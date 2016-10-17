@@ -136,16 +136,17 @@ class ProfileFields
             // create html for each field type
             $htmlValue = $value;
 
-            switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
+            $usfType = $this->mProfileFields[$fieldNameIntern]->getValue('usf_type');
+            switch ($usfType)
             {
                 case 'CHECKBOX':
                     if ($value == 1)
                     {
-                        $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
+                        $htmlValue = '<img src="' . THEME_PATH . '/icons/checkbox_checked.gif" alt="on" />';
                     }
                     else
                     {
-                        $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+                        $htmlValue = '<img src="' . THEME_PATH . '/icons/checkbox.gif" alt="off" />';
                     }
                     break;
                 case 'DATE':
@@ -165,7 +166,7 @@ class ProfileFields
                     {
                         if ($gPreferences['enable_mail_module'] != 1)
                         {
-                            $emailLink = 'mailto:'.$value;
+                            $emailLink = 'mailto:' . $value;
                         }
                         else
                         {
@@ -175,15 +176,15 @@ class ProfileFields
                                 $value2 = $this->mUserId;
                             }
 
-                            $emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
+                            $emailLink = $g_root_path . '/adm_program/modules/messages/messages_write.php?usr_id=' . $value2;
                         }
                         if (strlen($value) > 30)
                         {
-                            $htmlValue = '<a href="'.$emailLink.'" title="'.$value.'">'.substr($value, 0, 30).'...</a>';
+                            $htmlValue = '<a href="' . $emailLink . '" title="' . $value . '">' . substr($value, 0, 30) . '...</a>';
                         }
                         else
                         {
-                            $htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';
+                            $htmlValue = '<a href="' . $emailLink . '" title="' . $value . '" style="overflow: visible; display: inline;">' . $value . '</a>';
                         }
                     }
                     break;
@@ -195,10 +196,10 @@ class ProfileFields
                     $valueFormated = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
                     $arrListValues = explode("\n", $valueFormated);
 
-                    foreach ($arrListValues as $key => &$listValue)
+                    foreach ($arrListValues as $index => $listValue)
                     {
                         // if value is imagefile or imageurl then show image
-                        if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'RADIO_BUTTON'
+                        if ($usfType === 'RADIO_BUTTON'
                         && (strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0))
                         {
                             // if there is imagefile and text separated by | then explode them
@@ -224,11 +225,11 @@ class ProfileFields
                                 // create html for optionbox entry
                                 if (strValidCharacters($listValueImage, 'url') && strpos(admStrToLower($listValueImage), 'http') === 0)
                                 {
-                                    $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    $listValue = '<img class="admidio-icon-info" src="' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
                                 }
                                 elseif (admStrIsValidFileName($listValueImage, true))
                                 {
-                                    $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    $listValue = '<img class="admidio-icon-info" src="' . THEME_PATH . '/icons/' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
                                 }
                             }
                             catch (AdmException $e)
@@ -245,9 +246,8 @@ class ProfileFields
                         }
 
                         // save values in new array that starts with key = 1
-                        $arrListValuesWithKeys[++$key] = $listValue;
+                        $arrListValuesWithKeys[++$index] = $listValue;
                     }
-                    unset($listValue);
 
                     $htmlValue = $arrListValuesWithKeys[$value];
                     break;
@@ -284,11 +284,11 @@ class ProfileFields
                 {
                     // facebook has two different profile urls (id and facebook name),
                     // we could only store one way in database (facebook name) and the other (id) is defined here
-                    $htmlValue = '<a href="https://www.facebook.com/profile.php?id='.$value.'" target="_blank">'.$htmlValue.'</a>';
+                    $htmlValue = '<a href="https://www.facebook.com/profile.php?id=' . $value . '" target="_blank">' . $htmlValue . '</a>';
                 }
                 else
                 {
-                    $htmlValue = '<a href="'.$usfUrl.'" target="_blank">'.$htmlValue.'</a>';
+                    $htmlValue = '<a href="' . $usfUrl . '" target="_blank">' . $htmlValue . '</a>';
                 }
 
                 // replace a variable in url with user value
@@ -304,13 +304,13 @@ class ProfileFields
         {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
-                $value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+                $value = '<img src="' . THEME_PATH . '/icons/checkbox.gif" alt="off" />';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');
                 if ($usfUrl !== '')
                 {
-                    $value = '<a href="'.$usfUrl.'" target="_blank">'.$value.'</a>';
+                    $value = '<a href="' . $usfUrl . '" target="_blank">' . $value . '</a>';
                 }
             }
         }
@@ -341,53 +341,53 @@ class ProfileFields
         {
             $value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 
-            if ($format !== 'database')
+            if ($format === 'database')
             {
-                if ($fieldNameIntern === 'COUNTRY')
+                return $value;
+            }
+
+            if ($fieldNameIntern === 'COUNTRY')
+            {
+                if ($value !== '')
                 {
-                    if ($value !== '')
-                    {
-                        // read the language name of the country
-                        $value = $gL10n->getCountryByCode($value);
-                    }
+                    // read the language name of the country
+                    $value = $gL10n->getCountryByCode($value);
                 }
-                else
+            }
+            else
+            {
+                switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
                 {
-                    switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
-                    {
-                        case 'DATE':
-                            if ($value !== '')
+                    case 'DATE':
+                        if ($value !== '')
+                        {
+                            // if date field then the current date format must be used
+                            $date = DateTime::createFromFormat('Y-m-d', $value);
+                            if ($date === false)
                             {
-                                // if no format or html is set then show date format from Admidio settings
-                                if ($format === '' || $format === 'html')
-                                {
-                                    $dateFormat = $gPreferences['system_date'];
-                                }
-                                else
-                                {
-                                    $dateFormat = $format;
-                                }
-
-                                // if date field then the current date format must be used
-                                $date = DateTime::createFromFormat('Y-m-d', $value);
-                                if ($date === false)
-                                {
-                                    return $value;
-                                }
-                                $value = $date->format($dateFormat);
+                                return $value;
                             }
-                            break;
-                        case 'DROPDOWN':
-                        case 'RADIO_BUTTON':
-                            // the value in db is only the position, now search for the text
-                            if ($value > 0 && $format !== 'html')
+
+                            // if no format or html is set then show date format from Admidio settings
+                            if ($format === '' || $format === 'html')
                             {
-                                $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
-                                $value = $arrListValues[$value];
-
+                                $value = $date->format($gPreferences['system_date']);
                             }
-                            break;
-                    }
+                            else
+                            {
+                                $value = $date->format($format);
+                            }
+                        }
+                        break;
+                    case 'DROPDOWN':
+                    case 'RADIO_BUTTON':
+                        // the value in db is only the position, now search for the text
+                        if ($value > 0 && $format !== 'html')
+                        {
+                            $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
+                            $value = $arrListValues[$value];
+                        }
+                        break;
                 }
             }
         }
@@ -524,6 +524,11 @@ class ProfileFields
     {
         global $gPreferences;
 
+        if (!array_key_exists($fieldNameIntern, $this->mProfileFields))
+        {
+            return false;
+        }
+
         if ($fieldValue !== '')
         {
             switch ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type'))
@@ -594,28 +599,28 @@ class ProfileFields
             }
         }
 
-        $returnCode = false;
-
         $usfId = $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
+
+        if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '')
+        {
+            $this->mUserData[$usfId] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
+            $this->mUserData[$usfId]->setValue('usd_usf_id', $usfId);
+            $this->mUserData[$usfId]->setValue('usd_usr_id', $this->mUserId);
+        }
+
         // first check if user has a data object for this field and then set value of this user field
         if (array_key_exists($usfId, $this->mUserData))
         {
-            $returnCode = $this->mUserData[$usfId]->setValue('usd_value', $fieldValue);
-        }
-        elseif (array_key_exists($fieldNameIntern, $this->mProfileFields) && $fieldValue !== '')
-        {
-            $userData = &$this->mUserData[$usfId];
-            $userData = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
-            $userData->setValue('usd_usf_id', $usfId);
-            $userData->setValue('usd_usr_id', $this->mUserId);
-            $returnCode = $userData->setValue('usd_value', $fieldValue);
+            $valueChanged = $this->mUserData[$usfId]->setValue('usd_value', $fieldValue);
+
+            if ($valueChanged && $this->mUserData[$usfId]->hasColumnsValueChanged())
+            {
+                $this->columnsValueChanged = true;
+
+                return true;
+            }
         }
 
-        if ($returnCode && $this->mUserData[$usfId]->hasColumnsValueChanged())
-        {
-            $this->columnsValueChanged = true;
-        }
-
-        return $returnCode;
+        return false;
     }
 }
