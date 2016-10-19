@@ -129,6 +129,8 @@ else
                         if($announcement->editRight())
                         {
                             $page->addHtml('
+                            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img 
+                                src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
                             <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
                         }
