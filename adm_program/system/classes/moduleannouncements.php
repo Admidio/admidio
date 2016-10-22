@@ -27,7 +27,7 @@
  *                     [0] => 3
  *                     [ann_id] => 3
  *                     [1] => DEMO
- *                     [ann_org_id] => 1
+ *                     [ann_cat_id] => 1
  *                     [2] => 1
  *                     [ann_global] => 1
  *                     [3] => Willkommen im Demobereich
@@ -93,9 +93,10 @@ class ModuleAnnouncements extends Modules
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
-                 WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                  JOIN '.TBL_CATEGORIES.' ON cat_id = ann_cat_id
+                 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
-                          AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
+                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions;
         $pdoStatement = $gDb->query($sql);
 
@@ -159,10 +160,11 @@ class ModuleAnnouncements extends Modules
         // read announcements from database
         $sql = 'SELECT ann.*, '.$additionalFields.'
                   FROM '.TBL_ANNOUNCEMENTS.' ann
+                  JOIN '.TBL_CATEGORIES.' ON cat_id = ann_cat_id
                        '.$additionalTables.'
-                 WHERE (  ann_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
-                          AND ann_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
+                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions.'
               ORDER BY ann_timestamp_create DESC';
 

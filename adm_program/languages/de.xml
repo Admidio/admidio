@@ -1144,6 +1144,7 @@
     <string name="SYS_HOMEPAGE">Startseite</string>
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
+    <string name="SYS_IMPORTANT">Wichtig</string>
     <string name="SYS_INACTIVE">Inaktiv</string>
     <string name="SYS_INFORMATIONS">Informationen</string>
     <string name="SYS_INTERNAL_NAME">Interner Name</string>
