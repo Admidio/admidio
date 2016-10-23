@@ -158,9 +158,9 @@ class ModuleAnnouncements extends Modules
         }
 
         // read announcements from database
-        $sql = 'SELECT ann.*, '.$additionalFields.'
+        $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
                   FROM '.TBL_ANNOUNCEMENTS.' ann
-                  JOIN '.TBL_CATEGORIES.' ON cat_id = ann_cat_id
+                  JOIN '.TBL_CATEGORIES.' cat ON cat_id = ann_cat_id
                        '.$additionalTables.'
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
