@@ -1351,7 +1351,7 @@ class HtmlForm extends HtmlFormBasic
         while ($row = $pdoStatement->fetch())
         {
             // if result has 3 columns then create a array in array
-            if (count($row) === 3)
+            if(array_key_exists(2, $row))
             {
                 $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
             }
