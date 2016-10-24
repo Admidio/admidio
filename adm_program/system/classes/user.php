@@ -719,10 +719,13 @@ class User extends TableAccess
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
 
-        $file = SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
-        if ($columnName === 'usr_photo' && (int) $gPreferences['profile_photo_storage'] === 0 && is_file($file))
+        if ($columnName === 'usr_photo' && (int) $gPreferences['profile_photo_storage'] === 0)
         {
-            return file_get_contents($file);
+            $file = SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
+            if(is_file($file))
+            {
+                return file_get_contents($file);
+            }
         }
 
         return parent::getValue($columnName, $format);
