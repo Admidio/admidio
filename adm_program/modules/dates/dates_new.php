@@ -273,7 +273,7 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
     // add a multiselectbox to the form where the user can choose all roles that should see this event
     // first read all relevant roles from database and create an array with them
-    $sql = 'SELECT *
+    $sql = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
@@ -282,16 +282,11 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
                AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $statement = $gDb->query($sql);
-    $roles = array(array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null));
-
-    while($row = $statement->fetch())
-    {
-        $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
-    }
-    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, array('property'     => FIELD_REQUIRED,
+    $firstEntry = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
+    $form->addSelectBoxFromSql('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sql, array('property'     => FIELD_REQUIRED,
                                                                                    'defaultValue' => $dateRoles,
-                                                                                   'multiselect'  => true));
+                                                                                   'multiselect'  => true,
+                                                                                   'firstEntry'   => $firstEntry));
 
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
 

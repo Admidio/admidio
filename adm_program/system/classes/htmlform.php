@@ -1181,7 +1181,14 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['firstEntry'] !== '')
         {
-            $this->addOption('', '- ' . $optionsAll['firstEntry'] . ' -', null, $defaultEntry);
+            if(is_array($optionsAll['firstEntry']))
+            {
+                $this->addOption($optionsAll['firstEntry'][0], $optionsAll['firstEntry'][1], null, $defaultEntry);
+            }
+            else
+            {
+                $this->addOption('', '- ' . $optionsAll['firstEntry'] . ' -', null, $defaultEntry);
+            }
         }
         elseif ($optionsAll['showContextDependentFirstEntry'])
         {
@@ -1342,6 +1349,8 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBoxFromSql($id, $label, Database $database, $sql, array $options = array())
     {
+        global $gL10n;
+
         $selectBoxEntries = array();
 
         // execute the sql statement
@@ -1353,7 +1362,15 @@ class HtmlForm extends HtmlFormBasic
             // if result has 3 columns then create a array in array
             if(array_key_exists(2, $row))
             {
-                $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
+                // translate category name
+                if (strpos($row[2], '_') === 3)
+                {
+                    $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get(admStrToUpper($row[2])));
+                }
+                else
+                {
+                    $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
+                }
             }
             else
             {
