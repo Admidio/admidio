@@ -714,13 +714,13 @@ foreach ($membersList as $member)
                     else
                     {
                         // checkbox must set a sorting value
-                        if($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')
+                        if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
                         {
-                            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']), 'order' => $content);
+                            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']), 'order' => $content);
                         }
                         else
                         {
-                            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $member['usr_id']);
+                            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
                         }
                     }
                 }
