@@ -51,10 +51,15 @@ class TableAccess
      */
     public function __construct(&$database, $tableName, $columnPrefix, $id = '')
     {
-        $this->additionalTables = array();
         $this->tableName    = $tableName;
         $this->columnPrefix = $columnPrefix;
         $this->db =& $database;
+
+        // only initialize if not set before through child constructur
+        if(!is_array($this->additionalTables))
+        {
+            $this->additionalTables = array();
+        }
 
         // if a id is commited, then read data out of database
         if ($id > 0)
