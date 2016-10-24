@@ -225,9 +225,9 @@ while($row = $statement->fetch())
     // create array with all column values
     $columnValues = array(
         '<a href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'">'.$userField->getValue('usf_name').'</a>',
-        '<a class="admidio-icon-link" href="javascript:moveCategory(\'up\', '.$userField->getValue('usf_id').')"><img
+        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$userField->getValue('usf_id').')"><img
             src="'.THEME_PATH.'/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
-        <a class="admidio-icon-link" href="javascript:moveCategory(\'down\', '.$userField->getValue('usf_id').')"><img
+        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$userField->getValue('usf_id').')"><img
             src="'.THEME_PATH.'/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>',
         $description,
         $hidden,

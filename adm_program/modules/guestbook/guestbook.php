@@ -326,12 +326,12 @@ else
 
                     // this link will be shown when comments where loaded
                     $page->addHtml('
-                    <a id="admCommentsVisible_'. $gboId. '" class="btn" href="javascript:toggleComments('. $gboId. ')" style="display: '. $display_others. ';"><img
+                    <a id="admCommentsVisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $display_others. ';"><img
                         src="'. THEME_PATH. '/icons/comment.png" alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" />'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
                     // this link will be invisible when comments where loaded
                     $page->addHtml('
-                    <a id="admCommentsInvisible_'. $gboId. '" class="btn" href="javascript:toggleComments('. $gboId. ')" style="display: '. $display_show_comments. ';"><img
+                    <a id="admCommentsInvisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $display_show_comments. ';"><img
                         src="'. THEME_PATH. '/icons/comment.png" alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $commentStatement->rowCount()).'</a>');
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden

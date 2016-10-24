@@ -884,7 +884,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
             // only show info if system setting is activated
             if($gPreferences['system_show_create_edit'] > 0)
             {
-                  $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>');
+                  $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:void(0)"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>');
             }
             $page->addHtml('</span></div>');
             if($gPreferences['system_show_create_edit'] > 0)
