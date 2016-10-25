@@ -10,6 +10,7 @@
  */
 
 use Monolog\Logger;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\ErrorLogHandler;
 
@@ -22,8 +23,16 @@ if (!isset($gLogger))
     {
         $logLevel = Logger::DEBUG;
     }
-    $gLogger->pushHandler(new StreamHandler(SERVER_PATH . '/logs/admidio.log', $logLevel));
-    $gLogger->pushHandler(new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR));
+
+    $formatter = new LineFormatter(null, null, false, true);
+    $streamHandler = new StreamHandler(SERVER_PATH . '/adm_my_files/logs/admidio.log', $logLevel);
+    $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
+
+    $streamHandler->setFormatter($formatter);
+    $errorLogHandler->setFormatter($formatter);
+
+    $gLogger->pushHandler($streamHandler);
+    $gLogger->pushHandler($errorLogHandler);
 
     $gLogger->info('Admidio Logger initialized');
     $gLogger->info($_SERVER['REQUEST_URI'] . '?' . $_SERVER['QUERY_STRING']);
