@@ -13,6 +13,7 @@ use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Processor\IntrospectionProcessor;
 
 if (!isset($gLogger))
 {
@@ -22,6 +23,9 @@ if (!isset($gLogger))
     if ($gDebug)
     {
         $logLevel = Logger::DEBUG;
+
+        // If "$gDebug = true" append line/file/class/function where the log message came from
+        $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
     }
 
     $formatter = new LineFormatter(null, null, false, true);
