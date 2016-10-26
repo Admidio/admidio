@@ -675,7 +675,7 @@ class Database
      */
     public function showError()
     {
-        global $gPreferences, $gLogger, $gL10n;
+        global $gLogger, $gPreferences, $gL10n;
 
         $backtrace = $this->getBacktrace();
 
@@ -689,6 +689,8 @@ class Database
         $errorCode = $this->pdo->errorCode();
         $errorInfo = $this->pdo->errorInfo();
 
+        $gLogger->critical($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
+
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
@@ -698,9 +700,6 @@ class Database
                  <strong>B A C K T R A C E</strong><br />
                  '.$backtrace.'
              </div>';
-
-        // in debug mode show error in log file
-        $gLogger->error($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
 
         // display database error to user
         if (isset($gPreferences) && defined('THEME_SERVER_PATH') && !headers_sent())
