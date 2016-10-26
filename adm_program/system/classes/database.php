@@ -88,6 +88,8 @@ class Database
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, array $options = array())
     {
+        global $gLogger;
+
         // for compatibility to old versions accept the string postgresql
         if ($engine === 'postgresql')
         {
@@ -129,6 +131,17 @@ class Database
         }
         catch (PDOException $e)
         {
+            $logContext = array(
+                'engine'   => $engine,
+                'host'     => $this->host,
+                'port'     => $this->port,
+                'dbName'   => $this->dbName,
+                'username' => $this->username,
+                'password' => '******',
+                'options'  => $this->options
+            );
+            $gLogger->alert('Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
+
             throw new AdmException($e->getMessage());
         }
     }

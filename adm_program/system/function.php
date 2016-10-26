@@ -18,6 +18,8 @@
  */
 function admFuncAutoload($className)
 {
+    global $gLogger;
+
     $libFiles = array(
         SERVER_PATH . '/adm_program/system/classes/' . strtolower($className) . '.php',
         SERVER_PATH . '/adm_program/libs/monolog/src/' . str_replace('\\', '/', $className) . '.php',
@@ -36,6 +38,8 @@ function admFuncAutoload($className)
             return null;
         }
     }
+
+    $gLogger->critical('Class-File for Class "' . $className . '" could not be found and included!');
 
     return false;
 }

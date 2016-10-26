@@ -130,6 +130,8 @@ else
 
     if($gCurrentOrganization->getValue('org_id') === 0)
     {
+        $gLogger->error('Organization could not be found!', array('$g_organization' => $g_organization));
+
         // organization not found
         exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
