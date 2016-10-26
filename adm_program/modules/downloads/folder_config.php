@@ -77,7 +77,7 @@ catch(AdmException $e)
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlRoles =  'SELECT *
+$sqlViewRoles =  'SELECT rol_id, rol_name, cat_name
                 FROM '.TBL_ROLES.'
           INNER JOIN '.TBL_CATEGORIES.'
                   ON cat_id = rol_cat_id
@@ -85,18 +85,12 @@ $sqlRoles =  'SELECT *
                  AND rol_system = 0
                      '.$sqlRolesViewRight.'
                  AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY rol_name';
-$rolesViewStatement = $gDb->query($sqlRoles);
+            ORDER BY cat_sequence, rol_name';
+$firstEntryViewRoles = '';
 
 if (count($rolesViewRightParentFolder) === 0)
 {
-    $parentRoleViewSet[] = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
-}
-
-while($rowViewRoles = $rolesViewStatement->fetchObject())
-{
-    // Jede Rolle wird nun dem Array hinzugefuegt
-    $parentRoleViewSet[] = array($rowViewRoles->rol_id, $rowViewRoles->rol_name, $rowViewRoles->cat_name);
+    $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
 }
 
 // get assigned roles of this folder
@@ -110,7 +104,7 @@ if(count($roleViewSet) === 0)
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlRoles =  'SELECT *
+$sqlUploadRoles =  'SELECT rol_id, rol_name, cat_name
                 FROM '.TBL_ROLES.'
           INNER JOIN '.TBL_CATEGORIES.'
                   ON cat_id = rol_cat_id
@@ -118,14 +112,7 @@ $sqlRoles =  'SELECT *
                  AND rol_system = 0
                      '.$sqlRolesUploadRight.'
                  AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY rol_name';
-$rolesUploadStatement = $gDb->query($sqlRoles);
-
-while($rowUploadRoles = $rolesUploadStatement->fetchObject())
-{
-    // Jede Rolle wird nun dem Array hinzugefuegt
-    $parentRoleUploadSet[] = array($rowUploadRoles->rol_id, $rowUploadRoles->rol_name, $rowUploadRoles->cat_name);
-}
+            ORDER BY cat_sequence, rol_name';
 
 // get assigned roles of this folder
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
@@ -147,20 +134,23 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'
 
 // show form
 $form = new HtmlForm('folder_rights_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
-$form->addSelectBox(
+$form->addSelectBoxFromSql(
     'adm_roles_view_right',
     $gL10n->get('DAT_VISIBLE_TO'),
-    $parentRoleViewSet,
+    $gDb,
+    $sqlViewRoles,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,
-        'multiselect'  => true
+        'multiselect'  => true,
+        'firstEntry'   => $firstEntryViewRoles
     )
 );
-$form->addSelectBox(
+$form->addSelectBoxFromSql(
     'adm_roles_upload_right',
     $gL10n->get('DOW_UPLOAD_FILES'),
-    $parentRoleUploadSet,
+    $gDb,
+    $sqlUploadRoles,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,

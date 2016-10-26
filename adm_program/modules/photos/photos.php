@@ -311,7 +311,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 elseif ($gPreferences['photo_show_mode'] == 2)
                 {
                     $photoThumbnailTable .= '
-                        <a href="javascript:self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'\'"><img
+                        <a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'"><img
                             class="thumbnail center-block" id="img_'.$actThumbnail.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;thumb=1" />
                         </a>';
                 }
