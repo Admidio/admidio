@@ -101,7 +101,6 @@ define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
 // Define Constants for PHP 5.3 (deprecated)
 if (!defined('JSON_UNESCAPED_SLASHES'))
 {
-    $gLogger->notice('COMPATIBILITY: Constants "JSON_UNESCAPED_SLASHES" and "JSON_UNESCAPED_UNICODE" are already defined in PHP 5.4+!');
     define('JSON_UNESCAPED_SLASHES', 64);
     define('JSON_UNESCAPED_UNICODE', 256);
 }
