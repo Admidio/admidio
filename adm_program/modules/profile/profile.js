@@ -90,5 +90,6 @@ function ProfileJS(gRootPath) {
  */
 function profileJSClass() {
     /** global: gRootPath */
+    console.warn('DEPRECATED: "profileJSClass()" is deprecated, use "ProfileJS(gRootPath)" instead!');
     return ProfileJS(gRootPath);
 }

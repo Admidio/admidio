@@ -519,6 +519,10 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$htmlTable->setDatatablesAlternativOrderColumns()" is deprecated, use "$htmlTable->setDatatablesAlternativeOrderColumns()" instead!');
+
         $this->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
     }
 }

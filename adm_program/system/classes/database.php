@@ -726,6 +726,10 @@ class Database
      */
     public static function getAvailableDBs()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "PDO::getAvailableDrivers()" instead!');
+
         return PDO::getAvailableDrivers();
     }
 
@@ -743,6 +747,10 @@ class Database
      */
     public function fetch_array(PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->fetch_array()" is deprecated, use "$this->pdoStatement->fetch()" instead!');
+
         // if pdo statement is committed then fetch this object
         if ($pdoStatement instanceof \PDOStatement)
         {
@@ -770,6 +778,10 @@ class Database
      */
     public function fetch_object(PDOStatement $pdoStatement = null)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->fetch_object()" is deprecated, use "$this->pdoStatement->fetchObject()" instead!');
+
         // if pdo statement is committed then fetch this object
         if ($pdoStatement instanceof \PDOStatement)
         {
@@ -793,6 +805,10 @@ class Database
      */
     public function insert_id()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->insert_id()" is deprecated, use "$database->lastInsertId()" instead!');
+
         return $this->lastInsertId();
     }
 
@@ -808,6 +824,10 @@ class Database
      */
     public function num_rows(PDOStatement $pdoStatement = null)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->num_rows()" is deprecated, use "$this->pdoStatement->rowCount()" instead!');
+
         // if pdo statement is committed then fetch this object
         if ($pdoStatement instanceof \PDOStatement)
         {
@@ -831,6 +851,10 @@ class Database
      */
     public function showColumns($table, $showColumnProperties = true)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->showColumns()" is deprecated, use "$database->getTableColumnsProperties()" or "$database->getTableColumns()" instead!');
+
         if ($showColumnProperties)
         {
             // returns all columns with their properties of the table

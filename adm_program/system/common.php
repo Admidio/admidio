@@ -44,6 +44,7 @@ $_COOKIE = admStrStripTagsSpecial($_COOKIE);
 // deprecated
 if(!get_magic_quotes_gpc())
 {
+    $gLogger->warning('DEPRECATED: Magic-Quotes should not be used!');
     $_GET    = strAddSlashesDeep($_GET);
     $_POST   = strAddSlashesDeep($_POST);
     $_COOKIE = strAddSlashesDeep($_COOKIE);

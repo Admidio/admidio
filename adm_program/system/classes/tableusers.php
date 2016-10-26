@@ -23,7 +23,9 @@ class TableUsers extends User
      */
     public function __construct(&$database, $userId = 0)
     {
-        global $gProfileFields;
+        global $gLogger, $gProfileFields;
+
+        $gLogger->warning('DEPRECATED: "new TableUsers()" is deprecated, use "new User()" instead!');
 
         parent::__construct($database, $gProfileFields, $userId);
     }
