@@ -66,6 +66,7 @@ class Database
     protected $options;
 
     protected $dsn;
+    protected $dbEngine;
     protected $pdo;                 ///< The PDO object that handles the communication with the database.
     protected $transactions;        ///< The transaction marker. If this is > 0 than a transaction is open.
     protected $pdoStatement;        ///< The PdoStatement object which is needed to handle the return of a query.
@@ -117,13 +118,15 @@ class Database
             }
             if (!in_array($engine, $availableDrivers, true))
             {
-                throw new PDOException('The requested PDO driver '.$engine.' is not supported');
+                throw new PDOException('The requested PDO driver ' . $engine . ' is not supported');
             }
 
             $this->setDSNString($engine);
 
             // needed to avoid leaking username, password, ... if a PDOException is thrown
             $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
+
+            $this->dbEngine = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
 
             $this->setConnectionOptions();
         }
@@ -144,25 +147,22 @@ class Database
         switch ($engine)
         {
             case 'mysql':
-                if ($this->port === null)
+
+                $port = '';
+                if ($this->port !== null)
                 {
-                    $this->dsn = 'mysql:host='.$this->host.';dbname='.$this->dbName;
+                    $port = ';port=' . $this->port;
                 }
-                else
-                {
-                    $this->dsn = 'mysql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
-                }
+                $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8mb4';
                 break;
 
             case 'pgsql':
-                if ($this->port === null)
+                $port = '';
+                if ($this->port !== null)
                 {
-                    $this->dsn = 'pgsql:host='.$this->host.';dbname='.$this->dbName;
+                    $port = ';port=' . $this->port;
                 }
-                else
-                {
-                    $this->dsn = 'pgsql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName;
-                }
+                $this->dsn = 'pgsql:host=' . $this->host . $port . ';dbname=' . $this->dbName;
                 break;
 
             default:
@@ -180,7 +180,7 @@ class Database
 
         if ($gDebug)
         {
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // maybe change to PDO::ERRMODE_WARNING
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         else
         {
@@ -192,15 +192,18 @@ class Database
         $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH); // maybe change in future to PDO::FETCH_ASSOC or PDO::FETCH_OBJ
         $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
-        // Connect to database with UTF8
-        $this->query('SET NAMES \'UTF8\'');
-
-        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql')
+        switch ($this->dbEngine)
         {
-            // set ANSI mode, that SQL could be more compatible with other DBs
-            $this->query('SET SQL_MODE = \'ANSI\'');
-            // if the server has limited the joins, it can be canceled with this statement
-            $this->query('SET SQL_BIG_SELECTS = 1');
+            case 'mysql':
+                // MySQL charset UTF-8 is set in DSN-string
+                // set ANSI mode, that SQL could be more compatible with other DBs
+                $this->query('SET SQL_MODE = \'ANSI\'');
+                // if the server has limited the joins, it can be canceled with this statement
+                $this->query('SET SQL_BIG_SELECTS = 1');
+                break;
+            case 'pgsql':
+                $this->query('SET NAMES UNICODE');
+                break;
         }
     }
 
@@ -210,8 +213,8 @@ class Database
      */
     protected function getPropertyFromDatabaseConfig($property)
     {
-        $xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', null, true);
-        $node = $xmlDatabases->xpath('/databases/database[@id="'.$this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME).'"]/'.$property);
+        $xmlDatabases = new SimpleXMLElement(SERVER_PATH . '/adm_program/system/databases.xml', null, true);
+        $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
         return (string) $node[0];
     }
 
@@ -250,7 +253,7 @@ class Database
         $versionStatement = $this->query('SELECT version()');
         $version = $versionStatement->fetchColumn();
 
-        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
+        if ($this->dbEngine === 'pgsql')
         {
             // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
             $versionArray  = explode(',', $version);
@@ -398,7 +401,7 @@ class Database
                     $argument = htmlentities($trace['args'][0]);
                     $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
-                    $args[] = '\''.$argument.'\'';
+                    $args[] = '\'' . $argument . '\'';
                 }
             }
 
@@ -406,11 +409,11 @@ class Database
             $trace['type']  = array_key_exists('type',  $trace) ? $trace['type'] : '';
 
             $output .= '<br />';
-            $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
-            $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
+            $output .= '<strong>FILE:</strong> ' . htmlentities($trace['file']) . '<br />';
+            $output .= '<strong>LINE:</strong> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
 
-            $output .= '<strong>CALL:</strong> '.htmlentities($trace['class'].$trace['type'].$trace['function']).
-                       '('.(count($args) ? implode(', ', $args) : '').')<br />';
+            $output .= '<strong>CALL:</strong> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) .
+                       '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
         }
         $output .= '</div>';
 
@@ -425,7 +428,7 @@ class Database
      */
     public function lastInsertId()
     {
-        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
+        if ($this->dbEngine === 'pgsql')
         {
             $lastValStatement = $this->query('SELECT lastval()');
             return $lastValStatement->fetchColumn();
@@ -450,7 +453,7 @@ class Database
     {
         global $gDebug;
 
-        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
+        if ($this->dbEngine === 'pgsql')
         {
             $sqlCompare = strtolower($sql);
 
@@ -477,7 +480,7 @@ class Database
                 if ($posAutoIncrement > 0)
                 {
                     $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
-                    $sql = substr($sql, 0, $posInteger).' serial '.substr($sql, $posAutoIncrement + 14);
+                    $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
                 }
             }
         }
@@ -575,9 +578,9 @@ class Database
     {
         $tableColumnsProperties = array();
 
-        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql')
+        if ($this->dbEngine === 'mysql')
         {
-            $sql = 'SHOW COLUMNS FROM '.$table;
+            $sql = 'SHOW COLUMNS FROM ' . $table;
             $columnsStatement = $this->query($sql);
             $columnsList      = $columnsStatement->fetchAll();
 
@@ -611,11 +614,11 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         }
-        elseif ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql')
+        elseif ($this->dbEngine === 'pgsql')
         {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                          FROM information_schema.columns
-                         WHERE table_name = \''.$table.'\'';
+                      FROM information_schema.columns
+                     WHERE table_name = \'' . $table . '\'';
             $columnsStatement = $this->query($sql);
             $columnsList = $columnsStatement->fetchAll();
 
@@ -705,17 +708,17 @@ class Database
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
-                 <p><strong>CODE:</strong> '.$errorCode.'</p>
-                 '.$errorInfo[1].'<br /><br />
-                 '.$errorInfo[2].'<br /><br />
+                 <p><strong>CODE:</strong> ' . $errorCode . '</p>
+                 ' . $errorInfo[1] . '<br /><br />
+                 ' . $errorInfo[2] . '<br /><br />
                  <strong>B A C K T R A C E</strong><br />
-                 '.$backtrace.'
+                 ' . $backtrace . '
              </div>';
 
         // in debug mode show error in log file
         if ($gDebug)
         {
-            error_log($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
+            error_log($errorCode . ': ' . $errorInfo[1] . "\n" . $errorInfo[2]);
         }
 
         // display database error to user
