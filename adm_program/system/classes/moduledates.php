@@ -259,7 +259,7 @@ class ModuleDates extends Modules
         // check time period if old dates are chosen, then set headline to previous dates
         // Define a prefix
         if ($this->getParameter('mode') === 'old'
-        ||  (  $this->getParameter('dateStartFormatEnglish') < DATE_NOW
+        ||    ($this->getParameter('dateStartFormatEnglish') < DATE_NOW
             && $this->getParameter('dateEndFormatEnglish')   < DATE_NOW))
         {
             $headline = $gL10n->get('DAT_PREVIOUS_DATES', '') . $headline;
