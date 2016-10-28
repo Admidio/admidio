@@ -189,7 +189,7 @@ class Navigation
         }
 
         // Only one url, take this one
-        $entry = min(0, $count - 2);
+        $entry = max(0, $count - 2);
 
         return $this->urlStack[$entry]['url'];
     }
