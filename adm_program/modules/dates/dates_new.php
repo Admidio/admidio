@@ -284,9 +284,9 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
           ORDER BY cat_sequence, rol_name';
     $firstEntry = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
     $form->addSelectBoxFromSql('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sql, array('property'     => FIELD_REQUIRED,
-                                                                                   'defaultValue' => $dateRoles,
-                                                                                   'multiselect'  => true,
-                                                                                   'firstEntry'   => $firstEntry));
+                                                                                              'defaultValue' => $dateRoles,
+                                                                                              'multiselect'  => true,
+                                                                                              'firstEntry'   => $firstEntry));
 
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
 
