@@ -428,8 +428,8 @@ elseif($getMode === 2)
     $gDb->query($sql);
 
     // create an installation unique cookie prefix and remove special characters
-    $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-    $gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
+    $gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
+    $gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
 
     // start php session and remove session object with all data, so that
     // all data will be read after the update
