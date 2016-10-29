@@ -112,15 +112,15 @@ class AutoLogin extends TableAccess
         $currDateTime = new DateTime();
         $oneYearDateInterval = new DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
-        $date_session_delete = $oneYearBeforeDateTime->format('Y.m.d H:i:s');
+        $dateSessionDelete = $oneYearBeforeDateTime->format('Y.m.d H:i:s');
 
         $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                 WHERE atl_last_login < \''. $date_session_delete. '\'';
+                 WHERE atl_last_login < \''.$dateSessionDelete.'\'';
         $this->db->query($sql);
 
         // reset all counted wrong auto login ids from this user to prevent
         // a deadlock if user has auto login an several devices and they were
-        // set invalid fpr security reasons
+        // set invalid for security reasons
         $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = 0
                  WHERE atl_usr_id = '.$this->getValue('atl_usr_id');
         $this->db->query($sql);
