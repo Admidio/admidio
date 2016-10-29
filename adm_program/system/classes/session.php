@@ -51,7 +51,7 @@ class Session extends TableAccess
 
         $this->mCookiePrefix = $cookiePrefix;
 
-        if(is_numeric($session))
+        if (is_numeric($session))
         {
             $this->readDataById($session);
         }
@@ -59,7 +59,7 @@ class Session extends TableAccess
         {
             $this->readDataByColumns(array('ses_session_id' => $session));
 
-            if($this->new_record)
+            if ($this->new_record)
             {
                 // if PHP session id was commited then store them in that field
                 $this->setValue('ses_session_id', $session);
@@ -69,13 +69,13 @@ class Session extends TableAccess
 
         // if cookie PREFIX_AUTO_LOGIN_ID is set then there could be an auto login
         // the auto login must be done here because after that the corresponding organization must be set
-        if(array_key_exists($cookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE))
+        if (array_key_exists($cookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE))
         {
             // restore user from auto login session
             $this->mAutoLogin = new AutoLogin($database, $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
 
             // valid AutoLogin found
-            if($this->mAutoLogin->getValue('atl_id') > 0)
+            if ($this->mAutoLogin->getValue('atl_id') > 0)
             {
                 $this->mAutoLogin->setValue('atl_session_id', $session);
                 $this->mAutoLogin->save();
@@ -112,7 +112,7 @@ class Session extends TableAccess
      */
     public function addObject($objectName, &$object)
     {
-        if(is_object($object) && !array_key_exists($objectName, $this->mObjectArray))
+        if (is_object($object) && !array_key_exists($objectName, $this->mObjectArray))
         {
             $this->mObjectArray[$objectName] = &$object;
             return true;
@@ -129,7 +129,7 @@ class Session extends TableAccess
      */
     public function &getObject($objectName)
     {
-        if(!array_key_exists($objectName, $this->mObjectArray))
+        if (!array_key_exists($objectName, $this->mObjectArray))
         {
             // use parameter because we return a reference so only value will return an error
             $returnValue = false;
@@ -137,7 +137,7 @@ class Session extends TableAccess
         }
 
         // if object has database connection add database object
-        if(method_exists($this->mObjectArray[$objectName], 'setDatabase'))
+        if (method_exists($this->mObjectArray[$objectName], 'setDatabase'))
         {
             $this->mObjectArray[$objectName]->setDatabase($this->db);
         }
@@ -192,7 +192,7 @@ class Session extends TableAccess
      */
     public function getOrganizationId()
     {
-        if($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof \AutoLogin)
         {
             return (int) $this->mAutoLogin->getValue('atl_org_id');
         }
@@ -231,16 +231,16 @@ class Session extends TableAccess
     {
         global $gPreferences;
 
-        if($userId > 0)
+        if ($userId > 0)
         {
-            if($this->getValue('ses_usr_id') === $userId)
+            if ($this->getValue('ses_usr_id') === $userId)
             {
                 // session has a user assigned -> check if login is still valid
                 $timeGap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if($this->mAutoLogin instanceof \AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
+                if ($this->mAutoLogin instanceof \AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
                 {
                     $this->setValue('ses_timestamp', DATETIME_NOW);
                     return true;
@@ -271,7 +271,7 @@ class Session extends TableAccess
         $this->setValue('ses_usr_id', '');
         $this->save();
 
-        if($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof \AutoLogin)
         {
             // remove auto login cookie from users browser by setting expired timestamp to 0
             $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'));
@@ -298,7 +298,7 @@ class Session extends TableAccess
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
         $sesIpAddress = $this->getValue('ses_ip_address');
-        if($sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'] && isset($gCheckIpAddress) && $gCheckIpAddress === 1)
+        if ($sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'] && isset($gCheckIpAddress) && $gCheckIpAddress === 1)
         {
             error_log('Admidio stored session ip address: '.$sesIpAddress. ' :: Remote ip address: '.$_SERVER['REMOTE_ADDR']);
 
@@ -310,7 +310,7 @@ class Session extends TableAccess
         }
 
         // if AutoLogin is set then refresh the auto_login_id for security reasons
-        if($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof \AutoLogin)
         {
             $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
             $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
@@ -327,7 +327,7 @@ class Session extends TableAccess
 
         // if flag for reload of organization is set than reload the organization data
         $sesRenew = (int) $this->getValue('ses_renew');
-        if($sesRenew === 2 || $sesRenew === 3)
+        if ($sesRenew === 2 || $sesRenew === 3)
         {
             $organization =& $this->getObject('gCurrentOrganization');
             $organization->readDataById((int) $organization->getValue('org_id'));
@@ -355,7 +355,7 @@ class Session extends TableAccess
     public function renewUserObject($userId = 0)
     {
         $sqlCondition = '';
-        if($userId > 0)
+        if ($userId > 0)
         {
             $sqlCondition = ' WHERE ses_usr_id = ' . $userId;
         }
@@ -374,10 +374,11 @@ class Session extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if($this->new_record)
+        global $gCurrentOrganization;
+
+        if ($this->new_record)
         {
             // Insert
-            global $gCurrentOrganization;
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('ses_begin', DATETIME_NOW);
             $this->setValue('ses_timestamp', DATETIME_NOW);
@@ -425,7 +426,7 @@ class Session extends TableAccess
     {
         parent::setDatabase($database);
 
-        if($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof \AutoLogin)
         {
             $this->mAutoLogin->setDatabase($database);
         }
@@ -438,7 +439,7 @@ class Session extends TableAccess
     public function tableCleanup($maxInactiveMinutes)
     {
         // determine time when sessions should be deleted (min. 30 minutes)
-        if($maxInactiveMinutes > 30)
+        if ($maxInactiveMinutes > 30)
         {
             $maxInactiveMinutes = 30;
         }

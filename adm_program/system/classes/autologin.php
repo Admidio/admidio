@@ -37,7 +37,7 @@ class AutoLogin extends TableAccess
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
         // if not numeric than the session id is commited
-        if(is_numeric($session))
+        if (is_numeric($session))
         {
             $this->readDataById($session);
         }
@@ -60,7 +60,7 @@ class AutoLogin extends TableAccess
         {
             $loginId = $userId.':'.PasswordHashing::genRandomPassword(40);
         }
-        catch(AdmException $e)
+        catch (AdmException $e)
         {
             $e->showText();
             // => EXIT
@@ -80,11 +80,11 @@ class AutoLogin extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        if($this->new_record)
+        global $gCurrentOrganization;
+
+        if ($this->new_record)
         {
             // Insert
-            global $gCurrentOrganization;
-
             $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('atl_last_login', DATETIME_NOW);
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
@@ -98,6 +98,7 @@ class AutoLogin extends TableAccess
             $this->setValue('atl_last_login', DATETIME_NOW);
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
         }
+
         return parent::save($updateFingerPrint);
     }
 
