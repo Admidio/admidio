@@ -216,8 +216,11 @@ if(!array_key_exists('theme', $gPreferences))
 {
     $gPreferences['theme'] = 'modern';
 }
-define('THEME_SERVER_PATH', SERVER_PATH . '/adm_themes/' . $gPreferences['theme']);
-define('THEME_PATH', $g_root_path . '/adm_themes/' . $gPreferences['theme']);
+
+define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . '/adm_themes/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
+define('THEME_URL', ADMIDIO_URL . '/adm_themes/' . $gPreferences['theme']);
+define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // Deprecated
+define('THEME_PATH', THEME_URL); // Deprecated
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();
