@@ -88,7 +88,7 @@ class Session extends TableAccess
             {
                 // an invalid AutoLogin should be executed made the current AutoLogin unusable
                 $this->mAutoLogin = null;
-                setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, '/', $this->mDomain, 0);
+                $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
 
                 // now count invalid auto login for this user and delete all auto login of this users if number of wrong logins > 3
                 $userId = substr($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, strpos($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], ':'));
@@ -276,7 +276,7 @@ class Session extends TableAccess
         if($this->mAutoLogin instanceof \AutoLogin)
         {
             // remove auto login cookie from users browser by setting expired timestamp to 0
-            setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), 0, '/', $this->mDomain, 0);
+            $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'));
 
             // delete auto login and remove all data
             $this->mAutoLogin->delete();
@@ -325,7 +325,7 @@ class Session extends TableAccess
             $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
             $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-            setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired, '/', $this->mDomain, 0);
+            $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
         }
 
         // if flag for reload of organization is set than reload the organization data
@@ -417,7 +417,7 @@ class Session extends TableAccess
         $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
         $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-        setcookie($this->mCookiePrefix. '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired, '/', $this->mDomain, 0);
+        $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
     }
 
     /**
