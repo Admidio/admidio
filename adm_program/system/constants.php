@@ -50,7 +50,7 @@ define('CURRENT_URL', SERVER_URL . $_SERVER['REQUEST_URI']); // https://www.exam
 
 // Paths
 $admParts = explode('/adm_', __FILE__);
-define('WWW_PATH', $_SERVER['DOCUMENT_ROOT']); // /var/www
+define('WWW_PATH', $_SERVER['DOCUMENT_ROOT']); // /var/www    Will get "SERVER_PATH" in v4.0
 define('ADMIDIO_PATH', $admParts[0]); // /var/www/subfolder
 define('CURRENT_PATH', $_SERVER['SCRIPT_FILENAME']); // /var/www/subfolder/adm_program/index.php
 
