@@ -500,21 +500,6 @@ elseif($getMode === 6)  // Creating configuration file
     $configFileContent = fread($configFileHandle, filesize($filename));
     fclose($configFileHandle);
 
-    // detect root path
-    $rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
-    if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
-    {
-        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        {
-            $rootPath = 'https://'. $rootPath;
-        }
-        else
-        {
-            $rootPath = 'http://'. $rootPath;
-        }
-    }
-
     $port = 'null';
     if ($_SESSION['db_port'])
     {
@@ -530,7 +515,6 @@ elseif($getMode === 6)  // Creating configuration file
         '%USER%'         => $_SESSION['db_user'],
         '%PASSWORD%'     => $_SESSION['db_password'],
         '%DATABASE%'     => $_SESSION['db_database'],
-        '%ROOT_PATH%'    => $rootPath,
         '%ORGANIZATION%' => $_SESSION['orga_shortname'],
         '%TIMEZONE%'     => $_SESSION['orga_timezone']
     );
@@ -556,9 +540,18 @@ elseif($getMode === 6)  // Creating configuration file
     }
     else
     {
+        // detect root path
+        $https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        $port = (int) $_SERVER['SERVER_PORT'];
+        $port = ((!$https && $port === 80) || ($https && $port === 443)) ? '' : ':' . $port;
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port;
+        $uri = ($https ? 'https' : 'http') . '://' . $host;
+        $admParts = explode('/adm_', $uri . $_SERVER['SCRIPT_NAME']);
+        $myFilesPath = $admParts[0] . '/adm_my_files';
+
         // if user doesn't has write access then create a page with a download link for the config file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
-        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $myFilesPath, 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
         $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=5'));
         $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?mode=7'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));

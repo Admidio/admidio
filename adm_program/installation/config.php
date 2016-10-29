@@ -23,10 +23,6 @@ $g_adm_usr  = '%USER%';        // User
 $g_adm_pw   = '%PASSWORD%';    // Password
 $g_adm_db   = '%DATABASE%';    // Database
 
-// URL to this Admidio installation
-// Example: 'https://www.admidio.org/example'
-$g_root_path = '%ROOT_PATH%';
-
 // Short description of the organization that is running Admidio
 // This short description must correspond to your input in the installation wizard !!!
 // Example: 'ADMIDIO'
