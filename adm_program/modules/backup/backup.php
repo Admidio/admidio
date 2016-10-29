@@ -118,13 +118,13 @@ if($getMode === 'show_list')
         // create array with all column values
         $columnValues = array(
             '<a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img
-                src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
+                src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
             date($gPreferences['system_date'].' '.$gPreferences['system_time'], filemtime($backupAbsolutePath.$old_backup_file)),
             round(filesize($backupAbsolutePath.$old_backup_file) / 1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
-                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
 
         $backup_size_sum += round(filesize($backupAbsolutePath.$old_backup_file) / 1024);
@@ -141,13 +141,13 @@ if($getMode === 'show_list')
 elseif($getMode === 'create_backup')
 {
     ob_start();
-    include(SERVER_PATH. '/adm_program/modules/backup/backup_script.php');
+    include(ADMIDIO_PATH. '/adm_program/modules/backup/backup_script.php');
     $page->addHtml(ob_get_contents());
     ob_end_clean();
 
     // show button with link to backup list
     $form = new HtmlForm('show_backup_list_form', $g_root_path.'/adm_program/modules/backup/backup.php', $page);
-    $form->addSubmitButton('btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'), array('icon' => THEME_PATH.'/icons/back.png'));
+    $form->addSubmitButton('btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'), array('icon' => THEME_URL.'/icons/back.png'));
     $page->addHtml($form->show(false));
 
 }

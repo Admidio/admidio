@@ -191,7 +191,7 @@ elseif ($getMode === 4)
 
             // Test ob die Datei schon existiert im Filesystem
             if ($newFile !== $file->getValue('fil_name')
-            && is_file(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+            && is_file(ADMIDIO_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
             {
                 $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
                 // => EXIT
@@ -201,7 +201,7 @@ elseif ($getMode === 4)
                 $oldName = $file->getValue('fil_name');
 
                 // Datei umbenennen im Filesystem und in der Datenbank
-                if (rename($oldFile, SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+                if (rename($oldFile, ADMIDIO_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
                     $file->setValue('fil_name', $newFile);
                     $file->setValue('fil_description', $newDescription);
@@ -229,7 +229,7 @@ elseif ($getMode === 4)
 
             // Test ob der Ordner schon existiert im Filesystem
             if ($newFolder !== $folder->getValue('fol_name')
-            && is_dir(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+            && is_dir(ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
                 // => EXIT
@@ -239,7 +239,7 @@ elseif ($getMode === 4)
                 $oldName = $folder->getValue('fol_name');
 
                 // Ordner umbenennen im Filesystem und in der Datenbank
-                if (rename($oldFolder, SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+                if (rename($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
                 {
                     $folder->setValue('fol_description', $newDescription);
                     $folder->rename($newFolder, $folder->getValue('fol_path'));

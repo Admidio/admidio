@@ -79,11 +79,11 @@ while($rel_row = $relationtypesStatement->fetch())
     $relationtype2->setArray($rel_row2);
 
     $relationtypeAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                                    src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     $relationtypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=urt&amp;element_id=row_'.
                                         $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name').($relationtype1->isUnidirectional() ? '' : ('/'.$relationtype2->getValue('urt_name')))).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
-                                           src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                                           src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
     // create array with all column values
     $columnValues = array(

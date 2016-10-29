@@ -129,7 +129,7 @@ while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
 
 if(!is_file($picPath))
 {
-    $picPath = THEME_SERVER_PATH. '/images/nopix.jpg';
+    $picPath = THEME_ADMIDIO_PATH. '/images/nopix.jpg';
 }
 
 // Ermittlung der Original Bildgroesse

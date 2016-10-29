@@ -23,7 +23,7 @@ $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $image   = null;
-$picpath = THEME_SERVER_PATH. '/images/no_profile_pic.png';
+$picpath = THEME_ADMIDIO_PATH. '/images/no_profile_pic.png';
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())
@@ -45,9 +45,9 @@ if($inventory->getValue('inv_id') == 0)
 // Foto aus adm_my_files
 if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
 {
-    if(is_file(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
+    if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
     {
-        $picpath = SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg';
+        $picpath = ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg';
     }
     $image = new Image($picpath);
 }
@@ -67,7 +67,7 @@ elseif($gPreferences['profile_photo_storage'] == 0 && !$getNewPhoto)
 // neues Foto, Ordnerspeicherung
 elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
 {
-    $picpath = SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg';
+    $picpath = ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg';
     $image = new Image($picpath);
 }
 // neues Foto, Datenbankspeicherung

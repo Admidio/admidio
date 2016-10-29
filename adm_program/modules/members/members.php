@@ -107,12 +107,12 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile.png"
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile.png"
         alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName).'"
         title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName).'" />',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
-    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
+    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_URL.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
     '&nbsp;'

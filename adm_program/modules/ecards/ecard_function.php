@@ -68,7 +68,7 @@ class FunctionClass
     {
         if ($tplFolder === '')
         {
-            $tplFolder = THEME_SERVER_PATH.'/ecard_templates/';
+            $tplFolder = THEME_ADMIDIO_PATH.'/ecard_templates/';
         }
 
         if (!is_file($tplFolder.$tplFilename))
@@ -138,7 +138,7 @@ class FunctionClass
         // Hier wird der Pfad zum Admidio Verzeichnis ersetzt
         $pregRepArray['/<%g_root_path%>/']                = $g_root_path;
         // Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
-        $pregRepArray['/<%theme_root_path%>/']            = THEME_PATH;
+        $pregRepArray['/<%theme_root_path%>/']            = THEME_URL;
         // Hier wird der Sender Name, Email und Id ersetzt
         $pregRepArray['/<%ecard_sender_id%>/']            = $gCurrentUser->getValue('usr_id');
         $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
@@ -197,8 +197,8 @@ class FunctionClass
             for ($i = 0, $iMax = count($matchArray[0]); $i < $iMax; ++$i)
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
-                $img_server_path = str_replace(THEME_PATH, THEME_SERVER_PATH, $matchArray[2][$i]);
-                $img_server_path = str_replace($GLOBALS['g_root_path'], SERVER_PATH, $img_server_path);
+                $img_server_path = str_replace(THEME_URL, THEME_ADMIDIO_PATH, $matchArray[2][$i]);
+                $img_server_path = str_replace($GLOBALS['g_root_path'], ADMIDIO_PATH, $img_server_path);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
                 if(strpos($img_server_path, 'photo_show.php') !== false)
@@ -214,7 +214,7 @@ class FunctionClass
                 {
                     $img_name = 'picture.'. $img_type;
                     $img_name_intern = substr(md5(uniqid($img_name.time(), true)), 0, 8). '.'. $img_type;
-                    $img_server_path = SERVER_PATH. '/adm_my_files/photos/'. $img_name_intern;
+                    $img_server_path = ADMIDIO_PATH. '/adm_my_files/photos/'. $img_name_intern;
                     $img_photo_path  = $img_server_path;
 
                     $image_sized = new Image($photoServerPath);

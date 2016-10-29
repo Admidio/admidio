@@ -9,7 +9,7 @@
             <div id="right-block" class="admidio-container">
                 <?php
 
-                include(SERVER_PATH . '/adm_plugins/login_form/login_form.php');
+                include(ADMIDIO_PATH . '/adm_plugins/login_form/login_form.php');
 
                 ?>
                 <div id="plugin_menu" class="admidio-plugin-content">
@@ -133,7 +133,7 @@
 
 <p id="copyright">
     <a href="<?php echo ADMIDIO_HOMEPAGE; ?>" style="text-decoration: none;">
-        <img src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png"
+        <img src="<?php echo THEME_URL; ?>/images/admidio_logo_20.png"
              alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              style="border: 0; vertical-align: bottom;" />

@@ -233,7 +233,7 @@ if ($getMsgType === 'PM')
 
     $form->closeGroupBox();
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page
     $page->addHtml($form->show(false));
@@ -535,7 +535,7 @@ elseif (!isset($messageStatement))
         $form->closeGroupBox();
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -580,7 +580,7 @@ if (isset($messageStatement))
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-8">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+                        <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
                     <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
                     '</div>

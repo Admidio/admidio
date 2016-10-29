@@ -116,9 +116,9 @@ $columnHeading = array(
     $gL10n->get('SYS_FIELD').HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
     '&nbsp;',
     $gL10n->get('SYS_DESCRIPTION'),
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
-    '<img class="admidio-icon-info" data-html="true" src="'.THEME_PATH.'/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />',
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />',
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
+    '<img class="admidio-icon-info" data-html="true" src="'.THEME_URL.'/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />',
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />',
     $gL10n->get('ORG_DATATYPE'),
     '&nbsp;'
 );
@@ -170,29 +170,29 @@ while($row = $statement->fetch())
 
     if($userField->getValue('usf_hidden') == 1)
     {
-        $hidden = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/eye_gray.png" alt="'.$gL10n->get('ORG_FIELD_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'" />';
+        $hidden = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/eye_gray.png" alt="'.$gL10n->get('ORG_FIELD_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'" />';
     }
     else
     {
-        $hidden = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />';
+        $hidden = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />';
     }
 
     if($userField->getValue('usf_disabled') == 1)
     {
-        $disable = '<img class="admidio-icon-info" data-html="true" src="'.THEME_PATH.'/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />';
+        $disable = '<img class="admidio-icon-info" data-html="true" src="'.THEME_URL.'/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />';
     }
     else
     {
-        $disable = '<img class="admidio-icon-info" data-html="true" src="'.THEME_PATH.'/icons/textfield.png" alt="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" />';
+        $disable = '<img class="admidio-icon-info" data-html="true" src="'.THEME_URL.'/icons/textfield.png" alt="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" />';
     }
 
     if($userField->getValue('usf_mandatory') == 1)
     {
-        $mandatory = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />';
+        $mandatory = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />';
     }
     else
     {
-        $mandatory = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/asterisk_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
+        $mandatory = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/asterisk_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
     }
 
     $userFieldText = array('CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
@@ -208,27 +208,27 @@ while($row = $statement->fetch())
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
     $usfSystem = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'"><img
-                    src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                    src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
     if($userField->getValue('usf_system') == 1)
     {
-        $usfSystem .= '<img class="admidio-icon-link" src="'.THEME_PATH.'/icons/dummy.png" alt="dummy" />';
+        $usfSystem .= '<img class="admidio-icon-link" src="'.THEME_URL.'/icons/dummy.png" alt="dummy" />';
     }
     else
     {
         $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.$g_root_path.'/adm_program/system/popup_message.php?type=usf&amp;element_id=row_usf_'.
                         $userField->getValue('usf_id').'&amp;name='.urlencode($userField->getValue('usf_name')).'&amp;database_id='.$userField->getValue('usf_id').'"><img
-                        src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                        src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
 
     // create array with all column values
     $columnValues = array(
         '<a href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'">'.$userField->getValue('usf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$userField->getValue('usf_id').')"><img
-            src="'.THEME_PATH.'/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
+            src="'.THEME_URL.'/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$userField->getValue('usf_id').')"><img
-            src="'.THEME_PATH.'/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>',
+            src="'.THEME_URL.'/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>',
         $description,
         $hidden,
         $disable,

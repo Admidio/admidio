@@ -310,7 +310,7 @@ else
             {
                 $outputButtonIcal = '
                     <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id'). '&amp;mode=6">
-                        <img src="'.THEME_PATH.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                        <img src="'.THEME_URL.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
             }
 
             // change and delete is only for users with additional rights
@@ -320,10 +320,10 @@ else
                 {
                     $outputButtonCopy = '
                         <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'">
-                            <img src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
+                            <img src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
                     $outputButtonEdit = '
                         <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;headline='.$getHeadline.'">
-                            <img src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                            <img src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                 }
 
                 // Deleting events is only allowed for group members
@@ -335,7 +335,7 @@ else
                             $date->getValue('dat_id').'&amp;name='.
                             urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.
                             $date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'">
-                            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                            <img src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
             }
         }
@@ -398,7 +398,7 @@ else
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="'.$route_url.'" target="_blank">
-                            <img src="'.THEME_PATH.'/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" />
+                            <img src="'.THEME_URL.'/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" />
                         </a>';
                 }
             }
@@ -448,13 +448,13 @@ else
                 {
                     $outputButtonParticipation = '
                         <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                            <img src="'.THEME_PATH.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
+                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
                 }
                 else
                 {
                     $outputButtonParticipation = '
                         <a class="admidio-icon-link" href="'.$buttonURL.'">
-                            <img src="'.THEME_PATH.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
                 }
             }
             else
@@ -478,13 +478,13 @@ else
                     {
                         $outputButtonParticipation = '
                             <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
+                                <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
                     }
                     else
                     {
                         $outputButtonParticipation = '
                             <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                                <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
                     }
                 }
                 else
@@ -504,13 +504,13 @@ else
                     {
                         $outputButtonParticipants = '
                             <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
+                                <img src="'.THEME_URL.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
                     }
                     else
                     {
                         $outputButtonParticipants = '
                             <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                                <img src="'.THEME_URL.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
                     }
                 }
             }
@@ -526,14 +526,14 @@ else
                     {
                         $outputButtonParticipantsEmail = '
                             <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'
+                                <img src="'.THEME_URL.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'
                             </button>';
                     }
                     else
                     {
                         $outputButtonParticipantsEmail = '
                             <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" />
+                                <img src="'.THEME_URL.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" />
                             </a>';
                     }
                 }
@@ -548,14 +548,14 @@ else
                 {
                     $outputButtonParticipantsAssign = '
                         <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                            <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'
+                            <img src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'
                         </button>';
                 }
                 else
                 {
                     $outputButtonParticipantsAssign = '
                         <a class="admidio-icon-link" href="'.$buttonURL.'">
-                            <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />
+                            <img src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />
                         </a>';
                 }
             }
@@ -638,7 +638,7 @@ else
                 <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/dates.png" alt="'.$date->getValue('dat_headline').'" />' .
+                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="'.$date->getValue('dat_headline').'" />' .
                             $date->getValue('dat_begin', $gPreferences['system_date']).$outputEndDate.' '.$date->getValue('dat_headline') . '
                         </div>
                         <div class="pull-right text-right">' .

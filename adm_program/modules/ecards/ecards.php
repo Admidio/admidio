@@ -26,8 +26,8 @@ $showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultVa
 
 // Initialisierung lokaler Variablen
 $funcClass = new FunctionClass($gL10n);
-$templates = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
-$template  = THEME_SERVER_PATH. '/ecard_templates/';
+$templates = $funcClass->getFileNames(THEME_ADMIDIO_PATH. '/ecard_templates/');
+$template  = THEME_ADMIDIO_PATH. '/ecard_templates/';
 $headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -176,7 +176,7 @@ $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'"
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
-$templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
+$templates = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH.'/ecard_templates');
 if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
@@ -260,8 +260,8 @@ $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-edi
 $form->addEditor('ecard_message', null, $message, array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();
-$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_PATH. '/icons/eye.png'));
-$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH. '/icons/email.png'));
+$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_URL. '/icons/eye.png'));
+$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL. '/icons/email.png'));
 $form->closeButtonGroup();
 
 // add form to html page and show page

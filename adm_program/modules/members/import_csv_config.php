@@ -165,7 +165,7 @@ $htmlFieldTable = '
     $htmlFieldTable .= '</tbody>
     </table>';
 $form->addDescription($htmlFieldTable);
-$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_PATH.'/icons/database_in.png'));
+$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_URL.'/icons/database_in.png'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

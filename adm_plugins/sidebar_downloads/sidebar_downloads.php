@@ -124,13 +124,13 @@ if ($gPreferences['enable_download_module'] == 1)
                     // Vorname und Nachname abfragen (Upload der Datei)
                     $mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
 
-                    $timestampHtml = '<img class="admidio-icon-info" data-html="true" src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'"
+                    $timestampHtml = '<img class="admidio-icon-info" data-html="true" src="'. THEME_URL. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'"
                         title="'. $plg_row->fil_timestamp. ',<br />'. $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'). '" />';
                 }
 
                 echo '
                 <a class="btn '.$plg_link_class_downl.'" href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
-                    src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
+                    src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
                     title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.$timestampHtml.'</a>';
 
                 ++$anzahl;

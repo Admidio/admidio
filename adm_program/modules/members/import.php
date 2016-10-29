@@ -99,7 +99,7 @@ $form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $sele
                                                                                                     'defaultValue'                   => $form_values['user_import_mode'],
                                                                                                     'showContextDependentFirstEntry' => false,
                                                                                                     'helpTextIdLabel'                => 'MEM_IDENTIFY_USERS'));
-$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
+$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

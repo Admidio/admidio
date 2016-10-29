@@ -75,14 +75,14 @@ if($getMode === 'save')
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        if(is_file(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
+        if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
         {
-            if(is_file(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
+            if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
             {
-                unlink(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
+                unlink(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
             }
 
-            rename(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg', SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
+            rename(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg', ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
         }
     }
     else
@@ -114,9 +114,9 @@ elseif($getMode === 'dont_save')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        if(is_file(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
+        if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
         {
-            unlink(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg');
+            unlink(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg');
         }
     }
     // Datenbankspeicherung
@@ -136,7 +136,7 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        unlink(SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
+        unlink(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
     }
     // Datenbankspeicherung, Daten aus Session entfernen
     else
@@ -177,7 +177,7 @@ if($getMode === 'choose')
     $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?mode=upload&amp;inv_id='.$getItemId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="item_photo_show.php?inv_id='.$getItemId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload('userfile', $gL10n->get('PRO_CHOOSE_PHOTO'), array('helpTextIdLabel' => 'profile_photo_up_help'));
-    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_PATH.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
+    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -225,7 +225,7 @@ elseif($getMode === 'upload')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        $user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg');
+        $user_image->copyToFile(null, ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg');
     }
     // Datenbankspeicherung
     else
@@ -264,8 +264,8 @@ elseif($getMode === 'upload')
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="item_photo_show.php?inv_id='.$getItemId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
     $form->openButtonGroup();
-    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_PATH.'/icons/error.png'));
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_PATH.'/icons/database_in.png'));
+    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_URL.'/icons/error.png'));
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_URL.'/icons/database_in.png'));
     $form->closeButtonGroup();
 
     // add form to html page and show page

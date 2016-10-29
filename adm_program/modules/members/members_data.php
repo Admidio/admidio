@@ -261,7 +261,7 @@ while($row = $mglStatement->fetch())
     }
 
     $columnValues[] = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
-             src="'.THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
+             src="'.THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
     // Add "Lastname" and "Firstname"
     $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['name'].'</a>';
@@ -316,14 +316,14 @@ while($row = $mglStatement->fetch())
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '
             <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=5"><img
-                src="'.THEME_PATH.'/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+                src="'.THEME_URL.'/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
         }
         else
         {
             // if user has no email or send email is disabled then administrators could set a new password
             $userAdministration = '
             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/modules/profile/password.php?usr_id='.$row['usr_id'].'"><img
-                src="'.THEME_PATH.'/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
+                src="'.THEME_URL.'/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
         }
     }
 
@@ -338,7 +338,7 @@ while($row = $mglStatement->fetch())
             $mailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'];
         }
 
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_PATH.'/icons/email.png"
+        $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_URL.'/icons/email.png"
                                 alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
     }
 
@@ -347,7 +347,7 @@ while($row = $mglStatement->fetch())
     if($memberOfThisOrganization || !$memberOfOtherOrganization)
     {
         $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$row['usr_id'].'"><img
-                                    src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
+                                    src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
     }
 
     // Mitglieder entfernen
@@ -356,7 +356,7 @@ while($row = $mglStatement->fetch())
         && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
     {
         $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
-                                    src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
+                                    src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
     }
 
     $columnValues[] = $userAdministration;

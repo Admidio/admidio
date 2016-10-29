@@ -256,16 +256,16 @@ while($row = $statement->fetch())
         // show icon that leaders have no additional rights
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
         {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/info.png"
+            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
                                  alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-                                     <img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+                                     <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
         }
 
         // show icon with edit user right if leader has this right
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
         || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
         {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile_edit.png"
+            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
                                  alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
         }
 
@@ -273,14 +273,14 @@ while($row = $statement->fetch())
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
         || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
         {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
+            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
                                  alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
         }
 
         // show dummy icon if leader has not all rights
         if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
         {
-            $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+            $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
         }
         $columnValues[] = $leaderRights;
 
@@ -290,7 +290,7 @@ while($row = $statement->fetch())
 $html .= $table->show();
 
 $html .= '
-    <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+    <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_URL.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 

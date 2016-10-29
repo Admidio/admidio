@@ -315,7 +315,7 @@ $form->closeGroupBox();
 $btn_image = 'disk.png';
 $btn_text  = $gL10n->get('SYS_SAVE');
 
-$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons/'.$btn_image));
+$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_URL.'/icons/'.$btn_image));
 
 if($getNewItem == 0)
 {

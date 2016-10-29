@@ -285,7 +285,7 @@ if ($getMode !== 'csv')
     }
     elseif ($getMode === 'pdf')
     {
-        require_once(SERVER_PATH.'/adm_program/libs/tcpdf/tcpdf.php');
+        require_once(ADMIDIO_PATH.'/adm_program/libs/tcpdf/tcpdf.php');
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
@@ -789,14 +789,14 @@ elseif ($getMode === 'pdf')
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
 
     // Save PDF to file
-    $pdf->Output(SERVER_PATH.'/adm_my_files/'.$filename, 'F');
+    $pdf->Output(ADMIDIO_PATH.'/adm_my_files/'.$filename, 'F');
 
     // Redirect
     header('Content-Type: application/pdf');
 
-    readfile(SERVER_PATH.'/adm_my_files/'.$filename);
+    readfile(ADMIDIO_PATH.'/adm_my_files/'.$filename);
     ignore_user_abort(true);
-    unlink(SERVER_PATH.'/adm_my_files/'.$filename);
+    unlink(ADMIDIO_PATH.'/adm_my_files/'.$filename);
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {

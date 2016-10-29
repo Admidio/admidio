@@ -20,9 +20,9 @@ require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_pr
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // includes WITHOUT database connections
-require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
-require_once(SERVER_PATH . '/adm_program/system/function.php');
-require_once(SERVER_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
 if($gDebug)
 {

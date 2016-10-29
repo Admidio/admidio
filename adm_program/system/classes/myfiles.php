@@ -50,8 +50,8 @@ class MyFiles extends Folder
         }
 
         $this->module      = $module;
-        $this->modulePath  = SERVER_PATH.'/adm_my_files/'.$folderName;
-        $this->currentPath = SERVER_PATH.'/adm_my_files/'.$folderName;
+        $this->modulePath  = ADMIDIO_PATH.'/adm_my_files/'.$folderName;
+        $this->currentPath = ADMIDIO_PATH.'/adm_my_files/'.$folderName;
         $this->webPath     = $g_root_path.'/adm_my_files';
 
         parent::__construct($this->modulePath);
@@ -73,7 +73,7 @@ class MyFiles extends Folder
         {
             if(!is_dir($this->modulePath))
             {
-                $serverPathAdmMyFiles = SERVER_PATH.'/adm_my_files';
+                $serverPathAdmMyFiles = ADMIDIO_PATH.'/adm_my_files';
 
                 if(!is_writable($serverPathAdmMyFiles))
                 {

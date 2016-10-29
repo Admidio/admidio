@@ -157,7 +157,7 @@ $form->addSelectBoxFromSql(
         'multiselect'  => true
     )
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_PATH.'/icons/disk.png',
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_URL.'/icons/disk.png',
                                                                   'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page

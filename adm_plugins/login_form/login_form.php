@@ -167,7 +167,7 @@ if($gValidLogin)
     if($plg_show_icons)
     {
         echo '<a id="adm_logout_link" class="btn" href="'.$g_root_path.'/adm_program/system/logout.php"><img
-            src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" />'.$gL10n->get('SYS_LOGOUT').'</a>';
+            src="'. THEME_URL. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" />'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
     else
     {
@@ -180,7 +180,7 @@ else
     // create and show the login form
     if($plg_show_icons)
     {
-        $iconCode  = THEME_PATH. '/icons/key.png';
+        $iconCode  = THEME_URL. '/icons/key.png';
     }
 
     $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null,
@@ -216,7 +216,7 @@ else
         {
             echo '
             <a class="btn" href="'. $g_root_path. '/adm_program/modules/registration/registration.php"><img
-                src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'</a>';
+                src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
         else
         {
@@ -264,7 +264,7 @@ else
         {
             echo '
             <a class="btn" href="'. $linkUrl. '"><img
-                src="'. THEME_PATH. '/icons/email_key.png" alt="'.$linkText.'" />'.$linkText.'</a>';
+                src="'. THEME_URL. '/icons/email_key.png" alt="'.$linkText.'" />'.$linkText.'</a>';
         }
         else
         {

@@ -158,7 +158,7 @@ else
         $form->addCaptcha('captcha_code');
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));

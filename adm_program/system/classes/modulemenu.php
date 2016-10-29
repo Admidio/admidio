@@ -242,10 +242,10 @@ class ModuleMenu
             $link = '#';
         }
 
-        // add THEME_PATH to images unless the full URL is given
+        // add THEME_URL to images unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $icon) !== 1)
         {
-            $icon = THEME_PATH.'/icons/'.$icon;
+            $icon = THEME_URL.'/icons/'.$icon;
         }
 
         return array(

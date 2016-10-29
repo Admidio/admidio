@@ -225,14 +225,14 @@ if($numberBirthdays > 0)
                     {
                         $plg_show_name = $plg_show_name.'
                             <a class="admidio-icon-link" href="'. $g_root_path. '/adm_program/modules/messages/messages_write.php?usr_id='. $row['usr_id']. '"><img
-                            src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
+                            src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                     }
                 }
                 elseif($plg_show_email_extern === 1 && strlen($row['email']) > 0)
                 {
                     $plg_show_name = $plg_show_name.'
                         <a class="admidio-icon-link" href="mailto:'. $row['email']. '"><img
-                        src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
+                        src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                 }
 
                 // Soll das Alter auch für nicht angemeldete Benutzer angezeigt werden?

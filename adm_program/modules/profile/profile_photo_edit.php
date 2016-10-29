@@ -74,14 +74,14 @@ if($getMode === 'save')
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
+        if(is_file(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
-            if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+            if(is_file(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
             {
-                unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
+                unlink(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
             }
 
-            rename(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg', SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
+            rename(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg', ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
         }
     }
     else
@@ -113,9 +113,9 @@ elseif($getMode === 'dont_save')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        if(is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
+        if(is_file(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
-            unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
+            unlink(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
         }
     }
     // Datenbankspeicherung
@@ -135,7 +135,7 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
+        unlink(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
     }
     // Datenbankspeicherung, Daten aus Session entfernen
     else
@@ -176,7 +176,7 @@ if($getMode === 'choose')
     $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload('foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'), array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help'));
-    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_PATH.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
+    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -224,7 +224,7 @@ elseif($getMode === 'upload')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        $userImage->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
+        $userImage->copyToFile(null, ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
     }
     // Datenbankspeicherung
     else
@@ -262,8 +262,8 @@ elseif($getMode === 'upload')
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_PATH.'/icons/database_in.png'));
-    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_PATH.'/icons/error.png'));
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_URL.'/icons/database_in.png'));
+    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_URL.'/icons/error.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));

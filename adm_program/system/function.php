@@ -19,11 +19,11 @@
 function admFuncAutoload($className)
 {
     $libFiles = array(
-        SERVER_PATH . '/adm_program/system/classes/' . strtolower($className) . '.php',
-//        SERVER_PATH . '/adm_program/libs/phpass/' . strtolower($className) . '.php',
-        SERVER_PATH . '/adm_program/libs/phpmailer/class.' . strtolower($className) . '.php',
-//        SERVER_PATH . '/adm_program/libs/securimage/' . strtolower($className) . '.php',
-        SERVER_PATH . '/adm_program/libs/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
+        ADMIDIO_PATH . '/adm_program/system/classes/' . strtolower($className) . '.php',
+//        ADMIDIO_PATH . '/adm_program/libs/phpass/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . '/adm_program/libs/phpmailer/class.' . strtolower($className) . '.php',
+//        ADMIDIO_PATH . '/adm_program/libs/securimage/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . '/adm_program/libs/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
     );
 
     foreach ($libFiles as $libFile)

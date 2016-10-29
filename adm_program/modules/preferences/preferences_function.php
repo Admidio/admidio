@@ -51,7 +51,7 @@ switch($getMode)
                                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
                     if(!admStrIsValidFileName($_POST['theme'])
-                    || !is_file(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
+                    || !is_file(ADMIDIO_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
@@ -84,7 +84,7 @@ switch($getMode)
 
                 case 'regional_settings':
                     if(!admStrIsValidFileName($_POST['system_language'])
-                    || !is_file(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
+                    || !is_file(ADMIDIO_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                         // => EXIT
@@ -302,7 +302,7 @@ switch($getMode)
         $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
                         array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
         $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
-                               array('icon' => THEME_PATH.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
+                               array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
 
         // add form to html page and show page
         $page->addHtml($form->show(false));
@@ -371,7 +371,7 @@ switch($getMode)
 
         // show form
         $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences.php', $page);
-        $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png'));
+        $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
 
         // add form to html page and show page
         $page->addHtml($form->show(false));

@@ -320,7 +320,7 @@ class HtmlPage
         $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
         $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
 
-        if ((!$gDebug && is_file(SERVER_PATH.$filepathMin)) || !is_file(SERVER_PATH.$filepathDebug))
+        if ((!$gDebug && is_file(ADMIDIO_PATH.$filepathMin)) || !is_file(ADMIDIO_PATH.$filepathDebug))
         {
             return $g_root_path.$filepathMin;
         }
@@ -464,35 +464,35 @@ class HtmlPage
         }
 
         // add admidio css file at last because there the user can redefine all css
-        $this->addCssFile(THEME_PATH.'/css/admidio.css');
+        $this->addCssFile(THEME_URL.'/css/admidio.css');
 
         // add custom css file if it exists to add own css styles without edit the original admidio css
-        if(is_file(THEME_PATH.'/css/custom.css'))
+        if(is_file(THEME_URL.'/css/custom.css'))
         {
-            $this->addCssFile(THEME_PATH.'/css/custom.css');
+            $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
         // if print mode is set then add a print specific css file
         if($this->printMode)
         {
-            $this->addCssFile(THEME_PATH.'/css/print.css');
+            $this->addCssFile(THEME_URL.'/css/print.css');
         }
 
         // load content of theme files
         if($this->showThemeHtml)
         {
             ob_start();
-            include(THEME_SERVER_PATH.'/my_header.php');
+            include(THEME_ADMIDIO_PATH.'/my_header.php');
             $htmlMyHeader = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH.'/my_body_top.php');
+            include(THEME_ADMIDIO_PATH.'/my_body_top.php');
             $htmlMyBodyTop = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH.'/my_body_bottom.php');
+            include(THEME_ADMIDIO_PATH.'/my_body_bottom.php');
             $htmlMyBodyBottom = ob_get_contents();
             ob_end_clean();
         }
@@ -574,7 +574,7 @@ class HtmlPage
 
                 <script type="text/javascript">
                     var gRootPath  = "'. $g_root_path. '";
-                    var gThemePath = "'. THEME_PATH. '";
+                    var gThemePath = "'. THEME_URL. '";
                 </script>';
 
         $html .= $headerContent;

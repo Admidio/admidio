@@ -47,13 +47,13 @@ if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
-require_once(SERVER_PATH . '/adm_program/installation/install_functions.php');
-require_once(SERVER_PATH . '/adm_program/system/function.php');
-require_once(SERVER_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
 // Initialize and check the parameters
 
-define('THEME_PATH', 'layout');
+define('THEME_URL', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
 
@@ -343,7 +343,7 @@ elseif($getMode === 2)
                         error_log('Update to version ' . $version);
                     }
 
-                    $dbScriptsPath = SERVER_PATH . '/adm_program/installation/db_scripts/';
+                    $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
                     $sqlFileName = 'upd_' . $version . '_db.sql';
                     $phpFileName = 'upd_' . $version . '_conv.php';
 

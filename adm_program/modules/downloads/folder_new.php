@@ -75,7 +75,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentF
 $form = new HtmlForm('new_folder_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId, $page);
 $form->addInput('new_folder', $gL10n->get('SYS_NAME'), $form_values['new_folder'], array('maxLength' => 255, 'property' => FIELD_REQUIRED));
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, array('maxLength' => 4000));
-$form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), array('icon' => THEME_PATH.'/icons/folder_create.png', 'class' => ' col-sm-offset-3'));
+$form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), array('icon' => THEME_URL.'/icons/folder_create.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

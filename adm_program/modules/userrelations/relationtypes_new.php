@@ -127,7 +127,7 @@ $form->addInput(
     array('maxLength' => 100)
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     $relationtype1->getValue('urt_usr_id_create'),
     $relationtype1->getValue('urt_timestamp_create'),

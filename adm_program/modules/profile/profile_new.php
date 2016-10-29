@@ -248,7 +248,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png"
+                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_URL. '/icons/key.png"
                                 alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
@@ -418,7 +418,7 @@ else
     $btn_text  = $gL10n->get('SYS_SAVE');
 }
 
-$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons/'.$btn_image));
+$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_URL.'/icons/'.$btn_image));
 
 if($getNewUser === 0)
 {

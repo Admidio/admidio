@@ -186,7 +186,7 @@ class TableInventoryField extends TableAccess
                                     }
                                     elseif(admStrIsValidFileName($listValueImage, true))
                                     {
-                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                     }
                                 }
                                 catch(AdmException $e)

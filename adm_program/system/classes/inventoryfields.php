@@ -116,11 +116,11 @@ class InventoryFields
                 case 'CHECKBOX':
                     if($value == '1')
                     {
-                        $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
+                        $htmlValue = '<img src="'.THEME_URL.'/icons/checkbox_checked.gif" alt="on" />';
                     }
                     else
                     {
-                        $htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+                        $htmlValue = '<img src="'.THEME_URL.'/icons/checkbox.gif" alt="off" />';
                     }
                     break;
 
@@ -192,7 +192,7 @@ class InventoryFields
                                     }
                                     elseif(admStrIsValidFileName($listValueImage, true))
                                     {
-                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                     }
                                 }
                                 catch(AdmException $e)
@@ -264,7 +264,7 @@ class InventoryFields
             if(array_key_exists($fieldNameIntern, $this->mInventoryFields)
             && $this->mInventoryFields[$fieldNameIntern]->getValue('inf_type') === 'CHECKBOX')
             {
-                $value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+                $value = '<img src="'.THEME_URL.'/icons/checkbox.gif" alt="off" />';
             }
         }
         return $value;

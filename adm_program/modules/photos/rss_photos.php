@@ -139,7 +139,7 @@ while ($row = $statement->fetch())
         $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for($photoNr = $photo_album->getValue('pho_quantity'); $photoNr >= $photo_album->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr)
         {
-            $photoPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
+            $photoPath = ADMIDIO_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
 
             // show only photo if that photo exists
             if (is_file($photoPath))

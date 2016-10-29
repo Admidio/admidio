@@ -167,7 +167,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
     $form->addEditor('inf_description', null, $itemField->getValue('inf_description'), array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault', 'height' => '200px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($itemField->getValue('inf_usr_id_create'), $itemField->getValue('inf_timestamp_create'), $itemField->getValue('inf_usr_id_change'), $itemField->getValue('inf_timestamp_change')));
 
 // add form to html page and show page

@@ -56,7 +56,7 @@ if($getMode !== 'new' && $getPhotoId > 0)
 }
 
 // Speicherort mit dem Pfad aus der Datenbank
-$albumPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+$albumPath = ADMIDIO_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if($getMode === 'new' || $getMode === 'change')
@@ -166,9 +166,9 @@ if($getMode === 'new' || $getMode === 'change')
     else
     {
         // if begin date changed than the folder must also be changed
-        if($albumPath !== SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+        if($albumPath !== ADMIDIO_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
         {
-            $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
+            $newFolder = ADMIDIO_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
 
             // das komplette Album in den neuen Ordner kopieren
             $albumFolder = new Folder($albumPath);

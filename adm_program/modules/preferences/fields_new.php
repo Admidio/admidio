@@ -198,7 +198,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->addEditor('usf_description', null, $userField->getValue('usf_description'), array('height' => '200px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($userField->getValue('usf_usr_id_create'),
                $userField->getValue('usf_timestamp_create'), $userField->getValue('usf_usr_id_change'),
                $userField->getValue('usf_timestamp_change')));

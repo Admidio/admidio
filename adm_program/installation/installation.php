@@ -60,13 +60,13 @@ if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
-require_once(SERVER_PATH . '/adm_program/installation/install_functions.php');
-require_once(SERVER_PATH . '/adm_program/system/function.php');
-require_once(SERVER_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
 // Initialize and check the parameters
 
-define('THEME_PATH', 'layout');
+define('THEME_URL', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
 
@@ -142,7 +142,7 @@ if($getMode === 1) // (Default) Choose language
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'),
-                               SERVER_PATH.'/adm_program/languages/languages.xml',
+                               ADMIDIO_PATH.'/adm_program/languages/languages.xml',
                                'isocode', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $gL10n->getLanguage()));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
@@ -217,7 +217,7 @@ elseif($getMode === 3)  // Enter database access information
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=4');
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
-    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml',
+    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
                                'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
     $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_port', $gL10n->get('SYS_PORT'), $port, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
