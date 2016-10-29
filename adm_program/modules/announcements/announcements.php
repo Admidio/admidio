@@ -27,7 +27,7 @@ unset($_SESSION['announcements_request']);
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
 $getId       = admFuncVariableIsValid($_GET, 'id',        'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
