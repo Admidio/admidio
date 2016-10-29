@@ -67,7 +67,7 @@ class Session extends TableAccess
             }
         }
 
-        // if cookie ADMIDIO_DATA is set then there could be an auto login
+        // if cookie PREFIX_AUTO_LOGIN_ID is set then there could be an auto login
         // the auto login must be done here because after that the corresponding organization must be set
         if(array_key_exists($cookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE))
         {
@@ -290,18 +290,17 @@ class Session extends TableAccess
      */
     public function refreshSession()
     {
-        global $gCheckIpAddress, $gDebug;
+        global $gCheckIpAddress;
 
         // read session data from database to update the renew flag
         $this->readDataById($this->getValue('ses_id'));
 
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
-        if($this->getValue('ses_ip_address') !== ''
-        && $this->getValue('ses_ip_address') !== $_SERVER['REMOTE_ADDR']
-        && isset($gCheckIpAddress) && $gCheckIpAddress === 1)
+        $sesIpAddress = $this->getValue('ses_ip_address');
+        if($sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'] && isset($gCheckIpAddress) && $gCheckIpAddress === 1)
         {
-            error_log('Admidio stored session ip address: '.$this->getValue('ses_ip_address'). ' :: Remote ip address: '.$_SERVER['REMOTE_ADDR']);
+            error_log('Admidio stored session ip address: '.$sesIpAddress. ' :: Remote ip address: '.$_SERVER['REMOTE_ADDR']);
 
             unset($_SESSION['gCurrentSession']);
             $this->mObjectArray = array();
