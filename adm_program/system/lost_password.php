@@ -24,7 +24,7 @@ if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_r
 
 if($gValidLogin)
 {
-    $gMessage->setForwardUrl($g_root_path.'/adm_program/', 2000);
+    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/', 2000);
     $gMessage->show($gL10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));
     // => EXIT
 }
@@ -109,7 +109,7 @@ if(!empty($_POST['recipient_email']))
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database'));
             $sysmail->setVariable(1, $newPassword);
-            $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activationId);
+            $sysmail->setVariable(2, ADMIDIO_URL.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activationId);
             $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
             $user->saveChangesWithoutRights();
@@ -117,7 +117,7 @@ if(!empty($_POST['recipient_email']))
         }
 
         // always show a positive feedback to prevent hackers to validate an email-address or username
-        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php');
+        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php');
 
         if(strValidCharacters($_POST['recipient_email'], 'email'))
         {
@@ -149,7 +149,7 @@ else
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 
     // show form
-    $form = new HtmlForm('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php', $page);
+    $form = new HtmlForm('lost_password_form', ADMIDIO_URL.'/adm_program/system/lost_password.php', $page);
     $form->addInput('recipient_email', $gL10n->get('SYS_USERNAME_OR_EMAIL'), null, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
 
     // if captchas are enabled then visitors of the website must resolve this

@@ -250,9 +250,9 @@ catch(AdmException $e)
 // set default homepage
 if($gValidLogin)
 {
-    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_login'];
+    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
 }
 else
 {
-    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_logout'];
+    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
 }

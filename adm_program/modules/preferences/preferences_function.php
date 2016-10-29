@@ -294,7 +294,7 @@ switch($getMode)
 
         // show form
         $form = new HtmlForm('add_new_organization_form',
-                             $g_root_path.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
+                             ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
         $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
                         array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
         $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
@@ -370,7 +370,7 @@ switch($getMode)
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 
         // show form
-        $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences.php', $page);
+        $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php', $page);
         $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
 
         // add form to html page and show page

@@ -104,7 +104,7 @@ if($getMode === 'save')
 
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
+    header('Location: '.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
     exit();
 }
 elseif($getMode === 'dont_save')
@@ -125,7 +125,7 @@ elseif($getMode === 'dont_save')
         $gCurrentSession->save();
     }
     // zur Ausgangsseite zurueck
-    $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId, 2000);
+    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$getUserId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
     // => EXIT
 }
@@ -173,7 +173,7 @@ if($getMode === 'choose')
     $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
     // show form
-    $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('upload_files_form', ADMIDIO_URL.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload('foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'), array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help'));
     $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
@@ -254,11 +254,11 @@ elseif($getMode === 'upload')
     // create html page object
     $page = new HtmlPage($headline);
     $page->addJavascript('$("#btn_cancel").click(function() {
-        self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=dont_save&usr_id='.$getUserId.'\';
+        self.location.href=\''.ADMIDIO_URL.'/adm_program/modules/profile/profile_photo_edit.php?mode=dont_save&usr_id='.$getUserId.'\';
     });', true);
 
     // show form
-    $form = new HtmlForm('show_new_profile_picture_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=save&amp;usr_id='.$getUserId, $page);
+    $form = new HtmlForm('show_new_profile_picture_form', ADMIDIO_URL.'/adm_program/modules/profile/profile_photo_edit.php?mode=save&amp;usr_id='.$getUserId, $page);
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();

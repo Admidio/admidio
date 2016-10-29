@@ -104,7 +104,7 @@ else
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
 
-        echo '<h4><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
+        echo '<h4><a class="'. $plg_link_class. '" href="'. ADMIDIO_URL. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
         {
@@ -143,7 +143,7 @@ else
             $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
                 <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                    href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $plg_headline. '"><span
+                    href="'. ADMIDIO_URL. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $plg_headline. '"><span
                     class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a>';
             $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
@@ -156,7 +156,7 @@ else
 
     }
 
-    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.ADMIDIO_URL.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES').'</a>';
 }
 echo '</div>';
 

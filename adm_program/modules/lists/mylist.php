@@ -527,7 +527,7 @@ $myListMenu = $page->getMenu();
 // show link to system preferences of roles
 if($gCurrentUser->isAdministrator())
 {
-    $myListMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=lists',
+    $myListMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=lists',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -538,7 +538,7 @@ if($gNavigation->count() > 1)
 }
 
 // show form
-$form = new HtmlForm('mylist_configuration_form', $g_root_path. '/adm_program/modules/lists/mylist_prepare.php', $page);
+$form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. '/adm_program/modules/lists/mylist_prepare.php', $page);
 $form->openGroupBox('gb_configuration_list', $gL10n->get('LST_CONFIGURATION_LIST'));
 
 // read all relevant configurations from database and create an array
@@ -625,7 +625,7 @@ if($gCurrentUser->isAdministrator())
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.$g_root_path.'/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true">
+                        href="'.ADMIDIO_URL.'/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true">
                         <img src="'.THEME_URL.'/icons/help.png" alt="Help" />
                     </a>
                 </th>

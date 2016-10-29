@@ -106,7 +106,7 @@ if(is_file('../../config.php') && is_file('../../adm_my_files/config.php'))
     // try to delete the config file at the old place otherwise show notice to user
     if(!@unlink('../../config.php'))
     {
-        showNotice($gL10n->get('INS_DELETE_CONFIG_FILE', $g_root_path), $g_root_path.'/adm_program/installation/index.php',
+        showNotice($gL10n->get('INS_DELETE_CONFIG_FILE', ADMIDIO_URL), ADMIDIO_URL.'/adm_program/installation/index.php',
                    $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
     }
 }
@@ -116,7 +116,7 @@ $message = checkDatabaseVersion($gDb);
 
 if($message !== '')
 {
-    showNotice($message, $g_root_path.'/adm_program/index.php',
+    showNotice($message, ADMIDIO_URL.'/adm_program/index.php',
                $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
 }
 
@@ -165,7 +165,7 @@ if($installedDbVersion === '')
             <strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong>
         </div>
         <p>'.$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION_TEXT).'</p>';
-    showNotice($message, $g_root_path.'/adm_program/index.php',
+    showNotice($message, ADMIDIO_URL.'/adm_program/index.php',
                $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
 
@@ -210,7 +210,7 @@ if($getMode === 1)
                 <strong>'.$gL10n->get('INS_DATABASE_IS_UP_TO_DATE').'</strong>
             </div>
             <p>'.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</p>';
-        showNotice($message, $g_root_path.'/adm_program/index.php',
+        showNotice($message, ADMIDIO_URL.'/adm_program/index.php',
                    $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
     }
     // if source version smaller then database -> show error
@@ -224,7 +224,7 @@ if($getMode === 1)
                     <a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>').'
                 </p>
             </div>';
-        showNotice($message, $g_root_path.'/adm_program/index.php',
+        showNotice($message, ADMIDIO_URL.'/adm_program/index.php',
                    $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
     }
 }

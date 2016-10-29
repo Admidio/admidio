@@ -26,7 +26,6 @@ class Menu
     protected $id;
     protected $title;
     protected $items;
-    protected $root_path;
 
     /**
      * constructor
@@ -35,12 +34,9 @@ class Menu
      */
     public function __construct($id, $title)
     {
-        global $g_root_path;
-
         $this->id        = $id;
         $this->title     = $title;
         $this->items     = array();
-        $this->root_path = $g_root_path;
     }
 
     /**
@@ -56,7 +52,7 @@ class Menu
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $link) === 0)
         {
-            $link = $this->root_path . $link;
+            $link = ADMIDIO_URL . $link;
         }
         // add THEME_URL to images unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $icon) === 0)
@@ -97,7 +93,7 @@ class Menu
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $link) === 0)
         {
-            $link = $this->root_path . $link;
+            $link = ADMIDIO_URL . $link;
         }
 
         $this->items[$parentId]['subitems'][$id] = array('link' => $link, 'text' => $text);

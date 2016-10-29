@@ -127,7 +127,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('guestbook_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
+$form = new HtmlForm('guestbook_edit_form', ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name

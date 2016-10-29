@@ -38,7 +38,7 @@ $relationtypesMenu = $page->getMenu();
 $relationtypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new category
-$relationtypesMenu->addItem('admMenuItemNewRelationType', $g_root_path.'/adm_program/modules/userrelations/relationtypes_new.php',
+$relationtypesMenu->addItem('admMenuItemNewRelationType', ADMIDIO_URL.'/adm_program/modules/userrelations/relationtypes_new.php',
                          $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_USER_RELATION_TYPE')), 'add.png');
 
 // Create table object
@@ -78,10 +78,10 @@ while($rel_row = $relationtypesStatement->fetch())
     $rel_row2['urt_name_female'] = $rel_row2['urt_name_female_inverse'];
     $relationtype2->setArray($rel_row2);
 
-    $relationtypeAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
+    $relationtypeAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
                                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     $relationtypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=urt&amp;element_id=row_'.
+                                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=urt&amp;element_id=row_'.
                                         $relationtype1->getValue('urt_id').'&amp;name='.urlencode($relationtype1->getValue('urt_name').($relationtype1->isUnidirectional() ? '' : ('/'.$relationtype2->getValue('urt_name')))).'&amp;database_id='.$relationtype1->getValue('urt_id').'"><img
                                            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 

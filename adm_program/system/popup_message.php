@@ -117,7 +117,7 @@ switch ($get_type)
         $text = 'REL_USER_RELATION_TYPE_DEL';
         break;
     case 'ure':
-        $url = $g_root_path.'/adm_program/modules/userrelations/userrelations_function.php?mode=2&ure_id='.$get_database_id;
+        $url = ADMIDIO_URL.'/adm_program/modules/userrelations/userrelations_function.php?mode=2&ure_id='.$get_database_id;
         break;
     default:
         $url = '';

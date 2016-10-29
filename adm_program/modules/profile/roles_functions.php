@@ -99,7 +99,7 @@ function getFormerRolesFromDatabase($userId)
  */
 function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement, $count_role, $directOutput)
 {
-    global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path, $gProfileFields;
+    global $gDb, $gL10n, $gCurrentUser, $gPreferences, $gProfileFields;
 
     $countShowRoles = 0;
     $member = new TableMembers($gDb);
@@ -148,7 +148,7 @@ function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement
 
                             if($gCurrentUser->hasRightViewRole($member->getValue('mem_rol_id')))
                             {
-                                $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                                $roleMemHTML .= '<a href="'. ADMIDIO_URL. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }
                             else
                             {
@@ -183,7 +183,7 @@ function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement
                                 {
                                     $roleMemHTML .= '
                                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
+                                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
                                         $role->getValue('rol_id'). '&amp;database_id='.$member->getValue('mem_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
                                         src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                                 }
@@ -214,7 +214,7 @@ function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement
                         $roleMemHTML .= '</span>
                     </li>
                     <li class="list-group-item" id="membership_period_'.$member->getValue('mem_id').'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
-                        $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=7&amp;user_id='.$user->getValue('usr_id').'&amp;mem_id='.$row['mem_id'], null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
+                        $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), ADMIDIO_URL.'/adm_program/modules/profile/profile_function.php?mode=7&amp;user_id='.$user->getValue('usr_id').'&amp;mem_id='.$row['mem_id'], null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput('membership_start_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
                         $form->addInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
                         $form->addButton('btn_send_'.$member->getValue('mem_id'), $gL10n->get('SYS_OK'), array('class' => 'button-membership-period-form', 'data-admidio' => $member->getValue('mem_id')));

@@ -129,7 +129,7 @@ if ($gPreferences['enable_download_module'] == 1)
                 }
 
                 echo '
-                <a class="btn '.$plg_link_class_downl.'" href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
+                <a class="btn '.$plg_link_class_downl.'" href="'. ADMIDIO_URL. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
                     src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
                     title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.$timestampHtml.'</a>';
 

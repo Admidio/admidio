@@ -36,7 +36,7 @@ $roomsMenu = $page->getMenu();
 // show back link
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room
-$roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom,
+$roomsMenu->addItem('menu_item_new_room', ADMIDIO_URL.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom,
                     $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
 
 if($gPreferences['system_show_create_edit'] == 1)
@@ -101,10 +101,10 @@ else
                      . $room->getValue('room_name').'
                 </div>
                 <div class="pull-right text-right">
-                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img
                         src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
+                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
                         $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img
                         src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
                 </div>

@@ -107,7 +107,7 @@ echo '
                 echo '<hr />';
             }
             echo '<p>
-                <a class="btn" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
+                <a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
                     src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />';
 
                 if(strlen($row['address']) > 0)
@@ -122,7 +122,7 @@ echo '
                 {
                     if($gPreferences['enable_mail_module'] == 1)
                     {
-                        echo '<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a><br />';
+                        echo '<a href="'.ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a><br />';
                     }
                     else
                     {
@@ -134,7 +134,7 @@ echo '
             if(!isMember($row['usr_id']))
             {
                 // gefundene User ist noch KEIN Mitglied dieser Organisation
-                $link = $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$row['usr_id'];
+                $link = ADMIDIO_URL.'/adm_program/modules/profile/roles.php?usr_id='.$row['usr_id'];
 
                 // KEINE Logindaten vorhanden
                 echo '<p>'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
@@ -151,7 +151,7 @@ echo '
     <div class="panel-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
 
-        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1\'"><img
+        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.ADMIDIO_URL.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1\'"><img
             src="'. THEME_URL. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
     </div>
 </div>';

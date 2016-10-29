@@ -22,7 +22,7 @@
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *
  * // show link to create new announcement
- * $myNavbar->addItem('menu_item_new_entry', $g_root_path.'/adm_program/modules/mymodule/mymodule_new.php',
+ * $myNavbar->addItem('menu_item_new_entry', ADMIDIO_URL.'/adm_program/modules/mymodule/mymodule_new.php',
  *                         $gL10n->get('SYS_CREATE'), 'add.png');
  * $myNavbar->show(); @endcode
  */
@@ -132,14 +132,12 @@ class HtmlNavbar
      */
     public function addItem($id, $url, $text, $icon, $orientation = 'left', $parentItem = 'navbar', $class = '')
     {
-        global $g_root_path;
-
         $urlStartRegex = '/^(http(s?):)?\/\//';
 
         // add root path to link unless the full URL is given
         if ($url !== '' && $url !== '#' && preg_match($urlStartRegex, $url) === 0)
         {
-            $url = $g_root_path . $url;
+            $url = ADMIDIO_URL . $url;
         }
 
         // add THEME_URL to images unless the full URL is given

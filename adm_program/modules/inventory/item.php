@@ -41,7 +41,7 @@ if($gPreferences['enable_inventory_module'] >= 0 && !$gValidLogin)
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($fieldNameIntern, $item)
 {
-    global $gPreferences, $g_root_path, $inventory, $gL10n, $gInventoryFields;
+    global $gPreferences, $inventory, $gL10n, $gInventoryFields;
     $html      = array('label' => '', 'value' => '');
     $value     = '';
     $msg_image = '';
@@ -85,10 +85,10 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/dist/css/datepicker3.css');
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gL10n->getLanguage().'.js');
+$page->addCssFile(ADMIDIO_URL.'/adm_program/libs/bootstrap-datepicker/dist/css/datepicker3.css');
+$page->addJavascriptFile(ADMIDIO_URL.'/adm_program/modules/profile/profile.js');
+$page->addJavascriptFile(ADMIDIO_URL.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+$page->addJavascriptFile(ADMIDIO_URL.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gL10n->getLanguage().'.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
@@ -156,7 +156,7 @@ if($gNavigation->count() > 1)
 }
 
 // show link to edit profile
-$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/inventory/item_new.php?item_id='.$inventory->getValue('inv_id'),
+$profileMenu->addItem('menu_item_new_entry', ADMIDIO_URL. '/adm_program/modules/inventory/item_new.php?item_id='.$inventory->getValue('inv_id'),
                 $gL10n->get('MEM_EDIT_USER'), 'edit.png');
 
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
@@ -164,11 +164,11 @@ $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES')
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
+    $profileMenu->addItem('menu_item_maintain_profile_fields', ADMIDIO_URL. '/adm_program/modules/preferences/fields.php',
                                 $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
     // show link to system preferences of weblinks
-    $profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile',
+    $profileMenu->addItem('menu_item_preferences_links', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=profile',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
@@ -248,13 +248,13 @@ $page->addHtml('
             if($gCurrentUser->editInventory($inventory))
             {
                 $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
-                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/inventory/item_photo_edit.php?inv_id='.$inventory->getValue('inv_id').'"><img
+                    <a class="btn" href="'.ADMIDIO_URL.'/adm_program/modules/inventory/item_photo_edit.php?inv_id='.$inventory->getValue('inv_id').'"><img
                             src="'.THEME_URL.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($inventory->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                     || is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$inventory->getValue('inv_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
-                    $page->addHtml('<a class="btn" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
+                    $page->addHtml('<a class="btn" href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                     '&amp;database_id='.$inventory->getValue('inv_id').'"><img src="'. THEME_URL. '/icons/delete.png"
                                     alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }

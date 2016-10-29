@@ -126,7 +126,7 @@ else
 }
 
 // show headline of module
-$html .= '<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
+$html .= '<form id="roles_assignment_form" action="'.ADMIDIO_URL.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');

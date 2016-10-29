@@ -48,8 +48,6 @@ class HtmlPage
      */
     public function __construct($headline = '')
     {
-        global $g_root_path;
-
         $this->title         = '';
         $this->header        = '';
         $this->headline      = '';
@@ -312,7 +310,7 @@ class HtmlPage
      */
     private function getDebugOrMinFilepath($filepath)
     {
-        global $gDebug, $g_root_path;
+        global $gDebug;
 
         $fileInfo = pathinfo($filepath);
         $filename = basename($fileInfo['filename'], '.min');
@@ -320,12 +318,12 @@ class HtmlPage
         $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
         $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
 
-        if ((!$gDebug && is_file(ADMIDIO_PATH.$filepathMin)) || !is_file(ADMIDIO_PATH.$filepathDebug))
+        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
         {
-            return $g_root_path.$filepathMin;
+            return ADMIDIO_URL . $filepathMin;
         }
 
-        return $g_root_path.$filepathDebug;
+        return ADMIDIO_URL . $filepathDebug;
     }
 
     /**
@@ -441,7 +439,7 @@ class HtmlPage
      */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
 
         $headerContent    = '';
@@ -505,8 +503,8 @@ class HtmlPage
 
         // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
         $headerContent .= '<!--[if lt IE 9]>
-            <script src="'.$g_root_path.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
-            <script src="'.$g_root_path.'/adm_program/libs/respond/respond.min.js"></script>
+            <script src="'.ADMIDIO_URL.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
+            <script src="'.ADMIDIO_URL.'/adm_program/libs/respond/respond.min.js"></script>
         <![endif]-->';
 
         if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
@@ -573,7 +571,7 @@ class HtmlPage
                 <title>'.$this->title.'</title>
 
                 <script type="text/javascript">
-                    var gRootPath  = "'. $g_root_path. '";
+                    var gRootPath  = "'. ADMIDIO_URL. '";
                     var gThemePath = "'. THEME_URL. '";
                 </script>';
 

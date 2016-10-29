@@ -113,7 +113,7 @@ class FunctionClass
      */
     public function parseEcardTemplate($imageName, $ecardMessage, $ecardData, $recipientName, $recipientEmail)
     {
-        global $gCurrentUser, $g_root_path;
+        global $gCurrentUser;
 
         // Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
         if(strip_tags(trim($recipientName)) === '')
@@ -136,7 +136,7 @@ class FunctionClass
         $pregRepArray = array();
 
         // Hier wird der Pfad zum Admidio Verzeichnis ersetzt
-        $pregRepArray['/<%g_root_path%>/']                = $g_root_path;
+        $pregRepArray['/<%g_root_path%>/']                = ADMIDIO_URL;
         // Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
         $pregRepArray['/<%theme_root_path%>/']            = THEME_URL;
         // Hier wird der Sender Name, Email und Id ersetzt

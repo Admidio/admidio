@@ -260,11 +260,11 @@ while($row = $mglStatement->fetch())
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $orgName);
     }
 
-    $columnValues[] = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
+    $columnValues[] = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img
              src="'.THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
     // Add "Lastname" and "Firstname"
-    $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['name'].'</a>';
+    $columnValues[] = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['name'].'</a>';
 
     // Add "Loginname"
     if(strlen($row['usr_login_name']) > 0)
@@ -315,14 +315,14 @@ while($row = $mglStatement->fetch())
         {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '
-            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=5"><img
+            <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=5"><img
                 src="'.THEME_URL.'/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
         }
         else
         {
             // if user has no email or send email is disabled then administrators could set a new password
             $userAdministration = '
-            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/modules/profile/password.php?usr_id='.$row['usr_id'].'"><img
+            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.ADMIDIO_URL.'/adm_program/modules/profile/password.php?usr_id='.$row['usr_id'].'"><img
                 src="'.THEME_URL.'/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
         }
     }
@@ -335,7 +335,7 @@ while($row = $mglStatement->fetch())
         }
         else
         {
-            $mailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'];
+            $mailLink = ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'];
         }
 
         $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_URL.'/icons/email.png"
@@ -346,7 +346,7 @@ while($row = $mglStatement->fetch())
     // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
     if($memberOfThisOrganization || !$memberOfOtherOrganization)
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$row['usr_id'].'"><img
+        $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile_new.php?user_id='.$row['usr_id'].'"><img
                                     src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
     }
 
@@ -355,7 +355,7 @@ while($row = $mglStatement->fetch())
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
+        $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
                                     src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
     }
 

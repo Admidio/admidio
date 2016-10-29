@@ -665,7 +665,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  */
 function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited, $timestampEdited, $userIdCreated = 0, $userIdEdited = 0)
 {
-    global $gL10n, $gValidLogin, $g_root_path, $gPreferences;
+    global $gL10n, $gValidLogin, $gPreferences;
 
     $html = '';
 
@@ -685,7 +685,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             // if valid login and a user id is given than create a link to the profile of this user
             if($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
             {
-                $userNameCreated = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
+                $userNameCreated = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.
                                     $userIdCreated.'">'.$userNameCreated.'</a>';
             }
 
@@ -705,7 +705,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             // if valid login and a user id is given than create a link to the profile of this user
             if($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
             {
-                $userNameEdited = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
+                $userNameEdited = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.
                                    $userIdEdited.'">'.$userNameEdited.'</a>';
             }
 

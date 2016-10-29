@@ -102,7 +102,7 @@ class InventoryFields
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
-        global $gPreferences, $g_root_path, $gL10n;
+        global $gPreferences, $gL10n;
 
         if($value !== '' && array_key_exists($fieldNameIntern, $this->mInventoryFields))
         {
@@ -140,7 +140,7 @@ class InventoryFields
                                 $value2 = $this->mItemId;
                             }
 
-                            $emailLink = $g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
+                            $emailLink = ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?usr_id='. $value2;
                         }
                         if(strlen($value) > 30)
                         {

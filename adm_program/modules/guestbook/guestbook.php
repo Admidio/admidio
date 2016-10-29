@@ -60,13 +60,13 @@ $page->enableModal();
 // add rss feed to guestbook
 if($gPreferences['enable_rss'] == 1)
 {
-    $page->addRssFile($g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
+    $page->addRssFile(ADMIDIO_URL.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 }
 
 $page->addJavascript('
     function getComments(commentId) {
         // RequestObjekt abschicken und Kommentar laden
-        $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.',
+        $.get("'.ADMIDIO_URL.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.',
         function(data) {
             $("#comments_" + commentId).html(data);
         });
@@ -153,14 +153,14 @@ $guestbookMenu = $page->getMenu();
 if($getGboId === 0 && !$getModeration)
 {
     // show link to create new guestbook entry
-    $guestbookMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline,
+    $guestbookMenu->addItem('admMenuItemNewEntry', ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline,
                             $gL10n->get('GBO_CREATE_ENTRY'), 'add.png');
 }
 
 if($getGboId > 0 || $getModeration)
 {
     // show link to navigate back to guestbook
-    $guestbookMenu->addItem('admMenuItemNavigateBack', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline,
+    $guestbookMenu->addItem('admMenuItemNavigateBack', ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline,
                             $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png');
 }
 
@@ -185,7 +185,7 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enab
 
     if($countLockedEntries > 0)
     {
-        $guestbookMenu->addItem('admMenuItemModerate', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline,
+        $guestbookMenu->addItem('admMenuItemModerate', ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline,
                                 $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png');
     }
 }
@@ -193,7 +193,7 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enab
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
-    $guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=guestbook',
+    $guestbookMenu->addItem('admMenuItemPreferencesGuestbook', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=guestbook',
                             $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -259,10 +259,10 @@ else
                     if ($gCurrentUser->editGuestbookRight())
                     {
                         $page->addHtml('
-                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
                             src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
+                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
                             $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img
                             src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                     }
@@ -356,7 +356,7 @@ else
                 && !$getModeration)
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
-                    $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
+                    $load_url = ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
                     $page->addHtml('
                     <button type="button" class="btn btn-default" onclick="window.location.href=\''.$load_url.'\'"><img src="'. THEME_URL. '/icons/comment_new.png"
                         alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>');
@@ -383,7 +383,7 @@ else
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
+$base_url = ADMIDIO_URL.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
 $page->addHtml(admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, true));
 
 // show html of complete page

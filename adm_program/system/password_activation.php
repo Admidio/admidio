@@ -36,7 +36,7 @@ if($user->getValue('usr_activation_code') === $getActivationId)
     $user->setValue('usr_activation_code', '');
     $user->save();
 
-    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
+    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php', 2000);
     $gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
     // => EXIT
 }

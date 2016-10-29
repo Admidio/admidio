@@ -134,7 +134,7 @@ $categoryCreateMenu = $page->getMenu();
 $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/modules/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
+$form = new HtmlForm('categories_edit_form', ADMIDIO_URL.'/adm_program/modules/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
 
 // systemcategories should not be renamed
 $fieldPropertyCatName = FIELD_REQUIRED;

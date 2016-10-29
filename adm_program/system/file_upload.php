@@ -70,7 +70,7 @@ if($getModule === 'photos')
     }
 
     $uploadDir = ADMIDIO_PATH.'/adm_my_files/photos/upload/';
-    $uploadUrl = $g_root_path.'/adm_my_files/photos/upload/';
+    $uploadUrl = ADMIDIO_URL.'/adm_my_files/photos/upload/';
 
     $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
     $textFileUploaded = $gL10n->get('PHO_FILE_UPLOADED');
@@ -109,7 +109,7 @@ elseif($getModule === 'downloads')
         // get recordset of current folder from database
         $folder->getFolderForDownload($getId);
         $uploadDir = $folder->getCompletePathOfFolder().'/';
-        $uploadUrl = $g_root_path. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
+        $uploadUrl = ADMIDIO_URL. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
     }
     catch(AdmException $e)
     {

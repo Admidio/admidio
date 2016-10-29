@@ -254,7 +254,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCaptcha($id, $class = '')
     {
-        global $gL10n, $g_root_path;
+        global $gL10n;
 
         $attributes = array('class' => 'captcha');
         ++$this->countElements;
@@ -267,8 +267,8 @@ class HtmlForm extends HtmlFormBasic
 
         // add a row with the captcha puzzle
         $this->openControlStructure('captcha_puzzle', '', FIELD_DEFAULT, '', '', $attributes['class']);
-        $onClickCode = 'document.getElementById("captcha").src="' . $g_root_path . '/adm_program/libs/securimage/securimage_show.php?" + Math.random(); return false;';
-        $this->addHtml('<img id="captcha" src="' . $g_root_path . '/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
+        $onClickCode = 'document.getElementById("captcha").src="' . ADMIDIO_URL . '/adm_program/libs/securimage/securimage_show.php?" + Math.random(); return false;';
+        $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . '/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
                         <a class="admidio-icon-link" href="#" onclick="' . $onClickCode . '"><img
                             src="' . THEME_URL . '/icons/view-refresh.png" alt="' . $gL10n->get('SYS_RELOAD') . '" title="' . $gL10n->get('SYS_RELOAD') . '" /></a>');
         $this->closeControlStructure();
@@ -450,7 +450,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addEditor($id, $label, $value, array $options = array())
     {
-        global $gPreferences, $g_root_path, $gL10n;
+        global $gPreferences, $gL10n;
 
         ++$this->countElements;
         $attributes = array('class' => 'editor');
@@ -490,7 +490,7 @@ class HtmlForm extends HtmlFormBasic
                 toolbar: "' . $optionsAll['toolbar'] . '",
                 language: "' . $gL10n->getLanguageIsoCode() . '",
                 uiColor: "' . $gPreferences['system_js_editor_color'] . '",
-                filebrowserImageUploadUrl: "' . $g_root_path . '/adm_program/system/ckeditor_upload_handler.php"
+                filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
             });
             CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
 

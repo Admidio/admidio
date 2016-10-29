@@ -141,12 +141,12 @@ elseif ($getMode === 3)
             else
             {
                 // der entsprechende Ordner konnte nicht angelegt werden
-                $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
+                $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/modules/downloads/downloads.php');
                 $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
 
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+            $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
             $gMessage->show($gL10n->get('DOW_FOLDER_CREATED', $newFolderName));
             // => EXIT
         }
@@ -207,13 +207,13 @@ elseif ($getMode === 4)
                     $file->setValue('fil_description', $newDescription);
                     $file->save();
 
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
                     // => EXIT
                 }
                 else
                 {
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
                     // => EXIT
                 }
@@ -244,13 +244,13 @@ elseif ($getMode === 4)
                     $folder->setValue('fol_description', $newDescription);
                     $folder->rename($newFolder, $folder->getValue('fol_path'));
 
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
                     // => EXIT
                 }
                 else
                 {
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
                     // => EXIT
                 }
@@ -346,7 +346,7 @@ elseif ($getMode === 6)
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
-        $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
+        $location = 'Location: '.ADMIDIO_URL.'/adm_program/system/back.php';
         header($location);
         exit();
     }
@@ -371,7 +371,7 @@ elseif ($getMode === 6)
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
-        $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
+        $location = 'Location: '.ADMIDIO_URL.'/adm_program/system/back.php';
         header($location);
         exit();
     }
@@ -449,7 +449,7 @@ elseif ($getMode === 7)
 
         $folder->save();
 
-        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
         // => EXIT
     }

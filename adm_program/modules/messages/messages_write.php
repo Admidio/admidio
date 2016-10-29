@@ -57,7 +57,7 @@ if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
 // check if user has email address for sending a email
 if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') === '')
 {
-    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php">', '</a>'));
     // => EXIT
 }
 
@@ -200,7 +200,7 @@ if ($getMsgType === 'PM')
     }
 
     // show form
-    $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', ADMIDIO_URL.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
@@ -278,7 +278,7 @@ elseif (!isset($messageStatement))
     }
 
     // show form
-    $form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', ADMIDIO_URL.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $preloadData = array();

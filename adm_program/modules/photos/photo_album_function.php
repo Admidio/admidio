@@ -148,7 +148,7 @@ if($getMode === 'new' || $getMode === 'change')
             $photo_album->delete();
 
             // der entsprechende Ordner konnte nicht angelegt werden
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+            $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
             // => EXIT
         }
@@ -177,7 +177,7 @@ if($getMode === 'new' || $getMode === 'change')
             // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
             if(!$b_return)
             {
-                $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+                $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/modules/photos/photos.php');
                 $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
@@ -192,7 +192,7 @@ if($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        header('Location: '. $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId);
+        header('Location: '. ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId);
     }
     else
     {

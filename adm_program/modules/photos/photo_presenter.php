@@ -47,22 +47,22 @@ else
 // Ordnerpfad zusammensetzen
 $ordner_foto = '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
 $ordner      = ADMIDIO_PATH. $ordner_foto;
-$ordner_url  = $g_root_path. $ordner_foto;
+$ordner_url  = ADMIDIO_URL. $ordner_foto;
 
 // Naechstes und Letztes Bild
 $previousImage = $getPhotoNr - 1;
 $nextImage = $getPhotoNr + 1;
 $urlPreviousImage = '#';
 $urlNextImage     = '#';
-$urlCurrentImage  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'];
+$urlCurrentImage  = ADMIDIO_URL.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'];
 
 if($previousImage > 0)
 {
-    $urlPreviousImage = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $previousImage. '&pho_id='. $getPhotoId;
+    $urlPreviousImage = ADMIDIO_URL. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $previousImage. '&pho_id='. $getPhotoId;
 }
 if($nextImage <= $photoAlbum->getValue('pho_quantity'))
 {
-    $urlNextImage = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $nextImage. '&pho_id='. $getPhotoId;
+    $urlNextImage = ADMIDIO_URL. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $nextImage. '&pho_id='. $getPhotoId;
 }
 
 // create html page object
@@ -82,7 +82,7 @@ if($gPreferences['photo_show_mode'] == 2)
     // if you have no popup or colorbox then show a button back to the album
     if($gPreferences['photo_show_mode'] == 2)
     {
-        $photoPresenterMenu->addItem('menu_item_back_to_album', $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId,
+        $photoPresenterMenu->addItem('menu_item_back_to_album', ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId,
                                      $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png');
     }
 

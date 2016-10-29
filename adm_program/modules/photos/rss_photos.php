@@ -119,7 +119,7 @@ while ($row = $statement->fetch())
     }
 
     $title   = $parents.$photo_album->getValue('pho_name');
-    $link    = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
+    $link    = ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
     $author  = $row['create_name'];
     $pubDate = date('r', strtotime($photo_album->getValue('pho_timestamp_create')));
 
@@ -145,8 +145,8 @@ while ($row = $statement->fetch())
             if (is_file($photoPath))
             {
                 $description = $description.
-                    '<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img
-                     src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
+                    '<a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img
+                     src="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
                      '&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=1" border="0" /></a>&nbsp;';
             }
         }
