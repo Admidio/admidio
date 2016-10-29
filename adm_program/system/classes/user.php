@@ -407,9 +407,10 @@ class User extends TableAccess
 
         if ($updateSessionCookies)
         {
-            // set cookie for session id and remove ports from domain
-            $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-            setcookie($gCookiePraefix. '_ID', $gSessionId, 0, '/', $domain, 0);
+            // set cookie for session id
+            $pathParts = explode('adm_', $_SERVER['REQUEST_URI']);
+            $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+            setcookie($gCookiePraefix . '_ID', $gSessionId, 0, $pathParts[0], $_SERVER['HTTP_HOST'], $secure, true);
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();
