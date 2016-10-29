@@ -35,7 +35,6 @@ class Session extends TableAccess
     protected $mObjectArray = array();  ///< Array with all objects of this session object.
     protected $mAutoLogin;              ///< Object of table auto login that will handle an auto login
     protected $mCookiePrefix;           ///< The prefix that is used for the cookies and identify a cookie for this organization
-    protected $mDomain;                 ///< The current domain of this session without any ports
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -51,7 +50,6 @@ class Session extends TableAccess
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
         $this->mCookiePrefix = $cookiePrefix;
-        $this->mDomain       = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
 
         if(is_numeric($session))
         {
