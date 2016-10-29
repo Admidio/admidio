@@ -149,6 +149,44 @@ class Session extends TableAccess
     }
 
     /**
+     * @param string $name     Name of the cookie.
+     * @param string $value    Value of the cookie. If value is "empty string" or "false",
+     *                         the cookie will be set as deleted (Expire is set to 1 year in the past).
+     * @param int    $expire   The Unix-Timestamp (Seconds) of the Date/Time when the cookie should expire.
+     *                         With "0" the cookie will expire if the session ends. (When Browser gets closed)
+     * @param string $path     Specify the path where the cookie should be available. (Also in sub-paths)
+     * @param string $domain   Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
+     * @param bool   $secure   If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool   $httpOnly If "true" cookie is accessible only via HTTP.
+     *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
+     * @return bool Returns "true" if the cookie is successfully set.
+     */
+    private function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
+    {
+        if ($path === '')
+        {
+            $pathParts = explode('adm_', $_SERVER['REQUEST_URI']);
+            $path = $pathParts[0];
+        }
+        if ($domain === '')
+        {
+            $domain = $_SERVER['HTTP_HOST'];
+            // https://secure.php.net/manual/en/function.setcookie.php#73107
+            if ($domain === 'localhost')
+            {
+                $domain = false;
+            }
+        }
+        if ($secure === null)
+        {
+            // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
+            $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        }
+
+        return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+    }
+
+    /**
      * Return the organization id of this session. If AutoLogin is enabled then the
      * organization may not be the organization of the config.php because the
      * user had set the AutoLogin to a different organization.
