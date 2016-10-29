@@ -71,6 +71,8 @@ class TableAnnouncement extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
+        global $gL10n;
+
         if ($columnName === 'ann_description')
         {
             if (!isset($this->dbColumns['ann_description']))
@@ -90,7 +92,18 @@ class TableAnnouncement extends TableAccess
             return $value;
         }
 
-        return parent::getValue($columnName, $format);
+        $value = parent::getValue($columnName, $format);
+
+        if($columnName === 'cat_name')
+        {
+            // if text is a translation-id then translate it
+            if ($format !== 'database' && strpos($value, '_') === 3)
+            {
+                $value = $gL10n->get(admStrToUpper($value));
+            }
+        }
+
+        return $value;
     }
 
     /**

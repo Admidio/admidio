@@ -118,6 +118,11 @@ class ModuleAnnouncements extends Modules
         {
             $this->getConditions = 'AND ann_id = '.$this->getParameter('id');
         }
+        if($this->getParameter('cat_id') > 0)
+        {
+            $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
+        }
+
         // Search announcements to date
         elseif ($this->getParameter('dateStartFormatEnglish'))
         {
