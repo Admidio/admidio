@@ -178,7 +178,11 @@ class Session extends TableAccess
         if ($secure === null)
         {
             // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
-            $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+            $secure = false;
+            if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            {
+                $secure = true;
+            }
         }
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
