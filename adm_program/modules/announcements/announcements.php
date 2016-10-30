@@ -89,7 +89,7 @@ if($gCurrentUser->editAnnouncements())
 
 $page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit(); });', true);
 
-$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.'/adm_program/modules/announcements/announcements.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
 $announcementsMenu->addForm($navbarForm->show(false));
 
@@ -165,14 +165,14 @@ else
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'),
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
-                ' . $gL10n->get('SYS_CATEGORY') . ' <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='. $getHeadline.'&amp;cat_id'.$announcement->getValue('ann_cat_id').'">' . $announcement->getValue('cat_name').'</a>
+                ' . $gL10n->get('SYS_CATEGORY') . ' <a href="'.ADMIDIO_URL.'/adm_program/modules/announcements/announcements.php?headline='. $getHeadline.'&amp;cat_id'.$announcement->getValue('ann_cat_id').'">' . $announcement->getValue('cat_name').'</a>
             </div>
         </div>');
     }  // Ende foreach
 
     // If necessary show links to navigate to next and previous recordsets of the query
-    $base_url = ADMIDIO_URL.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
-    $page->addHtml(admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $getStart, true));
+    $baseUrl = ADMIDIO_URL.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
+    $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart, true));
 }
 
 // show html of complete page
