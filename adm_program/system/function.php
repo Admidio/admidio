@@ -791,3 +791,19 @@ function admFuncCheckUrl($url)
 
     return $url;
 }
+
+/**
+ * This is a safe method for redirecting.
+ * @param string $url        The URL where redirecting to. Must be a absolute URL. (www.example.org)
+ * @param int    $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
+ * @see https://www.owasp.org/index.php/Open_redirect
+ */
+function admRedirect($url, $statusCode = 303)
+{
+    if (headers_sent() === false)
+    {
+        header('Location: ' . $url, true, $statusCode);
+    }
+
+    exit();
+}
