@@ -12,6 +12,7 @@
  * start     - Position of query recordset where the visual output should start
  * headline  - Title of the announcements module. This will be shown in the whole module.
  *             (Default) ANN_ANNOUNCEMENTS
+ * cat_id    : Show only announcements of this category id, if id is not set than show all announcements.
  * id        - Id of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
  *             if no date information is delivered
@@ -26,6 +27,7 @@ unset($_SESSION['announcements_request']);
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',    'int');
 $getId       = admFuncVariableIsValid($_GET, 'id',        'int');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
@@ -46,6 +48,7 @@ elseif($gPreferences['enable_announcements_module'] == 2)
 // create object for announcements
 $announcements = new ModuleAnnouncements();
 $announcements->setParameter('id', $getId);
+$announcements->setParameter('cat_id', $getCatId);
 $announcements->setDateRange($getDateFrom, $getDateTo);
 
 // get parameters and number of recordsets
@@ -83,6 +86,12 @@ if($gCurrentUser->editAnnouncements())
     $announcementsMenu->addItem('menu_item_new_announcement', ADMIDIO_URL.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline,
                                 $gL10n->get('SYS_CREATE_ENTRY'), 'add.png');
 }
+
+$page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit(); });', true);
+
+$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
+$announcementsMenu->addForm($navbarForm->show(false));
 
 if($gCurrentUser->isAdministrator())
 {
@@ -129,12 +138,14 @@ else
                         if($announcement->editRight())
                         {
                             $page->addHtml('
+                            <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
+                                src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
                             <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img
                                 src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                        if($announcement->getValue('ann_org_id') == $gCurrentOrganization->getValue('org_id'))
+                        if($announcement->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
@@ -154,6 +165,7 @@ else
                 // show information about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'),
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
+                ' . $gL10n->get('SYS_CATEGORY') . ' <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='. $getHeadline.'&amp;cat_id'.$announcement->getValue('ann_cat_id').'">' . $announcement->getValue('cat_name').'</a>
             </div>
         </div>');
     }  // Ende foreach

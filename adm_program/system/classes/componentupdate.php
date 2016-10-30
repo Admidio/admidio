@@ -240,6 +240,37 @@ class ComponentUpdate extends Component
     /**
      * This method deletes all roles that belongs to still deleted dates.
      */
+    public function updateStepAddAnnouncementsCategories()
+    {
+        global $gL10n;
+
+        // read id of system user from database
+        $sql = 'SELECT usr_id
+                  FROM '.TBL_USERS.'
+                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+        $systemUserStatement = $this->db->query($sql);
+        $systemUserId = (int) $systemUserStatement->fetchColumn();
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                        VALUES ('.$row['org_id'].', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                             , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\',   \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
+            $this->db->query($sql);
+
+            $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id = 
+                           (SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ANN\' AND cat_name_intern = \'COMMON\')
+                     WHERE ann_org_id = '.$row['org_id'];
+            $this->db->query($sql);
+        }
+    }
+
+    /**
+     * This method deletes all roles that belongs to still deleted dates.
+     */
     public function updateStepDeleteDateRoles()
     {
         $sql = 'SELECT rol_id
