@@ -7,12 +7,8 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/******************************************************************************
- * Creatw RSS 2.0 - Feed for Links
  *
- * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
+ * Spezification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * Parameters:
  *

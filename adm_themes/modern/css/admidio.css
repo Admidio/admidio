@@ -617,11 +617,6 @@ input[type="time"] {
 
 /* Information block with user and timestamp who created and edited the data */
 
-.admidio-admidio-info-created-edited {
-    font-size: 8pt;
-    margin-top: 8px;
-}
-
 .admidio-info-created {
     display: block;
 }
@@ -651,9 +646,10 @@ input[type="time"] {
 
 
 .panel-primary > .panel-footer {
-    padding: 0;
+    padding: 5px 0 0 0;
     background-color: white;
     border-top: 2px solid #c1dce6;
+    font-size: 8pt;
 }
 
 .admidio-panel-heading-icon {

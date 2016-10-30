@@ -12,6 +12,7 @@
  * ann_id    - ID of the announcement that should be edited
  * headline  - Title of the announcements module. This will be shown in the whole module.
  *             (Default) ANN_ANNOUNCEMENTS
+ * copy : true - The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -34,9 +35,14 @@ if(!$gCurrentUser->editAnnouncements())
 // Initialize and check the parameters
 $getAnnId    = admFuncVariableIsValid($_GET, 'ann_id',   'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
+$getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // set headline of the script
-if($getAnnId > 0)
+if($getCopy)
+{
+    $headline = $gL10n->get('SYS_COPY_VAR', $getHeadline);
+}
+elseif($getAnnId > 0)
 {
     $headline = $getHeadline. ' - '. $gL10n->get('SYS_EDIT_ENTRY');
 }
@@ -54,6 +60,11 @@ $announcement = new TableAnnouncement($gDb);
 if($getAnnId > 0)
 {
     $announcement->readDataById($getAnnId);
+
+    if($getCopy === true)
+    {
+        $getAnnId = 0;
+    }
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if(!$announcement->editRight())
@@ -81,6 +92,8 @@ $announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 // show form
 $form = new HtmlForm('announcements_edit_form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1', $page);
 $form->addInput('ann_headline', $gL10n->get('SYS_TITLE'), $announcement->getValue('ann_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+$form->addSelectBoxForCategories('ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'EDIT_CATEGORIES',
+                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('ann_cat_id')));
 
 // if current organization has a parent organization or is child organizations then show option to set this announcement to global
 if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
