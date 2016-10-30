@@ -12,7 +12,7 @@
  * start     - Position of query recordset where the visual output should start
  * headline  - Title of the announcements module. This will be shown in the whole module.
  *             (Default) ANN_ANNOUNCEMENTS
- * cat_id    : Show only announcements of this category id, if id is not set than show all announcments.
+ * cat_id    : Show only announcements of this category id, if id is not set than show all announcements.
  * id        - Id of a single announcement that should be shown.
  * date_from - is set to 01.01.1970,
  *             if no date information is delivered
@@ -64,7 +64,7 @@ $page->enableModal();
 // add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)
 {
-    $page->addRssFile($g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
+    $page->addRssFile(ADMIDIO_URL.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 }
 
 // number of announcements per page
@@ -83,7 +83,7 @@ $announcementsMenu = $page->getMenu();
 if($gCurrentUser->editAnnouncements())
 {
     // show link to create new announcement
-    $announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline,
+    $announcementsMenu->addItem('menu_item_new_announcement', ADMIDIO_URL.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline,
                                 $gL10n->get('SYS_CREATE_ENTRY'), 'add.png');
 }
 
@@ -96,7 +96,7 @@ $announcementsMenu->addForm($navbarForm->show(false));
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
-    $announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements',
+    $announcementsMenu->addItem('menu_item_preferences', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=announcements',
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -127,7 +127,7 @@ else
         <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue('ann_headline'). '" />'.
+                    <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/announcements.png" alt="'. $announcement->getValue('ann_headline'). '" />'.
                     $announcement->getValue('ann_headline'). '
                 </div>
                 <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));
@@ -138,10 +138,10 @@ else
                         if($announcement->editRight())
                         {
                             $page->addHtml('
-                            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
-                                src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
-                            <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
+                            <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
+                                src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
+                            <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img
+                                src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
@@ -149,9 +149,9 @@ else
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                                href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
                                 $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                                src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                         }
                     }
                 $page->addHtml('</div>
@@ -171,7 +171,7 @@ else
     }  // Ende foreach
 
     // If necessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
+    $base_url = ADMIDIO_URL.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
     $page->addHtml(admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $getStart, true));
 }
 

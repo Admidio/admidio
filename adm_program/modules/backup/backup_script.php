@@ -60,7 +60,7 @@ $HexBLOBs           = true;  // if true: blobs get data dumped as hex string; if
 $SuppressHTMLoutput = (@$_REQUEST['nohtml'] ? true : false); // disable all output for running as a cron job
 $Disable_mysqldump  = false; // LEAVE THIS AS "false"! If true, avoid use of "mysqldump" program to export databases which is *MUCH* *MUCH* faster than doing it row-by-row in PHP. If mysqldump is not available, will automatically fall back to slower row-by-row method. Highly recommended to leave this at "false" (i.e. do use mysqldump)
 $backuptimestamp    = '.'.date('Y-m-d.His'); // timestamp
-$backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
+$backupabsolutepath = ADMIDIO_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 $fileextension = ((OUTPUT_COMPRESSION_TYPE === 'bzip2') ? '.bz2' : ((OUTPUT_COMPRESSION_TYPE === 'gzip') ? '.gz' : ''));
 $fullbackupfilename = 'db_backup'.$backuptimestamp.'.sql'.$fileextension;
 $partbackupfilename = 'db_backup_partial'.$backuptimestamp.'.sql'.$fileextension;
@@ -569,7 +569,7 @@ else
 echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.
     $gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</strong><br /><br />
 
-'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.ADMIDIO_URL.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';
 
 OutputInformation('cancel_link', '');

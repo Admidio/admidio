@@ -96,7 +96,7 @@ function querySqlFile($db, $sqlFileName)
 {
     global $gL10n, $g_tbl_praefix;
 
-    $sqlPath = SERVER_PATH . '/adm_program/installation/db_scripts/';
+    $sqlPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
     $sqlFilePath = $sqlPath . $sqlFileName;
 
     if (!is_file($sqlFilePath))

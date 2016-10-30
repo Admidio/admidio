@@ -213,7 +213,7 @@ class Database
      */
     protected function getPropertyFromDatabaseConfig($property)
     {
-        $xmlDatabases = new SimpleXMLElement(SERVER_PATH . '/adm_program/system/databases.xml', null, true);
+        $xmlDatabases = new SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', null, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
         return (string) $node[0];
     }
@@ -383,7 +383,7 @@ class Database
             }
             else
             {
-                $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
+                $trace['file'] = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $trace['file']);
                 $trace['file'] = substr($trace['file'], 1);
             }
             $args = array();
@@ -399,7 +399,7 @@ class Database
                 if (!empty($trace['args'][0]))
                 {
                     $argument = htmlentities($trace['args'][0]);
-                    $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
+                    $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
                     $args[] = '\'' . $argument . '\'';
                 }
@@ -722,7 +722,7 @@ class Database
         }
 
         // display database error to user
-        if (isset($gPreferences) && defined('THEME_SERVER_PATH') && !headers_sent())
+        if (isset($gPreferences) && defined('THEME_ADMIDIO_PATH') && !headers_sent())
         {
             // create html page object
             $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));

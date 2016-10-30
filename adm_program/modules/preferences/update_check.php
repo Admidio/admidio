@@ -170,7 +170,7 @@ if($getMode === 2)
         <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION_TEXT.'</p>
         <p>'.$gL10n->get('UPD_STABLE_VERSION').':&nbsp;
             <a class="btn" href="'.ADMIDIO_HOMEPAGE.'download.php" target="_blank">
-                <img src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />'.$stableVersion.'
+                <img src="'.THEME_URL.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />'.$stableVersion.'
             </a>
             <br />
             '.$gL10n->get('UPD_BETA_VERSION').': &nbsp;';
@@ -179,7 +179,7 @@ if($getMode === 2)
     {
         echo '
             <a class="btn" href="'.ADMIDIO_HOMEPAGE.'download.php" target="_blank">
-                <img src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />
+                <img src="'.THEME_URL.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />
                 '.$betaVersion.'&nbsp;Beta&nbsp;'.$betaRelease.'
             </a>';
     }

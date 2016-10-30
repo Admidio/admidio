@@ -133,7 +133,7 @@ $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', $folder->getValue('fol_name'), $gL10n->get('ROL_RIGHT_DOWNLOAD')).'</p>');
 
 // show form
-$form = new HtmlForm('folder_rights_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
+$form = new HtmlForm('folder_rights_form', ADMIDIO_URL.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
 $form->addSelectBoxFromSql(
     'adm_roles_view_right',
     $gL10n->get('DAT_VISIBLE_TO'),
@@ -157,7 +157,7 @@ $form->addSelectBoxFromSql(
         'multiselect'  => true
     )
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_PATH.'/icons/disk.png',
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_URL.'/icons/disk.png',
                                                                   'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page

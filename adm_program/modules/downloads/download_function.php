@@ -141,12 +141,12 @@ elseif ($getMode === 3)
             else
             {
                 // der entsprechende Ordner konnte nicht angelegt werden
-                $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
+                $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/modules/downloads/downloads.php');
                 $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
 
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+            $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
             $gMessage->show($gL10n->get('DOW_FOLDER_CREATED', $newFolderName));
             // => EXIT
         }
@@ -191,7 +191,7 @@ elseif ($getMode === 4)
 
             // Test ob die Datei schon existiert im Filesystem
             if ($newFile !== $file->getValue('fil_name')
-            && is_file(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+            && is_file(ADMIDIO_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
             {
                 $gMessage->show($gL10n->get('DOW_FILE_EXIST', $newFile));
                 // => EXIT
@@ -201,19 +201,19 @@ elseif ($getMode === 4)
                 $oldName = $file->getValue('fil_name');
 
                 // Datei umbenennen im Filesystem und in der Datenbank
-                if (rename($oldFile, SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
+                if (rename($oldFile, ADMIDIO_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
                 {
                     $file->setValue('fil_name', $newFile);
                     $file->setValue('fil_description', $newDescription);
                     $file->save();
 
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FILE_RENAME', $oldName));
                     // => EXIT
                 }
                 else
                 {
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', $oldName));
                     // => EXIT
                 }
@@ -229,7 +229,7 @@ elseif ($getMode === 4)
 
             // Test ob der Ordner schon existiert im Filesystem
             if ($newFolder !== $folder->getValue('fol_name')
-            && is_dir(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+            && is_dir(ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
                 $gMessage->show($gL10n->get('DOW_FOLDER_EXISTS', $newFolder));
                 // => EXIT
@@ -239,18 +239,18 @@ elseif ($getMode === 4)
                 $oldName = $folder->getValue('fol_name');
 
                 // Ordner umbenennen im Filesystem und in der Datenbank
-                if (rename($oldFolder, SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
+                if (rename($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
                 {
                     $folder->setValue('fol_description', $newDescription);
                     $folder->rename($newFolder, $folder->getValue('fol_path'));
 
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', $oldName));
                     // => EXIT
                 }
                 else
                 {
-                    $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                     $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', $oldName));
                     // => EXIT
                 }
@@ -346,7 +346,7 @@ elseif ($getMode === 6)
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
-        $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
+        $location = 'Location: '.ADMIDIO_URL.'/adm_program/system/back.php';
         header($location);
         exit();
     }
@@ -371,7 +371,7 @@ elseif ($getMode === 6)
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
-        $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
+        $location = 'Location: '.ADMIDIO_URL.'/adm_program/system/back.php';
         header($location);
         exit();
     }
@@ -449,7 +449,7 @@ elseif ($getMode === 7)
 
         $folder->save();
 
-        $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
         // => EXIT
     }

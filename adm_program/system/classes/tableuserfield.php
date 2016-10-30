@@ -230,7 +230,7 @@ class TableUserField extends TableAccess
                                             {
                                                 if (admStrIsValidFileName($listValueImage, true))
                                                 {
-                                                    $listValueImage = THEME_PATH . '/icons/' . $listValueImage;
+                                                    $listValueImage = THEME_URL . '/icons/' . $listValueImage;
                                                 }
                                             }
 
@@ -269,7 +269,7 @@ class TableUserField extends TableAccess
                             {
                                 if (admStrIsValidFileName($value, true))
                                 {
-                                    $value = THEME_PATH . '/icons/' . $value;
+                                    $value = THEME_URL . '/icons/' . $value;
                                 }
                             }
 

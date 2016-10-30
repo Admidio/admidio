@@ -6,7 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
+require_once(ADMIDIO_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
 
 /**
  * @class UploadHandlerPhoto
@@ -49,8 +49,8 @@ class UploadHandlerPhoto extends UploadHandler
         {
             try
             {
-                $fileLocation = SERVER_PATH.'/adm_my_files/photos/upload/'.$file->name;
-                $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+                $fileLocation = ADMIDIO_PATH.'/adm_my_files/photos/upload/'.$file->name;
+                $albumFolder  = ADMIDIO_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
 
                 // create folder if not exists
                 if(!is_dir($albumFolder))

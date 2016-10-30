@@ -25,6 +25,6 @@ if(!$gValidLogin)
     }
 
     // User not logged in -> Request login site
-    header('Location: '.$g_root_path.'/adm_program/system/login.php');
+    header('Location: '.ADMIDIO_URL.'/adm_program/system/login.php');
     exit();
 }

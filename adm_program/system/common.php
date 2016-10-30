@@ -20,9 +20,9 @@ require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_pr
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // includes WITHOUT database connections
-require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
-require_once(SERVER_PATH . '/adm_program/system/function.php');
-require_once(SERVER_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
 if($gDebug)
 {
@@ -216,8 +216,11 @@ if(!array_key_exists('theme', $gPreferences))
 {
     $gPreferences['theme'] = 'modern';
 }
-define('THEME_SERVER_PATH', SERVER_PATH . '/adm_themes/' . $gPreferences['theme']);
-define('THEME_PATH', $g_root_path . '/adm_themes/' . $gPreferences['theme']);
+
+define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . '/adm_themes/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
+define('THEME_URL', ADMIDIO_URL . '/adm_themes/' . $gPreferences['theme']);
+define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // Deprecated
+define('THEME_PATH', THEME_URL); // Deprecated
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();
@@ -247,9 +250,9 @@ catch(AdmException $e)
 // set default homepage
 if($gValidLogin)
 {
-    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_login'];
+    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
 }
 else
 {
-    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_logout'];
+    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
 }

@@ -88,7 +88,7 @@ $importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), 
 $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 
 // show form
-$form = new HtmlForm('import_assign_fields_form', $g_root_path. '/adm_program/modules/members/import_csv.php', $page, array('type' => 'vertical'));
+$form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. '/adm_program/modules/members/import_csv.php', $page, array('type' => 'vertical'));
 $form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $form_values['first_row']);
 $htmlFieldTable = '
     <table class="table table-condensed">
@@ -165,7 +165,7 @@ $htmlFieldTable = '
     $htmlFieldTable .= '</tbody>
     </table>';
 $form->addDescription($htmlFieldTable);
-$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_PATH.'/icons/database_in.png'));
+$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_URL.'/icons/database_in.png'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

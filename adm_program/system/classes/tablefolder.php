@@ -363,7 +363,7 @@ class TableFolder extends TableAccess
 
         while ($rowFolders = $foldersStatement->fetchObject())
         {
-            $folderExists = is_dir(SERVER_PATH . $rowFolders->fol_path . '/' . $rowFolders->fol_name);
+            $folderExists = is_dir(ADMIDIO_PATH . $rowFolders->fol_path . '/' . $rowFolders->fol_name);
 
             $addToArray = false;
 
@@ -424,7 +424,7 @@ class TableFolder extends TableAccess
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetchObject())
         {
-            $filePath = SERVER_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name') . '/' . $rowFiles->fil_name;
+            $filePath = ADMIDIO_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name') . '/' . $rowFiles->fil_name;
             $fileExists = is_file($filePath);
 
             $fileSize = 0;
@@ -567,7 +567,7 @@ class TableFolder extends TableAccess
         $folderPath = $this->getValue('fol_path');
         $folderName = $this->getValue('fol_name');
 
-        return SERVER_PATH . $folderPath . '/' . $folderName;
+        return ADMIDIO_PATH . $folderPath . '/' . $folderName;
     }
 
     /**
@@ -578,7 +578,7 @@ class TableFolder extends TableAccess
      */
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
-        global $gCurrentOrganization, $g_root_path, $gL10n;
+        global $gCurrentOrganization, $gL10n;
 
         if ($folderId > 0)
         {
@@ -591,7 +591,7 @@ class TableFolder extends TableAccess
 
             if ($currentFolderRow->fol_fol_id_parent)
             {
-                $currentNavigation = '<li><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
+                $currentNavigation = '<li><a href="'.ADMIDIO_URL.'/adm_program/modules/downloads/downloads.php?folder_id='.
                     $currentFolderRow->fol_id.'">'.$currentFolderRow->fol_name.'</a></li>'.$currentNavigation;
 
                 // Next call with parent folder
@@ -623,8 +623,8 @@ class TableFolder extends TableAccess
         $link = '
             <ol class="breadcrumb">
                 <li>
-                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.$rootFolderId.'"><img
-                    src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a>
+                    <a class="btn" href="'.ADMIDIO_URL.'/adm_program/modules/downloads/downloads.php?folder_id='.$rootFolderId.'"><img
+                    src="'.THEME_URL.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a>
                 </li>'.
                 $currentNavigation.
                 '<li>'.$this->getValue('fol_name').'</li>

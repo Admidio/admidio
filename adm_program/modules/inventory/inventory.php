@@ -51,15 +51,15 @@ $page->addJavascript('
 // get module menu
 $itemsAdministrationMenu = $page->getMenu();
 
-$itemsAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/inventory/item_new.php', $gL10n->get('INV_CREATE_ITEM'), 'add.png');
+$itemsAdministrationMenu->addItem('menu_item_create_user', ADMIDIO_URL.'/adm_program/modules/inventory/item_new.php', $gL10n->get('INV_CREATE_ITEM'), 'add.png');
 
 // show link to room management
-$itemsAdministrationMenu->addItem('menu_item_manage_rooms', $g_root_path.'/adm_program/modules/rooms/rooms.php', $gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION'), 'home.png');
+$itemsAdministrationMenu->addItem('menu_item_manage_rooms', ADMIDIO_URL.'/adm_program/modules/rooms/rooms.php', $gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION'), 'home.png');
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', $g_root_path. '/adm_program/modules/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
+    $itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', ADMIDIO_URL. '/adm_program/modules/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
 }
 
 // Create table object
@@ -87,12 +87,12 @@ while($row = $mglStatement->fetch())
     $timestampChange = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
 
     $room = new TableRooms($gDb, $row['room_id']);
-    $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$row['room_id'].'&amp;inline=true';
+    $roomLink = ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$row['room_id'].'&amp;inline=true';
 
     // create array with all column values
     $columnValues = array(
         $irow,
-        '<a href="'.$g_root_path.'/adm_program/modules/inventory/item.php?item_id='. $row['inv_id']. '">'. $row['item_name']. '</a>',
+        '<a href="'.ADMIDIO_URL.'/adm_program/modules/inventory/item.php?item_id='. $row['inv_id']. '">'. $row['item_name']. '</a>',
         '<a class="admidio-icon-link-popup" href="'.$roomLink.'">' . $room->getValue('room_name') . '</a>',
     );
 
@@ -101,18 +101,18 @@ while($row = $mglStatement->fetch())
     $itemAdministration = '';
 
     // Link to modify Item
-    $itemAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
+    $itemAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
+                                src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 
     // remove Item
     if($gCurrentUser->isAdministrator()) // just Webmaster can remove items
     {
-        $itemAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
+        $itemAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
+                                    src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
     }
     else
     {
-        $itemAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+        $itemAdministration .= '&nbsp;<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
     }
 
     $columnValues[] = $itemAdministration;

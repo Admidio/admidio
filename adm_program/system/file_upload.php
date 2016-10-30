@@ -69,8 +69,8 @@ if($getModule === 'photos')
         // => EXIT
     }
 
-    $uploadDir = SERVER_PATH.'/adm_my_files/photos/upload/';
-    $uploadUrl = $g_root_path.'/adm_my_files/photos/upload/';
+    $uploadDir = ADMIDIO_PATH.'/adm_my_files/photos/upload/';
+    $uploadUrl = ADMIDIO_URL.'/adm_my_files/photos/upload/';
 
     $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
     $textFileUploaded = $gL10n->get('PHO_FILE_UPLOADED');
@@ -78,7 +78,7 @@ if($getModule === 'photos')
     $textUploadNotSuccessful = $gL10n->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
     $textUploadDescription = $gL10n->get('PHO_PHOTO_UPLOAD_DESC', $photoAlbum->getValue('pho_name'));
     $textSelectFiles = $gL10n->get('PHO_SELECT_FOTOS');
-    $iconUploadPath = THEME_PATH. '/icons/photo_upload.png';
+    $iconUploadPath = THEME_URL. '/icons/photo_upload.png';
 }
 elseif($getModule === 'downloads')
 {
@@ -109,7 +109,7 @@ elseif($getModule === 'downloads')
         // get recordset of current folder from database
         $folder->getFolderForDownload($getId);
         $uploadDir = $folder->getCompletePathOfFolder().'/';
-        $uploadUrl = $g_root_path. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
+        $uploadUrl = ADMIDIO_URL. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
     }
     catch(AdmException $e)
     {
@@ -122,7 +122,7 @@ elseif($getModule === 'downloads')
     $textUploadNotSuccessful = $gL10n->get('DOW_FILES_UPLOAD_NOT_SUCCESSFUL');
     $textUploadDescription = $gL10n->get('DOW_FILES_UPLOAD_DESC', $folder->getValue('fol_name'));
     $textSelectFiles = $gL10n->get('DOW_SELECT_FILES');
-    $iconUploadPath = THEME_PATH. '/icons/page_white_upload.png';
+    $iconUploadPath = THEME_URL. '/icons/page_white_upload.png';
 }
 
 // check if the server allow file uploads
@@ -135,7 +135,7 @@ if (ini_get('file_uploads') !== '1')
 if($getMode === 'choose_files')
 {
     // delete old stuff in upload folder
-    $uploadFolder = new Folder(SERVER_PATH.'/adm_my_files/photos/upload');
+    $uploadFolder = new Folder(ADMIDIO_PATH.'/adm_my_files/photos/upload');
     $uploadFolder->delete('', true);
 
     // create html page object
