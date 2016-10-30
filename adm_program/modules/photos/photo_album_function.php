@@ -192,7 +192,7 @@ if($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        admRedirect(ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId);
+        admRedirect(ADMIDIO_URL . '/adm_program/modules/photos/photos.php?pho_id=' . $getPhotoId);
         // => EXIT
     }
     else

@@ -30,7 +30,7 @@ if(is_file('adm_my_files/config.php'))
     // because database Admidio version is lower then 3.0
     if($gDb->query('SELECT 1 FROM '.TBL_COMPONENTS, false) === false)
     {
-        admRedirect('adm_program/installation/update.php');
+        admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
         // => EXIT
     }
 
@@ -45,7 +45,7 @@ if(is_file('adm_my_files/config.php'))
     else
     {
         // if parameter gHomepage doesn't exists then show default page
-        admRedirect('adm_program/index.php');
+        admRedirect(ADMIDIO_URL . '/adm_program/index.php');
         // => EXIT
     }
 }

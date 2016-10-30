@@ -70,5 +70,5 @@ if($postImportCoding === 'iso-8859-1')
 }
 
 // CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
-admRedirect(ADMIDIO_URL.'/adm_program/modules/members/import_csv_config.php');
+admRedirect(ADMIDIO_URL . '/adm_program/modules/members/import_csv_config.php');
 // => EXIT

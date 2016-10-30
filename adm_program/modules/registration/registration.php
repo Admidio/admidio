@@ -20,7 +20,7 @@ if($gPreferences['registration_mode'] == 0)
 // if there is no login then show a profile form where the user can register himself
 if(!$gValidLogin)
 {
-    admRedirect(ADMIDIO_URL.'/adm_program/modules/profile/profile_new.php?new_user=2');
+    admRedirect(ADMIDIO_URL . '/adm_program/modules/profile/profile_new.php?new_user=2');
     // => EXIT
 }
 

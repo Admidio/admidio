@@ -104,7 +104,7 @@ if($getMode === 'save')
 
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
-    admRedirect(ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
+    admRedirect(ADMIDIO_URL . '/adm_program/modules/profile/profile.php?user_id=' . $getUserId);
     // => EXIT
 }
 elseif($getMode === 'dont_save')
