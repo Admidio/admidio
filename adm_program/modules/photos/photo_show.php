@@ -127,12 +127,19 @@ else
 
 if($image !== null)
 {
-    // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
+    // insert copyright text into photo if photo size is larger than 200px
     if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')
     {
         $font_c = imagecolorallocate($image->imageResource, 255, 255, 255);
         $font_ttf = THEME_SERVER_PATH.'/font.ttf';
-        $font_s = $getMaxWidth / $gPreferences['photo_image_text_size'];
+        if($gPreferences['photo_image_text_size'] > 0)
+        {
+            $font_s = $getMaxWidth / $gPreferences['photo_image_text_size'];
+        }
+        else
+        {
+            $font_s = $getMaxWidth / 40;
+        }
         $font_x = $font_s;
         $font_y = $image->imageHeight-$font_s;
         $text = $gPreferences['photo_image_text'];
