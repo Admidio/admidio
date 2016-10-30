@@ -1138,6 +1138,7 @@
     <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zeichenkette aufgetreten.</string>
     <string name="SYS_GEN_RANDOM_FAIL">Das Programm kann keine zufällige Zeichenkette erzeugen.</string>
     <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
+    <string name="SYS_HEADERS_ALREADY_SENT">HTTP-Headers wurden bereits gesendet!</string>
     <string name="SYS_HEADLINE">Überschrift</string>
     <string name="SYS_HELP">Hilfe</string>
     <string name="SYS_HIDE">Ausblenden</string>
@@ -1267,6 +1268,7 @@
     <string name="SYS_QUANTITY">Menge</string>
     <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
     <string name="SYS_RECIPIENT">Empfänger</string>
+    <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
     <string name="SYS_REGISTERED_AS">Angemeldet als</string>
     <string name="SYS_REGISTRATION">Registrierung</string>
     <string name="SYS_REGISTRATION_SAVED">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</string>
@@ -1308,6 +1310,7 @@
     <string name="SYS_SIZE">Größe</string>
     <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
     <string name="SYS_START" description="Start of a date">Beginn</string>
+    <string name="SYS_STATUS_CODE_INVALID">Ungülter Status-Code!</string>
     <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
     <string name="SYS_STOP">Stop</string>
     <string name="SYS_SUNDAY">Sonntag</string>
