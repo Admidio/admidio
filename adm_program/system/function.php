@@ -804,7 +804,7 @@ function admRedirect($url, $statusCode = 303)
 
     if (headers_sent() === false)
     {
-        $gMessage->show($gL10n->get('SYS_HEADERS_ALREADY_SENT'));
+        $gMessage->show($gL10n->get('SYS_HEADER_ALREADY_SENT'));
         // => EXIT
     }
     if (filter_var($url, FILTER_VALIDATE_URL) === false)
