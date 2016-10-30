@@ -60,23 +60,23 @@ $EmailMenu = $page->getMenu();
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewEmail', $g_root_path.'/adm_program/modules/messages/messages_write.php', $gL10n->get('MAI_SEND_EMAIL'), '/email.png');
+    $EmailMenu->addItem('admMenuItemNewEmail', ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php', $gL10n->get('MAI_SEND_EMAIL'), '/email.png');
 }
 // link to write new PM
 if ($gPreferences['enable_pm_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewPm', $g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM', $gL10n->get('PMS_SEND_PM'), '/pm.png');
+    $EmailMenu->addItem('admMenuItemNewPm', ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?msg_type=PM', $gL10n->get('PMS_SEND_PM'), '/pm.png');
 }
 
 // link to Chat
 if ($gPreferences['enable_chat_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewChat', $g_root_path.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
+    $EmailMenu->addItem('admMenuItemNewChat', ADMIDIO_URL.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
 }
 
 if($gCurrentUser->isAdministrator())
 {
-    $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=messages',
+    $EmailMenu->addItem('admMenuItemPreferences', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=messages',
                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -85,7 +85,7 @@ $table = new HtmlTable('adm_lists_table', $page, true, true);
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 
 $table->addRowHeadingByArray(array(
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_CATEGORY').'" title="'.$gL10n->get('SYS_CATEGORY').'" />',
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png" alt="'.$gL10n->get('SYS_CATEGORY').'" title="'.$gL10n->get('SYS_CATEGORY').'" />',
     $gL10n->get('MAI_SUBJECT'),
     $gL10n->get('MSG_OPPOSITE'),
     $gL10n->get('SYS_DATE'),
@@ -93,9 +93,9 @@ $table->addRowHeadingByArray(array(
 ));
 $table->disableDatatablesColumnsSort(array(5));
 $key = 0;
-$part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
-$part2 = '"><img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
-$href  = 'href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_id=';
+$part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
+$part2 = '"><img src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
+$href  = 'href="'.ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?msg_id=';
 
 // open some additonal functions for messages
 $moduleMessages = new ModuleMessages();
@@ -118,7 +118,7 @@ if(isset($statement))
         $table->addRowByArray(
             array(
                 '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') .'">
-                    <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />
+                    <img class="admidio-icon-info" src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />
                 </a>',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
                 $receiverName,
@@ -153,7 +153,7 @@ if(isset($statement))
         $table->addRowByArray(
             array(
                 '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
-                    <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
+                    <img class="admidio-icon-info" src="'. THEME_URL. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
                 </a>',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
                 $receiverName,
@@ -190,7 +190,7 @@ if(isset($statement))
         $table->addRowByArray(
             array(
                 '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
-                    <img class="admidio-icon-info" src="'. THEME_PATH. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
+                    <img class="admidio-icon-info" src="'. THEME_URL. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
                 </a>',
                 '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
                 $receiverName,

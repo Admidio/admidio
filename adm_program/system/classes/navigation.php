@@ -136,7 +136,7 @@ class Navigation
         if($url !== '')
         {
             $html = '
-            <a class="btn" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png"
+            <a class="btn" href="'.$url.'"><img src="'. THEME_URL. '/icons/back.png"
                 alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
         }
 

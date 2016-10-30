@@ -108,7 +108,7 @@ $profileFieldsEditMenu = $page->getMenu();
 $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('profile_fields_edit_form', $g_root_path.'/adm_program/modules/inventory/fields_function.php?inf_id='.$getInfId.'&amp;mode=1', $page);
+$form = new HtmlForm('profile_fields_edit_form', ADMIDIO_URL.'/adm_program/modules/inventory/fields_function.php?inf_id='.$getInfId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     if($itemField->getValue('inf_system') == 1)
     {
@@ -167,7 +167,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
     $form->addEditor('inf_description', null, $itemField->getValue('inf_description'), array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault', 'height' => '200px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($itemField->getValue('inf_usr_id_create'), $itemField->getValue('inf_timestamp_create'), $itemField->getValue('inf_usr_id_change'), $itemField->getValue('inf_timestamp_change')));
 
 // add form to html page and show page

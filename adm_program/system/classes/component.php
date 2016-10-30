@@ -52,8 +52,6 @@ class Component extends TableAccess
      */
     public function checkDatabaseVersion()
     {
-        global $g_root_path;
-
         $dbVersion = $this->getValue('com_version');
         if ($this->getValue('com_beta') > 0)
         {
@@ -71,7 +69,7 @@ class Component extends TableAccess
         if ($returnCode === -1) // database has minor version
         {
             throw new AdmException('SYS_DATABASE_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');
+                                   '<a href="'.ADMIDIO_URL.'/adm_program/installation/update.php">', '</a>');
         }
         elseif ($returnCode === 1) // filesystem has minor version
         {

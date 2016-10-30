@@ -67,7 +67,7 @@ function getBacktrace()
         }
         else
         {
-            $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
+            $trace['file'] = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $trace['file']);
             $trace['file'] = substr($trace['file'], 1);
         }
         $args = array();
@@ -83,7 +83,7 @@ function getBacktrace()
             if (!empty($trace['args'][0]))
             {
                 $argument = htmlentities($trace['args'][0]);
-                $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
+                $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
                 $args[] = '\''.$argument.'\'';
             }
@@ -117,11 +117,11 @@ echo 'Start with installation ...<br />';
 $gL10n = new Language();
 $gLanguageData = new LanguageData($getLanguage);
 $gL10n->addLanguageData($gLanguageData);
-$gL10n->addLanguagePath(SERVER_PATH. '/demo_data/languages');
+$gL10n->addLanguagePath(ADMIDIO_PATH. '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-$srcFolder = SERVER_PATH. '/demo_data/adm_my_files';
-$newFolder = SERVER_PATH. '/adm_my_files';
+$srcFolder = ADMIDIO_PATH. '/demo_data/adm_my_files';
+$newFolder = ADMIDIO_PATH. '/adm_my_files';
 
 $myFilesFolder = new Folder($srcFolder);
 $b_return = $myFilesFolder->delete($newFolder.'/backup');
@@ -241,8 +241,8 @@ if($gDbType === 'mysql')
 }
 
 // create an installation unique cookie prefix and remove special characters
-$gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
+$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
+$gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update

@@ -111,7 +111,7 @@ if($getViewMode === 'html')
 
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
-        $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline,
+        $page->addRssFile(ADMIDIO_URL.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline,
                           $gL10n->get('SYS_RSS_FEED_FOR_VAR',
                           $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
     }
@@ -122,7 +122,7 @@ if($getViewMode === 'html')
         });
 
         $("#menu_item_print_view").click(function () {
-            window.open("'.$g_root_path.'/adm_program/modules/dates/dates.php?view_mode=print&view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'", "_blank");
+            window.open("'.ADMIDIO_URL.'/adm_program/modules/dates/dates.php?view_mode=print&view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -140,7 +140,7 @@ if($getViewMode === 'html')
     if($gCurrentUser->editDates() && $getId === 0)
     {
         $DatesMenu->addItem('admMenuItemAdd',
-                            $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
+                            ADMIDIO_URL.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
                             $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
     }
 
@@ -170,7 +170,7 @@ if($getViewMode === 'html')
         if($gPreferences['enable_dates_ical'] == 1)
         {
             $DatesMenu->addItem('admMenuItemICal',
-                                $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
+                                ADMIDIO_URL.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
 
@@ -178,7 +178,7 @@ if($getViewMode === 'html')
         {
             // show link to system preferences of weblinks
             $DatesMenu->addItem('admMenuItemPreferencesLinks',
-                                $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=events',
+                                ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=events',
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
         }
         elseif($gCurrentUser->editDates())
@@ -192,7 +192,7 @@ if($getViewMode === 'html')
 
     // create filter menu with elements for calendar and start-/enddate
     $FilterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
-    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline.'&view='.$getView, $page, array('type' => 'navbar', 'setFocus' => false));
+    $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.'/adm_program/modules/dates/dates.php?headline='.$getHeadline.'&view='.$getView, $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', array('defaultValue' => $dates->getParameter('cat_id')));
     $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
     $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
@@ -309,8 +309,8 @@ else
             if($gPreferences['enable_dates_ical'] == 1)
             {
                 $outputButtonIcal = '
-                    <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id'). '&amp;mode=6">
-                        <img src="'.THEME_PATH.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id'). '&amp;mode=6">
+                        <img src="'.THEME_URL.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
             }
 
             // change and delete is only for users with additional rights
@@ -319,11 +319,11 @@ else
                 if($date->editRight())
                 {
                     $outputButtonCopy = '
-                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'">
-                            <img src="'.THEME_PATH.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'">
+                            <img src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
                     $outputButtonEdit = '
-                        <a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;headline='.$getHeadline.'">
-                            <img src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;headline='.$getHeadline.'">
+                            <img src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                 }
 
                 // Deleting events is only allowed for group members
@@ -331,11 +331,11 @@ else
                 {
                     $outputButtonDelete = '
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
+                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
                             $date->getValue('dat_id').'&amp;name='.
                             urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.
                             $date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'">
-                            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                            <img src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
             }
         }
@@ -398,7 +398,7 @@ else
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="'.$route_url.'" target="_blank">
-                            <img src="'.THEME_PATH.'/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" />
+                            <img src="'.THEME_URL.'/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" />
                         </a>';
                 }
             }
@@ -415,7 +415,7 @@ else
 
             if($getViewMode === 'html')
             {
-                $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                $roomLink = ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
                 $outputLinkRoom = '<strong><a data-toggle="modal" data-target="#admidio_modal" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
             }
             else
@@ -442,19 +442,19 @@ else
         {
             if($row['member_date_role'] > 0)
             {
-                $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
+                $buttonURL = ADMIDIO_URL.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
 
                 if ($getView === 'detail')
                 {
                     $outputButtonParticipation = '
                         <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                            <img src="'.THEME_PATH.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
+                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
                 }
                 else
                 {
                     $outputButtonParticipation = '
                         <a class="admidio-icon-link" href="'.$buttonURL.'">
-                            <img src="'.THEME_PATH.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
                 }
             }
             else
@@ -472,19 +472,19 @@ else
 
                 if($participationPossible)
                 {
-                    $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
+                    $buttonURL = ADMIDIO_URL.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
 
                     if ($getView === 'detail')
                     {
                         $outputButtonParticipation = '
                             <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
+                                <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
                     }
                     else
                     {
                         $outputButtonParticipation = '
                             <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_PATH.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                                <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
                     }
                 }
                 else
@@ -498,19 +498,19 @@ else
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {
-                    $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id');
+                    $buttonURL = ADMIDIO_URL.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id');
 
                     if ($getView === 'detail')
                     {
                         $outputButtonParticipants = '
                             <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
+                                <img src="'.THEME_URL.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</button>';
                     }
                     else
                     {
                         $outputButtonParticipants = '
                             <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                                <img src="'.THEME_URL.'/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
                     }
                 }
             }
@@ -520,20 +520,20 @@ else
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {
-                    $buttonURL = $g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$date->getValue('dat_rol_id');
+                    $buttonURL = ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?rol_id='.$date->getValue('dat_rol_id');
 
                     if ($getView === 'detail')
                     {
                         $outputButtonParticipantsEmail = '
                             <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'
+                                <img src="'.THEME_URL.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" />'.$gL10n->get('MAI_SEND_EMAIL').'
                             </button>';
                     }
                     else
                     {
                         $outputButtonParticipantsEmail = '
                             <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" />
+                                <img src="'.THEME_URL.'/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" />
                             </a>';
                     }
                 }
@@ -542,20 +542,20 @@ else
             // Link for managing new participants
             if($row['mem_leader'] == 1)
             {
-                $buttonURL = $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$date->getValue('dat_rol_id');
+                $buttonURL = ADMIDIO_URL.'/adm_program/modules/lists/members_assignment.php?rol_id='.$date->getValue('dat_rol_id');
 
                 if ($getView === 'detail')
                 {
                     $outputButtonParticipantsAssign = '
                         <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                            <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'
+                            <img src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'
                         </button>';
                 }
                 else
                 {
                     $outputButtonParticipantsAssign = '
                         <a class="admidio-icon-link" href="'.$buttonURL.'">
-                            <img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />
+                            <img src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />
                         </a>';
                 }
             }
@@ -638,7 +638,7 @@ else
                 <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_PATH.'/icons/dates.png" alt="'.$date->getValue('dat_headline').'" />' .
+                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="'.$date->getValue('dat_headline').'" />' .
                             $date->getValue('dat_begin', $gPreferences['system_date']).$outputEndDate.' '.$date->getValue('dat_headline') . '
                         </div>
                         <div class="pull-right text-right">' .
@@ -731,7 +731,7 @@ else
 
             if($getViewMode === 'html')
             {
-                $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
+                $columnValues[] = '<a href="'.ADMIDIO_URL.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
             }
             else
             {
@@ -816,6 +816,6 @@ else
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
+$base_url = ADMIDIO_URL.'/adm_program/modules/dates/dates.php?view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
 $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, true));
 $page->show();

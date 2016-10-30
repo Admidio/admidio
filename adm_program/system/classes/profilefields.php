@@ -123,7 +123,7 @@ class ProfileFields
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
-        global $gPreferences, $g_root_path, $gL10n;
+        global $gPreferences, $gL10n;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
@@ -142,11 +142,11 @@ class ProfileFields
                 case 'CHECKBOX':
                     if ($value == 1)
                     {
-                        $htmlValue = '<img src="' . THEME_PATH . '/icons/checkbox_checked.gif" alt="on" />';
+                        $htmlValue = '<img src="' . THEME_URL . '/icons/checkbox_checked.gif" alt="on" />';
                     }
                     else
                     {
-                        $htmlValue = '<img src="' . THEME_PATH . '/icons/checkbox.gif" alt="off" />';
+                        $htmlValue = '<img src="' . THEME_URL . '/icons/checkbox.gif" alt="off" />';
                     }
                     break;
                 case 'DATE':
@@ -176,7 +176,7 @@ class ProfileFields
                                 $value2 = $this->mUserId;
                             }
 
-                            $emailLink = $g_root_path . '/adm_program/modules/messages/messages_write.php?usr_id=' . $value2;
+                            $emailLink = ADMIDIO_URL . '/adm_program/modules/messages/messages_write.php?usr_id=' . $value2;
                         }
                         if (strlen($value) > 30)
                         {
@@ -229,7 +229,7 @@ class ProfileFields
                                 }
                                 elseif (admStrIsValidFileName($listValueImage, true))
                                 {
-                                    $listValue = '<img class="admidio-icon-info" src="' . THEME_PATH . '/icons/' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
+                                    $listValue = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
                                 }
                             }
                             catch (AdmException $e)
@@ -304,7 +304,7 @@ class ProfileFields
         {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
-                $value = '<img src="' . THEME_PATH . '/icons/checkbox.gif" alt="off" />';
+                $value = '<img src="' . THEME_URL . '/icons/checkbox.gif" alt="off" />';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');

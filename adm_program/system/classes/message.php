@@ -162,11 +162,11 @@ class Message
                 {
                     $htmlButtons .= '
                         <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'">
-                            <img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />
+                            <img src="'. THEME_URL. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />
                             &nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;
                         </button>
                         <button id="admButtonNo" class="btn" type="button" onclick="history.back()">
-                            <img src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />
+                            <img src="'. THEME_URL. '/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />
                             &nbsp;'.$gL10n->get('SYS_NO').'
                         </button>';
                 }
@@ -175,7 +175,7 @@ class Message
                     // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
                     $htmlButtons .= '
                         <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'
-                            <img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'"
+                            <img src="'. THEME_URL. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'"
                                 title="'.$gL10n->get('SYS_NEXT').'" />
                         </a>';
                 }
@@ -188,7 +188,7 @@ class Message
                 {
                     $htmlButtons .= '
                         <a class="btn" href="javascript:void(0)" onclick="history.back()">
-                            <img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
+                            <img src="'.THEME_URL.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
                                 title="'.$gL10n->get('SYS_BACK').'" />'.
                             $gL10n->get('SYS_BACK').
                         '</a>';

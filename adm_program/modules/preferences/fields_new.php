@@ -111,7 +111,7 @@ $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl()
 
 // show form
 $form = new HtmlForm('profile_fields_edit_form',
-                     $g_root_path.'/adm_program/modules/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
+                     ADMIDIO_URL.'/adm_program/modules/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if($userField->getValue('usf_system') == 1)
 {
@@ -198,7 +198,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->addEditor('usf_description', null, $userField->getValue('usf_description'), array('height' => '200px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($userField->getValue('usf_usr_id_create'),
                $userField->getValue('usf_timestamp_create'), $userField->getValue('usf_usr_id_change'),
                $userField->getValue('usf_timestamp_change')));

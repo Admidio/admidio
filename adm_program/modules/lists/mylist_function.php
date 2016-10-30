@@ -112,12 +112,12 @@ if ($getMode === 1 || $getMode === 2)
         $_SESSION['mylist_request']['sel_select_configuation'] = $list->getValue('lst_id');
 
         // go back to mylist configuration
-        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'));
+        header('Location: '.ADMIDIO_URL.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'));
         exit();
     }
 
     // weiterleiten zur allgemeinen Listeseite
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='.$_POST['sel_show_members'].'&rol_ids='.implode(',', $_POST['sel_roles_ids']).'&urt_ids='.implode(',', $_POST['sel_relationtype_ids']));
+    header('Location: '.ADMIDIO_URL.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='.$_POST['sel_show_members'].'&rol_ids='.implode(',', $_POST['sel_roles_ids']).'&urt_ids='.implode(',', $_POST['sel_relationtype_ids']));
     exit();
 }
 elseif ($getMode === 3)
@@ -134,6 +134,6 @@ elseif ($getMode === 3)
     }
 
     // go back to list configuration
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php');
+    header('Location: '.ADMIDIO_URL.'/adm_program/modules/lists/mylist.php');
     exit();
 }
