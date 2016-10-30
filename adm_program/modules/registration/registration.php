@@ -20,8 +20,8 @@ if($gPreferences['registration_mode'] == 0)
 // if there is no login then show a profile form where the user can register himself
 if(!$gValidLogin)
 {
-    header('Location: '.ADMIDIO_URL.'/adm_program/modules/profile/profile_new.php?new_user=2');
-    exit();
+    admRedirect(ADMIDIO_URL.'/adm_program/modules/profile/profile_new.php?new_user=2');
+    // => EXIT
 }
 
 // Only Users with the right "approve users" can confirm registrations. Otherwise exit.

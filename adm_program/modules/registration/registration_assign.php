@@ -98,8 +98,8 @@ else
 if($members_found === 0)
 {
     // if user doesn't exists than show profile or auto assign roles
-    header('Location: '.$urlCreateNewUser);
-    exit();
+    admRedirect($urlCreateNewUser);
+    // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

@@ -98,8 +98,8 @@ if($getMode === 1)
     $gDb->endTransaction();
 
     $gNavigation->deleteLastUrl();
-    header('Location: '. $gNavigation->getUrl());
-    exit();
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }
 elseif($getMode === 2)
 {

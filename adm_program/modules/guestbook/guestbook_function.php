@@ -253,8 +253,8 @@ if ($getMode === 1 || $getMode === 3)
             // => EXIT
         }
 
-        header('Location: '.$url);
-        exit();
+        admRedirect($url);
+        // => EXIT
     }
     else
     {
@@ -441,8 +441,8 @@ elseif($getMode === 4 || $getMode === 8)
             // => EXIT
         }
 
-        header('Location: '.$url);
-        exit();
+        admRedirect($url);
+        // => EXIT
     }
     else
     {
