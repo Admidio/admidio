@@ -15,30 +15,28 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Processor\IntrospectionProcessor;
 
-if (!isset($gLogger))
+$gLogger = new Logger('Admidio');
+
+$logLevel = Logger::WARNING;
+if ($gDebug)
 {
-    $gLogger = new Logger('Admidio');
-
-    $logLevel = Logger::WARNING;
-    if ($gDebug)
-    {
-        $logLevel = Logger::DEBUG;
-
-        // If "$gDebug = true" append line/file/class/function where the log message came from
-        $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
-    }
-
-    $formatter = new LineFormatter(null, null, false, true);
-    $streamHandler = new StreamHandler(SERVER_PATH . '/adm_my_files/logs/admidio.log', $logLevel);
-    $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
-
-    $streamHandler->setFormatter($formatter);
-    $errorLogHandler->setFormatter($formatter);
-
-    $gLogger->pushHandler($streamHandler);
-    $gLogger->pushHandler($errorLogHandler);
-
-    $gLogger->info('Admidio Logger initialized');
-    $gLogger->info($_SERVER['REQUEST_URI'] . '?' . $_SERVER['QUERY_STRING']);
-    $gLogger->info('Memory usage: ' . round(memory_get_usage() / 1024, 1) . ' KB');
+    $logLevel = Logger::DEBUG;
 }
+
+// If "$gDebug = true" append line/file/class/function where the log message came from
+$gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
+
+$formatter = new LineFormatter(null, null, false, true);
+$streamHandler = new StreamHandler(SERVER_PATH . '/adm_my_files/logs/admidio.log', $logLevel);
+$errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
+
+$streamHandler->setFormatter($formatter);
+$errorLogHandler->setFormatter($formatter);
+
+$gLogger->pushHandler($streamHandler);
+$gLogger->pushHandler($errorLogHandler);
+
+$gLogger->info('#################################################################################################');
+$gLogger->info('Admidio Logger initialized');
+$gLogger->info($_SERVER['REQUEST_URI'] . '?' . $_SERVER['QUERY_STRING']);
+$gLogger->info('Memory usage: ' . round(memory_get_usage() / 1024, 1) . ' KB');
