@@ -112,8 +112,6 @@ if(is_file('../../adm_my_files/config.php'))
     // if config exists then take parameters out of this file
     if($getMode < 3)
     {
-        $_SESSION['create_config_file'] = false;
-
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;
         $_SESSION['db_server']   = $g_adm_srv;
@@ -490,7 +488,7 @@ elseif($getMode === 6)  // Creating configuration file
     }
 
     // if config file exists than don't create a new one
-    if($_SESSION['create_config_file'] === false)
+    if(is_file('../../adm_my_files/config.php'))
     {
         header('Location: installation.php?mode=8');
         exit();
