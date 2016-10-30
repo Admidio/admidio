@@ -63,10 +63,7 @@ $ordner  = ADMIDIO_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begi
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
-if($gDebug)
-{
-    error_log($picpath);
-}
+$gLogger->info('ImagePath: ' . $picpath);
 
 // Wenn Thumbnail existiert laengere Seite ermitteln
 if($getThumbnail)

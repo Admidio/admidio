@@ -25,6 +25,10 @@ class DateTimeExtended extends DateTime
      */
     public function __construct($date, $format, DateTimeZone $timezone = null)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "new DateTimeExtended()" is deprecated, use "DateTime::createFromFormat()" instead!');
+
         $datetime = DateTime::createFromFormat($format, $date);
 
         if ($datetime === false)
@@ -46,6 +50,10 @@ class DateTimeExtended extends DateTime
      */
     public function isValid()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$dateTimeExtended->isValid()" is deprecated, use "DateTime::createFromFormat() === false" instead!');
+
         return $this->valid;
     }
 
@@ -57,6 +65,10 @@ class DateTimeExtended extends DateTime
      */
     public function getAge()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$dateTimeExtended->getAge()" is deprecated, use "DateTime::createFromFormat()->diff(new DateTime(\'now\'))->y" instead!');
+
         return $this->diff(new DateTime('now'))->y;
     }
 

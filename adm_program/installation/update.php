@@ -50,6 +50,7 @@ if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // Initialize and check the parameters
 
@@ -338,10 +339,7 @@ elseif($getMode === 2)
                     $version = $versionMain . '_' . $versionMinor . '_' . $versionPatch;
 
                     // output of the version number for better debugging
-                    if($gDebug)
-                    {
-                        error_log('Update to version ' . $version);
-                    }
+                    $gLogger->info('Update to version ' . $version);
 
                     $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
                     $sqlFileName = 'upd_' . $version . '_db.sql';

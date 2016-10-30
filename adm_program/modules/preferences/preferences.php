@@ -443,6 +443,7 @@ $page->addHtml('
                         // deprecated: Remove if PHP 5.3 dropped
                         if(ini_get('safe_mode') === '1')
                         {
+                            $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
                         }
                         else

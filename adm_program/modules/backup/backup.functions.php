@@ -34,6 +34,8 @@ if (!function_exists('getmicrotime'))
 // begin: (from phpthumb.functions.php)
 function FunctionIsDisabled($function)
 {
+    global $gLogger;
+
     static $DisabledFunctions = null;
     if ($DisabledFunctions === null)
     {
@@ -50,6 +52,7 @@ function FunctionIsDisabled($function)
         // deprecated: Remove if PHP 5.3 dropped
         if (@ini_get('safe_mode'))
         {
+            $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
             $DisabledFunctions['shell_exec'] = 'local';
         }
     }

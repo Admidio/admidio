@@ -1699,6 +1699,10 @@ class User extends TableAccess
      */
     public function isWebmaster()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$user->isWebmaster()" is deprecated, use "$user->isAdministrator()" instead!');
+
         return $this->isAdministrator();
     }
 }

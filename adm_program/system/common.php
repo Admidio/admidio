@@ -30,12 +30,10 @@ if($gDebug)
     error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
-
-    // write actual script with parameters in log file
-    error_log('--------------------------------------------------------------------------------'."\n" .
-              $_SERVER['SCRIPT_FILENAME'] . "\n? " . $_SERVER['QUERY_STRING']);
-    error_log('memory_used::' . memory_get_usage());
 }
+
+// LOGGING
+require_once(SERVER_PATH . '/adm_program/system/logging.php');
 
 // remove HTML & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);
@@ -46,6 +44,7 @@ $_COOKIE = admStrStripTagsSpecial($_COOKIE);
 // deprecated
 if(!get_magic_quotes_gpc())
 {
+    $gLogger->warning('DEPRECATED: Magic-Quotes should not be used!');
     $_GET    = strAddSlashesDeep($_GET);
     $_POST   = strAddSlashesDeep($_POST);
     $_COOKIE = strAddSlashesDeep($_COOKIE);
@@ -131,6 +130,8 @@ else
 
     if($gCurrentOrganization->getValue('org_id') === 0)
     {
+        $gLogger->error('Organization could not be found!', array('$g_organization' => $g_organization));
+
         // organization not found
         exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
