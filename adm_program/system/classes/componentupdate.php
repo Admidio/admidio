@@ -44,7 +44,7 @@ class ComponentUpdate extends Component
         // update of Admidio core has another path for the xml files as plugins
         if($this->getValue('com_type') === 'SYSTEM')
         {
-            $updateFile = SERVER_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
+            $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
 
             if(is_file($updateFile))
             {
@@ -161,7 +161,7 @@ class ComponentUpdate extends Component
      */
     public function update()
     {
-        global $gDebug;
+        global $gLogger;
 
         $this->updateFinished = false;
         $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
@@ -190,10 +190,7 @@ class ComponentUpdate extends Component
                 }
 
                 // output of the version number for better debugging
-                if($gDebug)
-                {
-                    error_log('Update to version '.$mainVersion.'.'.$subVersion);
-                }
+                $gLogger->info('Update to version '.$mainVersion.'.'.$subVersion);
 
                 // open xml file for this version
                 if($this->createXmlObject($mainVersion, $subVersion))
@@ -213,7 +210,7 @@ class ComponentUpdate extends Component
                 }
 
                 // check if an php update file exists and then execute the script
-                $phpUpdateFile = SERVER_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$subVersion.'_0_conv.php';
+                $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$subVersion.'_0_conv.php';
 
                 if(is_file($phpUpdateFile))
                 {
@@ -234,6 +231,37 @@ class ComponentUpdate extends Component
 
             // reset subversion because we want to start update for next main version with subversion 0
             $initialSubVersion = 0;
+        }
+    }
+
+    /**
+     * This method deletes all roles that belongs to still deleted dates.
+     */
+    public function updateStepAddAnnouncementsCategories()
+    {
+        global $gL10n;
+
+        // read id of system user from database
+        $sql = 'SELECT usr_id
+                  FROM '.TBL_USERS.'
+                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+        $systemUserStatement = $this->db->query($sql);
+        $systemUserId = (int) $systemUserStatement->fetchColumn();
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                        VALUES ('.$row['org_id'].', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                             , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\',   \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
+            $this->db->query($sql);
+
+            $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id = 
+                           (SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ANN\' AND cat_name_intern = \'COMMON\')
+                     WHERE ann_org_id = '.$row['org_id'];
+            $this->db->query($sql);
         }
     }
 

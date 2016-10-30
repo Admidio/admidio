@@ -722,7 +722,7 @@ class User extends TableAccess
 
         if ($columnName === 'usr_photo' && (int) $gPreferences['profile_photo_storage'] === 0)
         {
-            $file = SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
+            $file = ADMIDIO_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
             if(is_file($file))
             {
                 return file_get_contents($file);
@@ -820,7 +820,7 @@ class User extends TableAccess
         {
             $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
         }
-        $file = SERVER_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
+        $file = ADMIDIO_PATH . '/adm_my_files/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
         if ((int) $gPreferences['profile_photo_storage'] === 1 && is_file($file))
         {
             $imgHandle = fopen($file, 'rb');
@@ -1700,6 +1700,10 @@ class User extends TableAccess
      */
     public function isWebmaster()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$user->isWebmaster()" is deprecated, use "$user->isAdministrator()" instead!');
+
         return $this->isAdministrator();
     }
 }

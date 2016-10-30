@@ -20,9 +20,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'template.php')
  */
 function admReadTemplateFile($filename)
 {
-    if (is_file(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename))
+    if (is_file(ADMIDIO_PATH. '/adm_my_files/mail_templates/'.$filename))
     {
-        $fp = fopen(SERVER_PATH. '/adm_my_files/mail_templates/'.$filename, 'r');
+        $fp = fopen(ADMIDIO_PATH. '/adm_my_files/mail_templates/'.$filename, 'r');
         $str = '';
         while(!feof($fp))
         {

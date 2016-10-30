@@ -151,15 +151,15 @@ else
 
         // change mode of users that should be shown
         $("#filter_rol_id").change(function() {
-            window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&filter_rol_id=" + $("#filter_rol_id").val() + "&mem_show_all=0");
+            window.location.replace("'.ADMIDIO_URL.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&filter_rol_id=" + $("#filter_rol_id").val() + "&mem_show_all=0");
         });
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function() {
             if($("#mem_show_all").is(":checked")) {
-                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=1");
+                window.location.replace("'.ADMIDIO_URL.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=1");
             } else {
-                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=0");
+                window.location.replace("'.ADMIDIO_URL.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=0");
             }
         });
 
@@ -187,7 +187,7 @@ else
             }
 
             // change data in database
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
+            $.post("'.ADMIDIO_URL.'/adm_program/modules/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
                 "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
                 function(data) {
                     // check if error occurs
@@ -217,7 +217,7 @@ else
     $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     if ($gCurrentUser->editUsers())
     {
-        $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
+        $membersAssignmentMenu->addItem('menu_item_create_user', ADMIDIO_URL.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $sql = 'SELECT rol_id, rol_name, cat_name
@@ -246,7 +246,7 @@ else
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/info.png"
+        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
             alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
     }
 
@@ -254,7 +254,7 @@ else
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile_edit.png"
+        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
             alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
     }
 
@@ -262,24 +262,24 @@ else
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
+        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
     }
 
     // create array with all column heading values
     $columnHeading = array(
         '<img class="admidio-icon-info"
-            src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
+            src="'. THEME_URL. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
             title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
         $gL10n->get('SYS_MEMBER'),
         $gL10n->get('SYS_LASTNAME'),
         $gL10n->get('SYS_FIRSTNAME'),
-        '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/map.png"
+        '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/map.png"
             alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
         $gL10n->get('SYS_BIRTHDAY'),
         $htmlLeaderColumn);
 
-    $table->setServerSideProcessing($g_root_path.'/adm_program/modules/lists/members_assignment_data.php?rol_id='.$getRoleId.'&filter_rol_id='.$getFilterRoleId.'&mem_show_all='.$getMembersShowAll);
+    $table->setServerSideProcessing(ADMIDIO_URL.'/adm_program/modules/lists/members_assignment_data.php?rol_id='.$getRoleId.'&filter_rol_id='.$getFilterRoleId.'&mem_show_all='.$getMembersShowAll);
     $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'));
     $table->addRowHeadingByArray($columnHeading);
 

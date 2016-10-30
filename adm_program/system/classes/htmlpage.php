@@ -48,8 +48,6 @@ class HtmlPage
      */
     public function __construct($headline = '')
     {
-        global $g_root_path;
-
         $this->title         = '';
         $this->header        = '';
         $this->headline      = '';
@@ -312,7 +310,7 @@ class HtmlPage
      */
     private function getDebugOrMinFilepath($filepath)
     {
-        global $gDebug, $g_root_path;
+        global $gDebug;
 
         $fileInfo = pathinfo($filepath);
         $filename = basename($fileInfo['filename'], '.min');
@@ -320,12 +318,12 @@ class HtmlPage
         $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
         $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
 
-        if ((!$gDebug && is_file(SERVER_PATH.$filepathMin)) || !is_file(SERVER_PATH.$filepathDebug))
+        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
         {
-            return $g_root_path.$filepathMin;
+            return ADMIDIO_URL . $filepathMin;
         }
 
-        return $g_root_path.$filepathDebug;
+        return ADMIDIO_URL . $filepathDebug;
     }
 
     /**
@@ -441,7 +439,7 @@ class HtmlPage
      */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
 
         $headerContent    = '';
@@ -464,35 +462,35 @@ class HtmlPage
         }
 
         // add admidio css file at last because there the user can redefine all css
-        $this->addCssFile(THEME_PATH.'/css/admidio.css');
+        $this->addCssFile(THEME_URL.'/css/admidio.css');
 
         // add custom css file if it exists to add own css styles without edit the original admidio css
-        if(is_file(THEME_PATH.'/css/custom.css'))
+        if(is_file(THEME_URL.'/css/custom.css'))
         {
-            $this->addCssFile(THEME_PATH.'/css/custom.css');
+            $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
         // if print mode is set then add a print specific css file
         if($this->printMode)
         {
-            $this->addCssFile(THEME_PATH.'/css/print.css');
+            $this->addCssFile(THEME_URL.'/css/print.css');
         }
 
         // load content of theme files
         if($this->showThemeHtml)
         {
             ob_start();
-            include(THEME_SERVER_PATH.'/my_header.php');
+            include(THEME_ADMIDIO_PATH.'/my_header.php');
             $htmlMyHeader = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH.'/my_body_top.php');
+            include(THEME_ADMIDIO_PATH.'/my_body_top.php');
             $htmlMyBodyTop = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH.'/my_body_bottom.php');
+            include(THEME_ADMIDIO_PATH.'/my_body_bottom.php');
             $htmlMyBodyBottom = ob_get_contents();
             ob_end_clean();
         }
@@ -505,8 +503,8 @@ class HtmlPage
 
         // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
         $headerContent .= '<!--[if lt IE 9]>
-            <script src="'.$g_root_path.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
-            <script src="'.$g_root_path.'/adm_program/libs/respond/respond.min.js"></script>
+            <script src="'.ADMIDIO_URL.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
+            <script src="'.ADMIDIO_URL.'/adm_program/libs/respond/respond.min.js"></script>
         <![endif]-->';
 
         if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
@@ -573,8 +571,8 @@ class HtmlPage
                 <title>'.$this->title.'</title>
 
                 <script type="text/javascript">
-                    var gRootPath  = "'. $g_root_path. '";
-                    var gThemePath = "'. THEME_PATH. '";
+                    var gRootPath  = "'. ADMIDIO_URL. '";
+                    var gThemePath = "'. THEME_URL. '";
                 </script>';
 
         $html .= $headerContent;

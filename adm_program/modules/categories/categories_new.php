@@ -16,6 +16,7 @@
  * type  : Type of categories that could be maintained
  *         ROL = Categories for roles
  *         LNK = Categories for weblinks
+ *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
  *         INF = Categories for Inventory
@@ -28,7 +29,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
-$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
 // Modus und Rechte pruefen
@@ -38,6 +39,11 @@ if($getType === 'ROL' && !$gCurrentUser->manageRoles())
     // => EXIT
 }
 elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -68,6 +74,10 @@ if($getTitle === '')
     elseif($getType === 'LNK')
     {
         $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
+    }
+    elseif($getType === 'ANN')
+    {
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ANN_ANNOUNCEMENTS'));
     }
     elseif($getType === 'USF')
     {
@@ -134,7 +144,7 @@ $categoryCreateMenu = $page->getMenu();
 $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/modules/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
+$form = new HtmlForm('categories_edit_form', ADMIDIO_URL.'/adm_program/modules/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
 
 // systemcategories should not be renamed
 $fieldPropertyCatName = FIELD_REQUIRED;
@@ -172,7 +182,7 @@ else
 }
 $form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), $category->getValue('cat_default'),
                    array('icon' => 'star.png'));
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')));
 
 // add form to html page and show page

@@ -119,12 +119,12 @@ else
         // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf die Startseite verweisen
         if(!array_key_exists('login_forward_url', $_SESSION))
         {
-            $_SESSION['login_forward_url'] = $g_root_path . '/' . $gPreferences['homepage_login'];
+            $_SESSION['login_forward_url'] = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
         }
 
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
         // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        $location = 'Location: ' . $g_root_path . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage;
+        $location = 'Location: ' . ADMIDIO_URL . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage;
         header($location);
         exit();
     }

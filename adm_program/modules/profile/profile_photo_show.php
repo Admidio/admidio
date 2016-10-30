@@ -22,7 +22,7 @@ $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $image   = null;
-$picPath = THEME_SERVER_PATH. '/images/no_profile_pic.png';
+$picPath = THEME_ADMIDIO_PATH. '/images/no_profile_pic.png';
 
 // read user data and show error if user doesn't exists
 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -43,9 +43,9 @@ else
     // show photo from folder adm_my_files
     if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
     {
-        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+        if(file_exists(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
         {
-            $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
+            $picPath = ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
         }
         $image = new Image($picPath);
     }
@@ -65,7 +65,7 @@ else
     // show temporary saved new photo from upload in filesystem
     elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
     {
-        $picPath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
+        $picPath = ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
         $image = new Image($picPath);
     }
     // show temporary saved new photo from upload in database

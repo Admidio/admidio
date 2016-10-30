@@ -32,23 +32,23 @@ $mainMenu = $page->getMenu();
 if($gValidLogin)
 {
     // show link to own profile
-    $mainMenu->addItem('adm_menu_item_my_profile', $g_root_path.'/adm_program/modules/profile/profile.php',
+    $mainMenu->addItem('adm_menu_item_my_profile', ADMIDIO_URL.'/adm_program/modules/profile/profile.php',
                        $gL10n->get('PRO_MY_PROFILE'), 'profile.png');
     // show logout link
-    $mainMenu->addItem('adm_menu_item_logout', $g_root_path.'/adm_program/system/logout.php',
+    $mainMenu->addItem('adm_menu_item_logout', ADMIDIO_URL.'/adm_program/system/logout.php',
                        $gL10n->get('SYS_LOGOUT'), 'door_in.png');
 }
 else
 {
     // show login link
-    $mainMenu->addItem('adm_menu_item_login', $g_root_path.'/adm_program/system/login.php',
+    $mainMenu->addItem('adm_menu_item_login', ADMIDIO_URL.'/adm_program/system/login.php',
                        $gL10n->get('SYS_LOGIN'), 'key.png');
 
     if($gPreferences['registration_mode'] > 0)
     {
         // show registration link
         $mainMenu->addItem('adm_menu_item_registration',
-                           $g_root_path.'/adm_program/modules/registration/registration.php',
+                           ADMIDIO_URL.'/adm_program/modules/registration/registration.php',
                            $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
     }
 }
@@ -119,7 +119,7 @@ if($gValidLogin)
 if($gPreferences['enable_dates_module'] == 1
 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
 {
-    $moduleMenu->addItem('dates', $g_root_path.'/adm_program/modules/dates/dates.php',
+    $moduleMenu->addItem('dates', ADMIDIO_URL.'/adm_program/modules/dates/dates.php',
                          $gL10n->get('DAT_DATES'), '/icons/dates_big.png',
                          $gL10n->get('DAT_DATES_DESC'));
     $moduleMenu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
@@ -128,7 +128,7 @@ if($gPreferences['enable_dates_module'] == 1
 if($gPreferences['enable_weblinks_module'] == 1
 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
 {
-    $moduleMenu->addItem('links', $g_root_path.'/adm_program/modules/links/links.php',
+    $moduleMenu->addItem('links', ADMIDIO_URL.'/adm_program/modules/links/links.php',
                          $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks_big.png',
                          $gL10n->get('LNK_WEBLINKS_DESC'));
 }

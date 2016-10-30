@@ -528,6 +528,10 @@ class ModuleDates extends Modules
      */
     public function getFormValue($date, $reference)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$moduleDates->getFormValue()" is deprecated without replacement!');
+
         if (isset($date, $reference))
         {
             return $this->setFormValue($date, $reference);
@@ -546,6 +550,10 @@ class ModuleDates extends Modules
      */
     private function setFormValue($date, $reference)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$moduleDates->setFormValue()" is deprecated without replacement!');
+
         $checkedDate = $this->formatDate($date);
         if ($checkedDate === $reference || $checkedDate === '1970-01-01')
         {

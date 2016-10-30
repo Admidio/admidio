@@ -29,6 +29,9 @@ class TableAnnouncement extends TableAccess
      */
     public function __construct(&$database, $annId = 0)
     {
+        // read also data of assigned category
+        $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'ann_cat_id');
+
         parent::__construct($database, TBL_ANNOUNCEMENTS, 'ann', $annId);
     }
 
@@ -40,7 +43,7 @@ class TableAnnouncement extends TableAccess
     {
         global $gCurrentOrganization;
 
-        $orgId = (int) $this->getValue('ann_org_id');
+        $orgId = (int) $this->getValue('cat_org_id');
 
         // Ankuendigung der eigenen Orga darf bearbeitet werden
         if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
@@ -68,6 +71,8 @@ class TableAnnouncement extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
+        global $gL10n;
+
         if ($columnName === 'ann_description')
         {
             if (!isset($this->dbColumns['ann_description']))
@@ -87,27 +92,18 @@ class TableAnnouncement extends TableAccess
             return $value;
         }
 
-        return parent::getValue($columnName, $format);
-    }
+        $value = parent::getValue($columnName, $format);
 
-    /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     * a new record or if only an update is necessary. The update statement will only update the changed columns.
-     * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * The current organization will be set per default.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
-     */
-    public function save($updateFingerPrint = true)
-    {
-        global $gCurrentOrganization;
-
-        if ($this->new_record)
+        if($columnName === 'cat_name')
         {
-            $this->setValue('ann_org_id', $gCurrentOrganization->getValue('org_id'));
+            // if text is a translation-id then translate it
+            if ($format !== 'database' && strpos($value, '_') === 3)
+            {
+                $value = $gL10n->get(admStrToUpper($value));
+            }
         }
 
-        return parent::save($updateFingerPrint);
+        return $value;
     }
 
     /**

@@ -89,6 +89,8 @@ class Database
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, array $options = array())
     {
+        global $gLogger;
+
         // for compatibility to old versions accept the string postgresql
         if ($engine === 'postgresql')
         {
@@ -132,6 +134,17 @@ class Database
         }
         catch (PDOException $e)
         {
+            $logContext = array(
+                'engine'   => $engine,
+                'host'     => $this->host,
+                'port'     => $this->port,
+                'dbName'   => $this->dbName,
+                'username' => $this->username,
+                'password' => '******',
+                'options'  => $this->options
+            );
+            $gLogger->alert('Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
+
             throw new AdmException($e->getMessage());
         }
     }
@@ -213,7 +226,7 @@ class Database
      */
     protected function getPropertyFromDatabaseConfig($property)
     {
-        $xmlDatabases = new SimpleXMLElement(SERVER_PATH . '/adm_program/system/databases.xml', null, true);
+        $xmlDatabases = new SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', null, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
         return (string) $node[0];
     }
@@ -273,7 +286,7 @@ class Database
      */
     public function startTransaction()
     {
-        global $gDebug;
+        global $gLogger;
 
         // If we are within a transaction we will not open another one,
         // but enclose the current one to not loose data (prevening auto commit)
@@ -284,10 +297,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log('START TRANSACTION');
-        }
+        $gLogger->info('START TRANSACTION');
 
         $result = $this->pdo->beginTransaction();
 
@@ -311,7 +321,7 @@ class Database
      */
     public function endTransaction()
     {
-        global $gDebug;
+        global $gLogger;
 
         // if there is no open transaction then do nothing and return
         if ($this->transactions === 0)
@@ -328,10 +338,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log('COMMIT');
-        }
+        $gLogger->info('COMMIT');
 
         $result = $this->pdo->commit();
 
@@ -383,7 +390,7 @@ class Database
             }
             else
             {
-                $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
+                $trace['file'] = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $trace['file']);
                 $trace['file'] = substr($trace['file'], 1);
             }
             $args = array();
@@ -399,7 +406,7 @@ class Database
                 if (!empty($trace['args'][0]))
                 {
                     $argument = htmlentities($trace['args'][0]);
-                    $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
+                    $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
                     $args[] = '\'' . $argument . '\'';
                 }
@@ -451,7 +458,7 @@ class Database
      */
     public function query($sql, $showError = true)
     {
-        global $gDebug;
+        global $gLogger;
 
         if ($this->dbEngine === 'pgsql')
         {
@@ -486,10 +493,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log($sql);
-        }
+        $gLogger->info($sql);
 
         try
         {
@@ -505,10 +509,9 @@ class Database
             }
         }
 
-        if ($gDebug && strpos(strtoupper($sql), 'SELECT') === 0)
+        if (strpos(strtoupper($sql), 'SELECT') === 0)
         {
-            // if debug modus then show number of selected rows
-            error_log('Found rows: '.$this->pdoStatement->rowCount());
+            $gLogger->info('Found rows: '.$this->pdoStatement->rowCount());
         }
 
         return $this->pdoStatement;
@@ -523,7 +526,7 @@ class Database
      */
     public function rollback()
     {
-        global $gDebug;
+        global $gLogger;
 
         if ($this->transactions === 0)
         {
@@ -531,10 +534,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        if ($gDebug)
-        {
-            error_log('ROLLBACK');
-        }
+        $gLogger->info('ROLLBACK');
 
         $result = $this->pdo->rollBack();
 
@@ -691,7 +691,7 @@ class Database
      */
     public function showError()
     {
-        global $gPreferences, $gDebug, $gL10n;
+        global $gLogger, $gPreferences, $gL10n;
 
         $backtrace = $this->getBacktrace();
 
@@ -705,6 +705,8 @@ class Database
         $errorCode = $this->pdo->errorCode();
         $errorInfo = $this->pdo->errorInfo();
 
+        $gLogger->critical($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
+
         $htmlOutput = '
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>
@@ -715,14 +717,8 @@ class Database
                  ' . $backtrace . '
              </div>';
 
-        // in debug mode show error in log file
-        if ($gDebug)
-        {
-            error_log($errorCode . ': ' . $errorInfo[1] . "\n" . $errorInfo[2]);
-        }
-
         // display database error to user
-        if (isset($gPreferences) && defined('THEME_SERVER_PATH') && !headers_sent())
+        if (isset($gPreferences) && defined('THEME_ADMIDIO_PATH') && !headers_sent())
         {
             // create html page object
             $page = new HtmlPage($gL10n->get('SYS_DATABASE_ERROR'));
@@ -745,6 +741,10 @@ class Database
      */
     public static function getAvailableDBs()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "PDO::getAvailableDrivers()" instead!');
+
         return PDO::getAvailableDrivers();
     }
 
@@ -762,6 +762,10 @@ class Database
      */
     public function fetch_array(PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->fetch_array()" is deprecated, use "$this->pdoStatement->fetch()" instead!');
+
         // if pdo statement is committed then fetch this object
         if ($pdoStatement instanceof \PDOStatement)
         {
@@ -789,6 +793,10 @@ class Database
      */
     public function fetch_object(PDOStatement $pdoStatement = null)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->fetch_object()" is deprecated, use "$this->pdoStatement->fetchObject()" instead!');
+
         // if pdo statement is committed then fetch this object
         if ($pdoStatement instanceof \PDOStatement)
         {
@@ -812,6 +820,10 @@ class Database
      */
     public function insert_id()
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->insert_id()" is deprecated, use "$database->lastInsertId()" instead!');
+
         return $this->lastInsertId();
     }
 
@@ -827,6 +839,10 @@ class Database
      */
     public function num_rows(PDOStatement $pdoStatement = null)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->num_rows()" is deprecated, use "$this->pdoStatement->rowCount()" instead!');
+
         // if pdo statement is committed then fetch this object
         if ($pdoStatement instanceof \PDOStatement)
         {
@@ -850,6 +866,10 @@ class Database
      */
     public function showColumns($table, $showColumnProperties = true)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->showColumns()" is deprecated, use "$database->getTableColumnsProperties()" or "$database->getTableColumns()" instead!');
+
         if ($showColumnProperties)
         {
             // returns all columns with their properties of the table

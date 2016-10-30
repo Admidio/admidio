@@ -59,14 +59,11 @@ else
 }
 
 // Bildpfad zusammensetzten
-$ordner  = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$getPhotoId;
+$ordner  = ADMIDIO_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$getPhotoId;
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
-if($gDebug)
-{
-    error_log($picpath);
-}
+$gLogger->info('ImagePath: ' . $picpath);
 
 // Wenn Thumbnail existiert laengere Seite ermitteln
 if($getThumbnail)
@@ -111,7 +108,7 @@ if($getThumbnail)
     else
     {
         // kein Bild uebergeben, dann NoPix anzeigen
-        $image = new Image(THEME_SERVER_PATH. '/images/nopix.jpg');
+        $image = new Image(THEME_ADMIDIO_PATH. '/images/nopix.jpg');
         $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
     }
 }
@@ -119,7 +116,7 @@ else
 {
     if(!is_file($picpath))
     {
-        $picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
+        $picpath = THEME_ADMIDIO_PATH. '/images/nopix.jpg';
     }
     // Bild einlesen und scalieren
     $image = new Image($picpath);
@@ -132,7 +129,7 @@ if($image !== null)
     if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')
     {
         $font_c = imagecolorallocate($image->imageResource, 255, 255, 255);
-        $font_ttf = THEME_SERVER_PATH.'/font.ttf';
+        $font_ttf = THEME_ADMIDIO_PATH.'/font.ttf';
         $font_s = $getMaxWidth / $gPreferences['photo_image_text_size'];
         $font_x = $font_s;
         $font_y = $image->imageHeight-$font_s;

@@ -167,7 +167,7 @@ elseif($getMode === 'html')
     </div>
     <div class="modal-body">';
         // show form
-        $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
+        $form = new HtmlForm('password_form', ADMIDIO_URL. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
         if($currUserId === $getUserId)
         {
             // to change own password user must enter the valid old password for verification
@@ -180,7 +180,7 @@ elseif($getMode === 'html')
             array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $user->getPasswordUserData(), 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')
         );
         $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
+        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';
 }
