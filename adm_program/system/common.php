@@ -128,7 +128,7 @@ else
         $gCurrentOrganization = new Organization($gDb, $g_organization);
     }
 
-    if($gCurrentOrganization->getValue('org_id') === 0)
+    if((int) $gCurrentOrganization->getValue('org_id') === 0)
     {
         $gLogger->error('Organization could not be found!', array('$g_organization' => $g_organization));
 

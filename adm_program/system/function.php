@@ -561,7 +561,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         return $value;
     }
 
-    if(isset($gMessage))
+    if(isset($gMessage) && $gMessage instanceof \Message)
     {
         if($optionsAll['directOutput'])
         {
