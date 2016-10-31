@@ -84,7 +84,7 @@ switch($getMode)
 
                 case 'regional_settings':
                     if(!admStrIsValidFileName($_POST['system_language'])
-                    || !is_file(ADMIDIO_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
+                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                         // => EXIT

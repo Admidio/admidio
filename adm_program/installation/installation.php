@@ -143,7 +143,7 @@ if($getMode === 1) // (Default) Choose language
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'),
-                               ADMIDIO_PATH.'/adm_program/languages/languages.xml',
+                               ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml',
                                'isocode', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $gL10n->getLanguage()));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
