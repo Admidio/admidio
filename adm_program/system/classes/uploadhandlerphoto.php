@@ -6,7 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(ADMIDIO_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/jquery-file-upload/server/php/UploadHandler.php');
 
 /**
  * @class UploadHandlerPhoto

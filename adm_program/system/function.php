@@ -22,12 +22,12 @@ function admFuncAutoload($className)
 
     $libFiles = array(
         ADMIDIO_PATH . FOLDER_CLASSES . '/classes/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/monolog/src/' . str_replace('\\', '/', $className) . '.php',
-//        ADMIDIO_PATH . '/adm_program/libs/phpass/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/phpmailer/class.' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/psr/log/' . str_replace('\\', '/', $className) . '.php',
-//        ADMIDIO_PATH . '/adm_program/libs/securimage/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
+//        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/class.' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/log/' . str_replace('\\', '/', $className) . '.php',
+//        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
     );
 
     foreach ($libFiles as $libFile)
