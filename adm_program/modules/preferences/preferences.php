@@ -420,13 +420,13 @@ $page->addHtml('
                         }
                         $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
 
-                        if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
+                        if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
                         {
-                            $html = '<span class="text-danger"><strong>'.phpversion().'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
+                            $html = '<span class="text-danger"><strong>'.PHP_VERSION.'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                         }
                         else
                         {
-                            $html = '<span class="text-success"><strong>'.phpversion().'</strong></span>';
+                            $html = '<span class="text-success"><strong>'.PHP_VERSION.'</strong></span>';
                         }
                         $form->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 

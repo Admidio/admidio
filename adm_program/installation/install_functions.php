@@ -76,9 +76,9 @@ function checkPhpVersion()
     $message = '';
 
     // check PHP version
-    if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
+    if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
     {
-        $message = $gL10n->get('SYS_PHP_VERSION').': <strong>'.phpversion().'</strong><br /><br />'.
+        $message = $gL10n->get('SYS_PHP_VERSION').': <strong>'.PHP_VERSION.'</strong><br /><br />'.
                    $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
                                '<a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>');
     }

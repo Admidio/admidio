@@ -41,9 +41,9 @@ require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_progr
 require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
-if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
+if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
-    exit('<div style="color: #cc0000;">Error: Your PHP version '.phpversion().' does not fulfill
+    exit('<div style="color: #cc0000;">Error: Your PHP version '.PHP_VERSION.' does not fulfill
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
