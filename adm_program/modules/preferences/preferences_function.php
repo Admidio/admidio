@@ -51,7 +51,7 @@ switch($getMode)
                                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
                     if(!admStrIsValidFileName($_POST['theme'])
-                    || !is_file(ADMIDIO_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
+                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT

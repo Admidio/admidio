@@ -149,7 +149,7 @@ $page->addHtml('
                         $form = new HtmlForm('common_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=common', $page, array('class' => 'form-preferences'));
 
                         // search all available themes in theme folder
-                        $themes = admFuncGetDirectoryEntries(ADMIDIO_PATH.'/adm_themes', 'dir');
+                        $themes = admFuncGetDirectoryEntries(ADMIDIO_PATH . FOLDER_THEMES, 'dir');
                         if (!is_array($themes))
                         {
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));

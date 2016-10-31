@@ -218,8 +218,8 @@ if(!array_key_exists('theme', $gPreferences))
     $gPreferences['theme'] = 'modern';
 }
 
-define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . '/adm_themes/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
-define('THEME_URL', ADMIDIO_URL . '/adm_themes/' . $gPreferences['theme']);
+define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
+define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gPreferences['theme']);
 define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // Deprecated
 define('THEME_PATH', THEME_URL); // Deprecated
 
