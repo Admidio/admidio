@@ -85,8 +85,10 @@ $gLanguageData = new LanguageData($language);
 $gL10n->addLanguageData($gLanguageData);
 $language = $gL10n->getLanguage();
 
+$pathConfigFile = ADMIDIO_PATH . FOLDER_DATA . '/config.php';
+
 // if config file exists then connect to database
-if(is_file('../../adm_my_files/config.php'))
+if(is_file($pathConfigFile))
 {
     try
     {
@@ -281,7 +283,7 @@ elseif($getMode === 4)  // Creating organization
         }
 
         // for security reasons only check database connection if no config file exists
-        if(!is_file('../../adm_my_files/config.php'))
+        if(!is_file($pathConfigFile))
         {
             // check database connections
             try
@@ -488,7 +490,7 @@ elseif($getMode === 6)  // Creating configuration file
     }
 
     // if config file exists than don't create a new one
-    if(is_file('../../adm_my_files/config.php'))
+    if(is_file($pathConfigFile))
     {
         header('Location: installation.php?mode=8');
         exit();
@@ -533,8 +535,7 @@ elseif($getMode === 6)  // Creating configuration file
     $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
-    $filename = '../../adm_my_files/config.php';
-    $configFileHandle = @fopen($filename, 'a');
+    $configFileHandle = @fopen($pathConfigFile, 'a');
 
     if($configFileHandle)
     {
@@ -552,7 +553,7 @@ elseif($getMode === 6)  // Creating configuration file
     {
         // if user doesn't has write access then create a page with a download link for the config file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
-        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath . '/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath . FOLDER_DATA, 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
         $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=5'));
         $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?mode=7'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
@@ -573,7 +574,7 @@ elseif($getMode === 7) // Download configuration file
 elseif($getMode === 8) // Start installation
 {
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-    if(!is_file('../../adm_my_files/config.php'))
+    if(!is_file($pathConfigFile))
     {
         showNotice($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6',
                    $gL10n->get('SYS_BACK'), 'layout/back.png');
@@ -799,7 +800,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
 
     // text for dialog
     $text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
-    if(!is_writable('../../adm_my_files'))
+    if(!is_writable(ADMIDIO_PATH . FOLDER_DATA))
     {
         $text = $text.'
             <div class="alert alert-warning alert-small" role="alert">

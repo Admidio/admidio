@@ -59,7 +59,7 @@ else
 }
 
 // Bildpfad zusammensetzten
-$ordner  = ADMIDIO_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$getPhotoId;
+$ordner  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $getPhotoId;
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben

@@ -788,15 +788,17 @@ elseif ($getMode === 'pdf')
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
 
+    $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
+
     // Save PDF to file
-    $pdf->Output(ADMIDIO_PATH.'/adm_my_files/'.$filename, 'F');
+    $pdf->Output($file, 'F');
 
     // Redirect
     header('Content-Type: application/pdf');
 
-    readfile(ADMIDIO_PATH.'/adm_my_files/'.$filename);
+    readfile($file);
     ignore_user_abort(true);
-    unlink(ADMIDIO_PATH.'/adm_my_files/'.$filename);
+    unlink($file);
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {

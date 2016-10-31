@@ -27,7 +27,7 @@ if ($gDebug)
 $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
 
 $formatter = new LineFormatter(null, null, false, true);
-$streamHandler = new StreamHandler(SERVER_PATH . '/adm_my_files/logs/admidio.log', $logLevel);
+$streamHandler = new StreamHandler(SERVER_PATH . FOLDER_DATA . '/logs/admidio.log', $logLevel);
 $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
 
 $streamHandler->setFormatter($formatter);

@@ -45,9 +45,9 @@ else
 }
 
 // Ordnerpfad zusammensetzen
-$ordner_foto = '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
-$ordner      = ADMIDIO_PATH. $ordner_foto;
-$ordner_url  = ADMIDIO_URL. $ordner_foto;
+$ordnerFoto = FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+$ordner      = ADMIDIO_PATH . $ordnerFoto;
+$ordner_url  = ADMIDIO_URL . $ordnerFoto;
 
 // Naechstes und Letztes Bild
 $previousImage = $getPhotoNr - 1;

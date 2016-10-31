@@ -72,7 +72,7 @@ if($photo_album->getValue('pho_locked') == 1 && !$gCurrentUser->editPhotoRight()
     // => EXIT
 }
 
-$albumFolder = ADMIDIO_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id');
 
 if($photo_album->getValue('pho_quantity') == 0)
 {
@@ -159,7 +159,7 @@ if($getPhotoNr == null)
         // ignore locked albums owned by others
         if($photo_album->getValue('pho_locked') == 0 || $gCurrentUser->editPhotoRight())
         {
-            $albumFolder = ADMIDIO_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+            $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id');
             // get number of photos in total
             $quantity = $photo_album->getValue('pho_quantity');
             $photo_album_name = $photo_album->getValue('pho_name');

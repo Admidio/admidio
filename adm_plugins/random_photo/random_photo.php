@@ -123,13 +123,13 @@ while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
     }
 
     // Bilpfad zusammensetzen
-    $picPath = PLUGIN_PATH. '/../adm_my_files/photos/'.$album->getValue('pho_begin', 'Y-m-d').'_'.$album->getValue('pho_id').'/'.$picNr.'.jpg';
+    $picPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . $album->getValue('pho_id') . '/' . $picNr . '.jpg';
     ++$i;
 }
 
 if(!is_file($picPath))
 {
-    $picPath = THEME_ADMIDIO_PATH. '/images/nopix.jpg';
+    $picPath = THEME_ADMIDIO_PATH . '/images/nopix.jpg';
 }
 
 // Ermittlung der Original Bildgroesse

@@ -148,7 +148,7 @@ class TablePhotos extends TableAccess
         if ($returnValue)
         {
             // Ordnerpfad zusammensetzen
-            $folder = ADMIDIO_PATH.'/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
+            $folder = ADMIDIO_PATH . FOLDER_DATA. '/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
 
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
             if (is_dir($folder))

@@ -43,9 +43,10 @@ else
     // show photo from folder adm_my_files
     if($gPreferences['profile_photo_storage'] == 1 && !$getNewPhoto)
     {
-        if(file_exists(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
+        if(file_exists($file))
         {
-            $picPath = ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
+            $picPath = $file;
         }
         $image = new Image($picPath);
     }
@@ -65,7 +66,7 @@ else
     // show temporary saved new photo from upload in filesystem
     elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto)
     {
-        $picPath = ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
+        $picPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
         $image = new Image($picPath);
     }
     // show temporary saved new photo from upload in database

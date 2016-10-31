@@ -74,14 +74,16 @@ if($getMode === 'save')
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        if(is_file(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
+        $fileOld = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
+        if(is_file($fileOld))
         {
-            if(is_file(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
+            $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
+            if(is_file($fileNew))
             {
-                unlink(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
+                unlink($fileNew);
             }
 
-            rename(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg', ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
+            rename($fileOld, $fileNew);
         }
     }
     else
@@ -113,9 +115,10 @@ elseif($getMode === 'dont_save')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        if(is_file(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
+        if(is_file($file))
         {
-            unlink(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
+            unlink($file);
         }
     }
     // Datenbankspeicherung
@@ -135,7 +138,7 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        unlink(ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
+        unlink(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
     }
     // Datenbankspeicherung, Daten aus Session entfernen
     else
@@ -224,7 +227,7 @@ elseif($getMode === 'upload')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        $userImage->copyToFile(null, ADMIDIO_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
+        $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg');
     }
     // Datenbankspeicherung
     else

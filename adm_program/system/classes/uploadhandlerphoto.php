@@ -49,8 +49,8 @@ class UploadHandlerPhoto extends UploadHandler
         {
             try
             {
-                $fileLocation = ADMIDIO_PATH.'/adm_my_files/photos/upload/'.$file->name;
-                $albumFolder  = ADMIDIO_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+                $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;
+                $albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
                 // create folder if not exists
                 if(!is_dir($albumFolder))
