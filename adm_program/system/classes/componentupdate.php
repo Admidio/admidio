@@ -407,38 +407,41 @@ class ComponentUpdate extends Component
 
     /**
      * Check all folders in adm_my_files and set the rights to 0777
+     * @param string $folder
+     * @return bool
      */
     public function updateStepRewriteFolderRights($folder = '')
     {
-        if($folder === '')
+        $returnValue = true;
+
+        if ($folder === '')
         {
-            $folder = SERVER_PATH.'/adm_my_files';
+            $folder = SERVER_PATH . '/adm_my_files';
         }
 
-        $dh  = @opendir($folder);
-
-        if($dh)
+        $dirHandle = @opendir($folder);
+        if ($dirHandle)
         {
-            while (false !== ($filename = readdir($dh)))
+            while (($entry = readdir($dirHandle)) !== false)
             {
-                if($filename != '.' && $filename != '..')
+                if ($entry !== '.' && $entry !== '..')
                 {
-                    $currentFolder = $folder.'/'.$filename;
+                    $resource = $folder . '/' . $entry;
 
-                    if(is_dir($currentFolder))
+                    if (is_dir($resource))
                     {
                         // now check the subfolder
-                        $this->updateStepRewriteFolderRights($currentFolder);
+                        $returnValue = $returnValue && $this->updateStepRewriteFolderRights($resource);
 
                         // set rights to 0777
-                        @chmod($currentFolder, 0777);
+                        $returnValue = $returnValue && chmod($resource, 0777);
                     }
                 }
             }
-            closedir($dh);
+            closedir($dirHandle);
         }
 
-        return true;
+        return $returnValue;
     }
 
     /**
