@@ -219,7 +219,7 @@ class ListConfiguration extends TableLists
 
             // create a valid sort
             $lscSort = $listColumn->getValue('lsc_sort');
-            if($lscSort !== '')
+            if($lscSort != '')
             {
                 if($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL')
                 {
@@ -243,7 +243,7 @@ class ListConfiguration extends TableLists
             }
 
             // Handle the conditions for the columns
-            if($listColumn->getValue('lsc_filter') !== '')
+            if($listColumn->getValue('lsc_filter') != '')
             {
                 $value = $listColumn->getValue('lsc_filter');
                 $type = '';

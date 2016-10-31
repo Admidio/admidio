@@ -173,7 +173,7 @@ if ($getMsgType === 'EMAIL')
                             ON cat_id = rol_cat_id
                            AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                                OR cat_org_id IS NULL)
-                         WHERE rol_id = '.$group[0];
+                         WHERE rol_id = '.$group['id'];
                 $statement = $gDb->query($sql);
                 $row = $statement->fetch();
 
@@ -188,12 +188,12 @@ if ($getMsgType === 'EMAIL')
                     // => EXIT
                 }
 
-                if($group[1] == 1 && $gPreferences['mail_show_former'] == 1)
+                if($group['status'] === 'former' && $gPreferences['mail_show_former'] == 1)
                 {
                     // only former members
                     $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
                 }
-                elseif($group[1] == 2 && $gPreferences['mail_show_former'] == 1)
+                elseif($group['status'] === 'active_former' && $gPreferences['mail_show_former'] == 1)
                 {
                     // former members and active members
                     $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';
@@ -226,7 +226,7 @@ if ($getMsgType === 'EMAIL')
                      LEFT JOIN '.TBL_USER_DATA.' AS first_name
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                         WHERE rol_id      = '.$group[0].'
+                         WHERE rol_id      = '.$group['id'].'
                            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                                OR cat_org_id IS NULL )
                            AND usr_valid   = 1 '.

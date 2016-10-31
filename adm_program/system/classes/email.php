@@ -203,14 +203,7 @@ class Email extends PHPMailer
         $maxUploadSize = admFuncMaxUploadSize();
         $currentAttachmentSize = $gPreferences['max_email_attachment_size'] * pow(1024, 2);
 
-        if($maxUploadSize < $currentAttachmentSize)
-        {
-            $attachmentSize = $maxUploadSize;
-        }
-        else
-        {
-            $attachmentSize = $currentAttachmentSize;
-        }
+        $attachmentSize = min($maxUploadSize, $currentAttachmentSize);
 
         switch ($sizeUnit)
         {
@@ -363,9 +356,7 @@ class Email extends PHPMailer
      */
     public function adminNotfication($subject, $message, $editorName = '', $editorEmail = '')
     {
-        global $gPreferences;
-        global $gCurrentOrganization;
-        global $gL10n;
+        global $gPreferences, $gCurrentOrganization;
 
         if($gPreferences['enable_email_notification'] == 1)
         {

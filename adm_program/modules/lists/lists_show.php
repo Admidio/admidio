@@ -233,7 +233,7 @@ else
     $headline = $roleName;
 }
 
-if (count($relationtypeIds) == 1)
+if (count($relationtypeIds) === 1)
 {
     $headline .= ' - '.$relationtypeName;
 }
@@ -596,25 +596,25 @@ foreach ($membersList as $member)
             {
                 // add serial
                 $columnValues[] = $listRowNumber;
-
-                // in html mode we add an additional column with leader/member information to
-                // enable the grouping function of jquery datatables
-                if ($getMode === 'html')
-                {
-                    if ($memberIsLeader)
-                    {
-                        $columnValues[] = $gL10n->get('SYS_LEADERS');
-                    }
-                    else
-                    {
-                        $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
-                    }
-                }
             }
             else
             {
                 // 1st column may show the serial
                 $csvStr .= $valueQuotes.$listRowNumber.$valueQuotes;
+            }
+
+            // in html mode we add an additional column with leader/member information to
+            // enable the grouping function of jquery datatables
+            if ($getMode === 'html')
+            {
+                if ($memberIsLeader)
+                {
+                    $columnValues[] = $gL10n->get('SYS_LEADERS');
+                }
+                else
+                {
+                    $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
+                }
             }
         }
 
@@ -628,7 +628,7 @@ foreach ($membersList as $member)
             /*****************************************************************/
             // in some cases the content must have a special output format
             /*****************************************************************/
-            if ($usfId > 0 && $usfId == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+            if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id'))
             {
                 $content = $gL10n->getCountryByCode($member[$sqlColumnNumber]);
             }
@@ -656,6 +656,10 @@ foreach ($membersList as $member)
                     {
                         $content = $gL10n->get('SYS_NO');
                     }
+                }
+                elseif($content != 1)
+                {
+                    $content = 0;
                 }
             }
             elseif ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DATE'
@@ -691,14 +695,15 @@ foreach ($membersList as $member)
             {
                 // firstname and lastname get a link to the profile
                 if ($getMode === 'html'
-                &&    ($usfId == $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-                    || $usfId == $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
+                &&    ($usfId === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                    || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
                 {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
                     $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$member['usr_id'].'">'.$htmlValue.'</a>';
                 }
                 else
                 {
+                    // within print mode no links should be set
                     if ($getMode === 'print'
                     &&    ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'EMAIL'
                         || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'PHONE'
@@ -708,7 +713,15 @@ foreach ($membersList as $member)
                     }
                     else
                     {
-                        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
+                        // checkbox must set a sorting value
+                        if($gProfileFields->getPropertyById($usfId, 'usf_type') === 'CHECKBOX')
+                        {
+                            $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']), 'order' => $content);
+                        }
+                        else
+                        {
+                            $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
+                        }
                     }
                 }
             }
@@ -823,18 +836,17 @@ elseif ($getMode === 'html' || $getMode === 'print')
             }
 
             // Event
+            $value = '';
+            if ($role->getValue('rol_weekday') > 0)
+            {
+                $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+            }
+            if (strlen($role->getValue('rol_start_time')) > 0)
+            {
+                $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+            }
             if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
             {
-                $value = '';
-                if ($role->getValue('rol_weekday') > 0)
-                {
-                    $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
-                }
-                if (strlen($role->getValue('rol_start_time')) > 0)
-                {
-                    $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
-                }
-
                 $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
             }
 

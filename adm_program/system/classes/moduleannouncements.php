@@ -118,7 +118,7 @@ class ModuleAnnouncements extends Modules
             $this->getConditions = 'AND ann_id = '.$this->getParameter('id');
         }
         // Search announcements to date
-        elseif (strlen($this->getParameter('dateStartFormatEnglish')) > 0)
+        elseif ($this->getParameter('dateStartFormatEnglish'))
         {
             $this->getConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
         }

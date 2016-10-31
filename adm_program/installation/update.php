@@ -37,19 +37,8 @@ else
     exit();
 }
 
-if($g_tbl_praefix === '')
-{
-    // default praefix is "adm" because of compatibility to older versions
-    $g_tbl_praefix = 'adm';
-}
-
-// if there is no debug flag in config.php than set debug to false
-if(!isset($gDebug) || !$gDebug)
-{
-    $gDebug = 0;
-}
-
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1).'/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
@@ -58,32 +47,15 @@ if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
         the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
-require_once('install_functions.php');
-require_once(SERVER_PATH.'/adm_program/system/string.php');
-require_once(SERVER_PATH.'/adm_program/system/function.php');
+require_once(SERVER_PATH . '/adm_program/installation/install_functions.php');
+require_once(SERVER_PATH . '/adm_program/system/function.php');
+require_once(SERVER_PATH . '/adm_program/system/string.php');
 
 // Initialize and check the parameters
 
 define('THEME_PATH', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
-
-// set default password-hash algorithm
-if (!isset($gPasswordHashAlgorithm))
-{
-    $gPasswordHashAlgorithm = 'DEFAULT';
-}
-
-// Default-DB-Type ist immer MySql
-if(!isset($gDbType))
-{
-    $gDbType = 'mysql';
-}
-
-if (!isset($g_adm_port))
-{
-    $g_adm_port = null;
-}
 
 // connect to database
 try
@@ -249,7 +221,7 @@ if($getMode === 1)
                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                 <strong>'.$gL10n->get('SYS_ERROR').'</strong>
                 <p>'.$gL10n->get('SYS_FILESYSTEM_VERSION_INVALID', $installedDbVersion, ADMIDIO_VERSION_TEXT, '
-                    <a href="'.ADMIDIO_HOMEPAGE.'index.php?page=download">', '</a>').'
+                    <a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>').'
                 </p>
             </div>';
         showNotice($message, $g_root_path.'/adm_program/index.php',
@@ -377,7 +349,7 @@ elseif($getMode === 2)
 
                     if (is_file($dbScriptsPath . $sqlFileName))
                     {
-                        $sqlQueryResult = querySqlFile($db, $sqlFileName);
+                        $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
 
                         if ($sqlQueryResult === true)
                         {
@@ -426,7 +398,7 @@ elseif($getMode === 2)
         }
     }
 
-    disableSoundexSearchIfPgsql($db);
+    disableSoundexSearchIfPgsql($gDb);
 
     // since version 3 we do the update with xml files and a new class model
     if($versionMain >= 3)
@@ -466,7 +438,7 @@ elseif($getMode === 2)
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful
-    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'index.php?page=donate');
+    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.php');
     $form->setUpdateModus();
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();

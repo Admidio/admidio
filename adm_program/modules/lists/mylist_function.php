@@ -46,6 +46,11 @@ if(!isset($_POST['sel_show_members']))
     $_POST['sel_show_members'] = 0;
 }
 
+if(!isset($_POST['sel_relationtype_ids']))
+{
+    $_POST['sel_relationtype_ids'] = array();
+}
+
 // Listenobjekt anlegen
 $list = new ListConfiguration($gDb, $getListId);
 

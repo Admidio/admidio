@@ -187,7 +187,7 @@ class Message
                 if(!$this->modalWindowMode)
                 {
                     $htmlButtons .= '
-                        <a class="btn" href="javascript:history.back()">
+                        <a class="btn" href="javascript:void(0)" onclick="history.back()">
                             <img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
                                 title="'.$gL10n->get('SYS_BACK').'" />'.
                             $gL10n->get('SYS_BACK').

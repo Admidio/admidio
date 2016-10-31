@@ -29,9 +29,10 @@ else
     exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
-include_once('../adm_program/system/constants.php');
-include_once('../adm_program/system/function.php');
-include_once('../adm_program/system/string.php');
+require_once('../adm_program/system/init_globals.php');
+require_once('../adm_program/system/constants.php');
+require_once('../adm_program/system/function.php');
+require_once('../adm_program/system/string.php');
 
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
@@ -39,17 +40,6 @@ if(!isset($gImportDemoData) || $gImportDemoData != 1)
     exit('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
     <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = 1;</em></p>');
-}
-
-// default database type should be MySQL
-if(!isset($gDbType))
-{
-    $gDbType = 'mysql';
-}
-
-if (!isset($g_adm_port))
-{
-    $g_adm_port = null;
 }
 
 /**

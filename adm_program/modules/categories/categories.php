@@ -213,9 +213,9 @@ while($cat_row = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_UP', $addButtonText).'" /></a>
-                           <a class="admidio-icon-link" href="javascript:moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
+                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" /></a>';
     }
 

@@ -64,14 +64,13 @@ if ($gPreferences['enable_dates_ical'] != 1)
 // create Object
 $dates = new ModuleDates();
 // set mode, viewmode, calendar, startdate and enddate manually
-$dates->setParameter('mode', 2);
 $dates->setParameter('view_mode', 'period');
 $dates->setParameter('cat_id', $getCatId);
 $dates->setDateRange($startDate, $endDate);
 // read events for output
 $datesResult = $dates->getDataSet(0, 0);
 // get parameters fom $_GET Array stored in class
-$parameter = $dates->getParameters();
+$parameters = $dates->getParameters();
 
 // Headline for file name
 if($getCatId > 0)
@@ -96,19 +95,17 @@ if($datesResult['numResults'] > 0)
 
 $iCal .= $date->getIcalFooter();
 
-if($parameter['mode'] == 2)
+// for IE the filename must have special chars in hexadecimal
+if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
 {
-    // for IE the filename must have special chars in hexadecimal
-    if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
-    {
-        $getHeadline = urlencode($getHeadline);
-    }
-
-    header('Content-Type: text/calendar; charset=utf-8');
-    header('Content-Disposition: attachment; filename="'. $getHeadline. '.ics"');
-
-    // necessary for IE, because without it the download with SSL has problems
-    header('Cache-Control: private');
-    header('Pragma: public');
+    $getHeadline = urlencode($getHeadline);
 }
+
+header('Content-Type: text/calendar; charset=utf-8');
+header('Content-Disposition: attachment; filename="'. $getHeadline. '.ics"');
+
+// necessary for IE, because without it the download with SSL has problems
+header('Cache-Control: private');
+header('Pragma: public');
+
 echo $iCal;

@@ -43,27 +43,30 @@ if(!$gCurrentUser->assignRoles())
     // => EXIT
 }
 
-// detect number of selected roles
-$roleCount = 0;
-foreach($_POST as $key => $value)
+// if new user or registration than at least 1 role must be assigned
+if($getNewUser > 0)
 {
-    if(preg_match('/^(role-)\d+$/i', $key))
+    // detect number of selected roles
+    $roleCount = 0;
+    foreach($_POST as $key => $value)
     {
-        ++$roleCount;
+        if(preg_match('/^(role-)\d+$/i', $key))
+        {
+            ++$roleCount;
+        }
     }
-}
-
-// if no role is selected than show notice
-if($roleCount === 0)
-{
-    if(!$getInline)
+    // if no role is selected than show notice
+    if($roleCount === 0)
     {
-        $gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
-        // => EXIT
-    }
-    else
-    {
-        exit($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+        if(!$getInline)
+        {
+            $gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+            // => EXIT
+        }
+        else
+        {
+            exit($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
+        }
     }
 }
 
