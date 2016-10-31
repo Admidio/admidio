@@ -190,11 +190,11 @@ class Session extends TableAccess
     {
         if ($path === '')
         {
-            $path = ADMIDIO_SUBFOLDER;
+            $path = ADMIDIO_SUBFOLDER . '/';
         }
         if ($domain === '')
         {
-            $domain = HOST;
+            $domain = DOMAIN;
             // https://secure.php.net/manual/en/function.setcookie.php#73107
             if ($domain === 'localhost')
             {
