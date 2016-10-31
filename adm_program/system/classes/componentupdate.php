@@ -258,7 +258,7 @@ class ComponentUpdate extends Component
                              , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\',   \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
             $this->db->query($sql);
 
-            $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id = 
+            $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id =
                            (SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ANN\' AND cat_name_intern = \'COMMON\')
                      WHERE ann_org_id = '.$row['org_id'];
             $this->db->query($sql);
@@ -403,6 +403,42 @@ class ComponentUpdate extends Component
         $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
                  WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\'';
         $this->db->query($sql);
+    }
+
+    /**
+     * Check all folders in adm_my_files and set the rights to 0777
+     */
+    public function updateStepRewriteFolderRights($folder = '')
+    {
+        if($folder === '')
+        {
+            $folder = SERVER_PATH.'/adm_my_files';
+        }
+
+        $dh  = @opendir($folder);
+
+        if($dh)
+        {
+            while (false !== ($filename = readdir($dh)))
+            {
+                if($filename != '.' && $filename != '..')
+                {
+                    $currentFolder = $folder.'/'.$filename;
+
+                    if(is_dir($currentFolder))
+                    {
+                        // now check the subfolder
+                        $this->updateStepRewriteFolderRights($currentFolder);
+
+                        // set rights to 0777
+                        @chmod($currentFolder, 0777);
+                    }
+                }
+            }
+            closedir($dh);
+        }
+
+        return true;
     }
 
     /**
