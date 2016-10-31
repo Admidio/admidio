@@ -15,9 +15,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 }
 
 // embed config and constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my_files/config.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_my_files/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/init_globals.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/constants.php');
 
 // includes WITHOUT database connections
 require_once(ADMIDIO_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
