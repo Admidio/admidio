@@ -821,12 +821,13 @@ function admRedirect($url, $statusCode = 303)
     if (strpos($url, ADMIDIO_URL) === 0)
     {
         // TODO check if user is authorized for url
-        header('Location: ' . $url, true, $statusCode);
+        $redirectUrl = $url;
     }
     else
     {
-        header('Location: ' . ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url, true, $statusCode);
+        $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
     }
 
+    header('Location: ' . $redirectUrl, true, $statusCode);
     exit();
 }
