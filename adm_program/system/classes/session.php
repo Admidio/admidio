@@ -35,6 +35,7 @@ class Session extends TableAccess
     protected $mObjectArray = array();  ///< Array with all objects of this session object.
     protected $mAutoLogin;              ///< Object of table auto login that will handle an auto login
     protected $mCookiePrefix;           ///< The prefix that is used for the cookies and identify a cookie for this organization
+    protected $cookieAutoLoginId;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
@@ -49,9 +50,10 @@ class Session extends TableAccess
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
-        $this->mCookiePrefix = $cookiePrefix;
+        $this->mCookiePrefix = $cookiePrefix; // Deprecated
+        $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
-        if (is_numeric($session))
+        if (is_int($session))
         {
             $this->readDataById($session);
         }
@@ -69,10 +71,10 @@ class Session extends TableAccess
 
         // if cookie PREFIX_AUTO_LOGIN_ID is set then there could be an auto login
         // the auto login must be done here because after that the corresponding organization must be set
-        if (array_key_exists($cookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE))
+        if (array_key_exists($this->cookieAutoLoginId, $_COOKIE))
         {
             // restore user from auto login session
-            $this->mAutoLogin = new AutoLogin($database, $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
+            $this->mAutoLogin = new AutoLogin($database, $_COOKIE[$this->cookieAutoLoginId]);
 
             // valid AutoLogin found
             if ($this->mAutoLogin->getValue('atl_id') > 0)
@@ -84,12 +86,13 @@ class Session extends TableAccess
             }
             else
             {
-                // an invalid AutoLogin should be executed made the current AutoLogin unusable
+                // an invalid AutoLogin should made the current AutoLogin unusable
                 $this->mAutoLogin = null;
-                $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID']);
+                $this->setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
 
                 // now count invalid auto login for this user and delete all auto login of this users if number of wrong logins > 3
-                $userId = substr($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], 0, strpos($_COOKIE[$cookiePrefix . '_AUTO_LOGIN_ID'], ':'));
+                $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
+                $userId = $autoLoginParts[0];
 
                 $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = atl_number_invalid + 1
                          WHERE atl_usr_id = '.$userId;
@@ -101,6 +104,30 @@ class Session extends TableAccess
                 $this->db->query($sql);
             }
         }
+    }
+
+    /**
+     * Set the database object for communication with the database of this class.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$database)
+    {
+        parent::setDatabase($database);
+
+        if ($this->mAutoLogin instanceof \AutoLogin)
+        {
+            $this->mAutoLogin->setDatabase($database);
+        }
+    }
+
+    /**
+     * Checks if the object with this name exists in the object array of this class.
+     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
+     * @return bool Returns @b true if the object exits otherwise @b false
+     */
+    public function hasObject($objectName)
+    {
+        return array_key_exists($objectName, $this->mObjectArray);
     }
 
     /**
@@ -204,21 +231,11 @@ class Session extends TableAccess
         return (int) $this->getValue('ses_org_id');
     }
 
-    /**
-     * Checks if the object with this name exists in the object array of this class.
-     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
-     * @return bool Returns @b true if the object exits otherwise @b false
-     */
-    public function hasObject($objectName)
-    {
-        return array_key_exists($objectName, $this->mObjectArray);
-    }
-
     protected function clearUserData()
     {
         global $gCurrentUser;
 
-        if (isset($gCurrentUser))
+        if (isset($gCurrentUser) && $gCurrentUser instanceof \User)
         {
             $gCurrentUser->clear();
         }
@@ -237,7 +254,7 @@ class Session extends TableAccess
 
         if ($userId > 0)
         {
-            if ($this->getValue('ses_usr_id') === $userId)
+            if ((int) $this->getValue('ses_usr_id') === $userId)
             {
                 // session has a user assigned -> check if login is still valid
                 $timeGap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
@@ -278,7 +295,7 @@ class Session extends TableAccess
         if ($this->mAutoLogin instanceof \AutoLogin)
         {
             // remove auto login cookie from users browser by setting expired timestamp to 0
-            $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'));
+            $this->setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'));
 
             // delete auto login and remove all data
             $this->mAutoLogin->delete();
@@ -297,14 +314,14 @@ class Session extends TableAccess
         global $gCheckIpAddress, $gLogger;
 
         // read session data from database to update the renew flag
-        $this->readDataById($this->getValue('ses_id'));
+        $this->readDataById((int) $this->getValue('ses_id'));
 
         // check if current connection has same ip address as of session initialization
         // if config parameter $gCheckIpAddress = 0 then don't check ip address
         $sesIpAddress = $this->getValue('ses_ip_address');
-        if ($sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'] && isset($gCheckIpAddress) && $gCheckIpAddress === 1)
+        if (isset($gCheckIpAddress) && $gCheckIpAddress && $sesIpAddress !== '' && $sesIpAddress !== $_SERVER['REMOTE_ADDR'])
         {
-            $gLogger->warning('Admidio stored session ip address: '.$sesIpAddress. ' :: Remote ip address: '.$_SERVER['REMOTE_ADDR']);
+            $gLogger->warning('Admidio stored session ip address: ' . $sesIpAddress . ' :: Remote ip address: ' . $_SERVER['REMOTE_ADDR']);
             $gLogger->warning('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
 
             unset($_SESSION['gCurrentSession']);
@@ -327,7 +344,7 @@ class Session extends TableAccess
             $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
             $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-            $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
+            $this->setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
         }
 
         // if flag for reload of organization is set than reload the organization data
@@ -364,6 +381,7 @@ class Session extends TableAccess
         {
             $sqlCondition = ' WHERE ses_usr_id = ' . $userId;
         }
+
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1 ' . $sqlCondition;
         $this->db->query($sql);
     }
@@ -386,14 +404,12 @@ class Session extends TableAccess
             // Insert
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('ses_begin', DATETIME_NOW);
-            $this->setValue('ses_timestamp', DATETIME_NOW);
             $this->setValue('ses_ip_address', $_SERVER['REMOTE_ADDR']);
         }
-        else
-        {
-            // Update
-            $this->setValue('ses_timestamp', DATETIME_NOW);
-        }
+
+        // Insert & Update
+        $this->setValue('ses_timestamp', DATETIME_NOW);
+
         return parent::save($updateFingerPrint);
     }
 
@@ -420,37 +436,23 @@ class Session extends TableAccess
         $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
         $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-        $this->setCookie($this->mCookiePrefix . '_AUTO_LOGIN_ID', $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
-    }
-
-    /**
-     * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(&$database)
-    {
-        parent::setDatabase($database);
-
-        if ($this->mAutoLogin instanceof \AutoLogin)
-        {
-            $this->mAutoLogin->setDatabase($database);
-        }
+        $this->setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
     }
 
     /**
      * Deletes all sessions in table admSessions that are inactive since @b $maxInactiveTime minutes..
-     * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted. Minimum 30 minutes.
+     * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted. Maximum 60 minutes.
      */
-    public function tableCleanup($maxInactiveMinutes)
+    public function tableCleanup($maxInactiveMinutes = 30)
     {
-        // determine time when sessions should be deleted (min. 30 minutes)
-        if ($maxInactiveMinutes > 30)
+        // determine time when sessions should be deleted (max. 60 minutes)
+        if ($maxInactiveMinutes > 60)
         {
-            $maxInactiveMinutes = 30;
+            $maxInactiveMinutes = 60;
         }
 
         $now = new DateTime();
-        $minutesBack = new DateInterval('PT'.$maxInactiveMinutes.'M');
+        $minutesBack = new DateInterval('PT' . $maxInactiveMinutes . 'M');
         $timestamp = $now->sub($minutesBack)->format('Y-m-d H:i:s');
 
         $sql = 'DELETE FROM '.TBL_SESSIONS.'

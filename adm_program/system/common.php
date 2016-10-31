@@ -195,7 +195,7 @@ if($sesRenew === 1 || $sesRenew === 3)
 // check session if user login is valid
 if($gCurrentSession->getValue('ses_usr_id') > 0)
 {
-    if($gCurrentSession->isValidLogin($gCurrentUser->getValue('usr_id')))
+    if($gCurrentSession->isValidLogin((int) $gCurrentUser->getValue('usr_id')))
     {
         $gValidLogin = true;
     }
