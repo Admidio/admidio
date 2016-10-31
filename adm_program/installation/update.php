@@ -76,6 +76,7 @@ if(!$pdoStatement || $pdoStatement->rowCount() === 0)
 {
     // no valid installation exists -> show installation wizard
     header('Location: installation.php');
+    exit();
 }
 
 // create an organization object of the current organization

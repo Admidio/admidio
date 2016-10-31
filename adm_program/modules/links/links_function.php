@@ -106,8 +106,8 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     unset($_SESSION['links_request']);
     $gNavigation->deleteLastUrl();
 
-    header('Location: '. $gNavigation->getUrl());
-    exit();
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }
 elseif ($getMode === 2 && $getLinkId > 0)
 {

@@ -192,13 +192,14 @@ if($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        header('Location: '. ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId);
+        admRedirect(ADMIDIO_URL . '/adm_program/modules/photos/photos.php?pho_id=' . $getPhotoId);
+        // => EXIT
     }
     else
     {
-        header('Location: '. $gNavigation->getUrl());
+        admRedirect($gNavigation->getUrl());
+        // => EXIT
     }
-    exit();
 }
 
 /**************************************************************************/

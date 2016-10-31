@@ -83,23 +83,22 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
          WHERE usr_valid = 1
            AND '.$sql_similar_name;
 $usrStatement = $gDb->query($sql);
-$members_found = $usrStatement->rowCount();
 
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
 {
-    $urlCreateNewUser = ADMIDIO_URL.'/adm_program/modules/profile/profile_new.php?new_user=3&user_id='.$getNewUserId;
+    $urlCreateNewUser = ADMIDIO_URL . '/adm_program/modules/profile/profile_new.php?new_user=3&user_id=' . $getNewUserId;
 }
 else
 {
-    $urlCreateNewUser = ADMIDIO_URL.'/adm_program/modules/registration/registration_function.php?mode=5&new_user_id='.$getNewUserId;
+    $urlCreateNewUser = ADMIDIO_URL . '/adm_program/modules/registration/registration_function.php?mode=5&new_user_id=' . $getNewUserId;
 }
 
-if($members_found === 0)
+if($usrStatement->rowCount() === 0)
 {
     // if user doesn't exists than show profile or auto assign roles
-    header('Location: '.$urlCreateNewUser);
-    exit();
+    admRedirect($urlCreateNewUser);
+    // => EXIT
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);

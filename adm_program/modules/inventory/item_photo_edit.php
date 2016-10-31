@@ -105,8 +105,8 @@ if($getMode === 'save')
 
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
-    header('Location: '.ADMIDIO_URL.'/adm_program/modules/inventory/item.php?item_id='.$getItemId);
-    exit();
+    admRedirect(ADMIDIO_URL . '/adm_program/modules/inventory/item.php?item_id=' . $getItemId);
+    // => EXIT
 }
 elseif($getMode === 'dont_save')
 {

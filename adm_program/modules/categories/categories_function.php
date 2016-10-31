@@ -204,8 +204,8 @@ if($getMode === 1)
     $gNavigation->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    header('Location: '. $gNavigation->getUrl());
-    exit();
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }
 elseif($getMode === 2)
 {

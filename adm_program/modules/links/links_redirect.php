@@ -79,5 +79,6 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
 }
 else
 {
-    header('Location:'.$weblink->getValue('lnk_url'));
+    admRedirect($weblink->getValue('lnk_url'));
+    // => EXIT
 }
