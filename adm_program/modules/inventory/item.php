@@ -85,10 +85,10 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addCssFile(ADMIDIO_URL.'/adm_program/libs/bootstrap-datepicker/dist/css/datepicker3.css');
-$page->addJavascriptFile(ADMIDIO_URL.'/adm_program/modules/profile/profile.js');
-$page->addJavascriptFile(ADMIDIO_URL.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-$page->addJavascriptFile(ADMIDIO_URL.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gL10n->getLanguage().'.js');
+$page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/css/datepicker3.css');
+$page->addJavascriptFile(ADMIDIO_URL . '/adm_program/modules/profile/profile.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gL10n->getLanguage().'.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);

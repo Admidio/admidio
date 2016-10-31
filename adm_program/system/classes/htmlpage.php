@@ -503,8 +503,8 @@ class HtmlPage
 
         // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
         $headerContent .= '<!--[if lt IE 9]>
-            <script src="'.ADMIDIO_URL.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
-            <script src="'.ADMIDIO_URL.'/adm_program/libs/respond/respond.min.js"></script>
+            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/html5shiv/html5shiv.min.js"></script>
+            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/respond/respond.min.js"></script>
         <![endif]-->';
 
         if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)

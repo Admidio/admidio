@@ -85,7 +85,7 @@ $page->addJavascript('
                 if (data === "success") {
                     if(id === "captcha_preferences_form") {
                         // reload captcha if form is saved
-                        $("#captcha").attr("src", "'.ADMIDIO_URL.'/adm_program/libs/securimage/securimage_show.php?" + Math.random());
+                        $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random());
                     }
                     $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
                     $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
@@ -386,8 +386,8 @@ $page->addHtml('
                         $form->addInput('captcha_line_color', $gL10n->get('ORG_CAPTCHA_LINE_COLOR'), $form_values['captcha_line_color'], array('maxLength' => 7, 'helpTextIdInline' => array('ORG_CAPTCHA_COLOR_DESC', '<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>'), 'class' => 'form-control-small'));
                         $form->addInput('captcha_charset', $gL10n->get('ORG_CAPTCHA_SIGNS'), $form_values['captcha_charset'], array('maxLength' => 80, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNS_TEXT'));
                         $form->addInput('captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $form_values['captcha_signature'], array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT'));
-                        $html = '<img id="captcha" src="'.ADMIDIO_URL.'/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
-                                 <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\''.ADMIDIO_URL.'/adm_program/libs/securimage/securimage_show.php?\' + Math.random(); return false"><img
+                        $html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
+                                 <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?\' + Math.random(); return false"><img
                                     src="'.THEME_URL.'/icons/view-refresh.png" alt="'.$gL10n->get('SYS_RELOAD').'" title="'.$gL10n->get('SYS_RELOAD').'" /></a>';
                         $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT'));
 

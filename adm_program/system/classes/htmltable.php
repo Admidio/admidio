@@ -91,7 +91,7 @@ class HtmlTable extends HtmlTableBasic
         {
             $this->addAttribute('width', '100%');
 
-            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . '/adm_program/libs/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
         }
 
         if ($htmlPage instanceof \HtmlPage)
