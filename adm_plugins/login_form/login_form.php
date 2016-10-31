@@ -77,7 +77,7 @@ if(!isset($plg_rank))
 global $page;
 if(isset($page) && $page instanceof \HtmlPage)
 {
-    $page->addCssFile(ADMIDIO_URL.'/adm_plugins/login_form/login_form.css');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/login_form/login_form.css');
 }
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';

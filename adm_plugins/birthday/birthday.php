@@ -107,7 +107,7 @@ if($plg_show_names_extern === 0 && !$gValidLogin)
 global $page;
 if(isset($page) && $page instanceof \HtmlPage)
 {
-    $page->addCssFile(ADMIDIO_URL.'/adm_plugins/birthday/birthday.css');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/birthday/birthday.css');
 }
 
 $sql = 'SELECT DISTINCT usr_id, usr_login_name,

@@ -163,7 +163,7 @@ $birthdaysMonthDayArray = array();
 global $page;
 if(isset($page) && $page instanceof \HtmlPage)
 {
-    $page->addCssFile(ADMIDIO_URL.'/adm_plugins/calendar/calendar.css');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/calendar/calendar.css');
 }
 
 // query of all events
@@ -393,7 +393,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         if($plg_ajax_change)
         {
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
-                url: "'.ADMIDIO_URL.'/adm_plugins/'.$plugin_folder.'/calendar.php",
+                url: "'.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
                 cache: false,
                 data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'",
                 success: function(html) {
@@ -403,7 +403,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
             }); return false;">&laquo;</a></th>';
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
-                url: "'.ADMIDIO_URL.'/adm_plugins/'.$plugin_folder.'/calendar.php",
+                url: "'.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
                 cache: false,
                 data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'",
                 success: function(html) {
@@ -544,7 +544,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
                 if($plg_geb_icon)
                 {
-                    $icon = '<img src=\''.ADMIDIO_URL.'/adm_plugins/'.$plugin_folder.'/cake.png\' alt=\'Birthday\' /> ';
+                    $icon = '<img src=\''.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/cake.png\' alt=\'Birthday\' /> ';
                 }
                 else
                 {
@@ -679,7 +679,7 @@ echo '</table>';
 if($currentMonth.$currentYear !== date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.get({
-            url: \''.ADMIDIO_URL.'/adm_plugins/'.$plugin_folder.'/calendar.php\',
+            url: \''.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php\',
             cache: false,
             data: \'ajax_change&amp;date_id='.date('mY').'\',
             success: function(html) {

@@ -9,7 +9,7 @@
             <div id="right-block" class="admidio-container">
                 <?php
 
-                include(ADMIDIO_PATH . '/adm_plugins/login_form/login_form.php');
+                include(ADMIDIO_PATH . FOLDER_PLUGINS . '/login_form/login_form.php');
 
                 ?>
                 <div id="plugin_menu" class="admidio-plugin-content">
