@@ -68,6 +68,15 @@ define('WWW_PATH', $_SERVER['DOCUMENT_ROOT']); // /var/www    Will get "SERVER_P
 define('ADMIDIO_PATH', $admParts[0]); // /var/www/subfolder
 define('CURRENT_PATH', $_SERVER['SCRIPT_FILENAME']); // /var/www/subfolder/adm_program/index.php
 
+// FOLDERS
+define('FOLDER_DATA', '/adm_my_files');
+define('FOLDER_CLASSES', '/adm_program/system/classes');
+define('FOLDER_LIBS_SERVER', '/adm_program/libs'); // PHP libs
+define('FOLDER_LIBS_CLIENT', '/adm_program/libs'); // JS/CSS libs
+define('FOLDER_LANGUAGES', '/adm_program/languages');
+define('FOLDER_THEMES', '/adm_themes');
+define('FOLDER_PLUGINS', '/adm_plugins');
+
 ####################
 ###  DATE-STUFF  ###
 ####################
