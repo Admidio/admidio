@@ -37,8 +37,8 @@ else
     exit();
 }
 
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/init_globals.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
@@ -76,6 +76,7 @@ if(!$pdoStatement || $pdoStatement->rowCount() === 0)
 {
     // no valid installation exists -> show installation wizard
     header('Location: installation.php');
+    exit();
 }
 
 // create an organization object of the current organization

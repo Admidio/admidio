@@ -50,8 +50,8 @@ if(!isset($g_tbl_praefix))
     }
 }
 
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/init_globals.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))

@@ -117,6 +117,7 @@
     <step id="470" database="mysql" error="ignore">ALTER TABLE %PREFIX%_announcements DROP INDEX %PREFIX%_FK_ANN_ORG</step>
     <step id="480" database="postgresql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
+    <step id="500">ComponentUpdate::updateStepRewriteFolderRights</step>
 
     <step>stop</step>
 </update>

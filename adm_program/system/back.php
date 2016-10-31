@@ -23,4 +23,6 @@ if($nextUrl === '')
 {
     $nextUrl = $gHomepage;
 }
-header('Location: '.$nextUrl);
+
+admRedirect($nextUrl);
+// => EXIT

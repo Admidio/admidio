@@ -34,22 +34,24 @@ else
 }
 
 // Define URLs and Paths
-define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-define('PORT', (int) $_SERVER['SERVER_PORT']);
+// https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
+define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true
+define('PORT', (int) $_SERVER['SERVER_PORT']); // 443
 
 $port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT;
-$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port;
-$uri = (HTTPS ? 'https' : 'http') . '://' . $host;
-$admParts = explode('/adm_', $uri . $_SERVER['SCRIPT_NAME']);
+define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org
+
+$admParts = explode('/adm_', dirname($_SERVER['SCRIPT_NAME']));
+define('ADMIDIO_SUBFOLDER', $admParts[0]); // /subfolder
 
 // Urls
-define('SERVER_URL',  $uri); // https://www.example.org:1234
-define('ADMIDIO_URL', $admParts[0]); // https://www.example.org:1234/subfolder
+define('SERVER_URL',  (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234
+define('ADMIDIO_URL', SERVER_URL . ADMIDIO_SUBFOLDER); // https://www.example.org:1234/subfolder
 define('FILE_URL',    SERVER_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
 define('CURRENT_URL', SERVER_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // Paths
-$admParts = explode('/adm_', __FILE__);
+$admParts = explode('/adm_', __DIR__);
 define('WWW_PATH', $_SERVER['DOCUMENT_ROOT']); // /var/www    Will get "SERVER_PATH" in v4.0
 define('ADMIDIO_PATH', $admParts[0]); // /var/www/subfolder
 define('CURRENT_PATH', $_SERVER['SCRIPT_FILENAME']); // /var/www/subfolder/adm_program/index.php

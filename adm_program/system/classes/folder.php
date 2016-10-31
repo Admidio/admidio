@@ -97,8 +97,8 @@ class Folder
             }
         }
 
-        // der Ordner existiert, aber die Schreibrechte noch nicht
-        if($writable && is_dir($newPath) && !is_writable($newPath))
+        // set write permissions for all users everytime because mkdir does not set this on every system
+        if($writable && is_dir($newPath))
         {
             $returnValue = chmod($newPath, 0777);
         }

@@ -217,8 +217,8 @@ elseif($getMode === 6)
     {
         // only administrators are allowed to do this
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
-        header('Location: '.ADMIDIO_URL.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=1');
-        exit();
+        admRedirect(ADMIDIO_URL . '/adm_program/modules/members/members_function.php?usr_id=' . $getUserId . '&mode=1');
+        // => EXIT
     }
     elseif(!$this_orga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
     {

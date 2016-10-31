@@ -111,6 +111,16 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 // but no output of error message because of safe mode
 @set_time_limit(1000);
 
+// create an installation unique cookie prefix and remove special characters
+$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
+$gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
+
+// start php session and remove session object with all data, so that
+// all data will be read after the update
+session_name($gCookiePraefix. '_PHP_ID');
+session_start();
+unset($_SESSION['gCurrentSession']);
+
 echo 'Start with installation ...<br />';
 
 // create language and language data object to handle translations
@@ -239,16 +249,6 @@ if($gDbType === 'mysql')
     $sql = 'SET foreign_key_checks = 1 ';
     $db->query($sql);
 }
-
-// create an installation unique cookie prefix and remove special characters
-$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-$gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
-
-// start php session and remove session object with all data, so that
-// all data will be read after the update
-session_name($gCookiePraefix. '_PHP_ID');
-session_start();
-unset($_SESSION['gCurrentSession']);
 
 echo 'Installation successful !<br />';
 

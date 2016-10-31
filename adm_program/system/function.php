@@ -561,7 +561,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         return $value;
     }
 
-    if(isset($gMessage))
+    if(isset($gMessage) && $gMessage instanceof \Message)
     {
         if($optionsAll['directOutput'])
         {
@@ -790,4 +790,44 @@ function admFuncCheckUrl($url)
     }
 
     return $url;
+}
+
+/**
+ * This is a safe method for redirecting.
+ * @param string $url        The URL where redirecting to. Must be a absolute URL. (www.example.org)
+ * @param int    $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
+ * @see https://www.owasp.org/index.php/Open_redirect
+ */
+function admRedirect($url, $statusCode = 303)
+{
+    global $gMessage, $gL10n;
+
+    if (headers_sent() === false)
+    {
+        $gMessage->show($gL10n->get('SYS_HEADER_ALREADY_SENT'));
+        // => EXIT
+    }
+    if (filter_var($url, FILTER_VALIDATE_URL) === false)
+    {
+        $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
+        // => EXIT
+    }
+    if (in_array($statusCode, array(301, 302, 303, 307), true))
+    {
+        $gMessage->show($gL10n->get('SYS_STATUS_CODE_INVALID'));
+        // => EXIT
+    }
+
+    if (strpos($url, ADMIDIO_URL) === 0)
+    {
+        // TODO check if user is authorized for url
+        $redirectUrl = $url;
+    }
+    else
+    {
+        $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
+    }
+
+    header('Location: ' . $redirectUrl, true, $statusCode);
+    exit();
 }

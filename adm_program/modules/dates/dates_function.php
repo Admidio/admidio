@@ -479,8 +479,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     unset($_SESSION['dates_request']);
     $gNavigation->deleteLastUrl();
 
-    header('Location: '. $gNavigation->getUrl());
-    exit();
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }
 elseif($getMode === 2)  // Termin loeschen
 {
