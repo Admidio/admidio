@@ -190,12 +190,11 @@ class Session extends TableAccess
     {
         if ($path === '')
         {
-            $pathParts = explode('adm_', $_SERVER['REQUEST_URI']);
-            $path = $pathParts[0];
+            $path = ADMIDIO_SUBFOLDER;
         }
         if ($domain === '')
         {
-            $domain = $_SERVER['HTTP_HOST'];
+            $domain = HOST;
             // https://secure.php.net/manual/en/function.setcookie.php#73107
             if ($domain === 'localhost')
             {
@@ -204,12 +203,7 @@ class Session extends TableAccess
         }
         if ($secure === null)
         {
-            // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
-            $secure = false;
-            if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-            {
-                $secure = true;
-            }
+            $secure = HTTPS;
         }
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
