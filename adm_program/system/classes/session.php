@@ -435,16 +435,10 @@ class Session extends TableAccess
 
     /**
      * Deletes all sessions in table admSessions that are inactive since @b $maxInactiveTime minutes..
-     * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted. Maximum 60 minutes.
+     * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted.
      */
     public function tableCleanup($maxInactiveMinutes = 30)
     {
-        // determine time when sessions should be deleted (max. 60 minutes)
-        if ($maxInactiveMinutes > 60)
-        {
-            $maxInactiveMinutes = 60;
-        }
-
         $now = new DateTime();
         $minutesBack = new DateInterval('PT' . $maxInactiveMinutes . 'M');
         $timestamp = $now->sub($minutesBack)->format('Y-m-d H:i:s');
