@@ -13,7 +13,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
     exit('This page may not be called directly!');
 }
 
-define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
+##################
+###  VERSIONS  ###
+##################
 
 // !!! Please do not edit these version numbers !!!
 define('MIN_PHP_VERSION', '5.3.7');
@@ -33,7 +35,14 @@ else
     define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
 }
 
-// Define URLs and Paths
+######################
+###  URLS & PATHS  ###
+######################
+
+// Admidio Homepage
+define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
+
+// BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
 define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true
 define('PORT', (int) $_SERVER['SERVER_PORT']); // 443
@@ -47,21 +56,33 @@ define('DOMAIN', $hostParts[0]); // www.example.org
 $admParts = explode('/adm_', dirname($_SERVER['SCRIPT_NAME']));
 define('ADMIDIO_SUBFOLDER', $admParts[0]); // /subfolder
 
-// Urls
+// URLS
 define('SERVER_URL',  (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234
 define('ADMIDIO_URL', SERVER_URL . ADMIDIO_SUBFOLDER); // https://www.example.org:1234/subfolder
 define('FILE_URL',    SERVER_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
 define('CURRENT_URL', SERVER_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
-// Paths
+// PATHS
 $admParts = explode('/adm_', __DIR__);
 define('WWW_PATH', $_SERVER['DOCUMENT_ROOT']); // /var/www    Will get "SERVER_PATH" in v4.0
 define('ADMIDIO_PATH', $admParts[0]); // /var/www/subfolder
 define('CURRENT_PATH', $_SERVER['SCRIPT_FILENAME']); // /var/www/subfolder/adm_program/index.php
 
-define('SERVER_PATH', ADMIDIO_PATH); // Deprecated
+// FOLDERS
+define('FOLDER_DATA', '/adm_my_files');
+define('FOLDER_CLASSES', '/adm_program/system/classes');
+define('FOLDER_LIBS_SERVER', '/adm_program/libs'); // PHP libs
+define('FOLDER_LIBS_CLIENT', '/adm_program/libs'); // JS/CSS libs
+define('FOLDER_LANGUAGES', '/adm_program/languages');
+define('FOLDER_THEMES', '/adm_themes');
+define('FOLDER_MODULES', '/adm_program/modules');
+define('FOLDER_PLUGINS', '/adm_plugins');
 
-// Define date stuff
+####################
+###  DATE-STUFF  ###
+####################
+
+// Define default timezone
 date_default_timezone_set($gTimezone);
 
 // date and time for use in scripts
@@ -69,7 +90,10 @@ define('DATE_NOW', date('Y-m-d', time()));
 define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
 define('DATE_MAX', '9999-12-31');
 
-// Defines for all database tables
+###################
+###  DB-TABLES  ###
+###################
+
 define('TBL_ANNOUNCEMENTS',       $g_tbl_praefix . '_announcements');
 define('TBL_AUTO_LOGIN',          $g_tbl_praefix . '_auto_login');
 define('TBL_CATEGORIES',          $g_tbl_praefix . '_categories');
@@ -108,20 +132,31 @@ define('TBL_USER_LOG',            $g_tbl_praefix . '_user_log');
 define('TBL_USER_RELATIONS',      $g_tbl_praefix . '_user_relations');
 define('TBL_USER_RELATION_TYPES', $g_tbl_praefix . '_user_relation_types');
 
+#####################
+###  OTHER STUFF  ###
+#####################
+
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);
 define('ROLE_LEADER_MEMBERS_ASSIGN', 1);
 define('ROLE_LEADER_MEMBERS_EDIT', 2);
 define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
 
-// Define Constants for PHP 5.3 (deprecated)
+// Password settings
+define('PASSWORD_MIN_LENGTH', 8);
+define('PASSWORD_GEN_LENGTH', 16);
+define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+####################
+###  DEPRECATED  ###
+####################
+
+// Old ADMIDIO_PATH
+define('SERVER_PATH', ADMIDIO_PATH);
+
+// Define Constants for PHP 5.3
 if (!defined('JSON_UNESCAPED_SLASHES'))
 {
     define('JSON_UNESCAPED_SLASHES', 64);
     define('JSON_UNESCAPED_UNICODE', 256);
 }
-
-// Password settings
-define('PASSWORD_MIN_LENGTH', 8);
-define('PASSWORD_GEN_LENGTH', 16);
-define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');

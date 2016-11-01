@@ -75,26 +75,26 @@ $ListsMenu = $page->getMenu();
 if($gCurrentUser->manageRoles())
 {
     // show link to create new role
-    $ListsMenu->addItem('admMenuItemNewRole', ADMIDIO_URL.'/adm_program/modules/roles/roles_new.php',
+    $ListsMenu->addItem('admMenuItemNewRole', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
 if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 {
     // show link to maintain categories
-    $ListsMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.'/adm_program/modules/categories/categories.php?type=ROL',
+    $ListsMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=ROL',
                         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
 }
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
-$navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.'/adm_program/modules/lists/lists.php?active_role='.(int) $getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?active_role='.(int) $getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
 $ListsMenu->addForm($navbarForm->show(false));
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of roles
-    $ListsMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=lists',
+    $ListsMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=lists',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -183,14 +183,14 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'. THEME_URL. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>&nbsp;');
                 }
 
                 // show link to export vCard if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {
-                    $page->addHtml('<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
+                    $page->addHtml('<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
                                     src="'. THEME_URL. '/icons/vcard.png"
                                     alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
                                     title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
@@ -200,7 +200,7 @@ foreach($listsResult['recordset'] as $row)
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
                 }
 
@@ -208,7 +208,7 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->manageRoles())
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
                 }
             $page->addHtml('</div>
@@ -255,7 +255,7 @@ foreach($listsResult['recordset'] as $row)
                 }
 
                 // add count of participants to role
-                $html = '<a href="'.ADMIDIO_URL.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=0">'.$row['num_members'].'</a>';
+                $html = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=0">'.$row['num_members'].'</a>';
 
                 if($role->getValue('rol_max_members') > 0)
                 {
@@ -273,7 +273,7 @@ foreach($listsResult['recordset'] as $row)
                         $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                     }
 
-                    $html .= '&nbsp;&nbsp;(<a href="'.ADMIDIO_URL.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
+                    $html .= '&nbsp;&nbsp;(<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
                 }
                 $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
 
@@ -307,7 +307,7 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = ADMIDIO_URL.'/adm_program/modules/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
+$base_url = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
 $page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, true));
 
 $page->addHtml('</div>');

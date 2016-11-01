@@ -118,7 +118,7 @@ $profileEditMenu = $page->getMenu();
 $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // create html form
-$form = new HtmlForm('edit_item_form', ADMIDIO_URL.'/adm_program/modules/inventory/item_save.php?item_id='.$getItemId.'&amp;new_item='.$getNewItem, $page);
+$form = new HtmlForm('edit_item_form', ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_save.php?item_id='.$getItemId.'&amp;new_item='.$getNewItem, $page);
 
 // *******************************************************************************
 // Schleife ueber alle Kategorien und Felder ausser den Stammdaten

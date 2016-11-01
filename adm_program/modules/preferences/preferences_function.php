@@ -51,7 +51,7 @@ switch($getMode)
                                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
                     if(!admStrIsValidFileName($_POST['theme'])
-                    || !is_file(ADMIDIO_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
+                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
@@ -84,7 +84,7 @@ switch($getMode)
 
                 case 'regional_settings':
                     if(!admStrIsValidFileName($_POST['system_language'])
-                    || !is_file(ADMIDIO_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
+                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                         // => EXIT
@@ -294,7 +294,7 @@ switch($getMode)
 
         // show form
         $form = new HtmlForm('add_new_organization_form',
-                             ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
+                             ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?mode=3', $page);
         $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
                         array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
         $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
@@ -370,7 +370,7 @@ switch($getMode)
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 
         // show form
-        $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php', $page);
+        $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', $page);
         $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
 
         // add form to html page and show page

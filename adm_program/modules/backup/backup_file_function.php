@@ -28,7 +28,7 @@ if(!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
-$backupAbsolutePath = ADMIDIO_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
+$backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 
 // kompletten Pfad der Datei holen
 $completePath = $backupAbsolutePath.$getFilename;

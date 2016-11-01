@@ -116,13 +116,12 @@ class Inventory extends TableInventory
      */
     public function getValue($columnName, $format = '')
     {
-        global $gPreferences;
-
         if(strpos($columnName, 'inv_') === 0)
         {
-            if($columnName === 'inv_photo' && is_file(ADMIDIO_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg'))
+            $file = ADMIDIO_PATH . FOLDER_DATA . '/invent_profile_photos/' . $this->getValue('inv_id') . '.jpg';
+            if($columnName === 'inv_photo' && is_file($file))
             {
-                return file_get_contents(ADMIDIO_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg');
+                return file_get_contents($file);
             }
 
             return parent::getValue($columnName, $format);

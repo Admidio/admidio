@@ -64,7 +64,7 @@ $roomsMenu = $page->getMenu();
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('rooms_edit_form', ADMIDIO_URL.'/adm_program/modules/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1', $page);
+$form = new HtmlForm('rooms_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));
 $form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'),
                 array('maxLength' => 100, 'property' => FIELD_REQUIRED));

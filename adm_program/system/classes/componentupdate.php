@@ -380,7 +380,7 @@ class ComponentUpdate extends Component
             {
                 $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
                                                      fol_locked, fol_public, fol_timestamp)
-                                             VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'/adm_my_files\',
+                                             VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'' . FOLDER_DATA . '\',
                                                      0, 1, \''.DATETIME_NOW.'\')';
                 $this->db->query($sql);
             }
@@ -416,7 +416,7 @@ class ComponentUpdate extends Component
 
         if ($folder === '')
         {
-            $folder = SERVER_PATH . '/adm_my_files';
+            $folder = SERVER_PATH . FOLDER_DATA;
         }
 
         $dirHandle = @opendir($folder);

@@ -108,7 +108,7 @@ $profileFieldsEditMenu = $page->getMenu();
 $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('profile_fields_edit_form', ADMIDIO_URL.'/adm_program/modules/inventory/fields_function.php?inf_id='.$getInfId.'&amp;mode=1', $page);
+$form = new HtmlForm('profile_fields_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_function.php?inf_id='.$getInfId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     if($itemField->getValue('inf_system') == 1)
     {

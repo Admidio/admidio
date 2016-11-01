@@ -142,7 +142,7 @@ class Organization extends TableAccess
         // insert root folder name for download module
         $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
                                              fol_locked, fol_public, fol_usr_id, fol_timestamp)
-                                     VALUES ('.$orgId.', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'/adm_my_files\',
+                                     VALUES ('.$orgId.', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'' . FOLDER_DATA . '\',
                                              0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 

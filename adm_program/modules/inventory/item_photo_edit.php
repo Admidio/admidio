@@ -75,14 +75,16 @@ if($getMode === 'save')
         // Foto im Dateisystem speichern
 
         // Nachsehen ob fuer den User ein Photo gespeichert war
-        if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
+        $fileOld = ADMIDIO_PATH . FOLDER_DATA . '/item_photos/' . $getItemId . '_new.jpg';
+        if(is_file($fileOld))
         {
-            if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg'))
+            $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/item_photos/' . $getItemId . '.jpg';
+            if(is_file($fileNew))
             {
-                unlink(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
+                unlink($fileNew);
             }
 
-            rename(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg', ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
+            rename($fileOld, $fileNew);
         }
     }
     else
@@ -105,7 +107,7 @@ if($getMode === 'save')
 
     // zur Ausgangsseite zurueck
     $gNavigation->deleteLastUrl();
-    admRedirect(ADMIDIO_URL . '/adm_program/modules/inventory/item.php?item_id=' . $getItemId);
+    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/inventory/item.php?item_id=' . $getItemId);
     // => EXIT
 }
 elseif($getMode === 'dont_save')
@@ -114,9 +116,10 @@ elseif($getMode === 'dont_save')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        if(is_file(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg'))
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/item_photos/' . $getItemId . '_new.jpg';
+        if(is_file($file))
         {
-            unlink(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg');
+            unlink($file);
         }
     }
     // Datenbankspeicherung
@@ -126,7 +129,7 @@ elseif($getMode === 'dont_save')
         $gCurrentSession->save();
     }
     // zur Ausgangsseite zurueck
-    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/modules/inventory/item.php?item_id='.$getItemId, 2000);
+    $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/inventory/item.php?item_id='.$getItemId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
     // => EXIT
 }
@@ -136,7 +139,7 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        unlink(ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'.jpg');
+        unlink(ADMIDIO_PATH . FOLDER_DATA . '/item_photos/' . $getItemId . '.jpg');
     }
     // Datenbankspeicherung, Daten aus Session entfernen
     else
@@ -174,7 +177,7 @@ if($getMode === 'choose')
     $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
     // show form
-    $form = new HtmlForm('upload_files_form', ADMIDIO_URL.'/adm_program/modules/inventory/item_photo_edit.php?mode=upload&amp;inv_id='.$getItemId, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('upload_files_form', ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_photo_edit.php?mode=upload&amp;inv_id='.$getItemId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="item_photo_show.php?inv_id='.$getItemId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload('userfile', $gL10n->get('PRO_CHOOSE_PHOTO'), array('helpTextIdLabel' => 'profile_photo_up_help'));
     $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
@@ -225,7 +228,7 @@ elseif($getMode === 'upload')
     // Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        $user_image->copyToFile(null, ADMIDIO_PATH. '/adm_my_files/item_photos/'.$getItemId.'_new.jpg');
+        $user_image->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/item_photos/' . $getItemId . '_new.jpg');
     }
     // Datenbankspeicherung
     else
@@ -255,11 +258,11 @@ elseif($getMode === 'upload')
     // create html page object
     $page = new HtmlPage($headline);
     $page->addJavascript('$("#btn_cancel").click(function() {
-        self.location.href=\''.ADMIDIO_URL.'/adm_program/modules/inventory/item_photo_edit.php?mode=dont_save&inv_id='.$getItemId.'\';
+        self.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_photo_edit.php?mode=dont_save&inv_id='.$getItemId.'\';
     });', true);
 
     // show form
-    $form = new HtmlForm('show_new_profile_picture_form', ADMIDIO_URL.'/adm_program/modules/inventory/item_photo_edit.php?mode=save&amp;inv_id='.$getItemId, $page);
+    $form = new HtmlForm('show_new_profile_picture_form', ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_photo_edit.php?mode=save&amp;inv_id='.$getItemId, $page);
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="item_photo_show.php?inv_id='.$getItemId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="item_photo_show.php?inv_id='.$getItemId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
