@@ -816,7 +816,7 @@ function admRedirect($url, $statusCode = 303)
         $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
         // => EXIT
     }
-    if (in_array($statusCode, array(301, 302, 303, 307), true))
+    if (!in_array($statusCode, array(301, 302, 303, 307), true))
     {
         $gLogger->error('Status Code is not allowed!', array('url' => $url, 'statusCode' => $statusCode));
 
