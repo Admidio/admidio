@@ -119,7 +119,7 @@ $page->enableModal();
 if($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile(
-        ADMIDIO_URL.'/adm_program/modules/photos/rss_photos.php?headline='.$getHeadline,
+        ADMIDIO_URL.FOLDER_MODULES.'/photos/rss_photos.php?headline='.$getHeadline,
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline)
     );
 }
@@ -129,7 +129,7 @@ if($gCurrentUser->editPhotoRight())
     $page->addJavascript('
         // rotate image
         function imgrotate(img, direction) {
-            $.get("'.ADMIDIO_URL.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
+            $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 // Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
                 $("#img_"+img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr="+img+"&thumb=1&rand="+Math.random());
                 return false;
@@ -192,7 +192,7 @@ if($gCurrentUser->editPhotoRight())
     // show link to create new album
     $photosMenu->addItem(
         'menu_item_new_album',
-        ADMIDIO_URL.'/adm_program/modules/photos/photo_album_new.php?mode=new&amp;pho_id='.$getPhotoId,
+        ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php?mode=new&amp;pho_id='.$getPhotoId,
         $gL10n->get('PHO_CREATE_ALBUM'),
         'add.png'
     );
@@ -215,7 +215,7 @@ if($gPreferences['photo_download_enabled'] == 1 && $photoAlbum->getValue('pho_qu
     // show link to download photos
     $photosMenu->addItem(
         'menu_item_download_photos',
-        ADMIDIO_URL.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId,
+        ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$getPhotoId,
         $gL10n->get('PHO_DOWNLOAD_PHOTOS'),
         'page_white_compressed.png'
     );
@@ -226,7 +226,7 @@ if($gCurrentUser->isAdministrator())
     // show link to system preferences of photos
     $photosMenu->addItem(
         'menu_item_preferences_photos',
-        ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=photos',
+        ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=photos',
         $gL10n->get('SYS_MODULE_PREFERENCES'),
         'options.png',
         'right'
@@ -244,7 +244,7 @@ while ($phoParentId > 0)
     $photoAlbum_parent->readDataById($phoParentId);
 
     // Link zusammensetzen
-    $navilink = '<li><a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum_parent->getValue('pho_id').'">'.
+    $navilink = '<li><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$photoAlbum_parent->getValue('pho_id').'">'.
         $photoAlbum_parent->getValue('pho_name').'</a></li>'.$navilink;
 
     // Elternveranst
@@ -257,8 +257,8 @@ if($getPhotoId > 0)
     $page->addHtml('
         <ol class="breadcrumb">
             <li>
-                <a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photos.php"><img src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
-                <a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>
+                <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php"><img src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
+                <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>
             </li>'.
             $navilink.'&nbsp;&gt;&nbsp;'.$photoAlbum->getValue('pho_name').'
         </ol>
@@ -294,7 +294,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 {
                     $photoThumbnailTable .= '
                         <img class="thumbnail center-block" id="img_'.$actThumbnail.'" style="cursor: pointer"
-                            onclick="window.open(\''.ADMIDIO_URL.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.($gPreferences['photo_show_height']+210).', width='.($gPreferences['photo_show_width']+70).',left=162,top=5\')"
+                            onclick="window.open(\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.($gPreferences['photo_show_height']+210).', width='.($gPreferences['photo_show_width']+70).',left=162,top=5\')"
                             src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$actThumbnail.'&thumb=1" alt="'.$actThumbnail.'" />';
                 }
 
@@ -303,7 +303,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 {
                     $photoThumbnailTable .= '
                         <a data-gallery="admidio-gallery" data-type="image" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'"
-                            href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
+                            href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
                             class="center-block thumbnail" id="img_'.$actThumbnail.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;thumb=1" alt="'.$actThumbnail.'" /></a>';
                 }
 
@@ -311,7 +311,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 elseif ($gPreferences['photo_show_mode'] == 2)
                 {
                     $photoThumbnailTable .= '
-                        <a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'"><img
+                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'"><img
                             class="thumbnail center-block" id="img_'.$actThumbnail.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;thumb=1" />
                         </a>';
                 }
@@ -338,7 +338,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 if($gValidLogin && $gPreferences['enable_ecard_module'] == 1)
                 {
                     $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/ecards/ecards.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img
                             src="'. THEME_URL. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                 }
 
@@ -346,7 +346,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 {
                     // show link to download photo
                     $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'"><img
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'"><img
                             src="'. THEME_URL. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                 }
 
@@ -378,7 +378,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
             {
                 $page->addHtml('
                     <a class="hidden" data-gallery="admidio-gallery" data-type="image" data-toggle="lightbox" data-title="'.$headline.'"
-                        href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$hiddenPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'">&nbsp;</a>
+                        href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$hiddenPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'">&nbsp;</a>
                 ');
             }
         }
@@ -421,7 +421,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
     // show page navigations through thumbnails
     $page->addHtml(admFuncGeneratePagination(
-        ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum->getValue('pho_id'),
+        ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$photoAlbum->getValue('pho_id'),
         $photoAlbum->getValue('pho_quantity'),
         $gPreferences['photo_thumbs_page'],
         $getPhotoNr,
@@ -475,7 +475,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
     $childPhotoAlbum->setArray($albumList[$x]);
 
     // folder of the album
-    $ordner = ADMIDIO_PATH. '/adm_my_files/photos/'.$childPhotoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$childPhotoAlbum->getValue('pho_id');
+    $ordner = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
     // show album if album is not locked or it has child albums or the user has the photo module edit right
     if((is_dir($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0)
@@ -487,7 +487,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
         // Album angaben
         if(is_dir($ordner) || $childPhotoAlbum->hasChildAlbums())
         {
-            $albumTitle = '<a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
+            $albumTitle = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
         }
         else
         {
@@ -512,7 +512,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
         if($gPreferences['photo_download_enabled'] == 1 && $childPhotoAlbum->getValue('pho_quantity') > 0)
         {
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_download.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
+                <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
                         src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>
             ');
         }
@@ -521,7 +521,7 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
         if ($gCurrentUser->editPhotoRight())
         {
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode=change"><img
+                <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode=change"><img
                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                     href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=panel_pho_'.
@@ -536,8 +536,8 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
-                        <a href="'.ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
-                            class="thumbnail" src="'.ADMIDIO_URL.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;thumb=1" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
+                            class="thumbnail" src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;thumb=1" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">
         ');
@@ -578,14 +578,14 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
             if($childPhotoAlbum->getValue('pho_locked') == 1)
             {
                 $page->addHtml('
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0\'"><img
+                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0\'"><img
                         src="'. THEME_URL. '/icons/key.png"  alt="'.$gL10n->get('PHO_ALBUM_UNLOCK').'" />'.$gL10n->get('PHO_ALBUM_UNLOCK').'</button>
                 ');
             }
             elseif($childPhotoAlbum->getValue('pho_locked') == 0)
             {
                 $page->addHtml('
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1\'"><img
+                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1\'"><img
                         src="'. THEME_URL. '/icons/key.png" alt="'.$gL10n->get('PHO_ALBUM_LOCK').'" />'.$gL10n->get('PHO_ALBUM_LOCK').'</button>
                 ');
             }
@@ -607,7 +607,7 @@ if($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($
 }
 
 // If necessary show links to navigate to next and previous albums of the query
-$base_url = ADMIDIO_URL.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId;
+$base_url = ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId;
 $page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, $gPreferences['photo_albums_per_page'], $getStart, true));
 
 // show html of complete page

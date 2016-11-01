@@ -161,7 +161,7 @@ $categoriesMenu = $page->getMenu();
 $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new category
-$categoriesMenu->addItem('admMenuItemNewCategory', ADMIDIO_URL.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
+$categoriesMenu->addItem('admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
                          $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
 
 // Create table object
@@ -241,7 +241,7 @@ while($cat_row = $categoryStatement->fetch())
         $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />';
     }
 
-    $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+    $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
                                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     if($category->getValue('cat_system') == 1)
     {
@@ -257,7 +257,7 @@ while($cat_row = $categoryStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.ADMIDIO_URL.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlHideCategory,
         $htmlDefaultCategory,

@@ -69,7 +69,7 @@ if($gPreferences['registration_mode'] > 0)
     $page->addHtml('
         <div id="login_registration_link">
             <small>
-                <a href="'.ADMIDIO_URL.'/adm_program/modules/registration/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a>
+                <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a>
             </small>
         </div>');
 }
@@ -83,7 +83,7 @@ if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_syste
 elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
 {
     // show link of message module to send mail to administrator role
-    $forgotPasswordLink = ADMIDIO_URL.'/adm_program/modules/messages/messages_write.php?rol_id='.$roleAdministrator->getValue('rol_id').'&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+    $forgotPasswordLink = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?rol_id='.$roleAdministrator->getValue('rol_id').'&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
 }
 else
 {

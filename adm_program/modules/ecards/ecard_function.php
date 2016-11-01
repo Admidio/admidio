@@ -214,7 +214,7 @@ class FunctionClass
                 {
                     $img_name = 'picture.'. $img_type;
                     $img_name_intern = substr(md5(uniqid($img_name.time(), true)), 0, 8). '.'. $img_type;
-                    $img_server_path = ADMIDIO_PATH. '/adm_my_files/photos/'. $img_name_intern;
+                    $img_server_path = ADMIDIO_PATH . FOLDER_DATA . '/photos/'. $img_name_intern;
                     $img_photo_path  = $img_server_path;
 
                     $image_sized = new Image($photoServerPath);

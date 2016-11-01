@@ -111,7 +111,7 @@ $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl()
 
 // show form
 $form = new HtmlForm('profile_fields_edit_form',
-                     ADMIDIO_URL.'/adm_program/modules/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
+                     ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if($userField->getValue('usf_system') == 1)
 {

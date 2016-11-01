@@ -69,8 +69,8 @@ if($getModule === 'photos')
         // => EXIT
     }
 
-    $uploadDir = ADMIDIO_PATH.'/adm_my_files/photos/upload/';
-    $uploadUrl = ADMIDIO_URL.'/adm_my_files/photos/upload/';
+    $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
+    $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
 
     $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
     $textFileUploaded = $gL10n->get('PHO_FILE_UPLOADED');
@@ -135,7 +135,7 @@ if (ini_get('file_uploads') !== '1')
 if($getMode === 'choose_files')
 {
     // delete old stuff in upload folder
-    $uploadFolder = new Folder(ADMIDIO_PATH.'/adm_my_files/photos/upload');
+    $uploadFolder = new Folder(ADMIDIO_PATH . FOLDER_DATA. '/photos/upload');
     $uploadFolder->delete('', true);
 
     // create html page object

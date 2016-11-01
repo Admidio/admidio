@@ -127,11 +127,11 @@ echo 'Start with installation ...<br />';
 $gL10n = new Language();
 $gLanguageData = new LanguageData($getLanguage);
 $gL10n->addLanguageData($gLanguageData);
-$gL10n->addLanguagePath(ADMIDIO_PATH. '/demo_data/languages');
+$gL10n->addLanguagePath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-$srcFolder = ADMIDIO_PATH. '/demo_data/adm_my_files';
-$newFolder = ADMIDIO_PATH. '/adm_my_files';
+$srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
+$newFolder = ADMIDIO_PATH . FOLDER_DATA;
 
 $myFilesFolder = new Folder($srcFolder);
 $b_return = $myFilesFolder->delete($newFolder.'/backup');

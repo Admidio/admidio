@@ -176,7 +176,7 @@ class ProfileFields
                                 $value2 = $this->mUserId;
                             }
 
-                            $emailLink = ADMIDIO_URL . '/adm_program/modules/messages/messages_write.php?usr_id=' . $value2;
+                            $emailLink = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php?usr_id=' . $value2;
                         }
                         if (strlen($value) > 30)
                         {

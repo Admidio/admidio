@@ -21,13 +21,13 @@ function admFuncAutoload($className)
     global $gLogger;
 
     $libFiles = array(
-        ADMIDIO_PATH . '/adm_program/system/classes/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/monolog/src/' . str_replace('\\', '/', $className) . '.php',
-//        ADMIDIO_PATH . '/adm_program/libs/phpass/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/phpmailer/class.' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/psr/log/' . str_replace('\\', '/', $className) . '.php',
-//        ADMIDIO_PATH . '/adm_program/libs/securimage/' . strtolower($className) . '.php',
-        ADMIDIO_PATH . '/adm_program/libs/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
+        ADMIDIO_PATH . FOLDER_CLASSES . '/classes/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
+//        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/class.' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/log/' . str_replace('\\', '/', $className) . '.php',
+//        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/zxcvbn-php/src/' . substr(str_replace('\\', '/', $className), 9) . '.php'
     );
 
     foreach ($libFiles as $libFile)
@@ -691,7 +691,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             // if valid login and a user id is given than create a link to the profile of this user
             if($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
             {
-                $userNameCreated = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.
+                $userNameCreated = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
                                     $userIdCreated.'">'.$userNameCreated.'</a>';
             }
 
@@ -711,7 +711,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             // if valid login and a user id is given than create a link to the profile of this user
             if($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
             {
-                $userNameEdited = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.
+                $userNameEdited = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
                                    $userIdEdited.'">'.$userNameEdited.'</a>';
             }
 

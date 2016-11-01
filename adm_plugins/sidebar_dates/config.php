@@ -37,7 +37,7 @@ $plg_show_headline = 1;
 
 // Angabe der Prefix-Url für den Aufruf in Joomla
 // wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet
-$plg_link_url = ADMIDIO_URL. '/adm_program/modules/dates/dates.php';
+$plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen

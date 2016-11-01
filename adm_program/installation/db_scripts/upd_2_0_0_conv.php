@@ -184,7 +184,7 @@ while($row_orga = $orgaStatement->fetchObject())
 
     // Fuer das neue Downloadmodul wird der Root-Ordner in die DB eingetragen
     $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
-                                 VALUES ('.$row_orga->org_id.', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
+                                 VALUES ('.$row_orga->org_id.', \'DOWNLOAD\', \'download\', \'' . FOLDER_DATA . '\',
                                           0, 1, \''.date('Y-m-d h:i:s', time()).'\')';
     $gDb->query($sql);
 }

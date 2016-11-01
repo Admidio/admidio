@@ -135,7 +135,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('photo_album_edit_form', ADMIDIO_URL.'/adm_program/modules/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
+$form = new HtmlForm('photo_album_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
 $form->addInput('pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'), array('property' => FIELD_REQUIRED, 'maxLength' => 50));
 subfolder(null, '', $photoAlbum, $getPhotoId);
 $form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property'                       => FIELD_REQUIRED,
