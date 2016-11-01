@@ -21,7 +21,7 @@ function admFuncAutoload($className)
     global $gLogger;
 
     $libFiles = array(
-        ADMIDIO_PATH . FOLDER_CLASSES . '/classes/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_CLASSES . '/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
 //        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/class.' . strtolower($className) . '.php',
@@ -800,20 +800,26 @@ function admFuncCheckUrl($url)
  */
 function admRedirect($url, $statusCode = 303)
 {
-    global $gMessage, $gL10n;
+    global $gLogger, $gMessage, $gL10n;
 
-    if (headers_sent() === false)
+    if (headers_sent() === true)
     {
+        $gLogger->error('Header already sent!', array('url' => $url, 'statusCode' => $statusCode));
+
         $gMessage->show($gL10n->get('SYS_HEADER_ALREADY_SENT'));
         // => EXIT
     }
     if (filter_var($url, FILTER_VALIDATE_URL) === false)
     {
+        $gLogger->error('URL is not a valid URL!', array('url' => $url, 'statusCode' => $statusCode));
+
         $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
         // => EXIT
     }
-    if (in_array($statusCode, array(301, 302, 303, 307), true))
+    if (!in_array($statusCode, array(301, 302, 303, 307), true))
     {
+        $gLogger->error('Status Code is not allowed!', array('url' => $url, 'statusCode' => $statusCode));
+
         $gMessage->show($gL10n->get('SYS_STATUS_CODE_INVALID'));
         // => EXIT
     }
@@ -825,6 +831,8 @@ function admRedirect($url, $statusCode = 303)
     }
     else
     {
+        $gLogger->notice('Redirecting to an external URL!', array('url' => $url, 'statusCode' => $statusCode));
+
         $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
     }
 
