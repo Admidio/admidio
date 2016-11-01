@@ -51,15 +51,15 @@ $page->addJavascript('
 // get module menu
 $itemsAdministrationMenu = $page->getMenu();
 
-$itemsAdministrationMenu->addItem('menu_item_create_user', ADMIDIO_URL.'/adm_program/modules/inventory/item_new.php', $gL10n->get('INV_CREATE_ITEM'), 'add.png');
+$itemsAdministrationMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_new.php', $gL10n->get('INV_CREATE_ITEM'), 'add.png');
 
 // show link to room management
-$itemsAdministrationMenu->addItem('menu_item_manage_rooms', ADMIDIO_URL.'/adm_program/modules/rooms/rooms.php', $gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION'), 'home.png');
+$itemsAdministrationMenu->addItem('menu_item_manage_rooms', ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms.php', $gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION'), 'home.png');
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', ADMIDIO_URL. '/adm_program/modules/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
+    $itemsAdministrationMenu->addItem('menu_item_maintain_inventory_fields', ADMIDIO_URL. FOLDER_MODULES.'/inventory/fields.php', $gL10n->get('PRO_MAINTAIN_ITEM_FIELDS'), 'application_form_edit.png');
 }
 
 // Create table object
@@ -92,7 +92,7 @@ while($row = $mglStatement->fetch())
     // create array with all column values
     $columnValues = array(
         $irow,
-        '<a href="'.ADMIDIO_URL.'/adm_program/modules/inventory/item.php?item_id='. $row['inv_id']. '">'. $row['item_name']. '</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/item.php?item_id='. $row['inv_id']. '">'. $row['item_name']. '</a>',
         '<a class="admidio-icon-link-popup" href="'.$roomLink.'">' . $room->getValue('room_name') . '</a>',
     );
 
@@ -101,13 +101,13 @@ while($row = $mglStatement->fetch())
     $itemAdministration = '';
 
     // Link to modify Item
-    $itemAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
+    $itemAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
                                 src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 
     // remove Item
     if($gCurrentUser->isAdministrator()) // just Webmaster can remove items
     {
-        $itemAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
+        $itemAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
                                     src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
     }
     else

@@ -691,7 +691,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             // if valid login and a user id is given than create a link to the profile of this user
             if($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
             {
-                $userNameCreated = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.
+                $userNameCreated = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
                                     $userIdCreated.'">'.$userNameCreated.'</a>';
             }
 
@@ -711,7 +711,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
             // if valid login and a user id is given than create a link to the profile of this user
             if($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
             {
-                $userNameEdited = '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.
+                $userNameEdited = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
                                    $userIdEdited.'">'.$userNameEdited.'</a>';
             }
 

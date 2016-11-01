@@ -75,6 +75,7 @@ define('FOLDER_LIBS_SERVER', '/adm_program/libs'); // PHP libs
 define('FOLDER_LIBS_CLIENT', '/adm_program/libs'); // JS/CSS libs
 define('FOLDER_LANGUAGES', '/adm_program/languages');
 define('FOLDER_THEMES', '/adm_themes');
+define('FOLDER_MODULES', '/adm_program/modules');
 define('FOLDER_PLUGINS', '/adm_plugins');
 
 ####################

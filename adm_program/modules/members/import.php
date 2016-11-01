@@ -52,7 +52,7 @@ $importMenu = $page->getMenu();
 $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('import_users_form', ADMIDIO_URL.'/adm_program/modules/members/import_function.php', $page, array('enableFileUpload' => true));
+$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
 $form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values')));
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));

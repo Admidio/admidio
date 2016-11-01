@@ -334,8 +334,8 @@ while($user = $userStatement->fetch())
     $jsonArray['data'][] = array(
         '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
         $htmlMemberStatus,
-        '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
-        '<a href="'.ADMIDIO_URL.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
         $htmlAddress,
         $htmlBirthday,
         $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');

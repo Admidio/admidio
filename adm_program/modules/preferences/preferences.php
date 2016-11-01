@@ -104,7 +104,7 @@ $page->addJavascript('
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
         $("#admidio_version_content").prepend("<img src=\''.THEME_URL.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
-        $.get("'.ADMIDIO_URL.'/adm_program/modules/preferences/update_check.php", {mode:"2"}, function(htmlVersion) {
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode:"2"}, function(htmlVersion) {
             $("#admidio_version_content").empty();
             $("#admidio_version_content").append(htmlVersion);
         });
@@ -146,7 +146,7 @@ $page->addHtml('
                 <div id="collapse_common" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('common_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=common', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('common_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=common', $page, array('class' => 'form-preferences'));
 
                         // search all available themes in theme folder
                         $themes = admFuncGetDirectoryEntries(ADMIDIO_PATH . FOLDER_THEMES, 'dir');
@@ -196,7 +196,7 @@ $page->addHtml('
                 <div id="collapse_organization" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('organization_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('organization_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
                         $form->addInput('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
                         $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_REQUIRED));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('maxLength' => 60));
@@ -218,7 +218,7 @@ $page->addHtml('
                             $form->addCheckbox('system_organization_select', $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'), $form_values['system_organization_select'], array('helpTextIdInline' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC'));
                         }
 
-                        $html = '<a id="add_another_organization" class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/preferences/preferences_function.php?mode=2"><img
+                        $html = '<a id="add_another_organization" class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php?mode=2"><img
                                     src="'. THEME_URL. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
                         $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -238,7 +238,7 @@ $page->addHtml('
                 <div id="collapse_regional_settings" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('regional_settings_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('regional_settings_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
                         $form->addInput('system_timezone', $gL10n->get('ORG_TIMEZONE'), $gTimezone, array('property' => FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextIdInline' => 'ORG_TIMEZONE_DESC'));
                         $form->addSelectBox('system_language', $gL10n->get('SYS_LANGUAGE'), $gL10n->getAvailableLanguages(),
                                             array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['system_language']));
@@ -267,7 +267,7 @@ $page->addHtml('
                 <div id="collapse_registration" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('registration_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=registration', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('registration_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=registration', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
                         $form->addSelectBox('registration_mode', $gL10n->get('SYS_REGISTRATION'), $selectBoxEntries, array('defaultValue' => $form_values['registration_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_REGISTRATION_MODE'));
                         $form->addCheckbox('enable_registration_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_registration_captcha'], array('helpTextIdInline' => 'ORG_CAPTCHA_REGISTRATION'));
@@ -288,7 +288,7 @@ $page->addHtml('
                 <div id="collapse_email_dispatch" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('email_dispatch_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=email_dispatch', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('email_dispatch_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=email_dispatch', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
                         $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, array('defaultValue' => $form_values['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MAI_SEND_METHOD_DESC'));
                         $form->addInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'MAI_COUNT_BCC_DESC'));
@@ -322,7 +322,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $text = new TableText($gDb);
-                        $form = new HtmlForm('system_notification_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=system_notification', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('system_notification_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=system_notification', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_system_mails', $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'), $form_values['enable_system_mails'], array('helpTextIdInline' => 'ORG_ACTIVATE_SYSTEM_MAILS_DESC'));
                         $form->addInput('email_administrator', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $form_values['email_administrator'], array('type' => 'email', 'maxLength' => 50, 'helpTextIdInline' => 'ORG_SYSTEM_MAIL_ADDRESS_DESC'));
                         $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<em>'.$gPreferences['email_administrator'].'</em>')));
@@ -368,7 +368,7 @@ $page->addHtml('
                 <div id="collapse_captcha" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('captcha_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=captcha', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('captcha_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=captcha', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'), 'word' => $gL10n->get('ORG_CAPTCHA_TYPE_WORDS'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, array('defaultValue' => $form_values['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT'));
 
@@ -521,11 +521,11 @@ $page->addHtml('
                 <div id="collapse_announcements" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('announcements_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=announcements', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('announcements_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=announcements', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_announcements_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $form->addInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/categories/categories.php?type=ANN"><img
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ANN"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -545,7 +545,7 @@ $page->addHtml('
                 <div id="collapse_user_management" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('user_management_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=user_management', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('user_management_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=user_management', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('members_users_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['members_users_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'MEM_USERS_PER_PAGE_DESC'));
                         $form->addInput('members_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $form_values['members_days_field_history'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'helpTextIdInline' => 'MEM_DAYS_FIELD_HISTORY_DESC'));
@@ -567,7 +567,7 @@ $page->addHtml('
                 <div id="collapse_downloads" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('downloads_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=downloads', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('downloads_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=downloads', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_download_module', $gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE'), $form_values['enable_download_module'], array('helpTextIdInline' => 'DOW_ENABLE_DOWNLOAD_MODULE_DESC'));
                         $form->addInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (MB)', $form_values['max_file_upload_size'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextIdInline' => 'DOW_MAXIMUM_FILE_SIZE_DESC'));
                         $form->addSubmitButton('btn_save_downloads', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
@@ -586,7 +586,7 @@ $page->addHtml('
                 <div id="collapse_photos" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('photos_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=photos', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('photos_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=photos', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_photo_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_photo_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $selectBoxEntries = array('1' => $gL10n->get('PHO_MODAL_WINDOW'), '2' => $gL10n->get('PHO_SAME_WINDOW'), '0' => $gL10n->get('PHO_POPUP_WINDOW'));
@@ -617,7 +617,7 @@ $page->addHtml('
                 <div id="collapse_guestbook" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('guestbook_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=guestbook', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('guestbook_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=guestbook', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_guestbook_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_guestbook_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $form->addInput('guestbook_entries_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['guestbook_entries_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
@@ -643,7 +643,7 @@ $page->addHtml('
                 <div id="collapse_ecards" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('ecards_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=ecards', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('ecards_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=ecards', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_ecard_module', $gL10n->get('ECA_ACTIVATE_GREETING_CARDS'), $form_values['enable_ecard_module'], array('helpTextIdInline' => 'ECA_ACTIVATE_GREETING_CARDS_DESC'));
                         $form->addInput('ecard_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $form_values['ecard_thumbs_scale'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ECA_SCALE_THUMBNAILS_DESC'));
                         $form->addInput('ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['ecard_card_picture_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999));
@@ -675,7 +675,7 @@ $page->addHtml('
                 <div id="collapse_lists" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('lists_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=lists', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('lists_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=lists', $page, array('class' => 'form-preferences'));
                         $form->addInput('lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $form_values['lists_roles_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
@@ -687,7 +687,7 @@ $page->addHtml('
                                    AND lst_global = 1
                               ORDER BY lst_name ASC, lst_timestamp DESC';
                         $form->addSelectBoxFromSql('lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/categories/categories.php?type=ROL"><img
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ROL"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -707,7 +707,7 @@ $page->addHtml('
                 <div id="collapse_messages" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('messages_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=messages', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('messages_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=messages', $page, array('class' => 'form-preferences'));
                         $form->addCheckbox('enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), $form_values['enable_mail_module'], array('helpTextIdInline' => 'MAI_ACTIVATE_EMAIL_MODULE_DESC'));
                         $form->addCheckbox('enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), $form_values['enable_pm_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_PM_MODULE_DESC'));
                         $form->addCheckbox('enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), $form_values['enable_chat_module'], array('helpTextIdInline' => 'MSG_ACTIVATE_CHAT_MODULE_DESC'));
@@ -737,8 +737,8 @@ $page->addHtml('
                 <div id="collapse_profile" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('profile_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=profile', $page, array('class' => 'form-preferences'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/preferences/fields.php"><img
+                        $form = new HtmlForm('profile_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=profile', $page, array('class' => 'form-preferences'));
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/preferences/fields.php"><img
                                     src="'. THEME_URL. '/icons/application_form_edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" />'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
                         $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -771,7 +771,7 @@ $page->addHtml('
                 <div id="collapse_events" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('events_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=events', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('events_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=events', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_dates_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_dates_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         if($gPreferences['dates_show_rooms'])
@@ -788,12 +788,12 @@ $page->addHtml('
                         $form->addInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC'));
                         $form->addInput('dates_ical_days_future', $gL10n->get('DAT_ICAL_DAYS_FUTURE'), $form_values['dates_ical_days_future'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC'));
                         $form->addCheckbox('dates_show_map_link', $gL10n->get('DAT_SHOW_MAP_LINK'), $form_values['dates_show_map_link'], array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_MANAGE_CALENDARS'), $html, array('helpTextIdInline' => $htmlDesc));
                         $form->addCheckbox('dates_show_rooms', $gL10n->get('DAT_ROOM_SELECTABLE'), $form_values['dates_show_rooms'], array('helpTextIdInline' => 'DAT_ROOM_SELECTABLE_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/rooms/rooms.php"><img
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php"><img
                                     src="'. THEME_URL. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -813,14 +813,14 @@ $page->addHtml('
                 <div id="collapse_links" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('links_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=links', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('links_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=links', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_weblinks_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_weblinks_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
                         $form->addInput('weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['weblinks_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC'));
                         $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
                         $form->addSelectBox('weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries, array('defaultValue' => $form_values['weblinks_target'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LNK_LINK_TARGET_DESC'));
                         $form->addInput('weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $form_values['weblinks_redirect_seconds'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'helpTextIdInline' => 'LNK_DISPLAY_REDIRECT_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/categories/categories.php?type=LNK"><img
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=LNK"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
@@ -841,10 +841,10 @@ $page->addHtml('
                 <div id="collapse_inventory" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('inventory_preferences_form', ADMIDIO_URL.'/adm_program/modules/preferences/preferences_function.php?form=inventory', $page, array('class' => 'form-preferences'));
+                        $form = new HtmlForm('inventory_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=inventory', $page, array('class' => 'form-preferences'));
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_inventory_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $form_values['enable_inventory_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. '/adm_program/modules/rooms/rooms.php"><img
+                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php"><img
                                     src="'. THEME_URL. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));

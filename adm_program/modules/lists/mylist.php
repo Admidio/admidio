@@ -527,7 +527,7 @@ $myListMenu = $page->getMenu();
 // show link to system preferences of roles
 if($gCurrentUser->isAdministrator())
 {
-    $myListMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.'/adm_program/modules/preferences/preferences.php?show_option=lists',
+    $myListMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=lists',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -538,7 +538,7 @@ if($gNavigation->count() > 1)
 }
 
 // show form
-$form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. '/adm_program/modules/lists/mylist_prepare.php', $page);
+$form = new HtmlForm('mylist_configuration_form', ADMIDIO_URL. FOLDER_MODULES.'/lists/mylist_prepare.php', $page);
 $form->openGroupBox('gb_configuration_list', $gL10n->get('LST_CONFIGURATION_LIST'));
 
 // read all relevant configurations from database and create an array

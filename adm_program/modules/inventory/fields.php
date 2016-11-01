@@ -85,10 +85,10 @@ $fieldsMenu = $page->getMenu();
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new profile field
-$fieldsMenu->addItem('menu_item_new_field', ADMIDIO_URL.'/adm_program/modules/inventory/fields_new.php',
+$fieldsMenu->addItem('menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_new.php',
                             $gL10n->get('ORG_CREATE_ITEM_FIELD'), 'add.png');
 // define link to maintain categories
-$fieldsMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.'/adm_program/modules/categories/categories.php?type=INF',
+$fieldsMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=INF',
                             $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
 $sql = 'SELECT *
@@ -199,7 +199,7 @@ while($row = $statement->fetch())
                             'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                             'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
-    $usfSystem = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.'/adm_program/modules/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'"><img
+    $usfSystem = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'"><img
                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
     if($userField->getValue('inf_system') == 1)
@@ -216,7 +216,7 @@ while($row = $statement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.ADMIDIO_URL.'/adm_program/modules/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'">'.$userField->getValue('inf_name').'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'">'.$userField->getValue('inf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$userField->getValue('inf_id').')"><img
             src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$userField->getValue('inf_id').')"><img
