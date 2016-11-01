@@ -38,5 +38,5 @@ $gLogger->pushHandler($errorLogHandler);
 
 $gLogger->info('#################################################################################################');
 $gLogger->info('Admidio Logger initialized');
-$gLogger->info($_SERVER['REQUEST_URI'] . '?' . $_SERVER['QUERY_STRING']);
+$gLogger->info(CURRENT_URL);
 $gLogger->info('Memory usage: ' . round(memory_get_usage() / 1024, 1) . ' KB');
