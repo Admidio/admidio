@@ -21,7 +21,7 @@ function admFuncAutoload($className)
     global $gLogger;
 
     $libFiles = array(
-        ADMIDIO_PATH . FOLDER_CLASSES . '/classes/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_CLASSES . '/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
 //        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/class.' . strtolower($className) . '.php',
