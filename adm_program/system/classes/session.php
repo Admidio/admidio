@@ -88,7 +88,7 @@ class Session extends TableAccess
             {
                 // an invalid AutoLogin should made the current AutoLogin unusable
                 $this->mAutoLogin = null;
-                $this->setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
+                self::setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
 
                 // now count invalid auto login for this user and delete all auto login of this users if number of wrong logins > 3
                 $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
@@ -186,7 +186,7 @@ class Session extends TableAccess
      *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      * @return bool Returns "true" if the cookie is successfully set.
      */
-    private function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
+    public static function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
         global $gLogger;
 
@@ -291,7 +291,7 @@ class Session extends TableAccess
         if ($this->mAutoLogin instanceof \AutoLogin)
         {
             // remove auto login cookie from users browser by setting expired timestamp to 0
-            $this->setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'));
+            self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'));
 
             // delete auto login and remove all data
             $this->mAutoLogin->delete();
@@ -340,7 +340,7 @@ class Session extends TableAccess
             $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
             $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-            $this->setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
+            self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
         }
 
         // if flag for reload of organization is set than reload the organization data
@@ -432,7 +432,7 @@ class Session extends TableAccess
         $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
         $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-        $this->setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
+        self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
     }
 
     /**

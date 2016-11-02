@@ -408,15 +408,7 @@ class User extends TableAccess
         if ($updateSessionCookies)
         {
             // set cookie for session id
-            $domain = DOMAIN;
-            // https://secure.php.net/manual/en/function.setcookie.php#73107
-            if ($domain === 'localhost')
-            {
-                $domain = false;
-            }
-            setcookie($gCookiePraefix . '_ID', $gSessionId, 0, ADMIDIO_SUBFOLDER . '/', $domain, HTTPS, true);
-
-            $gLogger->info('Cookie setted!', array('name' => $gCookiePraefix . '_ID', 'value' => $gSessionId, 'expire' => 0, 'path' => ADMIDIO_SUBFOLDER . '/', 'domain' => $domain, 'secure' => HTTPS, 'httpOnly' => true));
+            Session::setCookie($gCookiePraefix . '_ID', $gSessionId);
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();
