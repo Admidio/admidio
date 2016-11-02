@@ -289,7 +289,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
+        global $gLogger, $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
 
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
         $now = new DateTime();
@@ -415,6 +415,8 @@ class User extends TableAccess
                 $domain = false;
             }
             setcookie($gCookiePraefix . '_ID', $gSessionId, 0, ADMIDIO_SUBFOLDER . '/', $domain, HTTPS, true);
+
+            $gLogger->info('Cookie setted!', array('name' => $gCookiePraefix . '_ID', 'value' => $gSessionId, 'expire' => 0, 'path' => ADMIDIO_SUBFOLDER . '/', 'domain' => $domain, 'secure' => HTTPS, 'httpOnly' => true));
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();
