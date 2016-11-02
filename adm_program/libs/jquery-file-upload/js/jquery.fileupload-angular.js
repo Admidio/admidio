@@ -10,7 +10,7 @@
  */
 
 /* jshint nomen:false */
-/* global define, angular */
+/* global define, angular, require */
 
 ;(function (factory) {
     'use strict';
@@ -24,6 +24,16 @@
             './jquery.fileupload-video',
             './jquery.fileupload-validate'
         ], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS:
+        factory(
+            require('jquery'),
+            require('angular'),
+            require('./jquery.fileupload-image'),
+            require('./jquery.fileupload-audio'),
+            require('./jquery.fileupload-video'),
+            require('./jquery.fileupload-validate')
+        );
     } else {
         factory();
     }

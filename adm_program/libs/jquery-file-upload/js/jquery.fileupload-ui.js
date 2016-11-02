@@ -18,7 +18,7 @@
         // Register as an anonymous AMD module:
         define([
             'jquery',
-            'tmpl',
+            'blueimp-tmpl',
             './jquery.fileupload-image',
             './jquery.fileupload-audio',
             './jquery.fileupload-video',
@@ -28,7 +28,10 @@
         // Node/CommonJS:
         factory(
             require('jquery'),
-            require('tmpl')
+            require('blueimp-tmpl'),
+            require('./jquery.fileupload-image'),
+            require('./jquery.fileupload-video'),
+            require('./jquery.fileupload-validate')
         );
     } else {
         // Browser globals:

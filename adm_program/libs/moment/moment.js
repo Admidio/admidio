@@ -1,5 +1,15 @@
+/*
+ * ******************************************************************************
+ *  *
+ *  * Copyright    : (c) 2004 - 2015 The Admidio Team
+ *  * Homepage     : http://www.admidio.org
+ *  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  *
+ *  ******************************************************************************
+ */
+
 //! moment.js
-//! version : 2.15.1
+//! version : 2.15.2
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -830,7 +840,7 @@
 
     // LOCALES
 
-    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
+    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/;
     var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
     function localeMonths (m, format) {
         if (!m) {
@@ -4195,7 +4205,7 @@
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.15.1';
+    utils_hooks__hooks.version = '2.15.2';
 
     setHookCallback(local__createLocal);
 
