@@ -225,6 +225,9 @@ class Session extends TableAccess
         return (int) $this->getValue('ses_org_id');
     }
 
+    /**
+     * clear user data
+     */
     protected function clearUserData()
     {
         global $gCurrentUser;
@@ -257,18 +260,13 @@ class Session extends TableAccess
                 // if user has auto login than session is also valid
                 if ($this->mAutoLogin instanceof \AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
                 {
-                    $this->setValue('ses_timestamp', DATETIME_NOW);
                     return true;
                 }
+            }
 
-                // user was inactive -> clear user data and remove him from session
-                $this->clearUserData();
-            }
-            else
-            {
-                // something is wrong -> clear user data
-                $this->clearUserData();
-            }
+            // user was inactive -> clear user data and remove him from session
+            // something is wrong -> clear user data
+            $this->clearUserData();
         }
 
         return false;
