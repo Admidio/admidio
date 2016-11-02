@@ -188,6 +188,8 @@ class Session extends TableAccess
      */
     private function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
+        global $gLogger;
+
         if ($path === '')
         {
             $path = ADMIDIO_SUBFOLDER . '/';
@@ -205,6 +207,8 @@ class Session extends TableAccess
         {
             $secure = HTTPS;
         }
+
+        $gLogger->info('Set Cookie!', array('name' => $name, 'value' => $value, 'expire' => $expire, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly));
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
@@ -493,5 +497,7 @@ class Session extends TableAccess
 
         // Start session
         session_start();
+
+        $gLogger->info('Session Started!', array('name' => $name . '_PHP_SESSION_ID', 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sessionId' => session_id()));
     }
 }
