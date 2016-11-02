@@ -100,7 +100,7 @@ class Folder
         // set write permissions for all users everytime because mkdir does not set this on every system
         if($writable && is_dir($newPath))
         {
-            $returnValue = chmod($newPath, 0777);
+            $returnValue = @chmod($newPath, 0777);
         }
         return $returnValue;
     }
