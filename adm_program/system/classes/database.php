@@ -166,7 +166,8 @@ class Database
                 {
                     $port = ';port=' . $this->port;
                 }
-                $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8mb4';
+                // TODO: change to "charset=utf8mb4" if we change charset in DB to "utf8mb4"
+                $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8';
                 break;
 
             case 'pgsql':
