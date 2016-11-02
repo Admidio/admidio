@@ -448,4 +448,52 @@ class Session extends TableAccess
                    AND ses_session_id NOT LIKE \''.$this->getValue('ses_session_id').'\'';
         $this->db->query($sql);
     }
+
+    /**
+     * @param string $name     The prefix name of the Cookie.
+     * @param int    $limit    The Lifetime (Seconds) of the cookie when it should expire.
+     *                         With "0" the cookie will expire if the session ends. (When Browser gets closed)
+     * @param string $path     Specify the path where the cookie should be available. (Also in sub-paths)
+     * @param string $domain   Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
+     * @param bool   $secure   If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool   $httpOnly If "true" cookie is accessible only via HTTP.
+     *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
+     */
+    public static function start($name, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
+    {
+        global $gLogger;
+
+        // Set the cookie name
+        session_name($name . '_PHP_SESSION_ID');
+
+        // Set session cookie options
+        if ($path === '')
+        {
+            $path = ADMIDIO_SUBFOLDER . '/';
+        }
+        if ($domain === '')
+        {
+            $domain = DOMAIN;
+
+            // TODO: Test if this is necessary
+            // https://secure.php.net/manual/en/function.setcookie.php#73107
+            if ($domain === 'localhost')
+            {
+                $domain = false;
+            }
+        }
+        if ($secure === null)
+        {
+            $secure = HTTPS;
+        }
+        session_set_cookie_params($limit, $path, $domain, $secure, $httpOnly);
+
+        if (session_id() !== '') // PHP 5.4+ => (session_status() === PHP_SESSION_ACTIVE)
+        {
+            $gLogger->notice('Session is already started!', array('sessionId' => session_id()));
+        }
+
+        // Start session
+        session_start();
+    }
 }

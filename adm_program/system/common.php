@@ -74,8 +74,7 @@ $gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gC
 // start PHP session
 if(!headers_sent())
 {
-    session_name($gCookiePraefix . '_PHP_ID');
-    session_start();
+    Session::start($gCookiePraefix);
 }
 
 // determine session id

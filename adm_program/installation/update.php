@@ -432,8 +432,7 @@ elseif($getMode === 2)
 
     // start php session and remove session object with all data, so that
     // all data will be read after the update
-    session_name($gCookiePraefix.'_PHP_ID');
-    session_start();
+    Session::start($gCookiePraefix);
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful

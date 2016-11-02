@@ -19,8 +19,6 @@
  *        8 : Start installation
  ***********************************************************************************************
  */
-session_name('admidio_php_session_id');
-session_start();
 
 // if config file already exists then load file with their variables
 if(is_file('../../adm_my_files/config.php'))
@@ -66,6 +64,8 @@ require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // Initialize and check the parameters
+Session::start('ADMIDIO');
+
 
 define('THEME_URL', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));

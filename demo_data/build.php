@@ -117,8 +117,7 @@ $gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gC
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update
-session_name($gCookiePraefix. '_PHP_ID');
-session_start();
+Session::start($gCookiePraefix);
 unset($_SESSION['gCurrentSession']);
 
 echo 'Start with installation ...<br />';
