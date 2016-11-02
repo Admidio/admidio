@@ -802,7 +802,7 @@ function admRedirect($url, $statusCode = 303)
 {
     global $gLogger, $gMessage, $gL10n;
 
-    if (headers_sent() === true)
+    if (headers_sent())
     {
         $gLogger->error('Header already sent!', array('url' => $url, 'statusCode' => $statusCode));
 
