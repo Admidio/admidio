@@ -43,7 +43,7 @@ else
 }
 
 // LOGGING
-require_once(SERVER_PATH . '/adm_program/system/logging.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // remove HTML & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);

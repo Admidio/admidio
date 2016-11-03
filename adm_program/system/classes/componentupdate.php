@@ -416,7 +416,7 @@ class ComponentUpdate extends Component
 
         if ($folder === '')
         {
-            $folder = SERVER_PATH . FOLDER_DATA;
+            $folder = ADMIDIO_PATH . FOLDER_DATA;
         }
 
         $dirHandle = @opendir($folder);
