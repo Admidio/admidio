@@ -83,8 +83,7 @@ $gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gC
 // start PHP session
 if(!headers_sent())
 {
-    session_name($gCookiePraefix . '_PHP_ID');
-    session_start();
+    Session::start($gCookiePraefix);
 }
 
 // determine session id
@@ -204,7 +203,7 @@ if($sesRenew === 1 || $sesRenew === 3)
 // check session if user login is valid
 if($gCurrentSession->getValue('ses_usr_id') > 0)
 {
-    if($gCurrentSession->isValidLogin($gCurrentUser->getValue('usr_id')))
+    if($gCurrentSession->isValidLogin((int) $gCurrentUser->getValue('usr_id')))
     {
         $gValidLogin = true;
     }

@@ -418,12 +418,12 @@ elseif($getMode === 2)
     if($gDbType === 'mysql')
     {
         // activate foreign key checks, so database is consistent
-        $sql = 'SET foreign_key_checks = 1 ';
+        $sql = 'SET foreign_key_checks = 1';
         $gDb->query($sql);
     }
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
-    $sql = 'UPDATE '.TBL_SESSIONS.' SET ses_renew = 1 ';
+    $sql = 'UPDATE '.TBL_SESSIONS.' SET ses_renew = 1';
     $gDb->query($sql);
 
     // create an installation unique cookie prefix and remove special characters
@@ -432,8 +432,7 @@ elseif($getMode === 2)
 
     // start php session and remove session object with all data, so that
     // all data will be read after the update
-    session_name($gCookiePraefix.'_PHP_ID');
-    session_start();
+    Session::start($gCookiePraefix);
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful

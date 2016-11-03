@@ -289,7 +289,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
+        global $gLogger, $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
 
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
         $now = new DateTime();
@@ -407,9 +407,8 @@ class User extends TableAccess
 
         if ($updateSessionCookies)
         {
-            // set cookie for session id and remove ports from domain
-            $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-            setcookie($gCookiePraefix. '_ID', $gSessionId, 0, '/', $domain, 0);
+            // set cookie for session id
+            Session::setCookie($gCookiePraefix . '_ID', $gSessionId);
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();
