@@ -37,8 +37,9 @@ else
     exit();
 }
 
-require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/init_globals.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, '/adm_program')) . '/adm_program/system/constants.php');
+$rootPath = substr(__FILE__, 0, strpos(__FILE__, '/adm_program'));
+require_once($rootPath . '/adm_program/system/init_globals.php');
+require_once($rootPath . '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
