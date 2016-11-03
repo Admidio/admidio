@@ -23,7 +23,7 @@ if ($gDebug)
     $logLevel = Logger::DEBUG;
 }
 
-// If "$gDebug = true" append line/file/class/function where the log message came from
+// Append line/file/class/function where the log message came from
 $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
 
 $formatter = new LineFormatter(null, null, false, true);
@@ -36,9 +36,9 @@ $errorLogHandler->setFormatter($formatter);
 $gLogger->pushHandler($streamHandler);
 $gLogger->pushHandler($errorLogHandler);
 
-$gLogger->info('#################################################################################################');
-$gLogger->info('URL: ' . CURRENT_URL);
-$gLogger->info('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KB');
+$gLogger->notice('#################################################################################################');
+$gLogger->notice('URL: ' . CURRENT_URL);
+$gLogger->notice('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KB');
 
 if (version_compare(PHP_VERSION, '5.6', '<'))
 {
@@ -73,4 +73,4 @@ $constants = array(
     'FOLDER_MODULES' => FOLDER_MODULES,
     'FOLDER_PLUGINS' => FOLDER_PLUGINS
 );
-$gLogger->debug('CONSTANTS: URLS & PATHS & FOLDERS', $constants);
+$gLogger->info('CONSTANTS: URLS & PATHS & FOLDERS', $constants);

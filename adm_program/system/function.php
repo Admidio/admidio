@@ -39,7 +39,15 @@ function admFuncAutoload($className)
         }
     }
 
-    $gLogger->critical('Class-File for Class "' . $className . '" could not be found and included!');
+    $logErrorMessage = 'Class-File for Class "' . $className . '" could not be found and included!';
+    if ($gLogger instanceof \Monolog\Logger)
+    {
+        $gLogger->critical($logErrorMessage);
+    }
+    else
+    {
+        error_log($logErrorMessage);
+    }
 
     return false;
 }
