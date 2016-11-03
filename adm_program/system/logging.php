@@ -40,3 +40,8 @@ $gLogger->info('################################################################
 $gLogger->info('Admidio Logger initialized');
 $gLogger->info(CURRENT_URL);
 $gLogger->info('Memory usage: ' . round(memory_get_usage() / 1024, 1) . ' KB');
+
+if (version_compare(PHP_VERSION, '5.6', '<'))
+{
+    $gLogger->warning('PHP-Version is out of date! Please update your PHP-Version!', array('phpVersion' => PHP_VERSION));
+}

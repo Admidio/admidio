@@ -24,12 +24,22 @@ require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
-if($gDebug)
+// ERROR REPORTING
+// http://www.phptherightway.com/#error_reporting
+// https://secure.php.net/manual/en/errorfunc.configuration.php
+// error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
+ini_set('error_reporting', '-1');
+ini_set('log_errors', '1');
+
+if ($gDebug)
 {
-    // https://secure.php.net/manual/en/errorfunc.configuration.php
-    error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
+}
+else
+{
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
 }
 
 // LOGGING
@@ -44,7 +54,6 @@ $_COOKIE = admStrStripTagsSpecial($_COOKIE);
 // deprecated
 if(!get_magic_quotes_gpc())
 {
-    $gLogger->warning('DEPRECATED: Magic-Quotes should not be used!');
     $_GET    = strAddSlashesDeep($_GET);
     $_POST   = strAddSlashesDeep($_POST);
     $_COOKIE = strAddSlashesDeep($_COOKIE);
