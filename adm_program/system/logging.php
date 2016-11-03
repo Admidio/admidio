@@ -37,11 +37,40 @@ $gLogger->pushHandler($streamHandler);
 $gLogger->pushHandler($errorLogHandler);
 
 $gLogger->info('#################################################################################################');
-$gLogger->info('Admidio Logger initialized');
-$gLogger->info(CURRENT_URL);
-$gLogger->info('Memory usage: ' . round(memory_get_usage() / 1024, 1) . ' KB');
+$gLogger->info('URL: ' . CURRENT_URL);
+$gLogger->info('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KB');
 
 if (version_compare(PHP_VERSION, '5.6', '<'))
 {
     $gLogger->warning('PHP-Version is out of date! Please update your PHP-Version!', array('phpVersion' => PHP_VERSION));
 }
+
+// Log Constants
+$constants = array(
+    'ADMIDIO_HOMEPAGE' => ADMIDIO_HOMEPAGE,
+    // Basic Stuff
+    'HTTPS' => HTTPS,
+    'PORT' => PORT,
+    'HOST' => HOST,
+    'DOMAIN' => DOMAIN,
+    'ADMIDIO_SUBFOLDER' => ADMIDIO_SUBFOLDER,
+    // URLs
+    'SERVER_URL' => SERVER_URL,
+    'ADMIDIO_URL' => ADMIDIO_URL,
+    'FILE_URL' => FILE_URL,
+    'CURRENT_URL' => CURRENT_URL,
+    // Paths
+    'WWW_PATH' => WWW_PATH, // Will get "SERVER_PATH" in v4.0
+    'ADMIDIO_PATH' => ADMIDIO_PATH,
+    'CURRENT_PATH' => CURRENT_PATH,
+    // Folders
+    'FOLDER_DATA' => FOLDER_DATA,
+    'FOLDER_CLASSES' => FOLDER_CLASSES,
+    'FOLDER_LIBS_SERVER' => FOLDER_LIBS_SERVER,
+    'FOLDER_LIBS_CLIENT' => FOLDER_LIBS_CLIENT,
+    'FOLDER_LANGUAGES' => FOLDER_LANGUAGES,
+    'FOLDER_THEMES' => FOLDER_THEMES,
+    'FOLDER_MODULES' => FOLDER_MODULES,
+    'FOLDER_PLUGINS' => FOLDER_PLUGINS
+);
+$gLogger->debug('CONSTANTS: URLS & PATHS & FOLDERS', $constants);
