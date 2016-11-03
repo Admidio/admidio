@@ -37,7 +37,7 @@ else
     exit();
 }
 
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, '/adm_program'));
+$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_program/system/init_globals.php');
 require_once($rootPath . '/adm_program/system/constants.php');
 

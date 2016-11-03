@@ -53,8 +53,8 @@ define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['
 $hostParts = explode(':', HOST);
 define('DOMAIN', $hostParts[0]); // www.example.org
 
-$admParts = explode('/adm_', dirname($_SERVER['SCRIPT_NAME']));
-define('ADMIDIO_SUBFOLDER', $admParts[0]); // /subfolder
+$admParts = explode(DIRECTORY_SEPARATOR . 'adm_', dirname($_SERVER['SCRIPT_NAME']));
+define('ADMIDIO_SUBFOLDER', str_replace('\\', '/', $admParts[0])); // /subfolder
 
 // URLS
 define('SERVER_URL',  (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234
@@ -63,10 +63,10 @@ define('FILE_URL',    SERVER_URL . $_SERVER['SCRIPT_NAME']); // https://www.exam
 define('CURRENT_URL', SERVER_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // PATHS
-$admParts = explode('/adm_', __DIR__);
-define('WWW_PATH', $_SERVER['DOCUMENT_ROOT']); // /var/www    Will get "SERVER_PATH" in v4.0
+$admParts = explode(DIRECTORY_SEPARATOR . 'adm_', __DIR__);
+define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
 define('ADMIDIO_PATH', $admParts[0]); // /var/www/subfolder
-define('CURRENT_PATH', $_SERVER['SCRIPT_FILENAME']); // /var/www/subfolder/adm_program/index.php
+define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');

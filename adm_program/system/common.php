@@ -15,7 +15,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 }
 
 // embed config and constants file
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, '/adm_program'));
+$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_my_files/config.php');
 require_once($rootPath . '/adm_program/system/init_globals.php');
 require_once($rootPath . '/adm_program/system/constants.php');
