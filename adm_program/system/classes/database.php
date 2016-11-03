@@ -298,7 +298,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        $gLogger->info('START TRANSACTION');
+        $gLogger->info('SQL: START TRANSACTION');
 
         $result = $this->pdo->beginTransaction();
 
@@ -339,7 +339,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        $gLogger->info('COMMIT');
+        $gLogger->info('SQL: COMMIT');
 
         $result = $this->pdo->commit();
 
@@ -494,7 +494,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        $gLogger->info($sql);
+        $gLogger->info('SQL: ' . preg_replace('/\s+/', ' ', $sql));
 
         try
         {
@@ -512,7 +512,7 @@ class Database
 
         if (strpos(strtoupper($sql), 'SELECT') === 0)
         {
-            $gLogger->info('Found rows: '.$this->pdoStatement->rowCount());
+            $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
         }
 
         return $this->pdoStatement;
@@ -535,7 +535,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        $gLogger->info('ROLLBACK');
+        $gLogger->info('SQL: ROLLBACK');
 
         $result = $this->pdo->rollBack();
 
