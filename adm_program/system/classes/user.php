@@ -294,14 +294,23 @@ class User extends TableAccess
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
         $now = new DateTime();
         $minutesOffset = new DateInterval('PT15M');
-        $now = $now->sub($minutesOffset);
+        $minutesBefore = $now->sub($minutesOffset);
         $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
 
         $invalidLoginCount = (int) $this->getValue('usr_number_invalid');
 
-        if ($invalidLoginCount >= 3 && $now->getTimestamp() > $dateInvalid->getTimestamp())
+        if ($invalidLoginCount >= 3 && $minutesBefore->getTimestamp() > $dateInvalid->getTimestamp())
         {
             $this->clear();
+
+            $loggingObject = array(
+                'username'      => $this->getValue('usr_login_name'),
+                'password'      => '******',
+                'numberInvalid' => $this->getValue('usr_number_invalid'),
+                'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
+            );
+            $gLogger->warning('AUTHENTICATION: Maximum number of invalid login!', $loggingObject);
+
             return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
@@ -326,10 +335,21 @@ class User extends TableAccess
             $this->save(false); // don't update timestamp // TODO Exception handling
             $this->clear();
 
+            $loggingObject = array(
+                'username'      => $this->getValue('usr_login_name'),
+                'password'      => '******',
+                'numberInvalid' => $this->getValue('usr_number_invalid'),
+                'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
+            );
+
             if ($this->getValue('usr_number_invalid') >= 3)
             {
+                $gLogger->warning('AUTHENTICATION: Maximum number of invalid login!', $loggingObject);
+
                 return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
             }
+
+            $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
 
             return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         }
@@ -339,6 +359,12 @@ class User extends TableAccess
         // if user is not activated/valid return error message
         if (!$this->getValue('usr_valid'))
         {
+            $loggingObject = array(
+                'username' => $this->getValue('usr_login_name'),
+                'password' => '******'
+            );
+            $gLogger->warning('AUTHENTICATION: User is not activated!', $loggingObject);
+
             return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
         }
 
@@ -371,13 +397,23 @@ class User extends TableAccess
         $userStatement = $this->db->query($sql);
         $userRow = $userStatement->fetch();
 
+        $loggingObject = array(
+            'username'     => $this->getValue('usr_login_name'),
+            'password'     => '******',
+            'organisation' => $userRow['org_longname']
+        );
+
         if ($userStatement->rowCount() === 0)
         {
+            $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
+
             return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4.0', '>=') && $userRow['administrator'] == 0)
         {
+            $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
+
             return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);
         }
 

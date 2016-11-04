@@ -75,6 +75,8 @@ $userStatement = $gDb->query($sql);
 
 if ($userStatement->rowCount() === 0)
 {
+    $gLogger->warning('AUTHENTICATION: Incorrect username/password!', array('username' => $loginname, 'password' => '******'));
+
     $gMessage->show($gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'));
     // => EXIT
 }
