@@ -346,9 +346,9 @@ elseif ($getMode === 6)
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
-        $location = 'Location: '.ADMIDIO_URL.'/adm_program/system/back.php';
-        header($location);
-        exit();
+
+        admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
+        // => EXIT
     }
     elseif (is_dir($folder->getCompletePathOfFolder(). '/'. $getName))
     {
@@ -371,9 +371,9 @@ elseif ($getMode === 6)
 
         // Zurueck zur letzten Seite
         $gNavigation->addUrl(CURRENT_URL);
-        $location = 'Location: '.ADMIDIO_URL.'/adm_program/system/back.php';
-        header($location);
-        exit();
+
+        admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
+        // => EXIT
     }
 }
 

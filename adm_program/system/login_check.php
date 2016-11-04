@@ -124,8 +124,7 @@ else
 
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
         // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        $location = 'Location: ' . ADMIDIO_URL . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage;
-        header($location);
-        exit();
+        admRedirect(ADMIDIO_URL . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage);
+        // => EXIT
     }
 }
