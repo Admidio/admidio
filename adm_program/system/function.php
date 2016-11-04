@@ -812,21 +812,21 @@ function admRedirect($url, $statusCode = 303)
 
     if (headers_sent())
     {
-        $gLogger->error('Header already sent!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->error('REDIRECT: Header already sent!', array('url' => $url, 'statusCode' => $statusCode));
 
         $gMessage->show($gL10n->get('SYS_HEADER_ALREADY_SENT'));
         // => EXIT
     }
     if (filter_var($url, FILTER_VALIDATE_URL) === false)
     {
-        $gLogger->error('URL is not a valid URL!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->error('REDIRECT: URL is not a valid URL!', array('url' => $url, 'statusCode' => $statusCode));
 
         $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
         // => EXIT
     }
     if (!in_array($statusCode, array(301, 302, 303, 307), true))
     {
-        $gLogger->error('Status Code is not allowed!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->error('REDIRECT: Status Code is not allowed!', array('url' => $url, 'statusCode' => $statusCode));
 
         $gMessage->show($gL10n->get('SYS_STATUS_CODE_INVALID'));
         // => EXIT
@@ -834,12 +834,14 @@ function admRedirect($url, $statusCode = 303)
 
     if (strpos($url, ADMIDIO_URL) === 0)
     {
+        $gLogger->info('REDIRECT: Redirecting to internal URL!', array('url' => $url, 'statusCode' => $statusCode));
+
         // TODO check if user is authorized for url
         $redirectUrl = $url;
     }
     else
     {
-        $gLogger->notice('Redirecting to an external URL!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->notice('REDIRECT: Redirecting to external URL!', array('url' => $url, 'statusCode' => $statusCode));
 
         $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
     }
