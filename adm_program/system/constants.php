@@ -53,8 +53,8 @@ define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['
 $hostParts = explode(':', HOST);
 define('DOMAIN', $hostParts[0]); // www.example.org
 
-$admParts = explode(DIRECTORY_SEPARATOR . 'adm_', dirname($_SERVER['SCRIPT_NAME']));
-define('ADMIDIO_SUBFOLDER', str_replace('\\', '/', $admParts[0])); // /subfolder
+$admParts = explode('/adm_', dirname($_SERVER['SCRIPT_NAME']));
+define('ADMIDIO_SUBFOLDER', $admParts[0] === DIRECTORY_SEPARATOR ? '' : $admParts[0]); // /subfolder
 
 // URLS
 define('SERVER_URL',  (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234
