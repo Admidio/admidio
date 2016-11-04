@@ -10,11 +10,7 @@
  */
 if(is_file('adm_my_files/config.php'))
 {
-    require_once('adm_my_files/config.php');
-    require_once('adm_program/system/init_globals.php');
-    require_once('adm_program/system/constants.php');
-    require_once('adm_program/system/function.php');
-    require_once('adm_program/system/logging.php');
+    require_once('adm_program/system/common.php');
 
     // connect to database
     try
@@ -34,9 +30,6 @@ if(is_file('adm_my_files/config.php'))
         admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
         // => EXIT
     }
-
-    // if config file exists then show stored homepage
-    require_once('adm_program/system/common.php');
 
     if(isset($gHomepage))
     {
