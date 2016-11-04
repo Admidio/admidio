@@ -333,7 +333,6 @@ class User extends TableAccess
             $this->setValue('usr_date_invalid', DATETIME_NOW);
             $this->saveChangesWithoutRights();
             $this->save(false); // don't update timestamp // TODO Exception handling
-            $this->clear();
 
             $loggingObject = array(
                 'username'      => $this->getValue('usr_login_name'),
@@ -341,6 +340,8 @@ class User extends TableAccess
                 'numberInvalid' => $this->getValue('usr_number_invalid'),
                 'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
             );
+
+            $this->clear();
 
             if ($this->getValue('usr_number_invalid') >= 3)
             {
