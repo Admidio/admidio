@@ -145,31 +145,6 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
-     * @param string $date Date to be validated and formated if needed
-     * @return string|false
-     */
-    private function formatDate($date)
-    {
-        global $gPreferences;
-
-        $objDate = DateTime::createFromFormat('Y-m-d', $date);
-        if ($objDate !== false)
-        {
-            return $date;
-        }
-
-        // check if date has system format
-        $objDate = DateTime::createFromFormat($gPreferences['system_date'], $date);
-        if ($objDate !== false)
-        {
-            return $objDate->format('Y-m-d');
-        }
-
-        return false;
-    }
-
-    /**
      * SQL query returns an array with available dates.
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit        Limit of query rows (default: 0)
@@ -513,6 +488,32 @@ class ModuleDates extends Modules
         }
 
         return $sqlConditions;
+    }
+
+    /**
+     * Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
+     * @deprecated 3.2.0:4.0.0 Dropped without replacement.
+     * @param string $date Date to be validated and formated if needed
+     * @return string|false
+     */
+    private function formatDate($date)
+    {
+        global $gPreferences;
+
+        $objDate = DateTime::createFromFormat('Y-m-d', $date);
+        if ($objDate !== false)
+        {
+            return $date;
+        }
+
+        // check if date has system format
+        $objDate = DateTime::createFromFormat($gPreferences['system_date'], $date);
+        if ($objDate !== false)
+        {
+            return $objDate->format('Y-m-d');
+        }
+
+        return false;
     }
 
     /**
