@@ -498,7 +498,9 @@ class ModuleDates extends Modules
      */
     private function formatDate($date)
     {
-        global $gPreferences;
+        global $gLogger, $gPreferences;
+
+        $gLogger->warning('DEPRECATED: "$moduleDates->formatDate()" is deprecated without replacement!');
 
         $objDate = DateTime::createFromFormat('Y-m-d', $date);
         if ($objDate !== false)
