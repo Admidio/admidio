@@ -501,7 +501,7 @@ class Database
             $this->fetchArray = array();
             $this->pdoStatement = $this->pdo->query($sql);
 
-            if (strpos(strtoupper($sql), 'SELECT') === 0)
+            if ($this->pdoStatement !== false && strpos(strtoupper($sql), 'SELECT') === 0)
             {
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
