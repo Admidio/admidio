@@ -316,7 +316,7 @@ if ($getMode !== 'csv')
         $pdf->AddPage();
 
         // Create table object for display
-        $table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
+        $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
         $table->addAttribute('border', '1');
     }
     elseif ($getMode === 'html')
