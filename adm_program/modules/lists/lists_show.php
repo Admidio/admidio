@@ -73,6 +73,7 @@ if($objDateFrom > $objDateTo)
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
+$showLinkMailToList = true;
 
 if ($numberRoles > 1)
 {
@@ -82,15 +83,22 @@ if ($numberRoles > 1)
     $rolesStatement = $gDb->query($sql);
     $rolesData      = $rolesStatement->fetchAll();
 
-    // check if user has right to view all roles
     foreach ($rolesData as $role)
     {
+    	// check if user has right to view all roles
         if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
-
+        
+      	// check if user has right to send mail to role
+    	if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
+        {
+            $showLinkMailToList = false;
+            // => do not show the link
+        }
+        
         $htmlSubHeadline .= ', '.$role['rol_name'];
     }
 
@@ -107,6 +115,13 @@ else
         // => EXIT
     }
 
+	// check if user has right to send mail to role
+    if (!$gCurrentUser->hasRightSendMailToRole($roleIds[0]))
+    {
+    	$showLinkMailToList = false;
+        // => do not show the link
+    }
+    
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
 }
@@ -220,6 +235,18 @@ if ($numMembers === 0)
     // Es sind keine Daten vorhanden !
     $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
     // => EXIT
+}
+
+$userIdList = array();
+foreach ($membersList as $member)
+{
+    $user = new User($gDb, $gProfileFields, $member['usr_id']);
+    
+    // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
+    if (strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUser->getValue('usr_id')<>$member['usr_id'])
+    {
+        $userIdList[] = $member['usr_id'];
+    }
 }
 
 // define title (html) and headline
@@ -361,6 +388,28 @@ if ($getMode !== 'csv')
                         "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
+            
+            $("#menu_item_mail_to_list").click(function () {
+            	var form = document.createElement("form");
+ 				form.setAttribute("method", "post");
+ 				form.setAttribute("action", "'.$g_root_path.'/adm_program/modules/messages/messages_write.php");
+ 				
+ 				var hiddenField = document.createElement("input");
+ 				hiddenField.setAttribute("type", "hidden");
+ 				hiddenField.setAttribute("name", "lst_id");
+ 				hiddenField.setAttribute("value", "'.$getListId.'");
+ 				form.appendChild(hiddenField);
+ 				
+				var hiddenField = document.createElement("input");
+ 				hiddenField.setAttribute("type", "hidden");
+ 				hiddenField.setAttribute("name", "userIdList");
+ 				hiddenField.setAttribute("value", "'.implode(',', $userIdList).'");
+ 				form.appendChild(hiddenField);
+ 				
+ 				document.body.appendChild(form);    // Not entirely sure if this is necessary
+ 				form.submit();
+ 				return false;
+            });
 
             $("#menu_item_print_view").click(function () {
                 window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
@@ -395,6 +444,12 @@ if ($getMode !== 'csv')
         // link to print overlay and exports
         $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
+        //link to email-module
+        if($showLinkMailToList)
+        {
+        	 $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+        }
+        
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array(
             ''       => $gL10n->get('LST_EXPORT_TO').' ...',
