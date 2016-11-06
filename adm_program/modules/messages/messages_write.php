@@ -32,6 +32,10 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 
+// Check form values
+$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
+$postListId     = admFuncVariableIsValid($_POST, 'lst_id',     'int');
+
 if ($getMsgId > 0)
 {
     $message = new TableMessage($gDb, $getMsgId);
@@ -429,6 +433,15 @@ elseif (!isset($messageStatement))
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
 
+    }
+
+    if($postListId > 0)
+    {
+    	$preloadData = 'dummy';
+    	$showlist = new ListConfiguration($gDb, $postListId);
+        $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '' ));
+        $form->addInput('userIdList', '', $postUserIdList, array('property' => FIELD_HIDDEN));
+       	$form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
     }
 
     // no roles or users found then show message
