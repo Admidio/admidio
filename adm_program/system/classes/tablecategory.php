@@ -252,6 +252,10 @@ class TableCategory extends TableAccess
                 $this->elementTable = TBL_DATES;
                 $this->elementColumn = 'dat_cat_id';
                 break;
+            case 'ANN':
+                $this->elementTable = TBL_ANNOUNCEMENTS;
+                $this->elementColumn = 'ann_cat_id';
+                break;
             case 'AWA':
                 $this->elementTable = $g_tbl_praefix . '_user_awards';
                 $this->elementColumn = 'awa_cat_id';
