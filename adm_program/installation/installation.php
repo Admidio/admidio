@@ -124,15 +124,15 @@ if(is_file($pathConfigFile))
         $_SESSION['db_database'] = $g_adm_db;
         $_SESSION['prefix']      = $g_tbl_praefix;
 
-        header('Location: installation.php?mode=4');
-        exit();
+        admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?mode=4');
+        // => EXIT
     }
 }
 elseif(is_file('../../config.php'))
 {
     // Config file found at location of version 2. Then go to update
-    header('Location: update.php');
-    exit();
+    admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
+    // => EXIT
 }
 
 if($getMode === 1) // (Default) Choose language
@@ -493,8 +493,8 @@ elseif($getMode === 6)  // Creating configuration file
     // if config file exists than don't create a new one
     if(is_file($pathConfigFile))
     {
-        header('Location: installation.php?mode=8');
-        exit();
+        admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?mode=8');
+        // => EXIT
     }
 
     // read configuration file structure

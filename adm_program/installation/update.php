@@ -76,8 +76,8 @@ $pdoStatement = $gDb->query($sql, false);
 if(!$pdoStatement || $pdoStatement->rowCount() === 0)
 {
     // no valid installation exists -> show installation wizard
-    header('Location: installation.php');
-    exit();
+    admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php');
+    // => EXIT
 }
 
 // create an organization object of the current organization
