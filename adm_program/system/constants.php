@@ -13,9 +13,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
     exit('This page may not be called directly!');
 }
 
-##################
-###  VERSIONS  ###
-##################
+// ##################
+// ###  VERSIONS  ###
+// ##################
 
 // !!! Please do not edit these version numbers !!!
 define('MIN_PHP_VERSION', '5.3.7');
@@ -35,9 +35,9 @@ else
     define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
 }
 
-######################
-###  URLS & PATHS  ###
-######################
+// ######################
+// ###  URLS & PATHS  ###
+// ######################
 
 // Admidio Homepage
 define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
@@ -78,9 +78,9 @@ define('FOLDER_THEMES', '/adm_themes');
 define('FOLDER_MODULES', '/adm_program/modules');
 define('FOLDER_PLUGINS', '/adm_plugins');
 
-####################
-###  DATE-STUFF  ###
-####################
+// ####################
+// ###  DATE-STUFF  ###
+// ####################
 
 // Define default timezone
 date_default_timezone_set($gTimezone);
@@ -90,9 +90,9 @@ define('DATE_NOW', date('Y-m-d', time()));
 define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
 define('DATE_MAX', '9999-12-31');
 
-###################
-###  DB-TABLES  ###
-###################
+// ###################
+// ###  DB-TABLES  ###
+// ###################
 
 define('TBL_ANNOUNCEMENTS',       $g_tbl_praefix . '_announcements');
 define('TBL_AUTO_LOGIN',          $g_tbl_praefix . '_auto_login');
@@ -132,9 +132,9 @@ define('TBL_USER_LOG',            $g_tbl_praefix . '_user_log');
 define('TBL_USER_RELATIONS',      $g_tbl_praefix . '_user_relations');
 define('TBL_USER_RELATION_TYPES', $g_tbl_praefix . '_user_relation_types');
 
-#####################
-###  OTHER STUFF  ###
-#####################
+// #####################
+// ###  OTHER STUFF  ###
+// #####################
 
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);
@@ -147,9 +147,9 @@ define('PASSWORD_MIN_LENGTH', 8);
 define('PASSWORD_GEN_LENGTH', 16);
 define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
-####################
-###  DEPRECATED  ###
-####################
+// ####################
+// ###  DEPRECATED  ###
+// ####################
 
 // Old ADMIDIO_PATH
 define('SERVER_PATH', ADMIDIO_PATH);

@@ -109,7 +109,8 @@
  * echo $table->getHtmlTable();
  * @endcode
  */
-class HtmlTableBasic extends HtmlElement {
+class HtmlTableBasic extends HtmlElement
+{
     protected $border;                   ///< String with border attribute and value of the table
     protected $rowClasses;               ///< Class names to design table rows
     protected $columnsWidth;             ///< Array with values for the columns width

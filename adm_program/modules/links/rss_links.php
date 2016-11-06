@@ -14,9 +14,7 @@
  *
  * headline  - Headline for RSS-Feed
  *             (Default) Weblinks
- *
  *****************************************************************************/
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

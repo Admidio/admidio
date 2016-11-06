@@ -67,7 +67,6 @@ require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 // Initialize and check the parameters
 Session::start('ADMIDIO');
 
-
 define('THEME_URL', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
 $message = '';
