@@ -174,6 +174,8 @@ if($installedDbVersion === '')
 
 if($getMode === 1)
 {
+    $gLogger->info('UPDATE: Show update start-view');
+
     // if database version is smaller then source version -> update
     // if database version is equal to source but beta has a difference -> update
     if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
@@ -195,6 +197,8 @@ if($getMode === 1)
         // if this is a beta version then show a warning message
         if(ADMIDIO_VERSION_BETA > 0)
         {
+            $gLogger->notice('UPDATE: This is a BETA release!');
+
             $form->addDescription('
                 <div class="alert alert-warning alert-small" role="alert">
                     <span class="glyphicon glyphicon-warning-sign"></span>
@@ -233,6 +237,8 @@ if($getMode === 1)
 }
 elseif($getMode === 2)
 {
+    $gLogger->info('UPDATE: Execute update');
+
     /**************************************/
     /* execute update script for database */
     /**************************************/

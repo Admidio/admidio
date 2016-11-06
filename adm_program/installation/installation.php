@@ -137,6 +137,8 @@ elseif(is_file('../../config.php'))
 
 if($getMode === 1) // (Default) Choose language
 {
+    $gLogger->info('INSTALLATION: Choose language');
+
     session_destroy();
 
     // create form with selectbox where user can select a language
@@ -152,6 +154,8 @@ if($getMode === 1) // (Default) Choose language
 }
 elseif($getMode === 2)  // Welcome to installation
 {
+    $gLogger->info('INSTALLATION: Welcome to installation');
+
     // check if a language string was committed
     if(!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
     {
@@ -170,6 +174,8 @@ elseif($getMode === 2)  // Welcome to installation
     // if this is a beta version then show a notice to the user
     if(ADMIDIO_VERSION_BETA > 0)
     {
+        $gLogger->notice('INSTALLATION: This is a BETA release!');
+
         $message .= '
             <div class="alert alert-warning alert-small" role="alert">
                 <span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
@@ -196,6 +202,8 @@ elseif($getMode === 2)  // Welcome to installation
 }
 elseif($getMode === 3)  // Enter database access information
 {
+    $gLogger->info('INSTALLATION: Enter database access information');
+
     // initialize form data
     if(isset($_SESSION['db_server']))
     {
@@ -235,6 +243,8 @@ elseif($getMode === 3)  // Enter database access information
 }
 elseif($getMode === 4)  // Creating organization
 {
+    $gLogger->info('INSTALLATION: Creating organisation');
+
     if(isset($_POST['db_server']))
     {
         if($_POST['db_prefix'] === '')
@@ -358,8 +368,10 @@ elseif($getMode === 4)  // Creating organization
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
     echo $form->show();
 }
-elseif($getMode === 5)  // Creating addministrator
+elseif($getMode === 5)  // Creating administrator
 {
+    $gLogger->info('INSTALLATION: Creating administrator');
+
     if(isset($_POST['orga_shortname']))
     {
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
@@ -426,6 +438,8 @@ elseif($getMode === 5)  // Creating addministrator
 }
 elseif($getMode === 6)  // Creating configuration file
 {
+    $gLogger->info('INSTALLATION: Creating configuration file');
+
     if(isset($_POST['user_last_name']))
     {
         // Daten des Administrators in Sessionvariablen gefiltert speichern
@@ -554,6 +568,8 @@ elseif($getMode === 6)  // Creating configuration file
 }
 elseif($getMode === 7) // Download configuration file
 {
+    $gLogger->info('INSTALLATION: Download configuration file');
+
     $filename   = 'config.php';
     $fileLength = strlen($_SESSION['config_file_content']);
 
@@ -565,6 +581,8 @@ elseif($getMode === 7) // Download configuration file
 }
 elseif($getMode === 8) // Start installation
 {
+    $gLogger->info('INSTALLATION: Start installation');
+
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
     if(!is_file($pathConfigFile))
     {
@@ -800,6 +818,8 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                 '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files').'
             </div>';
     }
+
+    $gLogger->info('INSTALLATION: Installation successfully complete');
 
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.php');
