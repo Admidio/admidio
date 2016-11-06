@@ -388,27 +388,10 @@ if ($getMode !== 'csv')
                         "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
-            
+
             $("#menu_item_mail_to_list").click(function () {
-            	var form = document.createElement("form");
- 				form.setAttribute("method", "post");
- 				form.setAttribute("action", "'.$g_root_path.'/adm_program/modules/messages/messages_write.php");
- 				
- 				var hiddenField = document.createElement("input");
- 				hiddenField.setAttribute("type", "hidden");
- 				hiddenField.setAttribute("name", "lst_id");
- 				hiddenField.setAttribute("value", "'.$getListId.'");
- 				form.appendChild(hiddenField);
- 				
-				var hiddenField = document.createElement("input");
- 				hiddenField.setAttribute("type", "hidden");
- 				hiddenField.setAttribute("name", "userIdList");
- 				hiddenField.setAttribute("value", "'.implode(',', $userIdList).'");
- 				form.appendChild(hiddenField);
- 				
- 				document.body.appendChild(form);    // Not entirely sure if this is necessary
- 				form.submit();
- 				return false;
+            	$("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id : "'.$getListId.'", userIdList : "'.implode(',', $userIdList).'" } );
+            	return false;
             });
 
             $("#menu_item_print_view").click(function () {
@@ -447,7 +430,8 @@ if ($getMode !== 'csv')
         //link to email-module
         if($showLinkMailToList)
         {
-        	 $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+        	//$listsMenu->addHtml('div id="dd" ');
+        	$listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
         }
         
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
