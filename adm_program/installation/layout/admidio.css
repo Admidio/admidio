@@ -545,42 +545,14 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 /*******************************/
 
 #admidio-password-strength {
-    position: relative;
-    height: 12px;
-    margin: 8px 0;
-    border: 1px solid #cccccc;
+    margin-top: 10px;
 }
-#admidio-password-strength-indicator {
-    height: 100%;
-}
+
 #admidio-password-strength-minimum {
     position: absolute;
-    border: 6px solid transparent;
+    border: 9px solid transparent;
     border-left-color: #555555;
     border-right-width: 0;
-    margin-top: -1px;
+    margin-top: 1px;
 }
-.admidio-password-strength-indicator-0 {
-    width: 0;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-1 {
-    width: 25%;
-    background-color: #ff0000;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-2 {
-    width: 50%;
-    background-color: #ff8800;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-3 {
-    width: 75%;
-    background-color: #ffff00;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-4 {
-    width: 100%;
-    background-color: #00ff00;
-    transition: all 250ms;
-}
+

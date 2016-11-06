@@ -412,9 +412,23 @@ elseif($getMode === 5)  // Creating administrator
     $form->addHeader('
         <script type="text/javascript">
             $(function() {
+                $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4)");
+
                 $("#user_password").keyup(function(e) {
                     var result = zxcvbn(e.target.value, ' . json_encode($userData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
-                    $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                    $("#admidio-password-strength .progress-bar").attr("aria-valuenow", result.score * 25);
+                    $("#admidio-password-strength .progress-bar").css("width", result.score * 25 + "%");
+                    $("#admidio-password-strength .progress-bar").removeClass("progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success");
+
+                    if(result.score == 1) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-danger");
+                    } else if(result.score == 2) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-warning");
+                    } else if(result.score == 3) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-info");
+                    } else if(result.score == 4) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-success");
+                    }
                 });
             });
         </script>
@@ -427,7 +441,7 @@ elseif($getMode === 5)  // Creating administrator
     $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_REQUIRED));
     $form->addInput(
         'user_password', $gL10n->get('SYS_PASSWORD'), null,
-        array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')
+        array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
     );
     $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
     $form->closeGroupBox();

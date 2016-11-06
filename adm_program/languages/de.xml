@@ -861,7 +861,7 @@
     <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
-    <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</string>
+    <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke deines gewählten Passworts wird dir farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt dir der Pfeil im Balken an.</string>
     <string name="PRO_PASSWORD_LENGTH">Das Passwort muss aus mindestens 8 Zeichen bestehen.</string>
     <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
     <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
