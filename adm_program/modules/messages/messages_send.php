@@ -29,6 +29,8 @@ $postBody       = admFuncVariableIsValid($_POST, 'msg_body', 'html');
 $postBodySQL    = admFuncVariableIsValid($_POST, 'msg_body', 'string');
 $postDeliveryConfirmation = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'bool');
 $postCaptcha    = admFuncVariableIsValid($_POST, 'captcha_code', 'string');
+$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
+$postListId     = admFuncVariableIsValid($_POST, 'lst_id',     'int');
 
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
@@ -152,6 +154,11 @@ if ($getMsgType === 'EMAIL')
 {
     if (isset($postTo))
     {
+        if($postListId > 0)				//the id of a list was passed
+        {
+        	$postTo = explode(',', $postUserIdList);
+        }
+
         $receiver = array();
         $receiverString = '';
 
@@ -423,6 +430,12 @@ if ($getMsgType === 'EMAIL')
     $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
 
     require_once('messages_functions.php');
+
+    if($postListId > 0)
+    {
+    	$showlist = new ListConfiguration($gDb, $postListId);
+        $receiverString ='list ' . $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '' );
+    }
 
     $receiverName = prepareReceivers($receiverString);
     $emailTemplate = str_replace('#receiver#', $receiverName, $emailTemplate);

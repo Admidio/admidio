@@ -360,6 +360,7 @@
     <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
     <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
+    <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>    
     <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</string>
     <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
