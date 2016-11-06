@@ -51,7 +51,9 @@ class AdmException extends Exception
      */
     public function __construct($message, $param1 = '', $param2 = '', $param3 = '', $param4 = '')
     {
-        global $gDb;
+        global $gLogger, $gDb;
+
+        $gLogger->error('AdmException is thrown!', array('message' => $message, 'params' => array($param1, $param2, $param3, $param4)));
 
         if($gDb instanceof \Database)
         {
@@ -120,8 +122,7 @@ class AdmException extends Exception
         }
         else
         {
-            echo $this->getText();
-            exit();
+            $this->showText();
         }
     }
 
