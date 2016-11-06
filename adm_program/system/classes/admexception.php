@@ -123,6 +123,7 @@ class AdmException extends Exception
         else
         {
             $this->showText();
+            // => EXIT
         }
     }
 
