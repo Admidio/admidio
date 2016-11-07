@@ -430,18 +430,18 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     $value = null;
 
     // set default value for each datatype if no value is given and no value was required
-    if(array_key_exists($variableName, $array) && $array[$variableName] !== '')
+    if (array_key_exists($variableName, $array) && $array[$variableName] !== '')
     {
         $value = $array[$variableName];
     }
     else
     {
-        if($optionsAll['requireValue'])
+        if ($optionsAll['requireValue'])
         {
             // if value is required an no value is given then show error
             $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
         }
-        elseif($optionsAll['defaultValue'] !== null)
+        elseif ($optionsAll['defaultValue'] !== null)
         {
             // if a default value was set then take this value
             $value = $optionsAll['defaultValue'];
@@ -449,15 +449,15 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         else
         {
             // no value set then initialize the parameter
-            if($datatype === 'bool' || $datatype === 'boolean')
+            if ($datatype === 'bool' || $datatype === 'boolean')
             {
                 $value = false;
             }
-            elseif($datatype === 'numeric' || $datatype === 'int')
+            elseif ($datatype === 'numeric' || $datatype === 'int')
             {
                 $value = 0;
             }
-            elseif($datatype === 'float')
+            elseif ($datatype === 'float')
             {
                 $value = 0.0;
             }
@@ -472,7 +472,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
     // check if parameter has a valid value
     // do a strict check with in_array because the function don't work properly
-    if($optionsAll['validValues'] !== null
+    if ($optionsAll['validValues'] !== null
     && !in_array(admStrToUpper($value), $optionsAll['validValues'], true)
     && !in_array(admStrToLower($value), $optionsAll['validValues'], true))
     {
@@ -484,12 +484,12 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         case 'file':
             try
             {
-                if($value !== '')
+                if ($value !== '')
                 {
                     admStrIsValidFileName($value);
                 }
             }
-            catch(AdmException $e)
+            catch (AdmException $e)
             {
                 $errorMessage = $e->getText();
             }
@@ -499,12 +499,12 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             // check if date is a valid Admidio date format
             $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $value);
 
-            if(!$objAdmidioDate)
+            if (!$objAdmidioDate)
             {
                 // check if date has english format
                 $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
 
-                if(!$objEnglishDate)
+                if (!$objEnglishDate)
                 {
                     $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
                 }
@@ -564,14 +564,14 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     }
 
     // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
-    if($errorMessage === '')
+    if ($errorMessage === '')
     {
         return $value;
     }
 
-    if(isset($gMessage) && $gMessage instanceof \Message)
+    if (isset($gMessage) && $gMessage instanceof \Message)
     {
-        if($optionsAll['directOutput'])
+        if ($optionsAll['directOutput'])
         {
             $gMessage->showTextOnly(true);
         }
@@ -603,64 +603,68 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
     global $gDb, $gProfileFields, $gL10n, $gPreferences;
 
     // only show info if system setting is activated
-    if ($gPreferences['system_show_create_edit'] > 0)
+    if ((int) $gPreferences['system_show_create_edit'] === 0)
     {
-        $htmlCreateName = '';
-        $htmlEditName   = '';
+        return '';
+    }
 
-        // compose name of user who create the recordset
-        if ($timestampCreate !== '')
+    // compose name of user who create the recordset
+    $htmlCreateName = '';
+    if ($timestampCreate !== '')
+    {
+        if ($userIdCreated > 0)
         {
-            if ($userIdCreated > 0)
-            {
-                $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
+            $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
 
-                if ($gPreferences['system_show_create_edit'] == 1)
-                {
-                    $htmlCreateName = $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME');
-                }
-                else
-                {
-                    $htmlCreateName = $userCreate->getValue('usr_login_name');
-                }
+            if ((int) $gPreferences['system_show_create_edit'] === 1)
+            {
+                $htmlCreateName = $userCreate->getValue('FIRST_NAME') . ' ' . $userCreate->getValue('LAST_NAME');
             }
             else
             {
-                $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
+                $htmlCreateName = $userCreate->getValue('usr_login_name');
             }
         }
-
-        // compose name of user who edit the recordset
-        if ($timestampEdited !== '')
+        else
         {
-            if ($userIdEdited > 0)
-            {
-                $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
-
-                if ($gPreferences['system_show_create_edit'] == 1)
-                {
-                    $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
-                }
-                else
-                {
-                    $htmlEditName = $userEdit->getValue('usr_login_name');
-                }
-            }
-            else
-            {
-                $htmlEditName = $gL10n->get('SYS_DELETED_USER');
-            }
-        }
-
-        if ($htmlCreateName !== '' || $htmlEditName !== '')
-        {
-            // get html output from other function
-            return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlEditName,
-                                                     $timestampEdited, $userIdCreated, $userIdEdited);
+            $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
         }
     }
 
-    return '';
+    // compose name of user who edit the recordset
+    $htmlEditName = '';
+    if ($timestampEdited !== '')
+    {
+        if ($userIdEdited > 0)
+        {
+            $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
+
+            if ((int) $gPreferences['system_show_create_edit'] === 1)
+            {
+                $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
+            }
+            else
+            {
+                $htmlEditName = $userEdit->getValue('usr_login_name');
+            }
+        }
+        else
+        {
+            $htmlEditName = $gL10n->get('SYS_DELETED_USER');
+        }
+    }
+
+    if ($htmlCreateName === '' && $htmlEditName === '')
+    {
+        return '';
+    }
+
+    // get html output from other function
+    return admFuncShowCreateChangeInfoByName(
+        $htmlCreateName, $timestampCreate,
+        $htmlEditName, $timestampEdited,
+        $userIdCreated, $userIdEdited
+    );
 }
 
 /**
@@ -681,58 +685,60 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 {
     global $gL10n, $gValidLogin, $gPreferences;
 
-    $html = '';
-
     // only show info if system setting is activated
-    if($gPreferences['system_show_create_edit'] > 0)
+    if ((int) $gPreferences['system_show_create_edit'] === 0)
     {
-        // compose name of user who create the recordset
-        if($timestampCreate !== '')
-        {
-            $userNameCreated = trim($userNameCreated);
-
-            if($userNameCreated === '')
-            {
-                $userNameCreated = $gL10n->get('SYS_DELETED_USER');
-            }
-
-            // if valid login and a user id is given than create a link to the profile of this user
-            if($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
-            {
-                $userNameCreated = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
-                                    $userIdCreated.'">'.$userNameCreated.'</a>';
-            }
-
-            $html .= '<span class="admidio-info-created">'.$gL10n->get('SYS_CREATED_BY', $userNameCreated, $timestampCreate).'</span>';
-        }
-
-        // compose name of user who edit the recordset
-        if($timestampEdited !== '')
-        {
-            $userNameEdited = trim($userNameEdited);
-
-            if($userNameEdited === '')
-            {
-                $userNameEdited = $gL10n->get('SYS_DELETED_USER');
-            }
-
-            // if valid login and a user id is given than create a link to the profile of this user
-            if($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
-            {
-                $userNameEdited = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
-                                   $userIdEdited.'">'.$userNameEdited.'</a>';
-            }
-
-            $html .= '<span class="info-edited">'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameEdited, $timestampEdited).'</span>';
-        }
-
-        if($html !== '')
-        {
-            $html = '<div class="admidio-admidio-info-created-edited">'.$html.'</div>';
-        }
+        return '';
     }
 
-    return $html;
+    $html = '';
+
+    // compose name of user who create the recordset
+    if ($timestampCreate !== '')
+    {
+        $userNameCreated = trim($userNameCreated);
+
+        if ($userNameCreated === '')
+        {
+            $userNameCreated = $gL10n->get('SYS_DELETED_USER');
+        }
+
+        // if valid login and a user id is given than create a link to the profile of this user
+        if ($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
+        {
+            $userNameCreated = '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php?user_id=' .
+                                $userIdCreated . '">' . $userNameCreated . '</a>';
+        }
+
+        $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY', $userNameCreated, $timestampCreate) . '</span>';
+    }
+
+    // compose name of user who edit the recordset
+    if ($timestampEdited !== '')
+    {
+        $userNameEdited = trim($userNameEdited);
+
+        if ($userNameEdited === '')
+        {
+            $userNameEdited = $gL10n->get('SYS_DELETED_USER');
+        }
+
+        // if valid login and a user id is given than create a link to the profile of this user
+        if ($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
+        {
+            $userNameEdited = '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php?user_id=' .
+                               $userIdEdited . '">' . $userNameEdited . '</a>';
+        }
+
+        $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', $userNameEdited, $timestampEdited) . '</span>';
+    }
+
+    if ($html === '')
+    {
+        return '';
+    }
+
+    return '<div class="admidio-info-created-edited">' . $html . '</div>';
 }
 
 /**
@@ -744,37 +750,42 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
-    $dirHandle = @opendir($directory);
-    if ($dirHandle)
+    if (!is_dir($directory))
     {
-        $entries = array();
+        return false;
+    }
 
-        while (($entry = readdir($dirHandle)) !== false)
+    $dirHandle = @opendir($directory);
+    if ($dirHandle === false)
+    {
+        return false;
+    }
+
+    $entries = array();
+
+    while (($entry = readdir($dirHandle)) !== false)
+    {
+        if ($searchType === 'all')
         {
-            if ($searchType === 'all')
+            $entries[$entry] = $entry; // $entries[] = $entry;
+        }
+        elseif (strpos($entry, '.') !== 0)
+        {
+            $resource = $directory . '/' . $entry;
+
+            if ($searchType === 'both'
+            || ($searchType === 'file' && is_file($resource))
+            || ($searchType === 'dir'  && is_dir($resource)))
             {
                 $entries[$entry] = $entry; // $entries[] = $entry;
             }
-            elseif (strpos($entry, '.') !== 0)
-            {
-                $resource = $directory . '/' . $entry;
-
-                if ($searchType === 'both'
-                || ($searchType === 'file' && is_file($resource))
-                || ($searchType === 'dir'  && is_dir($resource)))
-                {
-                    $entries[$entry] = $entry; // $entries[] = $entry;
-                }
-            }
         }
-        closedir($dirHandle);
-
-        asort($entries); // sort($entries);
-
-        return $entries;
     }
+    closedir($dirHandle);
 
-    return false;
+    asort($entries); // sort($entries);
+
+    return $entries;
 }
 
 /**

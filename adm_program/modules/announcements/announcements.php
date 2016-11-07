@@ -159,13 +159,18 @@ else
 
             <div class="panel-body">'.
                 $announcement->getValue('ann_description').
-
             '</div>
             <div class="panel-footer">'.
                 // show information about user who creates the recordset and changed it
-                admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'),
-                    $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
-                ' . $gL10n->get('SYS_CATEGORY') . ' <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='. $getHeadline.'&amp;cat_id'.$announcement->getValue('ann_cat_id').'">' . $announcement->getValue('cat_name').'</a>
+                admFuncShowCreateChangeInfoByName(
+                    $row['create_name'], $announcement->getValue('ann_timestamp_create'),
+                    $row['change_name'], $announcement->getValue('ann_timestamp_change'),
+                    $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')
+                ) .
+                '<div class="admidio-info-category">' .
+                    $gL10n->get('SYS_CATEGORY') .
+                    ' <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='. $getHeadline.'&amp;cat_id'.$announcement->getValue('ann_cat_id').'">' . $announcement->getValue('cat_name').'</a>
+                </div>
             </div>
         </div>');
     }  // Ende foreach
