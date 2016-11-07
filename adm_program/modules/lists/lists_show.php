@@ -91,14 +91,14 @@ if ($numberRoles > 1)
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
-        
+
       	// check if user has right to send mail to role
     	if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
         {
             $showLinkMailToList = false;
             // => do not show the link
         }
-        
+
         $htmlSubHeadline .= ', '.$role['rol_name'];
     }
 
@@ -121,7 +121,7 @@ else
     	$showLinkMailToList = false;
         // => do not show the link
     }
-    
+
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
 }
@@ -241,7 +241,7 @@ $userIdList = array();
 foreach ($membersList as $member)
 {
     $user = new User($gDb, $gProfileFields, $member['usr_id']);
-    
+
     // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
     if (strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUser->getValue('usr_id')<>$member['usr_id'])
     {
@@ -414,26 +414,34 @@ if ($getMode !== 'csv')
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
+        // link to print overlay and exports
+        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+
         if ($numberRoles === 1)
         {
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
+                $listsMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'left');
+
                 $listsMenu->addItem('menu_item_assign_members', ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
+                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png', 'left', 'menu_item_extras');
             }
         }
-
-        // link to print overlay and exports
-        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
         //link to email-module
         if($showLinkMailToList)
         {
-        	//$listsMenu->addHtml('div id="dd" ');
-        	$listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+            if ($role->allowedToAssignMembers($gCurrentUser))
+            {
+        	    $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
+            }
+            else
+            {
+        	    $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+            }
         }
-        
+
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array(
             ''       => $gL10n->get('LST_EXPORT_TO').' ...',
