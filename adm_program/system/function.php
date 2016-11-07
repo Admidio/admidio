@@ -610,7 +610,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
     // compose name of user who create the recordset
     $htmlCreateName = '';
-    if ($timestampCreate !== '')
+    if ($timestampCreate)
     {
         if ($userIdCreated > 0)
         {
@@ -633,7 +633,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 
     // compose name of user who edit the recordset
     $htmlEditName = '';
-    if ($timestampEdited !== '')
+    if ($timestampEdited)
     {
         if ($userIdEdited > 0)
         {
@@ -694,7 +694,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     $html = '';
 
     // compose name of user who create the recordset
-    if ($timestampCreate !== '')
+    if ($timestampCreate)
     {
         $userNameCreated = trim($userNameCreated);
 
@@ -714,7 +714,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     }
 
     // compose name of user who edit the recordset
-    if ($timestampEdited !== '')
+    if ($timestampEdited)
     {
         $userNameEdited = trim($userNameEdited);
 
