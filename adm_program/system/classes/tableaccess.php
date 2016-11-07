@@ -240,7 +240,7 @@ class TableAccess
                 case 'timestamp':
                 case 'date':
                 case 'time':
-                    if ($columnValue !== '' && $columnName !== null)
+                    if ($columnValue !== '' && $columnValue !== null)
                     {
                         if ($format === '' && isset($gPreferences))
                         {
