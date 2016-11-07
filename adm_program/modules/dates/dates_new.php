@@ -226,89 +226,92 @@ $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 
 // show form
 $form = new HtmlForm('dates_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode.'&amp;copy='.$getCopy, $page);
+
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
-    $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+$form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
-    // if a map link should be shown in the event then show help text and a field where the user could choose the country
-    if($gPreferences['dates_show_map_link'] == true)
+// if a map link should be shown in the event then show help text and a field where the user could choose the country
+if($gPreferences['dates_show_map_link'] == true)
+{
+    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
+
+    if(strlen($date->getValue('dat_country')) === 0 && $getDateId === 0)
     {
-        $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
+        $date->setValue('dat_country', $gPreferences['default_country']);
+    }
+    $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), array('defaultValue' => $date->getValue('dat_country', 'database')));
+}
+else
+{
+    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50));
+}
 
-        if(strlen($date->getValue('dat_country')) === 0 && $getDateId === 0)
-        {
-            $date->setValue('dat_country', $gPreferences['default_country']);
-        }
-        $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), array('defaultValue' => $date->getValue('dat_country', 'database')));
+// if room selection is activated then show a selectbox with all rooms
+if($gPreferences['dates_show_rooms'] == true)
+{
+    if($gDbType === 'mysql')
+    {
+        $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
+                  FROM '.TBL_ROOMS.'
+              ORDER BY room_name';
     }
     else
     {
-        $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50));
+        $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
+                  FROM '.TBL_ROOMS.'
+              ORDER BY room_name';
     }
-
-    // if room selection is activated then show a selectbox with all rooms
-    if($gPreferences['dates_show_rooms'] == true)
-    {
-        if($gDbType === 'mysql')
-        {
-            $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
-                      FROM '.TBL_ROOMS.'
-                  ORDER BY room_name';
-        }
-        else
-        {
-            $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
-                      FROM '.TBL_ROOMS.'
-                  ORDER BY room_name';
-        }
-        $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
-    }
+    $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
+}
 $form->closeGroupBox();
+
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
-    $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
-    $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
-    $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
-    $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
-                                     array('property' => FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
+$form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
+$form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
+$form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
+$form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
+                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();
+
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
-    // add a multiselectbox to the form where the user can choose all roles that should see this event
-    // first read all relevant roles from database and create an array with them
-    $sql = 'SELECT rol_id, rol_name, cat_name
-              FROM '.TBL_ROLES.'
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-             WHERE rol_valid   = 1
-               AND rol_visible = 1
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                   OR cat_org_id IS NULL )
-          ORDER BY cat_sequence, rol_name';
-    $firstEntry = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
-    $form->addSelectBoxFromSql('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sql, array('property'     => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $dateRoles,
-                                                                                              'multiselect'  => true,
-                                                                                              'firstEntry'   => $firstEntry));
+// add a multiselectbox to the form where the user can choose all roles that should see this event
+// first read all relevant roles from database and create an array with them
+$sql = 'SELECT rol_id, rol_name, cat_name
+          FROM '.TBL_ROLES.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
+         WHERE rol_valid   = 1
+           AND rol_visible = 1
+           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               OR cat_org_id IS NULL )
+      ORDER BY cat_sequence, rol_name';
+$firstEntry = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
+$form->addSelectBoxFromSql('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sql, array('property'     => FIELD_REQUIRED,
+                                                                                          'defaultValue' => $dateRoles,
+                                                                                          'multiselect'  => true,
+                                                                                          'firstEntry'   => $firstEntry));
 
-    $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
+$form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
 
-    // if current organization has a parent organization or is child organizations then show option to set this announcement to global
-    if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
-    {
-        // show all organizations where this organization is mother or child organization
-        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
+// if current organization has a parent organization or is child organizations then show option to set this announcement to global
+if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
+{
+    // show all organizations where this organization is mother or child organization
+    $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
+    $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-        $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
-    }
-    $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
-    $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
-    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
-                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
-    $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $role->getValue('rol_this_list_view'));
-    $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $role->getValue('rol_mail_this_role'));
-
+    $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
+}
+$form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
+$form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
+$form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
+$form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $role->getValue('rol_this_list_view'));
+$form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $role->getValue('rol_mail_this_role'));
 $form->closeGroupBox();
+
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
-    $form->addEditor('dat_description', null, $date->getValue('dat_description'));
+$form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
