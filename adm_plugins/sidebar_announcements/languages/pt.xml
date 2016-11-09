@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS">Todos os anúncios</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Todos</string>
   <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Anúncios</string>
   <string name="PLG_SIDEBAR_ANNOUNCEMENTS_MORE">mais</string>
 </resources>
