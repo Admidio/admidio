@@ -689,7 +689,7 @@
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
-    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher/komplex Passwörter mindestens sein müssen.\nIn () die geschätzten Versuche bis geknackt.\n\nKeine: riskantes Passwort (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte online Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte online Angriffe. (&lt;10^8)\nHoch: Mäßiger schutz gegen offline-hashing Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen offline-hashing Angriffe. (&gt;=10^10)</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte online Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte online Angriffe. (&lt;10^8)\nHoch: Mäßiger schutz gegen offline-hashing Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen offline-hashing Angriffe. (&gt;=10^10)</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
