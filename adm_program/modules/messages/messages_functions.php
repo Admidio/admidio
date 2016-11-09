@@ -22,7 +22,11 @@ function prepareReceivers($receiversString)
     $receiversSplit = explode('|', $receiversString);
     foreach ($receiversSplit as $receivers)
     {
-        if (strpos($receivers, ':') > 0)
+        if (strpos($receivers, 'list ') === 0)
+        {
+        	$receiverNames .= '; ' . substr($receivers, 5);
+        }
+        elseif (strpos($receivers, ':') > 0)
         {
             $moduleMessages = new ModuleMessages();
             $receiverNames .= '; ' . $moduleMessages->msgGroupNameSplit($receivers);
