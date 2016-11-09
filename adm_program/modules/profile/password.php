@@ -124,15 +124,35 @@ elseif($getMode === 'html')
 
     $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
+    $passwordStrengthLevel = 1;
+    if ($gPreferences['password_min_strength'])
+    {
+        $passwordStrengthLevel = $gPreferences['password_min_strength'];
+    }
+
     echo '<script type="text/javascript">
         $(function() {
             $("body").on("shown.bs.modal", ".modal", function () {
                 $("#password_form:first *:input[type!=hidden]:first").focus();
-            });
 
-            $("#new_password").keyup(function(e) {
-                var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
-                $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
+
+                $("#new_password").keyup(function(e) {
+                    var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
+                    $("#admidio-password-strength .progress-bar").attr("aria-valuenow", result.score * 25);
+                    $("#admidio-password-strength .progress-bar").css("width", result.score * 25 + "%");
+                    $("#admidio-password-strength .progress-bar").removeClass("progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success");
+
+                    if(result.score == 1) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-danger");
+                    } else if(result.score == 2) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-warning");
+                    } else if(result.score == 3) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-info");
+                    } else if(result.score == 4) {
+                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-success");
+                    }
+                });
             });
 
             $("#password_form").submit(function(event) {
