@@ -440,59 +440,71 @@ else
         // Links for the participation only in html mode
         if($date->getValue('dat_rol_id') > 0 && $getViewMode === 'html')
         {
-            if($row['member_date_role'] > 0)
+            // If user is invited to the event then the approval state is not initialized and has value "null" in data table
+            if($row['member_date_role'] > 0 && $row['member_approval_state'] == null)
             {
-                $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
-
-                if ($getView === 'detail')
-                {
-                    $outputButtonParticipation = '
-                        <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</button>';
-                }
-                else
-                {
-                    $outputButtonParticipation = '
-                        <a class="admidio-icon-link" href="'.$buttonURL.'">
-                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'" /></a>';
-                }
+                $row['member_approval_state'] = '0';
             }
-            else
+
+            switch($row['member_approval_state'])
             {
-                $participationPossible = true;
+                case '0':
+                    $buttonText =  $gL10n->get('DAT_USER_INVITED');
+                    $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/warning.png" alt="'.$gL10n->get('DAT_USER_INVITED').'" title="'.$gL10n->get('DAT_USER_INVITED').'"/>';
+                    break;
+                case '1':
+                    $buttonText =  $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
+                    $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="'.$gL10n->get('DAT_USER_MAYBE_PARTICPATE').'" title="'.$gL10n->get('DAT_USER_MAYBE_PARTICPATE').'"/>';
+                    break;
+                case '2':
+                    $buttonText =  $gL10n->get('DAT_USER_ATTEND');
+                    $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_USER_ATTEND').'" title="'.$gL10n->get('DAT_USER_ATTEND').'"/>';
+                    break;
+                default:
+                    $buttonText =  $gL10n->get('DAT_ATTEND');
+                    $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'"/>';
+                    break;
+            }
 
-                if($date->getValue('dat_max_members'))
-                {
-                    // Check limit of participants
-                    if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
-                    {
-                        $participationPossible = false;
-                    }
-                }
+            if ($getView !== 'detail')
+            {
+                // Status text only in deteil view
+                $buttonText = '';
+            }
 
-                if($participationPossible)
-                {
-                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
+            $outputButtonParticipation = '<div class="btn-group" role="group">
+                                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
+                                                <span class="caret"></span>
+                                            </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id').'">
+                                                            <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'"/>'.$gL10n->get('DAT_ATTEND').'
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id='.$date->getValue('dat_id').'">
+                                                            <img src="'.THEME_URL.'/icons/help_violett.png" alt="'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'" title="'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'"/>'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">
+                                                            <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'"/>'.$gL10n->get('DAT_CANCEL').'
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>';
 
-                    if ($getView === 'detail')
-                    {
-                        $outputButtonParticipation = '
-                            <button class="btn btn-default" onclick="window.location.href=\''.$buttonURL.'\'">
-                                <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</button>';
-                    }
-                    else
-                    {
-                        $outputButtonParticipation = '
-                            <a class="admidio-icon-link" href="'.$buttonURL.'">
-                                <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'" /></a>';
-                    }
-                }
-                else
+            if($date->getValue('dat_max_members'))
+            {
+                // Check limit of participants
+                if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
                 {
                     $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                    $iconParticipationStatus = '';
                 }
             }
-
+            
             // Link to participants list
             if($gValidLogin && $gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id')))
             {

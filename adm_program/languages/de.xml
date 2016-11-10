@@ -39,6 +39,7 @@
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
     <string name="DAT_ATTEND_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
+    <string name="DAT_ATTEND_POSSIBLY">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
     <string name="DAT_CALENDAR">Kalender</string>
     <string name="DAT_CANCEL">Absagen</string>
     <string name="DAT_CANCEL_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
@@ -93,6 +94,9 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
+    <string name="DAT_USER_ATTEND">Ich nehme teil</string>
+    <string name="DAT_USER_ATTEND_POSSIBLY">Teilnahme unter Vorbehalt</string>
+    <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
@@ -690,7 +694,7 @@
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
-    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher/komplex Passwörter mindestens sein müssen.\nIn () die geschätzten Versuche bis geknackt.\n\nKeine: riskantes Passwort (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte online Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte online Angriffe. (&lt;10^8)\nHoch: Mäßiger schutz gegen offline-hashing Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen offline-hashing Angriffe. (&gt;=10^10)</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>

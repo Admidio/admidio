@@ -103,9 +103,10 @@ class TableMembers extends TableAccess
      * @param int  $roleId Assign the membership to this role
      * @param int  $userId The user who should get a member of the role.
      * @param bool $leader If value @b 1 then the user will be a leader of the role and get more rights.
+     * @param $approvalState Option for User to confirm and adjust the membership ( @b 1 = User confirmed membership but maybe disagreed, @b 2 = user accepted membership
      * @return bool Return @b true if the assignment was successful.
      */
-    public function startMembership($roleId = 0, $userId = 0, $leader = null)
+    public function startMembership($roleId = 0, $userId = 0, $leader = null, $approvalState = '')
     {
         global $gCurrentUser;
 
@@ -137,7 +138,13 @@ class TableMembers extends TableAccess
             }
 
             $this->setValue('mem_end', DATE_MAX);
-
+            
+            // User hat Rollenmitgliedschaft bestätigt bzw. angepasst
+            if ($approvalState > 0 && is_integer($approvalState))
+            {
+                $this->setValue('mem_approved', $approvalState);
+            }
+            
             if ($this->columnsValueChanged)
             {
                 $this->save();
