@@ -76,7 +76,7 @@ class FunctionClass
             return null;
         }
 
-        $fileHandle = @fopen($tplFolder.$tplFilename, 'r');
+        $fileHandle = @fopen($tplFolder.$tplFilename, 'rb');
         if ($fileHandle)
         {
             $fileData = '';

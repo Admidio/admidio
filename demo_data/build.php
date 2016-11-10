@@ -170,7 +170,7 @@ function readAndExecuteSQLFromFile($filename, &$database)
 {
     global $g_tbl_praefix, $gL10n;
 
-    $file = fopen($filename, 'r');
+    $file = fopen($filename, 'rb');
     if ($file === false)
     {
         exit('<p style="color: #cc0000;">File <strong>data.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');

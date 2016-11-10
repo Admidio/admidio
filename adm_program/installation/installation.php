@@ -597,7 +597,7 @@ elseif ($getMode === 6)  // Creating configuration file
 
     // read configuration file structure
     $filename          = 'config.php';
-    $configFileHandle  = fopen($filename, 'r');
+    $configFileHandle  = fopen($filename, 'rb');
     $configFileContent = fread($configFileHandle, filesize($filename));
     fclose($configFileHandle);
 
@@ -625,7 +625,7 @@ elseif ($getMode === 6)  // Creating configuration file
     $_SESSION['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
-    $configFileHandle = @fopen($pathConfigFile, 'a');
+    $configFileHandle = @fopen($pathConfigFile, 'ab');
 
     if ($configFileHandle)
     {

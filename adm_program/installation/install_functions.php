@@ -104,7 +104,7 @@ function querySqlFile($db, $sqlFileName)
         return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', $sqlFileName, $sqlPath);
     }
 
-    $fileHandler = fopen($sqlFilePath, 'r');
+    $fileHandler = fopen($sqlFilePath, 'rb');
 
     if ($fileHandler === false)
     {

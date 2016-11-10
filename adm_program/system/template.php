@@ -23,7 +23,7 @@ function admReadTemplateFile($filename)
     $file = ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/' . $filename;
     if (is_file($file))
     {
-        $fp = fopen($file, 'r');
+        $fp = fopen($file, 'rb');
         $str = '';
         while (!feof($fp))
         {

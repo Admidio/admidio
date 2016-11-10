@@ -236,7 +236,7 @@ elseif($getMode === 'upload')
         // Foto in PHP-Temp-Ordner übertragen
         $user_image->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
         // Foto aus PHP-Temp-Ordner einlesen
-        $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
+        $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'rb'), $_FILES['userfile']['size'][0]);
 
         // Zwischenspeichern des neuen Fotos in der Session
         $gCurrentSession->setValue('ses_binary', $user_image_data);
