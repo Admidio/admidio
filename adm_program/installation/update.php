@@ -75,6 +75,7 @@ catch (AdmException $e)
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
+    // => EXIT
 }
 
 // now check if a valid installation exists.
@@ -124,6 +125,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
             $gL10n->get('SYS_OVERVIEW'),
             'layout/application_view_list.png'
         );
+        // => EXIT
     }
 }
 
@@ -138,6 +140,7 @@ if ($message !== '')
         $gL10n->get('SYS_OVERVIEW'),
         'layout/application_view_list.png'
     );
+    // => EXIT
 }
 
 // read current version of Admidio database
@@ -193,6 +196,7 @@ if ($installedDbVersion === '')
         'layout/application_view_list.png',
         true
     );
+    // => EXIT
 }
 
 if ($getMode === 1)
@@ -257,6 +261,7 @@ if ($getMode === 1)
             'layout/application_view_list.png',
             true
         );
+        // => EXIT
     }
     // if source version smaller then database -> show error
     else
@@ -280,6 +285,7 @@ if ($getMode === 1)
             'layout/application_view_list.png',
             true
         );
+        // => EXIT
     }
 }
 elseif ($getMode === 2)
@@ -309,7 +315,9 @@ elseif ($getMode === 2)
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
                 </div>';
+
             showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+            // => EXIT
         }
         else
         {
@@ -329,13 +337,14 @@ elseif ($getMode === 2)
                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                         <strong>' . $checkLoginReturn . '</strong>
                     </div>';
+
                 showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+                // => EXIT
             }
-            // else continue with code below
         }
     }
 
-    // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
+    // setzt die Ausfuehrungszeit des Scripts auf 5 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
@@ -410,13 +419,7 @@ elseif ($getMode === 2)
                         }
                         else
                         {
-                            showNotice(
-                                $sqlQueryResult,
-                                'update.php',
-                                $gL10n->get('SYS_BACK'),
-                                'layout/back.png',
-                                true
-                            );
+                            showNotice($sqlQueryResult, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
                             // => EXIT
                         }
                     }
@@ -432,7 +435,7 @@ elseif ($getMode === 2)
 
                 // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
                 // solange bis die aktuelle Versionsnummer erreicht wurde
-                if (!$flagNextVersion && version_compare($versionMain.'.'.$versionMinor.'.'.$versionPatch, ADMIDIO_VERSION, '<'))
+                if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $versionPatch, ADMIDIO_VERSION, '<'))
                 {
                     if ($versionMinor === 4) // we do not have more then 4 subversions with old updater
                     {
@@ -457,7 +460,7 @@ elseif ($getMode === 2)
     if ($versionMain >= 3)
     {
         // set system user as current user, but this user only exists since version 3
-        $sql = 'SELECT usr_id FROM '.TBL_USERS.' WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\' ';
+        $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'' . $gL10n->get('SYS_SYSTEM') . '\'';
         $systemUserStatement = $gDb->query($sql);
 
         $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
@@ -490,9 +493,15 @@ elseif ($getMode === 2)
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful
-    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.php');
+    $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE . 'donate.php');
     $form->setUpdateModus();
-    $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />' . $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
+    $form->setFormDescription(
+        $gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT) . '<br /><br />' . $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'),
+        '<div class="alert alert-success form-alert">
+            <span class="glyphicon glyphicon-ok"></span>
+            <strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong>
+        </div>'
+    );
     $form->openButtonGroup();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
     $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
