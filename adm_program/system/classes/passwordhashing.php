@@ -296,8 +296,10 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => 12))
+    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => 10))
     {
+        global $gLogger;
+
         $time = 0;
         $results = array();
         $cost = $options['cost'];
@@ -335,6 +337,8 @@ class PasswordHashing
             $results = array('cost' => $cost, 'time' => $time);
             $cost += $costIncrement;
         }
+
+        $gLogger->notice('Benchmark: Password-hashing results.', $results);
 
         return $results;
     }

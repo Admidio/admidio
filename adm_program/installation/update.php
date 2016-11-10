@@ -359,12 +359,7 @@ elseif ($getMode === 2)
     require_once('db_scripts/preferences.php');
 
     // calculate the best cost value for your server performance
-    $cost = 10;
-    if (isset($gPreferences) && array_key_exists('system_hashing_cost', $gPreferences))
-    {
-        $cost = (int) $gPreferences['system_hashing_cost'];
-    }
-    $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm, array('cost' => $cost));
+    $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
     $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
