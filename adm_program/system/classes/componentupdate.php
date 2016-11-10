@@ -69,6 +69,13 @@ class ComponentUpdate extends Component
     {
         global $g_tbl_praefix, $gDbType;
 
+        // for backwards compatibility "postgresql"
+        $dbType = $gDbType;
+        if ($gDbType === 'postgresql')
+        {
+            $dbType = 'pgsql';
+        }
+
         $executeSql = true;
         $showError  = true;
 
@@ -78,7 +85,7 @@ class ComponentUpdate extends Component
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $gDbType)
+            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
             {
                 $executeSql = false;
             }
