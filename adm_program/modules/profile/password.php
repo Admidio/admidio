@@ -139,19 +139,13 @@ elseif($getMode === 'html')
 
                 $("#new_password").keyup(function(e) {
                     var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
-                    $("#admidio-password-strength .progress-bar").attr("aria-valuenow", result.score * 25);
-                    $("#admidio-password-strength .progress-bar").css("width", result.score * 25 + "%");
-                    $("#admidio-password-strength .progress-bar").removeClass("progress-bar-danger progress-bar-warning progress-bar-info progress-bar-success");
+                    var cssClasses = ["", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
 
-                    if(result.score == 1) {
-                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-danger");
-                    } else if(result.score == 2) {
-                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-warning");
-                    } else if(result.score == 3) {
-                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-info");
-                    } else if(result.score == 4) {
-                        $("#admidio-password-strength .progress-bar").addClass("progress-bar-success");
-                    }
+                    var progressBar = $("#admidio-password-strength .progress-bar");
+                    progressBar.attr("aria-valuenow", result.score * 25);
+                    progressBar.css("width", result.score * 25 + "%");
+                    progressBar.removeClass(cssClasses.join(" "));
+                    progressBar.addClass(cssClasses[result.score]);
                 });
             });
 
