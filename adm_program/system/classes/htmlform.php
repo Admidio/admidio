@@ -843,7 +843,7 @@ class HtmlForm extends HtmlFormBasic
 
                     $("#' . $id . '").keyup(function(e) {
                         var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
-                        var cssClasses = ["", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
+                        var cssClasses = ["progress-bar-danger", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
 
                         var progressBar = $("#admidio-password-strength .progress-bar");
                         progressBar.attr("aria-valuenow", result.score * 25);

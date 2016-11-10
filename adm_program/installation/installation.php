@@ -416,7 +416,7 @@ elseif($getMode === 5)  // Creating administrator
 
                 $("#user_password").keyup(function(e) {
                     var result = zxcvbn(e.target.value, ' . json_encode($userData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
-                    var cssClasses = ["", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
+                    var cssClasses = ["progress-bar-danger", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
 
                     var progressBar = $("#admidio-password-strength .progress-bar");
                     progressBar.attr("aria-valuenow", result.score * 25);
