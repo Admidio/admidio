@@ -16,12 +16,12 @@
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
- * countImages($pho_id = 0)    - Rekursive Funktion gibt die Anzahl aller Bilder
+ * countImages($phoId = 0)     - Rekursive Funktion gibt die Anzahl aller Bilder
  *                               inkl. der Unteralben zurueck
- * shuffleImage($pho_id = 0)   - Rekursive Funktion zum Auswaehlen eines
+ * shuffleImage($phoId = 0)    - Rekursive Funktion zum Auswaehlen eines
  *                               Beispielbildes aus einem moeglichst hohen Album
- * createFolder()      - erzeugt den entsprechenden Ordner unter adm_my_files/photos
- * deleteInDatabase($photo_id) - Rekursive Funktion die die uebergebene Veranstaltung
+ * createFolder()              - erzeugt den entsprechenden Ordner unter adm_my_files/photos
+ * deleteInDatabase($photoId)  - Rekursive Funktion die die uebergebene Veranstaltung
  *                               und alle Unterveranstaltungen loescht
  * deleteInFilesystem($folder) - Rekursive Funktion die alles innerhalb des uebergebenen
  *                               Ordners mit Unterordnern und allen Dateien loescht
