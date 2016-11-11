@@ -437,11 +437,11 @@ elseif (!isset($messageStatement))
 
     if($postListId > 0)
     {
-    	$preloadData = 'dummy';
-    	$showlist = new ListConfiguration($gDb, $postListId);
+        $preloadData = 'dummy';
+        $showlist = new ListConfiguration($gDb, $postListId);
         $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '' ));
         $form->addInput('userIdList', '', $postUserIdList, array('property' => FIELD_HIDDEN));
-       	$form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
+        $form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
     }
 
     // no roles or users found then show message

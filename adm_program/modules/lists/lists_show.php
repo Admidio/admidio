@@ -85,15 +85,15 @@ if ($numberRoles > 1)
 
     foreach ($rolesData as $role)
     {
-    	// check if user has right to view all roles
+        // check if user has right to view all roles
         if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
 
-      	// check if user has right to send mail to role
-    	if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
+        // check if user has right to send mail to role
+        if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
         {
             $showLinkMailToList = false;
             // => do not show the link
@@ -115,10 +115,10 @@ else
         // => EXIT
     }
 
-	// check if user has right to send mail to role
+    // check if user has right to send mail to role
     if (!$gCurrentUser->hasRightSendMailToRole($roleIds[0]))
     {
-    	$showLinkMailToList = false;
+        $showLinkMailToList = false;
         // => do not show the link
     }
 
@@ -390,8 +390,8 @@ if ($getMode !== 'csv')
             });
 
             $("#menu_item_mail_to_list").click(function () {
-            	$("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id : "'.$getListId.'", userIdList : "'.implode(',', $userIdList).'" } );
-            	return false;
+                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id : "'.$getListId.'", userIdList : "'.implode(',', $userIdList).'" } );
+                return false;
             });
 
             $("#menu_item_print_view").click(function () {
@@ -434,11 +434,11 @@ if ($getMode !== 'csv')
         {
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
-        	    $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
             }
             else
             {
-        	    $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
             }
         }
 
