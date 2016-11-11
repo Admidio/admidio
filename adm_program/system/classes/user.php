@@ -341,16 +341,18 @@ class User extends TableAccess
                 'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
             );
 
-            $this->clear();
-
             if ($this->getValue('usr_number_invalid') >= 3)
             {
                 $gLogger->warning('AUTHENTICATION: Maximum number of invalid login!', $loggingObject);
+
+                $this->clear();
 
                 return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
             }
 
             $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
+
+            $this->clear();
 
             return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         }
