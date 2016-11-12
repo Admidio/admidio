@@ -144,15 +144,15 @@ class FunctionClass
         $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
         $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
         // Hier wird der Empfaenger Name und Email ersetzt
-        $pregRepArray['/<%ecard_reciepient_email%>/']     = htmlentities($recipientEmail, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_reciepient_name%>/']      = htmlentities($recipientName, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_reciepient_email%>/']     = noHTML($recipientEmail);
+        $pregRepArray['/<%ecard_reciepient_name%>/']      = noHTML($recipientName);
         // Hier wird der Bildname ersetzt
         $pregRepArray['/<%ecard_image_name%>/']           = $imageName;
 
-        $pregRepArray['/<%ecard_greeting_card_from%>/']   = htmlentities($this->greetingCardFrom, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_greeting_card_string%>/'] = htmlentities($this->greetingCardString, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_to_string%>/']            = htmlentities($this->sendToString, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_email_string%>/']         = htmlentities($this->emailString, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_greeting_card_from%>/']   = noHTML($this->greetingCardFrom);
+        $pregRepArray['/<%ecard_greeting_card_string%>/'] = noHTML($this->greetingCardString);
+        $pregRepArray['/<%ecard_to_string%>/']            = noHTML($this->sendToString);
+        $pregRepArray['/<%ecard_email_string%>/']         = noHTML($this->emailString);
 
         // make html in description secure
         $ecardMessage = htmLawed(stripslashes($ecardMessage), array('safe' => 1));
