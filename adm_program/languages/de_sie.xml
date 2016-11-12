@@ -72,13 +72,15 @@
   <string name="DAT_MANAGE_CALENDARS">Kalender verwalten</string>
   <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
-  <string name="DAT_PARTICIPATE_AT_DATE">Am Termin als Organisator teilnehmen</string>
+  <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren machen.</string>
   <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2# </string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Keine Anmeldung mehr möglich.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
   <string name="DAT_REMOVE_APPLICATION">Wollen Sie die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmer können die Teilnehmerliste einsehen</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden </string>
   <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
   <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, zu vergeben, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
   <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
@@ -137,7 +139,7 @@
   <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
   <string name="DOW_NEW_NAME">Neuer Name</string>
   <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner #VAR1_BOLD# sehen und die Dateien herunterladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben.</string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Benutzer von Rollen mit der Berechtigung #VAR2_BOLD# haben immer alle Rechte für den Ordner.</string>
   <string name="DOW_SELECT_FILES">Dateien auswählen</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="DOW_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
@@ -159,8 +161,9 @@
   <string name="ECA_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</string>
   <string name="ECA_SUCCESSFULLY_SEND">Ihre Grußkarte wurde erfolgreich versendet.</string>
   <string name="ECA_TEMPLATE">Template</string>
-  <string name="ECA_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Standard: Postcard) </string>
+  <string name="ECA_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Standard: Postcard)</string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
+  <string name="ECA_TEMPLATE_FOLDER_OPEN">Template Ordner konnte nicht geöffnet/gelesen werden.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Zurück zum Gästebuch</string>
   <string name="GBO_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
@@ -200,6 +203,7 @@
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
   <string name="INS_ADDRESS_LIST">Adressliste</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Es sind nicht alle Daten für den Administrator eingegeben worden!</string>
+  <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Administrators ein.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Vorstand</string>
   <string name="INS_CHOOSE_LANGUAGE">Bitte wählen Sie eine Sprache aus</string>
@@ -213,6 +217,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Ihre Datenbank liegt in Version #VAR1# vor.\n\nEine Aktualisierung der Datenbank auf Version #VAR2# ist erforderlich.</string>
   <string name="INS_DATABASE_SYSTEM">Datenbanksystem</string>
+  <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzen Sie oder Ihr Webhoster einen speziellen Port, so kann dieser hier eingetragen werden. </string>
   <string name="INS_DELETE_CONFIG_FILE">Im Hauptverzeichnis von Admidio #VAR1_BOLD# existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Löschen Sie bitte diese Datei im Hauptverzeichnis.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Konfigurationsdatei herunterladen</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Geben Sie dem Ordner bitte Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder laden Sie die Konfigurationsdatei herunter und kopieren diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem Sie die Datei dort abgelegt haben, können Sie die Installation fortsetzen.</string>
@@ -229,7 +234,7 @@
   <string name="INS_DESCRIPTION_BOARD">Vorstand des Vereins</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle Mitglieder der Organisation</string>
-  <string name="INS_DESCRIPTION_WEBMASTER">Gruppe der Administratoren des Systems</string>
+  <string name="INS_DESCRIPTION_ADMINISTRATOR">Gruppe der Administratoren des Systems</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -276,9 +281,6 @@
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Die Aktualisierung war erfolgreich</string>
   <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="INS_WARNING_SAFE_MODE">Auf Ihrem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</string>
-  <string name="INS_WEBMASTER_LOGIN">Webmaster-Anmeldung</string>
-  <string name="INS_WEBMASTER_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Webmaster durchgeführt werden. Geben Sie an dieser Stelle bitte die Zugangsdaten eines Webmasters ein.</string>
-  <string name="INS_WEBMASTER_LOGIN_FAILED">Zu den eingegebenen Logindaten wurde kein Benutzer gefunden, der Mitglied einer Webmasterrolle ist.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
   <string name="INS_WELCOME_TEXT">Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung von Admidio eingeben werden. Sie benötigen dazu unter anderem die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen soll.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
@@ -290,26 +292,26 @@
   <string name="INS_BOYFRIEND">Freund</string>
   <string name="INS_BROTHER">Bruder</string>
   <string name="INS_CHILD">Kind</string>
-  <string name="INS_COHABITANT">Partnerin/Partner</string>
-  <string name="INS_COHABITANT_MALE">Partner</string>
+  <string name="INS_COHABITANT">Partner/-in</string>
+  <string name="INS_COHABITANT_MALE">Partner </string>
   <string name="INS_COHABITANT_FEMALE">Partnerin</string>
-  <string name="INS_COMPANION">Freundin/Freund</string>
+  <string name="INS_COMPANION">Freund/-in</string>
   <string name="INS_DAUGHTER">Tochter</string>
   <string name="INS_FATHER">Vater</string>
   <string name="INS_GIRLFRIEND">Freundin</string>
   <string name="INS_HUSBAND">Ehemann</string>
   <string name="INS_MOTHER">Mutter</string>
   <string name="INS_PARENT">Elternteil</string>
-  <string name="INS_SUBORDINATE">Untergebene/Untergebener</string>
+  <string name="INS_SUBORDINATE">Untergebene/-r</string>
   <string name="INS_SUBORDINATE_MALE">Untergebener</string>
   <string name="INS_SUBORDINATE_FEMALE">Untergebene</string>
-  <string name="INS_SUPERIOR">Vorgesetze/Vorgesetzter</string>
+  <string name="INS_SUPERIOR">Vorgesetze/-r</string>
   <string name="INS_SUPERIOR_MALE">Vorgesetzer</string>
   <string name="INS_SUPERIOR_FEMALE">Vorgesetzte</string>
   <string name="INS_SIBLING">Geschwister</string>
   <string name="INS_SISTER">Schwester</string>
   <string name="INS_SON">Sohn</string>
-  <string name="INS_SPOUSE">Ehepartnerin/Ehepartner</string>
+  <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
   <!--Phrases only in Inventorymodule-->
   <string name="INV_CREATE_ITEM">Neuer Artikel</string>
@@ -358,6 +360,7 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
   <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
+  <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
@@ -383,7 +386,7 @@
   <string name="LST_MEMBERSHIP_END">Mitgliedschaftsende</string>
   <string name="LST_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="LST_MUST_HAVE_WEBMASTER">Die Rolle Webmaster muss mindestens ein Mitglied haben!</string>
+  <string name="LST_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator muss mindestens ein Mitglied haben!</string>
   <string name="LST_MY_LIST">Eigene Liste</string>
   <string name="LST_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach Ihren Bedingungen eingeschränkt.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Konfiguration wird zur neuen Standardkonfiguration</string>
@@ -397,7 +400,7 @@
   <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
   <string name="LST_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
-  <string name="LST_PRESET_CONFIGURATION_DESC">Als Webmaster können Sie Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfigurieren Sie die entsprechenden Spalten und Bedingungen und speichern Sie diese unter dem gewünschten Namen.</string>
+  <string name="LST_PRESET_CONFIGURATION_DESC">Als Administrator können Sie Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfigurieren Sie die entsprechenden Spalten und Bedingungen und speichern Sie diese unter dem gewünschten Namen.</string>
   <string name="LST_PRINT_PREVIEW">Druckvorschau</string>
   <string name="LST_ROLE_INFORMATION">Rolleninformationen</string>
   <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Mitglieder im Zeitraum:</string>
@@ -455,6 +458,7 @@
   <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# hat an die ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# hat an die aktiven und ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# hat Ihnen von #VAR2# folgende E-Mail geschickt:</string>
+  <string name="MAI_HIDDEN">Versteckt </string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
   <string name="MAI_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
@@ -464,15 +468,16 @@
   <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden</string>
   <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES">Empfänger bei Rollen</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit \"Undisclosed Recipients\" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse, bzw. der Administratoradresse, aus den Systembenachrichtigungen gefüllt werden. Alle Emails an beliebige Rollen werden dann allerdings auch an diese Empfänger zusätzlich geschickt. Die Rollenmitglieder werden dabei weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</string>
   <string name="MAI_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="MAI_SEND_EMAIL">E-Mail senden</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen und Empfänger zur Verfügung, an die Sie E-Mails schreiben können.</string>
   <string name="MAI_SEND_METHOD">Versandmethode</string>
   <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfohlen wird daher in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
+  <string name="MAI_SENDER">Absender</string>
   <string name="MAI_SENDER_EMAIL">Absender Mailadresse</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
-  <string name="MAI_SENDER_INTO_TO">Absender als Adressat</string>
-  <string name="MAI_SENDER_INTO_TO_DESC">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</string>
   <string name="MAI_SENDER_NAME">Name des Absenders</string>
   <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten Versandmailadresse.</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
@@ -519,7 +524,7 @@
   <string name="MEM_DUPLICATE">Duplizieren</string>
   <string name="MEM_EDIT_USER">Benutzer bearbeiten</string>
   <string name="MEM_ENABLE_USER_RELATIONS">Beziehungen pflegen und anzeigen</string>
-  <string name="MEM_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen Benutzer gepflegt und angezeigt werden. (Standard: ja)</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">Wenn diese Einstellung gesetzt ist, können Beziehungen zwischen den Benutzern gepflegt und angezeigt werden. (Standard: ja)</string>
   <string name="MEM_EXISTING_USERS">Existierende Benutzer</string>
   <string name="MEM_FILE_COLUMN">Dateispalte</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
@@ -554,7 +559,7 @@
   <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
-  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</string>
+  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank lädt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 Meldung werden die ersten 50 wieder gelöscht.</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Private Nachrichten aktivieren</string>
   <string name="MSG_ACTIVATE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Aktiviert)</string>
   <string name="MSG_ACTIVE_FORMER_SHORT">Aktive und ehemalige</string>
@@ -595,10 +600,10 @@
   <string name="NWU_USER_VALID_LOGIN">Dieser Benutzer besitzt schon ein gültiges Login.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systembenachrichtigungen aktivieren</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein neuer Benutzer angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden, es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
+  <string name="ORG_ADD_ORGANIZATION_DESC">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Administrator ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</string>
@@ -608,25 +613,29 @@
   <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Nach Aktivierung wird Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
-  <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Hintergrundbild</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">Es kann ein Hintergrundbild ausgewählt werden, welches als Grundlage für das Captcha-Bild dient. Die Farben der Zeichen sollten dann so darauf abgestimmt werden, dass das Captcha weiterhin lesbar ist. (Standard: kein Bild)</string>
+  <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Zeichenfarbe</string>
+  <string name="ORG_CAPTCHA_COLOR_DESC">Die Hintergrundfarbe sollte sich von der Zeichenfarbe absetzen. Sind Linienfarbe und Zeichenfarbe identisch ist es für Skripte und Bots schwieriger das Captcha zu lösen. Die einzelnen Farben müssen als #VAR1#hexadezimaler Wert#VAR2# angegeben werden.</string>
+  <string name="ORG_CAPTCHA_DISTORTION">Verzerrung</string>
+  <string name="ORG_CAPTCHA_DISTORTION_DESC">Dieser Wert gibt an, wie stark die Zeichen verzerrt werden sollen. 0 bedeutet keine Verzerrung, 3 ist bereits eine so starke Verzerrung, dass einzelne Zeichen nicht mehr erkannt werden können. (Standard: 0.75)</string>
   <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</string>
-  <string name="ORG_CAPTCHA_FONT_SIZE">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (Standard: 20)</string>
-  <string name="ORG_CAPTCHA_HEIGHT">Captcha-Höhe</string>
-  <string name="ORG_CAPTCHA_HEIGHT_DESC">Angabe der Höhe des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Breite des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 60)</string>
+  <string name="ORG_CAPTCHA_LINE_COLOR">Linienfarbe</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS">Anzahl Linien</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Die Linien auf dem Captcha sollen es Skripten/Bots erschweren diese zu lösen. Je mehr Linien gezeichnet werden, desto schwieriger ist es dieses zu lösen. Leider gilt dies aber auch für Menschen. (Standard: 5)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha-Vorschau</string>
-  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</string>
+  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Die Captcha-Vorschau berücksichtigt nur die bereits gespeicherten Einstellungen.</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha Untertitel</string>
-  <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (Standard: 13)</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Zulässige Captcha-Zeichen</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</string>
+  <string name="ORG_CAPTCHA_SIGNS">Zulässige Zeichen</string>
+  <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden. Zeichen, welche leicht verwechselt werden können, wie z.B. l oder I sollten dabei vermieden werden.</string>
   <string name="ORG_CAPTCHA_TYPE">Captcha Art</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Rechenaufgabe</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Bildchen</string>
-  <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (Standard: Bildchen)</string>
-  <string name="ORG_CAPTCHA_WIDTH">Captcha-Breite</string>
-  <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Höhe des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 250)</string>
+  <string name="ORG_CAPTCHA_TYPE_PIC">Zufällige Zeichen</string>
+  <string name="ORG_CAPTCHA_TYPE_WORDS">Wörter (englisch)</string>
+  <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha wird als Bild angezeigt und kann aus zufälligen Zeichen, aus einer kleinen Rechenaufgabe oder aus 2 Wörtern bestehen. Mit den weiteren Einstellungen kann das Bild angepasst werden. (Standard: Zufällige Zeichen)</string>
+  <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite in Pixel des Captcha-Bildes. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Standard: 215)</string>
   <string name="ORG_CONFIRM_REGISTRATION">Bestätigung der Anmeldung nach der manuellen Freigabe</string>
   <string name="ORG_CREATE_ITEM_FIELD">Neues Artikelfeld</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Profilfeld anlegen</string>
@@ -640,8 +649,8 @@
   <string name="ORG_EMAIL_ALERTS">E-Mail-Benachrichtigung</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">RSS-Feeds aktivieren</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
   <string name="ORG_FAST_REGISTRATION">Schnelle Registrierung</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht #VAR1_BOLD# editierbar</string>
@@ -672,7 +681,7 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Neues Passwort mit Aktivierungslink</string>
   <string name="ORG_NO_FIELD_CREATED">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
-  <string name="ORG_NOTIFY_WEBMASTER">Benachrichtung des Webmasters nach einer Registrierung</string>
+  <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung des Administrators nach einer Registrierung</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer</string>
@@ -680,6 +689,13 @@
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Hier können Sie die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit </string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier können Sie festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoch</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Sehr hoch</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profilfelder</string>
   <string name="ORG_REFUSE_REGISTRATION">Benachrichtigung bei einer Ablehnung der Registrierung</string>
@@ -704,13 +720,14 @@
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse #VAR1# versendet. (Standard: nein)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
+  <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Standard: H:i)</string>
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Werteliste</string>
-  <string name="ORG_VALUE_LIST_DESC">In diesem Feld können Sie die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
+  <string name="ORG_VALUE_LIST_DESC">In diesem Feld können Sie die Einträge für das Dropdown-Listenfeld oder, das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so sehen alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Theme Ordner (Bsp.: ok.png) oder die URL eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
   <string name="ORG_VARIABLE_EMAIL">E-Mail des Benutzers aus dem jeweiligen Mailkontext</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Systememailadresse der Organisation</string>
@@ -842,10 +859,10 @@
   <string name="PRO_MY_PROFILE">Mein Profil</string>
   <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
   <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
-  <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wenden Sie sich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</string>
+  <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wenden Sie sich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
   <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen Ihnen die Rechte bestimmte Rollen zu sehen.</string>
   <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke Ihres gewählten Passworts wird Ihnen farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt Ihnen der Pfeil im Balken an.</string>
   <string name="PRO_PASSWORD_LENGTH">Das Passwort muss aus mindestens 8 Zeichen bestehen.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Das alte Passwort ist falsch.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
@@ -880,12 +897,12 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Es werden Ihnen hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls Sie auch Mitglied dieser Organisation sind, werden Ihnen zusätzlich die Rollen angezeigt, die Sie mit Ihren Rechten innerhalb der jeweiligen Organisation sehen dürfen.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <string name="PRO_YEARS">Jahre</string>
-  <!-- Phrases only in Relationssmodule -->
+  <!--Phrases only in Relationssmodule-->
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
+  <string name="REL_USER_RELATION_TYPE_DEL">Wollen Sie den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
+  <string name="REL_USER_RELATION_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen, z.B. für Geschwister, verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
   <string name="REL_USER_RELATION_TYPE_FORWARD">Vorwärts</string>
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
@@ -933,9 +950,10 @@
   <string name="ROL_RIGHT_ASSIGN_ROLES">Rollen verwalten und zuordnen</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.</string>
   <string name="ROL_RIGHT_DATES">Termine anlegen und bearbeiten</string>
-  <string name="ROL_RIGHT_DOWNLOAD">Downloads hochladen und bearbeiten</string>
+  <string name="ROL_RIGHT_DOWNLOAD">Downloads verwalten</string>
+  <string name="ROL_RIGHT_DOWNLOAD_DESC">Rollen mit dieser Berechtigung können im Downloadmodul die Rechte vergeben, welche Rollen welche Ordner sehen oder Dateien hochladen dürfen.</string>
   <string name="ROL_RIGHT_EDIT_USER">Profildaten aller Benutzer bearbeiten</string>
-  <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen, die diese Option aktiviert haben, haben die Berechtigung alle Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
+  <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Benutzerdaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
   <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
@@ -989,6 +1007,7 @@
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
+  <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALSO_VISITORS">auch Besucher</string>
@@ -1001,13 +1020,8 @@
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Ergebnis der Rechnung</string>
-  <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergbenis der Rechnung wurde falsch eingegeben.</string>
+  <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergebnis der Rechnung wurde falsch eingegeben.</string>
   <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Bei der Rechenaufgabe handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Rechenaufgabe wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage die Lösung der Rechenaufgabe in das Formularfeld ein.</string>
-  <string name="SYS_CAPTCHA_CALC_PART1">Bitte berechne</string>
-  <string name="SYS_CAPTCHA_CALC_PART2">und zähle</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_THIRD">ein Drittel von</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_HALF">die Hälfte von</string>
-  <string name="SYS_CAPTCHA_CALC_PART4">dazu.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Der Bestätigungscode wurde falsch eingegeben.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bestätigungscode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
@@ -1041,6 +1055,7 @@
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
   <string name="SYS_CREATE">Anlegen</string>
+  <string name="SYS_CREATE_ENTRY">Eintrag anlegen</string>
   <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</string>
@@ -1052,6 +1067,7 @@
   <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
   <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Datenbank-Version</string>
+  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühren Sie bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_DATE">Datum</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</string>
@@ -1075,6 +1091,7 @@
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
   <string name="SYS_EDIT">Bearbeiten</string>
+  <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
@@ -1103,28 +1120,33 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
+  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
   <string name="SYS_FROM">ab #VAR1#</string>
   <string name="SYS_FROM_TO">vom #VAR1# bis #VAR2#</string>
   <string name="SYS_FOLDER">Ordner</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den #VAR2#Webmaster#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an den #VAR2#Webmaster#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
+  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
   <string name="SYS_FONT">Schriftart</string>
-  <string name="SYS_FONT_SIZE">Schriftgröße</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
   <string name="SYS_FRIDAY">Freitag</string>
   <string name="SYS_FULL_SCREEN">Vollbild</string>
   <string name="SYS_GENDER">Geschlecht</string>
+  <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zeichenkette aufgetreten.</string>
+  <string name="SYS_GEN_RANDOM_FAIL">Das Programm kann keine zufällige Zeichenkette erzeugen.</string>
+  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
+  <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
   <string name="SYS_HEADLINE">Überschrift</string>
   <string name="SYS_HELP">Hilfe</string>
   <string name="SYS_HIDE">Ausblenden</string>
   <string name="SYS_HOMEPAGE">Startseite</string>
-  <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Webmaster deaktiviert.</string>
+  <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_IMPORTANT">Wichtig</string>
   <string name="SYS_INACTIVE">Inaktiv</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
@@ -1149,8 +1171,8 @@
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Sie haben mehrmals innerhalb kurzer Zeit versucht, sich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist Ihr Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Ihre Anmeldung wurde noch nicht freigeschaltet.\n\nSie werden benachrichtigt, sobald Ihre Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings sind Sie kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
-  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Webmaster der Organisation #VAR1_BOLD# freigeschaltet.</string>
+  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Anmeldedaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administratoren der Organisation #VAR1_BOLD# freigeschaltet.</string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings sind Sie kein aktives Mitglied dieser Organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Benutzername und/oder das Passwort ist falsch.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGIN_SUCCESSFUL">Sie haben sich erfolgreich angemeldet.</string>
@@ -1179,7 +1201,6 @@
   <string name="SYS_MESSAGES">Nachrichten</string>
   <string name="SYS_MINUTES">Minuten</string>
   <string name="SYS_MOBILE">Handy</string>
-  <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">Dieses Modul kann nur von der Organisation genutzt werden, die in der config.php hinterlegt ist. Dies ist die Organisation #VAR1#.</string>
   <string name="SYS_MODULE_DISABLED">Dieses Modul ist nicht freigegeben.</string>
   <string name="SYS_MODULE_PREFERENCES">Moduleinstellungen</string>
   <string name="SYS_MODULES">Module</string>
@@ -1232,6 +1253,7 @@
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
   <string name="SYS_PLEASE_WAIT">Bitte warten</string>
   <string name="SYS_PM">Private Nachricht</string>
+  <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Hochformat</string>
   <string name="SYS_POST_MAX_SIZE">max. POST-Größe</string>
   <string name="SYS_POSTCODE">PLZ</string>
@@ -1247,9 +1269,11 @@
   <string name="SYS_QUANTITY">Menge</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
   <string name="SYS_RECIPIENT">Empfänger</string>
+  <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist ungültig.</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
   <string name="SYS_REGISTRATION_SAVED">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</string>
+  <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMOVE">Entfernen</string>
   <string name="SYS_REPEAT">Wiederholen</string>
@@ -1259,8 +1283,8 @@
   <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Raum</string>
-  <string name="SYS_RSS_DISABLED">Die RSS-Funktion wurde vom Webmaster deaktiviert.</string>
-  <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed für #VAR1#</string>
+  <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
+  <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">problematisch bei Dateiuploads</string>
   <string name="SYS_SATURDAY">Samstag</string>
@@ -1287,15 +1311,16 @@
   <string name="SYS_SIZE">Größe</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
+  <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name# #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Webmaster #webmaster_email# von #organization_homepage#.\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten Sie noch Fragen haben, schreiben Sie bitte eine E-Mail an #webmaster_email# .\n\nMit freundlichen Grüßen\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name# #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten Sie noch Fragen haben, schreiben Sie bitte eine E-Mail an #administrator_email# .\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname: #user_first_name#\nE-Mail: #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
   <string name="SYS_TEXT">Text</string>
@@ -1334,10 +1359,9 @@
   <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
   <string name="SYS_WARNING">Warnung</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
-  <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühren Sie bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
-  <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_WEBSITE">Webseite</string>
   <string name="SYS_WEDNESDAY">Mittwoch</string>
   <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
+  <string name="SYS_WIDTH">Breite</string>
   <string name="SYS_YES">Ja</string>
 </resources>
