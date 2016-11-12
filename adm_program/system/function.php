@@ -860,3 +860,20 @@ function admRedirect($url, $statusCode = 303)
     header('Location: ' . $redirectUrl, true, $statusCode);
     exit();
 }
+
+/**
+ * Escape all HTML, JavaScript, and CSS
+ * @param string $input    The input string
+ * @param string $encoding Define character encoding tue use
+ * @return string Escaped string
+ */
+function noHTML($input, $encoding = 'UTF-8')
+{
+    // backwards compatibility for PHP-Version < 5.4
+    if (!defined('ENT_HTML5'))
+    {
+        return htmlentities($input, ENT_QUOTES, $encoding);
+    }
+
+    return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+}
