@@ -140,7 +140,7 @@ $num_guestbook = (int) $pdoStatement->fetchColumn();
 // Anzahl Gaestebucheintraege pro Seite
 if($gPreferences['guestbook_entries_per_page'] > 0)
 {
-    $guestbook_entries_per_page = $gPreferences['guestbook_entries_per_page'];
+    $guestbook_entries_per_page = (int) $gPreferences['guestbook_entries_per_page'];
 }
 else
 {

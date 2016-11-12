@@ -70,7 +70,7 @@ if($gPreferences['enable_rss'] == 1)
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)
 {
-    $announcementsPerPage = $gPreferences['announcements_per_page'];
+    $announcementsPerPage = (int) $gPreferences['announcements_per_page'];
 }
 else
 {

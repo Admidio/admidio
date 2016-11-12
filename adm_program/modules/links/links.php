@@ -45,7 +45,7 @@ $weblinksCount = $weblinks->getDataSetCount();
 // number of weblinks per page
 if($gPreferences['weblinks_per_page'] > 0)
 {
-    $weblinksPerPage = $gPreferences['weblinks_per_page'];
+    $weblinksPerPage = (int) $gPreferences['weblinks_per_page'];
 }
 else
 {

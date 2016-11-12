@@ -82,7 +82,7 @@ if($getCatId > 0)
 // Number of events each page for default view 'html' or 'compact' view
 if($gPreferences['dates_per_page'] > 0 && $getViewMode === 'html')
 {
-    $datesPerPage = $gPreferences['dates_per_page'];
+    $datesPerPage = (int) $gPreferences['dates_per_page'];
 }
 else
 {
