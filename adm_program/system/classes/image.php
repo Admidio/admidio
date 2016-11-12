@@ -303,8 +303,20 @@ class Image
             @ini_set('memory_limit', '50M');
         }
 
-        // create new resized image
-        $resizedImageResource = imagescale($this->imageResource, $newXSize, $newYSize);
+        if (version_compare(PHP_VERSION, '5.5.0', '>='))
+        {
+            // create new resized image
+            $resizedImageResource = imagescale($this->imageResource, $newXSize, $newYSize);
+        }
+        else // backwards compatibility for PHP-Version < 5.5
+        {
+            // create a new image
+            $resizedImageResource = imagecreatetruecolor($newXSize, $newYSize);
+
+            // copy image data to a new image with the new given size
+            imagecopyresampled($resizedImageResource, $this->imageResource, 0, 0, 0, 0, $newXSize, $newYSize, $this->imageWidth, $this->imageHeight);
+        }
+
         imagedestroy($this->imageResource);
 
         // update the class parameters to new image data
