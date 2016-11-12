@@ -121,7 +121,6 @@
   <string name="ECA_RECIPIENT_NAME">Nom du destinataire</string>
   <string name="ECA_SUCCESSFULLY_SEND">Votre carte de voeux a été envoyé.</string>
   <string name="ECA_TEMPLATE">Modèle standard. (par défaut: Lettre standard)</string>
-  <string name="ECA_TEMPLATE_DESC">Définir un modèle standard. (par défaut: Postcard)</string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Afficher la grandeur réelle</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Retour au livre d\'or</string>
@@ -180,7 +179,6 @@
   <string name="INS_DESCRIPTION_BOARD">Tableau administratif des associations</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Les rencontres peuvent prendre place ici. La salle doit d\'abord être réservé avant la rencontre.</string>
   <string name="INS_DESCRIPTION_MEMBER">Tous les membres de l\'organisation</string>
-  <string name="INS_DESCRIPTION_WEBMASTER">Groupe des administrateurs du système</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Entrer les informations d\'accès à la base de données</string>
   <string name="INS_ERROR_OPEN_FILE">Le fichier #VAR1_BOLD# n\'a pu être ouvert.</string>
   <string name="INS_FOLDER_NOT_WRITABLE">Le dossier #VAR1_BOLD# n\'a pas les droits d\'écriture. Veuillez accorder les droits d\'écriture au dossier afin de pouvoir télécharger des photos et fichiers au module de téléchargement.</string>
@@ -272,7 +270,6 @@
   <string name="LST_MEMBERSHIP_END">Fin de l\'adhésion</string>
   <string name="LST_MEMBERSHIP_START">Début de l\'adhésion</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="LST_MUST_HAVE_WEBMASTER">Au moins un membre doit être assigné au rôle d\'administrateur !</string>
   <string name="LST_MY_LIST">Liste possédée</string>
   <string name="LST_MYLIST_CONDITION_DESC">Définir les champs requis pour la nouvelle liste de configuration. Les prérequis du rôle sélectionné seront limité par vos propre prérequis.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">La configuration sera défini comme configuration par défaut</string>
@@ -282,7 +279,6 @@
   <string name="LST_NO_RIGHTS_VIEW_LIST">Vous n\'êtes pas autorisé à afficher la liste des rôles.</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Nombre de rôle par page</string>
   <string name="LST_PRESET_CONFIGURATION">Configuration par défaut</string>
-  <string name="LST_PRESET_CONFIGURATION_DESC">En tant qu\'administrateur, vous êtes capable de définir la configuration par défaut de tous les utilisateurs. Configurez les colonnes et les conditions et enregistrez-les en leur donnant un nom.</string>
   <string name="LST_PRINT_PREVIEW">Afficher l\'aperçu</string>
   <string name="LST_ROLE_INFORMATION">Informations du rôle</string>
   <string name="LST_ROLE_MEMBERSHIP_TO">à</string>
@@ -387,7 +383,6 @@
   <string name="NWU_USER_VALID_LOGIN">L\'utilisateur possède déjà les informations de connexion valides.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module d\'accès</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Le module peut être désactivée ou activée pour les utilisateurs connectés uniquement. Si le module est accessible uniquement aux utilisateurs connectés, il sera caché pour les utilisateurs déconnectés et flux RSS seront complètement désactivés pour les deux groupes d\'utilisateurs. (par défaut: activé)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Les variables supplémentaires</string>
   <string name="ORG_ADMIDIO_THEME">Thèmes Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Sélectionnez la disposition des Admidio. Tous les thèmes enregistrés dans le dossier adm_themes sont montrées. (par défaut: moderne)</string>
@@ -397,21 +392,13 @@
   <string name="ORG_BROWSER_UPDATE_CHECK">Message de mis à jour concernant navigateur désuet</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Après l\'activation les utilisateurs de navigateurs désuet devraient effectuer une mise à jour du navigateur. Des nouveaux navigateurs protègent contre la fraude, les virus, les chevaux de Troie, le vol d\'identité et les autres menaces qui mettent en péril votre vie privée et la sécurité. Chaque nouvelle génération de navigateurs améliore la vitesse et prend en charge des nouvelles technologies web. Pour cela les sites peuvent être présentés mieux. A cet effet, le service de https://browser-update.org/ est utilisé.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Couleur de fond</string>
-  <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Sélectionnez la couleur de fond (comme hex) pour le code crypté. (par défaut: # FFEFC4)</string>
   <string name="ORG_CAPTCHA_FONT">Sélectionnez le type de police pour le code crypté. (par défaut: Thème de la police)</string>
-  <string name="ORG_CAPTCHA_FONT_SIZE">Sélectionnez la taille de police pour le code crypté. (par défaut: 20)</string>
   <string name="ORG_CAPTCHA_PREVIEW">aperçu Captcha</string>
-  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Afficher un aperçu de captcha. S\'il vous plaît noter que seules les valeurs enregistrées sont considérées !</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Après l\'activation une image avec un code captcha ou un simple calcul sera affiché pour les nouveaux utilisateurs. Il est nécessaire de remplir le bon code ou le résultat. Le captcha est une partie de solution anti-spam dans Admidio. (par défaut: oui)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">signature Captcha</string>
-  <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Sélectionnez la taille de police pour la signature captcha. (par défaut: 13)</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Remplissez votre signature préférée pour le captcha. Le type de police par défaut du thème courant sera utilisé.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Caractères acceptés</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Remplissez les caractères acceptés pour le captcha.</string>
   <string name="ORG_CAPTCHA_TYPE">Type du captcha</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Calcul</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Image</string>
-  <string name="ORG_CAPTCHA_TYPE_TEXT">Sélectionnez le type de captcha. Choisissez entre l\'affichage du captcha comme une image ou un simple calcul sous forme de texte. (par défaut: image)</string>
   <string name="ORG_CONFIRM_REGISTRATION">Une confirmation d\'inscription après confirmation manuelle.</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Créer champ de profil</string>
   <string name="ORG_CURRENCY">Devises</string>
@@ -423,8 +410,6 @@
   <string name="ORG_EMAIL_ALERTS">E-mail d\'alerte</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Tous les membres de tous les rôles avec la permission #VAR1_BOLD# recevront des e-mail en cas d\'inscription de nouvel utilisateur. (par défaut: oui)</string>
   <string name="ORG_ENABLE_CAPTCHA">Activation du captcha</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Activation des flux RSS</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio est capable de fournir un service de flux RSS de plusieurs modules (annonces, rendez-vous, livre d\'or, galerie de photos et de liens Internet) sur la page d\'aperçu pour chaque module. L\'abonnement est possible par le navigateur ou lecteur de flux. (par défaut: oui)</string>
   <string name="ORG_FAST_REGISTRATION">inscription rapide</string>
   <string name="ORG_FIELD_DESCRIPTION">Définir illimitée des champs supplémentaires. Les champs seront affichés et peuvent être édités dans le profil utilisateur. Ces champs seront disponibles en propre liste, aussi.</string>
   <string name="ORG_FIELD_DOWN">Déplacer champ de profil bas</string>
@@ -444,7 +429,6 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Nouveau mot de passe et un lien d\'activation.</string>
   <string name="ORG_NO_FIELD_CREATED">Aucun champ d\'organisation spécifique ont été éviscérées encore!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">En changeant l\'affichage, toutes les modifications non sauvegardées sont perdues.</string>
-  <string name="ORG_NOTIFY_WEBMASTER">Informer l\'administrateur des nouveaux enregistrements</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Nombre d\'entrées par page</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Définir le nombre d\'éléments affichés sur une page. La pagination est fournie si nombre d\'éléments dépasse la valeur définie. Aperçu avant impression et la fonctionnalité d\'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront cotées et la pagination est désactivée. (Par défaut: 10)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Pour les utilisateurs connectés uniquement</string>
@@ -554,7 +538,6 @@
   <string name="PRO_NEW_PASSWORD">Nouveau mot de passe</string>
   <string name="PRO_NEW_PICTURE">Photo de profil Nouvelle</string>
   <string name="PRO_PASSWORD_CHANGED">Le mot de passe a été changé avec succès.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Le mot de passe doit avoir au moins 8 caractères incluant des chiffres, lettres et caractères spéciaux. Pour des raisons de sécurité, quand mot de passe est enregistré, il ne peut plus être vu.</string>
   <string name="PRO_PASSWORD_LENGTH">Le mot de passe doit comporter au moins 8 caractères.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">L\'ancien mot de passe est incorrect.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Les mots de passe original et retapé sont différents.</string>
@@ -587,6 +570,7 @@
   <string name="PRO_USERNAME_DESCRIPTION">Vous serez capable de vous connecter avec ce nom d\'utilisateur. \n\nCe nom doit être bien défini. Si le nom choisi n\'est plus disponible, s\'il vous plaît essayer d\'utiliser des combinaisons comme Andi78 ou steve.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Voulez-vous supprimer la photo sélectionnée?</string>
   <string name="PRO_YEARS">Années</string>
+  <!--Phrases only in Relationssmodule-->
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Rôles actifs</string>
   <string name="ROL_ALL_GUESTS">Tous les invités du site</string>
@@ -614,9 +598,7 @@
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organiser et attribuer des rôles</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Les utilisateurs du rôle actuel sont autorisés à administrer et à créer des rôles et d\'attribuer des rôles aux utilisateurs.</string>
   <string name="ROL_RIGHT_DATES">Créer et éditer des événements</string>
-  <string name="ROL_RIGHT_DOWNLOAD">Téléverser et modifier les téléchargements</string>
   <string name="ROL_RIGHT_EDIT_USER">Modifier le profil de tous les utilisateurs</string>
-  <string name="ROL_RIGHT_EDIT_USER_DESC">Les rôles avec cette option activée sont autorisés à administrer toutes les informations sur l\'utilisateur (à l\'exception des mots de passe) des autres membres. \nDe plus, ils sont en mesure d\'accéder au panneau d\'administration des utilisateurs afin créer de nouveaux utilisateurs ou de supprimer les anciens utilisateurs.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Modifier et supprimer des entrées du livre d\'or</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Créer un commentaires du livre d\'or</string>
   <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Définir qui devrait être en mesure d\'envoyer des messages à ce rôle en utilisant le module électronique. Autorisation du rôle #VAR1_BOLD# est de configuration parents du niveau d\'autorisation actuelle.</string>
@@ -680,13 +662,7 @@
   <string name="SYS_BIRTHDAY">Anniversaire</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Résultat du calcul</string>
-  <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Code Captcha invalide. Essayez à nouveau!</string>
   <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Le calcul fait partie d\'un captcha. Un captcha est utilisé pour la prévention du spam. Le calcul est utilisée pour détecter si un utilisateur ou un script (ou spambot) rempli le formulaire. \nVeuillez remplir le résultat du calcul dans le formulaire.</string>
-  <string name="SYS_CAPTCHA_CALC_PART1">S\'il vous plaît calculer</string>
-  <string name="SYS_CAPTCHA_CALC_PART2">et ajouter</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_THIRD">tiers des</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_HALF">la moitié de</string>
-  <string name="SYS_CAPTCHA_CALC_PART4">.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Le code d\'authentification est invalide.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Code d\'authentification</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">L\'authentification de code fait partie d\'un captcha. Un captcha est utilisé pour la détection de spam. L\'image est utilisée pour détecter si un utilisateur ou un script (ou spambot) rempli le formulaire. \nVeuillez remplir le résultat du code d\'authentification dans le formulaire.</string>
@@ -756,12 +732,9 @@
   <string name="SYS_FIRSTNAME">Prénom</string>
   <string name="SYS_FROM_TO">#VAR1# vers #VAR2#</string>
   <string name="SYS_FOLDER">Dossier</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut être créé. \n\nVeuillez demandez à l\'administrateur #VAR2# #VAR3# de vous aider à vérifier les autorisations d\'écriture du dossier parent.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Les dossiers #VAR1_BOLD# ne peuvent pas être créés, y compris les permissions d\'écriture. \n\nVeuillez demandez à l\'administrateur #VAR2# #VAR3# de l\'aide afin de vérifier les permissions d\'écriture (en utilisant les attributs de fichier FTP changer à 0777 ou drwxrwxrwx).</string>
   <string name="SYS_FORMER">Ancien</string>
   <string name="SYS_FORMER_PL">Ancien</string>
   <string name="SYS_FONT">Police</string>
-  <string name="SYS_FONT_SIZE">Taille de la police</string>
   <string name="SYS_FORGOT_MY_PASSWORD">J\'ai oublié mon mot de passe!</string>
   <string name="SYS_FRIDAY">vendredi</string>
   <string name="SYS_GENDER">Sexe</string>
@@ -864,7 +837,6 @@
   <string name="SYS_ROLE">Rôle</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Enregistrement pas possible. Nombre maximal de rôle de membres dans le rôle #VAR1_BOLD# dépasse la limite prédéfinie.</string>
   <string name="SYS_ROOM">Chambre</string>
-  <string name="SYS_RSS_DISABLED">Fonctionnalité RSS désactivée par l\'administrateur système.</string>
   <string name="SYS_SAFE_MODE">Mode sans échec</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Problématique au téléchargement de fichiers</string>
   <string name="SYS_SATURDAY">Samedi</string>
@@ -892,10 +864,6 @@
   <string name="SYS_STOP">Arrêtez</string>
   <string name="SYS_SUNDAY">Dimanche</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Ouvrir la gestion des catégories</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Dein angefordertes Passwort\n#content# Hallo #user_first_name#,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name#,\n\ndu erhälst deine Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an #webmaster_email# .\n\nViele Grüße\nDie Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
   <string name="SYS_TEXT">Texte</string>
   <string name="SYS_THURSDAY">Jeudi</string>
   <string name="SYS_TIME">Temps</string>

@@ -79,6 +79,8 @@
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Enable registration to this event.</string>
   <string name="DAT_REMOVE_APPLICATION">Would you like to remove this event? All participants will be removed.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Participants can view the list of participants</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
   <string name="DAT_ROOM_INFORMATIONS">Room information</string>
   <string name="DAT_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
   <string name="DAT_ROOM_RESERVED">Selected room is already in use at this time.</string>
@@ -137,7 +139,7 @@
   <string name="DOW_NEW_FILE_NAME">New file name</string>
   <string name="DOW_NEW_NAME">New name</string>
   <string name="DOW_PREVIOUS_NAME">Previous name</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can adjust the visibility and enable downloads for the folder #VAR1_BOLD#. The permissions are inherited to all subfolders and existing permissions in the subfolders will be overwritten. There are only roles available that have access to the parent folder.</string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can define who can view the folder #VAR1_BOLD# and download/upload files. Subfolders will inherit the permissions. Already existing permissions of subfolders will be overridden. You can only use roles with access to the parent folders. User with role right #VAR2_BOLD# always have full rights to the folder.</string>
   <string name="DOW_SELECT_FILES">Select files</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="DOW_UNMANAGED_FILES">Unmanaged files</string>
@@ -159,8 +161,9 @@
   <string name="ECA_SCALE_THUMBNAILS_DESC">Here you can define the size to which the longer side of a thumbnail images should be scaled to (Default: 250px).</string>
   <string name="ECA_SUCCESSFULLY_SEND">Your greeting card was send.</string>
   <string name="ECA_TEMPLATE">Template</string>
-  <string name="ECA_TEMPLATE_DESC">Define standard template. (default: Postcard) </string>
+  <string name="ECA_TEMPLATE_DESC">Here you can define the default template (default: postcard).</string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Show full size picture</string>
+  <string name="ECA_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Back to guestbook</string>
   <string name="GBO_CAPTCHA_DESC">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (default: yes)</string>
@@ -200,6 +203,7 @@
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administrator\'s information is incomplete!</string>
+  <string name="INS_ADMINISTRATOR_LOGIN_DESC">An update can only be performed by an administrator. Please define the administrator credentials.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Association\'s board</string>
   <string name="INS_CHOOSE_LANGUAGE">Choose language</string>
@@ -213,6 +217,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Your database version is #VAR1#.\n\nUpdate to version #VAR2# is required</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
+  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhost need a special port, you can type it here. </string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurationen file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
@@ -229,7 +234,7 @@
   <string name="INS_DESCRIPTION_BOARD">Administrative board of association</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</string>
   <string name="INS_DESCRIPTION_MEMBER">All organization members</string>
-  <string name="INS_DESCRIPTION_WEBMASTER">Group of system administrators</string>
+  <string name="INS_DESCRIPTION_ADMINISTRATOR">Group of system administrators</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Enter database access information</string>
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -276,9 +281,6 @@
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Update process successful</string>
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
   <string name="INS_WARNING_SAFE_MODE">Save Mode on server is active. This can cause later problems when using certain functions.</string>
-  <string name="INS_WEBMASTER_LOGIN">Web administration login</string>
-  <string name="INS_WEBMASTER_LOGIN_DESC">Only a web administrator can update the database. Please insert web administrator login credentials.</string>
-  <string name="INS_WEBMASTER_LOGIN_FAILED">Could not find a user with this login credentials and a web administration role.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
   <string name="INS_WELCOME_TEXT">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
@@ -287,13 +289,13 @@
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
-  <string name="INS_BOYFRIEND">Boyfriend</string>
+  <string name="INS_BOYFRIEND">Friend</string>
   <string name="INS_BROTHER">Brother</string>
   <string name="INS_CHILD">Child</string>
-  <string name="INS_COHABITANT">Cohabitant</string>
-  <string name="INS_COHABITANT_MALE">Cohabitant</string>
-  <string name="INS_COHABITANT_FEMALE">Cohabitant</string>
-  <string name="INS_COMPANION">Companion</string>
+  <string name="INS_COHABITANT">Partner</string>
+  <string name="INS_COHABITANT_MALE">Partner</string>
+  <string name="INS_COHABITANT_FEMALE">Partner</string>
+  <string name="INS_COMPANION">Friend</string>
   <string name="INS_DAUGHTER">Daughter</string>
   <string name="INS_FATHER">Father</string>
   <string name="INS_GIRLFRIEND">Girlfriend</string>
@@ -301,11 +303,11 @@
   <string name="INS_MOTHER">Mother</string>
   <string name="INS_PARENT">Parent</string>
   <string name="INS_SUBORDINATE">Subordinate</string>
-  <string name="INS_SUBORDINATE_MALE">Subordinate</string>
-  <string name="INS_SUBORDINATE_FEMALE">Subordinate</string>
+  <string name="INS_SUBORDINATE_MALE">Male subordinate</string>
+  <string name="INS_SUBORDINATE_FEMALE">Female subordinate</string>
   <string name="INS_SUPERIOR">Superior</string>
-  <string name="INS_SUPERIOR_MALE">Superior</string>
-  <string name="INS_SUPERIOR_FEMALE">Superior</string>
+  <string name="INS_SUPERIOR_MALE">Male superior</string>
+  <string name="INS_SUPERIOR_FEMALE">Female superior</string>
   <string name="INS_SIBLING">Sibling</string>
   <string name="INS_SISTER">Sister</string>
   <string name="INS_SON">Son</string>
@@ -358,6 +360,7 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="LST_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail to members</string>
+  <string name="LST_EMAIL_TO_LIST">E-mail to list</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Find all users with an empty address field</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">The list configuration #VAR1_BOLD# is the default configuration for lists in this organization and can not be deleted. Choose a different configuration to the standard configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
@@ -383,7 +386,7 @@
   <string name="LST_MEMBERSHIP_END">End of membership</string>
   <string name="LST_MEMBERSHIP_START">Start of membership</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="LST_MUST_HAVE_WEBMASTER">Role type \'webmaster\' must have at least one member assigned!</string>
+  <string name="LST_MUST_HAVE_ADMINISTRATOR">The role \'administrator\' must have at least one member assigned!</string>
   <string name="LST_MY_LIST">Own list</string>
   <string name="LST_MYLIST_CONDITION_DESC">Define requirements of all fields used in your new list configuration. Requirements of selected role will be limited by your own requirements.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Configuration will be defined as default configuration</string>
@@ -397,7 +400,7 @@
   <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Find all users with a filled address field</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
   <string name="LST_PRESET_CONFIGURATION">Default configuration</string>
-  <string name="LST_PRESET_CONFIGURATION_DESC">As webmaster you are able to define the default configuration for all users. Configure rows and columns and save it by naming the configuration set.</string>
+  <string name="LST_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="LST_PRINT_PREVIEW">Print preview</string>
   <string name="LST_ROLE_INFORMATION">Role information</string>
   <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Members in period:</string>
@@ -455,6 +458,7 @@
   <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# has sent following e-mail to former users of role #VAR3# on #VAR2#:</string>
   <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# has sent following e-mail to active and former users of role #VAR3# on #VAR2#:</string>
   <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# from #VAR2# has sent to you following e-mail:</string>
+  <string name="MAI_HIDDEN">Hidden</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</string>
   <string name="MAI_INTO_TO">Recipients need to be listed in the TO field instead of the BCC field</string>
@@ -464,15 +468,16 @@
   <string name="MAI_MAX_RECEIVER_DESC">This value defines the maximum amount of mail recipients. A role counts as one recipient.</string>
   <string name="MAI_MESSAGE_WENT_TO">Message was sent to</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES">Receiver in roles</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain \"Undisclosed Recipients\". If this leads to problems you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</string>
   <string name="MAI_SEND_COPY">Send copy of e-mail to my address</string>
   <string name="MAI_SEND_EMAIL">Send e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
   <string name="MAI_SEND_METHOD">Send via</string>
   <string name="MAI_SEND_METHOD_DESC">The mail () function of PHP is limited by some HOSTERS and sometimes leads to suspected spam. It is therefore recommended to send emails via SMTP server. The SMTP settings can be configured below. (Default: PHP mail ())</string>
+  <string name="MAI_SENDER">Sender</string>
   <string name="MAI_SENDER_EMAIL">Sender\'s e-mail</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certain service provider do to not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@#VAR1#).\nIf field remains empty, sender\'s registered e-mail address will appear as sender information. (default: empty)</string>
-  <string name="MAI_SENDER_INTO_TO">Sender as recipient</string>
-  <string name="MAI_SENDER_INTO_TO_DESC">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results is an error you can use this option to fill the sender address into the TO field. The recipients will remain in the BCC field. (Default: Deactivated)</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certain service provider do not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@#VAR1#).\nIf field remains empty, sender\'s registered e-mail address will appear as sender information. (default: empty)</string>
   <string name="MAI_SENDER_NAME">Name of sender</string>
   <string name="MAI_SENDER_NAME_DESC">Name of the sender according to the used email address.</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
@@ -518,8 +523,8 @@
   <string name="MEM_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
   <string name="MEM_DUPLICATE">Duplicate</string>
   <string name="MEM_EDIT_USER">Edit user</string>
-  <string name="MEM_ENABLE_USER_RELATIONS">Show and manage relationships</string>
-  <string name="MEM_ENABLE_USER_RELATIONS_DESC">If enabled, relationships between users can be shown and managed. (default: yes)</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Maintain and show relationships</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">If set active, relationships between users can be maintained and displayed. (Default: yes)</string>
   <string name="MEM_EXISTING_USERS">Existing user</string>
   <string name="MEM_FILE_COLUMN">File column</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
@@ -595,10 +600,10 @@
   <string name="NWU_USER_VALID_LOGIN">User already has valid login information.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be deactivated or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and RSS-Feed will be completely disabled for both user groups. (default: active)</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be deactivated or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Enable system notifications</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Here you can disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">A new oraganization will be added to the database including its master data. The current user will be announced as web master and can maintain the dataset. User who log in to the system need to select the respective organization.</string>
+  <string name="ORG_ADD_ORGANIZATION_DESC">A new organization will be added to the database including its master data. The current user will be announced as administrator and can maintain the dataset. Users who log into the system need to select the respective organization.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</string>
@@ -608,25 +613,29 @@
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Background color</string>
-  <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Select background color (as hex) for captcha code. (default: #FFEFC4)</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Background image</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">You can choose a background image which will be used as Captcha. The font color should match with the image in order to keep it readable. (default: no image).</string>
+  <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Character color</string>
+  <string name="ORG_CAPTCHA_COLOR_DESC">The background color should be in good contrast to the character color. If both line and character color are the same it is harder for scripts and bots to read the Captcha. All colors need to be specified as #VAR1#hexadecimal value#VAR2#.</string>
+  <string name="ORG_CAPTCHA_DISTORTION">Distortion</string>
+  <string name="ORG_CAPTCHA_DISTORTION_DESC">This value indicates the distortion of the characters. 0 means no distortion. With a value of 3 some characters might not be readable any more. (default: 0.75)</string>
   <string name="ORG_CAPTCHA_FONT">Select font type for captcha code. (default: Theme font)</string>
-  <string name="ORG_CAPTCHA_FONT_SIZE">Select font size for captcha code. (default: 20)</string>
-  <string name="ORG_CAPTCHA_HEIGHT">Captcha height</string>
-  <string name="ORG_CAPTCHA_HEIGHT_DESC">Height of the captcha image. Thus characters of the captcha image can be stretched or crimped. (Default: 60)</string>
+  <string name="ORG_CAPTCHA_LINE_COLOR">Line color</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS">Number of lines</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">With lines on a Captcha it is harder for scripts and bots to solve it. The more lines will be drawn the harder it will be to solve it. Unfortunately it is the same for humans. (default: 5)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha preview</string>
-  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Display preview of the captcha. Please note that only saved values are considered!</string>
+  <string name="ORG_CAPTCHA_PREVIEW_TEXT">The Captcha preview only considers options which already have been saved.</string>
   <string name="ORG_CAPTCHA_REGISTRATION">After activation a picture with a captcha code or a simple calculation will be displayed to new users. It\'s necessary to fill in the correct code or result to save presently edited entry. The captcha is part of anti-spam solution in Admidio. (default: yes)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha subtitle</string>
-  <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Select font size for the captcha subtitle. (default: 13)</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Fill in your preferred subtitle for the captcha. Default font type of the current theme will be used.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Accepted characters</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Fill in the accepted characters for the captcha.</string>
+  <string name="ORG_CAPTCHA_SIGNS">Valid characters</string>
+  <string name="ORG_CAPTCHA_SIGNS_TEXT">Here you can define the Captcha characters which will be used. Please avoid to use characters which can easily mixed up, e.g. I and l.</string>
   <string name="ORG_CAPTCHA_TYPE">Captcha type</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Calculation</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Picture</string>
-  <string name="ORG_CAPTCHA_TYPE_TEXT">Select type of captcha. Choose between displaying the captcha as a picture or a simple calculation in form of text. (default: picture)</string>
-  <string name="ORG_CAPTCHA_WIDTH">Captcha width</string>
-  <string name="ORG_CAPTCHA_WIDTH_DESC">Width of the captcha image. Thus characters of the captcha image can be stretched or crimped. (Default: 250)</string>
+  <string name="ORG_CAPTCHA_TYPE_PIC">Random character</string>
+  <string name="ORG_CAPTCHA_TYPE_WORDS">Words (english)</string>
+  <string name="ORG_CAPTCHA_TYPE_TEXT">Here you can define the Captcha type. The Captcha will be displayed as image. It can consist of random characters, a small math problem or two words. Further options allow to define the Captcha in detail. (default: random characters)</string>
+  <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha width in pixel. Captcha height will be calculated by proportion in regard to the width. In addition it will define the character size. (default: 215)</string>
   <string name="ORG_CONFIRM_REGISTRATION">Registration confirmation after manual confirmation.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Create item field</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Create profile field</string>
@@ -640,8 +649,8 @@
   <string name="ORG_EMAIL_ALERTS">E-mail alert</string>
   <string name="ORG_EMAIL_ALERTS_DESC">All members of all roles with permission #VAR1_BOLD# receive e-mail in case of new user registration. (default: yes)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha activation</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">RSS-Feed activation</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide RSS-Feed service for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
   <string name="ORG_FAST_REGISTRATION">Quick registration</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field editable only for user with permission #VAR1_BOLD#</string>
@@ -672,7 +681,7 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">New password and activation link.</string>
   <string name="ORG_NO_FIELD_CREATED">No organization specific field has been created yet!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
-  <string name="ORG_NOTIFY_WEBMASTER">Notification for the administrator about new registrations</string>
+  <string name="ORG_NOTIFY_ADMINISTRATOR">Notification for the administrator about new registrations</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 10)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
@@ -680,6 +689,13 @@
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a seperate homepage for this organization please add it within the config.php of the seperate homepage.</string>
   <string name="ORG_PARENT_ORGANIZATION">Parent organization</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Define parent organization here. Parent organizations are able to create events and announcements for example which will be displayed in selected (child) organization.</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Password strength</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Here you can specify how safe and complex passwords must be at least.\nThe value in brackets indicates how many attempts are required on average until the password is determined.\n\n No: risky password (&lt;10^3)\n Low: Protection against throttled online attacks. (&lt;10^6)\n Middle: protection against unrestricted online attacks.(&lt;10^8)\n High: Moderate protection against offline hashing. (&lt;10 ^10)\n Extreme: Strong protection against offline hashing. (&gt;= 10^10)</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">None</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Low</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middle</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">High</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Very high</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profile fields</string>
   <string name="ORG_REFUSE_REGISTRATION">Notification on refusal of registration</string>
@@ -704,13 +720,14 @@
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">This function is used to enable the system notification for new entries within the modules. It is used as a monitoring function within Admidio. Thus the administrator can be notified by e-mail when new entries are added within a module (only new entries will be considered). The system notifications will be sent to the email address #VAR1#. (Default: no)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</string>
+  <string name="ORG_THEME_FOLDER_OPEN">Themes folder could not be opened/read.</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
   <string name="ORG_TIMEZONE">Time zone</string>
   <string name="ORG_TIMEZONE_DESC">This is the set time zone. If this is changed later in the config.php file of Admidio, already recorded dates and times are not adjusted to the new time zone.</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Value list</string>
-  <string name="ORG_VALUE_LIST_DESC">Define the items of the drop-down menu or the option boxes here.  Provide one drop-down or radio button item per line.\n\nInstead of the text, the selected position in the list will be stored in the profile. If text in a line should change, all assigned users will be able to see the new text in their profiles right away. If a menu item is being moved to another line, another entry might be shown in the user\'s profile.\n\nIn case of a radio button, an icon can be displayed instead of a text element, too. In order to do this, the name of an icon in the theme folder can be provided (e.g. ok.png) or the external URL of a picture files (e.g. https://www.example.com/example.jpg). By using a pipe, additional tool tip can be used with the icon set (e.g. female.png|female)</string>
+  <string name="ORG_VALUE_LIST_DESC">In this field, you can enter the entries for the drop-down list box or the option field. For each line, an entry of the drop-down list field or the option field can be entered here.\n\nThe profile is not stored as text later, but the selected position from the list. If you change the text in a line, all users already assigned will immediately see the new text in their profile. However, if you move an entry into another line, users may see a different entry.\n\nAn option field can be displayed as icon instead of a text. The name of an icon from the theme folder (ex: ok.png) or the url of an external image (example: https://www.example.com/example.jpg) can be specified. A tooltip for the icon (eg female.png|female) can optionally be set via a vertical divider.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activation link for the new password</string>
   <string name="ORG_VARIABLE_EMAIL">User e-mail address</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System e-mail address of the organization</string>
@@ -808,7 +825,7 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Confirm new profile picture</string>
   <string name="PRO_ADD_USER">Add user</string>
-  <string name="PRO_ADD_USER_RELATION">Add relationship</string>
+  <string name="PRO_ADD_USER_RELATION">Create relationship</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
@@ -842,10 +859,10 @@
   <string name="PRO_MY_PROFILE">My profile</string>
   <string name="PRO_NEW_PASSWORD">New password</string>
   <string name="PRO_NEW_PICTURE">New profile picture</string>
-  <string name="PRO_NO_DEFAULT_ROLE">The role management contains no default role for new users. Please contact a webmaster who can edit this setting.</string>
+  <string name="PRO_NO_DEFAULT_ROLE">The role management contains no default role for new users. Please contact an administrator who can edit this setting.</string>
   <string name="PRO_NO_ROLES_VISIBLE">No roles were found. Possibly you do not have the rights to see certain roles.</string>
   <string name="PRO_PASSWORD_CHANGED">Password has been successfully changed.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nDue to security reasons, the password will be encrypted. It can not be shown in clear text anymore.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
   <string name="PRO_PASSWORD_LENGTH">Password must have at least 8 characters.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Original and retyped passwords are different.</string>
@@ -880,15 +897,15 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="PRO_YEARS">Years</string>
-  <!-- Phrases only in Relationssmodule -->
-  <string name="REL_NO_USER_RELATION_TYPES_FOUND">There are no existing relationship definitions. Relationship definitions can be created in the user management.</string>
-  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrical</string>
+  <!--Phrases only in Relationssmodule-->
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">No relationship types exists. Relationship types can be created in the user management.</string>
+  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrical</string>
   <string name="REL_USER_RELATION_TYPE_BACKWARD">Backward</string>
-  <string name="REL_USER_RELATION_TYPE_DEL">Do you really want to delete the relatonship definition #VAR1_BOLD#? Attention: All existing relationships of this type will be deleted too.</string>
-  <string name="REL_USER_RELATION_TYPE_DESC">An asymmetrical relationship is used e.g. for parent/child. A symmetrical relationship is used e.g. for siblings. Both are always bidirectional, whereas unidirectional relationships are pointing only in one direction.</string>
+  <string name="REL_USER_RELATION_TYPE_DEL">Do you want to remove this type of relationship #VAR1_BOLD#? Warning: This will delete all existing relationships of this type.</string>
+  <string name="REL_USER_RELATION_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
   <string name="REL_USER_RELATION_TYPE_FORWARD">Forward</string>
-  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrical</string>
-  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirectional</string>
+  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetrical</string>
+  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">Unidirectional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Active roles</string>
   <string name="ROL_ALL_GUESTS">All guests of the site</string>
@@ -927,15 +944,16 @@
   <string name="ROL_RIGHT_INVENTORY">Article and inventory management</string>
   <string name="ROL_ROLE_ASSIGNMENT">Role assignment for #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Quarterly</string>
-  <string name="ROL_RIGHT_ALL_LISTS_VIEW">Display all membership lists of all roles</string>
+  <string name="ROL_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
   <string name="ROL_RIGHT_ANNOUNCEMENTS">Create and edit announcements</string>
   <string name="ROL_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organize and assign roles</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Users of this role have access to the role management and can create new roles, manage and assign roles to other users.</string>
   <string name="ROL_RIGHT_DATES">Create and edit event</string>
-  <string name="ROL_RIGHT_DOWNLOAD">Upload and edit downloads</string>
+  <string name="ROL_RIGHT_DOWNLOAD">Manage downloads</string>
+  <string name="ROL_RIGHT_DOWNLOAD_DESC">Roles having this permission can manage the rights for the download module. This includes who can see folders and can upload files.</string>
   <string name="ROL_RIGHT_EDIT_USER">Edit profile of all users</string>
-  <string name="ROL_RIGHT_EDIT_USER_DESC">Roles that have this option enabled, have permission to edit all user data on other members (except passwords).\n In addition, they have access to the user administration and can create new users or delete old user there.</string>
+  <string name="ROL_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add/delete users.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
   <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Define who should be able to send messages to this role by using the mail module. Role permission  #VAR1_BOLD# is parent configuration of the current permission level.</string>
@@ -989,6 +1007,7 @@
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
+  <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
@@ -1003,11 +1022,6 @@
   <string name="SYS_CAPTCHA_CALC">Result of the calculation</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">The result of the calculation is not correct.</string>
   <string name="SYS_CAPTCHA_CALC_DESCRIPTION">The calculation is part of a captcha. A captcha is used for spam prevention. The calculation is used to detect if a user or a script (or spambot) filled in the form.\nPlease fill in the result of the calculation in the form.</string>
-  <string name="SYS_CAPTCHA_CALC_PART1">Please calculate</string>
-  <string name="SYS_CAPTCHA_CALC_PART2">and add</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_THIRD">a third of</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_HALF">the half of</string>
-  <string name="SYS_CAPTCHA_CALC_PART4">.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">The authentication code was invalid.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Authentication code</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</string>
@@ -1041,6 +1055,7 @@
   <string name="SYS_COUNTRY">Country</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_CREATE">Create</string>
+  <string name="SYS_CREATE_ENTRY">Add entry</string>
   <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATE_NEW_USER">Add new user</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
@@ -1052,6 +1067,7 @@
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Database version</string>
+  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">The database version #VAR1# is lower than the version of the Admidio scripts #VAR2#.\n\nPlease perform #VAR3# database update to version #VAR4#.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_DATE">Date</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">End date is before start date.</string>
@@ -1075,6 +1091,7 @@
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
   <string name="SYS_EDIT">Edit</string>
+  <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDITED_BY">Last edited by</string>
@@ -1103,31 +1120,33 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Size of uploaded file exceeds server defined maximum file size of #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">File uploads</string>
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
+  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">First name</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Firstname and lastname</string>
   <string name="SYS_FROM">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FOLDER">Folder</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask #VAR2#webmaster#VAR3# for help to check write permissions of parent folder.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask #VAR2#webmaster#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
+  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_SIZE">Font-size</string>
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FULL_SCREEN">Full screen</string>
   <string name="SYS_GENDER">Gender</string>
-  <string name="SYS_GEN_RANDOM_ERROR">An unexpected error at generating a random string has occurred.</string>
-  <string name="SYS_GEN_RANDOM_FAIL">Could not generate a random string. Is this OS secure?</string>
-  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Expected a string that contains at least 2 distinct characters</string>
+  <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occured while generating a random string.</string>
+  <string name="SYS_GEN_RANDOM_FAIL">The program cannot generate a random string.</string>
+  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
+  <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
+  <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_INACTIVE">Inactive</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
@@ -1152,8 +1171,8 @@
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login credentials were correct but you are not an active member of the organization #VAR1_BOLD#.</string>
-  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Your login credentials were correct but the update process is only activated for webmasters of the organization #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Your login credentials were correct but the update process is only activated for administrators of the organization #VAR1_BOLD#.</string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login credentials were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_SUCCESSFUL">Signing in was successful.</string>
@@ -1165,7 +1184,7 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Manage categories</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Manage relationship definitions</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Maintain relationship types</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
   <string name="SYS_MAP">Map</string>
@@ -1182,7 +1201,6 @@
   <string name="SYS_MESSAGES">Messages</string>
   <string name="SYS_MINUTES">Minutes</string>
   <string name="SYS_MOBILE">Mobile</string>
-  <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">This module can only be accessed from the organization that is stored in the config.php. This is the organization % VAR1%.</string>
   <string name="SYS_MODULE_DISABLED">This module is disabled.</string>
   <string name="SYS_MODULE_PREFERENCES">Module settings</string>
   <string name="SYS_MODULES">Modules</string>
@@ -1235,6 +1253,7 @@
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
   <string name="SYS_PM">Private message</string>
+  <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
   <string name="SYS_POSTCODE">Postal code</string>
@@ -1250,9 +1269,11 @@
   <string name="SYS_QUANTITY">Amount</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
   <string name="SYS_RECIPIENT">Recipient</string>
+  <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
+  <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REPEAT">Repeat</string>
@@ -1262,8 +1283,8 @@
   <string name="SYS_ROLE_MAX_MEMBERS">It was not possible to save the change. Maximum number of role members in role #VAR1_BOLD# will exceed predefined limit.</string>
   <string name="SYS_ROLES">Roles</string>
   <string name="SYS_ROOM">Room</string>
-  <string name="SYS_RSS_DISABLED">RSS feature disabled by the system administrator.</string>
-  <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed for #VAR1#</string>
+  <string name="SYS_RSS_DISABLED">Web feed has been disabled by the system administrator.</string>
+  <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Might cause problems with file uploads</string>
   <string name="SYS_SATURDAY">Saturday</string>
@@ -1290,15 +1311,16 @@
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_CODE_INVALID">Invalid Status Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nGreetings,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login details for #organization_homepage#\n#content# Hello #user_first_name#,\n\nyour new login details for the #organization_long_name# website:\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nCheers,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration  at #organization_long_name# rejected.\n#content#Hello #user_first_name# your application at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the webmaster #webmaster_email# from #organization_homepage#.\n\nRegards,\nThe Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration on #organization_long_name# website approved\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# is approved.\n\nNow you may log in with your username: #user_login_name#\nand your password.\n\nIn case of any questions, please don\'t hesitate to contact the webmaster via email to #webmaster_email# .\n\nCheers,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# New registration at #organization_long_name# website\n#content# A new user registered himself on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name:  #user_first_name#\nE-Mail:   #user_email#\n\n\nThis message was generated automatically.</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nGreetings,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login details for #organization_homepage#\n#content# Hello #user_first_name#,\n\nyour new login details for the #organization_long_name# website:\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name# your application at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration on #organization_long_name# website approved\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# is approved.\n\nNow you may log in with your username: #user_login_name#\nand your password.\n\nIn case of any questions, please don\'t hesitate to contact the administrator via email to #administrator_email# .\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user registered himself on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
   <string name="SYS_TEXT">Text</string>
@@ -1323,8 +1345,8 @@
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
-  <string name="SYS_USER_RELATION_TYPE">Relationship definition</string>
-  <string name="SYS_USER_RELATION_TYPES">Relationship definitions</string>
+  <string name="SYS_USER_RELATION_TYPE">Relationship typ</string>
+  <string name="SYS_USER_RELATION_TYPES">Relationship types</string>
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERS_FOUND">User found</string>
@@ -1337,10 +1359,9 @@
   <string name="SYS_WANT_REGISTER">I want to register!</string>
   <string name="SYS_WARNING">Warning</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
-  <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">The database version #VAR1# is lower than the version of the Admidio scripts #VAR2#.\n\nPlease perform #VAR3# database update to version #VAR4#.</string>
-  <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio (#VAR4#).</string>
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>
   <string name="SYS_WHAT_TO_DO">What to do?</string>
+  <string name="SYS_WIDTH">Width</string>
   <string name="SYS_YES">Yes</string>
 </resources>
