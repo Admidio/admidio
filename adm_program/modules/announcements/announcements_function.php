@@ -84,9 +84,9 @@ if($getMode === 1)
     }
 
     // Daten in Datenbank schreiben
-    $return_code = $announcement->save();
+    $returnValue = $announcement->save();
 
-    if($return_code === false)
+    if($returnValue === false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -110,7 +110,7 @@ if($getMode === 1)
 elseif($getMode === 2)
 {
     // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
-    if($announcement->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+    if((int) $announcement->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
     {
         $announcement->delete();
 
