@@ -411,7 +411,7 @@ function admFuncProcessableImageSize()
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
  * // string that will be initialized with text of id DAT_DATES
- * $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $g_l10n->get('DAT_DATES')));
+ * $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
  *
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
@@ -821,23 +821,25 @@ function admRedirect($url, $statusCode = 303)
 {
     global $gLogger, $gMessage, $gL10n;
 
+    $loggerObject = array('url' => $url, 'statusCode' => $statusCode);
+
     if (headers_sent())
     {
-        $gLogger->error('REDIRECT: Header already sent!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->error('REDIRECT: Header already sent!', $loggerObject);
 
         $gMessage->show($gL10n->get('SYS_HEADER_ALREADY_SENT'));
         // => EXIT
     }
     if (filter_var($url, FILTER_VALIDATE_URL) === false)
     {
-        $gLogger->error('REDIRECT: URL is not a valid URL!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->error('REDIRECT: URL is not a valid URL!', $loggerObject);
 
         $gMessage->show($gL10n->get('SYS_REDIRECT_URL_INVALID'));
         // => EXIT
     }
     if (!in_array($statusCode, array(301, 302, 303, 307), true))
     {
-        $gLogger->error('REDIRECT: Status Code is not allowed!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->error('REDIRECT: Status Code is not allowed!', $loggerObject);
 
         $gMessage->show($gL10n->get('SYS_STATUS_CODE_INVALID'));
         // => EXIT
@@ -845,14 +847,14 @@ function admRedirect($url, $statusCode = 303)
 
     if (strpos($url, ADMIDIO_URL) === 0)
     {
-        $gLogger->info('REDIRECT: Redirecting to internal URL!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->info('REDIRECT: Redirecting to internal URL!', $loggerObject);
 
         // TODO check if user is authorized for url
         $redirectUrl = $url;
     }
     else
     {
-        $gLogger->notice('REDIRECT: Redirecting to external URL!', array('url' => $url, 'statusCode' => $statusCode));
+        $gLogger->notice('REDIRECT: Redirecting to external URL!', $loggerObject);
 
         $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
     }
