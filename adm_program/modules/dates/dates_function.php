@@ -498,7 +498,7 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), '', 2);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -516,7 +516,7 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
 elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), '', 1);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
