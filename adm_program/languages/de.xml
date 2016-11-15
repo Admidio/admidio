@@ -476,10 +476,10 @@
     <string name="MAI_SEND_METHOD">Versenden über</string>
     <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
     <string name="MAI_SENDER">Absender</string>
-    <string name="MAI_SENDER_EMAIL">Absender Mailadresse</string>
-    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
+    <string name="MAI_SENDER_EMAIL">Absender E-Mailadresse</string>
+    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
     <string name="MAI_SENDER_NAME">Name des Absenders</string>
-    <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten Versandmailadresse.</string>
+    <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten E-Mailadresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender E-Mailadresse gepflegt ist. (Standard: leer)</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
     <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_SMTP">SMTP</string>
