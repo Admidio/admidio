@@ -313,10 +313,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
 // div-Container admGroupBoxBody und admGroupBox schliessen
 $form->closeGroupBox();
 
-$btn_image = 'disk.png';
-$btn_text  = $gL10n->get('SYS_SAVE');
-
-$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_URL.'/icons/'.$btn_image));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 
 if($getNewItem == 0)
 {

@@ -101,27 +101,27 @@ $htmlFieldTable = '
 
         $line = reset($_SESSION['file_lines']);
         $arrayCsvColumns = explode($_SESSION['value_separator'], $line);
-        $category = '';
+        $categoryId = null;
 
         // jedes Benutzerfeld aus der Datenbank auflisten
 
         foreach($gProfileFields->mProfileFields as $field)
         {
-            if($category != $field->getValue('cat_id'))
+            $catId = (int) $field->getValue('cat_id');
+            if($categoryId !== $catId)
             {
-                if($category !== '')
+                if($categoryId !== null)
                 {
                     $htmlFieldTable .= '</tbody>';
                 }
-                $block_id = 'admCategory'. $field->getValue('cat_id');
                 $htmlFieldTable .= '<tbody>
                     <tr class="admidio-group-heading">
                         <td colspan="4">'.$field->getValue('cat_name').'</td>
                     </tr>
                 </tbody>
-                <tbody id="'.$block_id.'">';
+                <tbody id="admCategory'.$catId.'">';
 
-                $category = $field->getValue('cat_id');
+                $categoryId = $catId;
             }
             $htmlFieldTable .= '<tr>
                 <td><label for="usf-'. $field->getValue('usf_id'). '">'.$field->getValue('usf_name');
