@@ -59,7 +59,7 @@ $page->addJavascript('
         elementId = $(this).attr("id");
         roleId    = elementId.substr(elementId.search(/_/)+1);
 
-        if($(this).val() === "mylist") {
+        if ($(this).val() === "mylist") {
             self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.(int) $getActiveRole.'";
         } else {
             self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_ids=" + roleId;

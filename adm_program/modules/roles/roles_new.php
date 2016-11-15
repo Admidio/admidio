@@ -94,7 +94,7 @@ $page->addJavascript('
         markRoleRight("rol_assign_roles", "rol_all_lists_view", true);
     });
     $("#rol_all_lists_view").change(function() {
-        markRoleRight(\'rol_all_lists_view\', \'rol_assign_roles\', false);
+        markRoleRight("rol_all_lists_view", "rol_assign_roles", false);
     });
     $("#rol_max_members").change(function() {
         checkMaxMemberCount();
@@ -106,7 +106,7 @@ $page->addJavascript('
     // show/hide role dependencies if max count members will be changed
     function checkMaxMemberCount() {
         // Wenn eine Maximale Mitgliederzahl angeben wurde, duerfen keine Rollenabhaengigkeiten bestehen
-        if($("#rol_max_members").val() > 0) {
+        if ($("#rol_max_members").val() > 0) {
             // Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
             $("#gb_dependencies").hide();
 

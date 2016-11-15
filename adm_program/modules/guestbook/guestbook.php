@@ -84,7 +84,7 @@ $page->addJavascript('
     }
 
     function toggleDiv(objectId) {
-        if($("#" + objectId).is(":hidden")) {
+        if ($("#" + objectId).is(":hidden")) {
             $("#" + objectId).show();
         } else {
             $("#" + objectId).hide();

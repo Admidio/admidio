@@ -166,7 +166,7 @@ if($getMode === 'choose_files')
             },
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
-                    if(typeof file.error !== "undefined") {
+                    if (typeof file.error !== "undefined") {
                         $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                         countErrorFiles++;
@@ -186,7 +186,7 @@ if($getMode === 'choose_files')
                 );
             },
             stop: function (e, data) {
-                if(countErrorFiles === 0 && countFiles > 0) {
+                if (countErrorFiles === 0 && countFiles > 0) {
                     $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$textUploadSuccessful.'</div>").appendTo("#files");
                 } else {
                     $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$textUploadNotSuccessful.'</div>").appendTo("#files");

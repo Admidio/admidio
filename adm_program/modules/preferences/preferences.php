@@ -83,7 +83,7 @@ $page->addJavascript('
             data:    $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
-                    if(id === "captcha_preferences_form") {
+                    if (id === "captcha_preferences_form") {
                         // reload captcha if form is saved
                         $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random());
                     }

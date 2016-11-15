@@ -42,37 +42,37 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for(i=0;i < childs.length; i++) {
-            if(childs[i].tagName === "TR") {
+        for (i=0;i < childs.length; i++) {
+            if (childs[i].tagName === "TR") {
                 actRowCount++;
-                if(actSequence > 0 && nextNode === null) {
+                if (actSequence > 0 && nextNode === null) {
                     nextNode = childs[i];
                 }
 
-                if(childs[i].id === "row_usf_" + usfID) {
+                if (childs[i].id === "row_usf_" + usfID) {
                     actSequence = actRowCount;
                 }
 
-                if(actSequence === 0) {
+                if (actSequence === 0) {
                     prevNode = childs[i];
                 }
             }
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if(direction === "up") {
-            if(prevNode != null) {
+        if (direction === "up") {
+            if (prevNode != null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
             }
         } else {
-            if(nextNode != null) {
+            if (nextNode != null) {
                 actRow.parentNode.insertBefore(nextNode, actRow);
                 secondSequence = actSequence + 1;
             }
         }
 
-        if(secondSequence > 0) {
+        if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
             $.get(gRootPath + "/adm_program/modules/inventory/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }

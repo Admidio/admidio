@@ -381,7 +381,7 @@ if ($getMode !== 'csv')
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
             $("#export_list_to").change(function () {
-                if($(this).val().length > 1) {
+                if ($(this).val().length > 1) {
                     var result = $(this).val();
                     $(this).prop("selectedIndex",0);
                     self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?" +

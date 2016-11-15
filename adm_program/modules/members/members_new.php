@@ -36,7 +36,7 @@ echo '
             url:  action,
             data: $(this).serialize(),
             success: function(data) {
-                if(data === "success") {
+                if (data === "success") {
                     formMembersAlert.attr("class", "alert alert-success form-alert");
                     formMembersAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     formMembersAlert.fadeIn("slow");
@@ -44,7 +44,7 @@ echo '
                         self.location.href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                     },2500);
                 } else {
-                    if(data.length > 1000) {
+                    if (data.length > 1000) {
                         $(".modal-body").html(data);
                     } else {
                         formMembersAlert.attr("class", "alert alert-danger form-alert");

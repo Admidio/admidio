@@ -179,14 +179,14 @@ $page->addJavascript('
         var dateFrom = Date.parseDate($("#date_from").val(), "'.$gPreferences['system_date'].'");
         var dateTo   = Date.parseDate($("#date_to").val(), "'.$gPreferences['system_date'].'");
 
-        if(dateFrom.getTime() > dateTo.getTime()) {
+        if (dateFrom.getTime() > dateTo.getTime()) {
             $("#date_to").val($("#date_from").val());
             $("#date_to").datepicker("update");
         }
     }
 
     function setLocationCountry() {
-        if($("#dat_location").val().length > 0) {
+        if ($("#dat_location").val().length > 0) {
             $("#dat_country_group").show();
             $("#dat_country").focus();
         } else {
@@ -210,7 +210,7 @@ $page->addJavascript('
     $("#btn_save").click(function (event) {
         event.preventDefault();
 
-        if(dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
+        if (dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
             if(msg_result) {
                 $("#dates_edit_form").submit();

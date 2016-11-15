@@ -156,7 +156,7 @@ else
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function() {
-            if($("#mem_show_all").is(":checked")) {
+            if ($("#mem_show_all").is(":checked")) {
                 window.location.replace("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=1");
             } else {
                 window.location.replace("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=0");
@@ -175,13 +175,13 @@ else
             var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
 
             // Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if(checkbox.hasClass("memlist_leader") && leader_checked) {
+            if (checkbox.hasClass("memlist_leader") && leader_checked) {
                 $("input[type=checkbox]#member_"+userid).prop("checked", true);
                 member_checked = true;
             }
 
             // Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if(checkbox.hasClass("memlist_member") && member_checked == false) {
+            if (checkbox.hasClass("memlist_member") && member_checked == false) {
                 $("input[type=checkbox]#leader_"+userid).prop("checked", false);
                 leader_checked = false;
             }
@@ -191,11 +191,11 @@ else
                 "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
                 function(data) {
                     // check if error occurs
-                    if(data !== "success") {
+                    if (data !== "success") {
                         // reset checkbox status
-                        if(checkbox.prop("checked")) {
+                        if (checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
-                            if(checkbox.hasClass("memlist_leader")) {
+                            if (checkbox.hasClass("memlist_leader")) {
                                 $("input[type=checkbox]#member_"+userid).prop("checked", false);
                             }
                         } else {
