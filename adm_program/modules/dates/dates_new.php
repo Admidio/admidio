@@ -38,8 +38,8 @@ if(!$gCurrentUser->editDates())
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$dateRegistrationPossible = 0;
-$dateCurrentUserAssigned  = 0;
+$dateRegistrationPossible = false;
+$dateCurrentUserAssigned  = false;
 
 // set headline of the script
 if($getCopy)
@@ -80,13 +80,13 @@ if(isset($_SESSION['dates_request']))
     // check if a registration to this event is possible
     if(array_key_exists('date_registration_possible', $_SESSION['dates_request']))
     {
-        $dateRegistrationPossible = $_SESSION['dates_request']['date_registration_possible'];
+        $dateRegistrationPossible = (bool) $_SESSION['dates_request']['date_registration_possible'];
     }
 
     // check if current user is assigned to this date
     if(array_key_exists('date_current_user_assigned', $_SESSION['dates_request']))
     {
-        $dateCurrentUserAssigned = $_SESSION['dates_request']['date_current_user_assigned'];
+        $dateCurrentUserAssigned = (bool) $_SESSION['dates_request']['date_current_user_assigned'];
     }
 
     unset($_SESSION['dates_request']);
@@ -127,7 +127,7 @@ else
     // check if a registration to this event is possible
     if($date->getValue('dat_rol_id') > 0)
     {
-        $dateRegistrationPossible = 1;
+        $dateRegistrationPossible = true;
     }
     // check if current user is assigned to this date
     $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id'));
@@ -266,7 +266,7 @@ if($gPreferences['dates_show_rooms'] == true)
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
-$form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
+$form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), (bool) $date->getValue('dat_all_day'));
 $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
 $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
 $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
@@ -291,7 +291,7 @@ $form->addSelectBoxFromSql('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $s
                                                                                           'multiselect'  => true,
                                                                                           'firstEntry'   => $firstEntry));
 
-$form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
+$form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $date->getValue('dat_highlight'));
 
 // if current organization has a parent organization or is child organizations then show option to set this announcement to global
 if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
@@ -300,14 +300,14 @@ if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganiza
     $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
     $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-    $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
+    $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), (bool) $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
 }
 $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
 $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
 $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
                 array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
-$form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), $role->getValue('rol_this_list_view'));
-$form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), $role->getValue('rol_mail_this_role'));
+$form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_this_list_view'));
+$form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), (bool) $role->getValue('rol_mail_this_role'));
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

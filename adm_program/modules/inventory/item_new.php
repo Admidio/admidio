@@ -191,7 +191,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
             $form->addCheckbox(
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-                $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null,
+                (bool) $inventory->getValue($field->getValue('inf_name_intern')),
+                $fieldProperty, $helpId, null,
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database')
             );
         }

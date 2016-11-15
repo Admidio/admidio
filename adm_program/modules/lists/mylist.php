@@ -569,7 +569,7 @@ $form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURA
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isAdministrator())
 {
-    $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), $list->getValue('lst_global'),
+    $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), (bool) $list->getValue('lst_global'),
         array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'LST_PRESET_CONFIGURATION_DESC'));
 }
 

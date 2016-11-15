@@ -165,11 +165,11 @@ if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['
 
     if(!isset($form_values['carbon_copy']))
     {
-        $form_values['carbon_copy'] = 0;
+        $form_values['carbon_copy'] = false;
     }
     if(!isset($form_values['delivery_confirmation']))
     {
-        $form_values['delivery_confirmation'] = 0;
+        $form_values['delivery_confirmation'] = false;
     }
 }
 else

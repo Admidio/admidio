@@ -177,10 +177,10 @@ if($getType === 'USF')
 }
 else
 {
-    $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText), $category->getValue('cat_hidden'),
+    $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText), (bool) $category->getValue('cat_hidden'),
                        array('icon' => 'user_key.png'));
 }
-$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), $category->getValue('cat_default'),
+$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
                    array('icon' => 'star.png'));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')));

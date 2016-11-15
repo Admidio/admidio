@@ -68,12 +68,12 @@ if(isset($_SESSION['import_csv_request']))
     unset($_SESSION['import_csv_request']);
     if(!isset($form['first_row']))
     {
-        $form_values['first_row'] = 0;
+        $form_values['first_row'] = false;
     }
 }
 else
 {
-    $form_values['first_row'] = 1;
+    $form_values['first_row'] = true;
     $form_values['import_coding']  = 'iso-8859-1';
     $form_values['import_role_id'] = 0;
 }

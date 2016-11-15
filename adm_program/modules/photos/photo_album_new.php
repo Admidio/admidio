@@ -145,7 +145,7 @@ $form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photo
 $form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('property' => FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), array('type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'), array('maxLength' => 100));
-$form->addCheckbox('pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), $photoAlbum->getValue('pho_locked'), array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC'));
+$form->addCheckbox('pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), (bool) $photoAlbum->getValue('pho_locked'), array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC'));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
