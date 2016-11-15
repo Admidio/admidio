@@ -56,7 +56,7 @@ if($getUsfId > 0)
 
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($userField->getValue('cat_org_id') > 0
-    && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    && (int) $userField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

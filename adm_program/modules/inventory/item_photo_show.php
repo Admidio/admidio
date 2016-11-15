@@ -36,7 +36,7 @@ if (!$gCurrentUser->editInventory())
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 
-if($inventory->getValue('inv_id') == 0)
+if((int) $inventory->getValue('inv_id') === 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT

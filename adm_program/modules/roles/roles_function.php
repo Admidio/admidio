@@ -48,7 +48,7 @@ if($getRoleId > 0)
     $role->readDataById($getRoleId);
 
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+    if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -98,7 +98,7 @@ elseif($getMode === 2)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
         // => EXIT
     }
-    if($_POST['rol_cat_id'] == 0)
+    if((int) $_POST['rol_cat_id'] === 0)
     {
         // es sind nicht alle Felder gefuellt
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
@@ -245,7 +245,7 @@ elseif($getMode === 2)
     }
 
     // Kontrollieren ob bei nachtraeglicher Senkung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
-    if($getRoleId > 0 && $_POST['rol_max_members'] != $role->getValue('rol_max_members'))
+    if($getRoleId > 0 && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members'))
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
         $role->setValue('rol_max_members', $_POST['rol_max_members']);

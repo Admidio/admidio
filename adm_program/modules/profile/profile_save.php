@@ -300,7 +300,7 @@ catch(AdmException $e)
 $gDb->endTransaction();
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
+if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
 {
     $gCurrentUser = $user;
 }

@@ -89,7 +89,7 @@ if($getGbcId > 0)
     $guestbook_comment->readDataById($getGbcId);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if((int) $guestbook_comment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

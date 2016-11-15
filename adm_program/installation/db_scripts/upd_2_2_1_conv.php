@@ -26,7 +26,7 @@ while($row_texts = $textsStatement->fetch())
 // Laenderbezeichnung durch ISOCODES ersetzen, damit die Laender sprachabhaengig angezeigt werden
 foreach($gL10n->getCountries() as $key => $value)
 {
-    if($gPreferences['default_country'] == $value)
+    if($gPreferences['default_country'] === $value)
     {
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$key.'\'
                  WHERE prf_name  LIKE \'default_country\'
@@ -48,7 +48,7 @@ while($row_countries = $countriesStatement->fetch())
 {
     foreach($gL10n->getCountries() as $key => $value)
     {
-        if($row_countries['usd_value'] == $value)
+        if($row_countries['usd_value'] === $value)
         {
             $sql = 'UPDATE '.TBL_USER_DATA.' SET usd_value = \''.$key.'\'
                      WHERE usd_usf_id = '.$row_countries['usd_usf_id'].'
@@ -67,7 +67,7 @@ while($row_countries = $countriesStatement->fetch())
 {
     foreach($gL10n->getCountries() as $key => $value)
     {
-        if($row_countries['dat_country'] == $value)
+        if($row_countries['dat_country'] === $value)
         {
             $sql = 'UPDATE '.TBL_DATES.' SET dat_country = \''.$key.'\'
                      WHERE dat_id = '.$row_countries['dat_id'].'

@@ -309,7 +309,7 @@ while($row = $mglStatement->fetch())
 
     // Administrators can change or send password if login is configured and user is member of current organization
     if($memberOfThisOrganization && $gCurrentUser->isAdministrator()
-    && strlen($row['usr_login_name']) > 0 && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
+    && strlen($row['usr_login_name']) > 0 && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id'))
     {
         if(strlen($row['email']) > 0 && $gPreferences['enable_system_mails'] == 1)
         {
@@ -353,7 +353,7 @@ while($row = $mglStatement->fetch())
     // Mitglieder entfernen
     if(((!$memberOfOtherOrganization && $gCurrentUser->isAdministrator()) // kein Mitglied einer anderen Orga, dann duerfen Administratoren loeschen
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
-        && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
+        && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id')) // das eigene Profil darf keiner entfernen
     {
         $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
                                     src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';

@@ -180,7 +180,7 @@ function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement
                             if($role->allowedToAssignMembers($gCurrentUser))
                             {
                                 // You are not allowed to delete your own administrator membership, other roles could be deleted
-                                if (($role->getValue('rol_administrator') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
+                                if (($role->getValue('rol_administrator') == 1 && (int) $gCurrentUser->getValue('usr_id') !== (int) $user->getValue('usr_id'))
                                 || ($role->getValue('rol_administrator') == 0))
                                 {
                                     $roleMemHTML .= '

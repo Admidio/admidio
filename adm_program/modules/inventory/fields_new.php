@@ -55,8 +55,8 @@ if($getInfId > 0)
     }
 
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
-    if($itemField->getValue('cat_org_id') >  0
-    && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if($itemField->getValue('cat_org_id') > 0
+    && (int) $itemField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

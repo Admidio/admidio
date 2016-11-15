@@ -156,10 +156,10 @@ foreach($listsResult['recordset'] as $row)
     $role->setArray($row);
 
     // if category is different than previous, close old and open new one
-    if($previousCategoryId != $role->getValue('cat_id'))
+    if($previousCategoryId !== (int) $role->getValue('cat_id'))
     {
         // close only if previous category is not 0
-        if($previousCategoryId != 0)
+        if($previousCategoryId !== 0)
         {
             $page->addHtml('</div></div></div>');
         }
@@ -167,7 +167,7 @@ foreach($listsResult['recordset'] as $row)
             <div class="panel-heading">'. $role->getValue('cat_name'). '</div>
             <div class="panel-body">
                 <div class="panel-group" id="accordion_'.$role->getValue('cat_id').'">');
-        $previousCategoryId = $role->getValue('cat_id');
+        $previousCategoryId = (int) $role->getValue('cat_id');
     }
 
     $page->addHtml('

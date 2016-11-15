@@ -39,7 +39,7 @@ $_SESSION['set_rol_id'] = $getRoleId;
 $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -90,7 +90,7 @@ if($getMode === 'assign')
         $mem_count = $role->countMembers($getUserId);
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members') == 0)))
+        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || (int) $role->getValue('rol_max_members') === 0)))
         {
             $member->startMembership((int) $role->getValue('rol_id'), $getUserId, $leadership);
 

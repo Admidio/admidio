@@ -43,8 +43,8 @@ if($getUsfId > 0)
     $userField->readDataById($getUsfId);
 
     // check if profile field belongs to actual organization
-    if($userField->getValue('cat_org_id') >  0
-    && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if($userField->getValue('cat_org_id') > 0
+    && (int) $userField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -77,7 +77,7 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($userField->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
+    if($userField->getValue('usf_system') == 0 && (int) $_POST['usf_cat_id'] === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
         // => EXIT

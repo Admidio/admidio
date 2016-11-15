@@ -70,7 +70,7 @@ $i = 0;
 while($row = $userFieldsStatement->fetch())
 {
     ++$i;
-    if($row['usf_name_intern'] == $lastNameIntern)
+    if($row['usf_name_intern'] === $lastNameIntern)
     {
         $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name_intern = \''.$row['usf_name_intern'].'_0'.$i.'\'
                  WHERE usf_id = '.$row['usf_id'];

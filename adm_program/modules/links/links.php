@@ -135,7 +135,7 @@ else
             $weblink->clear();
             $weblink->setArray($row);
 
-            if ($weblink->getValue('lnk_cat_id') != $previous_cat_id)
+            if ((int) $weblink->getValue('lnk_cat_id') !== $previous_cat_id)
             {
                 $i = 0;
                 $new_category = true;
@@ -179,7 +179,7 @@ else
             ++$i;
 
             // set current category to privious
-            $previous_cat_id = $weblink->getValue('lnk_cat_id');
+            $previous_cat_id = (int) $weblink->getValue('lnk_cat_id');
 
             $new_category = false;
         }  // End While-loop

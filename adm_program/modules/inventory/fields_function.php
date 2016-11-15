@@ -39,8 +39,8 @@ if($getInfId > 0)
     $itemField->readDataById($getInfId);
 
     // check if profile field belongs to actual organization
-    if($itemField->getValue('cat_org_id') >  0
-    && $itemField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if($itemField->getValue('cat_org_id') > 0
+    && (int) $itemField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -73,13 +73,13 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($itemField->getValue('inf_system') == 0 && $_POST['inf_cat_id'] == 0)
+    if($itemField->getValue('inf_system') == 0 && (int) $_POST['inf_cat_id'] === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
         // => EXIT
     }
 
-    if(isset($_POST['inf_name']) && $itemField->getValue('inf_name') != $_POST['inf_name'])
+    if(isset($_POST['inf_name']) && $itemField->getValue('inf_name') !== $_POST['inf_name'])
     {
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count

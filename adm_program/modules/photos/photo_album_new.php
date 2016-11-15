@@ -58,7 +58,7 @@ if ($getMode === 'change')
     $photoAlbum->readDataById($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if($photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
