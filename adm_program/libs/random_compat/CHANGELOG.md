@@ -1,3 +1,8 @@
+### Version 2.0.4 - 2016-11-07
+
+* Don't unnecessarily prevent `mcrypt_create_iv()` from being used.
+  See [#111](https://github.com/paragonie/random_compat/issues/111).
+
 ### Version 2.0.3 - 2016-10-17
 
 * Updated `lib/error_polyfill.php` [to resolve corner cases](https://github.com/paragonie/random_compat/issues/104).
@@ -21,7 +26,7 @@ Due to downstream errors, the OpenSSL removal now belongs in version
 
 ### Version 1.3.1 - 2016-03-18
 
-* Add more possible values to `open_baseir` check.
+* Add more possible values to `open_basedir` check.
 
 ### Version 1.3.0 - 2016-03-17
 
