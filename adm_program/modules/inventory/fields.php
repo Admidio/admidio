@@ -152,7 +152,7 @@ while($row = $statement->fetch())
         $description = substr($userField->getValue('inf_description', 'database'), 0, 22).'
             <a class="colorbox-dialog" data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('inf_description')).'" href="'. ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('inf_name_intern'). '&amp;inline=true">[..]</a>';
     }
-    elseif(strlen($userField->getValue('inf_description') === 0))
+    elseif($userField->getValue('inf_description') === '')
     {
         $description = '&nbsp;';
     }
