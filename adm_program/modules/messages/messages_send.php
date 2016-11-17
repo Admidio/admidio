@@ -434,7 +434,7 @@ if ($getMsgType === 'EMAIL')
     if($postListId > 0)
     {
         $showlist = new ListConfiguration($gDb, $postListId);
-        $receiverString ='list ' . $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '' );
+        $receiverString ='list ' . $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '');
     }
 
     $receiverName = prepareReceivers($receiverString);

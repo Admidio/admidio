@@ -243,7 +243,7 @@ foreach ($membersList as $member)
     $user = new User($gDb, $gProfileFields, $member['usr_id']);
 
     // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
-    if (strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUser->getValue('usr_id')<>$member['usr_id'])
+    if (strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUser->getValue('usr_id') != $member['usr_id'])
     {
         $userIdList[] = $member['usr_id'];
     }
