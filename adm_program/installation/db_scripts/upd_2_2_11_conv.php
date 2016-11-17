@@ -9,8 +9,13 @@
  ***********************************************************************************************
  */
 
-// validate old bb-codes before update
-function validate_bbc($table, $idCol, $col)
+/**
+ * validate old bb-codes before update
+ * @param string $table
+ * @param string $idCol
+ * @param string $col
+ */
+function validateBBCodes($table, $idCol, $col)
 {
     global $gDb;
 
@@ -50,19 +55,19 @@ function validate_bbc($table, $idCol, $col)
         // update if nessecary
         if($sqlAppend != $row->$col)
         {
-            $sql_update = 'UPDATE '.$table. '
-                    SET '.$col.' = \''.$sqlAppend.'\' WHERE '.$idCol.' = \''.$row->$idCol.'\'';
-            $gDb->query($sql_update);
+            $sqlUpdate = 'UPDATE '.$table. '
+                              SET '.$col.' = \''.$sqlAppend.'\' WHERE '.$idCol.' = \''.$row->$idCol.'\'';
+            $gDb->query($sqlUpdate);
         }
 
     }
 }
-validate_bbc(TBL_ANNOUNCEMENTS, 'ann_id', 'ann_description');
-validate_bbc(TBL_DATES, 'dat_id', 'dat_description');
-validate_bbc(TBL_GUESTBOOK, 'gbo_id', 'gbo_text');
-validate_bbc(TBL_GUESTBOOK_COMMENTS, 'gbc_id', 'gbc_text');
-validate_bbc(TBL_LINKS, 'lnk_id', 'lnk_description');
-validate_bbc(TBL_ROOMS, 'room_id', 'room_description');
+validateBBCodes(TBL_ANNOUNCEMENTS, 'ann_id', 'ann_description');
+validateBBCodes(TBL_DATES, 'dat_id', 'dat_description');
+validateBBCodes(TBL_GUESTBOOK, 'gbo_id', 'gbo_text');
+validateBBCodes(TBL_GUESTBOOK_COMMENTS, 'gbc_id', 'gbc_text');
+validateBBCodes(TBL_LINKS, 'lnk_id', 'lnk_description');
+validateBBCodes(TBL_ROOMS, 'room_id', 'room_description');
 
 // check internal fieldname if name is unique, if not add suffix to name
 $sql = 'SELECT usf_id, usf_name_intern FROM '.TBL_USER_FIELDS.' ORDER BY usf_name_intern ';
