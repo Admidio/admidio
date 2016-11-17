@@ -861,15 +861,15 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     require_once('db_scripts/preferences.php');
 
     // set some specific preferences whose values came from user input of the installation wizard
-    $orga_preferences['email_administrator'] = $_SESSION['orga_email'];
-    $orga_preferences['system_language']     = $language;
+    $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
+    $defaultOrgPreferences['system_language']     = $language;
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
-    $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
+    $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
     // create all necessary data for this organization
-    $gCurrentOrganization->setPreferences($orga_preferences, false);
+    $gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
     $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
     // create default room for room module in database
