@@ -323,19 +323,19 @@ class TableCategory extends TableAccess
         {
             if ($this->getValue('cat_org_id') > 0)
             {
-                $org_condition = ' AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                $orgCondition = ' AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                                        OR cat_org_id IS NULL ) ';
             }
             else
             {
-                $org_condition = ' AND cat_org_id IS NULL ';
+                $orgCondition = ' AND cat_org_id IS NULL ';
             }
 
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_type = \''.$this->getValue('cat_type').'\'
-                           '.$org_condition;
+                           '.$orgCondition;
             $countCategoriesStatement = $this->db->query($sql);
 
             $this->setValue('cat_sequence', $countCategoriesStatement->fetchColumn() + 1);
