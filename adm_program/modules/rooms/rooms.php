@@ -46,29 +46,30 @@ if($gPreferences['system_show_create_edit'] == 1)
         cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
         cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
     $additionalTables = '
-                         LEFT JOIN '. TBL_USER_DATA .' cre_surname
-                                ON cre_surname.usd_usr_id = room_usr_id_create
-                               AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                         LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-                                ON cre_firstname.usd_usr_id = room_usr_id_create
-                               AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                         LEFT JOIN '. TBL_USER_DATA .' cha_surname
-                                ON cha_surname.usd_usr_id = room_usr_id_change
-                               AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                         LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-                                ON cha_firstname.usd_usr_id = room_usr_id_change
-                               AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+        LEFT JOIN '. TBL_USER_DATA .' cre_surname
+               ON cre_surname.usd_usr_id = room_usr_id_create
+              AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+        LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+               ON cre_firstname.usd_usr_id = room_usr_id_create
+              AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+        LEFT JOIN '. TBL_USER_DATA .' cha_surname
+               ON cha_surname.usd_usr_id = room_usr_id_change
+              AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+        LEFT JOIN '. TBL_USER_DATA .' cha_firstname
+               ON cha_firstname.usd_usr_id = room_usr_id_change
+              AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
 }
 else
 {
     // show username of create and last change user
-    $additionalFields = ' cre_username.usr_login_name AS create_name,
-                          cha_username.usr_login_name AS change_name ';
+    $additionalFields = '
+        cre_username.usr_login_name AS create_name,
+        cha_username.usr_login_name AS change_name ';
     $additionalTables = '
-                         LEFT JOIN '. TBL_USERS .' cre_username
-                                ON cre_username.usr_id = room_usr_id_create
-                         LEFT JOIN '. TBL_USERS .' cha_username
-                                ON cha_username.usr_id = room_usr_id_change ';
+        LEFT JOIN '. TBL_USERS .' cre_username
+               ON cre_username.usr_id = room_usr_id_create
+        LEFT JOIN '. TBL_USERS .' cha_username
+               ON cha_username.usr_id = room_usr_id_change ';
 }
 
 // read rooms from database
@@ -135,8 +136,11 @@ else
             $page->addHtml('</div>
             <div class="panel-footer">'.
                 // show information about user who creates the recordset and changed it
-                admFuncShowCreateChangeInfoByName($row['create_name'], $room->getValue('room_timestamp_create'),
-                        $row['change_name'], $room->getValue('room_timestamp_change'), $room->getValue('room_usr_id_create'), $room->getValue('room_usr_id_change')).'
+                admFuncShowCreateChangeInfoByName(
+                    $row['create_name'], $room->getValue('room_timestamp_create'),
+                    $row['change_name'], $room->getValue('room_timestamp_change'),
+                    $room->getValue('room_usr_id_create'), $room->getValue('room_usr_id_change')
+                ).'
             </div>
         </div>');
     }

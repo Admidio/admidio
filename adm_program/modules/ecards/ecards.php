@@ -66,7 +66,7 @@ if($getPhotoId > 0 && (int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurr
     // => EXIT
 }
 
-if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) === 0)
+if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '')
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
@@ -80,8 +80,7 @@ if ($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden
-    if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id')))
-    || strlen($user->getValue('usr_id')) === 0)
+    if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
@@ -133,7 +132,7 @@ $page->addJavascript('
     $("#btn_ecard_preview").click(function(event) {
         event.preventDefault();
         $("#ecard_form input[id=\'submit_action\']").val("preview");
-        $("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );
+        $("#ecard_form textarea[name=\'ecard_message\']").text(CKEDITOR.instances.ecard_message.getData());
 
         $.post({ // create an AJAX call...
             data: $("#ecard_form").serialize(), // get the form data
@@ -250,7 +249,7 @@ $form->addSelectBox(
     'ecard_recipients',
     $gL10n->get('SYS_TO'),
     $list,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect'  => true)
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
 );
 $form->addLine();
 $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));

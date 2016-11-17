@@ -57,7 +57,7 @@ echo '
 </div>
 <div class="modal-body" id="preview_content">';
 
-    // show output of parsed template
-    echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
+// show output of parsed template
+echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
 
 echo '</div>';

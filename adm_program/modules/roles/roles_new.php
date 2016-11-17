@@ -261,12 +261,12 @@ $form->addInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('ro
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_dependencies', $gL10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
-$rolename_var = $gL10n->get('ROL_NEW_ROLE');
+$roleName = $gL10n->get('ROL_NEW_ROLE');
 if($role->getValue('rol_name') !== '')
 {
-    $rolename_var = $gL10n->get('SYS_ROLE').' <strong>'.$role->getValue('rol_name').'</strong>';
+    $roleName = $gL10n->get('SYS_ROLE').' <strong>'.$role->getValue('rol_name').'</strong>';
 }
-$form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>');
+$form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $roleName).'</p>');
 
 //  list all roles that the user is allowed to see
 $sqlAllRoles = 'SELECT rol_id, rol_name, cat_name

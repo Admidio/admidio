@@ -66,17 +66,17 @@ $relationtype1 = new TableUserRelationType($gDb);
 $relationtype2 = new TableUserRelationType($gDb);
 
 // Get data
-while($rel_row = $relationtypesStatement->fetch())
+while($relRow = $relationtypesStatement->fetch())
 {
     $relationtype1->clear();
-    $relationtype1->setArray($rel_row);
+    $relationtype1->setArray($relRow);
     $relationtype2->clear();
-    $rel_row2 = $rel_row;
-    $rel_row2['urt_id'] = $rel_row2['urt_id_inverse'];
-    $rel_row2['urt_name'] = $rel_row2['urt_name_inverse'];
-    $rel_row2['urt_name_male'] = $rel_row2['urt_name_male_inverse'];
-    $rel_row2['urt_name_female'] = $rel_row2['urt_name_female_inverse'];
-    $relationtype2->setArray($rel_row2);
+    $relRow2 = $relRow;
+    $relRow2['urt_id'] = $relRow2['urt_id_inverse'];
+    $relRow2['urt_name'] = $relRow2['urt_name_inverse'];
+    $relRow2['urt_name_male'] = $relRow2['urt_name_male_inverse'];
+    $relRow2['urt_name_female'] = $relRow2['urt_name_female_inverse'];
+    $relationtype2->setArray($relRow2);
 
     $relationtypeAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
                                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
@@ -87,9 +87,9 @@ while($rel_row = $relationtypesStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-            $relationtype1->getValue('urt_name'),
-            $relationtype2->getValue('urt_name'),
-            $relationtypeAdministration
+        $relationtype1->getValue('urt_name'),
+        $relationtype2->getValue('urt_name'),
+        $relationtypeAdministration
     );
     $relationtypesOverview->addRowByArray($columnValues, 'row_'. $relationtype1->getValue('urt_id'));
 }

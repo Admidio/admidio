@@ -183,7 +183,10 @@ else
 $form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
                    array('icon' => 'star.png'));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    $category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'),
+    $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

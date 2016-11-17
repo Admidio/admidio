@@ -64,8 +64,7 @@ $relationEditMenu = $page->getMenu();
 $relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('relation_edit_form',
-                     ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?usr_id='.$getUsrId.'&amp;mode=1', $page);
+$form = new HtmlForm('relation_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?usr_id='.$getUsrId.'&amp;mode=1', $page);
 
 $form->addInput(
     'usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),

@@ -36,24 +36,27 @@ if($gPreferences['registration_mode'] == 0)
 $headline = $gL10n->get('NWU_ASSIGN_REGISTRATION');
 
 // create user object for new user
-$new_user = new User($gDb, $gProfileFields, $getNewUserId);
+$newUser = new User($gDb, $gProfileFields, $getNewUserId);
+
+$lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
+$firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
+if($gDbType === 'mysql' && $gPreferences['system_search_similar'] == 1)
 {
-    $sql_similar_name =
-    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\'), 1, 4) )
-     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\'), 1, 4) ) )';
+    $sqlSimilarName =
+        '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4)
+            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $firstName.'\'), 1, 4) )
+         OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $firstName.'\'), 1, 4)
+            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4) ) )';
 }
 else
 {
-    $sql_similar_name =
-    '(  (   last_name.usd_value  LIKE \''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\'
-        AND first_name.usd_value LIKE \''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\')
-     OR (   last_name.usd_value  LIKE \''. $gDb->escapeString($new_user->getValue('FIRST_NAME', 'database')).'\'
-        AND first_name.usd_value LIKE \''. $gDb->escapeString($new_user->getValue('LAST_NAME', 'database')).'\') )';
+    $sqlSimilarName =
+        '(  (   last_name.usd_value  LIKE \''. $lastName.'\'
+            AND first_name.usd_value LIKE \''. $firstName.'\')
+         OR (   last_name.usd_value  LIKE \''. $firstName.'\'
+            AND first_name.usd_value LIKE \''. $lastName.'\') )';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
@@ -81,7 +84,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 1
-           AND '.$sql_similar_name;
+           AND '.$sqlSimilarName;
 $usrStatement = $gDb->query($sql);
 
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
@@ -111,7 +114,7 @@ $registrationAssignMenu = $page->getMenu();
 $registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 $page->addHtml('
-    <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'</p>
+    <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME')).'</p>
     <div class="panel panel-default">
         <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
         <div class="panel-body">'
