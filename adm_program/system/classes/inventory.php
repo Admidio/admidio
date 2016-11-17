@@ -28,7 +28,7 @@ class Inventory extends TableInventory
 {
     public $mInventoryFieldsData;           ///< object with current user field structure
     public $mProfileFieldsData  = array();
-    protected $list_view_rights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
+    protected $listViewRights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
 
     /**
@@ -315,7 +315,7 @@ class Inventory extends TableInventory
                                 $viewProfile = true;
                             }
                             elseif($row['rol_this_list_view'] == 1
-                            && isset($this->list_view_rights[$row['rol_id']]))
+                            && isset($this->listViewRights[$row['rol_id']]))
                             {
                                 // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
                                 $viewProfile = true;
