@@ -47,7 +47,7 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for (i=0; i < childs.length; i++) {
+        for (var i = 0; i < childs.length; i++) {
             if (childs[i].tagName === "TR") {
                 actRowCount++;
                 if (actSequence > 0 && nextNode === null) {

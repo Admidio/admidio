@@ -102,8 +102,8 @@ $page = new HtmlPage($headline);
 $page->enableModal();
 
 $page->addJavascript('
-    function moveCategory(direction, catID) {
-        var actRow = document.getElementById("row_" + catID);
+    function moveCategory(direction, catId) {
+        var actRow = document.getElementById("row_" + catId);
         var childs = actRow.parentNode.childNodes;
         var prevNode    = null;
         var nextNode    = null;
@@ -112,14 +112,14 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for (i=0; i < childs.length; i++) {
+        for (var i = 0; i < childs.length; i++) {
             if (childs[i].tagName === "TR") {
                 actRowCount++;
                 if (actSequence > 0 && nextNode === null) {
                     nextNode = childs[i];
                 }
 
-                if (childs[i].id === "row_" + catID) {
+                if (childs[i].id === "row_" + catId) {
                     actSequence = actRowCount;
                 }
 
@@ -144,7 +144,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
+            $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catId + "&type='. $getType. '&mode=4&sequence=" + direction);
         }
     }');
 
