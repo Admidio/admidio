@@ -177,7 +177,7 @@ class FunctionClass
      */
     public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
     {
-        global $gPreferences, $g_root_path;
+        global $gPreferences;
 
         $imgPhotoPath = '';
         $returnCode = true;
@@ -199,7 +199,7 @@ class FunctionClass
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
                 $imgServerPath = str_replace(THEME_URL, THEME_ADMIDIO_PATH, $matchArray[2][$i]);
-                $imgServerPath = str_replace($g_root_path, ADMIDIO_PATH, $imgServerPath);
+                $imgServerPath = str_replace(ADMIDIO_URL, ADMIDIO_PATH, $imgServerPath);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
                 if(strpos($imgServerPath, 'photo_show.php') !== false)
