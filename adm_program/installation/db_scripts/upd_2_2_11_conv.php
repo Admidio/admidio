@@ -13,26 +13,29 @@
 function validate_bbc($table, $idCol, $col)
 {
     global $gDb;
-    $bbcodes =array(array('o' => '[b]', 'c' => '[/b]'),
-                    array('o' => '[i]', 'c' => '[/i]'),
-                    array('o' => '[u]', 'c' => '[/u]'),
-                    array('o' => '[big]', 'c' => '[/big]'),
-                    array('o' => '[small]', 'c' => '[/small]'),
-                    array('o' => '[center]', 'c' => '[/center]'),
-                    array('o' => '[img', 'c' => '[/img]'),
-                    array('o' => '[url', 'c' => '[/url]'),
-                    array('o' => '[email', 'c' => '[/email]'));
+
+    $bbcodes = array(
+        array('o' => '[b]', 'c' => '[/b]'),
+        array('o' => '[i]', 'c' => '[/i]'),
+        array('o' => '[u]', 'c' => '[/u]'),
+        array('o' => '[big]', 'c' => '[/big]'),
+        array('o' => '[small]', 'c' => '[/small]'),
+        array('o' => '[center]', 'c' => '[/center]'),
+        array('o' => '[img', 'c' => '[/img]'),
+        array('o' => '[url', 'c' => '[/url]'),
+        array('o' => '[email', 'c' => '[/email]')
+    );
 
     // get all entrys with bb-codes
     $sql = 'SELECT '.$idCol.', '.$col.'
-            FROM '.$table. '
-            WHERE '.$col.' LIKE \'%[%\'';
+              FROM '.$table. '
+             WHERE '.$col.' LIKE \'%[%\'';
     $bbcodeStatement = $gDb->query($sql);
 
     // walk through all results
     while($row = $bbcodeStatement->fetchObject())
     {
-        $sql_append = $row->$col;
+        $sqlAppend = $row->$col;
 
         // once for each bb-code-type
         foreach($bbcodes as $bbcode)
@@ -41,14 +44,14 @@ function validate_bbc($table, $idCol, $col)
             $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
             for($x = 0; $x < $dif; ++$x)
             {
-                $sql_append .= $bbcode['c'];
+                $sqlAppend .= $bbcode['c'];
             }
         }
         // update if nessecary
-        if($sql_append != $row->$col)
+        if($sqlAppend != $row->$col)
         {
             $sql_update = 'UPDATE '.$table. '
-                    SET '.$col.' = \''.$sql_append.'\' WHERE '.$idCol.' = \''.$row->$idCol.'\'';
+                    SET '.$col.' = \''.$sqlAppend.'\' WHERE '.$idCol.' = \''.$row->$idCol.'\'';
             $gDb->query($sql_update);
         }
 
