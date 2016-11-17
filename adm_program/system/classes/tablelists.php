@@ -48,6 +48,11 @@ class TableLists extends TableAccess
         {
             throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }
+        // if this list is the default configuration for particpation list than it couldn't be deleted
+        if ($lstId === (int) $gPreferences['dates_default_list_configuration'])
+        {
+            throw new AdmException('DAT_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
+        }
 
         $this->db->startTransaction();
 

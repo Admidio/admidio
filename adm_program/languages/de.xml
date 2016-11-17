@@ -47,6 +47,8 @@
     <string name="DAT_DATE">Termin</string>
     <string name="DAT_DATES">Termine</string>
     <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
+    <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
+    <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
     <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
     <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
@@ -60,6 +62,7 @@
     <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: #VAR1#</string>
     <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
     <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</string>
+    <string name="DAT_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Teilnehmerlisten in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
     <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
     <string name="DAT_ICAL_DAYS_FUTURE">Anzahl iCal Tage Zukunft</string>
@@ -360,7 +363,7 @@
     <string name="LST_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
     <string name="LST_CREATE_OWN_LIST">Eigene Liste erstellen</string>
     <string name="LST_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
-    <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden in mit dieser Konfiguration angezeigt.</string>
+    <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
     <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
     <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>

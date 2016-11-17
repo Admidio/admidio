@@ -504,13 +504,13 @@ else
                     $iconParticipationStatus = '';
                 }
             }
-            
+
             // Link to participants list
             if($gValidLogin && $gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id')))
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {
-                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id');
+                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id').'&amp;lst_id='.$gPreferences['dates_default_list_configuration'];
 
                     if ($getView === 'detail')
                     {
@@ -826,7 +826,6 @@ else
         $page->addHtml($compactTable->show());
     }
 }
-
 // If necessary show links to navigate to next and previous recordsets of the query
 $base_url = ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
 $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, true));
