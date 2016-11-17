@@ -113,9 +113,9 @@ if ($gPreferences['enable_download_module'] == 1)
 
                 // Auszugebendes Icon ermitteln
                 $iconFile = 'page_white_question.png';
-                if(array_key_exists($fileExtension, $icon_file_extension))
+                if(array_key_exists($fileExtension, $iconFileExtension))
                 {
-                    $iconFile = $icon_file_extension[$fileExtension];
+                    $iconFile = $iconFileExtension[$fileExtension];
                 }
 
                 // if set in config file then show timestamp of file upload

@@ -133,11 +133,11 @@ $srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
 $newFolder = ADMIDIO_PATH . FOLDER_DATA;
 
 $myFilesFolder = new Folder($srcFolder);
-$b_return = $myFilesFolder->delete($newFolder.'/backup');
-$b_return = $myFilesFolder->delete($newFolder.'/download');
-$b_return = $myFilesFolder->delete($newFolder.'/photos');
-$b_return = $myFilesFolder->copy($newFolder);
-if(!$b_return)
+$myFilesFolder->delete($newFolder.'/backup');
+$myFilesFolder->delete($newFolder.'/download');
+$myFilesFolder->delete($newFolder.'/photos');
+$returnValue = $myFilesFolder->copy($newFolder);
+if(!$returnValue)
 {
     echo '<p style="color: #cc0000;">Folder <strong>adm_my_files</strong> is not writable.<br />
     No files could be copied to that folder.</p>';
