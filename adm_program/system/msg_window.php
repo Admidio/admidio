@@ -165,19 +165,19 @@ switch ($getMessageId)
     default:
         // im Standardfall wird mit der ID der Text aus der Sprachdatei gelesen
         // falls die Textvariable gefuellt ist, pruefen ob dies auch eine ID aus der Sprachdatei ist
-        $msg_var1 = '';
+        $msgVar1 = '';
         if($getMessageVar1 !== '')
         {
             if(strpos($getMessageVar1, '_') === 3)
             {
-                $msg_var1 = $gL10n->get($getMessageVar1);
+                $msgVar1 = $gL10n->get($getMessageVar1);
             }
             else
             {
-                $msg_var1 = $getMessageVar1;
+                $msgVar1 = $getMessageVar1;
             }
         }
-        echo $gL10n->get(strtoupper($getMessageId), $msg_var1);
+        echo $gL10n->get(strtoupper($getMessageId), $msgVar1);
         break;
 }
 

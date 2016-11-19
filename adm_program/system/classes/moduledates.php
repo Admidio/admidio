@@ -156,7 +156,7 @@ class ModuleDates extends Modules
 
         if ($limit === null)
         {
-            $limit = $gPreferences['dates_per_page'];
+            $limit = (int) $gPreferences['dates_per_page'];
         }
 
         if ($gPreferences['system_show_create_edit'] == 1)

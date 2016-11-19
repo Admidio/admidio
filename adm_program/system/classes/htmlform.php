@@ -246,6 +246,42 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
+     * Add a new button with a custom text to the form. This button could have
+     * an icon in front of the text. Different to addButton this method adds an
+     * additional @b div around the button and the type of the button is @b submit.
+     * @param string $id      Id of the button. This will also be the name of the button.
+     * @param string $text    Text of the button
+     * @param array  $options (optional) An array with the following possible entries:
+     *                        - @b icon : Optional parameter. Path and filename of an icon.
+     *                          If set a icon will be shown in front of the text.
+     *                        - @b link : If set a javascript click event with a page load to this link
+     *                          will be attached to the button.
+     *                        - @b onClickText : A text that will be shown after a click on this button
+     *                          until the next page is loaded. The button will be disabled after click.
+     *                        - @b class : Optional an additional css classname. The class @b admButton
+     *                          is set as default and need not set with this parameter.
+     *                        - @b type : If set to true this button get the type @b submit. This will
+     *                          be the default.
+     */
+    public function addSubmitButton($id, $text, array $options = array())
+    {
+        // create array with all options
+        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
+        $optionsAll     = array_replace($optionsDefault, $options);
+
+        // add default css class
+        $optionsAll['class'] .= ' btn-primary';
+
+        // now add button to form
+        $this->addButton($id, $text, $optionsAll);
+
+        if (!$this->buttonGroupOpen)
+        {
+            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
+        }
+    }
+
+    /**
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
      * @param string $id    Id of the captcha field. This will also be the name of the captcha field.
@@ -510,7 +546,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $this->addHtml(
             '<div class="' . $attributes['class'] . '">
-                <textarea id="' . $id . '" name="' . $id . '"style="width: 100%;">' . $value . '</textarea>
+                <textarea id="' . $id . '" name="' . $id . '" style="width: 100%;">' . $value . '</textarea>
             </div>'
         );
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
@@ -944,7 +980,7 @@ class HtmlForm extends HtmlFormBasic
 
             // if max field length is set then show a counter how many characters still available
             $javascriptCode = '
-                $("#' . $id . '"").NobleCount("#' . $id . '_counter", {
+                $("#' . $id . '").NobleCount("#' . $id . '_counter", {
                     max_chars: ' . $optionsAll['maxLength'] . ',
                     on_negative: "systeminfoBad",
                     block_negative: true
@@ -1639,39 +1675,12 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
-     * Add a new button with a custom text to the form. This button could have
-     * an icon in front of the text. Different to addButton this method adds an
-     * additional @b div around the button and the type of the button is @b submit.
-     * @param string $id      Id of the button. This will also be the name of the button.
-     * @param string $text    Text of the button
-     * @param array  $options (optional) An array with the following possible entries:
-     *                        - @b icon : Optional parameter. Path and filename of an icon.
-     *                          If set a icon will be shown in front of the text.
-     *                        - @b link : If set a javascript click event with a page load to this link
-     *                          will be attached to the button.
-     *                        - @b onClickText : A text that will be shown after a click on this button
-     *                          until the next page is loaded. The button will be disabled after click.
-     *                        - @b class : Optional an additional css classname. The class @b admButton
-     *                          is set as default and need not set with this parameter.
-     *                        - @b type : If set to true this button get the type @b submit. This will
-     *                          be the default.
+     * Open a bootstrap btn-group if the form need more than one button.
      */
-    public function addSubmitButton($id, $text, array $options = array())
+    public function openButtonGroup()
     {
-        // create array with all options
-        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
-        $optionsAll     = array_replace($optionsDefault, $options);
-
-        // add default css class
-        $optionsAll['class'] .= ' btn-primary';
-
-        // now add button to form
-        $this->addButton($id, $text, $optionsAll);
-
-        if (!$this->buttonGroupOpen)
-        {
-            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
-        }
+        $this->buttonGroupOpen = true;
+        $this->addHtml('<div class="btn-group" role="group">');
     }
 
     /**
@@ -1748,23 +1757,6 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->addHtml('</div></div>');
         }
-    }
-
-    /**
-     * Close all html elements of a groupbox that was created before.
-     */
-    public function closeGroupBox()
-    {
-        $this->addHtml('</div></div>');
-    }
-
-    /**
-     * Open a bootstrap btn-group if the form need more than one button.
-     */
-    public function openButtonGroup()
-    {
-        $this->buttonGroupOpen = true;
-        $this->addHtml('<div class="btn-group" role="group">');
     }
 
     /**
@@ -1873,6 +1865,14 @@ class HtmlForm extends HtmlFormBasic
             $this->addHtml('<div class="panel-heading">' . $headline . '</div>');
         }
         $this->addHtml('<div class="panel-body">');
+    }
+
+    /**
+     * Close all html elements of a groupbox that was created before.
+     */
+    public function closeGroupBox()
+    {
+        $this->addHtml('</div></div>');
     }
 
     /**

@@ -264,12 +264,12 @@ class ModuleLists extends Modules
         }
 
         // assemble conditions
-        $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
+        $sqlConditions = $this->getCategorySql().$this->getVisibleRolesSql();
 
         // provoke empty result for not logged in users
         if(!$gValidLogin)
         {
-            $sql_conditions .= ' AND cat_hidden = 0 ';
+            $sqlConditions .= ' AND cat_hidden = 0 ';
         }
 
         $sql = 'SELECT rol.*, cat.*,
@@ -292,7 +292,7 @@ class ModuleLists extends Modules
                    AND rol_valid   = '.(int) $this->activeRole.'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
-                       '.$sql_conditions.'
+                       '.$sqlConditions.'
               ORDER BY cat_sequence, rol_name';
 
         // If is there a limit then specify one
@@ -326,21 +326,21 @@ class ModuleLists extends Modules
         global $gCurrentOrganization, $gValidLogin, $gDb;
 
         // assemble conditions
-        $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
+        $sqlConditions = $this->getCategorySql().$this->getVisibleRolesSql();
         // provoke empty result for not logged in users
         if(!$gValidLogin)
         {
-            $sql_conditions = ' AND cat_hidden = 0 ';
+            $sqlConditions = ' AND cat_hidden = 0 ';
         }
 
         $sql = 'SELECT COUNT(*) AS count
-          FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
-         WHERE rol_valid   = '.(int) $this->activeRole.'
-           AND rol_visible = 1
-           AND rol_cat_id = cat_id
-           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )
-               '.$sql_conditions;
+                  FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
+                 WHERE rol_valid   = '.(int) $this->activeRole.'
+                   AND rol_visible = 1
+                   AND rol_cat_id = cat_id
+                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                       OR cat_org_id IS NULL )
+                       '.$sqlConditions;
         $pdoStatement = $gDb->query($sql);
 
         return (int) $pdoStatement->fetchColumn();

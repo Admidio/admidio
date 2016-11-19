@@ -122,8 +122,7 @@ $page->enableModal();
 if($gDbType === 'mysql')
 {
     $mySqlMaxColumnAlert = '
-    if(fieldNumberIntern >= 57)
-    {
+    if (fieldNumberIntern >= 57) {
         alert("'.$gL10n->get('LST_NO_MORE_COLUMN').'");
         return;
     }';
@@ -136,8 +135,7 @@ $javascriptCode = '
     var arr_default_fields = createColumnsArray();
 
     // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
-    function addColumn()
-    {
+    function addColumn() {
         '.$mySqlMaxColumnAlert.'
 
         var category = "";
@@ -153,12 +151,9 @@ $javascriptCode = '
         var newCellField = newTableRow.insertCell(-1);
         htmlCboFields = "<select class=\"form-control\" onchange=\"getConditionField(" + fieldNumberShow + ", this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column" + fieldNumberShow + "\">" +
                 "<option value=\"\"></option>";
-        for(var counter = 1; counter < arr_user_fields.length; counter++)
-        {
-            if(category != arr_user_fields[counter]["cat_name"])
-            {
-                if(category.length > 0)
-                {
+        for (var counter = 1; counter < arr_user_fields.length; counter++) {
+            if (category != arr_user_fields[counter]["cat_name"]) {
+                if (category.length > 0) {
                     htmlCboFields += "</optgroup>";
                 }
                 htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
@@ -167,19 +162,16 @@ $javascriptCode = '
 
             var selected = "";
             // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
-            if((  (fieldNumberIntern === 0 && arr_user_fields[counter]["usf_name_intern"] === "LAST_NAME")
+            if (( (fieldNumberIntern === 0 && arr_user_fields[counter]["usf_name_intern"] === "LAST_NAME")
                || (fieldNumberIntern === 1 && arr_user_fields[counter]["usf_name_intern"] === "FIRST_NAME"))
-            && listId == 0)
-            {
+            && listId == 0) {
                 selected = " selected=\"selected\" ";
             }
 
             // bei gespeicherten Listen das entsprechende Profilfeld selektieren
             // und den Feldnamen dem Listenarray hinzufügen
-            if(arr_default_fields[fieldNumberShow])
-            {
-                if(arr_user_fields[counter]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"])
-                {
+            if (arr_default_fields[fieldNumberShow]) {
+                if (arr_user_fields[counter]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]) {
                     selected = " selected=\"selected\" ";
                     arr_default_fields[fieldNumberShow]["usf_name"] = arr_user_fields[counter]["usf_name"];
                 }
@@ -193,19 +185,14 @@ $javascriptCode = '
         var selectAsc  = "";
         var selectDesc = "";
 
-        if(arr_default_fields[fieldNumberShow])
-        {
-            if(arr_default_fields[fieldNumberShow]["sort"] === "ASC")
-            {
+        if (arr_default_fields[fieldNumberShow]) {
+            if (arr_default_fields[fieldNumberShow]["sort"] === "ASC") {
                 selectAsc = " selected=\"selected\" ";
             }
-            if(arr_default_fields[fieldNumberShow]["sort"] === "DESC")
-            {
+            if (arr_default_fields[fieldNumberShow]["sort"] === "DESC") {
                 selectDesc = " selected=\"selected\" ";
             }
-        }
-        else if(fieldNumberIntern === 0)
-        {
+        } else if (fieldNumberIntern === 0) {
             selectAsc = " selected=\"selected\" ";
         }
 
@@ -218,19 +205,15 @@ $javascriptCode = '
 
         // neue Spalte fuer Bedingungen
         condition = "";
-        if(arr_default_fields[fieldNumberShow])
-        {
+        if (arr_default_fields[fieldNumberShow]) {
             var fieldName = arr_default_fields[fieldNumberShow]["usf_name"];
 
-            if(arr_default_fields[fieldNumberShow]["condition"])
-            {
+            if (arr_default_fields[fieldNumberShow]["condition"]) {
                 condition = arr_default_fields[fieldNumberShow]["condition"];
                 condition = condition.replace(/{/g, "<");
                 condition = condition.replace(/}/g, ">");
             }
-        }
-        else
-        {
+        } else {
             var fieldName = "";
         }
 
@@ -243,8 +226,7 @@ $javascriptCode = '
         fieldNumberIntern++;
     }
 
-    function createProfileFieldsArray()
-    {
+    function createProfileFieldsArray() {
         var user_fields = new Array(); ';
 
 // create a multidimensional array for all columns with the necessary data
@@ -370,36 +352,28 @@ $javascriptCode .= '
         return default_fields;
     }
 
-    function getConditionField(columnNumber, columnName)
-    {
+    function getConditionField(columnNumber, columnName) {
         htmlFormCondition = setConditonField(columnNumber, columnName);
         $("#td_condition" + columnNumber).html(htmlFormCondition);
     }
 
-    function setConditonField(fieldNumberShow, columnName)
-    {
+    function setConditonField(fieldNumberShow, columnName) {
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
 
-        for (key in arr_user_fields)
-        {
-            if(arr_user_fields[key]["usf_name"] == columnName)
-            {
-                if(arr_user_fields[key]["usf_type"] === "DROPDOWN"
-                  || arr_user_fields[key]["usf_type"] === "RADIO_BUTTON")
-                {
+        for (key in arr_user_fields) {
+            if (arr_user_fields[key]["usf_name"] == columnName) {
+                if ( arr_user_fields[key]["usf_type"] === "DROPDOWN"
+                  || arr_user_fields[key]["usf_type"] === "RADIO_BUTTON") {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 
-                    for (selectValue in arr_user_fields[key]["usf_value_list"])
-                    {
+                    for (selectValue in arr_user_fields[key]["usf_value_list"]) {
                         selected = "";
 
-                        if(arr_default_fields[fieldNumberShow])
-                        {
-                            if(arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
-                                && arr_user_fields[key]["usf_value_list"][selectValue] == arr_default_fields[fieldNumberShow]["condition"])
-                            {
+                        if (arr_default_fields[fieldNumberShow]) {
+                            if (arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
+                                && arr_user_fields[key]["usf_value_list"][selectValue] == arr_default_fields[fieldNumberShow]["condition"]) {
                                 selected = " selected=\"selected\" ";
                             }
                         }
@@ -408,34 +382,27 @@ $javascriptCode .= '
                     }
                 }
 
-                if(arr_user_fields[key]["usf_type"] === "CHECKBOX")
-                {
+                if (arr_user_fields[key]["usf_type"] === "CHECKBOX") {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 
                     selected = "";
 
-                    if(arr_default_fields[fieldNumberShow])
-                    {
-
-                        if(arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
-                            && arr_default_fields[fieldNumberShow]["condition"] == "1")
-                        {
+                    if (arr_default_fields[fieldNumberShow]) {
+                        if (arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
+                            && arr_default_fields[fieldNumberShow]["condition"] == "1") {
                             selected = " selected=\"selected\" ";
                         }
                             html += "<option value=\"1\" " + selected + ">'.$gL10n->get('SYS_YES').'</option>";
                         selected = "";
 
-                        if(arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
-                            && arr_default_fields[fieldNumberShow]["condition"] == "0")
-                        {
+                        if (arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
+                            && arr_default_fields[fieldNumberShow]["condition"] == "0") {
                             selected = " selected=\"selected\" ";
                         }
                             html += "<option value=\"0\" " + selected + ">'.$gL10n->get('SYS_NO').'</option>" +
                             "</select>";
-                    }
-                    else
-                    {
+                    } else {
                         html += "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
                                 "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
                                 "</select>";
@@ -446,27 +413,22 @@ $javascriptCode .= '
         return html;
     }
 
-    function loadList()
-    {
+    function loadList() {
         var listId = $("#sel_select_configuation").val();
         var show_members = $("#sel_show_members").val();
         self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + show_members;
     }
 
-    function send(mode)
-    {
-        for(var i = 1; i <= fieldNumberIntern; i++)
-        {
-            if(document.getElementById("condition" + i))
-            {
+    function send(mode) {
+        for (var i = 1; i <= fieldNumberIntern; i++) {
+            if (document.getElementById("condition" + i)) {
                 var condition = document.getElementById("condition" + i);
                 condition.value = condition.value.replace(/</g, "{");
                 condition.value = condition.value.replace(/>/g, "}");
             }
         }
 
-        switch (mode)
-        {
+        switch (mode) {
             case "show":
                 document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
                 document.getElementById("mylist_configuration_form").submit();
@@ -480,8 +442,7 @@ $javascriptCode .= '
             case "save_as":
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
-                if(listName != null)
-                {
+                if (listName != null) {
                     document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
                     document.getElementById("mylist_configuration_form").submit();
                 }
@@ -489,8 +450,7 @@ $javascriptCode .= '
 
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
-                if(msg_result)
-                {
+                if (msg_result) {
                     document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
                     document.getElementById("mylist_configuration_form").submit();
                 }
@@ -498,8 +458,7 @@ $javascriptCode .= '
 
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
-                if(msg_result)
-                {
+                if (msg_result) {
                     document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
                     document.getElementById("mylist_configuration_form").submit();
                 }
@@ -516,7 +475,7 @@ $page->addJavascript('$(function() {
     $("#btn_delete").click(function() { send("delete"); });
     $("#btn_copy").click(function() { send("save_as"); });
 
-    for(var counter = 0; counter < '. $defaultColumnRows. '; counter++) {
+    for (var counter = 0; counter < '. $defaultColumnRows. '; counter++) {
         addColumn();
     }
 });', true);
@@ -610,7 +569,7 @@ $form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURA
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isAdministrator())
 {
-    $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), $list->getValue('lst_global'),
+    $form->addCheckbox('cbx_global_configuration', $gL10n->get('LST_CONFIGURATION_ALL_USERS'), (bool) $list->getValue('lst_global'),
         array('defaultValue' => $formValues['cbx_global_configuration'], 'helpTextIdLabel' => 'LST_PRESET_CONFIGURATION_DESC'));
 }
 
@@ -648,7 +607,7 @@ else
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
 if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
-|| ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
+|| ((int) $gCurrentUser->getValue('usr_id') === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
     $form->addButton('btn_delete', $gL10n->get('LST_DELETE_CONFIGURATION'), array('icon' => THEME_URL.'/icons/delete.png'));
 }

@@ -91,7 +91,7 @@ if ($getMode === 1 || $getMode === 2 || $getMode === 3 || $getMode === 9)
         $guestbook->readDataById($getGboId);
 
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
+        if((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
@@ -108,7 +108,7 @@ else
         $guestbook_comment->readDataById($getGboId);
 
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
+        if((int) $guestbook_comment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }

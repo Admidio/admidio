@@ -56,9 +56,8 @@ $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value AS las
            AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
       ORDER BY last_name, first_name';
 $usrStatement = $gDb->query($sql);
-$members_found = $usrStatement->rowCount();
 
-if ($members_found === 0)
+if ($usrStatement->rowCount() === 0)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
@@ -115,7 +114,7 @@ while($row = $usrStatement->fetch())
         $row['usr_login_name'],
         $mailLink,
         '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php?new_user_id='.$row['usr_id'].'"><img
-                            src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
+            src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
             href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
             $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img

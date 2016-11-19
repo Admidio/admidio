@@ -24,7 +24,7 @@ function prepareReceivers($receiversString)
     {
         if (strpos($receivers, 'list ') === 0)
         {
-        	$receiverNames .= '; ' . substr($receivers, 5);
+            $receiverNames .= '; ' . substr($receivers, 5);
         }
         elseif (strpos($receivers, ':') > 0)
         {

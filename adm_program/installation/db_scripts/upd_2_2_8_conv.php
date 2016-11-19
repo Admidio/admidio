@@ -13,27 +13,27 @@
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
 $orgaStatement = $gDb->query($sql);
 
-while($row_orga = $orgaStatement->fetch())
+while($rowOrga = $orgaStatement->fetch())
 {
-    $last_cat_type = '';
-    $counter       = 0;
+    $lastCatType = '';
+    $counter     = 0;
     $sql = 'SELECT *
               FROM '.TBL_CATEGORIES.'
-             WHERE (  cat_org_id = '. $row_orga['org_id']. '
+             WHERE (  cat_org_id = '. $rowOrga['org_id']. '
                    OR cat_org_id IS NULL )
           ORDER BY cat_type, cat_org_id, cat_sequence ';
     $catStatement = $gDb->query($sql);
 
-    while($row_cat = $catStatement->fetch())
+    while($rowCat = $catStatement->fetch())
     {
-        if($row_cat['cat_type'] != $last_cat_type)
+        if($rowCat['cat_type'] != $lastCatType)
         {
             $counter = 1;
-            $last_cat_type = $row_cat['cat_type'];
+            $lastCatType = $rowCat['cat_type'];
         }
 
         $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '. $counter. '
-                 WHERE cat_id = '. $row_cat['cat_id'];
+                 WHERE cat_id = '. $rowCat['cat_id'];
         $gDb->query($sql);
 
         ++$counter;

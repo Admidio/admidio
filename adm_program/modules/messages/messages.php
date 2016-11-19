@@ -136,7 +136,7 @@ if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
-        if($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
+        if((int) $row['msg_usr_id_sender'] === (int) $gCurrentUser->getValue('usr_id'))
         {
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
         }
@@ -172,7 +172,7 @@ if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
-        if($row['msg_usr_id_sender'] == $gCurrentUser->getValue('usr_id'))
+        if((int) $row['msg_usr_id_sender'] === (int) $gCurrentUser->getValue('usr_id'))
         {
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
         }

@@ -347,11 +347,11 @@ switch($getMode)
         require_once('../../installation/db_scripts/preferences.php');
 
         // set some specific preferences whose values came from user input of the installation wizard
-        $orga_preferences['email_administrator'] = $_POST['orgaEmail'];
-        $orga_preferences['system_language']     = $gPreferences['system_language'];
+        $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
+        $defaultOrgPreferences['system_language']     = $gPreferences['system_language'];
 
         // create all necessary data for this organization
-        $newOrganization->setPreferences($orga_preferences, false);
+        $newOrganization->setPreferences($defaultOrgPreferences, false);
         $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
 
         // if installation of second organization than show organization select at login

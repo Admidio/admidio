@@ -393,7 +393,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         if($plg_ajax_change)
         {
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
-                url: "'.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
+                url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
                 cache: false,
                 data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'",
                 success: function(html) {
@@ -403,7 +403,7 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
             }); return false;">&laquo;</a></th>';
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
-                url: "'.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
+                url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
                 cache: false,
                 data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'",
                 success: function(html) {
@@ -679,12 +679,12 @@ echo '</table>';
 if($currentMonth.$currentYear !== date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.get({
-            url: \''.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php\',
+            url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
             cache: false,
-            data: \'ajax_change&amp;date_id='.date('mY').'\',
+            data: "ajax_change&amp;date_id='.date('mY').'",
             success: function(html) {
-                $(\'#plgCalendarContent\').replaceWith(html);
-                $(\'.admidio-calendar-link\').popover();
+                $("#plgCalendarContent").replaceWith(html);
+                $(".admidio-calendar-link").popover();
             }
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }

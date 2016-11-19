@@ -137,7 +137,6 @@
   <string name="DOW_NEW_FILE_NAME">Naam nieuw bestand</string>
   <string name="DOW_NEW_NAME">Nieuwe naam</string>
   <string name="DOW_PREVIOUS_NAME">Vorige naam</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kun je instellen wie de map #VAR1_BOLD# kan zien en de bestanden kan downloaden. Deze rechten worden op alle submappen toegepast, rechten die deze mappen al hadden worden hierbij overschreven. De enige gebruikers die hier toegang tot kunnen krijgen zijn degene met toegang tot de bovengelegen map.</string>
   <string name="DOW_SELECT_FILES">Bestanden kiezen</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Instellingen toegangsrechten map</string>
   <string name="DOW_UNMANAGED_FILES">Onbeheerde bestanden</string>
@@ -159,7 +158,6 @@
   <string name="ECA_SCALE_THUMBNAILS_DESC">Bepaal grootte van de lange zijde van thumbnails. (Standaard: 250 pixels)</string>
   <string name="ECA_SUCCESSFULLY_SEND">Uw Ecard is verzonden.</string>
   <string name="ECA_TEMPLATE">Template</string>
-  <string name="ECA_TEMPLATE_DESC">Stel standaard template in. (standaard: Postcard)</string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Toon volledige grootte</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
@@ -200,6 +198,7 @@
   <string name="INS_ADDIDIONAL_DATA">Extra informatie</string>
   <string name="INS_ADDRESS_LIST">Adreslijst</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Informatie beheerder niet compleet!</string>
+  <string name="INS_ADMINISTRATOR_LOGIN_DESC">Een update aan de database kan alleen door een webmaster doorgevoerd worden. Log hier aub als webmaster in.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Bestuur</string>
   <string name="INS_CHOOSE_LANGUAGE">Kies taal</string>
@@ -229,7 +228,7 @@
   <string name="INS_DESCRIPTION_BOARD">Bestuur van de organisatie</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle leden</string>
-  <string name="INS_DESCRIPTION_WEBMASTER">Groep beheerders</string>
+  <string name="INS_DESCRIPTION_ADMINISTRATOR">Groep beheerders</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Geef database toegangsinformatie door</string>
   <string name="INS_ERROR_OPEN_FILE">Bestand #VAR1_BOLD# kan niet geopend worden.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -275,9 +274,6 @@
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Update proces gelukt</string>
   <string name="INS_WARNING_BETA_VERSION">U gebruikt een BETA versie van Admidio.\n\nProblemen zoals instabiliteit en verlies van gegevens kunnen voorkomen. Gebruik deze versie svp alleen voor testdoeleinden!</string>
   <string name="INS_WARNING_SAFE_MODE">Veilige modus op de server is actief. Dit kan later problemen veroorzaken wanneer u bepaalde functies gebruikt.</string>
-  <string name="INS_WEBMASTER_LOGIN">Webmaster-aanmelding</string>
-  <string name="INS_WEBMASTER_LOGIN_DESC">Een update aan de database kan alleen door een webmaster doorgevoerd worden. Log hier aub als webmaster in.</string>
-  <string name="INS_WEBMASTER_LOGIN_FAILED">Voor de door jou opgegeven inloggegevens, is geen gebruiker gevonden die webmaster is.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welkom in de installatie van Admidio</string>
   <string name="INS_WELCOME_TEXT">Op de volgende pagina\'s wordt u gevraagd om enkele belangrijke zaken door te geven om een nieuw Admidio systeem te installeren. U moet ook database toegangsinformatie doorgeven van uw Admidio installatie.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
@@ -356,7 +352,7 @@
   <string name="LST_MEMBERSHIP_END">Einde lidmaatschap</string>
   <string name="LST_MEMBERSHIP_START">Begin lidmaatschap</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="LST_MUST_HAVE_WEBMASTER">Rol type \'beheerder\' moet tenminste 1 lid hebben!</string>
+  <string name="LST_MUST_HAVE_ADMINISTRATOR">Rol type \'beheerder\' moet tenminste 1 lid hebben!</string>
   <string name="LST_MY_LIST">Eigen lijst</string>
   <string name="LST_MYLIST_CONDITION_DESC">Geef voorwaarden op voor alle velden die in uw nieuwe lijst komen. Het zoekresultaat kan beinvloed worden door beperkingen die bepaalde rollen hebben.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Instellingen als standaard gebruiken</string>
@@ -370,7 +366,6 @@
   <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers met ingevuld e-mail adres</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Aantal rollen per pagina</string>
   <string name="LST_PRESET_CONFIGURATION">Vooraf bepaalde instellingen</string>
-  <string name="LST_PRESET_CONFIGURATION_DESC">Als beheerder kunt u de standaard instellingen voor alle leden bepalen. Maak rijen en kolommen en sla dit op door het een naam te geven.</string>
   <string name="LST_PRINT_PREVIEW">Print</string>
   <string name="LST_ROLE_INFORMATION">Rol informatie</string>
   <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Leden in de periode:</string>
@@ -442,8 +437,6 @@
   <string name="MAI_SEND_METHOD_DESC">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</string>
   <string name="MAI_SENDER_EMAIL">E-mail adres verstuurder</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mail adres op wat als standaard e-mail adres wordt gebruik in deze module (b.v. outbox@#VAR1#).\nAls dit veld leeg blijft zal het e-mail adres van verstuurder als afzender gebruikt worden. (standaard: leeg)</string>
-  <string name="MAI_SENDER_INTO_TO">Afzender als geadresseerde</string>
-  <string name="MAI_SENDER_INTO_TO_DESC">Indien een mail word verzonden naar een rol, zullen alle begunstigden in BCC worden geplaatst. Het AAN veld zal \"\"Undisclosed Recipients\" bevatten. indien dit leidt tot problemen, kun je de optie activeren om de afzenden te gebruiken in het AAN veld. De overige adressen blijven in BCC staan. (Standaard: Uitgeschakeld)</string>
   <string name="MAI_SENDER_NAME">Afzender</string>
   <string name="MAI_SENDER_NAME_DESC">Afzender naam van het gebruikte e-mail adres.</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</string>
@@ -562,7 +555,6 @@
   <string name="NWU_USER_VALID_LOGIN">Gebruiker heeft al geldige inlog informatie.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Module toegang</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Module kan gedeactiveerd worden of is alleen toegankelijk voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het niet zichtbaar zijn voor niet-ingelogde gebruikers en RSS is volledig uitgeschakeld voor beide gebruikersgroepen. (standaard: actief)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Systeem berichten inschakelen</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Hier kan je de systeem berichten van Admidio uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker inlogt. Registratie bevestigingen worden doorgaans ook verzonden als systeem bericht. In het algemeen dient deze functie niet te worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie.(Standaard: Ja)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Extra variabelen</string>
@@ -573,23 +565,13 @@
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (standaard: 20 minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Achtergrond kleur</string>
-  <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Kies achtergrond kleur (hex) voor captcha code. (standaard: #FFEFC4)</string>
   <string name="ORG_CAPTCHA_FONT">Kies font type voor captcha code. (standaard: Theme font)</string>
-  <string name="ORG_CAPTCHA_FONT_SIZE">Kies font size voor captcha code. (standaard: 20)</string>
-  <string name="ORG_CAPTCHA_HEIGHT">Captcha-hoogte</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha preview</string>
-  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Toon preview van captcha. Let erop dat alleen opgeslagen waarden meegenomen worden!</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Na activering wordt een afbeelding met captcha code of een simpele rekensom getoond aan nieuwe gebruikers. Het is noodzakelijk dat alles correct wordt ingevuld. Captcha is onderdeel van anti-spam oplossing van Admidio. (standaard: ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha handtekening</string>
-  <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Kies font size voor de captcha handtekening. (standaard: 13)</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Vul handtekening voor de captcha in. Standaard font type van het huidige thema wordt gebruikt.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Geaccepteerde karakters</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Vul de geaccepteerde karakters in voor de captcha.</string>
   <string name="ORG_CAPTCHA_TYPE">Captcha type</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Berekening</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Afbeelding</string>
-  <string name="ORG_CAPTCHA_TYPE_TEXT">Selecteer type captcha. Kies tussen captcha middels afbeelding of captcha middels simpele berekening. (standaard: afbeelding)</string>
-  <string name="ORG_CAPTCHA_WIDTH">Captcha-breedte</string>
   <string name="ORG_CONFIRM_REGISTRATION">Bevestiging registratie na handmatige goedkeuring</string>
   <string name="ORG_CREATE_ITEM_FIELD">Nieuw artikelveld</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Maak profielveld</string>
@@ -603,8 +585,6 @@
   <string name="ORG_EMAIL_ALERTS">E-mail alert</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Alle leden van rollen met rechten voor #VAR1_BOLD# ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (standaard: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha activatie</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">RSS activatie</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan voorzien in RSS-feed voor meerdere modules (mededelingen, afspraken, gastenboek, foto galerij en links) op de overzichtspagina van elke module. Inschrijven is mogelijk via browser of feed reader. (standaard: ja)</string>
   <string name="ORG_FAST_REGISTRATION">Snelle registratie</string>
   <string name="ORG_FIELD_DESCRIPTION">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</string>
   <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht #VAR1_BOLD#</string>
@@ -633,7 +613,6 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Nieuw wachtwoord en activatie link</string>
   <string name="ORG_NO_FIELD_CREATED">Er zijn nog geen specifieke velden voor deze organistaie aangemaakt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Bij het wisselen van weergave gaan alle niet opgeslagen instellingen verloren.</string>
-  <string name="ORG_NOTIFY_WEBMASTER">Beheerder informeren over nieuwe registraties</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal items per pagina</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
@@ -671,7 +650,6 @@
   <string name="ORG_TIMEZONE_DESC">Dit is een vastgelegde tijdzone. Als later in het configuratiebestand config.php deze tijdzone verandert wordt, worden al gebruikte tijden en datums niet mee aangepast.</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Lijst met waarden</string>
-  <string name="ORG_VALUE_LIST_DESC">Bepaal hier de items van de drop-down of selectieboxen. Per regel kan 1 drop-down box of selectiebox opgegeven worden.\n\nIn plaats van de tekst wordt de geselecteerde positie in de lijst in het profiel opgeslagen. Als in de tekst een regel veranderd, zullen alle gebruikers deze nieuwe tekst direct in hun profiel kunnen zien. Als een menu item naar een andere regel wordt verplaatst, kan een ander item worden getoond in het gebruikersprofiel.\n\nBij een selectiebox kan ook een icoon weergegeven worden. Om dit te doen kan de naam van de icoon opgegeven worden (b.v. ok.png) of de externe URL van een afbeelding (v.b. https://www.example.com/example.jpg). Door verticale scheidslijn te gebruiken kan een extra tekstbaloon aan het icoon gekoppeld worden (v.b. vrouw.png|vrouw)</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activatie link voor nieuw wachtwoord</string>
   <string name="ORG_VARIABLE_EMAIL">E-mail adres gebruiker</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Systeem e-mail adres van organisatie</string>
@@ -796,10 +774,8 @@
   <string name="PRO_MY_PROFILE">Mijn profiel</string>
   <string name="PRO_NEW_PASSWORD">Nieuw wachtwoord</string>
   <string name="PRO_NEW_PICTURE">Nieuwe profielfoto</string>
-  <string name="PRO_NO_DEFAULT_ROLE">Het rol beheer bevat geen standaard rol voor nieuwe gebruikers. Gelieve contact op te nemen met een webmaster welke dit kan aanpassen.</string>
   <string name="PRO_NO_ROLES_VISIBLE">Geen rollen gevonden. Mogelijks heeft u niet de rechten om bepaalde rollen te zien.</string>
   <string name="PRO_PASSWORD_CHANGED">Wachtwoord is succesvol gewijzigd.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Wachtwoord moet uit tenminste 8 karakters bestaan en kan uit letters en cijfers bestaan.\n\nOp grond van veiligheid wordt het wachtwoord gecodeerd opgeslagen. Het is later niet zichtbaar.</string>
   <string name="PRO_PASSWORD_LENGTH">Wachtwoord moet tenminste uit 8 karakters bestaan.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Oude wachtwoord is onjuist.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">De ingevoerde wachtwoorden zijn verschillend.</string>
@@ -833,6 +809,7 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Er worden hier alleen rollen van andere organisaties weergegeven, die voor alle geregistreerd gebruikers zichtbaar zijn. Als je lid bent van deze organisatie, zal je ook de rollen getoond worden die u kunt zien met uw rechten binnen de organisatie.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Wilt u de geselecteerde foto verwijderen?</string>
   <string name="PRO_YEARS">jaar</string>
+  <!--Phrases only in Relationssmodule-->
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Actieve rollen</string>
   <string name="ROL_ALL_GUESTS">Alle gebruikers van de website</string>
@@ -876,9 +853,7 @@
   <string name="ROL_RIGHT_ASSIGN_ROLES">Rollen bewerken en toewijzen</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Leden met rol waarvan deze optie geactiveerd is mogen rollen maken/beheren en leden een rol toewijzen.</string>
   <string name="ROL_RIGHT_DATES">Maken en bewerken evenementen</string>
-  <string name="ROL_RIGHT_DOWNLOAD">Downloads uploaden en bewerken</string>
   <string name="ROL_RIGHT_EDIT_USER">Profiel van alle leden bewerken</string>
-  <string name="ROL_RIGHT_EDIT_USER_DESC">Leden met rol waarvan deze optie geactiveerd is mogen profiel beheren van andere leden (behalve wachtwoorden).\nHiernaast mogen ze nieuwe gebruikers maken en oude gebruikers verwijderen.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Berichten gastenboek bewerken en verwijderen</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Reacties plaatsen in gastenboek</string>
   <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Bepaal wie berichten kan versturen naar deze rol via de e-mail module. Rol met rechten #VAR1_BOLD# staat boven deze instelling.</string>
@@ -946,11 +921,6 @@
   <string name="SYS_CAPTCHA_CALC">Resultaat van berekening</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Het resultaat van de berekening is onjuist</string>
   <string name="SYS_CAPTCHA_CALC_DESCRIPTION">De berekening is onderdeel van captcha. Een captcha wordt gebruikt voor spam preventie. De berekening wordt gebruikt om te verifieren of een gebruiker of een script (of spambot) het formulier invulde.\nGelieve de berekening in te vullen in het formulier.</string>
-  <string name="SYS_CAPTCHA_CALC_PART1">Bereken svp</string>
-  <string name="SYS_CAPTCHA_CALC_PART2">en tel op</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_THIRD">een derde van</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_HALF">de helft van</string>
-  <string name="SYS_CAPTCHA_CALC_PART4">.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">De identificatiecode is ongeldig.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Identificatiecode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Deze code is onderdeel van captcha. Een captcha wordt gebruikt tegen spam. De afbeelding wordt gebruikt om te bepalen of een mens of script (spambot) het formulier ingevuld heeft.</string>
@@ -1052,12 +1022,9 @@
   <string name="SYS_FROM">van #VAR1#</string>
   <string name="SYS_FROM_TO">van #VAR1# tot #VAR2#</string>
   <string name="SYS_FOLDER">Map</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij #VAR2#beheerder#VAR3# om schrijfrechten te checken van hoofdmap.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden inclusief schrijfrechten.\n\nVraag svp hulp bij #VAR2#beheerder#VAR3# om schrijfrechten te checken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
   <string name="SYS_FORMER">Voormalig</string>
   <string name="SYS_FORMER_PL">Voormalig</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_SIZE">Font-size</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Wachtwoord vergeten!</string>
   <string name="SYS_FRIDAY">Vrijdag</string>
   <string name="SYS_FULL_SCREEN">Volledig scherm</string>
@@ -1095,8 +1062,6 @@
   <string name="SYS_LOGIN">Inloggen</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Je hebt meerdere keren binnen korte tijd geprobeerd in te loggen met een fout wachtwoord.\nUit veiligheidsoverwegingen is je toegang 15 minuten geblokkeerd.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Uw account is nog niet geactiveerd.\n\nU wordt geinformeerd zodra u toegang heeft.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Je inloggegevens zijn correct, echter ben je geen actief lid van deze organisatie.</string>
-  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Je inloggegevens zijn correct, echter is de update-procedure alleen voor de webmaster beschikbaar.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">De opgegeven gebruikersnaam en/of het opgegeven wachtwoord is foutief.</string>
   <string name="SYS_LOGIN_PROBLEMS">Inlog problemen</string>
   <string name="SYS_LOGIN_SUCCESSFUL">Inloggen is gelukt.</string>
@@ -1124,7 +1089,6 @@
   <string name="SYS_MESSAGES">Berichten</string>
   <string name="SYS_MINUTES">Minuten</string>
   <string name="SYS_MOBILE">Mobiel</string>
-  <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">Deze module is alleen toegankelijke vanaf de startpagina van de gekozen organisatie bij het inloggen (#VAR1#).</string>
   <string name="SYS_MODULE_DISABLED">Deze module is uitgeschakeld.</string>
   <string name="SYS_MODULE_PREFERENCES">Module instellingen</string>
   <string name="SYS_MODULES">Modules</string>
@@ -1204,8 +1168,6 @@
   <string name="SYS_ROLE_MAX_MEMBERS">Opslaan niet mogelijk. Maximaal aantal leden van rol #VAR1_BOLD# overschrijdt vooraf ingestelde limiet.</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Vergaderzaal</string>
-  <string name="SYS_RSS_DISABLED">RSS optie uitgeschakeld door beheerder.</string>
-  <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed voor #VAR1#</string>
   <string name="SYS_SAFE_MODE">Veilige modus</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Veroorzaakt mogelijk problemen met uploaden van bestanden</string>
   <string name="SYS_SATURDAY">Zaterdag</string>
@@ -1236,11 +1198,6 @@
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">Zondag</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Naar categorieadministratie wisselen</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Gevraagde wachtwoord voor website #organization_short_name#\n#content# Hallo #user_first_name#,\n\nUw gevraagde nieuwe wachtwoord.\n\nUw inloggegevens zijn:\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nOm wachtwoord te activeren klik op deze link:\n\n#variable2#\n\nHet wachtwoord is automatisch gegenereerd.\nDaarom kunt u inloggen op #organization_homepage# om het te wijzigen op uw profielpagina.\n\nGroeten,\nDe beheerder</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggegevens voor #organization_homepage#\n#content# Hallo #user_first_name#,\n\nUw nieuwe inloggegevens voor de website #organization_long_name#:\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nHet wachtwoord is automatisch gegenereerd.\nDaarom kunt u inloggen op #organization_homepage# om het te wijzigen op uw profielpagina.\n\nGroeten,\nDe beheerder</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registratie  bij #organization_long_name# geweigerd.\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# werd afgewezen.\n\nRegistraties worden alleen aanvaard voor leden. Indien u lid bent maar us registratie werd alsnog geweigerd, is het mogelijk dat u niet werd herkend als lid.\nVoor meer info omtrent de weigering, gelieve contact op te nemen met de  webmaster #webmaster_email# van #organization_homepage#.\n\nMet vriendelijke groeten,\nDe Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registratie voor website #organization_long_name# goedgekeurd\n#content# Hallo #user_first_name#,\n\nUw registratie voor de website #organization_homepage# is goedgekeurd.\n\nU kunt nu inloggen met gebruikersnaam: #user_login_name# en uw wachtwoord.\n\nAls u vragen heeft neem gerust contact op met de beheerder via: #webmaster_email#.\n\nGroeten,\nDe beheerder</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Nieuwe registratie voor website #organization_long_name#\n#content# Een nieuwe gebruiker heeft zich geregistreerd via de website #organization_homepage#.\n\nAchternaam: #user_last_name#\nVoornaam: #user_first_name#\nE-Mail: #user_email#\n\nDit bericht is automatisch gegenereerd.</string>
   <string name="SYS_SYSTEM">Systeem</string>
   <string name="SYS_SYSTEM_MAILS">Systeem berichten</string>
   <string name="SYS_TEXT">Tekst</string>
@@ -1275,8 +1232,6 @@
   <string name="SYS_WANT_REGISTER">Ik wil me inschrijven!</string>
   <string name="SYS_WARNING">Waarschuwing</string>
   <string name="SYS_WEBMASTER">Beheerder</string>
-  <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nMaak svp een #VAR3# database update naar versie #VAR4#.</string>
-  <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is hoger dan de versie van Admidio scripts #VAR2#.\n\nMaak svp een update van uw Admidio bestanden op de server #VAR3# door een nieuwere versie te gebruiken van Admidio (#VAR4#).</string>
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Woensdag</string>
   <string name="SYS_WHAT_TO_DO">Wat moet u doen?</string>

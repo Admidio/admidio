@@ -26,9 +26,11 @@ At Dropbox we use zxcvbn ([Release notes](https://github.com/dropbox/zxcvbn/rele
 * [`python-zxcvbn`](https://github.com/dropbox/python-zxcvbn) (Python)
 * [`zxcvbn-go`](https://github.com/nbutton23/zxcvbn-go) (Go)
 * [`zxcvbn-ruby`](https://github.com/envato/zxcvbn-ruby) (Ruby)
+* [`zxcvbn-js`](https://github.com/bitzesty/zxcvbn-js) (Ruby [via ExecJS])
 * [`zxcvbn-php`](https://github.com/bjeavons/zxcvbn-php) (PHP)
 * [`zxcvbn-cs`](https://github.com/mickford/zxcvbn-cs) (C#/.NET)
 * [`szxcvbn`](https://github.com/tekul/szxcvbn) (Scala)
+* [`zxcvbn-api`](https://github.com/wcjr/zxcvbn-api) (REST)
 
 Integrations with other frameworks:
 * [`angular-zxcvbn`](https://github.com/ghostbar/angular-zxcvbn) (AngularJS)

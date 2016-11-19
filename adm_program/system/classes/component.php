@@ -33,12 +33,12 @@ class Component extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_component.
      * If the id is set than the specific component will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $com_id   The recordset of the component with this id will be loaded.
+     * @param int       $comId    The recordset of the component with this id will be loaded.
      *                            If com_id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $com_id = 0)
+    public function __construct(&$database, $comId = 0)
     {
-        parent::__construct($database, TBL_COMPONENTS, 'com', $com_id);
+        parent::__construct($database, TBL_COMPONENTS, 'com', $comId);
     }
 
     /**
@@ -52,29 +52,41 @@ class Component extends TableAccess
      */
     public function checkDatabaseVersion()
     {
+        global $gLogger;
+
         $dbVersion = $this->getValue('com_version');
         if ($this->getValue('com_beta') > 0)
         {
-            $dbVersion .= '-Beta.'.$this->getValue('com_beta');
+            $dbVersion .= '-Beta.' . $this->getValue('com_beta');
         }
 
         $filesystemVersion = ADMIDIO_VERSION;
         if (ADMIDIO_VERSION_BETA > 0)
         {
-            $filesystemVersion .= '-Beta.'.ADMIDIO_VERSION_BETA;
+            $filesystemVersion .= '-Beta.' . ADMIDIO_VERSION_BETA;
         }
 
         $returnCode = version_compare($dbVersion, $filesystemVersion);
 
         if ($returnCode === -1) // database has minor version
         {
+            $gLogger->warning(
+                'UPDATE: Database-Version is lower than the filesystem!',
+                array('versionDB' => $dbVersion, 'versionFileSystem' => $filesystemVersion)
+            );
+
             throw new AdmException('SYS_DATABASE_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="'.ADMIDIO_URL.'/adm_program/installation/update.php">', '</a>');
+                                   '<a href="' . ADMIDIO_URL . '/adm_program/installation/update.php">', '</a>');
         }
         elseif ($returnCode === 1) // filesystem has minor version
         {
+            $gLogger->warning(
+                'UPDATE: Filesystem-Version is lower than the database!',
+                array('versionDB' => $dbVersion, 'versionFileSystem' => $filesystemVersion)
+            );
+
             throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>');
+                                   '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
         }
     }
 }

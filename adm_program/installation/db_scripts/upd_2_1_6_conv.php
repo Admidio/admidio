@@ -13,29 +13,29 @@
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
 $orgaStatement = $gDb->query($sql);
 
-while($row_orga = $orgaStatement->fetch())
+while($rowOrga = $orgaStatement->fetch())
 {
     // erstmal die Fotoskalierung fuer den Upload auslesen
     $sql = 'SELECT prf_value
               FROM '.TBL_PREFERENCES.'
-             WHERE prf_org_id = '. $row_orga['org_id']. '
+             WHERE prf_org_id = '. $rowOrga['org_id']. '
                AND prf_name   = \'photo_save_scale\' ';
     $statement = $gDb->query($sql);
-    $row_photo_image_text = $statement->fetch();
+    $rowPhotoImageText = $statement->fetch();
 
     // ist die Fotoskalierung kleiner 1030 Pixel, dann die Anzeige darauf anpassen
-    if($row_photo_image_text['prf_value'] < 1030)
+    if($rowPhotoImageText['prf_value'] < 1030)
     {
-        $new_photo_size_y = $row_photo_image_text['prf_value'] * 0.75;
+        $newPhotoSizeY = $rowPhotoImageText['prf_value'] * 0.75;
         $sql = 'UPDATE '.TBL_PREFERENCES.'
-                   SET prf_value = \''.$row_photo_image_text['prf_value'].'\'
-                 WHERE prf_org_id = '. $row_orga['org_id']. '
+                   SET prf_value = \''.$rowPhotoImageText['prf_value'].'\'
+                 WHERE prf_org_id = '. $rowOrga['org_id']. '
                    AND prf_name   = \'photo_show_width\' ';
         $gDb->query($sql);
 
         $sql = 'UPDATE '.TBL_PREFERENCES.'
-                   SET prf_value = \''.$new_photo_size_y.'\'
-                 WHERE prf_org_id = '. $row_orga['org_id']. '
+                   SET prf_value = \''.$newPhotoSizeY.'\'
+                 WHERE prf_org_id = '. $rowOrga['org_id']. '
                    AND prf_name   = \'photo_show_height\' ';
         $gDb->query($sql);
     }

@@ -46,6 +46,17 @@ else
 // LOGGING
 require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
+// Force permanent HTTPS redirect
+if (isset($gForceHTTPS) && $gForceHTTPS && !HTTPS)
+{
+    $url = str_replace('http://', 'https://', CURRENT_URL);
+
+    $gLogger->notice('REDIRECT: Redirecting permanent to HTTPS!', array('url' => $url, 'statusCode' => 301));
+
+    header('Location: ' . $url, true, 301);
+    exit();
+}
+
 // remove HTML & PHP-Code from all parameters
 $_GET    = admStrStripTagsSpecial($_GET);
 $_POST   = admStrStripTagsSpecial($_POST);

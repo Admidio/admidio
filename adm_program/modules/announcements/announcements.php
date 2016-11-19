@@ -70,7 +70,7 @@ if($gPreferences['enable_rss'] == 1)
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)
 {
-    $announcementsPerPage = $gPreferences['announcements_per_page'];
+    $announcementsPerPage = (int) $gPreferences['announcements_per_page'];
 }
 else
 {
@@ -145,7 +145,7 @@ else
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                        if($announcement->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+                        if((int) $announcement->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"

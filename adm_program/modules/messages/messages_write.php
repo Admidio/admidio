@@ -165,11 +165,11 @@ if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['
 
     if(!isset($form_values['carbon_copy']))
     {
-        $form_values['carbon_copy'] = 0;
+        $form_values['carbon_copy'] = false;
     }
     if(!isset($form_values['delivery_confirmation']))
     {
-        $form_values['delivery_confirmation'] = 0;
+        $form_values['delivery_confirmation'] = false;
     }
 }
 else
@@ -394,18 +394,18 @@ elseif (!isset($messageStatement))
             while ($row = $statement->fetch())
             {
                 // every user should only be once in the list
-                if (!isset($currentUserId) || $currentUserId != $row['usr_id'])
+                if (!isset($currentUserId) || $currentUserId !== (int) $row['usr_id'])
                 {
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
                         $active_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
-                        $currentUserId = $row['usr_id'];
+                        $currentUserId = (int) $row['usr_id'];
                     }
                     elseif($gPreferences['mail_show_former'] == 1)
                     {
                         $passive_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
-                        $currentUserId  = $row['usr_id'];
+                        $currentUserId  = (int) $row['usr_id'];
                     }
                 }
             }
@@ -437,11 +437,11 @@ elseif (!isset($messageStatement))
 
     if($postListId > 0)
     {
-    	$preloadData = 'dummy';
-    	$showlist = new ListConfiguration($gDb, $postListId);
-        $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '' ));
+        $preloadData = 'dummy';
+        $showlist = new ListConfiguration($gDb, $postListId);
+        $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
         $form->addInput('userIdList', '', $postUserIdList, array('property' => FIELD_HIDDEN));
-       	$form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
+        $form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
     }
 
     // no roles or users found then show message
@@ -561,7 +561,7 @@ if (isset($messageStatement))
     $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
-        if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
+        if ((int) $row['msc_usr_id'] === (int) $gCurrentUser->getValue('usr_id'))
         {
             $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
         }

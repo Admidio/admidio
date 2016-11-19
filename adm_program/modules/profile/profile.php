@@ -755,10 +755,10 @@ if($gPreferences['profile_show_extern_roles'] == 1
         while($row = $roleStatement->fetch())
         {
             // if roles of new organization than read the rights of this organization
-            if($actualOrganization != $row['org_id'])
+            if($actualOrganization !== (int) $row['org_id'])
             {
                 $gCurrentUser->setOrganization($row['org_id']);
-                $actualOrganization = $row['org_id'];
+                $actualOrganization = (int) $row['org_id'];
             }
 
             // check if current user has right to view the role of that organization

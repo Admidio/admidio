@@ -42,37 +42,37 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for(i=0;i < childs.length; i++) {
-            if(childs[i].tagName === "TR") {
+        for (var i = 0; i < childs.length; i++) {
+            if (childs[i].tagName === "TR") {
                 actRowCount++;
-                if(actSequence > 0 && nextNode === null) {
+                if (actSequence > 0 && nextNode === null) {
                     nextNode = childs[i];
                 }
 
-                if(childs[i].id === "row_usf_" + usfID) {
+                if (childs[i].id === "row_usf_" + usfID) {
                     actSequence = actRowCount;
                 }
 
-                if(actSequence === 0) {
+                if (actSequence === 0) {
                     prevNode = childs[i];
                 }
             }
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if(direction === "up") {
-            if(prevNode != null) {
+        if (direction === "up") {
+            if (prevNode != null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
             }
         } else {
-            if(nextNode != null) {
+            if (nextNode != null) {
                 actRow.parentNode.insertBefore(nextNode, actRow);
                 secondSequence = actSequence + 1;
             }
         }
 
-        if(secondSequence > 0) {
+        if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
             $.get(gRootPath + "/adm_program/modules/inventory/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
@@ -132,7 +132,7 @@ while($row = $statement->fetch())
     $userField->clear();
     $userField->setArray($row);
 
-    if($categoryId != $userField->getValue('cat_id'))
+    if($categoryId !== (int) $userField->getValue('cat_id'))
     {
         $block_id = 'admCategory'.$userField->getValue('inf_cat_id');
 
@@ -143,7 +143,7 @@ while($row = $statement->fetch())
         $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'));
         $table->addTableBody('id', $block_id);
 
-        $categoryId = $userField->getValue('inf_cat_id');
+        $categoryId = (int) $userField->getValue('inf_cat_id');
     }
 
     // cut long text strings and provide tooltip
@@ -152,7 +152,7 @@ while($row = $statement->fetch())
         $description = substr($userField->getValue('inf_description', 'database'), 0, 22).'
             <a class="colorbox-dialog" data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('inf_description')).'" href="'. ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('inf_name_intern'). '&amp;inline=true">[..]</a>';
     }
-    elseif(strlen($userField->getValue('inf_description') == 0))
+    elseif($userField->getValue('inf_description') === '')
     {
         $description = '&nbsp;';
     }

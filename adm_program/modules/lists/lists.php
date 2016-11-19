@@ -59,7 +59,7 @@ $page->addJavascript('
         elementId = $(this).attr("id");
         roleId    = elementId.substr(elementId.search(/_/)+1);
 
-        if($(this).val() === "mylist") {
+        if ($(this).val() === "mylist") {
             self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.(int) $getActiveRole.'";
         } else {
             self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
@@ -156,10 +156,10 @@ foreach($listsResult['recordset'] as $row)
     $role->setArray($row);
 
     // if category is different than previous, close old and open new one
-    if($previousCategoryId != $role->getValue('cat_id'))
+    if($previousCategoryId !== (int) $role->getValue('cat_id'))
     {
         // close only if previous category is not 0
-        if($previousCategoryId != 0)
+        if($previousCategoryId !== 0)
         {
             $page->addHtml('</div></div></div>');
         }
@@ -167,7 +167,7 @@ foreach($listsResult['recordset'] as $row)
             <div class="panel-heading">'. $role->getValue('cat_name'). '</div>
             <div class="panel-body">
                 <div class="panel-group" id="accordion_'.$role->getValue('cat_id').'">');
-        $previousCategoryId = $role->getValue('cat_id');
+        $previousCategoryId = (int) $role->getValue('cat_id');
     }
 
     $page->addHtml('
@@ -308,7 +308,7 @@ if($listsResult['numResults'] > 0)
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $base_url = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
-$page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, true));
+$page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart, true));
 
 $page->addHtml('</div>');
 $page->show();

@@ -3,4 +3,4 @@ Short description to update the current lib
 1. Go to https://github.com/dropbox/zxcvbn
 2. Download latest release and unzip the file
 3. Copy all files into this lib folder
-4. Folders demo/ and src/ and test/ could be removed
+4. Folders data-scripts/ demo/ and src/ and test/ could be removed

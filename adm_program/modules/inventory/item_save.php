@@ -140,7 +140,7 @@ try
 {
     // save changes; if it's a new registration than caught exception if email couldn't send
 
-    if($inventory->getValue('inv_id') == 0)
+    if((int) $inventory->getValue('inv_id') === 0)
     {
         // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
         $inventory->save();

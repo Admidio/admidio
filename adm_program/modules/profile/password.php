@@ -158,7 +158,7 @@ elseif($getMode === 'html')
                 event.preventDefault();
 
                 $.post(action, $(this).serialize(), function(data) {
-                    if(data === "success") {
+                    if (data === "success") {
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
                         passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");

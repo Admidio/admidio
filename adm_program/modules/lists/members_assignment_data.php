@@ -63,7 +63,7 @@ $jsonArray = array('draw' => $getDraw);
 $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
 }

@@ -60,7 +60,7 @@ if($gPreferences['profile_photo_storage'] == 1)
     }
 }
 
-if($inventory->getValue('inv_id') == 0)
+if((int) $inventory->getValue('inv_id') === 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
@@ -158,7 +158,7 @@ elseif($getMode === 'delete')
 if($getMode === 'choose')
 {
     // set headline
-    if($getItemId == $gCurrentUser->getValue('inv_id'))
+    if($getItemId === (int) $gCurrentUser->getValue('inv_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
@@ -246,7 +246,7 @@ elseif($getMode === 'upload')
     // Image-Objekt löschen
     $user_image->delete();
 
-    if($getItemId == $gCurrentUser->getValue('inv_id'))
+    if($getItemId === (int) $gCurrentUser->getValue('inv_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }

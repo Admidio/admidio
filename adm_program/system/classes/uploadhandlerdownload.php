@@ -28,7 +28,7 @@ class UploadHandlerDownload extends UploadHandler
      * Override the default method to handle the specific things of the download module and
      * update the database after file was successful uploaded.
      * This method has the same parameters as the default.
-     * @param string $uploaded_file
+     * @param string $uploadedFile
      * @param string $name
      * @param int    $size
      * @param        $type
@@ -37,11 +37,11 @@ class UploadHandlerDownload extends UploadHandler
      * @param        $content_range
      * @return \stdClass
      */
-    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null)
+    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $content_range = null)
     {
         global $gPreferences, $gL10n, $gDb, $getId, $gCurrentOrganization, $gCurrentUser;
 
-        $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $content_range);
 
         if(!isset($file->error))
         {

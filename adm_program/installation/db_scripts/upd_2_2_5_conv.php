@@ -12,7 +12,7 @@
 // eine Orga-ID einlesen
 $sql = 'SELECT MIN(org_id) AS org_id FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
 $orgaStatement = $gDb->query($sql);
-$row_orga = $orgaStatement->fetch();
+$rowOrga = $orgaStatement->fetch();
 
 // Webmaster-ID ermitteln
 $sql = 'SELECT usr_id AS webmaster_id, usr_timestamp_create AS timestamp
@@ -24,12 +24,12 @@ $sql = 'SELECT usr_id AS webmaster_id, usr_timestamp_create AS timestamp
                       INNER JOIN '.TBL_CATEGORIES.'
                               ON cat_id = rol_cat_id
                            WHERE rol_name   = \'Webmaster\'
-                             AND cat_org_id = '.$row_orga['org_id'].')';
+                             AND cat_org_id = '.$rowOrga['org_id'].')';
 $statement = $gDb->query($sql);
-$row_webmaster = $statement->fetch();
+$rowWebmaster = $statement->fetch();
 
 // Rollenpflichtfelder fuellen, falls dies noch nicht passiert ist
-$sql = 'UPDATE '.TBL_ROLES.' SET rol_timestamp_create = \''. $row_webmaster['timestamp'].'\'
-                               , rol_usr_id_create    = '. $row_webmaster['webmaster_id'].'
+$sql = 'UPDATE '.TBL_ROLES.' SET rol_timestamp_create = \''. $rowWebmaster['timestamp'].'\'
+                               , rol_usr_id_create    = '. $rowWebmaster['webmaster_id'].'
          WHERE rol_usr_id_create IS NULL';
 $gDb->query($sql);

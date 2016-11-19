@@ -111,7 +111,7 @@ if($plgDatesResult['numResults'] > 0)
         $plg_date->setArray($plg_row);
         $plg_html_end_date = '';
 
-        echo '<div>'.$plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
+        echo '<h4>'.$plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
 
         if ($plg_date->getValue('dat_all_day') != 1)
         {
@@ -158,11 +158,11 @@ if($plgDatesResult['numResults'] > 0)
                     $plg_new_headline .= ' '. $plg_value;
                 }
             }
-            echo $plg_new_headline. '</a></div>';
+            echo $plg_new_headline. '</a></h4>';
         }
         else
         {
-            echo $plg_date->getValue('dat_headline'). '</a></div>';
+            echo $plg_date->getValue('dat_headline'). '</a></h4>';
         }
 
         // show preview text

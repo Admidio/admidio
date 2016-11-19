@@ -10,7 +10,7 @@
  */
 use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Processor\IntrospectionProcessor;
 
@@ -26,7 +26,7 @@ if ($gDebug)
 $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
 
 $formatter = new LineFormatter(null, null, false, true);
-$streamHandler = new StreamHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', $logLevel, true, 0777);
+$streamHandler = new RotatingFileHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', 0, $logLevel, true, 0666);
 $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
 
 $streamHandler->setFormatter($formatter);

@@ -70,7 +70,7 @@ if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
     $plg_show_headline = 1;
 }
 
-if(!isset($plg_headline))
+if(!isset($plg_headline) || $plg_headline === '')
 {
     $plg_headline = $gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE');
 }
@@ -84,6 +84,7 @@ elseif(strpos($plg_headline, '_') === 3)
 $plg_announcements = new ModuleAnnouncements();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
+
 if($plg_show_headline === 1)
 {
     echo '<h3>'.$plg_headline.'</h3>';

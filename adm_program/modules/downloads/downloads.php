@@ -188,9 +188,9 @@ if (isset($folderContent['files']))
 
         // Choose icon for the file
         $iconFile = 'page_white_question.png';
-        if(array_key_exists($fileExtension, $icon_file_extension))
+        if(array_key_exists($fileExtension, $iconFileExtension))
         {
-            $iconFile = $icon_file_extension[$fileExtension];
+            $iconFile = $iconFileExtension[$fileExtension];
         }
 
         // Format timestamp
@@ -299,9 +299,9 @@ if ($gCurrentUser->editDownloadRight())
 
                 // Choose icon for the file
                 $iconFile = 'page_white_question.png';
-                if(array_key_exists($fileExtension, $icon_file_extension))
+                if(array_key_exists($fileExtension, $iconFileExtension))
                 {
-                    $iconFile = $icon_file_extension[$fileExtension];
+                    $iconFile = $iconFileExtension[$fileExtension];
                 }
 
                 $columnValues = array('<img src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',

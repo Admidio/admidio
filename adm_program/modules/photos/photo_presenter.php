@@ -33,7 +33,7 @@ elseif($gPreferences['enable_photo_module'] == 2)
 }
 
 // erfassen des Albums falls noch nicht in Session gespeichert
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
+if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
     $photoAlbum->setDatabase($gDb);
@@ -128,7 +128,7 @@ elseif($gPreferences['photo_show_mode'] == 2)
     // if no popup mode then show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
 
-    if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
+    if($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')
     && strlen($photoAlbum->getValue('pho_end')) > 0)
     {
         $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);

@@ -406,7 +406,7 @@ class Database
                 // Path...
                 if (!empty($trace['args'][0]))
                 {
-                    $argument = htmlentities($trace['args'][0]);
+                    $argument = noHTML($trace['args'][0]);
                     $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                     $argument = substr($argument, 1);
                     $args[] = '\'' . $argument . '\'';
@@ -417,10 +417,10 @@ class Database
             $trace['type']  = array_key_exists('type',  $trace) ? $trace['type'] : '';
 
             $output .= '<br />';
-            $output .= '<strong>FILE:</strong> ' . htmlentities($trace['file']) . '<br />';
+            $output .= '<strong>FILE:</strong> ' . noHTML($trace['file']) . '<br />';
             $output .= '<strong>LINE:</strong> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
 
-            $output .= '<strong>CALL:</strong> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) .
+            $output .= '<strong>CALL:</strong> ' . noHTML($trace['class'] . $trace['type'] . $trace['function']) .
                        '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
         }
         $output .= '</div>';

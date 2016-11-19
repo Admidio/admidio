@@ -143,10 +143,10 @@ class TableAccess
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code // Constructor of adm_dates object where the category (calendar) is connected
-     * public function __construct(&$db, $dat_id = 0)
+     * public function __construct(&$db, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
-     *     parent::__construct($db, TBL_DATES, 'dat', $dat_id);
+     *     parent::__construct($db, TBL_DATES, 'dat', $datId);
      * } @endcode
      */
     protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)

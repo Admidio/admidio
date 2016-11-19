@@ -154,9 +154,9 @@ if ($getMsgType === 'EMAIL')
 {
     if (isset($postTo))
     {
-        if($postListId > 0)				//the id of a list was passed
+        if($postListId > 0) //the id of a list was passed
         {
-        	$postTo = explode(',', $postUserIdList);
+            $postTo = explode(',', $postUserIdList);
         }
 
         $receiver = array();
@@ -433,8 +433,8 @@ if ($getMsgType === 'EMAIL')
 
     if($postListId > 0)
     {
-    	$showlist = new ListConfiguration($gDb, $postListId);
-        $receiverString ='list ' . $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '' );
+        $showlist = new ListConfiguration($gDb, $postListId);
+        $receiverString ='list ' . $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : '');
     }
 
     $receiverName = prepareReceivers($receiverString);

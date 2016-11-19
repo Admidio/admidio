@@ -59,7 +59,7 @@ $photo_album = new TablePhotos($gDb);
 $photo_album->readDataById($getPhotoId);
 
 // check whether album belongs to the current organization
-if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
+if((int) $photo_album->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -74,7 +74,7 @@ if($photo_album->getValue('pho_locked') == 1 && !$gCurrentUser->editPhotoRight()
 
 $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id');
 
-if($photo_album->getValue('pho_quantity') == 0)
+if((int) $photo_album->getValue('pho_quantity') === 0)
 {
     $gMessage->show($gL10n->get('PHO_NO_ALBUM_CONTENT'));
     // => EXIT

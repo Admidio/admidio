@@ -56,7 +56,7 @@ if($getUsfId > 0)
 
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($userField->getValue('cat_org_id') > 0
-    && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    && (int) $userField->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -177,20 +177,20 @@ $form->addInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url
                 array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
-$form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $userField->getValue('usf_hidden'),
+$form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), (bool) $userField->getValue('usf_hidden'),
                    array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
 $form->addCheckbox('usf_disabled', $gL10n->get('ORG_FIELD_DISABLED',
-                   $gL10n->get('ROL_RIGHT_EDIT_USER')), $userField->getValue('usf_disabled'),
+                   $gL10n->get('ROL_RIGHT_EDIT_USER')), (bool) $userField->getValue('usf_disabled'),
                    array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png'));
 
 if($userField->getValue('usf_name_intern') === 'LAST_NAME' || $userField->getValue('usf_name_intern') === 'FIRST_NAME')
 {
-    $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), $userField->getValue('usf_mandatory'),
+    $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
                        array('property' => FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
 }
 else
 {
-    $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), $userField->getValue('usf_mandatory'),
+    $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
                        array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
 }
 $form->closeGroupBox();

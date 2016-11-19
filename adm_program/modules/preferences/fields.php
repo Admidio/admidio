@@ -47,8 +47,8 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for (i=0; i < childs.length; i++) {
-            if(childs[i].tagName === "TR") {
+        for (var i = 0; i < childs.length; i++) {
+            if (childs[i].tagName === "TR") {
                 actRowCount++;
                 if (actSequence > 0 && nextNode === null) {
                     nextNode = childs[i];
@@ -139,7 +139,7 @@ while($row = $statement->fetch())
     $userField->clear();
     $userField->setArray($row);
 
-    if($categoryId != $userField->getValue('cat_id'))
+    if($categoryId !== (int) $userField->getValue('cat_id'))
     {
         $block_id = 'admCategory'.$userField->getValue('usf_cat_id');
 
@@ -149,7 +149,7 @@ while($row = $statement->fetch())
                           array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
         $table->addTableBody('id', $block_id);
 
-        $categoryId = $userField->getValue('usf_cat_id');
+        $categoryId = (int) $userField->getValue('usf_cat_id');
     }
 
     // cut long text strings and provide tooltip

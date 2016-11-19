@@ -19,33 +19,33 @@ require_once('login_valid.php');
 
 // Initialize and check the parameters
 $gMessage->showThemeBody(false);
-$get_type          = admFuncVariableIsValid($_GET, 'type',          'string', array('requireValue' => true));
-$get_element_id    = admFuncVariableIsValid($_GET, 'element_id',    'string', array('requireValue' => true));
-$get_database_id   = admFuncVariableIsValid($_GET, 'database_id',   'string', array('requireValue' => true));
-$get_database_id_2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
-$get_name          = admFuncVariableIsValid($_GET, 'name',          'string');
+$getType        = admFuncVariableIsValid($_GET, 'type',          'string', array('requireValue' => true));
+$getElementId   = admFuncVariableIsValid($_GET, 'element_id',    'string', array('requireValue' => true));
+$getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array('requireValue' => true));
+$getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
+$getName        = admFuncVariableIsValid($_GET, 'name',          'string');
 
 // initialize local variables
 $icon = 'error_big.png';
 $text = 'SYS_DELETE_ENTRY';
-$textVariable     = $get_name;
+$textVariable     = $getName;
 $textVariable2    = '';
 $callbackFunction = '';
 
 // URL zusammensetzen
-switch ($get_type)
+switch ($getType)
 {
     case 'ann':
-        $url = 'announcements_function.php?mode=2&ann_id='.$get_database_id;
+        $url = 'announcements_function.php?mode=2&ann_id='.$getDatabaseId;
         break;
     case 'bac':
-        $url = 'backup_file_function.php?job=delete&filename='.$get_database_id;
+        $url = 'backup_file_function.php?job=delete&filename='.$getDatabaseId;
         break;
     case 'cat':
-        $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
+        $url  = 'categories_function.php?cat_id='.$getDatabaseId.'&mode=2&type='.$getDatabaseId2;
 
         // get special message for calendars
-        if($get_database_id_2 === 'DAT')
+        if($getDatabaseId2 === 'DAT')
         {
             $text = 'SYS_DELETE_ENTRY';
         }
@@ -55,69 +55,69 @@ switch ($get_type)
         }
         break;
     case 'dat':
-        $url = 'dates_function.php?mode=2&dat_id='.$get_database_id;
+        $url = 'dates_function.php?mode=2&dat_id='.$getDatabaseId;
         break;
     case 'fil':
-        $url = 'download_function.php?mode=2&file_id='.$get_database_id.'&folder_id='.$get_database_id_2;
+        $url = 'download_function.php?mode=2&file_id='.$getDatabaseId.'&folder_id='.$getDatabaseId2;
         break;
     case 'fol':
-        $url = 'download_function.php?mode=5&folder_id='.$get_database_id;
+        $url = 'download_function.php?mode=5&folder_id='.$getDatabaseId;
         break;
     case 'gbo':
-        $url = 'guestbook_function.php?mode=2&id='.$get_database_id;
+        $url = 'guestbook_function.php?mode=2&id='.$getDatabaseId;
         break;
     case 'gbc':
-        $url = 'guestbook_function.php?mode=5&id='.$get_database_id;
+        $url = 'guestbook_function.php?mode=5&id='.$getDatabaseId;
         break;
     case 'lnk':
-        $url = 'links_function.php?mode=2&lnk_id='.$get_database_id;
+        $url = 'links_function.php?mode=2&lnk_id='.$getDatabaseId;
         break;
     case 'nwu':
-        $url = 'registration_function.php?mode=4&new_user_id='.$get_database_id;
+        $url = 'registration_function.php?mode=4&new_user_id='.$getDatabaseId;
         break;
     case 'pho':
-        $url  = 'photo_function.php?job=delete&pho_id='.$get_database_id_2.'&photo_nr='.$get_database_id;
+        $url  = 'photo_function.php?job=delete&pho_id='.$getDatabaseId2.'&photo_nr='.$getDatabaseId;
         $text = 'PHO_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
-        $url = 'photo_album_function.php?mode=delete&pho_id='.$get_database_id;
+        $url = 'photo_album_function.php?mode=delete&pho_id='.$getDatabaseId;
         break;
     case 'pro_pho':
-        $url  = 'profile_photo_edit.php?mode=delete&usr_id='.$get_database_id;
+        $url  = 'profile_photo_edit.php?mode=delete&usr_id='.$getDatabaseId;
         $text = 'PRO_WANT_DELETE_PHOTO';
         $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':
-        $url  = 'profile_function.php?mode=2&mem_id='.$get_database_id;
+        $url  = 'profile_function.php?mode=2&mem_id='.$getDatabaseId;
         $text = 'ROL_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackRoles';
         break;
     case 'pro_future':
-        $url  = 'profile_function.php?mode=3&mem_id='.$get_database_id;
+        $url  = 'profile_function.php?mode=3&mem_id='.$getDatabaseId;
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackFutureRoles';
         break;
     case 'pro_former':
-        $url  = 'profile_function.php?mode=3&mem_id='.$get_database_id;
+        $url  = 'profile_function.php?mode=3&mem_id='.$getDatabaseId;
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackFormerRoles';
         break;
     case 'room':
-        $url = 'rooms_function.php?mode=2&room_id='.$get_database_id;
+        $url = 'rooms_function.php?mode=2&room_id='.$getDatabaseId;
         break;
     case 'usf':
-        $url = 'fields_function.php?mode=2&usf_id='.$get_database_id;
+        $url = 'fields_function.php?mode=2&usf_id='.$getDatabaseId;
         break;
     case 'msg':
-        $url = 'messages.php?msg_id='.$get_database_id;
+        $url = 'messages.php?msg_id='.$getDatabaseId;
         $text = 'MSG_DELETE_DESC';
         break;
     case 'urt':
-        $url = 'relationtypes_function.php?mode=2&urt_id='.$get_database_id;
+        $url = 'relationtypes_function.php?mode=2&urt_id='.$getDatabaseId;
         $text = 'REL_USER_RELATION_TYPE_DEL';
         break;
     case 'ure':
-        $url = ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?mode=2&ure_id='.$get_database_id;
+        $url = ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?mode=2&ure_id='.$getDatabaseId;
         break;
     default:
         $url = '';
@@ -148,7 +148,7 @@ echo '
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-    <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$get_element_id.'\', \''.$url.'\''.$callbackFunction.')">
+    <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">
         <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
     </button>
     <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal">

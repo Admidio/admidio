@@ -165,6 +165,10 @@ h3 {
     font-size: 110%;
 }
 
+h4 {
+    font-size: 100%;
+}
+
 @media (min-width: 768px) {
     h1 {
         font-size: 140%;
