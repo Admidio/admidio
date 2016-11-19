@@ -247,100 +247,119 @@ $javascriptCode = '
     {
         var user_fields = new Array(); ';
 
-// create a multidimensional array for all columns with the necessary data
-$i = 1;
-$oldCategoryNameIntern = '';
-$posEndOfMasterData = 0;
-
-foreach($gProfileFields->mProfileFields as $field)
-{
-    // at the end of category master data save positions for loginname and username
-    // they will be added after profile fields loop
-    if($oldCategoryNameIntern === 'MASTER_DATA'
-        && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
-    {
-        $posEndOfMasterData = $i;
-        $i += 2;
-    }
-
-    // add profile field to user field array
-    if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
-    {
-        $javascriptCode .= '
-                user_fields['. $i. '] = new Object();
-                user_fields['. $i. ']["cat_id"]   = "'. $field->getValue('cat_id'). '";
-                user_fields['. $i. ']["cat_name"] = "'. str_replace('"', '\'', $field->getValue('cat_name')). '";
-                user_fields['. $i. ']["usf_id"]   = "'. $field->getValue('usf_id'). '";
-                user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
-                user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";
-                user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '";
-                user_fields['. $i. ']["usf_value_list"] = new Object();';
-
-        // get avaiable values for current field type and push to array
-        if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
+        // create a multidimensional array for all columns with the necessary data
+        $i = 1;
+        $oldCategoryNameIntern = '';
+        $posEndOfMasterData = 0;
+        $arrParticipientsInformation = array( 'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+                                              'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+                                              'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+                                              'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+                                              'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT'));
+    
+        foreach($gProfileFields->mProfileFields as $field)
         {
-            foreach($field->getValue('usf_value_list', 'text') as $key => $value)
+            // at the end of category master data save positions for loginname and username
+            // they will be added after profile fields loop
+            if($oldCategoryNameIntern === 'MASTER_DATA'
+                && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
+            {
+                $posEndOfMasterData = $i;
+                $i += 2;
+            }
+        
+            // add profile field to user field array
+            if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
             {
                 $javascriptCode .= '
-                        user_fields['. $i. ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
+                        user_fields['. $i. '] = new Object();
+                        user_fields['. $i. ']["cat_id"]   = "'. $field->getValue('cat_id'). '";
+                        user_fields['. $i. ']["cat_name"] = "'. str_replace('"', '\'', $field->getValue('cat_name')). '";
+                        user_fields['. $i. ']["usf_id"]   = "'. $field->getValue('usf_id'). '";
+                        user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
+                        user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";
+                        user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '";
+                        user_fields['. $i. ']["usf_value_list"] = new Object();';
+        
+                // get avaiable values for current field type and push to array
+                if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
+                {
+                    foreach($field->getValue('usf_value_list', 'text') as $key => $value)
+                    {
+                        $javascriptCode .= '
+                                user_fields['. $i. ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
+                    }
+                }
+                else
+                {
+                    $javascriptCode .= '
+                            user_fields['. $i. ']["usf_value_list"] = "";';
+                }
+        
+                $oldCategoryNameIntern = $field->getValue('cat_name_intern');
+                ++$i;
             }
         }
-        else
+        
+        // Add loginname and photo at the end of category master data
+        // add new category with start and end date of role membership
+        if($posEndOfMasterData === 0)
         {
-            $javascriptCode .= '
-                    user_fields['. $i. ']["usf_value_list"] = "";';
+            $posEndOfMasterData = $i;
+            $i += 2;
         }
-
-        $oldCategoryNameIntern = $field->getValue('cat_name_intern');
+        $javascriptCode .= '
+                user_fields['. $posEndOfMasterData. '] = new Object();
+                user_fields['. $posEndOfMasterData. ']["cat_id"]   = user_fields[1]["cat_id"];
+                user_fields['. $posEndOfMasterData. ']["cat_name"] = user_fields[1]["cat_name"];
+                user_fields['. $posEndOfMasterData. ']["usf_id"]   = "usr_login_name";
+                user_fields['. $posEndOfMasterData. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
+                user_fields['. $posEndOfMasterData. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";
+        
+                user_fields['. ($posEndOfMasterData + 1). '] = new Object();
+                user_fields['. ($posEndOfMasterData + 1). ']["cat_id"]   = user_fields[1]["cat_id"];;
+                user_fields['. ($posEndOfMasterData + 1). ']["cat_name"] = user_fields[1]["cat_name"];
+                user_fields['. ($posEndOfMasterData + 1). ']["usf_id"]   = "usr_photo";
+                user_fields['. ($posEndOfMasterData + 1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
+                user_fields['. ($posEndOfMasterData + 1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
+        
+                user_fields['. $i. '] = new Object();
+                user_fields['. $i. ']["cat_id"]   = -1;
+                user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
+                user_fields['. $i. ']["usf_id"]   = "mem_begin";
+                user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";
+                user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";';
+        
         ++$i;
-    }
-}
-
-// Add loginname and photo at the end of category master data
-// add new category with start and end date of role membership
-if($posEndOfMasterData === 0)
-{
-    $posEndOfMasterData = $i;
-    $i += 2;
-}
-$javascriptCode .= '
-        user_fields['. $posEndOfMasterData. '] = new Object();
-        user_fields['. $posEndOfMasterData. ']["cat_id"]   = user_fields[1]["cat_id"];
-        user_fields['. $posEndOfMasterData. ']["cat_name"] = user_fields[1]["cat_name"];
-        user_fields['. $posEndOfMasterData. ']["usf_id"]   = "usr_login_name";
-        user_fields['. $posEndOfMasterData. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
-        user_fields['. $posEndOfMasterData. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";
-
-        user_fields['. ($posEndOfMasterData + 1). '] = new Object();
-        user_fields['. ($posEndOfMasterData + 1). ']["cat_id"]   = user_fields[1]["cat_id"];;
-        user_fields['. ($posEndOfMasterData + 1). ']["cat_name"] = user_fields[1]["cat_name"];
-        user_fields['. ($posEndOfMasterData + 1). ']["usf_id"]   = "usr_photo";
-        user_fields['. ($posEndOfMasterData + 1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
-        user_fields['. ($posEndOfMasterData + 1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
-
-        user_fields['. $i. '] = new Object();
-        user_fields['. $i. ']["cat_id"]   = -1;
-        user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
-        user_fields['. $i. ']["usf_id"]   = "mem_begin";
-        user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";
-        user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";';
-
-++$i;
-$javascriptCode .= '
-        user_fields['. $i. '] = new Object();
-        user_fields['. $i. ']["cat_id"]   = -1;
-        user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
-        user_fields['. $i. ']["usf_id"]   = "mem_end";
-        user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
-        user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
-
-        return user_fields;
+        $javascriptCode .= '
+                user_fields['. $i. '] = new Object();
+                user_fields['. $i. ']["cat_id"]   = -1;
+                user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
+                user_fields['. $i. ']["usf_id"]   = "mem_end";
+                user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
+                user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";';
+                
+        // add new category with participient information of events
+        foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+        {
+            ++$i;
+            $javascriptCode .= '
+                    user_fields['. $i. '] = new Object();
+                    user_fields['. $i. ']["cat_id"]   = -1;
+                    user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'";
+                    user_fields['. $i. ']["usf_id"]   = "'.$memberStatus.'";
+                    user_fields['. $i. ']["usf_name"] = "'.$ColumnName.'";
+                    user_fields['. $i. ']["usf_name_intern"] = "'.$ColumnName.'";';
+        }
+        
+        $javascriptCode .= '
+                return user_fields;
     }
 
     function createColumnsArray()
     {
         var default_fields = new Array(); ';
-
+    
 // now add all columns to the javascript row objects
 $actualColumnNumber = 1;
 while(isset($formValues['column'. $actualColumnNumber]))
