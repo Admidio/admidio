@@ -26,21 +26,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about' }
 	];
 
-	config.toolbar_AdmidioDefault = [
-		['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
-			'NumberedList', 'BulletedList', '-','Image', 'Link', 'Unlink', 'Table', '-', 'Maximize']
-	];
-
-	config.toolbar_AdmidioGuestbook = [
-		['Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-',
-			'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
-	];
-
-	config.toolbar_AdmidioPlugin_WC = [
-		['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
-			'NumberedList', 'BulletedList', '-','-', '-', '-', 'Table', '-', 'Maximize']
-	];
-
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
@@ -51,16 +36,3 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 };
-
-/* Set default width of table to 100% instead of 500%. This fits better with a responsive design. */
-CKEDITOR.on('dialogDefinition', function( ev ) {
-	var diagName = ev.data.name;
-	var diagDefn = ev.data.definition;
-
-	if(diagName === 'table') {
-		var infoTab = diagDefn.getContents('info');
-
-		var width = infoTab.get('txtWidth');
-		width['default'] = "100%";
-	}
-});
