@@ -35,7 +35,7 @@ if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($getMode === 2
-&& (!isset($_POST['sel_roles_ids']) || $_POST['sel_roles_ids'] == 0 || !is_array($_POST['sel_roles_ids'])))
+&& (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids'])))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
     // => EXIT
@@ -63,7 +63,7 @@ if($getMode !== 2)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-    elseif($list->getValue('lst_usr_id') != $gCurrentUser->getValue('usr_id')
+    elseif((int) $list->getValue('lst_usr_id') !== (int) $gCurrentUser->getValue('usr_id')
     && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

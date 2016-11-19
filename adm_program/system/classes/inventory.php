@@ -247,7 +247,7 @@ class Inventory extends TableInventory
                 if(($this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 1
                    && $gCurrentUser->editUsers())
                 || $this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 0
-                || ($gCurrentUser->getValue('inv_id') == 0 && $this->getValue('inv_id') == 0))
+                || ((int) $gCurrentUser->getValue('inv_id') === 0 && (int) $this->getValue('inv_id') === 0))
                 {
                     $returnCode = $this->mInventoryFieldsData->setValue($columnName, $newValue);
                 }

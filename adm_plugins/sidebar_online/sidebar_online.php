@@ -109,7 +109,7 @@ if($onlineUsersStatement->rowCount() > 0)
     {
         if($row->ses_usr_id > 0)
         {
-            if($row->ses_usr_id != $usr_id_merker)
+            if((int) $row->ses_usr_id !== $usr_id_merker)
             {
                 echo '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
                     href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></strong>';
@@ -123,7 +123,7 @@ if($onlineUsersStatement->rowCount() > 0)
                 {
                     echo '<br />';
                 }
-                $usr_id_merker = $row->ses_usr_id;
+                $usr_id_merker = (int) $row->ses_usr_id;
             }
         }
         else

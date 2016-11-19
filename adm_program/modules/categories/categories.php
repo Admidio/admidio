@@ -202,7 +202,7 @@ while($cat_row = $categoryStatement->fetch())
         // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
         $categoriesOverview->addTableBody('id', 'cat_'.$category->getValue('cat_id'));
     }
-    elseif($category->getValue('cat_org_id') == 0 && $getType === 'USF')
+    elseif((int) $category->getValue('cat_org_id') === 0 && $getType === 'USF')
     {
         // Kategorien über alle Organisationen kommen immer zuerst
         if(!$flagTbodyAllOrgasWritten)

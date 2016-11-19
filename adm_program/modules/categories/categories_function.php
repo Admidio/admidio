@@ -78,7 +78,7 @@ if($getCatId > 0)
     $category->readDataById($getCatId);
 
     // check if category belongs to actual organization
-    if($category->getValue('cat_org_id') > 0 && $category->getValue('cat_org_id') != $orgId)
+    if($category->getValue('cat_org_id') > 0 && (int) $category->getValue('cat_org_id') !== $orgId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

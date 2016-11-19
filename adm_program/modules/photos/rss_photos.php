@@ -126,7 +126,7 @@ while ($row = $statement->fetch())
     // Inhalt zusammensetzen
     $description = $gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
     // Enddatum nur wenn anders als startdatum
-    if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
+    if($photo_album->getValue('pho_end') !== $photo_album->getValue('pho_begin'))
     {
         $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photo_album->getValue('pho_end', $gPreferences['system_date']));
     }

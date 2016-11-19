@@ -117,7 +117,7 @@ if($getCatId > 0)
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue('cat_org_id') > 0
-    && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    && (int) $category->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -166,7 +166,7 @@ if($getType === 'USF')
         $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
         $checked = false;
-        if($category->getValue('cat_org_id') == 0)
+        if((int) $category->getValue('cat_org_id') === 0)
         {
             $checked = true;
         }

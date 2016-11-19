@@ -340,7 +340,7 @@ class TableCategory extends TableAccess
 
             $this->setValue('cat_sequence', $countCategoriesStatement->fetchColumn() + 1);
 
-            if ($this->getValue('cat_org_id') == 0)
+            if ((int) $this->getValue('cat_org_id') === 0)
             {
                 // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
                 $sql = 'UPDATE '.TBL_CATEGORIES.'

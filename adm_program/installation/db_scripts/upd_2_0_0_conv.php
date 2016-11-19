@@ -213,10 +213,10 @@ $sequence     = 1;
 
 while($rowUsf = $usfStatement->fetch())
 {
-    if($rowUsf['usf_cat_id'] != $catIdMerker)
+    if((int) $rowUsf['usf_cat_id'] !== $catIdMerker)
     {
         $sequence = 1;
-        $catIdMerker = $rowUsf['usf_cat_id'];
+        $catIdMerker = (int) $rowUsf['usf_cat_id'];
     }
     $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_sequence = '.$sequence.'
              WHERE usf_id = '.$rowUsf['usf_id'];
@@ -237,10 +237,10 @@ $sequence     = 1;
 
 while($rowCat = $catStatement->fetch())
 {
-    if($rowCat['cat_org_id'] != $orgIdMerker || $rowCat['cat_type'] != $typeMerker)
+    if((int) $rowCat['cat_org_id'] !== $orgIdMerker || $rowCat['cat_type'] != $typeMerker)
     {
         $sequence = 1;
-        $orgIdMerker = $rowCat['cat_org_id'];
+        $orgIdMerker = (int) $rowCat['cat_org_id'];
         $typeMerker  = $rowCat['cat_type'];
     }
     $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_sequence = '.$sequence.'

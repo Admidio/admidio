@@ -239,7 +239,7 @@ if($numberBirthdays > 0)
                 if($plg_show_names_extern < 2 || $gValidLogin)
                 {
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
-                    if($row['days_to_bdate'] == 0)
+                    if((int) $row['days_to_bdate'] === 0)
                     {
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
                         echo '<li><span id="plgBirthdayNameHighlight">'.$gL10n->get('PLG_BIRTHDAY_TODAY', $plg_show_name, $row['age']).'</span></li>';

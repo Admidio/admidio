@@ -139,7 +139,7 @@ while($row = $statement->fetch())
     $userField->clear();
     $userField->setArray($row);
 
-    if($categoryId != $userField->getValue('cat_id'))
+    if($categoryId !== (int) $userField->getValue('cat_id'))
     {
         $block_id = 'admCategory'.$userField->getValue('usf_cat_id');
 
@@ -149,7 +149,7 @@ while($row = $statement->fetch())
                           array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
         $table->addTableBody('id', $block_id);
 
-        $categoryId = $userField->getValue('usf_cat_id');
+        $categoryId = (int) $userField->getValue('usf_cat_id');
     }
 
     // cut long text strings and provide tooltip

@@ -18,10 +18,10 @@ $fieldsStatement = $gDb->query($sql);
 
 while($rowFields = $fieldsStatement->fetch())
 {
-    if($rowFields['usf_cat_id'] != $lastCatId)
+    if((int) $rowFields['usf_cat_id'] !== $lastCatId)
     {
         $counter = 1;
-        $lastCatId = $rowFields['usf_cat_id'];
+        $lastCatId = (int) $rowFields['usf_cat_id'];
     }
 
     $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = '. $counter. '

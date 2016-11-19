@@ -327,7 +327,7 @@ else
                 }
 
                 // Deleting events is only allowed for group members
-                if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+                if((int) $date->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
                 {
                     $outputButtonDelete = '
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"

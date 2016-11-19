@@ -43,7 +43,7 @@ elseif($getNewUser === 2)
 {
     $headline = $gL10n->get('SYS_REGISTRATION');
 }
-elseif($getUserId == $gCurrentUser->getValue('usr_id'))
+elseif($getUserId === (int) $gCurrentUser->getValue('usr_id'))
 {
     $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
 }
@@ -177,7 +177,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $showField = true;
     }
     elseif($getNewUser !== 2
-    && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
+    && ($getUserId === (int) $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {
         // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
         // Leiter duerfen dies nicht !!!
@@ -242,7 +242,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     // Password of own user could be changed.
                     // Administrators are allowed to change password if no login was configured or no email is set to send a generated password.
                     if(isMember($user->getValue('usr_id'))
-                    && ($gCurrentUser->getValue('usr_id') == $user->getValue('usr_id')
+                    && ((int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id')
                        || ($gCurrentUser->isAdministrator()
                           && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))
                     {
@@ -305,7 +305,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 $arrListValues = $gL10n->getCountries();
                 $defaultValue  = null;
 
-                if($user->getValue('usr_id') == 0 && strlen($gPreferences['default_country']) > 0)
+                if((int) $user->getValue('usr_id') === 0 && strlen($gPreferences['default_country']) > 0)
                 {
                     $defaultValue = $gPreferences['default_country'];
                 }

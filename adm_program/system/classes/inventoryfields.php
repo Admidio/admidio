@@ -85,7 +85,7 @@ class InventoryFields
     {
         foreach($this->mInventoryFields as $field)
         {
-            if($field->getValue('inf_id') == $fieldId)
+            if((int) $field->getValue('inf_id') === $fieldId)
             {
                 return $field->getValue($column, $format);
             }
@@ -433,7 +433,7 @@ class InventoryFields
         foreach($this->mInventoryData as $value)
         {
             // if new user than set user id
-            if($this->mItemId == 0)
+            if($this->mItemId === 0)
             {
                 $value->setValue('ind_itm_id', $itemId);
             }

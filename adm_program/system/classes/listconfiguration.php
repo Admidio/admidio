@@ -447,7 +447,7 @@ class ListConfiguration extends TableLists
         // save columns
         foreach($this->columns as $number => $listColumn)
         {
-            if($listColumn->getValue('lsc_lst_id') == 0)
+            if((int) $listColumn->getValue('lsc_lst_id') === 0)
             {
                 $listColumn->setValue('lsc_lst_id', $this->getValue('lst_id'));
             }
