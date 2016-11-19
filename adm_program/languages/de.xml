@@ -98,7 +98,7 @@
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
-    <string name="DAT_USER_ATTEND_POSSIBLY">Teilnahme unter Vorbehalt</string>
+    <string name="DAT_USER_ATTEND_POSSIBLY">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
@@ -406,6 +406,8 @@
     <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
     <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</string>
     <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
+    <string name="LST_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
+    <string name="LST_PARTICIPATION_STATUS">Teilnehmerstatus</string>
     <string name="LST_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
     <string name="LST_PRESET_CONFIGURATION_DESC">Als Administrator kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
     <string name="LST_PRINT_PREVIEW">Druckvorschau</string>
@@ -429,6 +431,7 @@
     <string name="LST_SEARCH_TELEFON_DESC">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</string>
     <string name="LST_SEARCH_YES_NO_FIELD">Ja/Nein Feld</string>
     <string name="LST_SEARCH_YES_NO_FIELD_DESC">Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</string>
+    <string name="LST_SEAT_AMOUNT">Zusätzliche Plätze</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
     <string name="LST_SHOW_LIST">Liste anzeigen</string>
@@ -436,6 +439,7 @@
     <string name="LST_YOUR_CONFIGURATION">Deine Konfigurationen</string>
     <string name="LST_YOUR_LAST_CONFIGURATION">Deine letzten Konfigurationen</string>
     <string name="LST_YOUR_LISTS">Deine Listen</string>
+    <string name="LST_USER_CHANGED">Geändert von</string>
     <string name="LST_USER_PHOTO">Benutzerfoto</string>
     <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
     <string name="LST_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
