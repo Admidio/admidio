@@ -27,7 +27,7 @@ $picPath = THEME_ADMIDIO_PATH. '/images/no_profile_pic.png';
 // read user data and show error if user doesn't exists
 $user = new User($gDb, $gProfileFields, $getUserId);
 
-if($user->getValue('usr_id') == 0)
+if((int) $user->getValue('usr_id') === 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT

@@ -186,7 +186,7 @@ else
           ORDER BY cat_sequence, cat_id, rol_name';
 }
 $statement = $gDb->query($sql);
-$category  = '';
+$category  = null;
 $role      = new TableRoles($gDb);
 
 while($row = $statement->fetch())
@@ -202,7 +202,7 @@ while($row = $statement->fetch())
     {
         // if user is assigned to this role
         // or if user is created in members.php of list module
-        if($row['mem_usr_id'] > 0 || ($getNewUser == 1 && $role->getValue('rol_id') == $setRoleId))
+        if($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId))
         {
             $memberChecked = ' checked="checked" ';
         }
@@ -211,7 +211,7 @@ while($row = $statement->fetch())
         // but don't change their own membership, because there must be at least one administrator
         if($role->getValue('rol_administrator') == 1
         && (!$gCurrentUser->isAdministrator()
-        || ($gCurrentUser->isAdministrator() && $getUserId == $gCurrentUser->getValue('usr_id'))))
+        || ($gCurrentUser->isAdministrator() && $getUserId === (int) $gCurrentUser->getValue('usr_id'))))
         {
             $memberDisabled = ' disabled="disabled" ';
         }
@@ -236,7 +236,7 @@ while($row = $statement->fetch())
         );
 
         // if new category than display a category header
-        if($category != $role->getValue('cat_id'))
+        if($category !== (int) $role->getValue('cat_id'))
         {
             $block_id = 'admCategory'.$role->getValue('cat_id');
 
@@ -247,7 +247,7 @@ while($row = $statement->fetch())
             $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name'));
             $table->addTableBody('id', $block_id);
 
-            $category = $role->getValue('cat_id');
+            $category = (int) $role->getValue('cat_id');
         }
 
         $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.

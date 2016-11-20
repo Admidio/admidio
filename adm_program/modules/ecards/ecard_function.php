@@ -144,15 +144,15 @@ class FunctionClass
         $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
         $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
         // Hier wird der Empfaenger Name und Email ersetzt
-        $pregRepArray['/<%ecard_reciepient_email%>/']     = htmlentities($recipientEmail, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_reciepient_name%>/']      = htmlentities($recipientName, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_reciepient_email%>/']     = noHTML($recipientEmail);
+        $pregRepArray['/<%ecard_reciepient_name%>/']      = noHTML($recipientName);
         // Hier wird der Bildname ersetzt
         $pregRepArray['/<%ecard_image_name%>/']           = $imageName;
 
-        $pregRepArray['/<%ecard_greeting_card_from%>/']   = htmlentities($this->greetingCardFrom, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_greeting_card_string%>/'] = htmlentities($this->greetingCardString, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_to_string%>/']            = htmlentities($this->sendToString, ENT_COMPAT, 'UTF-8');
-        $pregRepArray['/<%ecard_email_string%>/']         = htmlentities($this->emailString, ENT_COMPAT, 'UTF-8');
+        $pregRepArray['/<%ecard_greeting_card_from%>/']   = noHTML($this->greetingCardFrom);
+        $pregRepArray['/<%ecard_greeting_card_string%>/'] = noHTML($this->greetingCardString);
+        $pregRepArray['/<%ecard_to_string%>/']            = noHTML($this->sendToString);
+        $pregRepArray['/<%ecard_email_string%>/']         = noHTML($this->emailString);
 
         // make html in description secure
         $ecardMessage = htmLawed(stripslashes($ecardMessage), array('safe' => 1));
@@ -178,7 +178,8 @@ class FunctionClass
     public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
     {
         global $gPreferences;
-        $img_photo_path = '';
+
+        $imgPhotoPath = '';
         $returnCode = true;
 
         $email = new Email();
@@ -197,38 +198,38 @@ class FunctionClass
             for ($i = 0, $iMax = count($matchArray[0]); $i < $iMax; ++$i)
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
-                $img_server_path = str_replace(THEME_URL, THEME_ADMIDIO_PATH, $matchArray[2][$i]);
-                $img_server_path = str_replace($GLOBALS['g_root_path'], ADMIDIO_PATH, $img_server_path);
+                $imgServerPath = str_replace(THEME_URL, THEME_ADMIDIO_PATH, $matchArray[2][$i]);
+                $imgServerPath = str_replace(ADMIDIO_URL, ADMIDIO_PATH, $imgServerPath);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
-                if(strpos($img_server_path, 'photo_show.php') !== false)
+                if(strpos($imgServerPath, 'photo_show.php') !== false)
                 {
-                    $img_server_path = $photoServerPath;
+                    $imgServerPath = $photoServerPath;
                 }
                 // Bildnamen und Typ ermitteln
-                $img_name = substr(strrchr($img_server_path, '/'), 1);
-                $img_type = substr(strrchr($img_name, '.'), 1);
+                $imgName = substr(strrchr($imgServerPath, '/'), 1);
+                $imgType = substr(strrchr($imgName, '.'), 1);
 
                 // das zu versendende eigentliche Bild, muss noch auf das entsprechende Format angepasst werden
                 if(strpos($matchArray[2][$i], 'photo_show.php') !== false)
                 {
-                    $img_name = 'picture.'. $img_type;
-                    $img_name_intern = substr(md5(uniqid($img_name.time(), true)), 0, 8). '.'. $img_type;
-                    $img_server_path = ADMIDIO_PATH . FOLDER_DATA . '/photos/'. $img_name_intern;
-                    $img_photo_path  = $img_server_path;
+                    $imgName = 'picture.'. $imgType;
+                    $imgNameIntern = substr(md5(uniqid($imgName.time(), true)), 0, 8). '.'. $imgType;
+                    $imgServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'. $imgNameIntern;
+                    $imgPhotoPath  = $imgServerPath;
 
-                    $image_sized = new Image($photoServerPath);
-                    $image_sized->scale($gPreferences['ecard_card_picture_width'], $gPreferences['ecard_card_picture_height']);
-                    $image_sized->copyToFile(null, $img_server_path);
+                    $imageSized = new Image($photoServerPath);
+                    $imageSized->scale($gPreferences['ecard_card_picture_width'], $gPreferences['ecard_card_picture_height']);
+                    $imageSized->copyToFile(null, $imgServerPath);
                 }
 
                 // Bild als Anhang an die Mail haengen
-                if($img_name !== 'none.jpg' && $img_name !== '')
+                if($imgName !== 'none.jpg' && $imgName !== '')
                 {
-                    $uid = md5(uniqid($img_name.time(), true));
+                    $uid = md5(uniqid($imgName.time(), true));
                     try
                     {
-                        $email->addEmbeddedImage($img_server_path, $uid, $img_name, $encoding = 'base64', 'image/'.$img_type);
+                        $email->addEmbeddedImage($imgServerPath, $uid, $imgName, $encoding = 'base64', 'image/'.$imgType);
                     }
                     catch (phpmailerException $e)
                     {
@@ -248,7 +249,7 @@ class FunctionClass
         }
 
         // nun noch das von der Groesse angepasste Bild loeschen
-        unlink($img_photo_path);
+        unlink($imgPhotoPath);
 
         return $returnCode;
     }

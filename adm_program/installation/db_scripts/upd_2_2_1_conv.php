@@ -13,20 +13,20 @@
 $sql = 'SELECT * FROM '.TBL_TEXTS.' ORDER BY txt_id DESC';
 $textsStatement = $gDb->query($sql);
 
-while($row_texts = $textsStatement->fetch())
+while($rowTexts = $textsStatement->fetch())
 {
-    $row_texts['txt_text'] = preg_replace('/#Betreff#/', '#subject#', $row_texts['txt_text']);
-    $row_texts['txt_text'] = preg_replace('/#Inhalt#/', '#content#', $row_texts['txt_text']);
+    $rowTexts['txt_text'] = preg_replace('/#Betreff#/', '#subject#', $rowTexts['txt_text']);
+    $rowTexts['txt_text'] = preg_replace('/#Inhalt#/',  '#content#', $rowTexts['txt_text']);
 
-    $sql = 'UPDATE '.TBL_TEXTS.' SET txt_text = \''.addslashes($row_texts['txt_text']). '\'
-             WHERE txt_id = '.$row_texts['txt_id'];
+    $sql = 'UPDATE '.TBL_TEXTS.' SET txt_text = \''.addslashes($rowTexts['txt_text']). '\'
+             WHERE txt_id = '.$rowTexts['txt_id'];
     $gDb->query($sql);
 }
 
 // Laenderbezeichnung durch ISOCODES ersetzen, damit die Laender sprachabhaengig angezeigt werden
 foreach($gL10n->getCountries() as $key => $value)
 {
-    if($gPreferences['default_country'] == $value)
+    if($gPreferences['default_country'] === $value)
     {
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$key.'\'
                  WHERE prf_name  LIKE \'default_country\'
@@ -44,14 +44,14 @@ $sql = 'SELECT DISTINCT usd_value, usd_usf_id
            AND LENGTH(usd_value) > 0 ';
 $countriesStatement = $gDb->query($sql);
 
-while($row_countries = $countriesStatement->fetch())
+while($rowCountries = $countriesStatement->fetch())
 {
     foreach($gL10n->getCountries() as $key => $value)
     {
-        if($row_countries['usd_value'] == $value)
+        if($rowCountries['usd_value'] === $value)
         {
             $sql = 'UPDATE '.TBL_USER_DATA.' SET usd_value = \''.$key.'\'
-                     WHERE usd_usf_id = '.$row_countries['usd_usf_id'].'
+                     WHERE usd_usf_id = '.$rowCountries['usd_usf_id'].'
                        AND usd_value LIKE \''.$value.'\'';
             $gDb->query($sql);
         }
@@ -63,14 +63,14 @@ $sql = 'SELECT distinct dat_country, dat_id FROM '.TBL_DATES.'
          WHERE length(dat_country) > 0 ';
 $countriesStatement = $gDb->query($sql);
 
-while($row_countries = $countriesStatement->fetch())
+while($rowCountries = $countriesStatement->fetch())
 {
     foreach($gL10n->getCountries() as $key => $value)
     {
-        if($row_countries['dat_country'] == $value)
+        if($rowCountries['dat_country'] === $value)
         {
             $sql = 'UPDATE '.TBL_DATES.' SET dat_country = \''.$key.'\'
-                     WHERE dat_id = '.$row_countries['dat_id'].'
+                     WHERE dat_id = '.$rowCountries['dat_id'].'
                        AND dat_country LIKE \''.$value.'\'';
             $gDb->query($sql);
         }

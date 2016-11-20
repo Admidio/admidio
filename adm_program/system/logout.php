@@ -30,9 +30,7 @@ $gCurrentUser->clear();
 // set homepage to logout page
 $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
 
-$message_code = 'SYS_LOGOUT_SUCCESSFUL';
-
 // message logout successful and go to homepage
 $gMessage->setForwardUrl($gHomepage, 2000);
-$gMessage->show($gL10n->get($message_code));
+$gMessage->show($gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
 // => EXIT

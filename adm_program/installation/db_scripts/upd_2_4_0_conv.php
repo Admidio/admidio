@@ -124,10 +124,10 @@ $gDb->query($sql);
 $sql = 'SELECT * FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
 $orgaStatement = $gDb->query($sql);
 
-while($row_orga = $orgaStatement->fetch())
+while($rowOrga = $orgaStatement->fetch())
 {
     $sql = 'INSERT INTO '.TBL_TEXTS.' (txt_org_id, txt_name, txt_text)
-                 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
+                 VALUES ('.$rowOrga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
     $gDb->query($sql);
 }
 

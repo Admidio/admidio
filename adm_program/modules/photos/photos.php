@@ -422,8 +422,8 @@ if($photoAlbum->getValue('pho_quantity') > 0)
     // show page navigations through thumbnails
     $page->addHtml(admFuncGeneratePagination(
         ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$photoAlbum->getValue('pho_id'),
-        $photoAlbum->getValue('pho_quantity'),
-        $gPreferences['photo_thumbs_page'],
+        (int) $photoAlbum->getValue('pho_quantity'),
+        (int) $gPreferences['photo_thumbs_page'],
         $getPhotoNr,
         true,
         'photo_nr'
@@ -608,7 +608,7 @@ if($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($
 
 // If necessary show links to navigate to next and previous albums of the query
 $base_url = ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId;
-$page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, $gPreferences['photo_albums_per_page'], $getStart, true));
+$page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, (int) $gPreferences['photo_albums_per_page'], $getStart, true));
 
 // show html of complete page
 $page->show();

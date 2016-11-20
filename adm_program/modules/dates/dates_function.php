@@ -486,7 +486,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 elseif($getMode === 2)  // Termin loeschen
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
-    if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+    if((int) $date->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
     {
         // member bzw. Teilnahme/Rolle löschen
         $date->delete();

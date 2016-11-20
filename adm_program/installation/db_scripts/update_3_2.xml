@@ -102,20 +102,20 @@
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="340">ComponentUpdate::updateStepInstallDefaultUserRelationTypes</step>
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'mail_sender_into_to' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
-    <step id="360" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'mail_sender_into_to' AND pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
+    <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'mail_sender_into_to' AND pr1.prf_name LIKE 'mail_recipients_with_roles'</step>
     <step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sender_into_to'</step>
     <step id="380" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'lists_default_configuation' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'lists_default_configuration'</step>
-    <step id="390" database="postgresql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'lists_default_configuation' AND pr1.prf_name = 'lists_default_configuration'</step>
+    <step id="390" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'lists_default_configuation' AND pr1.prf_name = 'lists_default_configuration'</step>
     <step id="400">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'lists_default_configuation'</step>
     <step id="410">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_cat_id integer unsigned</step>
     <step id="420">ComponentUpdate::updateStepAddAnnouncementsCategories</step>
     <step id="430" database="mysql">ALTER TABLE %PREFIX%_announcements MODIFY COLUMN ann_cat_id integer unsigned NOT NULL</step>
-    <step id="440" database="postgresql">ALTER TABLE %PREFIX%_announcements ALTER COLUMN ann_cat_id SET NOT NULL</step>
+    <step id="440" database="pgsql">ALTER TABLE %PREFIX%_announcements ALTER COLUMN ann_cat_id SET NOT NULL</step>
     <step id="450">alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_CAT foreign key (ann_cat_id)
         references %PREFIX%_categories (cat_id) on delete restrict on update restrict</step>
     <step id="460" database="mysql" error="ignore">ALTER TABLE %PREFIX%_announcements DROP FOREIGN KEY %PREFIX%_FK_ANN_ORG</step>
     <step id="470" database="mysql" error="ignore">ALTER TABLE %PREFIX%_announcements DROP INDEX %PREFIX%_FK_ANN_ORG</step>
-    <step id="480" database="postgresql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
+    <step id="480" database="pgsql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
     <step id="500">ComponentUpdate::updateStepRewriteFolderRights</step>
 

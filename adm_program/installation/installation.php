@@ -799,7 +799,6 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
                  , ('.$categoryIdMasterData.', \'EMAIL\', \'EMAIL\',    \'SYS_EMAIL\', NULL, NULL, 1, 0, 1, 12, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                  , ('.$categoryIdMasterData.', \'URL\',  \'WEBSITE\',   \'SYS_WEBSITE\', NULL, NULL, 0, 0, 0, 13, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
-    $usf_id_homepage = $db->lastInsertId();
 
     // create profile fields of category social networks
     $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
@@ -861,15 +860,15 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''.
     require_once('db_scripts/preferences.php');
 
     // set some specific preferences whose values came from user input of the installation wizard
-    $orga_preferences['email_administrator'] = $_SESSION['orga_email'];
-    $orga_preferences['system_language']     = $language;
+    $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
+    $defaultOrgPreferences['system_language']     = $language;
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
-    $orga_preferences['system_hashing_cost'] = $benchmarkResults['cost'];
+    $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
     // create all necessary data for this organization
-    $gCurrentOrganization->setPreferences($orga_preferences, false);
+    $gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
     $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
     // create default room for room module in database

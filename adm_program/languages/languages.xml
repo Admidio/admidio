@@ -29,6 +29,10 @@
         <name>Nederlands</name>
     </language>
     <language>
+        <isocode>nb</isocode>
+        <name>Norwegian Bokmål</name>
+    </language>
+    <language>
         <isocode>pt</isocode>
         <name>Português</name>
     </language>
