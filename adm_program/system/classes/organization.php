@@ -127,16 +127,16 @@ class Organization extends TableAccess
         $categoryCommon = $this->db->lastInsertId();
 
         $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                        VALUES ('.$orgId.', \'ROL\', \'GROUPS\',   \'INS_GROUPS\',   0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ROL\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ROL\', \'TEAMS\',    \'INS_TEAMS\',    0, 0, 0, 4, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'LNK\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'LNK\', \'INTERN\',   \'INS_INTERN\',   1, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ANN\', \'IMPORTANT\',   \'INS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'DAT\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'DAT\', \'TRAINING\', \'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'DAT\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')';
+                                        VALUES ('.$orgId.', \'ROL\', \'GROUPS\',    \'INS_GROUPS\',   0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'COURSES\',   \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'TEAMS\',     \'INS_TEAMS\',    0, 0, 0, 4, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'LNK\', \'COMMON\',    \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'LNK\', \'INTERN\',    \'INS_INTERN\',   1, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ANN\', \'COMMON\',    \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ANN\', \'IMPORTANT\', \'INS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'COMMON\',    \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'TRAINING\',  \'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'COURSES\',   \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 
         // insert root folder name for download module
