@@ -524,6 +524,21 @@ female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 12, 1, '2012-01-08 11:12:05', NU
 
 
 --
+-- Data for table adm_user_relation_types
+--
+
+INSERT INTO %PREFIX%_user_relation_types (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create, urt_usr_id_change, urt_timestamp_change) VALUES
+(1, 'INS_PARENT', 'INS_FATHER', 'INS_MOTHER', 2, 2, '2016-11-22 05:29:56', NULL, NULL),
+(2, 'INS_CHILD', 'INS_SON', 'INS_DAUGHTER', 1, 2, '2016-11-22 05:29:56', NULL, NULL),
+(3, 'INS_SIBLING', 'INS_BROTHER', 'INS_SISTER', 3, 2, '2016-11-22 05:29:56', NULL, NULL),
+(4, 'INS_SPOUSE', 'INS_HUSBAND', 'INS_WIFE', 4, 2, '2016-11-22 05:29:56', NULL, NULL),
+(5, 'INS_COHABITANT', 'INS_COHABITANT_MALE', 'INS_COHABITANT_FEMALE', 5, 2, '2016-11-22 05:29:56', NULL, NULL),
+(6, 'INS_COMPANION', 'INS_BOYFRIEND', 'INS_GIRLFRIEND', 6, 2, '2016-11-22 05:29:56', NULL, NULL),
+(7, 'INS_SUPERIOR', 'INS_SUPERIOR_MALE', 'INS_SUPERIOR_FEMALE', 8, 2, '2016-11-22 05:29:56', NULL, NULL),
+(8, 'INS_SUBORDINATE', 'INS_SUBORDINATE_MALE', 'INS_SUBORDINATE_FEMALE', 7, 2, '2016-11-22 05:29:56', NULL, NULL);
+
+
+--
 -- Data for table adm_announcements
 --
 
