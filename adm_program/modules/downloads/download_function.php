@@ -380,9 +380,14 @@ elseif ($getMode === 6)
 // save view or upload rights for a folder
 elseif ($getMode === 7)
 {
-    if(!isset($_POST['adm_roles_view_right'], $_POST['adm_roles_upload_right']))
+    if(!isset($_POST['adm_roles_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        // => EXIT
+    }
+    if(!isset($_POST['adm_roles_upload_right']))
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DOW_UPLOAD_FILES')));
         // => EXIT
     }
 
