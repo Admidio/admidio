@@ -99,14 +99,13 @@ else
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)
             {
-                $column_content = $column->getValue('lsc_usf_id');
+                $formValues['column'. $number] = $column->getValue('lsc_usf_id');
             }
             else
             {
-                $column_content = $column->getValue('lsc_special_field');
+                $formValues['column'. $number] = $column->getValue('lsc_special_field');
             }
 
-            $formValues['column'. $number]    = $column_content;
             $formValues['sort'. $number]      = $column->getValue('lsc_sort');
             $formValues['condition'. $number] = $column->getValue('lsc_filter');
         }
@@ -347,8 +346,8 @@ while(isset($formValues['column' . $actualColumnNumber]))
         defaultFields[' . $actualColumnNumber . '] = {
             "usf_id"    = "' . $formValues['column' . $actualColumnNumber] . '",
             "sort"      = "' . $sortValue . '",
-            "condition" = "' . $conditionValue . '"';
-        };
+            "condition" = "' . $conditionValue . '"
+        };';
 
     ++$actualColumnNumber;
 }
@@ -551,8 +550,8 @@ foreach($configurations as $configuration)
         if($numberLastConfigurations > 5)
         {
             // delete all other configurations
-            $del_list = new ListConfiguration($gDb, $configuration['lst_id']);
-            $del_list->delete();
+            $delList = new ListConfiguration($gDb, $configuration['lst_id']);
+            $delList->delete();
         }
         else
         {
