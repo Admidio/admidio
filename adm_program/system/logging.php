@@ -25,6 +25,13 @@ if ($gDebug)
 // Append line/file/class/function where the log message came from
 $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
 
+// check log folder in adm_my_files and create if necessary
+$myFilesLogs = new MyFiles('LOGS');
+if(!$myFilesLogs->checkSettings())
+{
+    $gLogger->error('Log folder coudlnot be created', $myFilesDownload->errorPath);
+}
+
 $formatter = new LineFormatter(null, null, false, true);
 $streamHandler = new RotatingFileHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', 0, $logLevel, true, 0666);
 $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
