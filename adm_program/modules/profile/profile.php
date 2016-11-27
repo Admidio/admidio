@@ -420,10 +420,11 @@ $page->addHtml('
                             break;
 
                         default:
-                            $field = getFieldCode($field->getValue('usf_name_intern'), $user);
+                            $fieldNameIntern = $field->getValue('usf_name_intern');
+                            $field = getFieldCode($fieldNameIntern, $user);
                             if(is_array($field) && $field['value'] !== '')
                             {
-                                $form->addStaticControl('address', $field['label'], $field['value']);
+                                $form->addStaticControl(admStrToLower($fieldNameIntern), $field['label'], $field['value']);
                             }
                             break;
                     }
@@ -473,9 +474,11 @@ foreach($gProfileFields->mProfileFields as $field)
     && ($gCurrentUser->hasRightEditProfile($user)
         || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
     {
+        $fieldNameIntern = $field->getValue('usf_name_intern');
+
         // show new category header if new category and field has value or is a checkbox field
         if($category !== $field->getValue('cat_name')
-        && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
+        && (strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
         {
             if($category !== '')
             {
@@ -486,21 +489,21 @@ foreach($gProfileFields->mProfileFields as $field)
             $category = $field->getValue('cat_name');
 
             $page->addHtml('
-            <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
-                <div class="panel-heading">'.$field->getValue('cat_name').'</div>
-                <div class="panel-body">');
+                <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
+                    <div class="panel-heading">'.$field->getValue('cat_name').'</div>
+                    <div class="panel-body">');
 
             // create a static form
             $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form', null);
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
-        if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX')
+        if(strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX')
         {
-            $field = getFieldCode($field->getValue('usf_name_intern'), $user);
+            $field = getFieldCode($fieldNameIntern, $user);
             if(is_array($field) && $field['value'] !== '')
             {
-                $form->addStaticControl('address', $field['label'], $field['value']);
+                $form->addStaticControl(admStrToLower($fieldNameIntern), $field['label'], $field['value']);
             }
         }
     }
