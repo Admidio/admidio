@@ -260,13 +260,17 @@ class ProfileFields
                 case 'URL':
                     if ($value !== '')
                     {
+                        $displayValue = $value;
+
+                        // trim "http://", "https://", "//"
+                        if (strpos($displayValue, '//') !== false)
+                        {
+                            $displayValue = substr($displayValue, strpos($displayValue, '//') + 2);
+                        }
+                        // trim after the 35th char
                         if (strlen($value) > 35)
                         {
-                            $displayValue = substr($value, strpos($value, '//') + 2, 35) . '...';
-                        }
-                        else
-                        {
-                            $displayValue = substr($value, strpos($value, '//') + 2);
+                            $displayValue = substr($displayValue, 0, 35) . '...';
                         }
                         $htmlValue = '<a href="' . $value . '" target="_blank" title="' . $value . '">' . $displayValue . '</a>';
                     }
