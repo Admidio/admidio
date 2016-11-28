@@ -373,12 +373,12 @@ class User extends TableAccess
 
         $sqlAdministrator = '';
         // only check for administrator role if version > 3.1 because before it was webmaster role
-        if ($isAdministrator && version_compare($installedDbVersion, '3.2.0', '>='))
+        if ($isAdministrator && version_compare($installedDbVersion, '3.2', '>='))
         {
             $sqlAdministrator = ', rol_administrator AS administrator';
         }
         // only check for webmaster role if version > 2.3 because before we don't have that flag
-        elseif ($isAdministrator && version_compare($installedDbVersion, '2.4.0', '>='))
+        elseif ($isAdministrator && version_compare($installedDbVersion, '2.4', '>='))
         {
             $sqlAdministrator = ', rol_webmaster AS administrator';
         }
@@ -413,7 +413,7 @@ class User extends TableAccess
             return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
         }
 
-        if ($isAdministrator && version_compare($installedDbVersion, '2.4.0', '>=') && $userRow['administrator'] == 0)
+        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && $userRow['administrator'] == 0)
         {
             $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
 
