@@ -25,11 +25,11 @@ if ($gDebug)
 // Append line/file/class/function where the log message came from
 $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
 
-// check log folder in adm_my_files and create if necessary
+// check log folder in "adm_my_files" and create if necessary
 $myFilesLogs = new MyFiles('LOGS');
-if(!$myFilesLogs->checkSettings())
+if (!$myFilesLogs->checkSettings())
 {
-    $gLogger->error('Log folder coudlnot be created', $myFilesDownload->errorPath);
+    error_log('Log folder could not be created! [error_text: ' $myFilesLogs->errorText . ', error_path: ' . $myFilesLogs->errorPath . ']');
 }
 
 $formatter = new LineFormatter(null, null, false, true);
