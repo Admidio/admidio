@@ -29,7 +29,7 @@ $gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
 $myFilesLogs = new MyFiles('LOGS');
 if (!$myFilesLogs->checkSettings())
 {
-    error_log('Log folder could not be created! [error_text: ' $myFilesLogs->errorText . ', error_path: ' . $myFilesLogs->errorPath . ']');
+    error_log('Log folder could not be created! [error_text: ' . $myFilesLogs->errorText . ', error_path: ' . $myFilesLogs->errorPath . ']');
 }
 
 $formatter = new LineFormatter(null, null, false, true);
