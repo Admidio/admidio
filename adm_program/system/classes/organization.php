@@ -321,12 +321,13 @@ class Organization extends TableAccess
     /**
      * Reads all preferences of the current organization out of the database table adm_preferences.
      * If the object has read the preferences than the method will return the stored values of the object.
+     * @param bool $update Should the preferences data be updated.
      * @return array Returns an array with all preferences of this organization.
      *               Array key is the column @b prf_name and array value is the column @b prf_value.
      */
-    public function getPreferences()
+    public function getPreferences($update = false)
     {
-        if(count($this->preferences) === 0)
+        if($update || count($this->preferences) === 0)
         {
             $sql = 'SELECT *
                       FROM '.TBL_PREFERENCES.'
@@ -429,6 +430,9 @@ class Organization extends TableAccess
                 $this->db->query($sql);
             }
         }
+
+        // Update the preferences cache
+        $this->getPreferences(true);
         $this->db->endTransaction();
     }
 
