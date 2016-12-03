@@ -334,6 +334,9 @@ class Organization extends TableAccess
                      WHERE prf_org_id = '. $this->getValue('org_id');
             $preferencesStatement = $this->db->query($sql);
 
+            // clear old data
+            $this->preferences = array();
+
             while($prf_row = $preferencesStatement->fetch())
             {
                 $this->preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
