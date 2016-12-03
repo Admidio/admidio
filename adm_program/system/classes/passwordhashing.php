@@ -40,7 +40,7 @@ class PasswordHashing
      */
     public static function hash($password, $algorithm = PASSWORD_DEFAULT, $options = array())
     {
-        if (!in_array('cost', $options, true))
+        if (!array_key_exists('cost', $options))
         {
             $options['cost'] = 10;
         }
@@ -191,8 +191,6 @@ class PasswordHashing
             $results = array('cost' => $cost, 'time' => $time);
             ++$cost;
         }
-
-        array_pop($results);
 
         return $results;
     }
