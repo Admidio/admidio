@@ -104,7 +104,7 @@ class ProfileFields
     {
         foreach ($this->mProfileFields as $field)
         {
-            if ((int) $field->getValue('usf_id') === $fieldId)
+            if ((int) $field->getValue('usf_id') === (int) $fieldId)
             {
                 return $field->getValue($column, $format);
             }
