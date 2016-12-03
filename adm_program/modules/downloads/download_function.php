@@ -385,6 +385,11 @@ elseif ($getMode === 7)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
         // => EXIT
     }
+    if(!isset($_POST['adm_roles_upload_right']))
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DOW_UPLOAD_FILES')));
+        // => EXIT
+    }
 
     if ($getFolderId === 0 || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right']))
     {

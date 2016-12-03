@@ -513,6 +513,7 @@ class Database
                 $this->showError();
                 // => EXIT
             }
+            return false;
         }
 
         return $this->pdoStatement;

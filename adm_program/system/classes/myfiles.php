@@ -88,15 +88,12 @@ class MyFiles extends Folder
                         }
                     }
 
-                    if(!is_writable($serverPathAdmMyFiles))
+                    // set "adm_my_files" writable
+                    if(!chmod($serverPathAdmMyFiles, 0777))
                     {
-                        // set "adm_my_files" writable
-                        if(!chmod($serverPathAdmMyFiles, 0777))
-                        {
-                            $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
-                            $this->errorPath = $this->webPath;
-                            return false;
-                        }
+                        $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
+                        $this->errorPath = $this->webPath;
+                        return false;
                     }
                 }
 
@@ -104,6 +101,14 @@ class MyFiles extends Folder
                 if(!@mkdir($this->modulePath, 0777) && !is_dir($this->modulePath)) // [1]
                 {
                     $this->errorText = 'SYS_FOLDER_NOT_CREATED';
+                    $this->errorPath = $this->webPath;
+                    return false;
+                }
+
+                // set "adm_my_files" writable
+                if(!chmod($this->modulePath, 0777))
+                {
+                    $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath;
                     return false;
                 }
