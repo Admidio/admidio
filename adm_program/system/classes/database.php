@@ -446,6 +446,44 @@ class Database
     }
 
     /**
+     * @param string $sql
+     * @return string
+     */
+    private function preparePgSqlQuery($sql)
+    {
+        $sqlCompare = strtolower($sql);
+
+        // prepare the sql statement to be compatible with PostgreSQL
+        if (strpos($sqlCompare, 'create table') !== false)
+        {
+            // on a create-table-statement if necessary cut existing MySQL table options
+            $sql = substr($sql, 0, strrpos($sql, ')') + 1);
+        }
+        if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
+        {
+            $replaceArray = array(
+                // PostgreSQL doesn't know unsigned
+                'unsigned' => '',
+                // PostgreSQL interprets a boolean as string so transform it to a smallint
+                'boolean'  => 'smallint',
+                // A blob is in PostgreSQL a bytea datatype
+                'blob'     => 'bytea'
+            );
+            $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
+
+            // Auto_Increment must be replaced with Serial
+            $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
+            if ($posAutoIncrement > 0)
+            {
+                $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
+                $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
      * Send a sql statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a @b SELECT statement
      * then also the number of rows will be logged. If an error occurred the script will
@@ -463,34 +501,7 @@ class Database
 
         if ($this->dbEngine === 'pgsql')
         {
-            $sqlCompare = strtolower($sql);
-
-            // prepare the sql statement to be compatible with PostgreSQL
-            if (strpos($sqlCompare, 'create table') !== false)
-            {
-                // on a create-table-statement if necessary cut existing MySQL table options
-                $sql = substr($sql, 0, strrpos($sql, ')') + 1);
-            }
-            if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
-            {
-                $replaceArray = array(
-                    // PostgreSQL doesn't know unsigned
-                    'unsigned' => '',
-                    // PostgreSQL interprets a boolean as string so transform it to a smallint
-                    'boolean'  => 'smallint',
-                    // A blob is in PostgreSQL a bytea datatype
-                    'blob'     => 'bytea'
-                );
-                $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
-
-                // Auto_Increment must be replaced with Serial
-                $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
-                if ($posAutoIncrement > 0)
-                {
-                    $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
-                    $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
-                }
-            }
+            $sql = $this->preparePgSqlQuery($sql);
         }
 
         // if debug mode then log all sql statements
