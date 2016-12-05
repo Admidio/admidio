@@ -684,8 +684,8 @@ class Database
         {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type
                       FROM information_schema.columns
-                     WHERE table_name = \'' . $table . '\'';
-            $columnsStatement = $this->query($sql);
+                     WHERE table_name = ?';
+            $columnsStatement = $this->queryPrepared($sql, array($table));
             $columnsList = $columnsStatement->fetchAll();
 
             foreach ($columnsList as $properties)
