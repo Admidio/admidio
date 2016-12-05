@@ -110,6 +110,8 @@ if(isset($page) && $page instanceof \HtmlPage)
     $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/birthday/birthday.css');
 }
 
+$fieldBirthday = $gProfileFields->getProperty('BIRTHDAY', 'usf_id');
+
 $sql = 'SELECT DISTINCT usr_id, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
@@ -122,49 +124,60 @@ $sql = 'SELECT DISTINCT usr_id, usr_login_name,
                     FROM '.TBL_USER_DATA.' bd1
                    WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
                          BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+                     AND usd_usf_id = '.$fieldBirthday.')
                UNION
                  (SELECT usd_usr_id, usd_value AS bday,
                          CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')) AS bdate
                     FROM '.TBL_USER_DATA.' bd2
                    WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
                          BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+                     AND usd_usf_id = '.$fieldBirthday.')
                UNION
                  (SELECT usd_usr_id, usd_value AS bday,
                          CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')) AS bdate
                     FROM '.TBL_USER_DATA.' bd3
                    WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
                          BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+                     AND usd_usf_id = '.$fieldBirthday.')
                ) birthday
             ON birthday.usd_usr_id = usr_id
      LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
+           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS gender
             ON gender.usd_usr_id = usr_id
-           AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
+           AND gender.usd_usf_id = ? -- $gProfileFields->getProperty(\'GENDER\', \'usf_id\')
      LEFT JOIN '.TBL_MEMBERS.'
             ON mem_usr_id = usr_id
-           AND mem_begin <= \''.DATE_NOW.'\'
-           AND mem_end    > \''.DATE_NOW.'\'
+           AND mem_begin <= ? -- DATE_NOW
+           AND mem_end    > ? -- DATE_NOW
     INNER JOIN '.TBL_ROLES.'
             ON mem_rol_id = rol_id
            AND rol_valid  = 1
     INNER JOIN '.TBL_CATEGORIES.'
             ON rol_cat_id = cat_id
-           AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
          WHERE usr_valid = 1
            AND mem_rol_id '.$rol_sql.'
-      ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
-$birthdayStatement = $gDb->query($sql);
+      ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name';
+
+$queryParams = array(
+    // TODO add more params
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('EMAIL', 'usf_id'),
+    $gProfileFields->getProperty('GENDER', 'usf_id'),
+    DATE_NOW,
+    DATE_NOW,
+    $gCurrentOrganization->getValue('org_id')
+);
+$birthdayStatement = $gDb->queryPrepared($sql, $queryParams);
 
 $numberBirthdays = $birthdayStatement->rowCount();
 

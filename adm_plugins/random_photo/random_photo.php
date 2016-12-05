@@ -85,7 +85,7 @@ if($plg_show_headline)
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten
 $sql = 'SELECT *
           FROM '.TBL_PHOTOS.'
-         WHERE pho_org_id   = '.$gCurrentOrganization->getValue('org_id').'
+         WHERE pho_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
            AND pho_locked   = 0
            AND pho_quantity > 0
       ORDER BY pho_begin DESC';
@@ -93,10 +93,10 @@ $sql = 'SELECT *
 // Limit setzen falls gefordert
 if($plg_photos_albums > 0)
 {
-    $sql = $sql.' LIMIT '.$plg_photos_albums;
+    $sql .= ' LIMIT '.$plg_photos_albums;
 }
 
-$albumStatement = $gDb->query($sql);
+$albumStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 $albumList      = $albumStatement->fetchAll();
 
 // Variablen initialisieren
