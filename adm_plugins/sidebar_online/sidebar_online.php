@@ -84,14 +84,17 @@ $sql = 'SELECT ses_usr_id, usr_login_name
 $queryParams = array($refDate, DATETIME_NOW, $gCurrentOrganization->getValue('org_id'));
 if(!$plg_show_visitors)
 {
-    $sql .= ' AND ses_usr_id IS NOT NULL';
+    $sql .= '
+        AND ses_usr_id IS NOT NULL';
 }
 if(!$plg_show_self && $gValidLogin)
 {
-    $sql .= ' AND ses_usr_id <> ? -- $gCurrentUser->getValue(\'usr_id\')';
+    $sql .= '
+         AND ses_usr_id <> ? -- $gCurrentUser->getValue(\'usr_id\')';
     $queryParams[] = $gCurrentUser->getValue('usr_id');
 }
-$sql .= ' ORDER BY ses_usr_id';
+$sql .= '
+     ORDER BY ses_usr_id';
 $onlineUsersStatement = $gDb->queryPrepared($sql, $queryParams);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';

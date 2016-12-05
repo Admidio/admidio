@@ -62,7 +62,13 @@ if(!empty($_POST['recipient_email']))
                        AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR cat_org_id IS NULL )
                   GROUP BY usr_id';
-            $queryParams = array($gProfileFields->getProperty('EMAIL', 'usf_id'), $_POST['recipient_email'], DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
+            $queryParams = array(
+                $gProfileFields->getProperty('EMAIL', 'usf_id'),
+                $_POST['recipient_email'],
+                DATE_NOW,
+                DATE_NOW,
+                $gCurrentOrganization->getValue('org_id')
+            );
             $userStatement = $gDb->queryPrepared($sql, $queryParams);
             $count = $userStatement->rowCount();
         }
@@ -85,7 +91,12 @@ if(!empty($_POST['recipient_email']))
                        AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR cat_org_id IS NULL )
                   GROUP BY usr_id';
-            $queryParams = array($_POST['recipient_email'], DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
+            $queryParams = array(
+                $_POST['recipient_email'],
+                DATE_NOW,
+                DATE_NOW,
+                $gCurrentOrganization->getValue('org_id')
+            );
             $userStatement = $gDb->queryPrepared($sql, $queryParams);
             $count = $userStatement->rowCount();
         }
