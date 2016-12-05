@@ -70,8 +70,8 @@ if($password === '')
 // Search for username
 $sql = 'SELECT usr_id
           FROM '.TBL_USERS.'
-         WHERE UPPER(usr_login_name) = UPPER(\''.$loginname.'\')';
-$userStatement = $gDb->query($sql);
+         WHERE UPPER(usr_login_name) = UPPER(?)';
+$userStatement = $gDb->querySecure($sql, array($loginname));
 
 if ($userStatement->rowCount() === 0)
 {
