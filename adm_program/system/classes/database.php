@@ -454,8 +454,8 @@ class Database
      * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
-     *                       This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
+     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function query($sql, $showError = true)
     {
@@ -513,6 +513,7 @@ class Database
                 $this->showError();
                 // => EXIT
             }
+            return false;
         }
 
         return $this->pdoStatement;

@@ -9,3 +9,4 @@ Short description to update the current lib
 3. Delete the following files:
     example_form.ajax.php
     example_form.php
+4. Delete folder „audio“ because we don’t implement it and it uses much space

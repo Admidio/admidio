@@ -360,7 +360,7 @@ elseif ($getMode === 2)
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
-    $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
+    $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['cost']);
 
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
     $orgaStatement = $gDb->query($sql);
@@ -369,6 +369,7 @@ elseif ($getMode === 2)
     {
         $gCurrentOrganization->setValue('org_id', $orgId);
         $gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
+        $gCurrentOrganization->setPreferences($updateOrgPreferences, true);
     }
 
     if ($gDbType === 'mysql')

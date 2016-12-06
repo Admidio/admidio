@@ -127,16 +127,16 @@ class Organization extends TableAccess
         $categoryCommon = $this->db->lastInsertId();
 
         $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                        VALUES ('.$orgId.', \'ROL\', \'GROUPS\',   \'INS_GROUPS\',   0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ROL\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ROL\', \'TEAMS\',    \'INS_TEAMS\',    0, 0, 0, 4, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'LNK\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'LNK\', \'INTERN\',   \'INS_INTERN\',   1, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'ANN\', \'IMPORTANT\',   \'INS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'DAT\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'DAT\', \'TRAINING\', \'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                                             , ('.$orgId.', \'DAT\', \'COURSES\',  \'INS_COURSES\',  0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')';
+                                        VALUES ('.$orgId.', \'ROL\', \'GROUPS\',    \'INS_GROUPS\',    0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'COURSES\',   \'INS_COURSES\',   0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'TEAMS\',     \'INS_TEAMS\',     0, 0, 0, 4, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'LNK\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'LNK\', \'INTERN\',    \'INS_INTERN\',    1, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'TRAINING\',  \'INS_TRAINING\',  0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'DAT\', \'COURSES\',   \'INS_COURSES\',   0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql);
 
         // insert root folder name for download module
@@ -343,17 +343,21 @@ class Organization extends TableAccess
     /**
      * Reads all preferences of the current organization out of the database table adm_preferences.
      * If the object has read the preferences than the method will return the stored values of the object.
+     * @param bool $update Should the preferences data be updated.
      * @return array Returns an array with all preferences of this organization.
      *               Array key is the column @b prf_name and array value is the column @b prf_value.
      */
-    public function getPreferences()
+    public function getPreferences($update = false)
     {
-        if(count($this->preferences) === 0)
+        if($update || count($this->preferences) === 0)
         {
             $sql = 'SELECT prf_name, prf_value
                       FROM '.TBL_PREFERENCES.'
                      WHERE prf_org_id = '. $this->getValue('org_id');
             $preferencesStatement = $this->db->query($sql);
+
+            // clear old data
+            $this->preferences = array();
 
             while($prfRow = $preferencesStatement->fetch())
             {
@@ -440,6 +444,9 @@ class Organization extends TableAccess
                 $this->db->query($sql);
             }
         }
+
+        // Update the preferences cache
+        $this->getPreferences(true);
         $this->db->endTransaction();
     }
 

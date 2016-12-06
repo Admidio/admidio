@@ -99,14 +99,13 @@ else
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)
             {
-                $column_content = $column->getValue('lsc_usf_id');
+                $formValues['column'. $number] = $column->getValue('lsc_usf_id');
             }
             else
             {
-                $column_content = $column->getValue('lsc_special_field');
+                $formValues['column'. $number] = $column->getValue('lsc_special_field');
             }
 
-            $formValues['column'. $number]    = $column_content;
             $formValues['sort'. $number]      = $column->getValue('lsc_sort');
             $formValues['condition'. $number] = $column->getValue('lsc_filter');
         }
@@ -129,54 +128,54 @@ if($gDbType === 'mysql')
 }
 
 $javascriptCode = '
-    var listId             = '.$getListId.';
-    var fieldNumberIntern  = 0;
-    var arr_user_fields    = createProfileFieldsArray();
-    var arr_default_fields = createColumnsArray();
+    var listId            = '.$getListId.';
+    var fieldNumberIntern = 0;
+    var arrUserFields     = createProfileFieldsArray();
+    var arrDefaultFields  = createColumnsArray();
 
     // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
     function addColumn() {
         '.$mySqlMaxColumnAlert.'
 
         var category = "";
-        var fieldNumberShow  = fieldNumberIntern + 1;
+        var fieldNumberShow = fieldNumberIntern + 1;
         var table = document.getElementById("mylist_fields_tbody");
         var newTableRow = table.insertRow(fieldNumberIntern);
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
-        newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
+        newCellCount.textContent = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
         htmlCboFields = "<select class=\"form-control\" onchange=\"getConditionField(" + fieldNumberShow + ", this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column" + fieldNumberShow + "\">" +
                 "<option value=\"\"></option>";
-        for (var counter = 1; counter < arr_user_fields.length; counter++) {
-            if (category != arr_user_fields[counter]["cat_name"]) {
+        for (var counter = 1; counter < arrUserFields.length; counter++) {
+            if (category !== arrUserFields[counter]["cat_name"]) {
                 if (category.length > 0) {
                     htmlCboFields += "</optgroup>";
                 }
-                htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
-                category = arr_user_fields[counter]["cat_name"];
+                htmlCboFields += "<optgroup label=\"" + arrUserFields[counter]["cat_name"] + "\">";
+                category = arrUserFields[counter]["cat_name"];
             }
 
             var selected = "";
             // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
-            if (( (fieldNumberIntern === 0 && arr_user_fields[counter]["usf_name_intern"] === "LAST_NAME")
-               || (fieldNumberIntern === 1 && arr_user_fields[counter]["usf_name_intern"] === "FIRST_NAME"))
-            && listId == 0) {
+            if (( (fieldNumberIntern === 0 && arrUserFields[counter]["usf_name_intern"] === "LAST_NAME")
+               || (fieldNumberIntern === 1 && arrUserFields[counter]["usf_name_intern"] === "FIRST_NAME"))
+            && listId === 0) {
                 selected = " selected=\"selected\" ";
             }
 
             // bei gespeicherten Listen das entsprechende Profilfeld selektieren
             // und den Feldnamen dem Listenarray hinzufügen
-            if (arr_default_fields[fieldNumberShow]) {
-                if (arr_user_fields[counter]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]) {
+            if (arrDefaultFields[fieldNumberShow]) {
+                if (arrUserFields[counter]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]) {
                     selected = " selected=\"selected\" ";
-                    arr_default_fields[fieldNumberShow]["usf_name"] = arr_user_fields[counter]["usf_name"];
+                    arrDefaultFields[fieldNumberShow]["usf_name"] = arrUserFields[counter]["usf_name"];
                 }
             }
-            htmlCboFields += "<option value=\"" + arr_user_fields[counter]["usf_id"] + "\" " + selected + ">" + arr_user_fields[counter]["usf_name"] + "</option>";
+            htmlCboFields += "<option value=\"" + arrUserFields[counter]["usf_id"] + "\" " + selected + ">" + arrUserFields[counter]["usf_name"] + "</option>";
         }
         htmlCboFields += "</select>";
         newCellField.innerHTML = htmlCboFields;
@@ -185,11 +184,11 @@ $javascriptCode = '
         var selectAsc  = "";
         var selectDesc = "";
 
-        if (arr_default_fields[fieldNumberShow]) {
-            if (arr_default_fields[fieldNumberShow]["sort"] === "ASC") {
+        if (arrDefaultFields[fieldNumberShow]) {
+            if (arrDefaultFields[fieldNumberShow]["sort"] === "ASC") {
                 selectAsc = " selected=\"selected\" ";
             }
-            if (arr_default_fields[fieldNumberShow]["sort"] === "DESC") {
+            if (arrDefaultFields[fieldNumberShow]["sort"] === "DESC") {
                 selectDesc = " selected=\"selected\" ";
             }
         } else if (fieldNumberIntern === 0) {
@@ -205,11 +204,11 @@ $javascriptCode = '
 
         // neue Spalte fuer Bedingungen
         condition = "";
-        if (arr_default_fields[fieldNumberShow]) {
-            var fieldName = arr_default_fields[fieldNumberShow]["usf_name"];
+        if (arrDefaultFields[fieldNumberShow]) {
+            var fieldName = arrDefaultFields[fieldNumberShow]["usf_name"];
 
-            if (arr_default_fields[fieldNumberShow]["condition"]) {
-                condition = arr_default_fields[fieldNumberShow]["condition"];
+            if (arrDefaultFields[fieldNumberShow]["condition"]) {
+                condition = arrDefaultFields[fieldNumberShow]["condition"];
                 condition = condition.replace(/{/g, "<");
                 condition = condition.replace(/}/g, ">");
             }
@@ -227,7 +226,7 @@ $javascriptCode = '
     }
 
     function createProfileFieldsArray() {
-        var user_fields = new Array(); ';
+        var userFields = [];';
 
 // create a multidimensional array for all columns with the necessary data
 $i = 1;
@@ -238,8 +237,7 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     // at the end of category master data save positions for loginname and username
     // they will be added after profile fields loop
-    if($oldCategoryNameIntern === 'MASTER_DATA'
-        && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
+    if($oldCategoryNameIntern === 'MASTER_DATA' && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
     {
         $posEndOfMasterData = $i;
         $i += 2;
@@ -249,14 +247,15 @@ foreach($gProfileFields->mProfileFields as $field)
     if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
     {
         $javascriptCode .= '
-                user_fields['. $i. '] = new Object();
-                user_fields['. $i. ']["cat_id"]   = "'. $field->getValue('cat_id'). '";
-                user_fields['. $i. ']["cat_name"] = "'. str_replace('"', '\'', $field->getValue('cat_name')). '";
-                user_fields['. $i. ']["usf_id"]   = "'. $field->getValue('usf_id'). '";
-                user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
-                user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";
-                user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '";
-                user_fields['. $i. ']["usf_value_list"] = new Object();';
+            userFields[' . $i . '] = {
+                "cat_id"   = '. $field->getValue('cat_id'). ',
+                "cat_name" = "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
+                "usf_id"   = "'. $field->getValue('usf_id'). '",
+                "usf_name" = "'. addslashes($field->getValue('usf_name')). '",
+                "usf_name_intern" = "'. addslashes($field->getValue('usf_name_intern')). '",
+                "usf_type" = "'. $field->getValue('usf_type'). '",
+                "usf_value_list" = {}
+            };';
 
         // get avaiable values for current field type and push to array
         if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
@@ -264,13 +263,13 @@ foreach($gProfileFields->mProfileFields as $field)
             foreach($field->getValue('usf_value_list', 'text') as $key => $value)
             {
                 $javascriptCode .= '
-                        user_fields['. $i. ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
+                    userFields[' . $i . ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
             }
         }
         else
         {
             $javascriptCode .= '
-                    user_fields['. $i. ']["usf_value_list"] = "";';
+                userFields[' . $i . ']["usf_value_list"] = "";';
         }
 
         $oldCategoryNameIntern = $field->getValue('cat_name_intern');
@@ -286,70 +285,75 @@ if($posEndOfMasterData === 0)
     $i += 2;
 }
 $javascriptCode .= '
-        user_fields['. $posEndOfMasterData. '] = new Object();
-        user_fields['. $posEndOfMasterData. ']["cat_id"]   = user_fields[1]["cat_id"];
-        user_fields['. $posEndOfMasterData. ']["cat_name"] = user_fields[1]["cat_name"];
-        user_fields['. $posEndOfMasterData. ']["usf_id"]   = "usr_login_name";
-        user_fields['. $posEndOfMasterData. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
-        user_fields['. $posEndOfMasterData. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";
+        userFields[' . $posEndOfMasterData . '] = {
+            "cat_id"   = userFields[1]["cat_id"],
+            "cat_name" = userFields[1]["cat_name"],
+            "usf_id"   = "usr_login_name",
+            "usf_name" = "'.$gL10n->get('SYS_USERNAME').'",
+            "usf_name_intern" = "'.$gL10n->get('SYS_USERNAME').'"
+        };
 
-        user_fields['. ($posEndOfMasterData + 1). '] = new Object();
-        user_fields['. ($posEndOfMasterData + 1). ']["cat_id"]   = user_fields[1]["cat_id"];;
-        user_fields['. ($posEndOfMasterData + 1). ']["cat_name"] = user_fields[1]["cat_name"];
-        user_fields['. ($posEndOfMasterData + 1). ']["usf_id"]   = "usr_photo";
-        user_fields['. ($posEndOfMasterData + 1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
-        user_fields['. ($posEndOfMasterData + 1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
+        userFields[' . ($posEndOfMasterData + 1) . '] = {
+            "cat_id"   = userFields[1]["cat_id"],
+            "cat_name" = userFields[1]["cat_name"],
+            "usf_id"   = "usr_photo",
+            "usf_name" = "'.$gL10n->get('PHO_PHOTO').'",
+            "usf_name_intern" = "'.$gL10n->get('PHO_PHOTO').'"
+        };
 
-        user_fields['. $i. '] = new Object();
-        user_fields['. $i. ']["cat_id"]   = -1;
-        user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
-        user_fields['. $i. ']["usf_id"]   = "mem_begin";
-        user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";
-        user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";';
+        userFields[' . $i . '] = {
+            "cat_id"   = -1,
+            "cat_name" = "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+            "usf_id"   = "mem_begin",
+            "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_START').'",
+            "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_START').'"
+        };';
 
 ++$i;
 $javascriptCode .= '
-        user_fields['. $i. '] = new Object();
-        user_fields['. $i. ']["cat_id"]   = -1;
-        user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
-        user_fields['. $i. ']["usf_id"]   = "mem_end";
-        user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
-        user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
+        userFields[' . $i . '] = {
+            "cat_id"   = -1,
+            "cat_name" = "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+            "usf_id"   = "mem_end",
+            "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_END').'",
+            "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_END').'"
+        };
 
-        return user_fields;
+        return userFields;
     }
 
     function createColumnsArray()
     {
-        var default_fields = new Array(); ';
+        var defaultFields = [];';
 
 // now add all columns to the javascript row objects
 $actualColumnNumber = 1;
-while(isset($formValues['column'. $actualColumnNumber]))
+while(isset($formValues['column' . $actualColumnNumber]))
 {
     $sortValue      = '';
     $conditionValue = '';
 
-    if(isset($formValues['sort'. $actualColumnNumber]))
+    if(isset($formValues['sort' . $actualColumnNumber]))
     {
-        $sortValue = $formValues['sort'. $actualColumnNumber];
+        $sortValue = $formValues['sort' . $actualColumnNumber];
     }
-    if(isset($formValues['condition'. $actualColumnNumber]))
+    if(isset($formValues['condition' . $actualColumnNumber]))
     {
-        $conditionValue = $formValues['condition'. $actualColumnNumber];
+        $conditionValue = $formValues['condition' . $actualColumnNumber];
     }
 
     $javascriptCode .= '
-            default_fields['. $actualColumnNumber. '] = new Object();
-            default_fields['. $actualColumnNumber. ']["usf_id"]    = "'. $formValues['column'. $actualColumnNumber]. '";
-            default_fields['. $actualColumnNumber. ']["sort"]      = "'. $sortValue. '";
-            default_fields['. $actualColumnNumber. ']["condition"] = "'. $conditionValue. '";';
+        defaultFields[' . $actualColumnNumber . '] = {
+            "usf_id"    = "' . $formValues['column' . $actualColumnNumber] . '",
+            "sort"      = "' . $sortValue . '",
+            "condition" = "' . $conditionValue . '"
+        };';
 
     ++$actualColumnNumber;
 }
 
 $javascriptCode .= '
-        return default_fields;
+        return defaultFields;
     }
 
     function getConditionField(columnNumber, columnName) {
@@ -361,43 +365,43 @@ $javascriptCode .= '
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
 
-        for (key in arr_user_fields) {
-            if (arr_user_fields[key]["usf_name"] == columnName) {
-                if ( arr_user_fields[key]["usf_type"] === "DROPDOWN"
-                  || arr_user_fields[key]["usf_type"] === "RADIO_BUTTON") {
+        for (key in arrUserFields) {
+            if (arrUserFields[key]["usf_name"] === columnName) {
+                if (arrUserFields[key]["usf_type"] === "DROPDOWN"
+                ||  arrUserFields[key]["usf_type"] === "RADIO_BUTTON") {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 
-                    for (selectValue in arr_user_fields[key]["usf_value_list"]) {
+                    for (selectValue in arrUserFields[key]["usf_value_list"]) {
                         selected = "";
 
-                        if (arr_default_fields[fieldNumberShow]) {
-                            if (arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
-                                && arr_user_fields[key]["usf_value_list"][selectValue] == arr_default_fields[fieldNumberShow]["condition"]) {
+                        if (arrDefaultFields[fieldNumberShow]) {
+                            if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
+                            &&  arrUserFields[key]["usf_value_list"][selectValue] == arrDefaultFields[fieldNumberShow]["condition"]) {
                                 selected = " selected=\"selected\" ";
                             }
                         }
-                        html += "<option value=\"" + arr_user_fields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arr_user_fields[key]["usf_value_list"][selectValue] + "</option>";
+                        html += "<option value=\"" + arrUserFields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arrUserFields[key]["usf_value_list"][selectValue] + "</option>";
                         "</select>";
                     }
                 }
 
-                if (arr_user_fields[key]["usf_type"] === "CHECKBOX") {
+                if (arrUserFields[key]["usf_type"] === "CHECKBOX") {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 
                     selected = "";
 
-                    if (arr_default_fields[fieldNumberShow]) {
-                        if (arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
-                            && arr_default_fields[fieldNumberShow]["condition"] == "1") {
+                    if (arrDefaultFields[fieldNumberShow]) {
+                        if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
+                            && arrDefaultFields[fieldNumberShow]["condition"] == "1") {
                             selected = " selected=\"selected\" ";
                         }
                             html += "<option value=\"1\" " + selected + ">'.$gL10n->get('SYS_YES').'</option>";
                         selected = "";
 
-                        if (arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberShow]["usf_id"]
-                            && arr_default_fields[fieldNumberShow]["condition"] == "0") {
+                        if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
+                            && arrDefaultFields[fieldNumberShow]["condition"] == "0") {
                             selected = " selected=\"selected\" ";
                         }
                             html += "<option value=\"0\" " + selected + ">'.$gL10n->get('SYS_NO').'</option>" +
@@ -415,8 +419,8 @@ $javascriptCode .= '
 
     function loadList() {
         var listId = $("#sel_select_configuation").val();
-        var show_members = $("#sel_show_members").val();
-        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + show_members;
+        var showMembers = $("#sel_show_members").val();
+        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
     }
 
     function send(mode) {
@@ -546,8 +550,8 @@ foreach($configurations as $configuration)
         if($numberLastConfigurations > 5)
         {
             // delete all other configurations
-            $del_list = new ListConfiguration($gDb, $configuration['lst_id']);
-            $del_list->delete();
+            $delList = new ListConfiguration($gDb, $configuration['lst_id']);
+            $delList->delete();
         }
         else
         {
