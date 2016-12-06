@@ -405,7 +405,9 @@ INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_passwo
 (352, 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, 0),
 (353, 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, 0),
 (354, 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', 1),
-(355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', 1);
+(355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', 1),
+(356, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', 1),
+(357, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', 1);
 
 
 --
@@ -539,6 +541,24 @@ INSERT INTO %PREFIX%_user_relation_types (urt_id, urt_name, urt_name_male, urt_n
 
 
 --
+-- Data for table adm_user_relations
+--
+
+INSERT INTO %PREFIX%_user_relations (ure_id, ure_urt_id, ure_usr_id1, ure_usr_id2, ure_usr_id_create, ure_timestamp_create, ure_usr_id_change, ure_timestamp_change) VALUES
+(1, 4, 1, 355, 1, '2016-12-06 20:02:09', NULL, NULL),
+(2, 4, 355, 1, 1, '2016-12-06 20:02:09', NULL, NULL),
+(3, 2, 1, 356, 1, '2016-12-06 20:02:23', NULL, NULL),
+(4, 1, 356, 1, 1, '2016-12-06 20:02:23', NULL, NULL),
+(5, 2, 1, 357, 1, '2016-12-06 20:02:35', NULL, NULL),
+(6, 1, 357, 1, 1, '2016-12-06 20:02:35', NULL, NULL),
+(7, 1, 357, 355, 1, '2016-12-06 20:02:58', NULL, NULL),
+(8, 2, 355, 357, 1, '2016-12-06 20:02:58', NULL, NULL),
+(9, 3, 357, 356, 1, '2016-12-06 20:03:15', NULL, NULL),
+(10, 3, 356, 357, 1, '2016-12-06 20:03:15', NULL, NULL),
+(11, 2, 355, 356, 1, '2016-12-06 20:04:32', NULL, NULL),
+(12, 1, 356, 355, 1, '2016-12-06 20:04:32', NULL, NULL);
+
+--
 -- Data for table adm_announcements
 --
 
@@ -613,7 +633,7 @@ INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_l
 --
 
 INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
+(1, 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
 (2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
@@ -621,7 +641,7 @@ INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_emai
 --
 
 INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
-(1, 2, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_COMMENT1', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
+(1, 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Data for table adm_links
@@ -933,7 +953,9 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (501, 8, 223, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (502, 8, 255, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (503, 8, 302, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
-(504, 8, 328, '2012-01-07', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL);
+(504, 8, 328, '2012-01-07', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
+(505, 2, 356, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
+(506, 2, 357, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL);
 
 
 --
@@ -994,7 +1016,7 @@ INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 --
 
 INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUES
-(1, 1, 1, 'Webmaster'),
+(1, 1, 1, 'Schmidt'),
 (2, 1, 2, 'Paul'),
 (3, 1, 3, 'Unter den Linden 45'),
 (4, 1, 4, '10117'),
@@ -2818,11 +2840,30 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1813, 354, 12, 'DEMO_CHAIRMAN@example.com'),
 (18131, 354, 22, 'Admidio'),
 (18132, 354, 25, '9'),
-(1814, 355, 1, 'SYS_MEMBER'),
+(1814, 355, 1, 'Schmidt'),
 (1815, 355, 2, 'Jennifer'),
+(1821, 355, 3, 'Unter den Linden 45'),
+(1822, 355, 4, '10117'),
+(1823, 355, 5, 'Berlin'),
 (1816, 355, 6, 'DEU'),
 (1817, 355, 11, '2'),
 (1818, 355, 12, 'SYS_MEMBER@example.com'),
 (1819, 355, 23, 'Admidio'),
-(1820, 355, 25, '12');
+(1820, 355, 25, '12'),
+(1900, 356, 1, 'Schmidt'),
+(1901, 356, 2, 'Silke'),
+(1902, 356, 3, 'Unter den Linden 45'),
+(1903, 356, 4, '10117'),
+(1904, 356, 5, 'Berlin'),
+(1905, 356, 6, 'DEU'),
+(1906, 356, 10, '2011-07-15'),
+(1907, 356, 11, '2'),
+(1910, 357, 1, 'Schmidt'),
+(1911, 357, 2, 'Stefan'),
+(1912, 357, 3, 'Unter den Linden 45'),
+(1913, 357, 4, '10117'),
+(1914, 357, 5, 'Berlin'),
+(1915, 357, 6, 'DEU'),
+(1916, 357, 10, '2014-01-21'),
+(1917, 357, 11, '1');
 
