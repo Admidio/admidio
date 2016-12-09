@@ -296,8 +296,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 )
             );
         }
-        elseif($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN'
-            || $usfNameIntern === 'COUNTRY')
+        elseif($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY')
         {
             // set array with values and set default value
             if($usfNameIntern === 'COUNTRY')
@@ -320,8 +319,10 @@ foreach($gProfileFields->mProfileFields as $field)
                 $defaultValue  = $user->getValue($usfNameIntern, 'database');
             }
 
-            $form->addSelectBox('usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
-                $gProfileFields->getProperty($usfNameIntern, 'usf_name'),  $arrListValues,
+            $form->addSelectBox(
+                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                $arrListValues,
                 array(
                     'property'        => $fieldProperty,
                     'defaultValue'    => $defaultValue,
@@ -332,9 +333,7 @@ foreach($gProfileFields->mProfileFields as $field)
         }
         elseif($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON')
         {
-            $arrListValues        = $gProfileFields->getProperty($usfNameIntern, 'usf_value_list');
             $showDummyRadioButton = false;
-
             if($gProfileFields->getProperty($usfNameIntern, 'usf_mandatory') == 0)
             {
                 $showDummyRadioButton = true;
@@ -343,7 +342,7 @@ foreach($gProfileFields->mProfileFields as $field)
             $form->addRadioButton(
                 'usf-'.$gProfileFields->getProperty($usfNameIntern, 'usf_id'),
                 $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $arrListValues,
+                $gProfileFields->getProperty($usfNameIntern, 'usf_value_list'),
                 array(
                     'property'          => $fieldProperty,
                     'defaultValue'      => $user->getValue($usfNameIntern, 'database'),
@@ -355,8 +354,18 @@ foreach($gProfileFields->mProfileFields as $field)
         }
         elseif($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'TEXT_BIG')
         {
-            $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'), $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                $user->getValue($usfNameIntern), 3, array('maxLength' => 4000, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' =>  $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')));
+            $form->addMultilineTextInput(
+                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'),
+                $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
+                $user->getValue($usfNameIntern),
+                3,
+                array(
+                    'maxLength'       => 4000,
+                    'property'        => $fieldProperty,
+                    'helpTextIdLabel' => $helpId,
+                    'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                )
+            );
         }
         else
         {
