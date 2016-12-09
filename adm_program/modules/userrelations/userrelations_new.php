@@ -80,7 +80,7 @@ $form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sq
 if($gCurrentUser->editUsers())
 {
     // the user has the edit right, therefore he can edit all visible users
-    $sql = 'SELECT usr_id, concat(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) AS name
+    $sql = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id
@@ -88,12 +88,12 @@ if($gCurrentUser->editUsers())
                 ON cat_id = rol_cat_id
         INNER JOIN '.TBL_USERS.'
                 ON usr_id = mem_usr_id
-         LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
-                ON LAST_NAME.usd_usr_id = usr_id
-               AND LAST_NAME.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
-                ON FIRST_NAME.usd_usr_id = usr_id
-               AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
              WHERE usr_id <> '.$user->getValue('usr_id').'
                AND rol_id IN ('.implode(',', $gCurrentUser->getAllVisibleRoles()).')
                AND rol_valid   = 1
@@ -103,21 +103,21 @@ if($gCurrentUser->editUsers())
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end   >= \''.DATE_NOW.'\'
                AND usr_valid  = 1
-          ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_id';
+          ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
 }
 else
 {
     // select all users which the current user can edit because of role leader rights
-    $sql = 'SELECT usr_id, concat(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) AS name
+    $sql = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_USERS.'
                 ON usr_id = mem_usr_id
-         LEFT JOIN '.TBL_USER_DATA.' LAST_NAME
-                ON LAST_NAME.usd_usr_id = usr_id
-               AND LAST_NAME.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' FIRST_NAME
-                ON FIRST_NAME.usd_usr_id = usr_id
-               AND FIRST_NAME.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+         LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
              WHERE usr_id <> '.$user->getValue('usr_id').'
                AND mem_rol_id IN (SELECT mem_rol_id
                                     FROM '.TBL_MEMBERS.'
@@ -137,7 +137,7 @@ else
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end   >= \''.DATE_NOW.'\'
                AND usr_valid  = 1
-          ORDER BY LAST_NAME.usd_value, FIRST_NAME.usd_value, usr_id';
+          ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
 }
 $form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'search' => true));
 

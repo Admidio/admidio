@@ -250,11 +250,17 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_DATES.'
-                     WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
-                       AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
-                       AND dat_room_id = '.$_POST['dat_room_id'].'
-                       AND dat_id     <> '.$getDateId;
-            $datesStatement = $gDb->query($sql);
+                     WHERE dat_begin  <= ? -- $endDateTime->format(\'Y-m-d H:i:s\')
+                       AND dat_end    >= ? -- $startDateTime->format(\'Y-m-d H:i:s\')
+                       AND dat_room_id = ? -- $_POST[\'dat_room_id\']
+                       AND dat_id     <> ? -- $getDateId';
+            $queryParams = array(
+                $endDateTime->format('Y-m-d H:i:s'),
+                $startDateTime->format('Y-m-d H:i:s'),
+                $_POST['dat_room_id'],
+                $getDateId
+            );
+            $datesStatement = $gDb->queryPrepared($sql, $queryParams);
 
             if($datesStatement->fetchColumn())
             {
@@ -314,10 +320,10 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
 
-        $sql_cal = 'SELECT cat_name
+        $sqlCal = 'SELECT cat_name
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_id = '.$_POST['dat_cat_id'];
-        $pdoStatement = $gDb->query($sql_cal);
+                     WHERE cat_id = ?';
+        $pdoStatement = $gDb->queryPrepared($sqlCal, array($_POST['dat_cat_id']));
         $calendar = $pdoStatement->fetchColumn();
 
         if(strlen($_POST['dat_location']) > 0)
@@ -375,8 +381,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             // copy original role with their settings
             $sql = 'SELECT dat_rol_id
                       FROM '.TBL_DATES.'
-                     WHERE dat_id = '.$originalDateId;
-            $pdoStatement = $gDb->query($sql);
+                     WHERE dat_id = ?';
+            $pdoStatement = $gDb->queryPrepared($sql, array($originalDateId));
 
             $role = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
             $role->setValue('rol_id', '0');

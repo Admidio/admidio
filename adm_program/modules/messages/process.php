@@ -44,8 +44,8 @@ $msg_id = $moduleMessages->msgGetChatId();
 
 $sql = 'SELECT MAX(msc_part_id) AS max_id
           FROM '.TBL_MESSAGES_CONTENT.'
-         WHERE msc_msg_id = \''.$msg_id.'\'';
-$pdoStatement = $gDb->query($sql);
+         WHERE msc_msg_id = ?';
+$pdoStatement = $gDb->queryPrepared($sql, array($msg_id));
 $msgId = $pdoStatement->fetchColumn();
 if(!$msgId)
 {
@@ -65,13 +65,14 @@ switch($postFunction)
             $log['test'] = '100';
 
             $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                     WHERE msc_msg_id = \''.$msg_id.'\' AND msc_part_id <= 50';
-            $gDb->query($sql);
+                     WHERE msc_msg_id = ?
+                       AND msc_part_id <= 50';
+            $gDb->queryPrepared($sql, array($msg_id));
 
             $sql = 'UPDATE '.TBL_MESSAGES_CONTENT.'
                        SET msc_part_id = msc_part_id - 50
-                     WHERE msc_msg_id = \''.$msg_id.'\'';
-            $gDb->query($sql);
+                     WHERE msc_msg_id = ?';
+            $gDb->queryPrepared($sql, array($msg_id));
 
             $postLines -= 50;
             $msgId -= 50;
@@ -88,11 +89,11 @@ switch($postFunction)
 
             $sql = 'SELECT msc_part_id, msc_usr_id, msc_message, msc_timestamp
                       FROM '.TBL_MESSAGES_CONTENT.'
-                     WHERE msc_msg_id  = \''.$msg_id.'\'
-                       AND msc_part_id > '.$postLines. '
+                     WHERE msc_msg_id  = ? -- $msg_id
+                       AND msc_part_id > ? -- $postLines
                   ORDER BY msc_part_id';
 
-            $statement = $gDb->query($sql);
+            $statement = $gDb->queryPrepared($sql, array($msg_id, $postLines));
             while($row = $statement->fetch())
             {
                 $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
@@ -119,7 +120,7 @@ switch($postFunction)
         {
             $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
                     VALUES (\'CHAT\', \'DUMMY\', \'1\', \''.$msgId.'\', CURRENT_TIMESTAMP, \'0\')';
-            $gDb->query($sql);
+            $gDb->query($sql); // TODO add more params
             $msg_id = $moduleMessages->msgGetChatId();
         }
 
@@ -128,13 +129,14 @@ switch($postFunction)
         $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
                 VALUES (\''.$msg_id.'\', \''.$msgId.'\', \''.$gCurrentUser->getValue('usr_id').'\', \''.$postMessage.'\', CURRENT_TIMESTAMP)';
 
-        $gDb->query($sql);
+        $gDb->query($sql); // TODO add more params
         $log['state'] = $msgId;
         break;
 
     case 'delete':
-        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.' WHERE msc_msg_id = \''.$msg_id.'\'';
-        $gDb->query($sql);
+        $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
+                 WHERE msc_msg_id = ?';
+        $gDb->queryPrepared($sql, array($msg_id));
         break;
 }
 

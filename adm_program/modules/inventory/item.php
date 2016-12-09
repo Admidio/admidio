@@ -201,15 +201,15 @@ $page->addHtml('
                             {
                                 $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') AS name
                                           FROM '.TBL_ROOMS.'
-                                         WHERE room_id = ' . $field['value'];
+                                         WHERE room_id = ? -- $field[\'value\']';
                             }
                             else
                             {
                                 $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' AS name
                                           FROM '.TBL_ROOMS.'
-                                         WHERE room_id = ' . $field['value'];
+                                         WHERE room_id = ? -- $field[\'value\']';
                             }
-                            $pdoStatement = $gDb->query($sql);
+                            $pdoStatement = $gDb->queryPrepared($sql, array($field['value']));
 
                             if($pdoStatement->rowCount() > 0)
                             {

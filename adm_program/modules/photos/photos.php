@@ -435,23 +435,29 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 // erfassen der Alben die in der Albentabelle ausgegeben werden sollen
 $sql = 'SELECT *
           FROM '.TBL_PHOTOS.'
-         WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
+         WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+$queryParams = array($gCurrentOrganization->getValue('org_id'));
 if($getPhotoId === 0)
 {
-    $sql .= ' AND (pho_pho_id_parent IS NULL) ';
+    $sql .= '
+        AND (pho_pho_id_parent IS NULL) ';
 }
 if($getPhotoId > 0)
 {
-    $sql .= ' AND pho_pho_id_parent = '.$getPhotoId.'';
+    $sql .= '
+        AND pho_pho_id_parent = ? -- $getPhotoId';
+    $queryParams[] = $getPhotoId;
 }
 if(!$gCurrentUser->editPhotoRight())
 {
-    $sql .= ' AND pho_locked = 0 ';
+    $sql .= '
+        AND pho_locked = 0 ';
 }
 
-$sql .= ' ORDER BY pho_begin DESC';
+$sql .= '
+    ORDER BY pho_begin DESC';
 
-$albumStatement = $gDb->query($sql);
+$albumStatement = $gDb->queryPrepared($sql, $queryParams);
 $albumList      = $albumStatement->fetchAll();
 
 // Gesamtzahl der auszugebenden Alben

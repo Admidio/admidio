@@ -160,16 +160,6 @@ switch($getMode)
                 case 'messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_chat_module', 'enable_mail_captcha',
                                         'mail_html_registered_users', 'mail_into_to', 'mail_show_former');
-
-                    if($_POST['mail_sendmail_address'] !== '')
-                    {
-                        $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
-                        if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
-                        {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
-                            // => EXIT
-                        }
-                    }
                     break;
 
                 case 'photos':
@@ -358,7 +348,7 @@ switch($getMode)
         if($gCurrentOrganization->countAllRecords() === 2)
         {
             $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = 1
-                     WHERE prf_name = \'system_organization_select\' ';
+                     WHERE prf_name = \'system_organization_select\'';
             $gDb->query($sql);
         }
 

@@ -84,10 +84,10 @@ if($getMode === 1)
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_INVENT_FIELDS.'
-                 WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
-                   AND inf_cat_id  = '.$_POST['inf_cat_id'].'
-                   AND inf_id     <> '.$getInfId;
-        $statement = $gDb->query($sql);
+                 WHERE inf_name LIKE ? -- $_POST[\'inf_name\']
+                   AND inf_cat_id  = ? -- $_POST[\'inf_cat_id\']
+                   AND inf_id     <> ? -- $getInfId';
+        $statement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $_POST['inf_cat_id'], $getInfId));
 
         if($statement->fetchColumn() > 0)
         {

@@ -56,11 +56,11 @@ if($getMode !== 1)
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
              WHERE rol_valid   = 1
-               AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
-               AND mem_begin  <= \''.DATE_NOW.'\'
-               AND mem_end     > \''.DATE_NOW.'\'
-               AND mem_usr_id  = '. $getUserId;
-    $statement = $gDb->query($sql);
+               AND cat_org_id <> ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND mem_begin  <= ? -- DATE_NOW
+               AND mem_end     > ? -- DATE_NOW
+               AND mem_usr_id  = ? -- $getUserId';
+    $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), DATE_NOW, DATE_NOW, $getUserId));
     $otherOrgaCount = $statement->rowCount();
 
     // User-Objekt anlegen
@@ -125,12 +125,12 @@ elseif($getMode === 2)
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
              WHERE rol_valid  = 1
-               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end    > \''.DATE_NOW.'\'
-               AND mem_usr_id = '. $getUserId;
-    $mglStatement = $gDb->query($sql);
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end    > ? -- DATE_NOW
+               AND mem_usr_id = ? -- $getUserId';
+    $mglStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), DATE_NOW, DATE_NOW, $getUserId));
 
     while($row = $mglStatement->fetch())
     {

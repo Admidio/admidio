@@ -88,22 +88,24 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
+    $queryParams = array($photoAlbum->getValue('pho_id'), $gCurrentOrganization->getValue('org_id'));
     // Erfassen des auszugebenden Albums
     if($parentId > 0)
     {
-        $sqlConditionParentId .= ' AND pho_pho_id_parent = \''.$parentId.'\' ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent = ? -- $parentId';
+        $queryParams[] = $parentId;
     }
     else
     {
-        $sqlConditionParentId .= ' AND pho_pho_id_parent IS NULL ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent IS NULL';
     }
 
     $sql = 'SELECT *
               FROM '.TBL_PHOTOS.'
-             WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
-                   $sqlConditionParentId.'
-               AND pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-    $childStatement = $gDb->query($sql);
+             WHERE pho_id    <> ? -- $photoAlbum->getValue(\'pho_id\')
+               AND pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   '.$sqlConditionParentId;
+    $childStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while($adm_photo_child = $childStatement->fetch())
     {
