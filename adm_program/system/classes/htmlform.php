@@ -1076,7 +1076,7 @@ class HtmlForm extends HtmlFormBasic
         // set one radio button with no value will be set in front of the other array.
         if ($optionsAll['showNoValueButton'])
         {
-            if ($optionsAll['defaultValue'] === '' && count($values) === 0)
+            if ($optionsAll['defaultValue'] === '')
             {
                 $attributes['checked'] = 'checked';
             }
@@ -1089,6 +1089,8 @@ class HtmlForm extends HtmlFormBasic
         // for each entry of the array create an input radio field
         foreach ($values as $key => $value)
         {
+            unset($attributes['checked']);
+
             if ($optionsAll['defaultValue'] == $key)
             {
                 $attributes['checked'] = 'checked';
