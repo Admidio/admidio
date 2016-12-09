@@ -11,16 +11,16 @@
 
 // select all member ids where we find multiple role / user assignments
 $sql = 'SELECT mem5.mem_id AS member_id
-          FROM '.TBL_MEMBERS.' mem5
-         WHERE exists (SELECT 1 FROM '.TBL_MEMBERS.' mem2
+          FROM '.TBL_MEMBERS.' AS mem5
+         WHERE exists (SELECT 1 FROM '.TBL_MEMBERS.' AS mem2
                         WHERE mem2.mem_rol_id = mem5.mem_rol_id
                           AND mem2.mem_usr_id = mem5.mem_usr_id
                           AND mem2.mem_end    = mem5.mem_end
                           AND mem2.mem_id    <> mem5.mem_id )
            AND mem5.mem_id NOT IN (
                        SELECT MIN(mem.mem_id)
-                         FROM '.TBL_MEMBERS.' mem
-                        WHERE exists (SELECT 1 FROM '.TBL_MEMBERS.' mem2
+                         FROM '.TBL_MEMBERS.' AS mem
+                        WHERE exists (SELECT 1 FROM '.TBL_MEMBERS.' AS mem2
                                        WHERE mem2.mem_rol_id = mem.mem_rol_id
                                          AND mem2.mem_usr_id = mem.mem_usr_id
                                          AND mem2.mem_end    = mem.mem_end
