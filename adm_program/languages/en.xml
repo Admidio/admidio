@@ -469,7 +469,7 @@
   <string name="MAI_MESSAGE_WENT_TO">Message was sent to</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
   <string name="MAI_RECIPIENTS_WITH_ROLES">Receiver in roles</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain \"Undisclosed Recipients\". If this leads to problems you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-mails to roles contain all recipients in the BCC field. The TO field is then usually filled with \"Undisclosed Recipients\". If this leads to problems, this setting can be used to fill the recipient field (TO) with the sender address or the administrator address from the system notifications. All mails to any roles will be sent in addition to these recipients. The role members are still written to the BCC field. (Default: Hidden)</string>
   <string name="MAI_SEND_COPY">Send copy of e-mail to my address</string>
   <string name="MAI_SEND_EMAIL">Send e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
@@ -477,9 +477,9 @@
   <string name="MAI_SEND_METHOD_DESC">The mail () function of PHP is limited by some HOSTERS and sometimes leads to suspected spam. It is therefore recommended to send emails via SMTP server. The SMTP settings can be configured below. (Default: PHP mail ())</string>
   <string name="MAI_SENDER">Sender</string>
   <string name="MAI_SENDER_EMAIL">Sender\'s e-mail</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certain service provider do not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@#VAR1#).\nIf field remains empty, sender\'s registered e-mail address will appear as sender information. (default: empty)</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certain service provider do not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@#VAR1#).\nIf this field remains empty, sender\'s registered e-mail address will appear as sender information. (default: empty)</string>
   <string name="MAI_SENDER_NAME">Name of sender</string>
-  <string name="MAI_SENDER_NAME_DESC">Name of the sender according to the used email address.</string>
+  <string name="MAI_SENDER_NAME_DESC">Name of the sender according to the used email address. This field must only be filled if a sender\'s e-mail address is also maintained. (default: empty)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -569,7 +569,7 @@
   <string name="MSG_FORMER_MEMBERS">Former members</string>
   <string name="MSG_NO_ROLES_AND_USERS">There are no roles or users released to whom you can send messages.</string>
   <string name="MSG_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
-  <string name="MSG_OPPOSITE">Business partner</string>
+  <string name="MSG_OPPOSITE">Conversation partner</string>
   <string name="MSG_PM_SEND">Private message has been send to #VAR1_BOLD#.</string>
   <string name="MSG_PM_NOT_SEND">Private message could not be sent to #VAR1_BOLD#.\n\nFollowing error has occurred:\n#VAR2#</string>
   <string name="MSG_REMOVE">Remove message</string>
@@ -619,7 +619,7 @@
   <string name="ORG_CAPTCHA_COLOR_DESC">The background color should be in good contrast to the character color. If both line and character color are the same it is harder for scripts and bots to read the Captcha. All colors need to be specified as #VAR1#hexadecimal value#VAR2#.</string>
   <string name="ORG_CAPTCHA_DISTORTION">Distortion</string>
   <string name="ORG_CAPTCHA_DISTORTION_DESC">This value indicates the distortion of the characters. 0 means no distortion. With a value of 3 some characters might not be readable any more. (default: 0.75)</string>
-  <string name="ORG_CAPTCHA_FONT">Select font type for captcha code. (default: Theme font)</string>
+  <string name="ORG_CAPTCHA_FONT">Select font type for captcha code. (default: AHGBold.ttf)</string>
   <string name="ORG_CAPTCHA_LINE_COLOR">Line color</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS">Number of lines</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">With lines on a Captcha it is harder for scripts and bots to solve it. The more lines will be drawn the harder it will be to solve it. Unfortunately it is the same for humans. (default: 5)</string>
@@ -683,7 +683,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notification for the administrator about new registrations</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 10)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 0)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a seperate homepage for this organization please add it within the config.php of the seperate homepage.</string>
