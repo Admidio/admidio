@@ -109,6 +109,16 @@ switch($getMode)
 
                 case 'email_dispatch':
                     $checkboxes = array('mail_smtp_auth');
+
+                    if($_POST['mail_sendmail_address'] !== '')
+                    {
+                        $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
+                        if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
+                        {
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                            // => EXIT
+                        }
+                    }
                     break;
 
                 case 'system_notification':
