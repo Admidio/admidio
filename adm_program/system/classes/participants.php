@@ -179,10 +179,10 @@ class Participants
         $sql = 'SELECT DISTINCT
                        surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader
                   FROM '.TBL_MEMBERS.'
-             LEFT JOIN '. TBL_USER_DATA .' surname
+             LEFT JOIN '. TBL_USER_DATA .' AS surname
                     ON surname.usd_usr_id = mem_usr_id
                    AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-             LEFT JOIN '. TBL_USER_DATA .' firstname
+             LEFT JOIN '. TBL_USER_DATA .' AS firstname
                     ON firstname.usd_usr_id = mem_usr_id
                    AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
                  WHERE mem_rol_id = '.$this->rolId.'

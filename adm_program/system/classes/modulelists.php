@@ -274,19 +274,19 @@ class ModuleLists extends Modules
 
         $sql = 'SELECT rol.*, cat.*,
                        (SELECT COUNT(*) AS count
-                          FROM '.TBL_MEMBERS.' mem
+                          FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
                            AND mem_leader = 0) AS num_members,
                        (SELECT COUNT(*) AS count
-                          FROM '.TBL_MEMBERS.' mem
+                          FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().'
                            AND mem_leader = 1) AS num_leader,
                        (SELECT COUNT(*) AS count
-                          FROM '.TBL_MEMBERS.' mem
+                          FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
                            AND mem_end < \''. DATE_NOW.'\') AS num_former
-                  FROM '.TBL_ROLES.' rol
-            INNER JOIN '.TBL_CATEGORIES.' cat
+                  FROM '.TBL_ROLES.' AS rol
+            INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
                  WHERE rol_visible = 1
                    AND rol_valid   = '.(int) $this->activeRole.'
@@ -334,10 +334,11 @@ class ModuleLists extends Modules
         }
 
         $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
+                  FROM '.TBL_ROLES.' AS rol
+            INNER JOIN '.TBL_CATEGORIES.' AS cat
+                    ON rol_cat_id = cat_id
                  WHERE rol_valid   = '.(int) $this->activeRole.'
                    AND rol_visible = 1
-                   AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;

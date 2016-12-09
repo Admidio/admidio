@@ -136,16 +136,16 @@ class ModuleAnnouncements extends Modules
                 cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
                 cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
             $additionalTables = '
-                LEFT JOIN '.TBL_USER_DATA.' cre_surname
+                LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
                        ON cre_surname.usd_usr_id = ann_usr_id_create
                       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                LEFT JOIN '.TBL_USER_DATA.' cre_firstname
+                LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
                        ON cre_firstname.usd_usr_id = ann_usr_id_create
                       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                LEFT JOIN '.TBL_USER_DATA.' cha_surname
+                LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
                        ON cha_surname.usd_usr_id = ann_usr_id_change
                       AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                LEFT JOIN '.TBL_USER_DATA.' cha_firstname
+                LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
                        ON cha_firstname.usd_usr_id = ann_usr_id_change
                       AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
         }
@@ -156,16 +156,17 @@ class ModuleAnnouncements extends Modules
                 cre_username.usr_login_name AS create_name,
                 cha_username.usr_login_name AS change_name ';
             $additionalTables = '
-                LEFT JOIN '.TBL_USERS.' cre_username
+                LEFT JOIN '.TBL_USERS.' AS cre_username
                        ON cre_username.usr_id = ann_usr_id_create
-                LEFT JOIN '.TBL_USERS.' cha_username
+                LEFT JOIN '.TBL_USERS.' AS cha_username
                        ON cha_username.usr_id = ann_usr_id_change ';
         }
 
         // read announcements from database
         $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
-                  FROM '.TBL_ANNOUNCEMENTS.' ann
-                  JOIN '.TBL_CATEGORIES.' cat ON cat_id = ann_cat_id
+                  FROM '.TBL_ANNOUNCEMENTS.' AS ann
+                  JOIN '.TBL_CATEGORIES.' AS cat
+                    ON cat_id = ann_cat_id
                        '.$additionalTables.'
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
