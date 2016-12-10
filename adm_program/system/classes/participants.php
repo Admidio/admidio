@@ -192,7 +192,7 @@ class Participants
             $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             $this->rolId
         );
-        $membersStatement = $this->mDb->queryPrepared($sql, $queryParams); // TODO add more params
+        $membersStatement = $this->mDb->queryPrepared($sql, $queryParams);
 
         $participants = array();
         while ($row = $membersStatement->fetch())

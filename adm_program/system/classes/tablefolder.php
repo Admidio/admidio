@@ -296,17 +296,19 @@ class TableFolder extends TableAccess
         if ($folderId > 0)
         {
             // get folder of the parameter
-            $condition = ' fol_id   = '.$folderId.'
+            $condition = ' fol_id   = ? -- $folderId
                        AND fol_type = \'DOWNLOAD\' ';
+            $queryParams = array($folderId);
         }
         else
         {
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
-                       AND fol_type   = \'DOWNLOAD\'
-                       AND fol_org_id = '.$gCurrentOrganization->getValue('org_id');
+                       AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       AND fol_type   = \'DOWNLOAD\' ';
+            $queryParams = array($gCurrentOrganization->getValue('org_id'));
         }
-        $this->readData($condition);
+        $this->readData($condition, $queryParams);
 
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
@@ -700,13 +702,14 @@ class TableFolder extends TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array  $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition)
+    protected function readData($sqlWhereCondition, array $queryParams = array())
     {
-        if (parent::readData($sqlWhereCondition))
+        if (parent::readData($sqlWhereCondition, $queryParams))
         {
             $folId = (int) $this->getValue('fol_id');
             $this->folderViewRolesObject   = new RolesRights($this->db, 'folder_view', $folId);

@@ -180,8 +180,9 @@ class RoleDependency
         {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
                                 (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES ('.$this->roleIdParent.', '.$this->roleIdChild.', \''.$this->comment.'\', '.$loginUserId.', \''.DATETIME_NOW.'\') ';
-            $this->db->query($sql); // TODO add more params
+                         VALUES (?,?,?,?,?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
+            $queryParams = array($this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW);
+            $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;
 
             return true;
@@ -252,14 +253,24 @@ class RoleDependency
     {
         if ($loginUserId > 0 && !$this->isEmpty())
         {
-            $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_rol_id_parent = \''.$this->roleIdParent.'\'
-                                                       , rld_rol_id_child  = \''.$this->roleIdChild.'\'
-                                                       , rld_comment       = \''.$this->comment.'\'
-                                                       , rld_timestamp     = \''.DATETIME_NOW.'\'
-                                                       , rld_usr_id        = '.$loginUserId.'
-                     WHERE rld_rol_id_parent = '.$this->roleIdParentOrig.'
-                       AND rld_rol_id_child  = '.$this->roleIdChildOrig;
-            $this->db->query($sql); // TODO add more params
+            $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
+                       SET rld_rol_id_parent = ? -- $this->roleIdParent
+                         , rld_rol_id_child  = ? -- $this->roleIdChild
+                         , rld_comment       = ? -- $this->comment
+                         , rld_timestamp     = ? -- DATETIME_NOW
+                         , rld_usr_id        = ? -- $loginUserId
+                     WHERE rld_rol_id_parent = ? -- $this->roleIdParentOrig
+                       AND rld_rol_id_child  = ? -- $this->roleIdChildOrig';
+            $queryParams = array(
+                $this->roleIdParent,
+                $this->roleIdChild,
+                $this->comment,
+                DATETIME_NOW,
+                $loginUserId,
+                $this->roleIdParentOrig,
+                $this->roleIdChildOrig
+            );
+            $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;
 
             return true;
