@@ -93,12 +93,13 @@ class ModuleAnnouncements extends Modules
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
-                  JOIN '.TBL_CATEGORIES.' ON cat_id = ann_cat_id
-                 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = ann_cat_id
+                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getConditions;
-        $pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }
@@ -165,7 +166,7 @@ class ModuleAnnouncements extends Modules
         // read announcements from database
         $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
                   FROM '.TBL_ANNOUNCEMENTS.' AS ann
-                  JOIN '.TBL_CATEGORIES.' AS cat
+            INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
                        '.$additionalTables.'
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
@@ -184,7 +185,7 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $announcementsStatement = $gDb->query($sql);
+        $announcementsStatement = $gDb->query($sql); // TODO add more params
 
         // array for results
         return array(

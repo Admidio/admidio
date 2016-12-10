@@ -63,9 +63,9 @@ class TablePhotos extends TableAccess
         // Get all sub-albums
         $sql = 'SELECT pho_id, pho_quantity
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_pho_id_parent = '.$phoId.'
+                 WHERE pho_pho_id_parent = ? -- $phoId
                    AND pho_locked = 0';
-        $childAlbumsStatement = $this->db->query($sql);
+        $childAlbumsStatement = $this->db->queryPrepared($sql, array($phoId));
 
         while ($phoRow = $childAlbumsStatement->fetch())
         {
@@ -133,8 +133,8 @@ class TablePhotos extends TableAccess
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
         $sql = 'SELECT pho_id
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_pho_id_parent = '.$photoId;
-        $childAlbumStatement = $this->db->query($sql);
+                 WHERE pho_pho_id_parent = ? -- $photoId';
+        $childAlbumStatement = $this->db->queryPrepared($sql, array($photoId));
 
         while ($phoId = $childAlbumStatement->fetchColumn())
         {
@@ -163,8 +163,8 @@ class TablePhotos extends TableAccess
             {
                 // Veranstaltung jetzt in DB loeschen
                 $sql = 'DELETE FROM '.TBL_PHOTOS.'
-                         WHERE pho_id = '.$photoId;
-                $this->db->query($sql);
+                         WHERE pho_id = ? -- $photoId';
+                $this->db->queryPrepared($sql, array($photoId));
             }
         }
 
@@ -183,8 +183,8 @@ class TablePhotos extends TableAccess
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_PHOTOS.'
-                     WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
-            $countChildAlbums = $this->db->query($sql);
+                     WHERE pho_pho_id_parent = ? -- $this->getValue(\'pho_id\')';
+            $countChildAlbums = $this->db->queryPrepared($sql, array($this->getValue('pho_id')));
 
             if ($countChildAlbums->fetchColumn() > 0)
             {
@@ -248,10 +248,10 @@ class TablePhotos extends TableAccess
             // kein Bild vorhanden, dann in einem Unteralbum suchen
             $sql = 'SELECT pho_id, pho_begin, pho_quantity
                       FROM '.TBL_PHOTOS.'
-                     WHERE pho_pho_id_parent = '.$phoId.'
+                     WHERE pho_pho_id_parent = ? -- $phoId
                        AND pho_locked = 0
                   ORDER BY pho_quantity DESC';
-            $childAlbumsStatement = $this->db->query($sql);
+            $childAlbumsStatement = $this->db->queryPrepared($sql, array($phoId));
 
             while ($phoRow = $childAlbumsStatement->fetch())
             {

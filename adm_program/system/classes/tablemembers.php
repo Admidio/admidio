@@ -193,10 +193,11 @@ class TableMembers extends TableAccess
                 {
                     $sql = 'SELECT mem_id
                               FROM '.TBL_MEMBERS.'
-                             WHERE mem_rol_id  = '.$this->getValue('mem_rol_id').'
-                               AND mem_usr_id <> '.$this->getValue('mem_usr_id').'
-                               AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
-                    $memberStatement = $this->db->query($sql);
+                             WHERE mem_rol_id  = ? -- $this->getValue(\'mem_rol_id\')
+                               AND mem_usr_id <> ? -- $this->getValue(\'mem_usr_id\')
+                               AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end';
+                    $queryParams = array($this->getValue('mem_rol_id'), $this->getValue('mem_usr_id'));
+                    $memberStatement = $this->db->queryPrepared($sql, $queryParams); // TODO add more params
 
                     if ($memberStatement->rowCount() === 0)
                     {

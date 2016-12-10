@@ -52,8 +52,9 @@ class TableLists extends TableAccess
         $this->db->startTransaction();
 
         // Delete all columns of the list
-        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.' WHERE lsc_lst_id = '.$lstId;
-        $this->db->query($sql);
+        $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
+                      WHERE lsc_lst_id = ? -- $lstId';
+        $this->db->queryPrepared($sql, array($lstId));
 
         $return = parent::delete();
 

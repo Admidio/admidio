@@ -139,13 +139,13 @@ class TableRoles extends TableAccess
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = '.$this->getValue('rol_id').'
+                     WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
                        AND mem_leader = 1
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'';
-            $countMembersStatement = $this->db->query($sql);
+                       AND mem_begin <= ? -- DATE_NOW
+                       AND mem_end    > ? -- DATE_NOW';
+            $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
-            $this->countLeaders = (int) $countMembersStatement->fetchColumn();
+            $this->countLeaders = (int) $pdoStatement->fetchColumn();
         }
 
         return $this->countLeaders;
@@ -162,14 +162,14 @@ class TableRoles extends TableAccess
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id  = '.$this->getValue('rol_id').'
-                       AND mem_usr_id <> '.$exceptUserId.'
+                     WHERE mem_rol_id  = ? -- $this->getValue(\'rol_id\')
+                       AND mem_usr_id <> ? -- $exceptUserId
                        AND mem_leader  = 0
-                       AND mem_begin  <= \''.DATE_NOW.'\'
-                       AND mem_end     > \''.DATE_NOW.'\'';
-            $countMembersStatement = $this->db->query($sql);
+                       AND mem_begin  <= ? -- DATE_NOW
+                       AND mem_end     > ? -- DATE_NOW';
+            $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $exceptUserId, DATE_NOW, DATE_NOW));
 
-            $this->countMembers = (int) $countMembersStatement->fetchColumn();
+            $this->countMembers = (int) $pdoStatement->fetchColumn();
         }
 
         return $this->countMembers;
@@ -192,16 +192,17 @@ class TableRoles extends TableAccess
 
         $sql = 'SELECT mem_usr_id
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '.$this->getValue('rol_id').'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'';
+                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW';
         if (!$countLeaders)
         {
-            $sql .= ' AND mem_leader = 0 ';
+            $sql .= '
+                AND mem_leader = 0 ';
         }
-        $membersStatement = $this->db->query($sql);
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
-        return $rolMaxMembers - $membersStatement->rowCount();
+        return $rolMaxMembers - $pdoStatement->rowCount();
     }
 
     /**
@@ -224,9 +225,9 @@ class TableRoles extends TableAccess
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
-                       AND rol_id    <> '.$rolId.'
-                       AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
-            $countRolesStatement = $this->db->query($sql);
+                       AND rol_id    <> ? -- $rolId
+                       AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, $gCurrentOrganization->getValue('org_id')));
 
             if ((int) $countRolesStatement->fetchColumn() === 0)
             {
@@ -246,28 +247,27 @@ class TableRoles extends TableAccess
 
         $this->db->startTransaction();
 
-        $sqlQueries = array();
+        $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
+                 WHERE rld_rol_id_parent = ? -- $rolId
+                    OR rld_rol_id_child  = ? -- $rolId';
+        $this->db->queryPrepared($sql, array($rolId, $rolId));
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
-                          WHERE rld_rol_id_parent = '.$rolId.'
-                             OR rld_rol_id_child  = '.$rolId;
+        $sql = 'DELETE FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = ? -- $rolId';
+        $this->db->queryPrepared($sql, array($rolId));
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_MEMBERS.'
-                          WHERE mem_rol_id = '.$rolId;
+        $sql = 'UPDATE '.TBL_DATES.'
+                   SET dat_rol_id = NULL
+                 WHERE dat_rol_id = ? -- $rolId';
+        $this->db->queryPrepared($sql, array($rolId));
 
-        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_rol_id = NULL
-                          WHERE dat_rol_id = '.$rolId;
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
+                 WHERE dtr_rol_id = ? -- $rolId';
+        $this->db->queryPrepared($sql, array($rolId));
 
-        $sqlQueries[] = 'DELETE FROM '.TBL_DATE_ROLE.'
-                          WHERE dtr_rol_id = '.$rolId;
-
-        $sqlQueries[] = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
-                          WHERE rrd_rol_id = '.$rolId;
-
-        foreach ($sqlQueries as $sqlQuery)
-        {
-            $this->db->query($sqlQuery);
-        }
+        $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
+                 WHERE rrd_rol_id = ? -- $rolId';
+        $this->db->queryPrepared($sql, array($rolId));
 
         $return = parent::delete();
 
@@ -362,12 +362,12 @@ class TableRoles extends TableAccess
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '.$this->getValue('rol_id').'
-                   AND (  mem_begin > \''.DATE_NOW.'\'
-                       OR mem_end   < \''.DATE_NOW.'\')';
-        $countMembersStatement = $this->db->query($sql);
+                 WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
+                   AND (  mem_begin > ? -- DATE_NOW
+                       OR mem_end   < ? ) -- DATE_NOW';
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
-        return $countMembersStatement->fetchColumn() > 0;
+        return $pdoStatement->fetchColumn() > 0;
     }
 
     /**
@@ -408,9 +408,10 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if ((int) $this->getValue('rol_system') === 0)
         {
-            $sql = 'UPDATE '.TBL_ROLES.' SET rol_valid = '.(int) $status.'
-                     WHERE rol_id = '.$this->getValue('rol_id');
-            $this->db->query($sql);
+            $sql = 'UPDATE '.TBL_ROLES.'
+                       SET rol_valid = ? -- $status
+                     WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
+            $this->db->queryPrepared($sql, array((int) $status, $this->getValue('rol_id')));
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
@@ -460,11 +461,11 @@ class TableRoles extends TableAccess
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
                      WHERE rol_default_registration = 1
-                       AND rol_id    <> '.$this->getValue('rol_id').'
-                       AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
-            $countRolesStatement = $this->db->query($sql);
+                       AND rol_id    <> ? -- $this->getValue(\'rol_id\')
+                       AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+            $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $gCurrentOrganization->getValue('org_id')));
 
-            if ((int) $countRolesStatement->fetchColumn() === 0)
+            if ((int) $pdoStatement->fetchColumn() === 0)
             {
                 return false;
             }
@@ -503,14 +504,14 @@ class TableRoles extends TableAccess
                   FROM '.TBL_DATE_ROLE.'
             INNER JOIN '.TBL_DATES.'
                     ON dat_id = dtr_dat_id
-                 WHERE dat_rol_id = '.$this->getValue('rol_id').'
+                 WHERE dat_rol_id = ? -- $this->getValue(\'rol_id\')
                    AND (  dtr_rol_id IS NULL
                        OR EXISTS (SELECT 1
                                     FROM '.TBL_MEMBERS.'
                                    WHERE mem_rol_id = dtr_rol_id
-                                     AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
-        $memberDatesStatement = $this->db->query($sql);
+                                     AND mem_usr_id = ?)) -- $gCurrentUser->getValue(\'usr_id\')';
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $gCurrentUser->getValue('usr_id')));
 
-        return $memberDatesStatement->rowCount() > 0;
+        return $pdoStatement->rowCount() > 0;
     }
 }

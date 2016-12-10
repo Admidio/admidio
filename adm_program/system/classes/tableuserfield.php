@@ -48,37 +48,37 @@ class TableUserField extends TableAccess
         // close gap in sequence
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
                    SET usf_sequence = usf_sequence - 1
-                 WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'
-                   AND usf_sequence > '.$this->getValue('usf_sequence');
-        $this->db->query($sql);
+                 WHERE usf_cat_id   = ? -- $this->getValue(\'usf_cat_id\')
+                   AND usf_sequence > ? -- $this->getValue(\'usf_sequence\')';
+        $this->db->queryPrepared($sql, array($this->getValue('usf_cat_id'), $this->getValue('usf_sequence')));
 
         // close gap in sequence of saved lists
         $sql = 'SELECT lsc_lst_id, lsc_number
                   FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_usf_id = '.$this->getValue('usf_id');
-        $listsStatement = $this->db->query($sql);
+                 WHERE lsc_usf_id = ? -- $this->getValue(\'usf_id\')';
+        $listsStatement = $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
 
         while($rowLst = $listsStatement->fetch())
         {
             $sql = 'UPDATE '.TBL_LIST_COLUMNS.'
                        SET lsc_number = lsc_number - 1
-                     WHERE lsc_lst_id = '.$rowLst['lsc_lst_id'].'
-                       AND lsc_number > '.$rowLst['lsc_number'];
-            $this->db->query($sql);
+                     WHERE lsc_lst_id = ? -- $rowLst[\'lsc_lst_id\']
+                       AND lsc_number > ? -- $rowLst[\'lsc_number\']';
+            $this->db->queryPrepared($sql, array($rowLst['lsc_lst_id'], $rowLst['lsc_number']));
         }
 
         // delete all dependencies in other tables
         $sql = 'DELETE FROM '.TBL_USER_LOG.'
-                 WHERE usl_usf_id = '.$this->getValue('usf_id');
-        $this->db->query($sql);
+                 WHERE usl_usf_id = ? -- $this->getValue(\'usf_id\')';
+        $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
 
         $sql = 'DELETE FROM '.TBL_USER_DATA.'
-                 WHERE usd_usf_id = '.$this->getValue('usf_id');
-        $this->db->query($sql);
+                 WHERE usd_usf_id = ? -- $this->getValue(\'usf_id\')';
+        $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
 
         $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_usf_id = '.$this->getValue('usf_id');
-        $this->db->query($sql);
+                 WHERE lsc_usf_id = ? -- $this->getValue(\'usf_id\')';
+        $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
 
         // all active users must renew their user data because the user field structure has been changed
         $gCurrentSession->renewUserObject();
@@ -109,8 +109,8 @@ class TableUserField extends TableAccess
 
         $sql = 'SELECT usf_id
                   FROM '.TBL_USER_FIELDS.'
-                 WHERE usf_name_intern = \''.$newNameIntern.'\'';
-        $userFieldsStatement = $this->db->query($sql);
+                 WHERE usf_name_intern = ? -- $newNameIntern';
+        $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if ($userFieldsStatement->rowCount() > 0)
         {
@@ -305,20 +305,20 @@ class TableUserField extends TableAccess
         $usfSequence = (int) $this->getValue('usf_sequence');
         $usfCatId    = (int) $this->getValue('usf_cat_id');
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
-                   SET usf_sequence = '.$usfSequence.'
-                 WHERE usf_cat_id   = '.$usfCatId.'
-                   AND usf_sequence = '.$usfSequence;
+                   SET usf_sequence = ? -- $usfSequence
+                 WHERE usf_cat_id   = ? -- $usfCatId
+                   AND usf_sequence = ? -- $usfSequence -/+ 1';
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if ($mode === 'UP')
         {
-            $this->db->query($sql . ' - 1');
+            $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence - 1));
             --$usfSequence;
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif ($mode === 'DOWN')
         {
-            $this->db->query($sql . ' + 1');
+            $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence + 1));
             ++$usfSequence;
         }
 
@@ -385,10 +385,10 @@ class TableUserField extends TableAccess
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_USER_FIELDS.'
-                     WHERE usf_cat_id = '.$newValue;
-            $countUserFieldsStatement = $this->db->query($sql);
+                     WHERE usf_cat_id = ? -- $newValue';
+            $pdoStatement = $this->db->queryPrepared($sql, array($newValue));
 
-            $this->setValue('usf_sequence', $countUserFieldsStatement->fetchColumn() + 1);
+            $this->setValue('usf_sequence', $pdoStatement->fetchColumn() + 1);
         }
         elseif ($columnName === 'usf_url' && $newValue !== '')
         {

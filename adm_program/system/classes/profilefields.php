@@ -432,9 +432,9 @@ class ProfileFields
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = usf_cat_id
                  WHERE cat_org_id IS NULL
-                    OR cat_org_id = '.$organizationId.'
+                    OR cat_org_id = ? -- $organizationId
               ORDER BY cat_sequence ASC, usf_sequence ASC';
-        $userFieldsStatement = $this->mDb->query($sql);
+        $userFieldsStatement = $this->mDb->queryPrepared($sql, array($organizationId));
 
         while ($row = $userFieldsStatement->fetch())
         {
@@ -471,8 +471,8 @@ class ProfileFields
                       FROM '.TBL_USER_DATA.'
                 INNER JOIN '.TBL_USER_FIELDS.'
                         ON usf_id = usd_usf_id
-                     WHERE usd_usr_id = '.$userId;
-            $userDataStatement = $this->mDb->query($sql);
+                     WHERE usd_usr_id = ? -- $userId';
+            $userDataStatement = $this->mDb->queryPrepared($sql, array($userId));
 
             while ($row = $userDataStatement->fetch())
             {

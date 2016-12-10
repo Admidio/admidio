@@ -204,7 +204,7 @@ class ModuleDates extends Modules
             $sql .= ' OFFSET ' . $startElement;
         }
 
-        $datesStatement = $gDb->query($sql);
+        $datesStatement = $gDb->query($sql); // TODO add more params
 
         // array for results
         return array(
@@ -265,14 +265,14 @@ class ModuleDates extends Modules
                 INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = dat_cat_id
                            ' . $this->sqlAdditionalTablesGet('count') . '
-                     WHERE ( cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
+                     WHERE ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR  (   dat_global = 1
                                AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                                )
                            )'
                            . $this->sqlConditionsGet();
 
-            $statement = $gDb->query($sql);
+            $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
             return (int) $statement->fetchColumn();
         }

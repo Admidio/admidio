@@ -394,9 +394,9 @@ class ListConfiguration extends TableLists
     {
         $sql = 'SELECT *
                   FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_lst_id = '.$this->getValue('lst_id').'
+                 WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
               ORDER BY lsc_number ASC';
-        $lscStatement = $this->db->query($sql);
+        $lscStatement = $this->db->queryPrepared($sql, array($this->getValue('lst_id')));
 
         while($lscRow = $lscStatement->fetch())
         {

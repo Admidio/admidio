@@ -140,9 +140,9 @@ class RolesRights extends TableAccess
         if(parent::readData($sqlWhereCondition))
         {
             $sql = 'SELECT * FROM '.TBL_ROLES_RIGHTS_DATA.'
-                     WHERE rrd_ror_id    = '.$this->getValue('ror_id').'
-                       AND rrd_object_id = '.$this->objectId;
-            $rolesRightsStatement = $this->db->query($sql);
+                     WHERE rrd_ror_id    = ? -- $this->getValue(\'ror_id\')
+                       AND rrd_object_id = ? -- $this->objectId';
+            $rolesRightsStatement = $this->db->queryPrepared($sql, array($this->getValue('ror_id'), $this->objectId));
 
             while($row = $rolesRightsStatement->fetch())
             {

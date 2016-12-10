@@ -305,7 +305,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->query($sql);
+        $listsStatement = $gDb->query($sql); // TODO add more params
 
         // array for results
         return array(
@@ -326,7 +326,7 @@ class ModuleLists extends Modules
         global $gCurrentOrganization, $gValidLogin, $gDb;
 
         // assemble conditions
-        $sqlConditions = $this->getCategorySql().$this->getVisibleRolesSql();
+        $sqlConditions = $this->getCategorySql() . $this->getVisibleRolesSql();
         // provoke empty result for not logged in users
         if(!$gValidLogin)
         {
@@ -337,12 +337,12 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON rol_cat_id = cat_id
-                 WHERE rol_valid   = '.(int) $this->activeRole.'
+                 WHERE rol_valid   = ? -- $this->activeRole
                    AND rol_visible = 1
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;
-        $pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->queryPrepared($sql, array((int) $this->activeRole, $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }
@@ -357,12 +357,12 @@ class ModuleLists extends Modules
 
         $sql = 'SELECT lst_id, lst_name, lst_global
                   FROM '.TBL_LISTS.'
-                 WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                   AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
+                 WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
                        OR lst_global = 1)
                    AND lst_name IS NOT NULL
               ORDER BY lst_global ASC, lst_name ASC';
-        $pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $gCurrentUser->getValue('usr_id')));
 
         $configurations = array();
         while($row = $pdoStatement->fetch())

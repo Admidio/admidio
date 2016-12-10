@@ -62,16 +62,16 @@ class TableDate extends TableAccess
         $this->db->startTransaction();
 
         $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                 WHERE dtr_dat_id = '.$datId;
-        $this->db->query($sql);
+                 WHERE dtr_dat_id = ? -- $datId';
+        $this->db->queryPrepared($sql, array($datId));
 
         // if date has participants then the role with their memberships must be deleted
         if ($datRoleId > 0)
         {
             $sql = 'UPDATE '.TBL_DATES.'
                        SET dat_rol_id = NULL
-                     WHERE dat_id = '.$datId;
-            $this->db->query($sql);
+                     WHERE dat_id = ? -- $datId';
+            $this->db->queryPrepared($sql, array($datId));
 
             $dateRole = new TableRoles($this->db, $datRoleId);
             $dateRole->delete(); // TODO Exception handling
@@ -309,8 +309,8 @@ class TableDate extends TableAccess
             // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
             $sql = 'SELECT dtr_rol_id AS roleId
                       FROM '.TBL_DATE_ROLE.'
-                     WHERE dtr_dat_id = '.$this->getValue('dat_id');
-            $dateRolesStatement = $this->db->query($sql);
+                     WHERE dtr_dat_id = ? -- $this->getValue(\'dat_id\')';
+            $dateRolesStatement = $this->db->queryPrepared($sql, array($this->getValue('dat_id')));
 
             while ($row = $dateRolesStatement->fetch()) // Do not simplify to fetchColumn() -> This row could be null
             {
@@ -350,8 +350,8 @@ class TableDate extends TableAccess
             {
                 // erst einmal alle bisherigen Rollenzuordnungen loeschen, damit alles neu aufgebaut werden kann
                 $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                         WHERE dtr_dat_id = '.$this->getValue('dat_id');
-                $this->db->query($sql);
+                         WHERE dtr_dat_id = ? -- $this->getValue(\'dat_id\')';
+                $this->db->queryPrepared($sql, array($this->getValue('dat_id')));
             }
 
             // nun alle Rollenzuordnungen wegschreiben

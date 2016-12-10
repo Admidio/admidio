@@ -180,7 +180,7 @@ class TableAccess
         {
             $sql = 'DELETE FROM '.$this->tableName.'
                      WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';
-            $this->db->query($sql);
+            $this->db->query($sql); // TODO add more params
         }
 
         $this->clear();
@@ -331,7 +331,7 @@ class TableAccess
             $sql = 'SELECT *
                       FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
-            $readDataStatement = $this->db->query($sql);
+            $readDataStatement = $this->db->query($sql); // TODO add more params
 
             if ($readDataStatement->rowCount() === 1)
             {
@@ -541,7 +541,7 @@ class TableAccess
         {
             // insert record and mark this object as not new and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.' ('.$sqlFieldList.') VALUES ('.$sqlValueList.') ';
-            $this->db->query($sql);
+            $this->db->query($sql); // TODO add more params
             $this->new_record = false;
             if ($this->keyColumnName !== '')
             {
@@ -552,7 +552,7 @@ class TableAccess
         {
             $sql = 'UPDATE '.$this->tableName.' SET '.$sqlFieldList.'
                      WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';
-            $this->db->query($sql);
+            $this->db->query($sql); // TODO add more params
         }
 
         $this->columnsValueChanged = false;

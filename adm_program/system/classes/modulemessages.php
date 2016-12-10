@@ -52,10 +52,10 @@ class ModuleMessages
                   FROM ' . TBL_ROLES . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = rol_cat_id
-                 WHERE rol_id = ' . $groupInfo['id'] . '
-                   AND (  cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
+                 WHERE rol_id = ? -- $groupInfo[\'id\']
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL)';
-        $statement = $gDb->query($sql);
+        $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], $gCurrentOrganization->getValue('org_id')));
         $roleName = $statement->fetchColumn();
 
         switch ($groupInfo['status'])
@@ -115,10 +115,11 @@ class ModuleMessages
 
         $sql = 'SELECT msg_id, msg_usr_id_receiver AS user
                   FROM ' . TBL_MESSAGES . '
-                 WHERE msg_type = \'EMAIL\' AND msg_usr_id_sender = ' . $userId . '
+                 WHERE msg_type = \'EMAIL\'
+                   AND msg_usr_id_sender = ? -- $userId
               ORDER BY msg_id DESC';
 
-        return $gDb->query($sql);
+        return $gDb->queryPrepared($sql, array($userId));
     }
 
     /**
@@ -133,10 +134,11 @@ class ModuleMessages
         $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'PM\'
-                   AND msg_usr_id_receiver LIKE \'' . $userId . '\' AND msg_read = 1
+                   AND msg_usr_id_receiver LIKE ? -- $userId
+                   AND msg_read = 1
               ORDER BY msg_id DESC';
 
-        return $gDb->query($sql);
+        return $gDb->queryPrepared($sql, array($userId));
     }
 
     /**
@@ -151,11 +153,11 @@ class ModuleMessages
         $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'PM\'
-                   AND ( (msg_usr_id_receiver LIKE \'' . $userId . '\' AND msg_read <> 1)
-                       OR (msg_usr_id_sender = ' . $userId . ' AND msg_read < 2))
+                   AND ( (msg_usr_id_receiver LIKE ? AND msg_read <> 1) -- $userId
+                       OR (msg_usr_id_sender  =    ? AND msg_read < 2)) -- $userId
               ORDER BY msg_id DESC';
 
-        return $gDb->query($sql);
+        return $gDb->queryPrepared($sql, array($userId, $userId));
     }
 
     /**

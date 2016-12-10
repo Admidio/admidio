@@ -1400,7 +1400,7 @@ class HtmlForm extends HtmlFormBasic
         $selectBoxEntries = array();
 
         // execute the sql statement
-        $pdoStatement = $database->query($sql);
+        $pdoStatement = $database->query($sql); // TODO add more params
 
         // create array from sql result
         while ($row = $pdoStatement->fetch())
@@ -1550,8 +1550,8 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $sqlTables      = '';
-        $sqlCondidtions = '';
+        $sqlTables     = '';
+        $sqlConditions = '';
 
         // create sql conditions if category must have child elements
         if ($selectBoxModus === 'FILTER_CATEGORIES')
@@ -1569,7 +1569,7 @@ class HtmlForm extends HtmlFormBasic
                 case 'ROL':
                     // don't show system categories
                     $sqlTables = ' INNER JOIN ' . TBL_ROLES . ' ON cat_id = rol_cat_id';
-                    $sqlCondidtions = ' AND rol_visible = 1 ';
+                    $sqlConditions = ' AND rol_visible = 1 ';
                     break;
                 case 'INF':
                     $sqlTables = ' INNER JOIN ' . TBL_INVENT_FIELDS . ' ON cat_id = inf_cat_id ';
@@ -1579,24 +1579,24 @@ class HtmlForm extends HtmlFormBasic
 
         if (!$optionsAll['showSystemCategory'])
         {
-            $sqlCondidtions .= ' AND cat_system = 0 ';
+            $sqlConditions .= ' AND cat_system = 0 ';
         }
 
         if (!$gValidLogin)
         {
-            $sqlCondidtions .= ' AND cat_hidden = 0 ';
+            $sqlConditions .= ' AND cat_hidden = 0 ';
         }
 
         // the sql statement which returns all found categories
         $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
-                       '.$sqlTables.'
-                 WHERE (  cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
+                       ' . $sqlTables . '
+                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
-                   AND cat_type = \'' . $categoryType . '\'
-                       ' . $sqlCondidtions . '
+                   AND cat_type = ? -- $categoryType
+                       ' . $sqlConditions . '
               ORDER BY cat_sequence ASC';
-        $pdoStatement = $database->query($sql);
+        $pdoStatement = $database->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $categoryType));
         $countCategories = $pdoStatement->rowCount();
 
         // if no or only one category exist and in filter modus, than don't show category

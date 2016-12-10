@@ -41,8 +41,9 @@ class TableGuestbook extends TableAccess
         $this->db->startTransaction();
 
         // Delete all available comments to this guestbook entry
-        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.' WHERE gbc_gbo_id = '.$this->getValue('gbo_id');
-        $this->db->query($sql);
+        $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
+                      WHERE gbc_gbo_id = ? -- $this->getValue(\'gbo_id\')';
+        $this->db->queryPrepared($sql, array($this->getValue('gbo_id')));
 
         $return = parent::delete();
 

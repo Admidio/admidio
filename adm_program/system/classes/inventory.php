@@ -297,13 +297,14 @@ class Inventory extends TableInventory
                                 ON rol_id = mem_rol_id
                         INNER JOIN '.TBL_CATEGORIES.'
                                 ON cat_id = rol_cat_id
-                             WHERE mem_usr_id = '.$item->getValue('inv_id'). '
-                               AND mem_begin <= \''.DATE_NOW.'\'
-                               AND mem_end    > \''.DATE_NOW.'\'
+                             WHERE mem_usr_id = ? -- $item->getValue(\'inv_id\')
+                               AND mem_begin <= ? -- DATE_NOW
+                               AND mem_end    > ? -- DATE_NOW
                                AND rol_valid  = 1
-                               AND (  cat_org_id = '.$this->organizationId.'
+                               AND (  cat_org_id = ? -- $this->organizationId
                                    OR cat_org_id IS NULL ) ';
-                    $pdoStatement = $this->db->query($sql);
+                    $queryParams = array($item->getValue('inv_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+                    $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
                     if($pdoStatement->rowCount() > 0)
                     {

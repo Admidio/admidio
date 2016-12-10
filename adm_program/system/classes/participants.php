@@ -91,9 +91,9 @@ class Participants
 
         $sql = 'SELECT DISTINCT mem_usr_id, mem_leader
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '.$this->rolId.'
-                   AND mem_end   >= \''.DATE_NOW.'\'';
-        $membersStatement = $this->mDb->query($sql);
+                 WHERE mem_rol_id = ? -- $this->rolId
+                   AND mem_end   >= ? -- DATE_NOW';
+        $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
 
         // Write all member Id´s and leader status in an array
         $numParticipants = array();
@@ -179,15 +179,20 @@ class Participants
         $sql = 'SELECT DISTINCT
                        surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader
                   FROM '.TBL_MEMBERS.'
-             LEFT JOIN '. TBL_USER_DATA .' AS surname
+             LEFT JOIN '.TBL_USER_DATA.' AS surname
                     ON surname.usd_usr_id = mem_usr_id
-                   AND surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-             LEFT JOIN '. TBL_USER_DATA .' AS firstname
+                   AND surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+             LEFT JOIN '.TBL_USER_DATA.' AS firstname
                     ON firstname.usd_usr_id = mem_usr_id
-                   AND firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                 WHERE mem_rol_id = '.$this->rolId.'
+                   AND firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                 WHERE mem_rol_id = ? -- $this->rolId
               ORDER BY surname '.$this->order;
-        $membersStatement = $this->mDb->query($sql);
+        $queryParams = array(
+            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            $this->rolId
+        );
+        $membersStatement = $this->mDb->queryPrepared($sql, $queryParams); // TODO add more params
 
         $participants = array();
         while ($row = $membersStatement->fetch())

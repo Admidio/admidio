@@ -39,14 +39,15 @@ class TableInventoryField extends TableAccess
         $this->db->startTransaction();
 
         // close gap in sequence
-        $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = inf_sequence - 1
-                 WHERE inf_cat_id   = '. $this->getValue('inf_cat_id'). '
-                   AND inf_sequence > '. $this->getValue('inf_sequence');
-        $this->db->query($sql);
+        $sql = 'UPDATE '.TBL_INVENT_FIELDS.'
+                   SET inf_sequence = inf_sequence - 1
+                 WHERE inf_cat_id   = ? -- $this->getValue(\'inf_cat_id\')
+                   AND inf_sequence > ? -- $this->getValue(\'inf_sequence\')';
+        $this->db->queryPrepared($sql, array($this->getValue('inf_cat_id'), $this->getValue('inf_sequence')));
 
         $sql = 'DELETE FROM '.TBL_INVENT_DATA.'
-                    WHERE ind_inf_id = '. $this->getValue('inf_id');
-        $this->db->query($sql);
+                      WHERE ind_inf_id = ? -- $this->getValue(\'inf_id\')';
+        $this->db->queryPrepared($sql, array($this->getValue('inf_id')));
 
         $return = parent::delete();
 
@@ -71,8 +72,8 @@ class TableInventoryField extends TableAccess
         }
         $sql = 'SELECT inf_id
                   FROM '.TBL_INVENT_FIELDS.'
-                 WHERE inf_name_intern = \''.$newNameIntern.'\'';
-        $pdoStatement = $this->db->query($sql);
+                 WHERE inf_name_intern = ? -- $newNameIntern';
+        $pdoStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if($pdoStatement->rowCount() > 0)
         {
@@ -221,25 +222,25 @@ class TableInventoryField extends TableAccess
      */
     public function moveSequence($mode)
     {
+        $mode = admStrToUpper($mode);
+        $sequence = (int) $this->getValue('inf_sequence');
+        $sql = 'UPDATE '.TBL_INVENT_FIELDS.'
+                   SET inf_sequence = ? -- $sequence
+                 WHERE inf_cat_id   = ? -- $this->getValue(\'inf_cat_id\')
+                   AND inf_sequence = ? -- $sequence -/+1';
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) === 'UP')
+        if($mode === 'UP')
         {
-            $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = '.$this->getValue('inf_sequence').'
-                     WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
-                       AND inf_sequence = '.$this->getValue('inf_sequence').' - 1 ';
-            $this->db->query($sql);
-            $this->setValue('inf_sequence', $this->getValue('inf_sequence')-1);
+            $this->db->queryPrepared($sql, array($sequence, $this->getValue('inf_cat_id'), $sequence - 1));
+            $this->setValue('inf_sequence', $sequence - 1);
             $this->save();
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) === 'DOWN')
+        elseif($mode === 'DOWN')
         {
-            $sql = 'UPDATE '.TBL_INVENT_FIELDS.' SET inf_sequence = '.$this->getValue('inf_sequence').'
-                     WHERE inf_cat_id   = '.$this->getValue('inf_cat_id').'
-                       AND inf_sequence = '.$this->getValue('inf_sequence').' + 1 ';
-            $this->db->query($sql);
-            $this->setValue('inf_sequence', $this->getValue('inf_sequence')+1);
+            $this->db->queryPrepared($sql, array($sequence, $this->getValue('inf_cat_id'), $sequence + 1));
+            $this->setValue('inf_sequence', $sequence + 1);
             $this->save();
         }
     }
@@ -285,8 +286,8 @@ class TableInventoryField extends TableAccess
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_INVENT_FIELDS.'
-                     WHERE inf_cat_id = '.$newValue;
-            $pdoStatement = $this->db->query($sql);
+                     WHERE inf_cat_id = ? -- $newValue';
+            $pdoStatement = $this->db->queryPrepared($sql, array($newValue));
 
             $this->setValue('inf_sequence', $pdoStatement->fetchColumn() + 1);
         }

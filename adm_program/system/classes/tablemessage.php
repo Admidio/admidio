@@ -39,9 +39,9 @@ class TableMessage extends TableAccess
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->tableName.'
-                 WHERE msg_usr_id_receiver LIKE \''. $usrId .'\'
-                   AND msg_read = 1';
-        $countStatement = $this->db->query($sql);
+                 WHERE msg_read = 1
+                   AND msg_usr_id_receiver LIKE ? -- $usrId';
+        $countStatement = $this->db->queryPrepared($sql, array($usrId));
 
         return (int) $countStatement->fetchColumn();
     }
@@ -66,8 +66,8 @@ class TableMessage extends TableAccess
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MESSAGES_CONTENT.'
-                 WHERE msc_msg_id = '.$this->getValue('msg_id');
-        $countStatement = $this->db->query($sql);
+                 WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')';
+        $countStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
         return (int) $countStatement->fetchColumn();
     }
@@ -81,10 +81,10 @@ class TableMessage extends TableAccess
     {
         $sql = 'UPDATE '.TBL_MESSAGES.'
                    SET msg_read = \'0\'
-                 WHERE msg_id   = '.$this->msgId.'
-                   AND msg_usr_id_receiver LIKE \''.$usrId.'\'';
+                 WHERE msg_id   = ? -- $this->msgId
+                   AND msg_usr_id_receiver LIKE ? -- $usrId';
 
-        return $this->db->query($sql);
+        return $this->db->queryPrepared($sql, array($this->msgId, $usrId));
     }
 
     /**
@@ -96,10 +96,10 @@ class TableMessage extends TableAccess
     {
         $sql = 'SELECT msc_usr_id, msc_message, msc_timestamp
                   FROM '. TBL_MESSAGES_CONTENT. '
-                 WHERE msc_msg_id = '. $msgId .'
+                 WHERE msc_msg_id = ? -- $msgId
               ORDER BY msc_part_id DESC';
 
-        return $this->db->query($sql);
+        return $this->db->queryPrepared($sql, array($msgId));
     }
 
     /**
@@ -111,13 +111,15 @@ class TableMessage extends TableAccess
     public function getConversationPartner($usrId)
     {
         $sql = 'SELECT
-                  CASE WHEN msg_usr_id_sender = '. $usrId .' THEN msg_usr_id_receiver
+                  CASE
+                  WHEN msg_usr_id_sender = ? -- $usrId
+                  THEN msg_usr_id_receiver
                   ELSE msg_usr_id_sender
                    END AS user
                   FROM '.TBL_MESSAGES.'
                  WHERE msg_type = \'PM\'
-                   AND msg_id = '. $this->msgId;
-        $partnerStatement = $this->db->query($sql);
+                   AND msg_id = ? -- $this->msgId';
+        $partnerStatement = $this->db->queryPrepared($sql, array($usrId, $this->msgId));
 
         return (int) $partnerStatement->fetchColumn();
     }
@@ -139,8 +141,8 @@ class TableMessage extends TableAccess
         if ($this->getValue('msg_type') === 'EMAIL' || (int) $this->getValue('msg_read') === 2)
         {
             $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
-                     WHERE msc_msg_id = '.$msgId;
-            $this->db->query($sql);
+                     WHERE msc_msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($msgId));
 
             parent::delete();
         }
@@ -156,11 +158,11 @@ class TableMessage extends TableAccess
 
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 2,
-                           msg_timestamp = CURRENT_TIMESTAMP,
-                           msg_usr_id_sender = '.$usrId.',
-                           msg_usr_id_receiver = \''.$other.'\'
-                     WHERE msg_id = '.$msgId;
-            $this->db->query($sql);
+                           msg_usr_id_sender   = ?, -- $usrId
+                           msg_usr_id_receiver = ?, -- $other
+                           msg_timestamp = CURRENT_TIMESTAMP
+                     WHERE msg_id = ? -- $msgId';
+            $this->db->queryPrepared($sql, array($usrId, $other, $msgId));
         }
 
         $this->db->endTransaction();
