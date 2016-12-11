@@ -87,7 +87,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT *
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
-        $recordsetsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id'))); // TODO add more params
+        $recordsetsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id')));
 
         if ($recordsetsStatement->rowCount() > 0)
         {
@@ -140,7 +140,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
-        $elementsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id'))); // TODO add more params
+        $elementsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id')));
 
         return (int) $elementsStatement->fetchColumn();
     }
