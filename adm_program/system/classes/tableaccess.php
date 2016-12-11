@@ -379,7 +379,7 @@ class TableAccess
         if ($id > 0)
         {
             // call method to read data out of database
-            return $this->readData(' AND ' . $this->keyColumnName . ' = ? ', array($id)); // TODO add more params
+            return $this->readData(' AND ' . $this->keyColumnName . ' = ? ', array($id));
         }
 
         return false;
@@ -473,8 +473,8 @@ class TableAccess
 
         // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
         $sqlFieldArray = array();
-        $sqlValueArray = array();
         $sqlSetArray = array();
+        $queryParams = array();
 
         // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
         foreach ($this->dbColumns as $key => $value)
@@ -490,45 +490,19 @@ class TableAccess
                     {
                         // Daten fuer ein Insert aufbereiten
                         $sqlFieldArray[] = $key;
-
-                        // unterscheiden zwischen Numerisch und Text
-                        if (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
-                        ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
-                        {
-                            $sqlValueArray[] = $value;
-                        }
-                        else
-                        {
-                            // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
-                            // damit sie auf jeden Fall da sind
-                            $value = addslashes(stripslashes($value));
-                            $sqlValueArray[] = '\'' . $value . '\'';
-                        }
+                        $queryParams[] = $value;
                     }
                 }
                 else
                 {
-                    $setString = $key . ' = ';
+                    $sqlSetArray[] = $key . ' = ?';
+                    $queryParams[] = $value;
 
                     // Daten fuer ein Update aufbereiten
                     if ($value === '' || $value === null)
                     {
-                        $setString .= 'NULL';
+                        $queryParams[] = null;
                     }
-                    elseif (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
-                        ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
-                    {
-                        // numerisch
-                        $setString .= $value;
-                    }
-                    else
-                    {
-                        // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
-                        // damit sie auf jeden Fall da sind
-                        $value = addslashes(stripslashes($value));
-                        $setString .= '\'' . $value . '\'';
-                    }
-                    $sqlSetArray[] = $setString;
                 }
 
                 $this->columnsInfos[$key]['changed'] = false;
@@ -540,8 +514,8 @@ class TableAccess
             // insert record and mark this object as not new and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.'
                            ('.implode(',', $sqlFieldArray).')
-                    VALUES ('.implode(',', $sqlValueArray).')';
-            $this->db->query($sql); // TODO add more params
+                    VALUES ('.implode(',', array_fill(0, count($sqlFieldArray), '?')).')';
+            $this->db->queryPrepared($sql, $queryParams);
 
             $this->new_record = false;
             if ($this->keyColumnName !== '')
@@ -554,7 +528,8 @@ class TableAccess
             $sql = 'UPDATE '.$this->tableName.'
                        SET '.implode(',', $sqlSetArray).'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
-            $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName])); // TODO add more params
+            $queryParams[] = $this->dbColumns[$this->keyColumnName];
+            $this->db->queryPrepared($sql, $queryParams);
         }
 
         $this->columnsValueChanged = false;
