@@ -118,7 +118,7 @@ $profileEditMenu = $page->getMenu();
 $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // create html form
-$form = new HtmlForm('edit_item_form', $g_root_path.'/adm_program/modules/inventory/item_save.php?item_id='.$getItemId.'&amp;new_item='.$getNewItem, $page);
+$form = new HtmlForm('edit_item_form', ADMIDIO_URL.FOLDER_MODULES.'/inventory/item_save.php?item_id='.$getItemId.'&amp;new_item='.$getNewItem, $page);
 
 // *******************************************************************************
 // Schleife ueber alle Kategorien und Felder ausser den Stammdaten
@@ -191,7 +191,8 @@ foreach($gInventoryFields->mInventoryFields as $field)
             $form->addCheckbox(
                 'inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'),
-                $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null,
+                (bool) $inventory->getValue($field->getValue('inf_name_intern')),
+                $fieldProperty, $helpId, null,
                 $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database')
             );
         }
@@ -312,10 +313,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
 // div-Container admGroupBoxBody und admGroupBox schliessen
 $form->closeGroupBox();
 
-$btn_image = 'disk.png';
-$btn_text  = $gL10n->get('SYS_SAVE');
-
-$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons/'.$btn_image));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 
 if($getNewItem == 0)
 {

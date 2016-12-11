@@ -61,13 +61,13 @@ if ($getMode === 1)
         }
     }
     // Daten in Datenbank schreiben
-    $return_code = $room->save();
+    $room->save();
 
     unset($_SESSION['rooms_request']);
     $gNavigation->deleteLastUrl();
 
-    header('Location: '. $gNavigation->getUrl());
-    exit();
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }
 // Löschen des Raums
 elseif ($getMode === 2)
@@ -76,8 +76,8 @@ elseif ($getMode === 2)
               FROM '.TBL_DATES.'
              WHERE dat_room_id = '.$getRoomId;
     $statement = $gDb->query($sql);
-    $row = $statement->rowCount();
-    if($row === 0)
+
+    if($statement->rowCount() === 0)
     {
         $room->delete();
         echo 'done';

@@ -42,37 +42,37 @@ $page->addJavascript('
         var secondSequence = 0;
 
         // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-        for(i=0;i < childs.length; i++) {
-            if(childs[i].tagName === "TR") {
+        for (var i = 0; i < childs.length; i++) {
+            if (childs[i].tagName === "TR") {
                 actRowCount++;
-                if(actSequence > 0 && nextNode === null) {
+                if (actSequence > 0 && nextNode === null) {
                     nextNode = childs[i];
                 }
 
-                if(childs[i].id === "row_usf_" + usfID) {
+                if (childs[i].id === "row_usf_" + usfID) {
                     actSequence = actRowCount;
                 }
 
-                if(actSequence === 0) {
+                if (actSequence === 0) {
                     prevNode = childs[i];
                 }
             }
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if(direction === "up") {
-            if(prevNode != null) {
+        if (direction === "up") {
+            if (prevNode != null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
             }
         } else {
-            if(nextNode != null) {
+            if (nextNode != null) {
                 actRow.parentNode.insertBefore(nextNode, actRow);
                 secondSequence = actSequence + 1;
             }
         }
 
-        if(secondSequence > 0) {
+        if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
             $.get(gRootPath + "/adm_program/modules/inventory/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
@@ -85,10 +85,10 @@ $fieldsMenu = $page->getMenu();
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new profile field
-$fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/inventory/fields_new.php',
+$fieldsMenu->addItem('menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_new.php',
                             $gL10n->get('ORG_CREATE_ITEM_FIELD'), 'add.png');
 // define link to maintain categories
-$fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=INF',
+$fieldsMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=INF',
                             $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 
 $sql = 'SELECT *
@@ -110,9 +110,9 @@ $columnHeading = array(
     $gL10n->get('SYS_FIELD').HtmlForm::getHelpTextIcon('ORG_FIELD_DESCRIPTION'),
     '&nbsp;',
     $gL10n->get('SYS_DESCRIPTION'),
-    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
-    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />',
-    '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />',
+    '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
+    '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />',
+    '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />',
     $gL10n->get('ORG_DATATYPE'),
     '&nbsp;');
 $table->addRowHeadingByArray($columnHeading);
@@ -132,7 +132,7 @@ while($row = $statement->fetch())
     $userField->clear();
     $userField->setArray($row);
 
-    if($categoryId != $userField->getValue('cat_id'))
+    if($categoryId !== (int) $userField->getValue('cat_id'))
     {
         $block_id = 'admCategory'.$userField->getValue('inf_cat_id');
 
@@ -143,16 +143,16 @@ while($row = $statement->fetch())
         $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'));
         $table->addTableBody('id', $block_id);
 
-        $categoryId = $userField->getValue('inf_cat_id');
+        $categoryId = (int) $userField->getValue('inf_cat_id');
     }
 
     // cut long text strings and provide tooltip
     if(strlen($userField->getValue('inf_description')) > 22)
     {
         $description = substr($userField->getValue('inf_description', 'database'), 0, 22).'
-            <a class="colorbox-dialog" data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('inf_description')).'" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('inf_name_intern'). '&amp;inline=true">[..]</a>';
+            <a class="colorbox-dialog" data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('inf_description')).'" href="'. ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('inf_name_intern'). '&amp;inline=true">[..]</a>';
     }
-    elseif(strlen($userField->getValue('inf_description') == 0))
+    elseif($userField->getValue('inf_description') === '')
     {
         $description = '&nbsp;';
     }
@@ -163,29 +163,29 @@ while($row = $statement->fetch())
 
     if($userField->getValue('inf_hidden') == 1)
     {
-        $hidden = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/eye_gray.png" alt="'.$gL10n->get('ORG_FIELD_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'" />';
+        $hidden = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/eye_gray.png" alt="'.$gL10n->get('ORG_FIELD_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_HIDDEN').'" />';
     }
     else
     {
-        $hidden = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />';
+        $hidden = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />';
     }
 
     if($userField->getValue('inf_disabled') == 1)
     {
-        $disable = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />';
+        $disable = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />';
     }
     else
     {
-        $disable = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/textfield.png" alt="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" />';
+        $disable = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/textfield.png" alt="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" title="'.$gL10n->get('ORG_FIELD_NOT_DISABLED').'" />';
     }
 
     if($userField->getValue('inf_mandatory') == 1)
     {
-        $mandatory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />';
+        $mandatory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />';
     }
     else
     {
-        $mandatory = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
+        $mandatory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/asterisk_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
     }
 
     $userFieldText = array('CHECKBOX'      => $gL10n->get('SYS_CHECKBOX'),
@@ -199,28 +199,28 @@ while($row = $statement->fetch())
                             'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                             'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
-    $usfSystem = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'"><img
-                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+    $usfSystem = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'"><img
+                    src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
     if($userField->getValue('inf_system') == 1)
     {
-        $usfSystem .= '<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+        $usfSystem .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
     }
     else
     {
         $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=inf&amp;element_id=row_inf_'.
+                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=inf&amp;element_id=row_inf_'.
                         $userField->getValue('inf_id').'&amp;name='.urlencode($userField->getValue('inf_name')).'&amp;database_id='.$userField->getValue('inf_id').'"><img
-                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.$g_root_path.'/adm_program/modules/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'">'.$userField->getValue('inf_name').'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/inventory/fields_new.php?inf_id='.$userField->getValue('inf_id').'">'.$userField->getValue('inf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$userField->getValue('inf_id').')"><img
-            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
+            src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$userField->getValue('inf_id').')"><img
-            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>',
+            src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>',
         $description,
         $hidden,
         $disable,

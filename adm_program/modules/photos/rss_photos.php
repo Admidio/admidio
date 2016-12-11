@@ -119,14 +119,14 @@ while ($row = $statement->fetch())
     }
 
     $title   = $parents.$photo_album->getValue('pho_name');
-    $link    = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
+    $link    = ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
     $author  = $row['create_name'];
     $pubDate = date('r', strtotime($photo_album->getValue('pho_timestamp_create')));
 
     // Inhalt zusammensetzen
     $description = $gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
     // Enddatum nur wenn anders als startdatum
-    if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
+    if($photo_album->getValue('pho_end') !== $photo_album->getValue('pho_begin'))
     {
         $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photo_album->getValue('pho_end', $gPreferences['system_date']));
     }
@@ -139,14 +139,14 @@ while ($row = $statement->fetch())
         $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for($photoNr = $photo_album->getValue('pho_quantity'); $photoNr >= $photo_album->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr)
         {
-            $photoPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photoNr.'.jpg';
+            $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id') . '/' . $photoNr . '.jpg';
 
             // show only photo if that photo exists
             if (is_file($photoPath))
             {
                 $description = $description.
-                    '<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img
-                     src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
+                    '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img
+                     src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
                      '&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=1" border="0" /></a>&nbsp;';
             }
         }

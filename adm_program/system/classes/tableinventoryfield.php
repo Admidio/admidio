@@ -19,14 +19,14 @@ class TableInventoryField extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_invent_fields.
      * If the id is set than the specific item field will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $inf_id   The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $infId    The recordset of the item field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $inf_id = 0)
+    public function __construct(&$database, $infId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'inf_cat_id');
 
-        parent::__construct($database, TBL_INVENT_FIELDS, 'inf', $inf_id);
+        parent::__construct($database, TBL_INVENT_FIELDS, 'inf', $infId);
     }
 
     /**
@@ -186,7 +186,7 @@ class TableInventoryField extends TableAccess
                                     }
                                     elseif(admStrIsValidFileName($listValueImage, true))
                                     {
-                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                        $listValue = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                     }
                                 }
                                 catch(AdmException $e)

@@ -75,7 +75,7 @@ if($datesResult['numResults'] > 0)
             $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
         }
         $title   = $title. ' '. $date->getValue('dat_headline');
-        $link    = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id').'&view=detail';
+        $link    = ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id='. $date->getValue('dat_id').'&view=detail';
         $author  = $row['create_name'];
         $pubDate = date('r', strtotime($date->getValue('dat_timestamp_create')));
 
@@ -111,7 +111,7 @@ if($datesResult['numResults'] > 0)
         $description = $description. '<br /><br />'. $date->getValue('dat_description');
 
         // i-cal downloadlink
-        $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$gL10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
+        $description = $description. '<br /><br /><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$gL10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
 
         // add entry to RSS feed
         $rss->addItem($title, $description, $link, $author, $pubDate);

@@ -32,6 +32,10 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 
+// Check form values
+$postUserIdList = admFuncVariableIsValid($_POST, 'userIdList', 'string');
+$postListId     = admFuncVariableIsValid($_POST, 'lst_id',     'int');
+
 if ($getMsgId > 0)
 {
     $message = new TableMessage($gDb, $getMsgId);
@@ -57,7 +61,7 @@ if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
 // check if user has email address for sending a email
 if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') === '')
 {
-    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>'));
     // => EXIT
 }
 
@@ -161,11 +165,11 @@ if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['
 
     if(!isset($form_values['carbon_copy']))
     {
-        $form_values['carbon_copy'] = 0;
+        $form_values['carbon_copy'] = false;
     }
     if(!isset($form_values['delivery_confirmation']))
     {
-        $form_values['delivery_confirmation'] = 0;
+        $form_values['delivery_confirmation'] = false;
     }
 }
 else
@@ -200,7 +204,7 @@ if ($getMsgType === 'PM')
     }
 
     // show form
-    $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
@@ -233,7 +237,7 @@ if ($getMsgType === 'PM')
 
     $form->closeGroupBox();
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page
     $page->addHtml($form->show(false));
@@ -278,7 +282,7 @@ elseif (!isset($messageStatement))
     }
 
     // show form
-    $form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $preloadData = array();
@@ -390,18 +394,18 @@ elseif (!isset($messageStatement))
             while ($row = $statement->fetch())
             {
                 // every user should only be once in the list
-                if (!isset($currentUserId) || $currentUserId != $row['usr_id'])
+                if (!isset($currentUserId) || $currentUserId !== (int) $row['usr_id'])
                 {
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
                         $active_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
-                        $currentUserId = $row['usr_id'];
+                        $currentUserId = (int) $row['usr_id'];
                     }
                     elseif($gPreferences['mail_show_former'] == 1)
                     {
                         $passive_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
-                        $currentUserId  = $row['usr_id'];
+                        $currentUserId  = (int) $row['usr_id'];
                     }
                 }
             }
@@ -429,6 +433,15 @@ elseif (!isset($messageStatement))
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
 
+    }
+
+    if($postListId > 0)
+    {
+        $preloadData = 'dummy';
+        $showlist = new ListConfiguration($gDb, $postListId);
+        $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
+        $form->addInput('userIdList', '', $postUserIdList, array('property' => FIELD_HIDDEN));
+        $form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
     }
 
     // no roles or users found then show message
@@ -535,7 +548,7 @@ elseif (!isset($messageStatement))
         $form->closeGroupBox();
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -548,7 +561,7 @@ if (isset($messageStatement))
     $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
-        if ($row['msc_usr_id'] == $gCurrentUser->getValue('usr_id'))
+        if ((int) $row['msc_usr_id'] === (int) $gCurrentUser->getValue('usr_id'))
         {
             $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
         }
@@ -580,7 +593,7 @@ if (isset($messageStatement))
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-8">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+                        <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
                     <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
                     '</div>

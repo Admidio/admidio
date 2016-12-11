@@ -85,7 +85,7 @@ if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
-    $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
+    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
 }
 
 // create Object
@@ -111,7 +111,7 @@ if($plgDatesResult['numResults'] > 0)
         $plg_date->setArray($plg_row);
         $plg_html_end_date = '';
 
-        echo '<div>'.$plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
+        echo '<h4>'.$plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
 
         if ($plg_date->getValue('dat_all_day') != 1)
         {
@@ -158,11 +158,11 @@ if($plgDatesResult['numResults'] > 0)
                     $plg_new_headline .= ' '. $plg_value;
                 }
             }
-            echo $plg_new_headline. '</a></div>';
+            echo $plg_new_headline. '</a></h4>';
         }
         else
         {
-            echo $plg_date->getValue('dat_headline'). '</a></div>';
+            echo $plg_date->getValue('dat_headline'). '</a></h4>';
         }
 
         // show preview text

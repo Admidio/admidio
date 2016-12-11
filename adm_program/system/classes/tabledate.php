@@ -307,20 +307,20 @@ class TableDate extends TableAccess
         if (count($this->visibleRoles) === 0)
         {
             // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
-            $sql = 'SELECT dtr_rol_id
+            $sql = 'SELECT dtr_rol_id AS roleId
                       FROM '.TBL_DATE_ROLE.'
                      WHERE dtr_dat_id = '.$this->getValue('dat_id');
             $dateRolesStatement = $this->db->query($sql);
 
-            while ($roleId = $dateRolesStatement->fetchColumn())
+            while ($row = $dateRolesStatement->fetch()) // Do not simplify to fetchColumn() -> This row could be null
             {
-                if ($roleId === null)
+                if ($row['roleId'] === null)
                 {
                     $this->visibleRoles[] = 0;
                 }
                 else
                 {
-                    $this->visibleRoles[] = (int) $roleId;
+                    $this->visibleRoles[] = (int) $row['roleId'];
                 }
             }
         }

@@ -168,7 +168,7 @@ class Language
         }
 
         // set path to language file of countries
-        $countriesFilesPath = SERVER_PATH.'/adm_program/languages/countries_';
+        $countriesFilesPath = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_';
 
         if(is_file($countriesFilesPath.$this->languageData->getLanguage().'.xml'))
         {
@@ -274,7 +274,7 @@ class Language
     {
         if(count($this->languages) === 0)
         {
-            $languagesXml = new SimpleXMLElement(SERVER_PATH.'/adm_program/languages/languages.xml', null, true);
+            $languagesXml = new SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', null, true);
 
             foreach($languagesXml->children() as $stringNode)
             {

@@ -50,8 +50,7 @@ $relationtypeEditMenu = $page->getMenu();
 $relationtypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('relationtype_edit_form',
-                     $g_root_path.'/adm_program/modules/userrelations/relationtypes_function.php?urt_id='.$getUrtId.'&amp;mode=1', $page);
+$form = new HtmlForm('relationtype_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php?urt_id='.$getUrtId.'&amp;mode=1', $page);
 
 $form->addInput(
     'urt_name', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD'), $relationtype1->getValue('urt_name'),
@@ -127,7 +126,7 @@ $form->addInput(
     array('maxLength' => 100)
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     $relationtype1->getValue('urt_usr_id_create'),
     $relationtype1->getValue('urt_timestamp_create'),

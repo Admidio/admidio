@@ -124,15 +124,29 @@ elseif($getMode === 'html')
 
     $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
+    $passwordStrengthLevel = 1;
+    if ($gPreferences['password_min_strength'])
+    {
+        $passwordStrengthLevel = $gPreferences['password_min_strength'];
+    }
+
     echo '<script type="text/javascript">
         $(function() {
             $("body").on("shown.bs.modal", ".modal", function () {
                 $("#password_form:first *:input[type!=hidden]:first").focus();
-            });
 
-            $("#new_password").keyup(function(e) {
-                var result = zxcvbn(e.target.value, '.$zxcvbnUserInputs.');
-                $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
+
+                $("#new_password").keyup(function(e) {
+                    var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
+                    var cssClasses = ["progress-bar-danger", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
+
+                    var progressBar = $("#admidio-password-strength .progress-bar");
+                    progressBar.attr("aria-valuenow", result.score * 25);
+                    progressBar.css("width", result.score * 25 + "%");
+                    progressBar.removeClass(cssClasses.join(" "));
+                    progressBar.addClass(cssClasses[result.score]);
+                });
             });
 
             $("#password_form").submit(function(event) {
@@ -144,7 +158,7 @@ elseif($getMode === 'html')
                 event.preventDefault();
 
                 $.post(action, $(this).serialize(), function(data) {
-                    if(data === "success") {
+                    if (data === "success") {
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
                         passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
@@ -167,7 +181,7 @@ elseif($getMode === 'html')
     </div>
     <div class="modal-body">';
         // show form
-        $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
+        $form = new HtmlForm('password_form', ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
         if($currUserId === $getUserId)
         {
             // to change own password user must enter the valid old password for verification
@@ -180,7 +194,7 @@ elseif($getMode === 'html')
             array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $user->getPasswordUserData(), 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')
         );
         $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
+        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';
 }

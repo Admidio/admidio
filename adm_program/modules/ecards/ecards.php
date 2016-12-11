@@ -26,8 +26,8 @@ $showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultVa
 
 // Initialisierung lokaler Variablen
 $funcClass = new FunctionClass($gL10n);
-$templates = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
-$template  = THEME_SERVER_PATH. '/ecard_templates/';
+$templates = $funcClass->getFileNames(THEME_ADMIDIO_PATH. '/ecard_templates/');
+$template  = THEME_ADMIDIO_PATH. '/ecard_templates/';
 $headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -66,11 +66,11 @@ if($getPhotoId > 0 && (int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurr
     // => EXIT
 }
 
-if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) === 0)
+if ($gValidLogin && $gCurrentUser->getValue('EMAIL') === '')
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>'));
     // => EXIT
 }
 
@@ -80,8 +80,7 @@ if ($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden
-    if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id')))
-    || strlen($user->getValue('usr_id')) === 0)
+    if((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || strlen($user->getValue('usr_id')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
@@ -133,7 +132,7 @@ $page->addJavascript('
     $("#btn_ecard_preview").click(function(event) {
         event.preventDefault();
         $("#ecard_form input[id=\'submit_action\']").val("preview");
-        $("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );
+        $("#ecard_form textarea[name=\'ecard_message\']").text(CKEDITOR.instances.ecard_message.getData());
 
         $.post({ // create an AJAX call...
             data: $("#ecard_form").serialize(), // get the form data
@@ -156,7 +155,7 @@ if($gCurrentUser->isAdministrator())
     // show link to system preferences of announcements
     $ecardMenu->addItem(
         'menu_item_preferences',
-        $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards',
+        ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=ecards',
         $gL10n->get('SYS_MODULE_PREFERENCES'),
         'options.png',
         'right'
@@ -172,11 +171,11 @@ $form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
     <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
-        href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
-        src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'"
+        href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
+        src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'"
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
-$templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
+$templates = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH.'/ecard_templates');
 if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
@@ -250,7 +249,7 @@ $form->addSelectBox(
     'ecard_recipients',
     $gL10n->get('SYS_TO'),
     $list,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect'  => true)
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
 );
 $form->addLine();
 $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
@@ -260,8 +259,8 @@ $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-edi
 $form->addEditor('ecard_message', null, $message, array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();
-$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_PATH. '/icons/eye.png'));
-$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH. '/icons/email.png'));
+$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_URL. '/icons/eye.png'));
+$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL. '/icons/email.png'));
 $form->closeButtonGroup();
 
 // add form to html page and show page

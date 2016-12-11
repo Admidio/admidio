@@ -145,31 +145,6 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
-     * @param string $date Date to be validated and formated if needed
-     * @return string|false
-     */
-    private function formatDate($date)
-    {
-        global $gPreferences;
-
-        $objDate = DateTime::createFromFormat('Y-m-d', $date);
-        if ($objDate !== false)
-        {
-            return $date;
-        }
-
-        // check if date has system format
-        $objDate = DateTime::createFromFormat($gPreferences['system_date'], $date);
-        if ($objDate !== false)
-        {
-            return $objDate->format('Y-m-d');
-        }
-
-        return false;
-    }
-
-    /**
      * SQL query returns an array with available dates.
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit        Limit of query rows (default: 0)
@@ -181,7 +156,7 @@ class ModuleDates extends Modules
 
         if ($limit === null)
         {
-            $limit = $gPreferences['dates_per_page'];
+            $limit = (int) $gPreferences['dates_per_page'];
         }
 
         if ($gPreferences['system_show_create_edit'] == 1)
@@ -259,7 +234,7 @@ class ModuleDates extends Modules
         // check time period if old dates are chosen, then set headline to previous dates
         // Define a prefix
         if ($this->getParameter('mode') === 'old'
-        ||  (  $this->getParameter('dateStartFormatEnglish') < DATE_NOW
+        ||    ($this->getParameter('dateStartFormatEnglish') < DATE_NOW
             && $this->getParameter('dateEndFormatEnglish')   < DATE_NOW))
         {
             $headline = $gL10n->get('DAT_PREVIOUS_DATES', '') . $headline;
@@ -516,6 +491,34 @@ class ModuleDates extends Modules
     }
 
     /**
+     * Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
+     * @deprecated 3.2.0:4.0.0 Dropped without replacement.
+     * @param string $date Date to be validated and formated if needed
+     * @return string|false
+     */
+    private function formatDate($date)
+    {
+        global $gLogger, $gPreferences;
+
+        $gLogger->warning('DEPRECATED: "$moduleDates->formatDate()" is deprecated without replacement!');
+
+        $objDate = DateTime::createFromFormat('Y-m-d', $date);
+        if ($objDate !== false)
+        {
+            return $date;
+        }
+
+        // check if date has system format
+        $objDate = DateTime::createFromFormat($gPreferences['system_date'], $date);
+        if ($objDate !== false)
+        {
+            return $objDate->format('Y-m-d');
+        }
+
+        return false;
+    }
+
+    /**
      * Returns value for form field.
      * This method compares a date value to a reference value and to date '1970-01-01'.
      * Html output will be set regarding the parameters.
@@ -528,6 +531,10 @@ class ModuleDates extends Modules
      */
     public function getFormValue($date, $reference)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$moduleDates->getFormValue()" is deprecated without replacement!');
+
         if (isset($date, $reference))
         {
             return $this->setFormValue($date, $reference);
@@ -546,6 +553,10 @@ class ModuleDates extends Modules
      */
     private function setFormValue($date, $reference)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$moduleDates->setFormValue()" is deprecated without replacement!');
+
         $checkedDate = $this->formatDate($date);
         if ($checkedDate === $reference || $checkedDate === '1970-01-01')
         {

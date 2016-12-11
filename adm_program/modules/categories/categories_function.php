@@ -16,6 +16,7 @@
  * type  : Type of categories that could be maintained
  *         ROL = Categories for roles
  *         LNK = Categories for weblinks
+ *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
  *         INF = Categories for Inventory
@@ -31,7 +32,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'DAT', 'INF', 'AWA')));
+$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'INF', 'AWA')));
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
@@ -43,6 +44,11 @@ if($getType === 'ROL' && !$gCurrentUser->manageRoles())
     // => EXIT
 }
 elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -65,14 +71,14 @@ elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 
 // create category object
 $category = new TableCategory($gDb);
+$orgId = (int) $gCurrentOrganization->getValue('org_id');
 
 if($getCatId > 0)
 {
     $category->readDataById($getCatId);
 
     // check if category belongs to actual organization
-    if($category->getValue('cat_org_id') > 0
-    && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if($category->getValue('cat_org_id') > 0 && (int) $category->getValue('cat_org_id') !== $orgId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -87,7 +93,7 @@ if($getCatId > 0)
 else
 {
     // create a new category
-    $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+    $category->setValue('cat_org_id', $orgId);
     $category->setValue('cat_type', $getType);
 }
 
@@ -97,8 +103,7 @@ if($getMode === 1)
 
     $_SESSION['categories_request'] = $_POST;
 
-    if((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '')
-    && $category->getValue('cat_system') == 0)
+    if((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '') && $category->getValue('cat_system') == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
         // => EXIT
@@ -109,17 +114,17 @@ if($getMode === 1)
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
     if(($getType === 'USF'
-    && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() == 1))
+    && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() === 1))
     || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'CONFIRMATION_OF_PARTICIPATION'))
     {
         $category->setValue('cat_org_id', '0');
-        $sqlSearchOrga = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+        $sqlSearchOrga = ' AND (  cat_org_id  = '. $orgId. '
                              OR cat_org_id IS NULL )';
     }
     else
     {
-        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-        $sqlSearchOrga = ' AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id');
+        $category->setValue('cat_org_id', $orgId);
+        $sqlSearchOrga = ' AND cat_org_id  = '. $orgId;
     }
 
     if($category->getValue('cat_name') !== $_POST['cat_name'])
@@ -161,8 +166,6 @@ if($getMode === 1)
         }
     }
 
-    $cat_org_merker = $category->getValue('cat_org_id');
-
     // Daten in Datenbank schreiben
     $returnCode = $category->save();
 
@@ -180,7 +183,7 @@ if($getMode === 1)
     $sql = 'SELECT *
               FROM '.TBL_CATEGORIES.'
              WHERE cat_type = \''. $getType. '\'
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id  = '. $orgId. '
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id ASC, cat_sequence ASC';
     $categoriesStatement = $gDb->query($sql);
@@ -198,8 +201,8 @@ if($getMode === 1)
     $gNavigation->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    header('Location: '. $gNavigation->getUrl());
-    exit();
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }
 elseif($getMode === 2)
 {

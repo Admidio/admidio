@@ -121,7 +121,8 @@
  * echo HtmlElement::getHtmlElement();
  * @endcode
  */
-abstract class HtmlElement {
+abstract class HtmlElement
+{
     protected $nesting;                   ///< Flag enables nesting of main elements, e.g div blocks ( Default : true )
     protected $mainElement;               ///< String with main element as string
     protected $mainElementAttributes;     ///< String with attributes of the main element

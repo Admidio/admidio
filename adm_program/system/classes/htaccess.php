@@ -45,7 +45,7 @@ class Htaccess
     {
         if (is_dir($this->folderPath) && !is_file($this->folderPath.'/.htaccess') && is_writable($this->folderPath.'/.htaccess'))
         {
-            $file = fopen($this->folderPath.'/.htaccess', 'w+');
+            $file = fopen($this->folderPath.'/.htaccess', 'w+b');
 
             if (!$file)
             {

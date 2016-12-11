@@ -109,10 +109,10 @@ if($onlineUsersStatement->rowCount() > 0)
     {
         if($row->ses_usr_id > 0)
         {
-            if($row->ses_usr_id != $usr_id_merker)
+            if((int) $row->ses_usr_id !== $usr_id_merker)
             {
                 echo '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
-                    href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></strong>';
+                    href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></strong>';
 
                 // User neben-/untereinander anzeigen
                 if($plg_show_users_side_by_side)
@@ -123,7 +123,7 @@ if($onlineUsersStatement->rowCount() > 0)
                 {
                     echo '<br />';
                 }
-                $usr_id_merker = $row->ses_usr_id;
+                $usr_id_merker = (int) $row->ses_usr_id;
             }
         }
         else

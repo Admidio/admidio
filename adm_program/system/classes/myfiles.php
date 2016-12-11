@@ -38,7 +38,7 @@ class MyFiles extends Folder
      */
     public function __construct($module)
     {
-        global $g_root_path, $gCurrentOrganization;
+        global $gCurrentOrganization;
 
         if($module === 'DOWNLOAD')
         {
@@ -50,9 +50,9 @@ class MyFiles extends Folder
         }
 
         $this->module      = $module;
-        $this->modulePath  = SERVER_PATH.'/adm_my_files/'.$folderName;
-        $this->currentPath = SERVER_PATH.'/adm_my_files/'.$folderName;
-        $this->webPath     = $g_root_path.'/adm_my_files';
+        $this->modulePath  = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName;
+        $this->currentPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName;
+        $this->webPath     = ADMIDIO_URL . FOLDER_DATA;
 
         parent::__construct($this->modulePath);
     }
@@ -73,7 +73,7 @@ class MyFiles extends Folder
         {
             if(!is_dir($this->modulePath))
             {
-                $serverPathAdmMyFiles = SERVER_PATH.'/adm_my_files';
+                $serverPathAdmMyFiles = ADMIDIO_PATH . FOLDER_DATA;
 
                 if(!is_writable($serverPathAdmMyFiles))
                 {
@@ -88,15 +88,12 @@ class MyFiles extends Folder
                         }
                     }
 
-                    if(!is_writable($serverPathAdmMyFiles))
+                    // set "adm_my_files" writable
+                    if(!chmod($serverPathAdmMyFiles, 0777))
                     {
-                        // set "adm_my_files" writable
-                        if(!chmod($serverPathAdmMyFiles, 0777))
-                        {
-                            $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
-                            $this->errorPath = $this->webPath;
-                            return false;
-                        }
+                        $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
+                        $this->errorPath = $this->webPath;
+                        return false;
                     }
                 }
 
@@ -104,6 +101,14 @@ class MyFiles extends Folder
                 if(!@mkdir($this->modulePath, 0777) && !is_dir($this->modulePath)) // [1]
                 {
                     $this->errorText = 'SYS_FOLDER_NOT_CREATED';
+                    $this->errorPath = $this->webPath;
+                    return false;
+                }
+
+                // set "adm_my_files" writable
+                if(!chmod($this->modulePath, 0777))
+                {
+                    $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath;
                     return false;
                 }

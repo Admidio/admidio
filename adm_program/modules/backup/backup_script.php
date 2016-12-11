@@ -60,7 +60,7 @@ $HexBLOBs           = true;  // if true: blobs get data dumped as hex string; if
 $SuppressHTMLoutput = (@$_REQUEST['nohtml'] ? true : false); // disable all output for running as a cron job
 $Disable_mysqldump  = false; // LEAVE THIS AS "false"! If true, avoid use of "mysqldump" program to export databases which is *MUCH* *MUCH* faster than doing it row-by-row in PHP. If mysqldump is not available, will automatically fall back to slower row-by-row method. Highly recommended to leave this at "false" (i.e. do use mysqldump)
 $backuptimestamp    = '.'.date('Y-m-d.His'); // timestamp
-$backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
+$backupabsolutepath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 $fileextension = ((OUTPUT_COMPRESSION_TYPE === 'bzip2') ? '.bz2' : ((OUTPUT_COMPRESSION_TYPE === 'gzip') ? '.gz' : ''));
 $fullbackupfilename = 'db_backup'.$backuptimestamp.'.sql'.$fileextension;
 $partbackupfilename = 'db_backup_partial'.$backuptimestamp.'.sql'.$fileextension;
@@ -105,7 +105,7 @@ switch (OUTPUT_COMPRESSION_TYPE)
         }
         break;
     default:
-        exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.htmlentities(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
+        exit('ERROR: OUTPUT_COMPRESSION_TYPE ('.noHTML(OUTPUT_COMPRESSION_TYPE).') must be one of "bzip2", "gzip", "none"');
         break;
 }
 if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$tempbackupfilename, 'wb'.OUTPUT_COMPRESSION_LEVEL))) ||
@@ -137,7 +137,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     $overallrows = 0;
     foreach ($SelectedTables as $dbname => $value)
     {
-        echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><strong>'.htmlentities($dbname).'</strong></th></tr><tr><td nowrap valign="top">';
+        echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><strong>'.noHTML($dbname).'</strong></th></tr><tr><td nowrap valign="top">';
         $tablecounter = 0;
         for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
@@ -152,7 +152,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             $row = $countTablesStatement->fetch();
             $rows[$t] = $row['num'];
             $overallrows += $rows[$t];
-            echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br />';
+            echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.noHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br />';
         }
         echo '</td></tr></table><br />';
     }
@@ -163,7 +163,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
         for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
             @set_time_limit(60);
-            OutputInformation('statusinfo', 'Creating structure for <strong>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</strong>');
+            OutputInformation('statusinfo', 'Creating structure for <strong>'.noHTML($dbname.'.'.$SelectedTables[$dbname][$t]).'</strong>');
 
             $fieldnames = array();
 
@@ -475,7 +475,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                         @set_time_limit(60);
                         if ($DHTMLenabled)
                         {
-                            OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<strong>'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</strong>');
+                            OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<strong>'.noHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</strong>');
                             $elapsedtime = getmicrotime() - $datastarttime;
                             $percentprocessed = ($processedrows + $currentrow) / $overallrows;
                             $overallprogress = 'Overall Progress: '.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.number_format($percentprocessed * 100, 1).'% done) ['.FormattedTimeRemaining($elapsedtime).' elapsed';
@@ -499,7 +499,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                 }
                 if ($DHTMLenabled)
                 {
-                    OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
+                    OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], noHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
                     $processedrows += $rows[$t];
                 }
                 if (OUTPUT_COMPRESSION_TYPE === 'bzip2')
@@ -557,11 +557,11 @@ else
     echo '<strong>Warning:</strong> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br /><br />';
     if (is_dir($backupabsolutepath))
     {
-        echo '<em>CHMOD 777</em> on the directory ('.htmlentities($backupabsolutepath).') should fix that.';
+        echo '<em>CHMOD 777</em> on the directory ('.noHTML($backupabsolutepath).') should fix that.';
     }
     else
     {
-        echo 'The specified directory does not exist: "'.htmlentities($backupabsolutepath).'"';
+        echo 'The specified directory does not exist: "'.noHTML($backupabsolutepath).'"';
     }
 }
 // End original backupDB
@@ -569,7 +569,7 @@ else
 echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.
     $gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</strong><br /><br />
 
-'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';
 
 OutputInformation('cancel_link', '');

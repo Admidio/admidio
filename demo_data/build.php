@@ -33,6 +33,7 @@ require_once('../adm_program/system/init_globals.php');
 require_once('../adm_program/system/constants.php');
 require_once('../adm_program/system/function.php');
 require_once('../adm_program/system/string.php');
+require_once('../adm_program/system/logging.php');
 
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
@@ -66,7 +67,7 @@ function getBacktrace()
         }
         else
         {
-            $trace['file'] = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $trace['file']);
+            $trace['file'] = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $trace['file']);
             $trace['file'] = substr($trace['file'], 1);
         }
         $args = array();
@@ -81,8 +82,8 @@ function getBacktrace()
             // Path...
             if (!empty($trace['args'][0]))
             {
-                $argument = htmlentities($trace['args'][0]);
-                $argument = str_replace(array(SERVER_PATH, '\\'), array('', '/'), $argument);
+                $argument = noHTML($trace['args'][0]);
+                $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
                 $args[] = '\''.$argument.'\'';
             }
@@ -92,10 +93,10 @@ function getBacktrace()
         $trace['type']  = array_key_exists('type',  $trace) ? $trace['type'] : '';
 
         $output .= '<br />';
-        $output .= '<strong>FILE:</strong> '.htmlentities($trace['file']).'<br />';
+        $output .= '<strong>FILE:</strong> '.noHTML($trace['file']).'<br />';
         $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
 
-        $output .= '<strong>CALL:</strong> '.htmlentities($trace['class'].$trace['type'].$trace['function']).
+        $output .= '<strong>CALL:</strong> '.noHTML($trace['class'].$trace['type'].$trace['function']).
             '('.(count($args) ? implode(', ', $args) : '').')<br />';
     }
     $output .= '</div>';
@@ -110,24 +111,33 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 // but no output of error message because of safe mode
 @set_time_limit(1000);
 
+// create an installation unique cookie prefix and remove special characters
+$gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
+$gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
+
+// start php session and remove session object with all data, so that
+// all data will be read after the update
+Session::start($gCookiePraefix);
+unset($_SESSION['gCurrentSession']);
+
 echo 'Start with installation ...<br />';
 
 // create language and language data object to handle translations
 $gL10n = new Language();
 $gLanguageData = new LanguageData($getLanguage);
 $gL10n->addLanguageData($gLanguageData);
-$gL10n->addLanguagePath(SERVER_PATH. '/demo_data/languages');
+$gL10n->addLanguagePath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-$srcFolder = SERVER_PATH. '/demo_data/adm_my_files';
-$newFolder = SERVER_PATH. '/adm_my_files';
+$srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
+$newFolder = ADMIDIO_PATH . FOLDER_DATA;
 
 $myFilesFolder = new Folder($srcFolder);
-$b_return = $myFilesFolder->delete($newFolder.'/backup');
-$b_return = $myFilesFolder->delete($newFolder.'/download');
-$b_return = $myFilesFolder->delete($newFolder.'/photos');
-$b_return = $myFilesFolder->copy($newFolder);
-if(!$b_return)
+$myFilesFolder->delete($newFolder.'/backup');
+$myFilesFolder->delete($newFolder.'/download');
+$myFilesFolder->delete($newFolder.'/photos');
+$returnValue = $myFilesFolder->copy($newFolder);
+if(!$returnValue)
 {
     echo '<p style="color: #cc0000;">Folder <strong>adm_my_files</strong> is not writable.<br />
     No files could be copied to that folder.</p>';
@@ -160,7 +170,7 @@ function readAndExecuteSQLFromFile($filename, &$database)
 {
     global $g_tbl_praefix, $gL10n;
 
-    $file = fopen($filename, 'r');
+    $file = fopen($filename, 'rb');
     if ($file === false)
     {
         exit('<p style="color: #cc0000;">File <strong>data.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
@@ -238,16 +248,6 @@ if($gDbType === 'mysql')
     $sql = 'SET foreign_key_checks = 1 ';
     $db->query($sql);
 }
-
-// create an installation unique cookie prefix and remove special characters
-$gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
-
-// start php session and remove session object with all data, so that
-// all data will be read after the update
-session_name($gCookiePraefix. '_PHP_ID');
-session_start();
-unset($_SESSION['gCurrentSession']);
 
 echo 'Installation successful !<br />';
 

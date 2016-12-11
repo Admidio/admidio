@@ -136,7 +136,7 @@ class Navigation
         if($url !== '')
         {
             $html = '
-            <a class="btn" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png"
+            <a class="btn" href="'.$url.'"><img src="'. THEME_URL. '/icons/back.png"
                 alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
         }
 
@@ -189,7 +189,7 @@ class Navigation
         }
 
         // Only one url, take this one
-        $entry = min(0, $count - 2);
+        $entry = max(0, $count - 2);
 
         return $this->urlStack[$entry]['url'];
     }

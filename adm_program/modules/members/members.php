@@ -52,18 +52,18 @@ $page->addJavascript('
 
     // change mode of users that should be shown
     $("#mem_show_all").click(function() {
-        window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.(int) $flagShowMembers.'");
+        window.location.replace("'.ADMIDIO_URL.FOLDER_MODULES.'/members/members.php?members='.(int) $flagShowMembers.'");
     });', true);
 
 // get module menu
 $membersAdministrationMenu = $page->getMenu();
 
-$membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
+$membersAdministrationMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
 
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
     // show link to view profile field change history
-    $membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/modules/members/profile_field_history.php',
+    $membersAdministrationMenu->addItem('menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php',
                                 $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 
@@ -78,24 +78,24 @@ if($gPreferences['members_show_all_users'] == 1)
 $membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to import users
-$membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/modules/members/import.php',
+$membersAdministrationMenu->addItem('menu_item_import_users', ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
                             $gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path.'/adm_program/modules/preferences/fields.php',
+    $membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
                                 $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
     if($gPreferences['members_enable_user_relations'] == 1)
     {
         // show link to relation types
-        $membersAdministrationMenu->addItem('menu_item_maintain_user_relation_types', $g_root_path.'/adm_program/modules/userrelations/relationtypes.php',
+        $membersAdministrationMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
             $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'user_administration.png', 'right', 'menu_item_extras');
     }
 
     // show link to system preferences of weblinks
-    $membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=user_management',
+    $membersAdministrationMenu->addItem('menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=user_management',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
@@ -107,18 +107,18 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
-    '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile.png"
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile.png"
         alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName).'"
         title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName).'" />',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
-    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
+    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_URL.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
     '&nbsp;'
 );
 
-$membersTable->setServerSideProcessing($g_root_path.'/adm_program/modules/members/members_data.php?members='.(int) $getMembers);
+$membersTable->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php?members='.(int) $getMembers);
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);

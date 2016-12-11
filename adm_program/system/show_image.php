@@ -20,7 +20,7 @@ $getModule = admFuncVariableIsValid($_GET, 'module', 'file', array('requireValue
 $getFile   = admFuncVariableIsValid($_GET, 'file',   'file', array('requireValue' => true, 'directOutput' => true));
 
 // Initialize locale parameters
-$imageServerPath = SERVER_PATH.'/adm_my_files/'.$getModule.'/images/'.$getFile;
+$imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $getModule . '/images/' . $getFile;
 
 // check if image exists
 if(is_file($imageServerPath))

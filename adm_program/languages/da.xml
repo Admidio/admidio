@@ -19,7 +19,7 @@
   <string name="BAC_FILE_NAME_INVALID">Det valgte filnavn indeholder ugyldige karakterer.\n\nKun alfanumeriske karakterer, umlaud, numre fra 0-9 og de specielle karakterer $!?._+-()&amp; er tilladt. Undgå også de skandinaviske specielle karakterer æøå</string>
   <string name="BAC_HOURS_VAR">#VAR1# timer</string>
   <string name="BAC_MINUTES_VAR">#VAR1# minutter</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">Ingen backup fil tilstede!</string>
+  <string name="BAC_NO_BACKUP_FILE_EXISTS">Ingen backup fil fundet!</string>
   <string name="BAC_ONLY_MYSQL">Backup modulet kan kun anvendes sammen med en MySQL database.</string>
   <string name="BAC_OVERALL_PROGRESS">Status</string>
   <string name="BAC_START_BACKUP">Start backup processen</string>
@@ -79,6 +79,8 @@
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registrering er lukket.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Aktiver registrering til denne aftale.</string>
   <string name="DAT_REMOVE_APPLICATION">Vil du fjerne denne event? Alle deltagere vil blive fjernet sammen med eventen.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Deltagere kan se listen med deltagere</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Deltagere kan sende beskeder til alle andre deltagere</string>
   <string name="DAT_ROOM_INFORMATIONS">Lokale information</string>
   <string name="DAT_ROOM_OVERHANG">I tilfælde af yderligere tilgængelig plads som (f.eks. yderligere sæder, stå pladser), så kan antallet af yderligere pladser defineres her.</string>
   <string name="DAT_ROOM_RESERVED">Det valgte lokale er allerede i brug i denne periode.</string>
@@ -137,7 +139,7 @@
   <string name="DOW_NEW_FILE_NAME">Nyt fil navn</string>
   <string name="DOW_NEW_NAME">Nyt navn</string>
   <string name="DOW_PREVIOUS_NAME">Tidligere navn</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">På denne side kan du justere synligheden af og aktivere downloads for folderen #VAR1_BOLD#. Rettighederne bliver nedarvet på alle underfoldere og eksisterende rettigheder i underfolderne vil blive overskrevet. Der er roller tilgængelige som har adgang til forældre folderen. </string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">På denne side kan du definere hvem der kan se folderen #VAR1_BOLD# og downloade eller uploade filer. Underfoldere vil arve disse rettigheder. Allerede eksisterende rettigheder til underfolderne vil blive overskrevet. Du kan kun bruge roller som allerede har adgang til de overliggende foldere. Brugere med rollen #VAR2_BOLD# har altid fulde rettigheder til disse foldere.</string>
   <string name="DOW_SELECT_FILES">Vælg filer</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
   <string name="DOW_UNMANAGED_FILES">Filer uden ejer</string>
@@ -159,8 +161,9 @@
   <string name="ECA_SCALE_THUMBNAILS_DESC">Her kan du definere størrelsen på den lange side af thumbnail billeder og hvad de scaleres til (Standard: 250px).</string>
   <string name="ECA_SUCCESSFULLY_SEND">Dit postkort blev sendt.</string>
   <string name="ECA_TEMPLATE">Skabelon</string>
-  <string name="ECA_TEMPLATE_DESC">Definer standard skabelon. (Standard: Postcard) </string>
+  <string name="ECA_TEMPLATE_DESC">Her bliver standard skabelonen fastlagt. (Standard: postkort)</string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Vis fuld størrelse billede</string>
+  <string name="ECA_TEMPLATE_FOLDER_OPEN">Skabelon folderen kunne ikke åbnes eller læses.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tilbage til gæstebog</string>
   <string name="GBO_CAPTCHA_DESC">Hvis denne indstilling er aktiveret så vil brugere der ikke er logget ind få et billede med en CAPTCHA kode eller et simpelt regnestykke. Det er nødvendigt at udfylde koden eller resultatet korrekt eller for at gemme gæstebogs indlægget. CAPTCHA er en del af antispam løsningen i Admidio. (Standard: Ja)</string>
@@ -200,6 +203,7 @@
   <string name="INS_ADDIDIONAL_DATA">Yderligere information</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administrators information er ikke fyldestgørende!</string>
+  <string name="INS_ADMINISTRATOR_LOGIN_DESC">En opdatering kan kun foretages af en administrator. Venligst definer administratorens rettigheder.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Bestyrelsen</string>
   <string name="INS_CHOOSE_LANGUAGE">Vælg sprog</string>
@@ -213,6 +217,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Angiv dine database adgangs oplysninger her. Tabel prefix kan ændres hvis behovet er derfor. Ændring af tabel prefix er kun nødvendig hvis flere Admidio installationer anvender den samme database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Din database version er #VAR1#.\n\nEn opdatering til version #VAR2# er påkrævet</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
+  <string name="INS_DATABASE_PORT_INFO">Hvis dette felt ikke udfyldes så anvendes standardporten for databasen (MySQL: 3306, PostgreSQL: 5432). Hvis du eller din webhost har brug for at anvende andre porte så kan de angives her.</string>
   <string name="INS_DELETE_CONFIG_FILE">Admidio\'s hoved bibliotek #VAR1_BOLD# indeholder en config.php. Den er allerede blevet kopieret til adm_my_files folderen. Venligst slet den fra hoved biblioteket.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Hent konfigurations fil</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Konfigurations filen #VAR1_BOLD# kunne ikke gemmes i folderen #VAR2_BOLD#. Venligst arranger skrive rettigheder til den folder (ret fil rettigheder via ftp program til 0777 eller drwxrwxrwx) eller download konfigurations filen og kopier den ind i Admidio folderen #VAR3_BOLD# ved hjælp af et FTP program.\n\nEfter filen er blevet uploaded til denne folder så kan du fortsætte installationen.</string>
@@ -229,7 +234,7 @@
   <string name="INS_DESCRIPTION_BOARD">Organisationens Bestyrelse</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Møder kan afholdes her. Lokale skal reserveres på forhånd. Projektor kan frit afbenyttes.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle organisations medlemmer</string>
-  <string name="INS_DESCRIPTION_WEBMASTER">Gruppe af system administratorer</string>
+  <string name="INS_DESCRIPTION_ADMINISTRATOR">System administrator gruppe</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Indtast database adgangs information</string>
   <string name="INS_ERROR_OPEN_FILE">Filen #VAR1_BOLD# kunne ikke åbnes.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -276,9 +281,6 @@
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Opdaterings proces afsluttet succesfuldt</string>
   <string name="INS_WARNING_BETA_VERSION">Dette er en beta version af Admidio.\n\nProduktions brug kan være forbundet med risiko på grund af mulig instabilit og kan resultere i datatab. Bør kun bruges som testmiljø!</string>
   <string name="INS_WARNING_SAFE_MODE">Safe mode er aktiveret på serveren. Dette kan give problemer med visse funktioner såsom fil overførsler.</string>
-  <string name="INS_WEBMASTER_LOGIN">Web administration login</string>
-  <string name="INS_WEBMASTER_LOGIN_DESC">Kun en web administrator kan opdatere databasen. Venligst anvend web administrator login oplysninger.</string>
-  <string name="INS_WEBMASTER_LOGIN_FAILED">Kunne ikke finde en bruger med disse login oplysninger og en web administrator rolle.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Velkommen til installationen af Admidio</string>
   <string name="INS_WELCOME_TEXT">På de følgende sider vil du blive bedt om at oplyse nødvendig information for at kunne oprette et nyt Admidio system. Du vil blive bedt om at specificere database adgangs informationer til din Admidio installation.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
@@ -287,6 +289,30 @@
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Kunne du tænke dig at linke til din Xing profil? For at gøre dette har du brug for dit Xing login navn. Log ind i din Xing konto og vis din profil. Kopier Xing URL\'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Xing profil.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
+  <string name="INS_BOYFRIEND">Ven</string>
+  <string name="INS_BROTHER">Bror</string>
+  <string name="INS_CHILD">Barn</string>
+  <string name="INS_COHABITANT">Partner</string>
+  <string name="INS_COHABITANT_MALE">Partner</string>
+  <string name="INS_COHABITANT_FEMALE">Partner</string>
+  <string name="INS_COMPANION">Veninde</string>
+  <string name="INS_DAUGHTER">Datter</string>
+  <string name="INS_FATHER">Far</string>
+  <string name="INS_GIRLFRIEND">Veninde</string>
+  <string name="INS_HUSBAND">Mand</string>
+  <string name="INS_MOTHER">Mor</string>
+  <string name="INS_PARENT">Forælder</string>
+  <string name="INS_SUBORDINATE">Underordnet</string>
+  <string name="INS_SUBORDINATE_MALE">Mandlig underordnet</string>
+  <string name="INS_SUBORDINATE_FEMALE">Kvindelig underordnet</string>
+  <string name="INS_SUPERIOR">Overordnet</string>
+  <string name="INS_SUPERIOR_MALE">Mandlig overordnet</string>
+  <string name="INS_SUPERIOR_FEMALE">Kvindelig overordnet</string>
+  <string name="INS_SIBLING">Søskende</string>
+  <string name="INS_SISTER">Søster</string>
+  <string name="INS_SON">Søn</string>
+  <string name="INS_SPOUSE">Ægtefælle</string>
+  <string name="INS_WIFE">Kone</string>
   <!--Phrases only in Inventorymodule-->
   <string name="INV_CREATE_ITEM">Opret artikel</string>
   <string name="INV_INVENTORY">Inventar administration</string>
@@ -334,6 +360,7 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</string>
   <string name="LST_DELETE_CONFIGURATION">Slet liste indstillingen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail til medlemmer</string>
+  <string name="LST_EMAIL_TO_LIST">E-mail til liste</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Find alle brugere med et tomt adresse felt</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">Liste konfigurationen #VAR1_BOLD# er standard konfigurationen for lister i denne organisation og kan derfor ikke slettes. Vælg en anden konfiguration som standard konfiguration i modul indstillingerne og prøv så efterfølgende at slette denne konfiguration igen.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Niels</string>
@@ -359,7 +386,7 @@
   <string name="LST_MEMBERSHIP_END">Afslutning af medlemskab</string>
   <string name="LST_MEMBERSHIP_START">Start på medlemskab</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="LST_MUST_HAVE_WEBMASTER">Rolle type \'webmaster\' SKAL have mindst et medlem tildelt!</string>
+  <string name="LST_MUST_HAVE_ADMINISTRATOR">Rollen \'Administrator\' skal have mindst ét medlem tildelt til denne rolle.</string>
   <string name="LST_MY_LIST">Egen liste</string>
   <string name="LST_MYLIST_CONDITION_DESC">Definer kravene til alle felterne brug i din nye liste konfiguration. Kravene til den valgte rolle vil blive begrænset af dine egne krav.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">Liste indstillingen vil blive brugt som standard.</string>
@@ -373,7 +400,7 @@
   <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Find alle brugere med et udfyldt adresse felt</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Antal roller pr. side.</string>
   <string name="LST_PRESET_CONFIGURATION">Standard liste indstillinger</string>
-  <string name="LST_PRESET_CONFIGURATION_DESC">Som webmaster kan du definere en standard liste indstilling for alle brugere. Konfigurer rækker og kolonner og gem indstillingerne ved at navngive konfigurations sættet.</string>
+  <string name="LST_PRESET_CONFIGURATION_DESC">Administratorer kan definere standard konfigurationer for alle brugere. Konfigurer rækker og kolonner og gem dem ved at give konfigurationen et navn.</string>
   <string name="LST_PRINT_PREVIEW">Vis print eksempel</string>
   <string name="LST_ROLE_INFORMATION">Rolle information</string>
   <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Medlemmer i perioden:</string>
@@ -404,6 +431,7 @@
   <string name="LST_YOUR_LISTS">Egne lister</string>
   <string name="LST_USER_PHOTO">Bruger billede</string>
   <string name="LST_VARIOUS_ROLES">Diverse roller</string>
+  <string name="LST_VARIOUS_USER_RELATION_TYPES">Forskellige bekendtskaber</string>
   <string name="LST_WANT_CONFIGURATION_FOR_ALL_USERS">Vil du gerne gøre den valgte liste konfiguration tilgængelig for alle brugere?</string>
   <string name="LST_Z_TO_A">Z til A</string>
   <!--Phrases only in Mailmodule-->
@@ -430,6 +458,7 @@
   <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# har sendt følgende e-mail til tidligere brugere i rollen #VAR3# på #VAR2#:</string>
   <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# har sendt følgende e-mail til aktive og tidligere brugere i rollen #VAR3# på #VAR2#:</string>
   <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# fra #VAR2# har sendt dig følgende e-mail:</string>
+  <string name="MAI_HIDDEN">Skjult</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</string>
   <string name="MAI_INTO_TO">Modtagere skal placeres i TIL feltet istedet for i BCC feltet</string>
@@ -439,17 +468,18 @@
   <string name="MAI_MAX_RECEIVER_DESC">Denne værdi beskriver maximum antallet af samtidige mail modtagere. En rolle tæller kun som én modtager.</string>
   <string name="MAI_MESSAGE_WENT_TO">Beskeden blev sendt til</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES">Modtager i roller</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">I e-mails til roller , findes alle modtager adresser i BCC feltet. Til feltet vil så indeholde ordet \"Undisclosed Recipients\". Hvis dette resulterer i en fejl, så kan du med denne indstilling benytte dig af muligheden for at fylde (TIL) feltet med afsender adressen eller administrator adressen fra system notifikationerne. Alle mails til enhver rolle vil blive sendt til disse modtagere. Rolle medlemmernes adresser vil forblive i BCC feltet. (Standard: Gemt)</string>
   <string name="MAI_SEND_COPY">Send kopi af e-mail til min egen adresse</string>
   <string name="MAI_SEND_EMAIL">Send e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Din email vil blive sendt til alle medlemmer der har en email adresse og som tilhører den valgte rolle eller de valgte modtagere.\n\nFlere roller og modtagere er tilgængelige kun for brugere der er logget ind.</string>
   <string name="MAI_SEND_METHOD">Send via</string>
   <string name="MAI_SEND_METHOD_DESC">Mail () functionen i PHP er hos nogen hosts begrænset og betragtes sommmetider som spam. Det anbefales derfor at sende e-mails via en SMTP server. SMTP server indstillingerne kan konfigureres herunder. (Standard: PHP mail ())</string>
+  <string name="MAI_SENDER">Afsender</string>
   <string name="MAI_SENDER_EMAIL">Afsenders e-mail</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Nogen service leverandører tillader ikke uidentificeret afsender information. Derfor bedes du angive en e-mail addrese som bliver standard afsender der bliver brugt af e-mail modulet (f.eks. udbakke@#VAR1#).\nHvis feltet forbliver tomt, så vil afsenders registrerede e-mail addresse bruges istedet. (Standard: tom)</string>
-  <string name="MAI_SENDER_INTO_TO">Afsender som modtager</string>
-  <string name="MAI_SENDER_INTO_TO_DESC">Hvis en e-mail er sendt til en rolle, vil alle modtager adresser blive placeret i BCC feltet. Til feltet vil så indeholde ordet \"Undisclosed Recipients\". Hvis dette resulterer i en fejl, så kan du benytte dig af muligheden for at flytte adresserne til til-feltet. De andre adresser vil forblive i BCC feltet. (Standard: Deaktiveret)</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Nogen service leverandører vil ikke tillade uidentificerede at sende mails. Derfor bedes du angive en standard afsender e-mail adresse, som kan anvendes af e-mail modulet (f.eks.. outbox@#VAR1#).\nHvis dette felt er tomt vil afsenderens e-mail adresse blive brugt som afsender information. (Standard: tomt)</string>
   <string name="MAI_SENDER_NAME">Navn på afsender</string>
-  <string name="MAI_SENDER_NAME_DESC">Afsender e-mail adresse.</string>
+  <string name="MAI_SENDER_NAME_DESC">Navn på afsender ifølge den anvendte e-mail adresse. Dette felt må kun udfyldes hvis afsenders e-mail adresse er vedligeholdt. (Standard: Tomt)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Afsender var logget af. Derfor kan afsenders information være forkert.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">For brugere der er logget ud vil der fremkomme en alphanummerisk tekst når captcha modulet er aktiveret. Den viste tekst skal skrives i det dertil indrettede felt. Det bør forhindre misbrug af formularen fra spammere. (Standard: Ja)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -493,6 +523,8 @@
   <string name="MEM_DAYS_FIELD_HISTORY_DESC">Ændringer i profil felter vil blive vist i en given periode målt i dage. Dette er standard filteret, som kan ændres af brugeren på et senere tidspunkt. For store databaser er denne mulighed brugt til at begrænse ændrings historikken. (Standard: 365)</string>
   <string name="MEM_DUPLICATE">Duplikere</string>
   <string name="MEM_EDIT_USER">Rediger bruger</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Vedligehold og vis relationer</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">Hvis denne er sat til aktiv så kan relationer imellem brugere vedligeholdes og vises. (Standard: Ja) </string>
   <string name="MEM_EXISTING_USERS">Eksisterende bruger</string>
   <string name="MEM_FILE_COLUMN">Fil kolonne</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">Første linje indeholder kolonne navne</string>
@@ -568,10 +600,10 @@
   <string name="NWU_USER_VALID_LOGIN">Brugeren har allerede gyldig login information.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modul adgang</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Modulet kan deaktiveres eller aktiveres kun for brugere der er logget ind. Hvis modulet kun er tilgængeligt for brugere der er logget ind, så vil det blive skjult for brugere der ikke er logget ind og RSS-Feeds vil være fuldstændigt deaktiveret for begge bruger grupper. (Standard: aktiv)</string>
+  <string name="ORG_ACCESS_TO_MODULE_DESC">Moduler kan deaktiveres eller aktiveres kun for brugere der er logget ind. Hvis modulet kun er aktiveret for brugere der er logget ind, så vil det blive skjult for brugere der er logget ud og web-feed vil blive helt deaktiveret for begge bruger grupper (Standard: Aktiv)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Aktiver system beskeder</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Her kan du deaktivere system beskeder fra Admidio. De kan blive afsendt, hvis for eksempel en ny bruger logger på. Registrerings bekræftelser vil også blive sendt som system beskeder. Generelt set, bør disse beskeder ikke slås fra, med mindre serveren ikke understøtter afsendelse af system e-mails. E-mail modulet bliver ikke berørt af en deaktivering. (Standard: Ja)</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation vil blive tilføjet til databasen inklusiv dens master data. Den nuværende bruger vil blive webmaster og kan vedligeholde datasættet. Brugere der logge ind skal vælge den relevante organisation.</string>
+  <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation vil blive tilføjet til databasen inklusiv dens masterdata. Den nuværende bruger vil blive annonceret som administrator og kan administrere datasættet. Brugere som logger på systemet skal vælge den respektive organisation.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Yderligere variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: modern)</string>
@@ -581,25 +613,29 @@
   <string name="ORG_BROWSER_UPDATE_CHECK">Opdaterings besked for gamle browsere</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Efter aktivering bliver brugere med gamle og usikre browsere bedt om at opdatere deres browser. Nyere browsere garanterer en bedre beskyttelse mod svig, vira, trojanske heste og identitets tyveri og andre trusler mod dit privatliv og sikkerhed. Enhver ny browser generation giver bedre hastighed og understøtter flere og flere af de nye web teknologier, som igen giver en bedre oplevelse af internettet. Til denne service bruges https://browser-update.org/</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Baggrunds farve</string>
-  <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Vælg baggrunds farve (som hexidecimalt) for captcha koden. (Standard: #FFEFC4)</string>
-  <string name="ORG_CAPTCHA_FONT">Vælg font type for captcha koden. (Standard: Tema font)</string>
-  <string name="ORG_CAPTCHA_FONT_SIZE">Vælg font størrelse for captcha kode. (Standard: 20)</string>
-  <string name="ORG_CAPTCHA_HEIGHT">Captcha højde</string>
-  <string name="ORG_CAPTCHA_HEIGHT_DESC">Højde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 60)</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Baggrunds billede</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">Du kan vælge et baggrunds billede der vil blive anvendt som CAPTCHA. Font farven skal passe til billedet for at gøre det læsbart. (Standard:Intet billede)</string>
+  <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Font farve</string>
+  <string name="ORG_CAPTCHA_COLOR_DESC">Baggrunds farven skal være i god kontrast til font farven. Hvis både linje og fyld farven er den samme, vil det være sværere for scripts og bots at læse CAPTACHA. Alle farver skal specificeres som #VAR1#hexidecimale værdier#VAR2#.</string>
+  <string name="ORG_CAPTCHA_DISTORTION">Forvrængning</string>
+  <string name="ORG_CAPTCHA_DISTORTION_DESC">Denne værdi angiver forvrængningen af karaktererne. 0 betyder ingen forvrængning. Med en værdi på 3, vil nogen karakterer ikke kunne læses mere. (Standard: 0.75)</string>
+  <string name="ORG_CAPTCHA_FONT">Vælg en font type for CAPTCHA koden (Standard: AHGBold.ttf)</string>
+  <string name="ORG_CAPTCHA_LINE_COLOR">Linje farve</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS">Antal linjer</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Med linjer i CAPTCHA, vil det være sværere for scripts og bots og løse den. Jo flere linjer der laves, jo sværerer er det at løse. Uheldigvis er det det samme for mennesker. (Standard: 5)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha eksempel</string>
-  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Vis eksempel af captcha. Venligst bemærk at kun gemte værdier forbliver gemte!</string>
+  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Forhåndsvisningen af CAPTCHA viser KUN de indstillinger der er blevet gemt.</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Når aktiveret vil der vises et billede med en captcha kode eller et simpelt regnestykke til nye brugere. Det er nødvendigt at skrive den rigtige kode eller resultatet for at få lov til at gemme det nyligt rettede indlæg. Captcha er en del af anti-spam løsningen i Admidio. (Standard: Ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha signatur</string>
-  <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Vælg font størrelse til captcha signaturen. (Standard: 13)</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Udfyld din foretrukne signatur til captcha. Standard fonten i det valgte tema vil blive benyttet.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Accepterede karakterer</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Udfyld de accepterede karakterer som denne captcha skal anvende.</string>
+  <string name="ORG_CAPTCHA_SIGNS">Brugbare karakterer</string>
+  <string name="ORG_CAPTCHA_SIGNS_TEXT">Her kan du definere de CAPTCHA karakterer der skal anvendes. Venligst undgå karakterer der let forveksles, f.eks. I og l.</string>
   <string name="ORG_CAPTCHA_TYPE">Captcha type</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Regnestykke</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Billede</string>
-  <string name="ORG_CAPTCHA_TYPE_TEXT">Vælg den type af captcha du vil bruge. Vælg imellem at vise en captcha som et billede eller som et simpelt regnestykke i form af tekst. (Standard: Billede)</string>
-  <string name="ORG_CAPTCHA_WIDTH">Captcha bredde</string>
-  <string name="ORG_CAPTCHA_WIDTH_DESC">Bredde på captcha billede. Så karakterer i captcha billedet kan blive strukket eller skrumpet. (Standard: 250)</string>
+  <string name="ORG_CAPTCHA_TYPE_PIC">Tilfældige karakterer</string>
+  <string name="ORG_CAPTCHA_TYPE_WORDS">Ord (Engelske)</string>
+  <string name="ORG_CAPTCHA_TYPE_TEXT">Her kan du definere CAPTCHA typen. CAPTCHA vil blive vist som et billede. Det kan bestå af tilfældige karakterer, et lille matematisk problem eller to ord. Yderligere indstillinger tillader at konfigurerer CAPTCHA mere detaljeret. (Standard: Tilfældige karakterer)</string>
+  <string name="ORG_CAPTCHA_WIDTH_DESC">CAPTCHA bredde i pixel, CAPTCHA højden vil blive udregnet i forhold til bredden. Dette vil også definere font størrelsen. (Standard: 215)</string>
   <string name="ORG_CONFIRM_REGISTRATION">Registrerings bekræftelse efter manuel bekræftelse.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Opret emne felt</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Opret profil felt</string>
@@ -613,8 +649,8 @@
   <string name="ORG_EMAIL_ALERTS">E-mail Alarm</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Alle medlemmer af en rolle med rettigheder #VAR1_BOLD# modtager en mail hvis en ny bruger registrerer sig. (Standard: Ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivering</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">RSS-Feed aktivering</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan levere et RSS-Feed for flere moduler (Beskeder, Events/Møder, Gæstebog, Billede galleri og weblinks) på oversigt siden for hvert modul. Abonnement er mulig via browser eller RSS reader. (Standard: Ja)</string>
+  <string name="ORG_ENABLE_RSS_FEEDS">Aktiver web-feeds</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan levere web-feeds til adskillige moduler (Annonceringer, aftaler, gæstebog, fotogalleri og weblinks) på oversigten for hvert modul. Tilmelding er mulig via browser eller feed læser. (Standard: Ja)</string>
   <string name="ORG_FAST_REGISTRATION">Kvik registrering</string>
   <string name="ORG_FIELD_DESCRIPTION">Definér antal eller ubegrænset yderligere felter. Felterne vil blive vist og kan redigeres i brugerens profil. Disse felter vil også være tilgængelige i egne lister.</string>
   <string name="ORG_FIELD_DISABLED">Feltet kan kun redigeres af brugere med følgende rettigheder #VAR1_BOLD#</string>
@@ -645,14 +681,21 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Nyt kodeord og aktiverings link.</string>
   <string name="ORG_NO_FIELD_CREATED">Intet organisations specifikt felt er oprettet endnu!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</string>
-  <string name="ORG_NOTIFY_WEBMASTER">Informer administrator om nye registreringer</string>
+  <string name="ORG_NOTIFY_ADMINISTRATOR">Notifikation til administratoren om nye registreringer</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definér antal poster vist pr. side. Sidenummerering træder i kraft hvis antallet af poster overskrider denne definerede værdi. Print eksempel og eksport funktionaliteten bliver ikke påvirket af dette. Hvis værdien er 0, vil alle poster blive listet og sidenummerering deaktiveret. (Standard: 10)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definer et antal emner som vises på en side. Sideskift sker hvis antallet af emner overskrider den definerede værdi. Print Preview og eksport funktionalitet er ikke påvirket. Hvis værdien er 0, vil alle emner blive vist og sideskift bliver deaktiveret. (Standard: 0)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Administrer generelle organisations indstillinger og modul indstillinger.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organisationen #VAR1_BOLD# er blevet tilføjet. Den er nu til at vælge ved login.\n\nHvis du har en separat hjemmeside til denne organisation, venligst tilføj den til config.php filen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Forældre organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Definér forældre organisation her. Forældre organisationer kan f.eks. oprette events og beskeder der så vises i de valgte (børne) organisationer.</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Kodeords styrke</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Her kan du specificere hvor sikre og komplekse kodeord som minimum skal være.\nVærdien i parentes indikerer hvor mange forsøg der skal til for at knække koden.\n\n No: risikabelt kodeord (&lt;10^3)\n Lav: Beskyttelse imod automatiserede online angreb. (&lt;10^6)\n Middel: Beskyttelse imod ubegrænsede online angreb.(&lt;10^8)\n Høj: Moderat beskyttelse imod offline hashing angreb. (&lt;10 ^10)\n Ekstrem: Stærk beskyttelse imod offline hashing angreb. (&gt;= 10^10)</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ingen</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Lav</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middel</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Høj</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Meget høj</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profil felter</string>
   <string name="ORG_REFUSE_REGISTRATION">Besked om afvisning af registrering</string>
@@ -677,13 +720,14 @@
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Besked om nye poster</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i et modul (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen #VAR1#. (Standard: Nej)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</string>
+  <string name="ORG_THEME_FOLDER_OPEN">Tema folderen kunne ikke åbnes eller læses.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIME_FORMAT_DESC">Formatet efterkommer standarden i PHP funktionen #VAR1#. (Standard: H:i)</string>
   <string name="ORG_TIMEZONE">Tidszone</string>
   <string name="ORG_TIMEZONE_DESC">Dette er den allerede satte tidszone. Hvis denne ændres senere i Admidios config.php fil, så vil eksisterende datoer og tider IKKE blive justeret til den nye tidszone.</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Værdi liste</string>
-  <string name="ORG_VALUE_LIST_DESC">Definer indholdet af drop-down menuer eller valg bokse.  Angiv EN drop-down eller radio button værdi pr. linie.\n\nIstedet for tekst så vil den valgte position på listen blive gemt i profilen. Hvis teksten i en linie skulle ændre sig så vil alle brugere med denne værdi se den nye værdi med det samme. Hvis en menu værdi bliver flyttet til en anden linie, så kan der dukke en anden tekst på i brugerens profil.\n\nHvis det er en radio button, kan en ikon blive vist istedet for et tekst element. For at gøre dette skal du indtaste navnet på en ikon fil i tema folderen (f.eks ok.png) eller du kan bruge en ekstern billede URL (f.eks https://www.example.com/example.jpg). Ved at bruge en lodret streg, kan du tilføje yderligere hjælpsom information sammen med ikonen(f.eks. kvinde.png|kvinde)</string>
+  <string name="ORG_VALUE_LIST_DESC">I dette felt kan du indtaste poster for alternativknappen drop-down boks. En titel pr. linje i rullelisten boks eller marken option kan påvises her. \ N \ nI profilen gemmes ikke teksten senere, men det valgte element på listen. man ændrer derfor teksten i træk, så vi finde allerede tildelt brugere straks den nye tekst i deres profil. men man Flytter en post til en anden linje, så når brugerne en anden post er muligvis vises. \ n \ nFor en alternativknap kan vises i stedet for en tekst, et ikon. I betragtning navnet på et ikon fra tema mappe (Ex:. Ok.png) eller url på en ekstern billede (Ex:. Https://www.example.com/example.jpg) kan specificeres. Om en lodret bindestreg kan også eventuelt et værktøjstip er sat til Icon (. Ex: female.png | hun).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktiverings link til nyt kodeord</string>
   <string name="ORG_VARIABLE_EMAIL">Brugers e-mail adresse</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System e-mail adresse for organisationen</string>
@@ -702,7 +746,7 @@
   <string name="UPD_NEW">En ny stabil version er tilgængelig!</string>
   <string name="UPD_NEW_BETA">En ny beta version er tilgængelig!</string>
   <string name="UPD_NEW_BOTH">En ny stabil version og en ny beta version er tilgængelig!</string>
-  <string name="UPD_NO_NEW">Du bruger lige nu #VAR1# versionen af Admidio!</string>
+  <string name="UPD_NO_NEW">Du bruger den nyeste version af Admidio!</string>
   <string name="UPD_STABLE_VERSION">Tilgængelig</string>
   <string name="UPD_TITLE">Opdaterings check</string>
   <!--Phrases only in Photomodule-->
@@ -781,8 +825,10 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Bekræft nyt profil bilede</string>
   <string name="PRO_ADD_USER">Tilføj bruger</string>
+  <string name="PRO_ADD_USER_RELATION">Opret relation</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registrering er blevet bekræftet. Brugeren kan nu logge på systemet.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Afslut medlemsskab</string>
+  <string name="PRO_CANCEL_USER_RELATION">Slet relation</string>
   <string name="PRO_CHANGE_DATE">Rediger dato</string>
   <string name="PRO_CHANGE_PROFILE_PICTURE">Upload profil billede</string>
   <string name="PRO_CHOOSE_PHOTO">Vælg billede</string>
@@ -813,13 +859,14 @@
   <string name="PRO_MY_PROFILE">Min profil</string>
   <string name="PRO_NEW_PASSWORD">Nyt kodeord</string>
   <string name="PRO_NEW_PICTURE">Nyt profil billede</string>
-  <string name="PRO_NO_DEFAULT_ROLE">Rolle styringen indeholder ingen standard rolle for nye brugere. Venligst kontakt en administrator der kan ændre denne indstilling.</string>
+  <string name="PRO_NO_DEFAULT_ROLE">Rolle administrationen indeholder ikke nogen standard rolle for nye brugere. Venligst kontakt en administrator der kan redigere denne indstilling.</string>
   <string name="PRO_NO_ROLES_VISIBLE">Ingen roller blev fundet. Der er muligvis roller som du ikke har rettigheder nok til at se.</string>
   <string name="PRO_PASSWORD_CHANGED">Kodeordet er blevet ændret.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">Kodeordet skal have mindst 8 karakterer som kan være numre, bogstaver og specielle karakterer (brug IKKE ÆØÅ).\n\nAf sikkerhedshensyn gemmes kodeordet krypteret. Det kan derfor ikke vises i klartekst efter indtastningen.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Kodeord skal have mindst 8 karakterer som inkluderer numre, bogstaver og specielle karakterer.\n\nStyrken af dit valgte kodeord vil blive vist i farver med en bar. Minimum styrken er indikeret via pilen i baren.</string>
   <string name="PRO_PASSWORD_LENGTH">Kodeord skal indeholde mindst 8 karakterer.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Det gamle kodeord er ikke korrekt.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Det originale og det genindtastede kodeord er ikke ens.</string>
+  <string name="PRO_PASSWORD_NOT_STRONG_ENOUGH">Kodeordet er ikke sikkert nok.</string>
   <string name="PRO_PHOTO_DELETED">Profil billede er blevet slettet.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Størrelsen af det overførte billede overskrider den filstørrelse der er tilladt her som er #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Kun JPG og PNG billedeformater er tilladt.</string>
@@ -850,6 +897,15 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Kun roller fra andre organisationer som er synlige for alle registrerede brugere vises. Hvis du er medlem af denne organisation, vil du også kunne se roller som du vil kunne se inde i denne organisation.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Vil du slette det valgte billede?</string>
   <string name="PRO_YEARS">År</string>
+  <!--Phrases only in Relationssmodule-->
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Ingen findes ingen relations typer. Relations typer kan oprettes i bruger administrationen </string>
+  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrisk</string>
+  <string name="REL_USER_RELATION_TYPE_BACKWARD">Baglæns</string>
+  <string name="REL_USER_RELATION_TYPE_DEL">Vil du fjerne denne type relation? #VAR1_BOLD#? Advarsel: Dette vil slette alle eksisterende relationer af denne type.</string>
+  <string name="REL_USER_RELATION_TYPE_DESC">En asymmetrisk relation bruges i relationen forældre / barn, imens symmetriske relationer kan bruges imellem søskende. Disse er dog altid to-vejs relationer, hvor, en-vejs relationer kun peger i én retning.</string>
+  <string name="REL_USER_RELATION_TYPE_FORWARD">Fremad</string>
+  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">Symmetrisk</string>
+  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">En-vejs</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktive roller</string>
   <string name="ROL_ALL_GUESTS">Alle gæster på hjemmesiden</string>
@@ -894,9 +950,10 @@
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organiser og tildel roller</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Brugere af nuværende rolle har tilladelse til at administrere, oprette roller og tildele brugere til disse roller.</string>
   <string name="ROL_RIGHT_DATES">Opret og rediger en event</string>
-  <string name="ROL_RIGHT_DOWNLOAD">Overfør og rediger filer</string>
+  <string name="ROL_RIGHT_DOWNLOAD">Administrer downloads</string>
+  <string name="ROL_RIGHT_DOWNLOAD_DESC">Roller som har denne rettighed kan administrere rettighederne til download modulet. Dette inkluderer hvem der kan se foldere og uploade filer.</string>
   <string name="ROL_RIGHT_EDIT_USER">Rediger profil for alle brugere</string>
-  <string name="ROL_RIGHT_EDIT_USER_DESC">Roller med denne tilladelse aktiveret har tilladelse til at administrere al bruger information (undtaget kodeord) for andre medlemmer.\nDe kan ydermere tilgå administrations panelet og oprette nye brugere eller slette eksisterende.</string>
+  <string name="ROL_RIGHT_EDIT_USER_DESC">Roller der har denne rettighed kan redigere i andre brugeres data (undtagen kodeord).\n De har desuden adgang til bruger administrationen og kan tilføje / slette brugere.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Rediger og slet gæstebogs indlæg</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Opret kommentarer til gæstebogs indlæg</string>
   <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Definer hvem der skal have ret til at sende beskeder til denne rolle ved at bruge mail modulet. Rolle rettigheden #VAR1_BOLD# er forældre konfiguration for det nuværende rettigheds niveau.</string>
@@ -950,6 +1007,7 @@
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
+  <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax forespørgsels fejl.\nFejl detaljer: #VAR1#</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALSO_VISITORS">også Gæster</string>
@@ -962,13 +1020,8 @@
   <string name="SYS_BIRTHDAY">Fødselsdag</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Resultat af udregningen</string>
-  <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Captcha kode resultat ugyldigt. Prøv igen!</string>
+  <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Resultatet af kalkulationen er ikke korrekt.</string>
   <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Udregningen er en del af captcha. En captcha bliver brugt for at forhindre elektronisk misbrug (spam). Udregningen bliver brugt til at afgøre om det var et menneske eller et script (eller en spambot) der udfyldte formularen.\nUdfyld venligst rubrikken med resultatet af udregningen.</string>
-  <string name="SYS_CAPTCHA_CALC_PART1">Udregn</string>
-  <string name="SYS_CAPTCHA_CALC_PART2">og læg dertil</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_THIRD">en trediedel af</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_HALF">det halve af</string>
-  <string name="SYS_CAPTCHA_CALC_PART4">.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Godkendelses koden er ugyldig.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Godkendelses kode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Godkendelses kode er en del af captcha. En captcha bliver brugt for at forhindre elektronisk misbrug (spam). Billedet bliver brugt til at afgøre om det var et menneske eller et script (eller en spambot) der udfyldte formularen.\nUdfyld venligst rubrikken med teksten på billedet.</string>
@@ -1002,6 +1055,7 @@
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_CREATE">Opret</string>
+  <string name="SYS_CREATE_ENTRY">Tilføj emne</string>
   <string name="SYS_CREATE_VAR">Opret #VAR1#</string>
   <string name="SYS_CREATE_NEW_USER">Tilføj ny bruger</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Du kan oprette den nye bruger hvis brugeren ikke allerede findes i bruger listen.</string>
@@ -1013,6 +1067,7 @@
   <string name="SYS_DATABASE_ERROR">Database fejl</string>
   <string name="SYS_DATABASE_NO_LOGIN">Forbindelsen til databasen fejlede!\n\nFølgende fejl opstod:\n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Database version</string>
+  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">Database versionen #VAR1# er lavere end versionen af Admidio scripts #VAR2#.\n\nVenligst udfør #VAR3# database opdatering til version #VAR4#.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio kræver #VAR1# eller højere</string>
   <string name="SYS_DATE">Dato</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">Slut dato er før start dato.</string>
@@ -1036,6 +1091,7 @@
   <string name="SYS_DONT_SHOW">Vis ikke</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down liste boks</string>
   <string name="SYS_EDIT">Rediger</string>
+  <string name="SYS_EDIT_ENTRY">Rediger emne</string>
   <string name="SYS_EDIT_MEMBERS">Rediger medlemmer</string>
   <string name="SYS_EDIT_VAR">Rediger #VAR1#</string>
   <string name="SYS_EDITED_BY">Sidst ændret af</string>
@@ -1064,28 +1120,33 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Størrelsen på den fil du har forsøgt at overføre, overskrider den tilladte størrelse som er, #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">fil overførsler</string>
   <string name="SYS_FILENAME_EMPTY">Filnavn mangler!</string>
+  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Database versionen #VAR1# er højere end versionen på selve Admidio Scriptet #VAR2#.\n\nVenligst opdater dine Admidio filer på serveren #VAR3#, med en nyere version af Admidio #VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">Fornavn</string>
   <string name="SYS_FIRSTNAME_LASTNAME">Fornavn og efternavn</string>
   <string name="SYS_FROM">fra #VAR1#</string>
   <string name="SYS_FROM_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_FOLDER">Folder</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes.\n\nBed #VAR2# webmaster #VAR3# om at checke skrive rettigheder til forældre folderen.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes med skrive rettigeheder.\n\nBed #VAR2# webmaster #VAR3# om at ændre skrive rettigheder til forældre folderen. (ved at bruge FTP til at ændre fil attributer til 0777 eller drwxrwxrwx).</string>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes.\n\nVenligst snak med en #VAR2#administrator#VAR3# for at få hjælp til at undersøge skrive rettigheder på forældre folderen.</string>
+  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes med de krævede skriverettigheder.\n\nVenligst snak med en  #VAR2#administrator#VAR3# om at få hjælp til at undersøge om skriverettighederne er i orden på folderen. (Dette kan gøres med et FTP program, du skal ændre rettigheden til 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FORMER">Tidligere medlem</string>
   <string name="SYS_FORMER_PL">Tidligere medlem</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_SIZE">Font-størrelse</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Jeg har glemt mit kodeord!</string>
   <string name="SYS_FRIDAY">fredag</string>
   <string name="SYS_FULL_SCREEN">Fuld skærm</string>
   <string name="SYS_GENDER">Køn</string>
+  <string name="SYS_GEN_RANDOM_ERROR">En uventet fejl opstod under ved generering af en tilfældig streng.</string>
+  <string name="SYS_GEN_RANDOM_FAIL">Programmet kan ikke generere en tilfældig streng.</string>
+  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet forventer en streng med mindst to forskellige karakterer.</string>
+  <string name="SYS_HEADER_ALREADY_SENT">HTTP Header er allerede sendt!</string>
   <string name="SYS_HEADLINE">Overskrift</string>
   <string name="SYS_HELP">Hjælp</string>
   <string name="SYS_HIDE">Gem</string>
   <string name="SYS_HOMEPAGE">Hjemmeside</string>
-  <string name="SYS_ICAL_DISABLED">iCal er blevet deaktiveret af system administartoren.</string>
+  <string name="SYS_ICAL_DISABLED">ICal er blevet deaktiveret af system administratoren.</string>
   <string name="SYS_ICON">Ikon</string>
+  <string name="SYS_IMPORTANT">Vigtigt</string>
   <string name="SYS_INACTIVE">Inaktiv</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>
@@ -1110,8 +1171,8 @@
   <string name="SYS_LOGIN">Log ind</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du har forsøgt at logge ind for mange gange med det forkerte kodeord.\nAf sikkerhedshensyn er din konto nu låst i 15 minutter.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Din konto er ikke aktiveret endnu.\n\nDu vil blive informeret når den er klar til brug.</string>
-  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Dine login oplysninger er korrekte, men du er ikke et aktivt medlem af denne organisation.</string>
-  <string name="SYS_LOGIN_USER_NO_WEBMASTER">Dine login oplysninger er korrekte, men opdaterings processen er kun tilgængelig for webmasters.</string>
+  <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Dine login rettigheder er korrekte, men opdaterings processen er kun aktiveret for administratorer i organisationen #VAR1_BOLD#. </string>
+  <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Dine login oplysninger er korrekte, men du er ikke et aktivt medlem af denne organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Det indtastede brugernavn og/eller kodeord er forkert.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problemer</string>
   <string name="SYS_LOGIN_SUCCESSFUL">Logind lykkedes.</string>
@@ -1123,6 +1184,7 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail adressen #VAR1_BOLD# er blevet tildelt til flere registreringer. En unik bruger registrering kunne identificeres.</string>
   <string name="SYS_MAIL_DISPATCH">E-mail forsendelse</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Vedligehold kategorier</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Vedligehold relations typer</string>
   <string name="SYS_MALE">Hankøn</string>
   <string name="SYS_MANDATORY_FIELD">Krævet felt</string>
   <string name="SYS_MAP">Kort</string>
@@ -1139,7 +1201,6 @@
   <string name="SYS_MESSAGES">Beskeder</string>
   <string name="SYS_MINUTES">Minutter</string>
   <string name="SYS_MOBILE">Mobil</string>
-  <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">Dette modul kan kun tilgåes fra hjemmesiden af den organisation/forening der blev valgt ved logind.(% VAR1%).</string>
   <string name="SYS_MODULE_DISABLED">Dette modul er deaktiveret.</string>
   <string name="SYS_MODULE_PREFERENCES">Modul indstillinger</string>
   <string name="SYS_MODULES">Moduler</string>
@@ -1192,6 +1253,7 @@
   <string name="SYS_PLEASE_CHOOSE">Vælg</string>
   <string name="SYS_PLEASE_WAIT">Vent venligst</string>
   <string name="SYS_PM">Privat Besked</string>
+  <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portræt</string>
   <string name="SYS_POST_MAX_SIZE">max. POST størrelse</string>
   <string name="SYS_POSTCODE">Postnummer</string>
@@ -1207,9 +1269,11 @@
   <string name="SYS_QUANTITY">Mængde</string>
   <string name="SYS_RADIO_BUTTON">Radio knap</string>
   <string name="SYS_RECIPIENT">Modtager</string>
+  <string name="SYS_REDIRECT_URL_INVALID">Den specificerede redirect URL er ugyldig.</string>
   <string name="SYS_REGISTERED_AS">Logget ind som</string>
   <string name="SYS_REGISTRATION">Registrering</string>
   <string name="SYS_REGISTRATION_SAVED">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</string>
+  <string name="SYS_RELOAD">Genopfrisk</string>
   <string name="SYS_REMEMBER_ME">Forbliv logget ind</string>
   <string name="SYS_REMOVE">Fjern</string>
   <string name="SYS_REPEAT">Gentag</string>
@@ -1219,8 +1283,8 @@
   <string name="SYS_ROLE_MAX_MEMBERS">Det var ikke muligt at gemme. Maximum antal medlemmer af rollen #VAR1_BOLD# ville overskride den forud definerede begrænsning.</string>
   <string name="SYS_ROLES">Roller</string>
   <string name="SYS_ROOM">Lokale</string>
-  <string name="SYS_RSS_DISABLED">RSS slået fra af system administratoren.</string>
-  <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed for #VAR1#</string>
+  <string name="SYS_RSS_DISABLED">Web feed er blevet deaktiveret af system administratoren.</string>
+  <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">problematisk med fil overførsler</string>
   <string name="SYS_SATURDAY">lørdag</string>
@@ -1247,15 +1311,16 @@
   <string name="SYS_SIZE">Størrelse</string>
   <string name="SYS_SOCIAL_NETWORKS">Sociale medier</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_CODE_INVALID">Ugyldig status kode!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# karakterer</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">søndag</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Skift til kategori administration</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Det ønskede kodeord til #organization_short_name# hjemmesiden.\n#content# Hej #user_first_name#,\n\nDu har bedt om et nyt kodeord!\n\nDine login oplysninger er nu:\nBrugernavn: #user_login_name#\nKodeord: #variable1#\n\nFor at aktivere dit nye kodeord, venligst følg dette link:\n\n#variable2#\n\nKodeordet du lige har modtaget er genereret automatisk,\nderfor bør du logge ind på #organization_homepage# og så ændre det under \"Min profil\".\n\nMed venlig hilsen,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login detaljer for #organization_homepage#\n#content# Hej #user_first_name#,\n\nDine nye login detaljer til #organization_long_name#\'s hjemmeside er:\nBrugernavn: #user_login_name#\nKodeord: #variable1#\n\nKodeordet du lige har modtaget er genereret automatisk,\nderfor bør du logge ind på #organization_homepage# og så ændre det under \"Min profil\".\n\nMed venlig hilsen,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# i registrering hos #organization_long_name# afslået.\n#content#Goddag #user_first_name# din forespørgsel på medlemsskab af #organization_homepage# blev afslået.\n\nRegistreringer bliver generelt accepteret af vores brugere. Hvis du er medlem og din registrering alligvel blev afslået, er det måske fordi du ikke blev genkendt som medlem.\nFor at opklare denne sag, kontakt venligst webmaster #webmaster_email# fra #organization_homepage#.\n\nMed venlig hilsen,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registreringen på #organization_long_name#\'s hjemmeside er godkendt\n#content# Hej #user_first_name#,\n\nDin registrering på #organization_homepage# er blevet godkendt.\n\nDu kan nu logge ind med dit bruger navn: #user_login_name#\nog dit valgte kodeord.\n\nHvis du har nogen spørgsmål, så tøv ikke med at skrive til webmaster via #webmaster_email# .\n\nTak for registreringen,\nWebmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Ny registrering på #organization_long_name#\'s hjemmeside\n#content# En ny bruger har registreret sig selv på #organization_homepage#.\n\nEfternavn: #user_last_name#\nFornavn:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDenne mail blev genereret automatisk.</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Din anmodning om nyt kodeord til  #organization_short_name# hjemmesiden\n#content# Hej #user_first_name#,\n\ndu har anmodet om et nyt kodeord!\n\nDine login detaljer er:\nBrugernavn: #user_login_name#\nKodeord: #variable1#\n\nFor at aktivere dit nye kodeord skal du klikke på dette link:\n\n#variable2#\n\nKodeordet du har modtaget er automatisk genereret,\ndu bedes derfor logge ind på #organization_homepage# for at ændre det. Dette kan du gøre under \"Min profil\".\n\nMed venlig hilsen\nAdministratorene</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login detaljer for  #organization_homepage#\n#content# Hej #user_first_name#,\n\ndine nye login detaljer til  #organization_long_name#\'s hjemmeside:\nBrugernavn: #user_login_name#\nKodeord: #variable1#\n\nKodeordet du har modtaget er automatisk genereret,\ndu bedes derfor logge ind på #organization_homepage# for at ændre det. Dette kan du gøre under \"Min profil\".\n\nMed venlig hilsen\nAdministratorene</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Din registrering hos #organization_long_name# er afvist.\n#content#Hej #user_first_name# din medlems ansøgning hos #organization_homepage# blev afvist.\n\nRegistreringer er generelt accepteret af vores brugere. Hvis du er medlem og din registrering stadig bliver afvist, skyldes det måske at du ikke er blevet identificeret som medlem.\nFor at få løst problemet, kontakt venligst en administrator via #administrator_email# fra #organization_homepage#.\n\nMed venlig hilsen\nAdministratorene</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Din registrering på #organization_long_name#\'s hjemmeside er godkendt. \n#content# Hej #user_first_name#,\n\nDin registrering som medlem af #organization_homepage# er godkendt.\n\nDu kan nu logge ind med dit brugernavn: #user_login_name#\nog dit kodeord.\n\nHvis du har nogen spørgsmål, så tøv ikke med at kontakte administratoren via email til #administrator_email# .\n\nMed venlig hilsen \nAdministratorene</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Ny registrering på #organization_long_name# hjemmesiden \n#content# En ny bruger har registreret sig på  #organization_homepage#.\n\nEfternavn: #user_last_name#\nFornavn: #user_first_name#\nemail: #user_email#\n\n\nDenne besked blev genereret automatisk.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">System beskeder</string>
   <string name="SYS_TEXT">Tekst</string>
@@ -1278,6 +1343,10 @@
   <string name="SYS_USER">Bruger</string>
   <string name="SYS_USER_ID_NOT_FOUND">Der kunne ikke findes nogen bruger med dette ID!</string>
   <string name="SYS_USER_NO_EMAIL">Brugeren #VAR1_BOLD# har ikke nogen gyldig e-mail adresse i sin personlige information!</string>
+  <string name="SYS_USER_RELATION">Relation</string>
+  <string name="SYS_USER_RELATIONS">Relationer</string>
+  <string name="SYS_USER_RELATION_TYPE">Relations typer</string>
+  <string name="SYS_USER_RELATION_TYPES">Relations typer</string>
   <string name="SYS_USERNAME">Bruger navn</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERS_FOUND">Bruger fundet</string>
@@ -1290,10 +1359,9 @@
   <string name="SYS_WANT_REGISTER">Jeg vil registreres!</string>
   <string name="SYS_WARNING">Advarsel</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
-  <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">Database versionen #VAR1# er lavere end versionerne af Admidios scripts #VAR2#.\n\nVenligst udfør #VAR3# database opdatering til version #VAR4#.</string>
-  <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">Database versionen #VAR1# er højere end versionen af Admidios scripts #VAR2#.\n\nVenligst opdater dine Admidio filer på på serveren #VAR3# ved at bruge en nyere version af Admidio (#VAR4#).</string>
   <string name="SYS_WEBSITE">Hjemmeside</string>
   <string name="SYS_WEDNESDAY">onsdag</string>
   <string name="SYS_WHAT_TO_DO">Hvad skal jeg gøre?</string>
+  <string name="SYS_WIDTH">Bredde</string>
   <string name="SYS_YES">Ja</string>
 </resources>

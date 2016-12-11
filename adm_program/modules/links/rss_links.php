@@ -7,20 +7,14 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/******************************************************************************
- * Creatw RSS 2.0 - Feed for Links
  *
- * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
+ * Spezification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * Parameters:
  *
  * headline  - Headline for RSS-Feed
  *             (Default) Weblinks
- *
  *****************************************************************************/
-
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
@@ -95,7 +89,7 @@ while ($row = $statement->fetch())
     $title = $weblink->getValue('lnk_name');
     $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank">'.$weblink->getValue('lnk_url').'</a>'.
                    '<br /><br />'. $weblink->getValue('lnk_description');
-    $link    = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
+    $link    = ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. $weblink->getValue('lnk_id');
     $author  = $row['create_name'];
     $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
 

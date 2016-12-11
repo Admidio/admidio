@@ -68,12 +68,12 @@ if(isset($_SESSION['import_csv_request']))
     unset($_SESSION['import_csv_request']);
     if(!isset($form['first_row']))
     {
-        $form_values['first_row'] = 0;
+        $form_values['first_row'] = false;
     }
 }
 else
 {
-    $form_values['first_row'] = 1;
+    $form_values['first_row'] = true;
     $form_values['import_coding']  = 'iso-8859-1';
     $form_values['import_role_id'] = 0;
 }
@@ -88,7 +88,7 @@ $importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), 
 $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 
 // show form
-$form = new HtmlForm('import_assign_fields_form', $g_root_path. '/adm_program/modules/members/import_csv.php', $page, array('type' => 'vertical'));
+$form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. FOLDER_MODULES.'/members/import_csv.php', $page, array('type' => 'vertical'));
 $form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $form_values['first_row']);
 $htmlFieldTable = '
     <table class="table table-condensed">
@@ -101,27 +101,27 @@ $htmlFieldTable = '
 
         $line = reset($_SESSION['file_lines']);
         $arrayCsvColumns = explode($_SESSION['value_separator'], $line);
-        $category = '';
+        $categoryId = null;
 
         // jedes Benutzerfeld aus der Datenbank auflisten
 
         foreach($gProfileFields->mProfileFields as $field)
         {
-            if($category != $field->getValue('cat_id'))
+            $catId = (int) $field->getValue('cat_id');
+            if($categoryId !== $catId)
             {
-                if($category !== '')
+                if($categoryId !== null)
                 {
                     $htmlFieldTable .= '</tbody>';
                 }
-                $block_id = 'admCategory'. $field->getValue('cat_id');
                 $htmlFieldTable .= '<tbody>
                     <tr class="admidio-group-heading">
                         <td colspan="4">'.$field->getValue('cat_name').'</td>
                     </tr>
                 </tbody>
-                <tbody id="'.$block_id.'">';
+                <tbody id="admCategory'.$catId.'">';
 
-                $category = $field->getValue('cat_id');
+                $categoryId = $catId;
             }
             $htmlFieldTable .= '<tr>
                 <td><label for="usf-'. $field->getValue('usf_id'). '">'.$field->getValue('usf_name');
@@ -165,7 +165,7 @@ $htmlFieldTable = '
     $htmlFieldTable .= '</tbody>
     </table>';
 $form->addDescription($htmlFieldTable);
-$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_PATH.'/icons/database_in.png'));
+$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_URL.'/icons/database_in.png'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

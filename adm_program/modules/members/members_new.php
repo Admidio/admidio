@@ -36,15 +36,15 @@ echo '
             url:  action,
             data: $(this).serialize(),
             success: function(data) {
-                if(data === "success") {
+                if (data === "success") {
                     formMembersAlert.attr("class", "alert alert-success form-alert");
                     formMembersAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     formMembersAlert.fadeIn("slow");
                     setTimeout(function () {
-                        self.location.href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
+                        self.location.href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                     },2500);
                 } else {
-                    if(data.length > 1000) {
+                    if (data.length > 1000) {
                         $(".modal-body").html(data);
                     } else {
                         formMembersAlert.attr("class", "alert alert-danger form-alert");
@@ -64,9 +64,9 @@ echo '
 <div class="modal-body">
     <p class="lead">'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</p>';
 
-    $form = new HtmlForm('form_members_create_user', $g_root_path.'/adm_program/modules/members/members_assign.php');
+    $form = new HtmlForm('form_members_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_assign.php');
     $form->addInput('lastname', $gL10n->get('SYS_LASTNAME'), null, array('maxLength' => 100, 'property' => FIELD_REQUIRED));
     $form->addInput('firstname', $gL10n->get('SYS_FIRSTNAME'), null, array('maxLength' => 100, 'property' => FIELD_REQUIRED));
-    $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), array('icon' => THEME_PATH.'/icons/add.png', 'class' => ' col-sm-offset-3'));
+    $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), array('icon' => THEME_URL.'/icons/add.png', 'class' => ' col-sm-offset-3'));
     $form->show();
 echo '</div>';

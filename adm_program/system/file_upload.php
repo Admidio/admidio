@@ -51,7 +51,7 @@ if($getModule === 'photos')
     }
 
     // create photo object or read it from session
-    if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getId)
+    if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getId)
     {
         $photoAlbum =& $_SESSION['photo_album'];
         $photoAlbum->setDatabase($gDb);
@@ -63,14 +63,14 @@ if($getModule === 'photos')
     }
 
     // check if album belongs to current organization
-    if($photoAlbum->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT
     }
 
-    $uploadDir = SERVER_PATH.'/adm_my_files/photos/upload/';
-    $uploadUrl = $g_root_path.'/adm_my_files/photos/upload/';
+    $uploadDir = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/';
+    $uploadUrl = ADMIDIO_URL . FOLDER_DATA . '/photos/upload/';
 
     $headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
     $textFileUploaded = $gL10n->get('PHO_FILE_UPLOADED');
@@ -78,7 +78,7 @@ if($getModule === 'photos')
     $textUploadNotSuccessful = $gL10n->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
     $textUploadDescription = $gL10n->get('PHO_PHOTO_UPLOAD_DESC', $photoAlbum->getValue('pho_name'));
     $textSelectFiles = $gL10n->get('PHO_SELECT_FOTOS');
-    $iconUploadPath = THEME_PATH. '/icons/photo_upload.png';
+    $iconUploadPath = THEME_URL. '/icons/photo_upload.png';
 }
 elseif($getModule === 'downloads')
 {
@@ -109,7 +109,7 @@ elseif($getModule === 'downloads')
         // get recordset of current folder from database
         $folder->getFolderForDownload($getId);
         $uploadDir = $folder->getCompletePathOfFolder().'/';
-        $uploadUrl = $g_root_path. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
+        $uploadUrl = ADMIDIO_URL. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
     }
     catch(AdmException $e)
     {
@@ -122,7 +122,7 @@ elseif($getModule === 'downloads')
     $textUploadNotSuccessful = $gL10n->get('DOW_FILES_UPLOAD_NOT_SUCCESSFUL');
     $textUploadDescription = $gL10n->get('DOW_FILES_UPLOAD_DESC', $folder->getValue('fol_name'));
     $textSelectFiles = $gL10n->get('DOW_SELECT_FILES');
-    $iconUploadPath = THEME_PATH. '/icons/page_white_upload.png';
+    $iconUploadPath = THEME_URL. '/icons/page_white_upload.png';
 }
 
 // check if the server allow file uploads
@@ -135,7 +135,7 @@ if (ini_get('file_uploads') !== '1')
 if($getMode === 'choose_files')
 {
     // delete old stuff in upload folder
-    $uploadFolder = new Folder(SERVER_PATH.'/adm_my_files/photos/upload');
+    $uploadFolder = new Folder(ADMIDIO_PATH . FOLDER_DATA. '/photos/upload');
     $uploadFolder->delete('', true);
 
     // create html page object
@@ -166,7 +166,7 @@ if($getMode === 'choose_files')
             },
             done: function (e, data) {
                 $.each(data.result.files, function (index, file) {
-                    if(typeof file.error !== "undefined") {
+                    if (typeof file.error !== "undefined") {
                         $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
                             + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                         countErrorFiles++;
@@ -186,7 +186,7 @@ if($getMode === 'choose_files')
                 );
             },
             stop: function (e, data) {
-                if(countErrorFiles === 0 && countFiles > 0) {
+                if (countErrorFiles === 0 && countFiles > 0) {
                     $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$textUploadSuccessful.'</div>").appendTo("#files");
                 } else {
                     $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$textUploadNotSuccessful.'</div>").appendTo("#files");

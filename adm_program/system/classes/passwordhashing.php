@@ -8,11 +8,11 @@
  */
 
 // provide forward compatibility with the password_* functions that ship with PHP 5.5
-require_once(SERVER_PATH.'/adm_program/libs/password_compat/password.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/password_compat/password.php');
 // provide forward compatibility with the random_* functions that ship with PHP 7.0
-require_once(SERVER_PATH.'/adm_program/libs/random_compat/lib/random.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php');
 // old phpass password hashing lib for backward compatibility
-require_once(SERVER_PATH.'/adm_program/libs/phpass/passwordhash.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/passwordhash.php');
 
 /**
  * @class PasswordHashing
@@ -296,8 +296,10 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => 12))
+    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => 10))
     {
+        global $gLogger;
+
         $time = 0;
         $results = array();
         $cost = $options['cost'];
@@ -335,6 +337,8 @@ class PasswordHashing
             $results = array('cost' => $cost, 'time' => $time);
             $cost += $costIncrement;
         }
+
+        $gLogger->notice('Benchmark: Password-hashing results.', $results);
 
         return $results;
     }

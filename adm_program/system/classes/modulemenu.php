@@ -22,7 +22,7 @@
  * $myModuleMenu = new ModuleMenu('admMenuMyModule');
  *
  * // show link to create new announcement
- * $myModuleMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/mymodule/mymodule_new.php',
+ * $myModuleMenu->addItem('admMenuItemNewEntry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
  *                         $gL10n->get('SYS_CREATE'), 'add.png');
  * $myModuleMenu->show(); @endcode
  */
@@ -31,7 +31,6 @@ class ModuleMenu
     protected $id;
     protected $items;
     protected $ddItemCnt;
-    protected $rootPath;
     protected $customCssClass;
     protected $maxMenuLinkItem;
     protected $ddJS;
@@ -43,12 +42,9 @@ class ModuleMenu
      */
     public function __construct($id, $maxMenuLinkItem = 6)
     {
-        global $g_root_path;
-
         $this->id        = $id;
         $this->items     = array();
         $this->ddItemCnt = 0;
-        $this->rootPath  = $g_root_path;
         $this->customCssClass  = '';
         $this->maxMenuLinkItem = $maxMenuLinkItem;
     }
@@ -234,7 +230,7 @@ class ModuleMenu
             // add root path to link unless the full URL is given
             if (preg_match('/^http(s?):\/\//', $link) !== 1)
             {
-                $link = $this->rootPath.$link;
+                $link = ADMIDIO_URL . $link;
             }
         }
         else
@@ -242,10 +238,10 @@ class ModuleMenu
             $link = '#';
         }
 
-        // add THEME_PATH to images unless the full URL is given
+        // add THEME_URL to images unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $icon) !== 1)
         {
-            $icon = THEME_PATH.'/icons/'.$icon;
+            $icon = THEME_URL.'/icons/'.$icon;
         }
 
         return array(

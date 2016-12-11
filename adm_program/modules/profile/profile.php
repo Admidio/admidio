@@ -38,7 +38,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
  */
 function getFieldCode($fieldNameIntern, User $user)
 {
-    global $gPreferences, $g_root_path, $gCurrentUser, $gProfileFields, $gL10n;
+    global $gPreferences, $gCurrentUser, $gProfileFields, $gL10n;
 
     if(!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {
@@ -211,14 +211,14 @@ if($gNavigation->count() > 1)
 // if user has right then show link to edit profile
 if($gCurrentUser->hasRightEditProfile($user))
 {
-    $profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='.$userId,
+    $profileMenu->addItem('menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$userId,
                         $gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
 }
 
 // Password of own user could be changed
 if($userId === $currUserId)
 {
-    $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $userId,
+    $profileMenu->addItem('menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
                         $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
 }
 elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0)
@@ -228,13 +228,13 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
         // if email is set and systemmails are activated then administrator can send a new password to user
-        $profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$userId.'&amp;mode=5',
+        $profileMenu->addItem('menu_item_send_password', ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='.$userId.'&amp;mode=5',
                             $gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
     }
     else
     {
         // if user has no email or send email is disabled then administrator could set a new password
-        $profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $userId,
+        $profileMenu->addItem('menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
                             $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
     }
 }
@@ -242,38 +242,38 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
 // show link to view profile field change history
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
-    $profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/modules/members/profile_field_history.php?usr_id='. $userId,
+    $profileMenu->addItem('menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php?usr_id='. $userId,
                         $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to export the profile as vCard
-$profileMenu->addItem('menu_item_vcard', $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $userId,
+$profileMenu->addItem('menu_item_vcard', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=1&amp;user_id='. $userId,
                         $gL10n->get('PRO_EXPORT_VCARD'), 'vcard.png', 'right', 'menu_item_extras');
 
 // if you have the right to assign roles then show the link to assign new roles to this user
 if($gCurrentUser->assignRoles())
 {
-    $profileMenu->addItem('menu_item_role_memberships_change', $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$userId.'&amp;inline=1',
+    $profileMenu->addItem('menu_item_role_memberships_change', ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$userId.'&amp;inline=1',
                             $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
 }
 
 // show link to create relations
 if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
 {
-    $profileMenu->addItem('menu_item_maintain_user_relation_types', $g_root_path . '/adm_program/modules/userrelations/userrelations_new.php?usr_id=' . $userId,
+    $profileMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
         $gL10n->get('PRO_ADD_USER_RELATION'), 'user_administration.png', 'right', 'menu_item_extras');
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php',
+    $profileMenu->addItem('menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
                                 $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
     // show link to system preferences of weblinks
-    $profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=profile',
+    $profileMenu->addItem('menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=profile',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
@@ -307,8 +307,8 @@ $page->addHtml('
                 if ($userId !== $currUserId && $gPreferences['enable_pm_module'] == 1)
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
-                        '<img src="'.THEME_PATH.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
-                        <a href='.$g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM&usr_id='.$userId.'>'.$user->getValue('usr_login_name').'</a>');
+                        '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
+                        <a href='.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM&usr_id='.$userId.'>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else
                 {
@@ -405,7 +405,7 @@ $page->addHtml('
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '
-                                    <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png"
+                                    <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
@@ -420,10 +420,11 @@ $page->addHtml('
                             break;
 
                         default:
-                            $field = getFieldCode($field->getValue('usf_name_intern'), $user);
+                            $fieldNameIntern = $field->getValue('usf_name_intern');
+                            $field = getFieldCode($fieldNameIntern, $user);
                             if(is_array($field) && $field['value'] !== '')
                             {
-                                $form->addStaticControl('address', $field['label'], $field['value']);
+                                $form->addStaticControl(admStrToLower($fieldNameIntern), $field['label'], $field['value']);
                             }
                             break;
                     }
@@ -443,15 +444,15 @@ $page->addHtml('
             if($gCurrentUser->hasRightEditProfile($user))
             {
                 $page->addHtml('<div id="profile_picture_links" class="btn-group-vertical" role="group">
-                    <a class="btn" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$userId.'"><img
-                        src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
+                    <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php?usr_id='.$userId.'"><img
+                        src="'.THEME_URL.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                 if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
-                    || is_file(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$userId.'.jpg') && $gPreferences['profile_photo_storage'] == 1)
+                    || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && $gPreferences['profile_photo_storage'] == 1)
                 {
                     $page->addHtml('<a id="btn_delete_photo" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
-                                    '&amp;database_id='.$userId.'"><img src="'. THEME_PATH. '/icons/delete.png"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
+                                    '&amp;database_id='.$userId.'"><img src="'. THEME_URL. '/icons/delete.png"
                                     alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'</a>');
                 }
                 $page->addHtml('</div>');
@@ -473,9 +474,11 @@ foreach($gProfileFields->mProfileFields as $field)
     && ($gCurrentUser->hasRightEditProfile($user)
         || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
     {
+        $fieldNameIntern = $field->getValue('usf_name_intern');
+
         // show new category header if new category and field has value or is a checkbox field
         if($category !== $field->getValue('cat_name')
-        && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
+        && (strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
         {
             if($category !== '')
             {
@@ -486,21 +489,21 @@ foreach($gProfileFields->mProfileFields as $field)
             $category = $field->getValue('cat_name');
 
             $page->addHtml('
-            <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
-                <div class="panel-heading">'.$field->getValue('cat_name').'</div>
-                <div class="panel-body">');
+                <div class="panel panel-default" id="'.$field->getValue('cat_name_intern').'_data_panel">
+                    <div class="panel-heading">'.$field->getValue('cat_name').'</div>
+                    <div class="panel-body">');
 
             // create a static form
             $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form', null);
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field
-        if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') === 'CHECKBOX')
+        if(strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX')
         {
-            $field = getFieldCode($field->getValue('usf_name_intern'), $user);
+            $field = getFieldCode($fieldNameIntern, $user);
             if(is_array($field) && $field['value'] !== '')
             {
-                $form->addStaticControl('address', $field['label'], $field['value']);
+                $form->addStaticControl(admStrToLower($fieldNameIntern), $field['label'], $field['value']);
             }
         }
     }
@@ -573,68 +576,68 @@ if($gPreferences['profile_show_roles'] == 1)
             //checkRolesRight($right)
             if($user->checkRolesRight('rol_assign_roles'))
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_assign_roles'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_assign_roles'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />');
             }
             if($user->checkRolesRight('rol_approve_users'))
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_approve_users'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/new_registrations.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_approve_users'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/new_registrations.png"
                 alt="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" />');
             }
             if($user->checkRolesRight('rol_edit_user'))
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_edit_user'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/group.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_edit_user'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/group.png"
                 alt="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" />');
             }
 
             if($user->checkRolesRight('rol_mail_to_all'))
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_mail_to_all'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/email.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_mail_to_all'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png"
                 alt="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />');
             }
             if($user->checkRolesRight('rol_profile'))
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_profile'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_profile'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/profile.png"
                 alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />');
             }
             if($user->checkRolesRight('rol_announcements') && $gPreferences['enable_announcements_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_announcements'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/announcements.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_announcements'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/announcements.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />');
             }
             if($user->checkRolesRight('rol_dates') && $gPreferences['enable_dates_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_dates'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/dates.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_dates'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/dates.png"
                 alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />');
             }
             if($user->checkRolesRight('rol_photo') && $gPreferences['enable_photo_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_photo'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/photo.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_photo'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/photo.png"
                 alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />');
             }
             if($user->checkRolesRight('rol_download') && $gPreferences['enable_download_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_download'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/download.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_download'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/download.png"
                 alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />');
             }
             if($user->checkRolesRight('rol_guestbook') && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_guestbook'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/guestbook.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_guestbook'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/guestbook.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />');
             }
             if($user->checkRolesRight('rol_guestbook_comments') && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_guestbook_comments'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/comment.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_guestbook_comments'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/comment.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />');
             }
             if($user->checkRolesRight('rol_weblinks') && $gPreferences['enable_weblinks_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_weblinks'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/weblinks.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_weblinks'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/weblinks.png"
                 alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />');
             }
             if($user->checkRolesRight('rol_all_lists_view'))
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_all_lists_view'], 2).'\')" class="admidio-icon-info" src="'.THEME_PATH.'/icons/lists.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungsHerkunft['rol_all_lists_view'], 2).'\')" class="admidio-icon-info" src="'.THEME_URL.'/icons/lists.png"
                 alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />');
             }
             $page->addHtml('</p>
@@ -755,10 +758,10 @@ if($gPreferences['profile_show_extern_roles'] == 1
         while($row = $roleStatement->fetch())
         {
             // if roles of new organization than read the rights of this organization
-            if($actualOrganization != $row['org_id'])
+            if($actualOrganization !== (int) $row['org_id'])
             {
                 $gCurrentUser->setOrganization($row['org_id']);
-                $actualOrganization = $row['org_id'];
+                $actualOrganization = (int) $row['org_id'];
             }
 
             // check if current user has right to view the role of that organization
@@ -868,23 +871,23 @@ if($gPreferences['members_enable_user_relations'] == 1)
 
             $page->addHtml('<li id="row_ure_'.$relation->getValue('ure_id').'" class="list-group-item">');
             $page->addHtml('<div>');
-            $page->addHtml('<span>'.$relationName.' - <a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
+            $page->addHtml('<span>'.$relationName.' - <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
                             $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a><span>');
             $page->addHtml('<span class="pull-right text-right">');
 
              if($gCurrentUser->hasRightEditProfile($otherUser))
              {
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ure&amp;element_id=row_ure_'.
+                                 href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=ure&amp;element_id=row_ure_'.
                                  $relation->getValue('ure_id').'&amp;database_id='.$relation->getValue('ure_id').
                                  '&amp;name='.urlencode($relationtype->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'"><img
-                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" /></a>');
+                                 src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'" /></a>');
              }
 
             // only show info if system setting is activated
             if($gPreferences['system_show_create_edit'] > 0)
             {
-                  $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:void(0)"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>');
+                  $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:void(0)"><img src="'.THEME_URL.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>');
             }
             $page->addHtml('</span></div>');
             if($gPreferences['system_show_create_edit'] > 0)

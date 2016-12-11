@@ -51,7 +51,7 @@ switch($getMode)
                                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
 
                     if(!admStrIsValidFileName($_POST['theme'])
-                    || !is_file(SERVER_PATH.'/adm_themes/'.$_POST['theme'].'/index.html'))
+                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
@@ -84,7 +84,7 @@ switch($getMode)
 
                 case 'regional_settings':
                     if(!admStrIsValidFileName($_POST['system_language'])
-                    || !is_file(SERVER_PATH.'/adm_program/languages/'.$_POST['system_language'].'.xml'))
+                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml'))
                     {
                         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
                         // => EXIT
@@ -109,6 +109,16 @@ switch($getMode)
 
                 case 'email_dispatch':
                     $checkboxes = array('mail_smtp_auth');
+
+                    if($_POST['mail_sendmail_address'] !== '')
+                    {
+                        $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
+                        if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
+                        {
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                            // => EXIT
+                        }
+                    }
                     break;
 
                 case 'system_notification':
@@ -160,16 +170,6 @@ switch($getMode)
                 case 'messages':
                     $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_chat_module', 'enable_mail_captcha',
                                         'mail_html_registered_users', 'mail_into_to', 'mail_show_former');
-
-                    if($_POST['mail_sendmail_address'] !== '')
-                    {
-                        $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
-                        if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
-                        {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
-                            // => EXIT
-                        }
-                    }
                     break;
 
                 case 'photos':
@@ -294,7 +294,7 @@ switch($getMode)
 
         // show form
         $form = new HtmlForm('add_new_organization_form',
-                             $g_root_path.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
+                             ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?mode=3', $page);
         $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
                         array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
         $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
@@ -302,7 +302,7 @@ switch($getMode)
         $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
                         array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
         $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
-                               array('icon' => THEME_PATH.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
+                               array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
 
         // add form to html page and show page
         $page->addHtml($form->show(false));
@@ -347,11 +347,11 @@ switch($getMode)
         require_once('../../installation/db_scripts/preferences.php');
 
         // set some specific preferences whose values came from user input of the installation wizard
-        $orga_preferences['email_administrator'] = $_POST['orgaEmail'];
-        $orga_preferences['system_language']     = $gPreferences['system_language'];
+        $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
+        $defaultOrgPreferences['system_language']     = $gPreferences['system_language'];
 
         // create all necessary data for this organization
-        $newOrganization->setPreferences($orga_preferences, false);
+        $newOrganization->setPreferences($defaultOrgPreferences, false);
         $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
 
         // if installation of second organization than show organization select at login
@@ -370,8 +370,8 @@ switch($getMode)
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 
         // show form
-        $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences.php', $page);
-        $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png'));
+        $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', $page);
+        $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
 
         // add form to html page and show page
         $page->addHtml($form->show(false));

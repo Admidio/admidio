@@ -51,7 +51,7 @@ class LanguageData
     {
         if($languagePath === '')
         {
-            $this->addLanguagePath(SERVER_PATH. '/adm_program/languages');
+            $this->addLanguagePath(ADMIDIO_PATH . FOLDER_LANGUAGES);
         }
         else
         {

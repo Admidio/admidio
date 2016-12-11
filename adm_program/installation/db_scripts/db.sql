@@ -55,7 +55,7 @@ drop table if exists %PREFIX%_menu cascade;
 create table %PREFIX%_announcements
 (
     ann_id                         integer       unsigned not null AUTO_INCREMENT,
-    ann_org_id                     integer       unsigned,
+    ann_cat_id                     integer       unsigned not null,
     ann_global                     boolean       not null default '0',
     ann_headline                   varchar(100)  not null,
     ann_description                text,
@@ -922,8 +922,8 @@ create unique index %PREFIX%_IDX_URE_URT_USR on %PREFIX%_user_relations (ure_urt
 /*==============================================================*/
 /* Constraints                                                  */
 /*==============================================================*/
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
+alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_CAT foreign key (ann_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)

@@ -29,6 +29,8 @@ $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
+$getHeadline = urlencode($getHeadline);
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
@@ -89,7 +91,7 @@ if ($getMode === 1 || $getMode === 2 || $getMode === 3 || $getMode === 9)
         $guestbook->readDataById($getGboId);
 
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
+        if((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
@@ -106,7 +108,7 @@ else
         $guestbook_comment->readDataById($getGboId);
 
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
+        if((int) $guestbook_comment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -242,7 +244,7 @@ if ($getMode === 1 || $getMode === 3)
         unset($_SESSION['guestbook_entry_request']);
         $gNavigation->deleteLastUrl();
 
-        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline;
+        $url = ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php?headline=' . $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
@@ -253,8 +255,8 @@ if ($getMode === 1 || $getMode === 3)
             // => EXIT
         }
 
-        header('Location: '.$url);
-        exit();
+        admRedirect($url);
+        // => EXIT
     }
     else
     {
@@ -430,7 +432,7 @@ elseif($getMode === 4 || $getMode === 8)
         unset($_SESSION['guestbook_comment_request']);
         $gNavigation->deleteLastUrl();
 
-        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $getHeadline;
+        $url = ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php?id=' . $guestbook_comment->getValue('gbc_gbo_id') . '&headline=' . $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if(($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
@@ -441,8 +443,8 @@ elseif($getMode === 4 || $getMode === 8)
             // => EXIT
         }
 
-        header('Location: '.$url);
-        exit();
+        admRedirect($url);
+        // => EXIT
     }
     else
     {

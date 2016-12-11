@@ -63,7 +63,7 @@ if($getGboId > 0)
     $guestbook->readDataById($getGboId);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if((int) $guestbook->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -127,7 +127,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('guestbook_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
+$form = new HtmlForm('guestbook_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name
@@ -150,7 +150,7 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 }
 
 // show information about user who creates the recordset and changed it
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($guestbook->getValue('gbo_usr_id_create'), $guestbook->getValue('gbo_timestamp_create'), $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')));
 
 // add form to html page and show page

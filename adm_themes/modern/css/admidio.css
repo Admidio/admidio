@@ -165,6 +165,10 @@ h3 {
     font-size: 110%;
 }
 
+h4 {
+    font-size: 100%;
+}
+
 @media (min-width: 768px) {
     h1 {
         font-size: 140%;
@@ -617,11 +621,6 @@ input[type="time"] {
 
 /* Information block with user and timestamp who created and edited the data */
 
-.admidio-admidio-info-created-edited {
-    font-size: 8pt;
-    margin-top: 8px;
-}
-
 .admidio-info-created {
     display: block;
 }
@@ -651,9 +650,10 @@ input[type="time"] {
 
 
 .panel-primary > .panel-footer {
-    padding: 0;
+    padding: 5px 0 0 0;
     background-color: white;
     border-top: 2px solid #c1dce6;
+    font-size: 8pt;
 }
 
 .admidio-panel-heading-icon {
@@ -764,44 +764,15 @@ input[type="time"] {
 }
 
 #admidio-password-strength {
-    position: relative;
-    height: 12px;
-    margin: 8px 0;
-    border: 1px solid #cccccc;
+    margin-top: 10px;
 }
-#admidio-password-strength-indicator {
-    height: 100%;
-}
+
 #admidio-password-strength-minimum {
     position: absolute;
-    border: 6px solid transparent;
+    border: 9px solid transparent;
     border-left-color: #555555;
     border-right-width: 0;
-    margin-top: -1px;
-}
-.admidio-password-strength-indicator-0 {
-    width: 0;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-1 {
-    width: 25%;
-    background-color: #ff0000;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-2 {
-    width: 50%;
-    background-color: #ff8800;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-3 {
-    width: 75%;
-    background-color: #ffff00;
-    transition: all 250ms;
-}
-.admidio-password-strength-indicator-4 {
-    width: 100%;
-    background-color: #00ff00;
-    transition: all 250ms;
+    margin-top: 1px;
 }
 
 /* Fullscreen mode for lists */

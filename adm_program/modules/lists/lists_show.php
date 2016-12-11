@@ -73,6 +73,7 @@ if($objDateFrom > $objDateTo)
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
+$showLinkMailToList = true;
 
 if ($numberRoles > 1)
 {
@@ -82,13 +83,20 @@ if ($numberRoles > 1)
     $rolesStatement = $gDb->query($sql);
     $rolesData      = $rolesStatement->fetchAll();
 
-    // check if user has right to view all roles
     foreach ($rolesData as $role)
     {
+        // check if user has right to view all roles
         if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
+        }
+
+        // check if user has right to send mail to role
+        if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
+        {
+            $showLinkMailToList = false;
+            // => do not show the link
         }
 
         $htmlSubHeadline .= ', '.$role['rol_name'];
@@ -105,6 +113,13 @@ else
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
+    }
+
+    // check if user has right to send mail to role
+    if (!$gCurrentUser->hasRightSendMailToRole($roleIds[0]))
+    {
+        $showLinkMailToList = false;
+        // => do not show the link
     }
 
     $roleName         = $role->getValue('rol_name');
@@ -222,6 +237,18 @@ if ($numMembers === 0)
     // => EXIT
 }
 
+$userIdList = array();
+foreach ($membersList as $member)
+{
+    $user = new User($gDb, $gProfileFields, $member['usr_id']);
+
+    // besitzt der User eine gueltige E-Mail-Adresse? && aktuellen User ausschließen
+    if (strValidCharacters($user->getValue('EMAIL'), 'email') && $gCurrentUser->getValue('usr_id') != $member['usr_id'])
+    {
+        $userIdList[] = $member['usr_id'];
+    }
+}
+
 // define title (html) and headline
 $title = $gL10n->get('LST_LIST').' - '.$roleName;
 if (strlen($list->getValue('lst_name')) > 0)
@@ -285,7 +312,7 @@ if ($getMode !== 'csv')
     }
     elseif ($getMode === 'pdf')
     {
-        require_once(SERVER_PATH.'/adm_program/libs/tcpdf/tcpdf.php');
+        require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/tcpdf.php');
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
@@ -316,7 +343,7 @@ if ($getMode !== 'csv')
         $pdf->AddPage();
 
         // Create table object for display
-        $table = new HtmlTable('adm_lists_table', $pdf, $hoverRows, $datatable, $classTable);
+        $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
         $table->addAttribute('border', '1');
     }
     elseif ($getMode === 'html')
@@ -340,7 +367,7 @@ if ($getMode !== 'csv')
         {
             // create filter menu with elements for start-/enddate
             $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
-            $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
+            $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
@@ -354,16 +381,21 @@ if ($getMode !== 'csv')
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
             $("#export_list_to").change(function () {
-                if($(this).val().length > 1) {
+                if ($(this).val().length > 1) {
                     var result = $(this).val();
                     $(this).prop("selectedIndex",0);
-                    self.location.href = "'.$g_root_path.'/adm_program/modules/lists/lists_show.php?" +
+                    self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?" +
                         "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
 
+            $("#menu_item_mail_to_list").click(function () {
+                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id : "'.$getListId.'", userIdList : "'.implode(',', $userIdList).'" } );
+                return false;
+            });
+
             $("#menu_item_print_view").click(function () {
-                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
+                window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
             });', true);
 
         // get module menu
@@ -373,27 +405,42 @@ if ($getMode !== 'csv')
 
         if ($getFullScreen)
         {
-            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
+            $listsMenu->addItem('menu_item_normal_picture', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
+            $listsMenu->addItem('menu_item_full_screen', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
+
+        // link to print overlay and exports
+        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
         if ($numberRoles === 1)
         {
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
-                $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
+                $listsMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'left');
+
+                $listsMenu->addItem('menu_item_assign_members', ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
+                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png', 'left', 'menu_item_extras');
             }
         }
 
-        // link to print overlay and exports
-        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+        //link to email-module
+        if($showLinkMailToList)
+        {
+            if ($numberRoles === 1 && $role->allowedToAssignMembers($gCurrentUser))
+            {
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
+            }
+            else
+            {
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+            }
+        }
 
         $form = new HtmlForm('navbar_export_to_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
         $selectBoxEntries = array(
@@ -637,7 +684,7 @@ foreach ($membersList as $member)
                 // show user photo
                 if ($getMode === 'html' || $getMode === 'print')
                 {
-                    $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                    $content = '<img src="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
                 if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
@@ -699,7 +746,7 @@ foreach ($membersList as $member)
                     || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
                 {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                    $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$member['usr_id'].'">'.$htmlValue.'</a>';
+                    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$member['usr_id'].'">'.$htmlValue.'</a>';
                 }
                 else
                 {
@@ -788,15 +835,17 @@ elseif ($getMode === 'pdf')
     // output the HTML content
     $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
 
+    $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
+
     // Save PDF to file
-    $pdf->Output(SERVER_PATH.'/adm_my_files/'.$filename, 'F');
+    $pdf->Output($file, 'F');
 
     // Redirect
     header('Content-Type: application/pdf');
 
-    readfile(SERVER_PATH.'/adm_my_files/'.$filename);
+    readfile($file);
     ignore_user_abort(true);
-    unlink(SERVER_PATH.'/adm_my_files/'.$filename);
+    unlink($file);
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {

@@ -15,26 +15,46 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 }
 
 // embed config and constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_my_files/config.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/init_globals.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program') - 1) . '/adm_program/system/constants.php');
+$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
+require_once($rootPath . '/adm_my_files/config.php');
+require_once($rootPath . '/adm_program/system/init_globals.php');
+require_once($rootPath . '/adm_program/system/constants.php');
 
 // includes WITHOUT database connections
-require_once(SERVER_PATH . '/adm_program/libs/htmlawed/htmlawed.php');
-require_once(SERVER_PATH . '/adm_program/system/function.php');
-require_once(SERVER_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
-if($gDebug)
+// ERROR REPORTING
+// http://www.phptherightway.com/#error_reporting
+// https://secure.php.net/manual/en/errorfunc.configuration.php
+// error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
+ini_set('error_reporting', '-1');
+ini_set('log_errors', '1');
+
+if ($gDebug)
 {
-    // https://secure.php.net/manual/en/errorfunc.configuration.php
-    error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
+}
+else
+{
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+}
 
-    // write actual script with parameters in log file
-    error_log('--------------------------------------------------------------------------------'."\n" .
-              $_SERVER['SCRIPT_FILENAME'] . "\n? " . $_SERVER['QUERY_STRING']);
-    error_log('memory_used::' . memory_get_usage());
+// LOGGING
+require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
+
+// Force permanent HTTPS redirect
+if (isset($gForceHTTPS) && $gForceHTTPS && !HTTPS)
+{
+    $url = str_replace('http://', 'https://', CURRENT_URL);
+
+    $gLogger->notice('REDIRECT: Redirecting permanent to HTTPS!', array('url' => $url, 'statusCode' => 301));
+
+    header('Location: ' . $url, true, 301);
+    exit();
 }
 
 // remove HTML & PHP-Code from all parameters
@@ -66,7 +86,7 @@ catch(AdmException $e)
 
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-$gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
+$gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
 
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
@@ -75,8 +95,7 @@ $gCookiePraefix = strtr($gCookiePraefix, ' .,;:[]', '_______');
 // start PHP session
 if(!headers_sent())
 {
-    session_name($gCookiePraefix . '_PHP_ID');
-    session_start();
+    Session::start($gCookiePraefix);
 }
 
 // determine session id
@@ -129,8 +148,10 @@ else
         $gCurrentOrganization = new Organization($gDb, $g_organization);
     }
 
-    if($gCurrentOrganization->getValue('org_id') === 0)
+    if((int) $gCurrentOrganization->getValue('org_id') === 0)
     {
+        $gLogger->error('Organization could not be found!', array('$g_organization' => $g_organization));
+
         // organization not found
         exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
@@ -194,7 +215,7 @@ if($sesRenew === 1 || $sesRenew === 3)
 // check session if user login is valid
 if($gCurrentSession->getValue('ses_usr_id') > 0)
 {
-    if($gCurrentSession->isValidLogin($gCurrentUser->getValue('usr_id')))
+    if($gCurrentSession->isValidLogin((int) $gCurrentUser->getValue('usr_id')))
     {
         $gValidLogin = true;
     }
@@ -216,8 +237,11 @@ if(!array_key_exists('theme', $gPreferences))
 {
     $gPreferences['theme'] = 'modern';
 }
-define('THEME_SERVER_PATH', SERVER_PATH . '/adm_themes/' . $gPreferences['theme']);
-define('THEME_PATH', $g_root_path . '/adm_themes/' . $gPreferences['theme']);
+
+define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
+define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gPreferences['theme']);
+define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // Deprecated
+define('THEME_PATH', THEME_URL); // Deprecated
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();
@@ -247,9 +271,9 @@ catch(AdmException $e)
 // set default homepage
 if($gValidLogin)
 {
-    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_login'];
+    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
 }
 else
 {
-    $gHomepage = $g_root_path . '/' . $gPreferences['homepage_logout'];
+    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
 }

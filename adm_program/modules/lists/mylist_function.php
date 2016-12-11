@@ -35,7 +35,7 @@ if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($getMode === 2
-&& (!isset($_POST['sel_roles_ids']) || $_POST['sel_roles_ids'] == 0 || !is_array($_POST['sel_roles_ids'])))
+&& (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids'])))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
     // => EXIT
@@ -63,7 +63,7 @@ if($getMode !== 2)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-    elseif($list->getValue('lst_usr_id') != $gCurrentUser->getValue('usr_id')
+    elseif((int) $list->getValue('lst_usr_id') !== (int) $gCurrentUser->getValue('usr_id')
     && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -112,13 +112,17 @@ if ($getMode === 1 || $getMode === 2)
         $_SESSION['mylist_request']['sel_select_configuation'] = $list->getValue('lst_id');
 
         // go back to mylist configuration
-        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'));
-        exit();
+        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php?lst_id=' . $list->getValue('lst_id'));
+        // => EXIT
     }
 
     // weiterleiten zur allgemeinen Listeseite
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='.$_POST['sel_show_members'].'&rol_ids='.implode(',', $_POST['sel_roles_ids']).'&urt_ids='.implode(',', $_POST['sel_relationtype_ids']));
-    exit();
+    admRedirect(
+        ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php?lst_id=' . $list->getValue('lst_id') .
+        '&mode=html&show_members=' . $_POST['sel_show_members'] . '&rol_ids=' . implode(',', $_POST['sel_roles_ids']) .
+        '&urt_ids=' . implode(',', $_POST['sel_relationtype_ids'])
+    );
+    // => EXIT
 }
 elseif ($getMode === 3)
 {
@@ -134,6 +138,6 @@ elseif ($getMode === 3)
     }
 
     // go back to list configuration
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php');
-    exit();
+    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php');
+    // => EXIT
 }

@@ -12,8 +12,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$orga_preferences = array(
-
+$defaultOrgPreferences = array(
     // System
     'enable_rss'                     => '1',
     'enable_auto_login'              => '1',
@@ -95,7 +94,7 @@ $orga_preferences = array(
     'photo_thumbs_scale'     => '160',
     'photo_show_width'       => '640',
     'photo_show_height'      => '400',
-    'photo_image_text'       => '© '.$_SERVER['HTTP_HOST'],
+    'photo_image_text'       => '© '.DOMAIN,
     'photo_image_text_size'  => '40',
     'photo_keep_original'    => '0',
     'photo_download_enabled' => '0',

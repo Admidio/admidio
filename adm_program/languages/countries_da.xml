@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="AFG">Afganistan</string>
-  <string name="EGY">Egypt</string>
+  <string name="EGY">Ægypten</string>
   <string name="ALB">Albanien</string>
   <string name="DZA">Algir</string>
   <string name="AND">Andorra</string>
   <string name="AGO">Angola</string>
   <string name="AIA">Anguilla</string>
-  <string name="ATG">Antigua and Barbuda</string>
-  <string name="GNQ">Equatorial Guinea</string>
+  <string name="ATG">Antigua og Barbuda</string>
+  <string name="GNQ">Ækvatorial Guinea</string>
   <string name="ARG">Argentina</string>
   <string name="ARM">Armenien</string>
   <string name="ABW">Aruba</string>

@@ -28,11 +28,9 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 $gCurrentUser->clear();
 
 // set homepage to logout page
-$gHomepage = $g_root_path.'/'.$gPreferences['homepage_logout'];
-
-$message_code = 'SYS_LOGOUT_SUCCESSFUL';
+$gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
 
 // message logout successful and go to homepage
 $gMessage->setForwardUrl($gHomepage, 2000);
-$gMessage->show($gL10n->get($message_code));
+$gMessage->show($gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
 // => EXIT

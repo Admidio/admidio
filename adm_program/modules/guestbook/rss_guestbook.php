@@ -71,7 +71,7 @@ while ($row = $statement->fetch())
     // set data for attributes of this entry
     $title       = $guestbook->getValue('gbo_name');
     $description = $guestbook->getValue('gbo_text');
-    $link        = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
+    $link        = ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
     $author      = $guestbook->getValue('gbo_name');
     $pubDate     = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
 

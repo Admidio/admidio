@@ -48,7 +48,7 @@ if($getMode !== 'new' && $getPhotoId > 0)
     $photo_album->readDataById($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if($photo_album->getValue('pho_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if((int) $photo_album->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -56,7 +56,7 @@ if($getMode !== 'new' && $getPhotoId > 0)
 }
 
 // Speicherort mit dem Pfad aus der Datenbank
-$albumPath = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+$albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if($getMode === 'new' || $getMode === 'change')
@@ -148,7 +148,7 @@ if($getMode === 'new' || $getMode === 'change')
             $photo_album->delete();
 
             // der entsprechende Ordner konnte nicht angelegt werden
-            $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+            $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
             $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
             // => EXIT
         }
@@ -166,9 +166,9 @@ if($getMode === 'new' || $getMode === 'change')
     else
     {
         // if begin date changed than the folder must also be changed
-        if($albumPath !== SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+        if($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $getPhotoId)
         {
-            $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
+            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photo_album->getValue('pho_id');
 
             // das komplette Album in den neuen Ordner kopieren
             $albumFolder = new Folder($albumPath);
@@ -177,7 +177,7 @@ if($getMode === 'new' || $getMode === 'change')
             // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
             if(!$b_return)
             {
-                $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+                $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
                 $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
                 // => EXIT
             }
@@ -192,13 +192,14 @@ if($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        header('Location: '. $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId);
+        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php?pho_id=' . $getPhotoId);
+        // => EXIT
     }
     else
     {
-        header('Location: '. $gNavigation->getUrl());
+        admRedirect($gNavigation->getUrl());
+        // => EXIT
     }
-    exit();
 }
 
 /**************************************************************************/

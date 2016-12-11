@@ -300,7 +300,7 @@ catch(AdmException $e)
 $gDb->endTransaction();
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
+if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
 {
     $gCurrentUser = $user;
 }
@@ -342,8 +342,8 @@ if($getNewUser === 1 || $getNewUser === 3)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->assignRoles())
     {
-        header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user='.$getNewUser);
-        exit();
+        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php?usr_id=' . $user->getValue('usr_id') . '&new_user=' . $getNewUser);
+        // => EXIT
     }
     else
     {

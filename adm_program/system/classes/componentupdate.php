@@ -44,7 +44,7 @@ class ComponentUpdate extends Component
         // update of Admidio core has another path for the xml files as plugins
         if($this->getValue('com_type') === 'SYSTEM')
         {
-            $updateFile = SERVER_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
+            $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
 
             if(is_file($updateFile))
             {
@@ -69,6 +69,13 @@ class ComponentUpdate extends Component
     {
         global $g_tbl_praefix, $gDbType;
 
+        // for backwards compatibility "postgresql"
+        $dbType = $gDbType;
+        if ($gDbType === 'postgresql')
+        {
+            $dbType = 'pgsql';
+        }
+
         $executeSql = true;
         $showError  = true;
 
@@ -78,7 +85,7 @@ class ComponentUpdate extends Component
         {
             // if the sql statement is only for a special database and you do
             // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $gDbType)
+            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
             {
                 $executeSql = false;
             }
@@ -161,7 +168,7 @@ class ComponentUpdate extends Component
      */
     public function update()
     {
-        global $gDebug;
+        global $gLogger;
 
         $this->updateFinished = false;
         $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
@@ -190,10 +197,7 @@ class ComponentUpdate extends Component
                 }
 
                 // output of the version number for better debugging
-                if($gDebug)
-                {
-                    error_log('Update to version '.$mainVersion.'.'.$subVersion);
-                }
+                $gLogger->info('Update to version '.$mainVersion.'.'.$subVersion);
 
                 // open xml file for this version
                 if($this->createXmlObject($mainVersion, $subVersion))
@@ -213,7 +217,7 @@ class ComponentUpdate extends Component
                 }
 
                 // check if an php update file exists and then execute the script
-                $phpUpdateFile = SERVER_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$subVersion.'_0_conv.php';
+                $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$subVersion.'_0_conv.php';
 
                 if(is_file($phpUpdateFile))
                 {
@@ -234,6 +238,37 @@ class ComponentUpdate extends Component
 
             // reset subversion because we want to start update for next main version with subversion 0
             $initialSubVersion = 0;
+        }
+    }
+
+    /**
+     * This method deletes all roles that belongs to still deleted dates.
+     */
+    public function updateStepAddAnnouncementsCategories()
+    {
+        global $gL10n;
+
+        // read id of system user from database
+        $sql = 'SELECT usr_id
+                  FROM '.TBL_USERS.'
+                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+        $systemUserStatement = $this->db->query($sql);
+        $systemUserId = (int) $systemUserStatement->fetchColumn();
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                        VALUES ('.$row['org_id'].', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                             , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\',   \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
+            $this->db->query($sql);
+
+            $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id =
+                           (SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ANN\' AND cat_name_intern = \'COMMON\')
+                     WHERE ann_org_id = '.$row['org_id'];
+            $this->db->query($sql);
         }
     }
 
@@ -352,7 +387,7 @@ class ComponentUpdate extends Component
             {
                 $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
                                                      fol_locked, fol_public, fol_timestamp)
-                                             VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'/adm_my_files\',
+                                             VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'' . FOLDER_DATA . '\',
                                                      0, 1, \''.DATETIME_NOW.'\')';
                 $this->db->query($sql);
             }
@@ -444,6 +479,45 @@ class ComponentUpdate extends Component
         $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
                  WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\'';
         $this->db->query($sql);
+    }
+
+    /**
+     * Check all folders in adm_my_files and set the rights to 0777
+     * @param string $folder
+     * @return bool
+     */
+    public function updateStepRewriteFolderRights($folder = '')
+    {
+        $returnValue = true;
+
+        if ($folder === '')
+        {
+            $folder = ADMIDIO_PATH . FOLDER_DATA;
+        }
+
+        $dirHandle = @opendir($folder);
+        if ($dirHandle)
+        {
+            while (($entry = readdir($dirHandle)) !== false)
+            {
+                if ($entry !== '.' && $entry !== '..')
+                {
+                    $resource = $folder . '/' . $entry;
+
+                    if (is_dir($resource))
+                    {
+                        // now check the subfolder
+                        $returnValue = $returnValue && $this->updateStepRewriteFolderRights($resource);
+
+                        // set rights to 0777
+                        $returnValue = $returnValue && chmod($resource, 0777);
+                    }
+                }
+            }
+            closedir($dirHandle);
+        }
+
+        return $returnValue;
     }
 
     /**

@@ -27,12 +27,12 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', $url);
 
-    if($update)
+    if ($update)
     {
         $form->setUpdateModus();
     }
 
-    if($buttonText === $gL10n->get('INS_UPDATE_DATABASE'))
+    if ($buttonText === $gL10n->get('INS_UPDATE_DATABASE'))
     {
         $onClickText = $gL10n->get('INS_DATABASE_IS_UPDATED');
     }
@@ -55,11 +55,11 @@ function checkDatabaseVersion(&$db)
     $message = '';
 
     // check database version
-    if(version_compare($db->getVersion(), $db->getMinimumRequiredVersion(), '<'))
+    if (version_compare($db->getVersion(), $db->getMinimumRequiredVersion(), '<'))
     {
-        $message = $gL10n->get('SYS_DATABASE_VERSION').': <strong>'.$db->getVersion().'</strong><br /><br />'.
+        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $db->getVersion() . '</strong><br /><br />' .
                    $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $db->getMinimumRequiredVersion(),
-                               '<a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>');
+                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
     }
 
     return $message;
@@ -76,11 +76,11 @@ function checkPhpVersion()
     $message = '';
 
     // check PHP version
-    if(version_compare(phpversion(), MIN_PHP_VERSION, '<'))
+    if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
     {
-        $message = $gL10n->get('SYS_PHP_VERSION').': <strong>'.phpversion().'</strong><br /><br />'.
+        $message = $gL10n->get('SYS_PHP_VERSION') . ': <strong>' . PHP_VERSION . '</strong><br /><br />' .
                    $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
-                               '<a href="'.ADMIDIO_HOMEPAGE.'download.php">', '</a>');
+                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
     }
 
     return $message;
@@ -96,7 +96,7 @@ function querySqlFile($db, $sqlFileName)
 {
     global $gL10n, $g_tbl_praefix;
 
-    $sqlPath = SERVER_PATH . '/adm_program/installation/db_scripts/';
+    $sqlPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
     $sqlFilePath = $sqlPath . $sqlFileName;
 
     if (!is_file($sqlFilePath))
@@ -104,7 +104,7 @@ function querySqlFile($db, $sqlFileName)
         return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', $sqlFileName, $sqlPath);
     }
 
-    $fileHandler = fopen($sqlFilePath, 'r');
+    $fileHandler = fopen($sqlFilePath, 'rb');
 
     if ($fileHandler === false)
     {
@@ -141,7 +141,7 @@ function disableSoundexSearchIfPgsql($db)
     if ($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
         // soundex is not a default function in PostgreSQL
-        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
+        $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'0\'
                  WHERE prf_name LIKE \'system_search_similar\'';
         $db->query($sql);
     }

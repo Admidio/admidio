@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.1.6', 0, 500)
-                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.1.6', 0, 0)
-                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.1.6', 0, 0)
-                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.1.6', 0, 0)
-                              , ('MODULE', 'DAT_DATES', 'DATES', '3.1.6', 0, 0)
-                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.1.6', 0, 0)
-                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.1.6', 0, 0)
-                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.1.6', 0, 0)
-                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.1.6', 0, 0)
-                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.1.6', 0, 0)
-                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.1.6', 0, 0)
-                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.1.6', 0, 0)
-                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.1.6', 0, 0)
-                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.1.6', 0, 0)
-                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.1.6', 0, 0)
-                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.1.6', 0, 0)
-                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.1.6', 0, 0);
+                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.1.8', 0, 500)
+                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.1.8', 0, 0)
+                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.1.8', 0, 0)
+                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.1.8', 0, 0)
+                              , ('MODULE', 'DAT_DATES', 'DATES', '3.1.8', 0, 0)
+                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.1.8', 0, 0)
+                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.1.8', 0, 0)
+                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.1.8', 0, 0)
+                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.1.8', 0, 0)
+                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.1.8', 0, 0)
+                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.1.8', 0, 0)
+                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.1.8', 0, 0)
+                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.1.8', 0, 0)
+                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.1.8', 0, 0)
+                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.1.8', 0, 0)
+                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.1.8', 0, 0)
+                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.1.8', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -104,6 +104,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (7251, 1, 'members_days_field_history', '365'),
 (7252, 1, 'members_show_all_users', '1'),
 (7300, 1, 'photo_image_text', '© demo.admidio.org'),
+(7305, 1, 'photo_image_text_size', '40'),
 (7350, 1, 'photo_albums_per_page', '16'),
 (7400, 1, 'photo_save_scale', '640'),
 (7500, 1, 'photo_show_width', '640'),
@@ -210,8 +211,9 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (72500, 2, 'members_users_per_page', '25'),
 (72510, 2, 'members_days_field_history', '365'),
 (72520, 2, 'members_show_all_users', '0'),
-(73050, 2, 'photo_albums_per_page', '16'),
-(73001, 2, 'photo_image_text', '© demo.admidio.org'),
+(73000, 2, 'photo_albums_per_page', '16'),
+(73025, 2, 'photo_image_text', '© demo.admidio.org'),
+(73050, 2, 'photo_image_text_size', '40'),
 (74001, 2, 'photo_save_scale', '640'),
 (75001, 2, 'photo_show_width', '640'),
 (76001, 2, 'photo_show_height', '480'),

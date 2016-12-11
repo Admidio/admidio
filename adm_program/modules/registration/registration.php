@@ -20,8 +20,8 @@ if($gPreferences['registration_mode'] == 0)
 // if there is no login then show a profile form where the user can register himself
 if(!$gValidLogin)
 {
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2');
-    exit();
+    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php?new_user=2');
+    // => EXIT
 }
 
 // Only Users with the right "approve users" can confirm registrations. Otherwise exit.
@@ -56,9 +56,8 @@ $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value AS las
            AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
       ORDER BY last_name, first_name';
 $usrStatement = $gDb->query($sql);
-$members_found = $usrStatement->rowCount();
 
-if ($members_found === 0)
+if ($usrStatement->rowCount() === 0)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
@@ -76,7 +75,7 @@ if($gCurrentUser->isAdministrator())
 
     // show link to system preferences of announcements
     $registrationMenu->addItem('menu_item_preferences',
-                               $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=registration',
+                               ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=registration',
                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -101,7 +100,7 @@ while($row = $usrStatement->fetch())
 
     if($gPreferences['enable_mail_module'] == 1)
     {
-        $mailLink = '<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
+        $mailLink = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
     }
     else
     {
@@ -110,16 +109,16 @@ while($row = $usrStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>',
         $datetimeCreate,
         $row['usr_login_name'],
         $mailLink,
-        '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_assign.php?new_user_id='.$row['usr_id'].'"><img
-                            src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
+        '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php?new_user_id='.$row['usr_id'].'"><img
+            src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
+            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
             $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img
-            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
 
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
 }

@@ -52,7 +52,7 @@ $importMenu = $page->getMenu();
 $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/modules/members/import_function.php', $page, array('enableFileUpload' => true));
+$form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
 $form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values')));
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
@@ -99,7 +99,7 @@ $form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $sele
                                                                                                     'defaultValue'                   => $form_values['user_import_mode'],
                                                                                                     'showContextDependentFirstEntry' => false,
                                                                                                     'helpTextIdLabel'                => 'MEM_IDENTIFY_USERS'));
-$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
+$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

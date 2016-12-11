@@ -64,8 +64,7 @@ $relationEditMenu = $page->getMenu();
 $relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('relation_edit_form',
-                     $g_root_path.'/adm_program/modules/userrelations/userrelations_function.php?usr_id='.$getUsrId.'&amp;mode=1', $page);
+$form = new HtmlForm('relation_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?usr_id='.$getUsrId.'&amp;mode=1', $page);
 
 $form->addInput(
     'usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
@@ -142,7 +141,7 @@ else
 }
 $form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'search' => true));
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

@@ -126,7 +126,7 @@ else
 }
 
 // show headline of module
-$html .= '<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
+$html .= '<form id="roles_assignment_form" action="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');
@@ -186,7 +186,7 @@ else
           ORDER BY cat_sequence, cat_id, rol_name';
 }
 $statement = $gDb->query($sql);
-$category  = '';
+$category  = null;
 $role      = new TableRoles($gDb);
 
 while($row = $statement->fetch())
@@ -202,7 +202,7 @@ while($row = $statement->fetch())
     {
         // if user is assigned to this role
         // or if user is created in members.php of list module
-        if($row['mem_usr_id'] > 0 || ($getNewUser == 1 && $role->getValue('rol_id') == $setRoleId))
+        if($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId))
         {
             $memberChecked = ' checked="checked" ';
         }
@@ -211,7 +211,7 @@ while($row = $statement->fetch())
         // but don't change their own membership, because there must be at least one administrator
         if($role->getValue('rol_administrator') == 1
         && (!$gCurrentUser->isAdministrator()
-        || ($gCurrentUser->isAdministrator() && $getUserId == $gCurrentUser->getValue('usr_id'))))
+        || ($gCurrentUser->isAdministrator() && $getUserId === (int) $gCurrentUser->getValue('usr_id'))))
         {
             $memberDisabled = ' disabled="disabled" ';
         }
@@ -236,7 +236,7 @@ while($row = $statement->fetch())
         );
 
         // if new category than display a category header
-        if($category != $role->getValue('cat_id'))
+        if($category !== (int) $role->getValue('cat_id'))
         {
             $block_id = 'admCategory'.$role->getValue('cat_id');
 
@@ -247,7 +247,7 @@ while($row = $statement->fetch())
             $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name'));
             $table->addTableBody('id', $block_id);
 
-            $category = $role->getValue('cat_id');
+            $category = (int) $role->getValue('cat_id');
         }
 
         $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
@@ -256,16 +256,16 @@ while($row = $statement->fetch())
         // show icon that leaders have no additional rights
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
         {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/info.png"
+            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
                                  alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-                                     <img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+                                     <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
         }
 
         // show icon with edit user right if leader has this right
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
         || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
         {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/profile_edit.png"
+            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
                                  alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
         }
 
@@ -273,14 +273,14 @@ while($row = $statement->fetch())
         if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
         || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
         {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_PATH.'/icons/roles.png"
+            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
                                  alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
         }
 
         // show dummy icon if leader has not all rights
         if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
         {
-            $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+            $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
         }
         $columnValues[] = $leaderRights;
 
@@ -290,7 +290,7 @@ while($row = $statement->fetch())
 $html .= $table->show();
 
 $html .= '
-    <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+    <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_URL.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 

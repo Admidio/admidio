@@ -55,7 +55,7 @@ $getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue'
 $getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
 $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
-error_log('bool::'.$getMembersShowAll);
+$gLogger->info('mem_show_all: ' . $getMembersShowAll);
 
 $jsonArray = array('draw' => $getDraw);
 
@@ -63,7 +63,7 @@ $jsonArray = array('draw' => $getDraw);
 $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
+if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
 }
@@ -310,7 +310,7 @@ while($user = $userStatement->fetch())
 
     if(strlen($addressText) > 1)
     {
-        $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+        $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
     }
 
     // Haekchen setzen ob jemand Leiter ist oder nicht
@@ -332,10 +332,10 @@ while($user = $userStatement->fetch())
 
     // create array with all column values and add it to the json array
     $jsonArray['data'][] = array(
-        '<img class="admidio-icon-info" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+        '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
         $htmlMemberStatus,
-        '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
-        '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
         $htmlAddress,
         $htmlBirthday,
         $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');

@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(SERVER_PATH. '/adm_program/system/classes/tableusers.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/tableusers.php');
 
 // drop foreign keys to delete index
 if($gDbType === 'mysql')
@@ -124,10 +124,10 @@ $gDb->query($sql);
 $sql = 'SELECT * FROM '.TBL_ORGANIZATIONS.' ORDER BY org_id DESC';
 $orgaStatement = $gDb->query($sql);
 
-while($row_orga = $orgaStatement->fetch())
+while($rowOrga = $orgaStatement->fetch())
 {
     $sql = 'INSERT INTO '.TBL_TEXTS.' (txt_org_id, txt_name, txt_text)
-                 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
+                 VALUES ('.$rowOrga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
     $gDb->query($sql);
 }
 

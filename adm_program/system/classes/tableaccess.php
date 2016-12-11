@@ -30,7 +30,7 @@
  */
 class TableAccess
 {
-    protected $additionalTables;    ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+    protected $additionalTables = array();  ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
     protected $columnPrefix;       ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
     protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
@@ -143,10 +143,10 @@ class TableAccess
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code // Constructor of adm_dates object where the category (calendar) is connected
-     * public function __construct(&$db, $dat_id = 0)
+     * public function __construct(&$db, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
-     *     parent::__construct($db, TBL_DATES, 'dat', $dat_id);
+     *     parent::__construct($db, TBL_DATES, 'dat', $datId);
      * } @endcode
      */
     protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
@@ -240,7 +240,7 @@ class TableAccess
                 case 'timestamp':
                 case 'date':
                 case 'time':
-                    if ($columnValue !== '')
+                    if ($columnValue !== '' && $columnValue !== null)
                     {
                         if ($format === '' && isset($gPreferences))
                         {

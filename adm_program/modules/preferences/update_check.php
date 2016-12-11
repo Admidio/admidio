@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1, 'directOutput' => true));
 
-if($getMode === 3 && !$gCurrentUser->isAdministrator())
+if ($getMode === 3 && !$gCurrentUser->isAdministrator())
 {
     echo $gL10n->get('SYS_NO_RIGHTS');
     exit();
@@ -41,11 +41,11 @@ function getUpdateVersion($updateInfo, $search)
     $adding = strlen($search) - 1;
 
     // Version auslesen
-    while($pointer !== "\n")
+    while ($pointer !== "\n")
     {
         ++$i;
         $updateVersion .= $pointer;
-        $pointer = substr($updateInfo, $currentVersionStart + $adding + $i, 1);
+        $pointer = $updateInfo[$currentVersionStart + $adding + $i];
     }
 
     return trim($updateVersion, "\n\r");
@@ -66,16 +66,16 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
     $update = 0;
 
     // Zunächst auf stabile Version prüfen
-    if(version_compare($checkStableVersion, $currentVersion, '>'))
+    if (version_compare($checkStableVersion, $currentVersion, '>'))
     {
         $update = 1;
     }
 
     // Jetzt auf Beta Version prüfen
     $status = version_compare($checkBetaVersion, $currentVersion);
-    if($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag, '>')))
+    if ($status === 1 || ($status === 0 && version_compare($betaRelease, $betaFlag, '>')))
     {
-        if($update === 1)
+        if ($update === 1)
         {
             $update = 3;
         }
@@ -91,7 +91,8 @@ function checkVersion($currentVersion, $checkStableVersion, $checkBetaVersion, $
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
 // Zunächst die Methode selektieren (CURL bevorzugt)
-if(@file_get_contents(ADMIDIO_HOMEPAGE.'update.txt') === false)
+$updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
+if (@file_get_contents($updateInfoUrl) === false)
 {
     // Admidio Versionen nicht auslesbar
     $stableVersion = 'n/a';
@@ -102,21 +103,21 @@ if(@file_get_contents(ADMIDIO_HOMEPAGE.'update.txt') === false)
 }
 else
 {
-    $update_info = file_get_contents(ADMIDIO_HOMEPAGE.'update.txt');
+    $updateInfo = file_get_contents($updateInfoUrl);
 
     // Admidio Versionen vom Server übergeben
-    $stableVersion = getUpdateVersion($update_info, 'Version=');
-    $betaVersion   = getUpdateVersion($update_info, 'Beta-Version=');
-    $betaRelease   = getUpdateVersion($update_info, 'Beta-Release=');
+    $stableVersion = getUpdateVersion($updateInfo, 'Version=');
+    $betaVersion   = getUpdateVersion($updateInfo, 'Beta-Version=');
+    $betaRelease   = getUpdateVersion($updateInfo, 'Beta-Release=');
 
     // Keine Stabile Version verfügbar (eigentlich unmöglich)
-    if($stableVersion === '')
+    if ($stableVersion === '')
     {
         $stableVersion = 'n/a';
     }
 
     // Keine Beatversion verfügbar
-    if($betaVersion === '')
+    if ($betaVersion === '')
     {
         $betaVersion = 'n/a';
         $betaRelease = '';
@@ -130,57 +131,55 @@ else
 // in der Variable $version_update abgefragt werden.
 // $version_update (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version, 99 = Keine Verbindung)
 
-if($getMode === 2)
+if ($getMode === 2)
 {
     /***********************************************************************/
     /* Updateergebnis anzeigen */
     /***********************************************************************/
 
-    if($versionUpdate === 1)
+    if ($versionUpdate === 1)
     {
-        $versionstext = $gL10n->get('UPD_NEW');
+        $versionsText = $gL10n->get('UPD_NEW');
     }
-    elseif($versionUpdate === 2)
+    elseif ($versionUpdate === 2)
     {
-        $versionstext = $gL10n->get('UPD_NEW_BETA');
+        $versionsText = $gL10n->get('UPD_NEW_BETA');
     }
-    elseif($versionUpdate === 3)
+    elseif ($versionUpdate === 3)
     {
-        $versionstext = $gL10n->get('UPD_NEW_BOTH');
+        $versionsText = $gL10n->get('UPD_NEW_BOTH');
     }
-    elseif($versionUpdate === 99)
+    elseif ($versionUpdate === 99)
     {
-        $admidioLink = '<a href="'.ADMIDIO_HOMEPAGE.'download.php" target="_blank">Admidio</a>';
-        $versionstext = $gL10n->get('UPD_CONNECTION_ERROR', $admidioLink);
+        $admidioLink = '<a href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">Admidio</a>';
+        $versionsText = $gL10n->get('UPD_CONNECTION_ERROR', $admidioLink);
     }
     else
     {
-        if(ADMIDIO_VERSION_BETA > 0)
+        $versionsTextBeta = '';
+        if (ADMIDIO_VERSION_BETA > 0)
         {
-            $versionstextBeta = 'Beta ';
+            $versionsTextBeta = 'Beta ';
         }
-        else
-        {
-            $versionstextBeta = ' ';
-        }
-        $versionstext = $gL10n->get('UPD_NO_NEW', $versionstextBeta);
+
+        $versionsText = $gL10n->get('UPD_NO_NEW', $versionsTextBeta);
     }
 
     echo '
-        <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION_TEXT.'</p>
-        <p>'.$gL10n->get('UPD_STABLE_VERSION').':&nbsp;
-            <a class="btn" href="'.ADMIDIO_HOMEPAGE.'download.php" target="_blank">
-                <img src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />'.$stableVersion.'
+        <p>' . $gL10n->get('UPD_CURRENT_VERSION') . ':&nbsp;' . ADMIDIO_VERSION_TEXT . '</p>
+        <p>' . $gL10n->get('UPD_STABLE_VERSION') . ':&nbsp;
+            <a class="btn" href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">
+                <img src="' . THEME_URL . '/icons/update_link.png" alt="' . $gL10n->get('UPD_ADMIDIO') . '" />' . $stableVersion . '
             </a>
             <br />
-            '.$gL10n->get('UPD_BETA_VERSION').': &nbsp;';
+            ' . $gL10n->get('UPD_BETA_VERSION') . ': &nbsp;';
 
-    if($versionUpdate !== 99 && $betaVersion !== 'n/a')
+    if ($versionUpdate !== 99 && $betaVersion !== 'n/a')
     {
         echo '
-            <a class="btn" href="'.ADMIDIO_HOMEPAGE.'download.php" target="_blank">
-                <img src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'" />
-                '.$betaVersion.'&nbsp;Beta&nbsp;'.$betaRelease.'
+            <a class="btn" href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">
+                <img src="' . THEME_URL . '/icons/update_link.png" alt="' . $gL10n->get('UPD_ADMIDIO') . '" />
+                ' . $betaVersion . ' Beta ' . $betaRelease . '
             </a>';
     }
     else
@@ -189,5 +188,5 @@ if($getMode === 2)
     }
     echo '
         </p>
-        <strong>'.$versionstext.'</strong>';
+        <strong>' . $versionsText . '</strong>';
 }

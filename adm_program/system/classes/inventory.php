@@ -28,7 +28,7 @@ class Inventory extends TableInventory
 {
     public $mInventoryFieldsData;           ///< object with current user field structure
     public $mProfileFieldsData  = array();
-    protected $list_view_rights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
+    protected $listViewRights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
 
     /**
@@ -116,13 +116,12 @@ class Inventory extends TableInventory
      */
     public function getValue($columnName, $format = '')
     {
-        global $gPreferences;
-
         if(strpos($columnName, 'inv_') === 0)
         {
-            if($columnName === 'inv_photo' && is_file(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg'))
+            $file = ADMIDIO_PATH . FOLDER_DATA . '/invent_profile_photos/' . $this->getValue('inv_id') . '.jpg';
+            if($columnName === 'inv_photo' && is_file($file))
             {
-                return file_get_contents(SERVER_PATH. '/adm_my_files/invent_profile_photos/'.$this->getValue('inv_id').'.jpg');
+                return file_get_contents($file);
             }
 
             return parent::getValue($columnName, $format);
@@ -248,7 +247,7 @@ class Inventory extends TableInventory
                 if(($this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 1
                    && $gCurrentUser->editUsers())
                 || $this->mInventoryFieldsData->getProperty($columnName, 'inf_disabled') == 0
-                || ($gCurrentUser->getValue('inv_id') == 0 && $this->getValue('inv_id') == 0))
+                || ((int) $gCurrentUser->getValue('inv_id') === 0 && (int) $this->getValue('inv_id') === 0))
                 {
                     $returnCode = $this->mInventoryFieldsData->setValue($columnName, $newValue);
                 }
@@ -316,7 +315,7 @@ class Inventory extends TableInventory
                                 $viewProfile = true;
                             }
                             elseif($row['rol_this_list_view'] == 1
-                            && isset($this->list_view_rights[$row['rol_id']]))
+                            && isset($this->listViewRights[$row['rol_id']]))
                             {
                                 // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
                                 $viewProfile = true;

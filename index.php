@@ -10,10 +10,7 @@
  */
 if(is_file('adm_my_files/config.php'))
 {
-    require_once('adm_my_files/config.php');
-    require_once('adm_program/system/init_globals.php');
-    require_once('adm_program/system/constants.php');
-    require_once('adm_program/system/function.php');
+    require_once('adm_program/system/common.php');
 
     // connect to database
     try
@@ -30,24 +27,25 @@ if(is_file('adm_my_files/config.php'))
     // because database Admidio version is lower then 3.0
     if($gDb->query('SELECT 1 FROM '.TBL_COMPONENTS, false) === false)
     {
-        header('Location: adm_program/installation/update.php');
+        admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
+        // => EXIT
     }
-
-    // if config file exists then show stored homepage
-    require_once('adm_program/system/common.php');
 
     if(isset($gHomepage))
     {
-        header('Location: '.$gHomepage);
+        admRedirect($gHomepage);
+        // => EXIT
     }
     else
     {
         // if parameter gHomepage doesn't exists then show default page
-        header('Location: adm_program/index.php');
+        admRedirect(ADMIDIO_URL . '/adm_program/index.php');
+        // => EXIT
     }
 }
 else
 {
     // config file doesn't exists then show installation wizard
     header('Location: adm_program/installation/index.php');
+    exit();
 }

@@ -6,7 +6,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/UploadHandler.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/jquery-file-upload/server/php/UploadHandler.php');
 
 /**
  * @class UploadHandlerPhoto
@@ -30,7 +30,7 @@ class UploadHandlerPhoto extends UploadHandler
      * Override the default method to handle the specific things of the photo module and
      * update the database after file was succesful uploaded.
      * This method has the same parameters as the default.
-     * @param string $uploaded_file
+     * @param string $uploadedFile
      * @param string $name
      * @param int    $size
      * @param        $type
@@ -39,18 +39,18 @@ class UploadHandlerPhoto extends UploadHandler
      * @param        $content_range
      * @return \stdClass
      */
-    protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null)
+    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $content_range = null)
     {
         global $photoAlbum, $gPreferences, $gL10n;
 
-        $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $content_range);
 
         if(!isset($file->error))
         {
             try
             {
-                $fileLocation = SERVER_PATH.'/adm_my_files/photos/upload/'.$file->name;
-                $albumFolder  = SERVER_PATH.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
+                $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;
+                $albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
                 // create folder if not exists
                 if(!is_dir($albumFolder))

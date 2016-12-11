@@ -58,7 +58,7 @@ class HtmlTable extends HtmlTableBasic
      */
     public function __construct($id, HtmlPage $htmlPage = null, $hoverRows = true, $datatables = false, $class = null)
     {
-        global $g_root_path, $gL10n;
+        global $gL10n;
 
         if ($class === null)
         {
@@ -91,7 +91,7 @@ class HtmlTable extends HtmlTableBasic
         {
             $this->addAttribute('width', '100%');
 
-            $this->datatablesInitParameters[] = '"language": {"url": "' . $g_root_path . '/adm_program/libs/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
         }
 
         if ($htmlPage instanceof \HtmlPage)
@@ -519,6 +519,10 @@ class HtmlTable extends HtmlTableBasic
      */
     public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$htmlTable->setDatatablesAlternativOrderColumns()" is deprecated, use "$htmlTable->setDatatablesAlternativeOrderColumns()" instead!');
+
         $this->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
     }
 }

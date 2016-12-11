@@ -53,6 +53,8 @@ release on Github.
 2. Extract the files into your project.
 3. `require_once "/path/to/random_compat/lib/random.php";`
 
+The entrypoint should be **`lib/random.php`** directly, not any of the other files in `/lib`.
+
 ## Usage
 
 This library exposes the [CSPRNG functions added in PHP 7](https://secure.php.net/manual/en/ref.csprng.php)
@@ -82,8 +84,7 @@ var_dump(bin2hex($string));
 
 ```php
 try {
-    $int = random_int(0,255);
-
+    $int = random_int(0, 255);
 } catch (TypeError $e) {
     // Well, it's an integer, so this IS unexpected.
     die("An unexpected error has occurred"); 
@@ -92,7 +93,7 @@ try {
     die("An unexpected error has occurred");
 } catch (Exception $e) {
     // If you get this message, the CSPRNG failed hard.
-    die("Could not generate a random string. Is our OS secure?");
+    die("Could not generate a random int. Is our OS secure?");
 }
 
 var_dump($int);
@@ -136,6 +137,46 @@ try {
 }
 ```
 
+### Troubleshooting
+
+**Exception: "Could not gather sufficient random data"**
+
+If an Exception is thrown, then your operating system is not secure.
+
+1. If you're on Windows, make sure you enable mcrypt.
+2. If you're on any other OS, make sure `/dev/urandom` is readable.
+   * FreeBSD jails need to expose `/dev/urandom` from the host OS
+   * If you use `open_basedir`, make sure `/dev/urandom` is allowed
+
+This library does not (and will not accept any patches to) fall back to
+an insecure random number generator.
+
+**Version Conflict with [Other PHP Project]**
+
+If you're using a project that has a line like this in its composer.json
+
+    "require" {
+        ...
+        "paragonie/random_compat": "~1.1",
+        ...
+    }
+
+...and then you try to add random_compat 2 (or another library that explicitly
+requires random_compat 2, such as [this secure PHP encryption library](https://github.com/defuse/php-encryption)),
+you will get a version conflict.
+
+The solution is to get the project to update its requirement string to allow
+version 2 and above to be used instead of hard-locking users to version 1.
+
+```diff
+"require" {
+    ...
+-    "paragonie/random_compat": "~1.1",
++    "paragonie/random_compat": "^1|^2",
+    ...
+}
+```
+
 ## Contributors
 
 This project would not be anywhere near as excellent as it is today if it 
@@ -144,33 +185,44 @@ weren't for the contributions of the following individuals:
 * [@AndrewCarterUK (Andrew Carter)](https://github.com/AndrewCarterUK)
 * [@asgrim (James Titcumb)](https://github.com/asgrim)
 * [@bcremer (Benjamin Cremer)](https://github.com/bcremer)
-* [@CodesInChaos (Christian Winnerlein)](https://github.com/CodesInChaos)
 * [@chriscct7 (Chris Christoff)](https://github.com/chriscct7)
+* [@CodesInChaos (Christian Winnerlein)](https://github.com/CodesInChaos)
+* [@ConnorVG (Connor S. Parks)](https://github.com/ConnorVG)
 * [@cs278 (Chris Smith)](https://github.com/cs278)
 * [@cweagans (Cameron Eagans)](https://github.com/cweagans)
 * [@dd32 (Dion Hulse)](https://github.com/dd32)
 * [@geggleto (Glenn Eggleton)](https://github.com/geggleto)
+* [@glensc (Elan Ruusamäe)](https://github.com/glensc)
+* [@GrahamCampbell (Graham Campbell)](https://github.com/GrahamCampbell)
 * [@ircmaxell (Anthony Ferrara)](https://github.com/ircmaxell)
+* [@jdevalk (Joost de Valk)](https://github.com/jdevalk)
 * [@jedisct1 (Frank Denis)](https://github.com/jedisct1)
 * [@juliangut (Julián Gutiérrez)](https://github.com/juliangut)
 * [@kelunik (Niklas Keller)](https://github.com/kelunik)
 * [@lt (Leigh)](https://github.com/lt)
 * [@MasonM (Mason Malone)](https://github.com/MasonM)
+* [@menkaff (Mehran NikNafs)](https://github.com/menkaff)
 * [@mmeyer2k (Michael M)](https://github.com/mmeyer2k)
 * [@narfbg (Andrey Andreev)](https://github.com/narfbg)
 * [@nicolas-grekas (Nicolas Grekas)](https://github.com/nicolas-grekas)
+* [@ocean90 (Dominik Schilling)](https://github.com/ocean90)
 * [@oittaa](https://github.com/oittaa)
 * [@oucil (Kevin Farley)](https://github.com/oucil)
+* [@philios33 (Phil Nicholls)](https://github.com/philios33)
 * [@redragonx (Stephen Chavez)](https://github.com/redragonx)
+* [@relaxnow (Boy Baukema)](https://github.com/relaxnow)
 * [@rchouinard (Ryan Chouinard)](https://github.com/rchouinard)
+* [@rugk](https://github.com/rugk)
 * [@SammyK (Sammy Kaye Powers)](https://github.com/SammyK)
 * [@scottchiefbaker (Scott Baker)](https://github.com/scottchiefbaker)
 * [@skyosev (Stoyan Kyosev)](https://github.com/skyosev)
+* [@sthen (Stuart Henderseon)](https://github.com/sthen)
 * [@stof (Christophe Coevoet)](https://github.com/stof)
 * [@teohhanhui (Teoh Han Hui)](https://github.com/teohhanhui)
 * [@tom-- (Tom Worster)](https://github.com/tom--)
 * [@tsyr2ko](https://github.com/tsyr2ko)
 * [@trowski (Aaron Piotrowski)](https://github.com/trowski)
 * [@twistor (Chris Lepannen)](https://github.com/twistor)
+* [@vinkla (Vincent Klaiber)](https://github.com/vinkla)
 * [@voku (Lars Moelleken)](https://github.com/voku)
 * [@xabbuh (Christian Flothmann)](https://github.com/xabbuh)

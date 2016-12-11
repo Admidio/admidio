@@ -246,6 +246,42 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
+     * Add a new button with a custom text to the form. This button could have
+     * an icon in front of the text. Different to addButton this method adds an
+     * additional @b div around the button and the type of the button is @b submit.
+     * @param string $id      Id of the button. This will also be the name of the button.
+     * @param string $text    Text of the button
+     * @param array  $options (optional) An array with the following possible entries:
+     *                        - @b icon : Optional parameter. Path and filename of an icon.
+     *                          If set a icon will be shown in front of the text.
+     *                        - @b link : If set a javascript click event with a page load to this link
+     *                          will be attached to the button.
+     *                        - @b onClickText : A text that will be shown after a click on this button
+     *                          until the next page is loaded. The button will be disabled after click.
+     *                        - @b class : Optional an additional css classname. The class @b admButton
+     *                          is set as default and need not set with this parameter.
+     *                        - @b type : If set to true this button get the type @b submit. This will
+     *                          be the default.
+     */
+    public function addSubmitButton($id, $text, array $options = array())
+    {
+        // create array with all options
+        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
+        $optionsAll     = array_replace($optionsDefault, $options);
+
+        // add default css class
+        $optionsAll['class'] .= ' btn-primary';
+
+        // now add button to form
+        $this->addButton($id, $text, $optionsAll);
+
+        if (!$this->buttonGroupOpen)
+        {
+            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
+        }
+    }
+
+    /**
      * Add a captcha with an input field to the form. The captcha could be a picture with a character code
      * or a simple mathematical calculation that must be solved.
      * @param string $id    Id of the captcha field. This will also be the name of the captcha field.
@@ -254,7 +290,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCaptcha($id, $class = '')
     {
-        global $gL10n, $g_root_path;
+        global $gL10n;
 
         $attributes = array('class' => 'captcha');
         ++$this->countElements;
@@ -267,10 +303,10 @@ class HtmlForm extends HtmlFormBasic
 
         // add a row with the captcha puzzle
         $this->openControlStructure('captcha_puzzle', '', FIELD_DEFAULT, '', '', $attributes['class']);
-        $onClickCode = 'document.getElementById("captcha").src="' . $g_root_path . '/adm_program/libs/securimage/securimage_show.php?" + Math.random(); return false;';
-        $this->addHtml('<img id="captcha" src="' . $g_root_path . '/adm_program/libs/securimage/securimage_show.php" alt="CAPTCHA Image" />
-                        <a class="admidio-icon-link" href="#" onclick="' . $onClickCode . '"><img
-                            src="' . THEME_PATH . '/icons/view-refresh.png" alt="' . $gL10n->get('SYS_RELOAD') . '" title="' . $gL10n->get('SYS_RELOAD') . '" /></a>');
+        $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?\' + Math.random(); return false;';
+        $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '"><img
+                            src="' . THEME_URL . '/icons/view-refresh.png" alt="' . $gL10n->get('SYS_RELOAD') . '" title="' . $gL10n->get('SYS_RELOAD') . '" /></a>');
         $this->closeControlStructure();
 
         // now add a row with a text field where the user can write the solution for the puzzle
@@ -352,7 +388,7 @@ class HtmlForm extends HtmlFormBasic
             }
             elseif (admStrIsValidFileName($optionsAll['icon'], true))
             {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_PATH . '/icons/' . $optionsAll['icon'] . '" title="' . $label . '" alt="' . $label . '" />';
+                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $optionsAll['icon'] . '" title="' . $label . '" alt="' . $label . '" />';
             }
         }
 
@@ -450,7 +486,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addEditor($id, $label, $value, array $options = array())
     {
-        global $gPreferences, $g_root_path, $gL10n;
+        global $gPreferences, $gL10n;
 
         ++$this->countElements;
         $attributes = array('class' => 'editor');
@@ -490,7 +526,7 @@ class HtmlForm extends HtmlFormBasic
                 toolbar: "' . $optionsAll['toolbar'] . '",
                 language: "' . $gL10n->getLanguageIsoCode() . '",
                 uiColor: "' . $gPreferences['system_js_editor_color'] . '",
-                filebrowserImageUploadUrl: "' . $g_root_path . '/adm_program/system/ckeditor_upload_handler.php"
+                filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
             });
             CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
 
@@ -510,7 +546,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $this->addHtml(
             '<div class="' . $attributes['class'] . '">
-                <textarea id="' . $id . '" name="' . $id . '"style="width: 100%;">' . $value . '</textarea>
+                <textarea id="' . $id . '" name="' . $id . '" style="width: 100%;">' . $value . '</textarea>
             </div>'
         );
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
@@ -629,7 +665,7 @@ class HtmlForm extends HtmlFormBasic
             // show button to add new upload field to form
             $this->addHtml(
                 '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-default">
-                    <img src="' . THEME_PATH . '/icons/add.png" alt="' . $optionsAll['multiUploadLabel'] . '" />'
+                    <img src="' . THEME_URL . '/icons/add.png" alt="' . $optionsAll['multiUploadLabel'] . '" />'
                     . $optionsAll['multiUploadLabel'] .
                 '</button>'
             );
@@ -829,29 +865,37 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['passwordStrength'])
         {
+            $passwordStrengthLevel = 1;
+            if ($gPreferences['password_min_strength'])
+            {
+                $passwordStrengthLevel = $gPreferences['password_min_strength'];
+            }
+
             if ($this->htmlPage instanceof \HtmlPage)
             {
                 $zxcvbnUserInputs = json_encode($optionsAll['passwordUserData'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $javascriptCode = '
+                    $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
+
                     $("#' . $id . '").keyup(function(e) {
                         var result = zxcvbn(e.target.value, ' . $zxcvbnUserInputs . ');
-                        $("#admidio-password-strength-indicator").removeClass().addClass("admidio-password-strength-indicator-" + result.score);
+                        var cssClasses = ["progress-bar-danger", "progress-bar-danger", "progress-bar-warning", "progress-bar-info", "progress-bar-success"];
+
+                        var progressBar = $("#admidio-password-strength .progress-bar");
+                        progressBar.attr("aria-valuenow", result.score * 25);
+                        progressBar.css("width", result.score * 25 + "%");
+                        progressBar.removeClass(cssClasses.join(" "));
+                        progressBar.addClass(cssClasses[result.score]);
                     });
                 ';
                 $this->htmlPage->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
 
-            $passwordStrengthLevel = 1;
-            if ($gPreferences['password_min_strength'])
-            {
-                $passwordStrengthLevel = $gPreferences['password_min_strength'];
-            }
             $this->addHtml('
-                <div id="admidio-password-strength" class="' . $optionsAll['class'] . '">
-                    <div id="admidio-password-strength-indicator">
-                        <div id="admidio-password-strength-minimum" style="margin-left: calc(' . $passwordStrengthLevel . ' * 25% - 3px);"></div>
-                    </div>
+                <div id="admidio-password-strength" class="progress ' . $optionsAll['class'] . '">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                    <div id="admidio-password-strength-minimum"></div>
                 </div>
             ');
         }
@@ -936,7 +980,7 @@ class HtmlForm extends HtmlFormBasic
 
             // if max field length is set then show a counter how many characters still available
             $javascriptCode = '
-                $("#' . $id . '"").NobleCount("#' . $id . '_counter", {
+                $("#' . $id . '").NobleCount("#' . $id . '_counter", {
                     max_chars: ' . $optionsAll['maxLength'] . ',
                     on_negative: "systeminfoBad",
                     block_negative: true
@@ -1027,12 +1071,12 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
-        $this->openControlStructure('', $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // set one radio button with no value will be set in front of the other array.
         if ($optionsAll['showNoValueButton'])
         {
-            if ($optionsAll['defaultValue'] === '' && count($values) === 0)
+            if ($optionsAll['defaultValue'] === '')
             {
                 $attributes['checked'] = 'checked';
             }
@@ -1045,6 +1089,8 @@ class HtmlForm extends HtmlFormBasic
         // for each entry of the array create an input radio field
         foreach ($values as $key => $value)
         {
+            unset($attributes['checked']);
+
             if ($optionsAll['defaultValue'] == $key)
             {
                 $attributes['checked'] = 'checked';
@@ -1631,39 +1677,12 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
-     * Add a new button with a custom text to the form. This button could have
-     * an icon in front of the text. Different to addButton this method adds an
-     * additional @b div around the button and the type of the button is @b submit.
-     * @param string $id      Id of the button. This will also be the name of the button.
-     * @param string $text    Text of the button
-     * @param array  $options (optional) An array with the following possible entries:
-     *                        - @b icon : Optional parameter. Path and filename of an icon.
-     *                          If set a icon will be shown in front of the text.
-     *                        - @b link : If set a javascript click event with a page load to this link
-     *                          will be attached to the button.
-     *                        - @b onClickText : A text that will be shown after a click on this button
-     *                          until the next page is loaded. The button will be disabled after click.
-     *                        - @b class : Optional an additional css classname. The class @b admButton
-     *                          is set as default and need not set with this parameter.
-     *                        - @b type : If set to true this button get the type @b submit. This will
-     *                          be the default.
+     * Open a bootstrap btn-group if the form need more than one button.
      */
-    public function addSubmitButton($id, $text, array $options = array())
+    public function openButtonGroup()
     {
-        // create array with all options
-        $optionsDefault = array('icon' => '', 'link' => '', 'onClickText' => '', 'class' => '', 'type' => 'submit');
-        $optionsAll     = array_replace($optionsDefault, $options);
-
-        // add default css class
-        $optionsAll['class'] .= ' btn-primary';
-
-        // now add button to form
-        $this->addButton($id, $text, $optionsAll);
-
-        if (!$this->buttonGroupOpen)
-        {
-            $this->addHtml('<div class="form-alert" style="display: none;">&nbsp;</div>');
-        }
+        $this->buttonGroupOpen = true;
+        $this->addHtml('<div class="btn-group" role="group">');
     }
 
     /**
@@ -1743,23 +1762,6 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
-     * Close all html elements of a groupbox that was created before.
-     */
-    public function closeGroupBox()
-    {
-        $this->addHtml('</div></div>');
-    }
-
-    /**
-     * Open a bootstrap btn-group if the form need more than one button.
-     */
-    public function openButtonGroup()
-    {
-        $this->buttonGroupOpen = true;
-        $this->addHtml('<div class="btn-group" role="group">');
-    }
-
-    /**
      * Creates a html structure for a form field. This structure contains the label and the div for the form element.
      * After the form element is added the method closeControlStructure must be called.
      * @param string $id         The id of this field structure.
@@ -1815,7 +1817,7 @@ class HtmlForm extends HtmlFormBasic
             }
             elseif (admStrIsValidFileName($icon, true))
             {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_PATH . '/icons/' . $icon . '" title="' . $label . '" alt="' . $label . '" />';
+                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $icon . '" title="' . $label . '" alt="' . $label . '" />';
             }
         }
 
@@ -1868,6 +1870,14 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
+     * Close all html elements of a groupbox that was created before.
+     */
+    public function closeGroupBox()
+    {
+        $this->addHtml('</div></div>');
+    }
+
+    /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
      * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
@@ -1900,7 +1910,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        return '<img class="admidio-icon-help" src="' . THEME_PATH . '/icons/help.png"
+        return '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
             title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
             data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
     }

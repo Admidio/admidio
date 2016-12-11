@@ -36,8 +36,8 @@ class AutoLogin extends TableAccess
     {
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
-        // if not numeric than the session id is commited
-        if(is_numeric($session))
+        // if not integer than the auto-login-id is commited
+        if (is_int($session))
         {
             $this->readDataById($session);
         }
@@ -58,9 +58,9 @@ class AutoLogin extends TableAccess
 
         try
         {
-            $loginId = $userId.':'.PasswordHashing::genRandomPassword(40);
+            $loginId = $userId . ':' . PasswordHashing::genRandomPassword(40);
         }
-        catch(AdmException $e)
+        catch (AdmException $e)
         {
             $e->showText();
             // => EXIT
@@ -73,31 +73,28 @@ class AutoLogin extends TableAccess
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * The current organization, last login and ip adress will be set per default.
+     * The current organization, last login and ip address will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
      *                                if table has columns like @b usr_id_create or @b usr_id_changed
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
     {
-        if($this->new_record)
+        global $gCurrentOrganization;
+
+        // Insert & Update
+        $this->setValue('atl_last_login', DATETIME_NOW);
+        $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
+
+        if ($this->new_record)
         {
             // Insert
-            global $gCurrentOrganization;
-
             $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));
-            $this->setValue('atl_last_login', DATETIME_NOW);
-            $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
 
             // Tabelle aufraeumen, wenn ein neuer Datensatz geschrieben wird
             $this->tableCleanup();
         }
-        else
-        {
-            // Update
-            $this->setValue('atl_last_login', DATETIME_NOW);
-            $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
-        }
+
         return parent::save($updateFingerPrint);
     }
 
@@ -112,15 +109,15 @@ class AutoLogin extends TableAccess
         $currDateTime = new DateTime();
         $oneYearDateInterval = new DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
-        $date_session_delete = $oneYearBeforeDateTime->format('Y.m.d H:i:s');
+        $dateSessionDelete = $oneYearBeforeDateTime->format('Y.m.d H:i:s');
 
         $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                 WHERE atl_last_login < \''. $date_session_delete. '\'';
+                 WHERE atl_last_login < \''.$dateSessionDelete.'\'';
         $this->db->query($sql);
 
         // reset all counted wrong auto login ids from this user to prevent
         // a deadlock if user has auto login an several devices and they were
-        // set invalid fpr security reasons
+        // set invalid for security reasons
         $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = 0
                  WHERE atl_usr_id = '.$this->getValue('atl_usr_id');
         $this->db->query($sql);
