@@ -472,9 +472,9 @@ class TableAccess
         }
 
         // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-        $itemConnection = '';
-        $sqlFieldList   = '';
-        $sqlValueList   = '';
+        $sqlFieldArray = array();
+        $sqlValueArray = array();
+        $sqlSetArray = array();
 
         // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
         foreach ($this->dbColumns as $key => $value)
@@ -489,52 +489,48 @@ class TableAccess
                     if ($value !== '')
                     {
                         // Daten fuer ein Insert aufbereiten
-                        $sqlFieldList .= ' ' . $itemConnection . ' ' . $key . ' ';
-                        $sqlValueList .= ' ' . $itemConnection;
+                        $sqlFieldArray[] = $key;
 
                         // unterscheiden zwischen Numerisch und Text
                         if (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
                         ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
                         {
-                            $sqlValueList .= ' ' . $value . ' ';
+                            $sqlValueArray[] = $value;
                         }
                         else
                         {
                             // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
                             // damit sie auf jeden Fall da sind
                             $value = addslashes(stripslashes($value));
-                            $sqlValueList .= ' \'' . $value . '\' ';
+                            $sqlValueArray[] = '\'' . $value . '\'';
                         }
                     }
                 }
                 else
                 {
-                    $sqlFieldList .= ' ' . $itemConnection . ' ' . $key;
+                    $setString = $key . ' = ';
 
                     // Daten fuer ein Update aufbereiten
                     if ($value === '' || $value === null)
                     {
-                        $sqlFieldList .= ' = NULL ';
+                        $setString .= 'NULL';
                     }
                     elseif (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
                         ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
                     {
                         // numerisch
-                        $sqlFieldList .= ' = ' . $value . ' ';
+                        $setString .= $value;
                     }
                     else
                     {
                         // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
                         // damit sie auf jeden Fall da sind
                         $value = addslashes(stripslashes($value));
-                        $sqlFieldList .= ' = \'' . $value . '\' ';
+                        $setString .= '\'' . $value . '\'';
                     }
+                    $sqlSetArray[] = $setString;
                 }
 
-                if ($itemConnection === '' && $sqlFieldList !== '')
-                {
-                    $itemConnection = ',';
-                }
                 $this->columnsInfos[$key]['changed'] = false;
             }
         }
@@ -542,8 +538,11 @@ class TableAccess
         if ($this->new_record)
         {
             // insert record and mark this object as not new and remember the new id
-            $sql = 'INSERT INTO '.$this->tableName.' ('.$sqlFieldList.') VALUES ('.$sqlValueList.') ';
+            $sql = 'INSERT INTO '.$this->tableName.'
+                           ('.implode(',', $sqlFieldArray).')
+                    VALUES ('.implode(',', $sqlValueArray).')';
             $this->db->query($sql); // TODO add more params
+
             $this->new_record = false;
             if ($this->keyColumnName !== '')
             {
@@ -553,7 +552,7 @@ class TableAccess
         else
         {
             $sql = 'UPDATE '.$this->tableName.'
-                       SET '.$sqlFieldList.'
+                       SET '.implode(',', $sqlSetArray).'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
             $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName])); // TODO add more params
         }
