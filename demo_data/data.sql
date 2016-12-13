@@ -4,23 +4,23 @@
 --
 
 INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.1.8', 0, 500)
-                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.1.8', 0, 0)
-                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.1.8', 0, 0)
-                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.1.8', 0, 0)
-                              , ('MODULE', 'DAT_DATES', 'DATES', '3.1.8', 0, 0)
-                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.1.8', 0, 0)
-                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.1.8', 0, 0)
-                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.1.8', 0, 0)
-                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.1.8', 0, 0)
-                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.1.8', 0, 0)
-                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.1.8', 0, 0)
-                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.1.8', 0, 0)
-                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.1.8', 0, 0)
-                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.1.8', 0, 0)
-                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.1.8', 0, 0)
-                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.1.8', 0, 0)
-                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.1.8', 0, 0);
+                         VALUES ('SYSTEM', 'Admidio Core', 'CORE', '3.2.0', 0, 500)
+                              , ('MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUCEMENTS', '3.2.0', 0, 0)
+                              , ('MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.2.0', 0, 0)
+                              , ('MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.2.0', 0, 0)
+                              , ('MODULE', 'DAT_DATES', 'DATES', '3.2.0', 0, 0)
+                              , ('MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.2.0', 0, 0)
+                              , ('MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.2.0', 0, 0)
+                              , ('MODULE', 'LNK_WEBLINKS', 'LINKS', '3.2.0', 0, 0)
+                              , ('MODULE', 'LST_LISTS', 'LISTS', '3.2.0', 0, 0)
+                              , ('MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.2.0', 0, 0)
+                              , ('MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.2.0', 0, 0)
+                              , ('MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.2.0', 0, 0)
+                              , ('MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.2.0', 0, 0)
+                              , ('MODULE', 'PRO_PROFILE', 'PROFILE', '3.2.0', 0, 0)
+                              , ('MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.2.0', 0, 0)
+                              , ('MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.2.0', 0, 0)
+                              , ('MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.2.0', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -87,7 +87,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6925, 1, 'mail_into_to', '0'),
 (6927, 1, 'mail_show_former', '1'),
 (6930, 1, 'mail_max_receiver', '4'),
-(6950, 1, 'mail_sender_into_to', '0'),
+(6950, 1, 'mail_recipients_with_roles', '0'),
 (7000, 1, 'mail_sendmail_address', ''),
 (7010, 1, 'mail_sendmail_name', ''),
 (7020, 1, 'mail_send_method', 'phpmail'),
@@ -135,13 +135,9 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (9365, 1, 'system_show_create_edit', '1'),
 (9370, 1, 'system_time', 'H:i'),
 (9400, 1, 'captcha_background_color', '#FFEFC4'),
-(9410, 1, 'captcha_font_size', '20'),
-(9420, 1, 'captcha_fonts', 'Theme'),
+(9420, 1, 'captcha_fonts', 'AHGBold.ttf'),
 (9430, 1, 'captcha_width', '250'),
-(9440, 1, 'captcha_height', '60'),
-(9450, 1, 'captcha_signs', '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'),
-(9460, 1, 'captcha_signature', 'POWERED  BY   A D M I D I O . O R G'),
-(9470, 1, 'captcha_signature_font_size', '13'),
+(9460, 1, 'captcha_signature', 'Powered by Admidio.org'),
 (9480, 1, 'captcha_type', 'pic'),
 (10001, 2, 'announcements_per_page', '10'),
 (11001, 2, 'ecard_thumbs_scale', '250'),
@@ -195,7 +191,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (69250, 2, 'mail_into_to', '0'),
 (69270, 2, 'mail_show_former', '1'),
 (69300, 2, 'mail_max_receiver', '1'),
-(69500, 2, 'mail_sender_into_to', '0'),
+(69500, 2, 'mail_recipients_with_roles', '0'),
 (70001, 2, 'mail_sendmail_address', ''),
 (70010, 2, 'mail_sendmail_name', ''),
 (70020, 2, 'mail_send_method', 'phpmail'),
@@ -243,13 +239,9 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (93650, 2, 'system_show_create_edit', '2'),
 (93080, 2, 'system_time', 'H:i'),
 (94000, 2, 'captcha_background_color', '#FFEFC4'),
-(94010, 2, 'captcha_font_size', '20'),
-(94020, 2, 'captcha_fonts', 'Theme'),
+(94020, 2, 'captcha_fonts', 'AHGBold.ttf'),
 (94030, 2, 'captcha_width', '250'),
-(94040, 2, 'captcha_height', '60'),
-(94050, 2, 'captcha_signs', '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'),
-(94060, 2, 'captcha_signature', 'POWERED  BY   A D M I D I O . O R G'),
-(94070, 2, 'captcha_signature_font_size', '13'),
+(94060, 2, 'captcha_signature', 'Powered by Admidio.org'),
 (94080, 2, 'captcha_type', 'pic');
 
 
@@ -413,7 +405,9 @@ INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_passwo
 (352, 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, 0),
 (353, 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, 0),
 (354, 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', 1),
-(355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', 1);
+(355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', 1),
+(356, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', 1),
+(357, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', 1);
 
 
 --
@@ -433,31 +427,55 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 (10, 1, 'DAT', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (11, 1, 'DAT', 'COURSES', 'INS_COURSES', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, 1, 'DAT', 'TRAINING', 'INS_TRAINING', 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(13, 2, 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(14, 2, 'ROL', 'GROUPS', 'INS_GROUPS', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(15, 2, 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(16, 2, 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
-(17, 2, 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(19, 2, 'LNK', 'ADMIDIO', 'Admidio', 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(20, 2, 'DAT', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
-(21, 2, 'DAT', 'COURSES', 'INS_COURSES', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
-(22, 2, 'DAT', 'TRAINING', 'INS_TRAINING', 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
-(23, NULL, 'ROL', 'CONFIRMATION_OF_PARTICIPATION', 'SYS_CONFIRMATION_OF_PARTICIPATION', 1, 1, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL);
+(13, 1, 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(14, 1, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(100, 2, 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(101, 2, 'ROL', 'GROUPS', 'INS_GROUPS', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(102, 2, 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(103, 2, 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL),
+(104, 2, 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(105, 2, 'LNK', 'ADMIDIO', 'Admidio', 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
+(106, 2, 'DAT', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(107, 2, 'DAT', 'COURSES', 'INS_COURSES', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(108, 2, 'DAT', 'TRAINING', 'INS_TRAINING', 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
+(109, 2, 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
+(110, 2, 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 0, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
+(200, NULL, 'ROL', 'CONFIRMATION_OF_PARTICIPATION', 'SYS_CONFIRMATION_OF_PARTICIPATION', 1, 1, 0, 4, 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
 --
 -- Data for table adm_roles
 --
 
-INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_visible, rol_webmaster) VALUES
-(1, 3, 'SYS_WEBMASTER', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1, 1),
+INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_visible, rol_administrator) VALUES
+(1, 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1, 1),
 (2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 1, 0),
 (3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD', 0, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 1, 0),
 (4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', 1, 0, 1, 0),
 (5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 1, 0),
-(6, 13, 'SYS_WEBMASTER', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1, 1),
-(7, 13, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 1, 0),
-(8, 23, 'DAT_DATE 2012-05-13 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0, 0);
+(6, 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1, 1),
+(7, 100, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 1, 0),
+(8, 200, 'DAT_DATE 2012-05-13 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0, 0);
+
+
+--
+-- Data for table adm_roles_rights
+--
+
+INSERT INTO %PREFIX%_roles_rights (ror_id, ror_name_intern, ror_table) VALUES
+(1, 'folder_view', 'adm_folders'),
+(2, 'folder_upload', 'adm_folders');
+
+
+--
+-- Data for table adm_roles_rights_data
+--
+
+INSERT INTO %PREFIX%_roles_rights_data (rrd_id, rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create) VALUES
+(1, 1, 3, 3, 1, '2015-01-08 13:12:05'),
+(2, 2, 3, 1, 1, '2015-03-08 15:56:35'),
+(3, 2, 1, 2, 1, '2016-10-08 01:45:05'),
+(4, 2, 3, 3, 1, '2016-10-08 11:23:05');
 
 
 --
@@ -508,13 +526,46 @@ female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 12, 1, '2012-01-08 11:12:05', NU
 
 
 --
+-- Data for table adm_user_relation_types
+--
+
+INSERT INTO %PREFIX%_user_relation_types (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create, urt_usr_id_change, urt_timestamp_change) VALUES
+(1, 'INS_PARENT', 'INS_FATHER', 'INS_MOTHER', 2, 2, '2016-11-22 05:29:56', NULL, NULL),
+(2, 'INS_CHILD', 'INS_SON', 'INS_DAUGHTER', 1, 2, '2016-11-22 05:29:56', NULL, NULL),
+(3, 'INS_SIBLING', 'INS_BROTHER', 'INS_SISTER', 3, 2, '2016-11-22 05:29:56', NULL, NULL),
+(4, 'INS_SPOUSE', 'INS_HUSBAND', 'INS_WIFE', 4, 2, '2016-11-22 05:29:56', NULL, NULL),
+(5, 'INS_COHABITANT', 'INS_COHABITANT_MALE', 'INS_COHABITANT_FEMALE', 5, 2, '2016-11-22 05:29:56', NULL, NULL),
+(6, 'INS_COMPANION', 'INS_BOYFRIEND', 'INS_GIRLFRIEND', 6, 2, '2016-11-22 05:29:56', NULL, NULL),
+(7, 'INS_SUPERIOR', 'INS_SUPERIOR_MALE', 'INS_SUPERIOR_FEMALE', 8, 2, '2016-11-22 05:29:56', NULL, NULL),
+(8, 'INS_SUBORDINATE', 'INS_SUBORDINATE_MALE', 'INS_SUBORDINATE_FEMALE', 7, 2, '2016-11-22 05:29:56', NULL, NULL);
+
+
+--
+-- Data for table adm_user_relations
+--
+
+INSERT INTO %PREFIX%_user_relations (ure_id, ure_urt_id, ure_usr_id1, ure_usr_id2, ure_usr_id_create, ure_timestamp_create, ure_usr_id_change, ure_timestamp_change) VALUES
+(1, 4, 1, 355, 1, '2016-12-06 20:02:09', NULL, NULL),
+(2, 4, 355, 1, 1, '2016-12-06 20:02:09', NULL, NULL),
+(3, 2, 1, 356, 1, '2016-12-06 20:02:23', NULL, NULL),
+(4, 1, 356, 1, 1, '2016-12-06 20:02:23', NULL, NULL),
+(5, 2, 1, 357, 1, '2016-12-06 20:02:35', NULL, NULL),
+(6, 1, 357, 1, 1, '2016-12-06 20:02:35', NULL, NULL),
+(7, 1, 357, 355, 1, '2016-12-06 20:02:58', NULL, NULL),
+(8, 2, 355, 357, 1, '2016-12-06 20:02:58', NULL, NULL),
+(9, 3, 357, 356, 1, '2016-12-06 20:03:15', NULL, NULL),
+(10, 3, 356, 357, 1, '2016-12-06 20:03:15', NULL, NULL),
+(11, 2, 355, 356, 1, '2016-12-06 20:04:32', NULL, NULL),
+(12, 1, 356, 355, 1, '2016-12-06 20:04:32', NULL, NULL);
+
+--
 -- Data for table adm_announcements
 --
 
-INSERT INTO %PREFIX%_announcements (ann_id, ann_org_id, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
-(1, 1, '0', 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
-(2, 1, '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
-(3, 1, '1', 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
+INSERT INTO %PREFIX%_announcements (ann_id, ann_cat_id, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
+(1, 13, '0', 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 13, '2012-01-01 00:00:00', NULL, NULL),
+(2, 13, '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 13, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
+(3, 14, '1', 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 13, '2012-01-08 11:12:05', NULL, NULL);
 
 
 --
@@ -525,7 +576,7 @@ INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, 
 (3, 12, 0, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', 0,  1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
 (4, 10, 0, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', 1, 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
 (5, 10, 0, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', 1, 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
-(6, 21, 1, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
+(6, 106, 1, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
 (7, 10, 1, '2012-01-07 06:00:00', '2012-01-08 15:00:00', 1, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
 (8, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0,  1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
 (9, 12, 0, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
@@ -556,15 +607,11 @@ INSERT INTO %PREFIX%_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
 --
 
 INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
-(1, 1, NULL, 'DOWNLOAD', 'download', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07'),
+(1, 1, NULL, 'DOWNLOAD', 'download_demo', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07'),
 (2, 1, 1, 'DOWNLOAD', 'licenses', NULL, '/adm_my_files/download', 0, 1, NULL, '2014-02-05 14:05:34'),
-(3, 1, 1, 'DOWNLOAD', 'board-meeting', NULL, '/adm_my_files/download', 0, 0, NULL, '2016-04-15 13:25:06');
+(3, 1, 1, 'DOWNLOAD', 'board-meeting', NULL, '/adm_my_files/download', 0, 0, NULL, '2016-04-15 13:25:06'),
+(100, 2, NULL, 'DOWNLOAD', 'download_test', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07');
 
---
--- Data for table adm_folder_roles
---
-INSERT INTO %PREFIX%_folder_roles (flr_fol_id, flr_rol_id) VALUES
-(3, 3);
 
 --
 -- Data for table adm_files
@@ -577,14 +624,16 @@ INSERT INTO %PREFIX%_files (fil_id, fil_fol_id, fil_name, fil_description, fil_l
 (4, 2, 'lgpl-3.0.txt', null, 0, 0, 1, '2015-08-13 08:24:45'),
 (5, 1, 'admidio-readme.md', null, 0, 134, 1, '2015-07-01 10:05:23'),
 (6, 1, 'admidio-logo.png', null, 0, 45, 1, '2015-07-01 10:07:23'),
-(7, 3, '20160511_meeting.txt', null, 0, 45, 1, '2015-07-01 10:07:23');
+(7, 3, '20160511_meeting.txt', null, 0, 45, 1, '2015-07-01 10:07:23'),
+(100, 100, 'admidio-readme.md', null, 0, 14, 1, '2015-07-01 10:05:23'),
+(101, 100, 'admidio-logo.png', null, 0, 6, 1, '2015-07-01 10:07:23');
 
 --
 -- Data for table adm_guestbook
 --
 
 INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
+(1, 1, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
 (2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
@@ -592,7 +641,7 @@ INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_emai
 --
 
 INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
-(1, 2, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_COMMENT1', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
+(1, 2, 'Paul Schmidt', 'DEMO_GBO_WEBMASTER_COMMENT1', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Data for table adm_links
@@ -904,7 +953,9 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (501, 8, 223, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (502, 8, 255, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (503, 8, 302, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
-(504, 8, 328, '2012-01-07', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL);
+(504, 8, 328, '2012-01-07', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
+(505, 2, 356, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
+(506, 2, 357, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL);
 
 
 --
@@ -965,7 +1016,7 @@ INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 --
 
 INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUES
-(1, 1, 1, 'Webmaster'),
+(1, 1, 1, 'Schmidt'),
 (2, 1, 2, 'Paul'),
 (3, 1, 3, 'Unter den Linden 45'),
 (4, 1, 4, '10117'),
@@ -2789,11 +2840,30 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1813, 354, 12, 'DEMO_CHAIRMAN@example.com'),
 (18131, 354, 22, 'Admidio'),
 (18132, 354, 25, '9'),
-(1814, 355, 1, 'SYS_MEMBER'),
+(1814, 355, 1, 'Schmidt'),
 (1815, 355, 2, 'Jennifer'),
+(1821, 355, 3, 'Unter den Linden 45'),
+(1822, 355, 4, '10117'),
+(1823, 355, 5, 'Berlin'),
 (1816, 355, 6, 'DEU'),
 (1817, 355, 11, '2'),
 (1818, 355, 12, 'SYS_MEMBER@example.com'),
 (1819, 355, 23, 'Admidio'),
-(1820, 355, 25, '12');
+(1820, 355, 25, '12'),
+(1900, 356, 1, 'Schmidt'),
+(1901, 356, 2, 'Silke'),
+(1902, 356, 3, 'Unter den Linden 45'),
+(1903, 356, 4, '10117'),
+(1904, 356, 5, 'Berlin'),
+(1905, 356, 6, 'DEU'),
+(1906, 356, 10, '2011-07-15'),
+(1907, 356, 11, '2'),
+(1910, 357, 1, 'Schmidt'),
+(1911, 357, 2, 'Stefan'),
+(1912, 357, 3, 'Unter den Linden 45'),
+(1913, 357, 4, '10117'),
+(1914, 357, 5, 'Berlin'),
+(1915, 357, 6, 'DEU'),
+(1916, 357, 10, '2014-01-21'),
+(1917, 357, 11, '1');
 
