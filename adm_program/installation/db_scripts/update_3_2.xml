@@ -116,46 +116,5 @@
     <step id="480" database="pgsql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
     <step id="500">ComponentUpdate::updateStepRewriteFolderRights</step>
-
-    <step id="410">CREATE TABLE %PREFIX%_menu
-                (
-                    men_id                         integer       unsigned not null AUTO_INCREMENT,
-                    men_group                      integer,
-                    men_order                      integer,
-                    men_standart                   boolean       not null default '0',
-                    men_modul_name                 varchar(255),
-                    men_url                        varchar(255),
-                    men_icon                       varchar(2000),
-                    men_translate_name             varchar(255),
-                    men_translate_desc             varchar(255),
-                    men_need_enable                boolean       not null default '0',
-                    primary key (men_id)
-                )
-                engine = InnoDB
-                auto_increment = 1
-                default character set = utf8
-                collate = utf8_unicode_ci</step>
-    <step id="420">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
-    <step id="430">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
-               VALUES (1, 2, 1, 1, 'overview', '/adm_program/index.php', '/icons/home.png', 'SYS_OVERVIEW', '', 0)
-                    , (2, 2, 3, 1, 'download', '/adm_program/modules/downloads/downloads.php', '/icons/download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC', 1)
-                    , (3, 2, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', '/icons/lists.png', 'LST_LISTS', 'LST_LISTS_DESC', 0)
-                    , (4, 2, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', '/icons/mylist.png', 'LST_MY_LIST', '', 0)
-                    , (5, 2, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', '/icons/announcements.png', 'ANN_ANNOUNCEMENTS', 'ANN_ANNOUNCEMENTS_DESC', 1)
-                    , (6, 2, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', '/icons/photo.png', 'PHO_PHOTOS', 'PHO_PHOTOS_DESC', 1)
-                    , (8, 2, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', '/icons/guestbook.png', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 1)
-                    , (9, 2, 8, 1, 'dates', '/adm_program/modules/dates/dates.php', '/icons/dates.png', 'DAT_DATES', 'DAT_DATES_DESC', 1)
-                    , (10, 2, 9, 1, 'weblinks', '/adm_program/modules/links/links.php', '/icons/weblinks.png', 'LNK_WEBLINKS', 'LNK_WEBLINKS_DESC', 1)
-                    , (11, 1, 4, 1, 'dbback', '/adm_program/modules/backup/backup.php', '/icons/backup.png', 'BAC_DATABASE_BACKUP', 'BAC_DATABASE_BACKUP_DESC', 0)
-                    , (12, 1, 5, 1, 'orgprop', '/adm_program/modules/preferences/preferences.php', '/icons/options.png', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', 0)
-                    , (13, 2, 4, 1, 'mail', '/adm_program/modules/messages/messages_write.php', '/icons/email.png', 'SYS_EMAIL', 'MAI_EMAIL_DESC', 0)
-                    , (14, 1, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', '/icons/new_registrations.png', 'NWU_NEW_REGISTRATIONS', 'NWU_MANAGE_NEW_REGISTRATIONS_DESC', 0)
-                    , (15, 1, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', '/icons/user_administration.png', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC', 0)
-                    , (16, 1, 3, 1, 'roladm', '/adm_program/modules/roles/roles.php', '/icons/roles.png', 'ROL_ROLE_ADMINISTRATION', 'ROL_ROLE_ADMINISTRATION_DESC', 0)
-                    , (17, 1, 6, 1, 'menu', '/adm_program/modules/menu/menu.php', '/icons/application_view_tile.png', 'SYS_MENU', '', 0)</step>
-    <step id="440">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
-              VALUES ('men_display_right', '%PREFIX%_menu'),
-                     ('men_display_index', '%PREFIX%_menu'),
-                     ('men_display_boot', '%PREFIX%_menu')</step>
     <step>stop</step>
 </update>
