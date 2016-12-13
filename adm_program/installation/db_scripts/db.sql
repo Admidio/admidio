@@ -65,7 +65,6 @@ create table %PREFIX%_announcements
     primary key (ann_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -111,7 +110,6 @@ create table %PREFIX%_categories
     primary key (cat_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -133,7 +131,6 @@ create table %PREFIX%_components
     primary key (com_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -150,7 +147,6 @@ create table %PREFIX%_date_role
     primary key (dtr_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -180,7 +176,6 @@ create table %PREFIX%_dates
     primary key (dat_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -200,7 +195,6 @@ create table %PREFIX%_files
     primary key (fil_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -224,7 +218,6 @@ create table %PREFIX%_folders
     primary key (fol_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -249,7 +242,6 @@ create table %PREFIX%_guestbook
     primary key (gbo_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -273,7 +265,6 @@ create table %PREFIX%_guestbook_comments
     primary key (gbc_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -315,7 +306,6 @@ create table %PREFIX%_invent_fields
     primary key (inf_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -334,7 +324,6 @@ create table %PREFIX%_invent_data
     primary key (ind_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -362,7 +351,6 @@ create table %PREFIX%_invent
     primary key (inv_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -385,7 +373,6 @@ create table %PREFIX%_links
     primary key (lnk_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -404,7 +391,6 @@ create table %PREFIX%_lists
     primary key (lst_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -424,7 +410,6 @@ create table %PREFIX%_list_columns
     primary key (lsc_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -450,7 +435,6 @@ create table %PREFIX%_members
     primary key (mem_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -507,7 +491,6 @@ create table %PREFIX%_organizations
     primary key (org_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -535,7 +518,6 @@ create table %PREFIX%_photos
     primary key (pho_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -552,7 +534,6 @@ create table %PREFIX%_preferences
     primary key (prf_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -572,7 +553,6 @@ create table %PREFIX%_registrations
     primary key (reg_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -642,7 +622,6 @@ create table %PREFIX%_roles
     primary key (rol_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -700,7 +679,6 @@ create table %PREFIX%_rooms
     primary key (room_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -722,7 +700,6 @@ create table %PREFIX%_sessions
     primary key (ses_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -741,7 +718,6 @@ create table %PREFIX%_texts
     primary key (txt_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -772,7 +748,6 @@ create table %PREFIX%_user_fields
     primary key (usf_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -791,7 +766,6 @@ create table %PREFIX%_user_data
     primary key (usd_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -813,7 +787,6 @@ create table %PREFIX%_user_log
     primary key (usl_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -842,7 +815,6 @@ create table %PREFIX%_users
     primary key (usr_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -865,7 +837,6 @@ create table %PREFIX%_user_relation_types
     primary key (urt_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
@@ -888,7 +859,6 @@ create table %PREFIX%_user_relations
     primary key (ure_id)
 )
 engine = InnoDB
-auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
