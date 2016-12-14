@@ -3,11 +3,11 @@
  ***********************************************************************************************
  * sidebar_downloads
  *
- * Version 1.5.1
+ * Version 1.6.0
  *
  * Plugin das die aktuellsten X Downloads auflistet
  *
- * Compatible with Admidio version 3.1
+ * Compatible with Admidio version 3.2
  *
  * @copyright 2004-2016 The Admidio Team
  * @see https://www.admidio.org/
