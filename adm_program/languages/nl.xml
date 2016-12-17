@@ -656,6 +656,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Bij het wisselen van weergave gaan alle niet opgeslagen instellingen verloren.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Administrator informeren over nieuwe registraties</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal items per pagina</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">De organisatie #VAR1_BOLD# is toegevoegd. Bij de aanmelding kun je deze nu kiezen. \n\nAls je voor deze organisatie een aparte homepage hebt gemaakt, moet je enkel nog op de desbetreffende pagina deze organisatie aan het config.php bestand toevoegen.</string>

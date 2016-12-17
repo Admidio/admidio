@@ -683,7 +683,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ao mudar a visualização todas as alteração não guardadas serão perdidas.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notificar o administrador sobre novos registros</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Número de entradas por página</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens a serem exibidos numa página. A paginação acontece quando o número de itens excede o valor definido. As funções de visualizar impressão e exportar não são afetadas. Se o valor é 0, todos os itens serão listados e a paginação é desativada. (padrão: 0)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens a serem exibidos numa página. A paginação acontece quando o número de itens excede o valor definido. As funções de visualizar impressão e exportar não são afetadas. Se o valor é 0, todos os itens serão listados e a paginação é desativada. (padrão: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para usuários em sessão</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gerencie preferências gerais da organização ou preferências de módulo</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">A organização #VAR1_BOLD# foi adicionada com sucesso. Ela está agora elegível ao iniciar a sessão.\n\nSe tens uma página inicial separada para esta organização, por favor, adicione-a ao arquivo config.php da página separada.</string>

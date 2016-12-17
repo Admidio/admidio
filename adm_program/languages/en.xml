@@ -683,7 +683,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notification for the administrator about new registrations</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 0)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a seperate homepage for this organization please add it within the config.php of the seperate homepage.</string>
