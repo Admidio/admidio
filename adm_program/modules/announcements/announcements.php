@@ -176,7 +176,7 @@ else
     }  // Ende foreach
 
     // If necessary show links to navigate to next and previous recordsets of the query
-    $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='.$getHeadline;
+    $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='.$getHeadline.'&cat_id='.$getCatId;
     $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart, true));
 }
 
