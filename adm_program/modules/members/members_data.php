@@ -8,7 +8,7 @@
  * Server side script for Datatables to return the requested userlist
  *
  * This script will read all necessary users and their data from the database. It is optimized to
- + work with the javascript DataTables and will return the data in json format.
+ * work with the javascript DataTables and will return the data in json format.
  *
  * @par Examples
  * @code // the returned json data string
@@ -241,6 +241,7 @@ $mglStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryPa
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
 
+$jsonArray['data'] = array();
 while($row = $mglStatement->fetch())
 {
     ++$rowNumber;
@@ -389,12 +390,6 @@ if($getSearch !== '')
 else
 {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-}
-
-// add empty data element if no rows where found
-if(!array_key_exists('data', $jsonArray))
-{
-    $jsonArray['data'] = array();
 }
 
 echo json_encode($jsonArray);

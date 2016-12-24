@@ -191,7 +191,7 @@ class ModuleDates extends Modules
                            AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                            )
                        )
-                       ' . $this->sqlConditionsGet() . '
+                       ' . $this->getSqlConditions() . '
                        ORDER BY dat_begin ' . $this->order;
 
         // Parameter
@@ -270,7 +270,7 @@ class ModuleDates extends Modules
                                AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                                )
                            )'
-                           . $this->sqlConditionsGet();
+                           . $this->getSqlConditions();
 
             $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
@@ -415,7 +415,7 @@ class ModuleDates extends Modules
      * Prepare SQL Statement.
      * @return string
      */
-    private function sqlConditionsGet()
+    private function getSqlConditions()
     {
         global $gValidLogin, $gCurrentUser;
 

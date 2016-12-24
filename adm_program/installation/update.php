@@ -367,9 +367,9 @@ elseif ($getMode === 2)
 
     while($orgId = $orgaStatement->fetchColumn())
     {
-        $gCurrentOrganization->setValue('org_id', $orgId);
-        $gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
-        $gCurrentOrganization->setPreferences($updateOrgPreferences, true);
+        $organization = new Organization($gDb, $orgId);
+        $organization->setPreferences($defaultOrgPreferences, false);
+        $organization->setPreferences($updateOrgPreferences, true);
     }
 
     if ($gDbType === 'mysql')

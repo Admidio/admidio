@@ -1,6 +1,6 @@
 <?php
 
-// PHP-CS-Fixer v1.12
+// PHP-CS-Fixer v1.13
 
 $level = Symfony\CS\FixerInterface::NONE_LEVEL;
 
@@ -56,6 +56,7 @@ $fixers = array(
     'no_empty_statement',                           // [symfony]
     'object_operator',                              // [symfony]
     //'operators_spaces',                           // [symfony] maybe used in future (in combination with unary_operators_spaces)
+    //'php_unit_fqcn_annotation',                   // [symfony] <PHPUnit> not necessary now
     //'phpdoc_annotation_without_dot',              // [symfony] <PHPDoc> maybe used in future
     'phpdoc_indent',                                // [symfony] <PHPDoc>
     //'phpdoc_inline_tag',                          // [symfony] <PHPDoc> not specified now
@@ -120,6 +121,7 @@ $fixers = array(
     //'php_unit_strict',                            // [contrib] <PHPUnit> not necessary now
     'phpdoc_order',                                 // [contrib] <PHPDoc>
     //'phpdoc_var_to_type',                         // [contrib] <PHPDoc> {phpdoc_type_to_var} not specified now
+    'protected_to_private',                         // [contrib]
     //'short_array_syntax',                         // [contrib] {long_array_syntax} will be used in future
     //'short_echo_tag',                             // [contrib] not specified now
     //'silenced_deprecation_error',                 // [contrib]

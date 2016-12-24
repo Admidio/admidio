@@ -81,8 +81,6 @@
  */
 class ModuleAnnouncements extends Modules
 {
-    protected $getConditions;   ///< String with SQL condition
-
     /**
      * Get number of available announcements
      * @Return int Returns the total count and push it in the array
@@ -98,7 +96,7 @@ class ModuleAnnouncements extends Modules
                  WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$this->getConditions;
+                       '.$this->getSqlConditions();
         $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
@@ -113,22 +111,6 @@ class ModuleAnnouncements extends Modules
     public function getDataSet($startElement = 0, $limit = null)
     {
         global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb;
-
-        // Bedingungen
-        if ($this->getParameter('id') > 0)
-        {
-            $this->getConditions = 'AND ann_id = '.$this->getParameter('id');
-        }
-        if($this->getParameter('cat_id') > 0)
-        {
-            $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
-        }
-
-        // Search announcements to date
-        elseif ($this->getParameter('dateStartFormatEnglish'))
-        {
-            $this->getConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
-        }
 
         if ($gPreferences['system_show_create_edit'] == 1)
         {
@@ -172,7 +154,7 @@ class ModuleAnnouncements extends Modules
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$this->getConditions.'
+                       '.$this->getSqlConditions().'
               ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
@@ -195,6 +177,48 @@ class ModuleAnnouncements extends Modules
             'totalCount' => $this->getDataSetCount(),
             'parameter'  => $this->getParameters()
         );
+    }
+
+    /**
+     * Prepare SQL Statement.
+     * @return string
+     */
+    private function getSqlConditions()
+    {
+        global $gValidLogin, $gCurrentUser;
+
+        $sqlConditions = '';
+
+        // if user isn't logged in, then don't show hidden categories
+        if (!$gValidLogin)
+        {
+            $sqlConditions .= ' AND cat_hidden = 0 ';
+        }
+
+        $id = $this->getParameter('id');
+        // In case ID was permitted and user has rights
+        if ($id > 0)
+        {
+            $sqlConditions .= ' AND dat_id = ' . $this->getParameter('id');
+        }
+        // ...otherwise get all additional announcements for a group
+        else
+        {
+            // show all events from category
+            if ($this->getParameter('cat_id') > 0)
+            {
+                // show all events from category
+                $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
+            }
+
+            // Search announcements to date
+            if ($this->getParameter('dateStartFormatEnglish'))
+            {
+                $sqlConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
+            }
+        }
+
+        return $sqlConditions;
     }
 
     /**

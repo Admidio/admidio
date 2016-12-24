@@ -455,7 +455,7 @@ class ComponentUpdate extends Component
                         $returnValue = $returnValue && $this->updateStepRewriteFolderRights($resource);
 
                         // set rights to 0777
-                        $returnValue = $returnValue && chmod($resource, 0777);
+                        $returnValue = $returnValue && @chmod($resource, 0777);
                     }
                 }
             }

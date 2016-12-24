@@ -377,15 +377,20 @@ class TableFolder extends TableAccess
             // If user hasn't editDownloadRight, only show if folder exists
             elseif ($folderExists)
             {
-                // If user has a membership in a role that is assigned to the current folder, show it
-                if ($gValidLogin && $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
-                {
-                    $addToArray = true;
-                }
                 // If folder is public and not locked, show it
                 if ($rowFolders->fol_public && !$rowFolders->fol_locked)
                 {
                     $addToArray = true;
+                }
+                // If user has a membership in a role that is assigned to the current subfolder, show it
+                elseif ($gValidLogin)
+                {
+                    $subfolderViewRolesObject = new RolesRights($this->db, 'folder_view', $rowFolders->fol_id);
+
+                    if($subfolderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
+                    {
+                        $addToArray = true;
+                    }
                 }
             }
 
