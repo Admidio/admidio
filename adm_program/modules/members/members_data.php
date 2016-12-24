@@ -8,7 +8,7 @@
  * Server side script for Datatables to return the requested userlist
  *
  * This script will read all necessary users and their data from the database. It is optimized to
- + work with the javascript DataTables and will return the data in json format.
+ * work with the javascript DataTables and will return the data in json format.
  *
  * @par Examples
  * @code // the returned json data string
