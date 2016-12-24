@@ -146,6 +146,7 @@ if(isset($_SESSION['profile_request']))
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();
+$page->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
 
 // add back link to module menu
 $profileEditMenu = $page->getMenu();
@@ -248,7 +249,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_URL. '/icons/key.png"
+                                href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='.$getUserId.'"><img src="'. THEME_URL. '/icons/key.png"
                                 alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
