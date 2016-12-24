@@ -238,6 +238,7 @@ $mglStatement = $gDb->query($sql);
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
 
+$jsonArray['data'] = array();
 while($row = $mglStatement->fetch())
 {
     ++$rowNumber;
@@ -386,12 +387,6 @@ if($getSearch !== '')
 else
 {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-}
-
-// add empty data element if no rows where found
-if(!array_key_exists('data', $jsonArray))
-{
-    $jsonArray['data'] = array();
 }
 
 echo json_encode($jsonArray);
