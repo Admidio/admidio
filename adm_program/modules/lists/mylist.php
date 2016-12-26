@@ -99,11 +99,11 @@ else
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)
             {
-                $column_content = $column->getValue('lsc_usf_id');
+                $formValues['column'. $number] = $column->getValue('lsc_usf_id');
             }
             else
             {
-                $column_content = $column->getValue('lsc_special_field');
+                $formValues['column'. $number] = $column->getValue('lsc_special_field');
             }
 
             $formValues['column'. $number]    = $column_content;
