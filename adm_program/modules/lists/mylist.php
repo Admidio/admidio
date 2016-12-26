@@ -99,13 +99,14 @@ else
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)
             {
-                $formValues['column'. $number] = $column->getValue('lsc_usf_id');
+                $column_content = $column->getValue('lsc_usf_id');
             }
             else
             {
-                $formValues['column'. $number] = $column->getValue('lsc_special_field');
+                $column_content = $column->getValue('lsc_special_field');
             }
 
+            $formValues['column'. $number]    = $column_content;
             $formValues['sort'. $number]      = $column->getValue('lsc_sort');
             $formValues['condition'. $number] = $column->getValue('lsc_filter');
         }
@@ -128,10 +129,10 @@ if($gDbType === 'mysql')
 }
 
 $javascriptCode = '
-    var listId            = '.$getListId.';
-    var fieldNumberIntern = 0;
-    var arrUserFields     = createProfileFieldsArray();
-    var arrDefaultFields  = createColumnsArray();
+    var listId             = '.$getListId.';
+    var fieldNumberIntern  = 0;
+    var arrUserFields      = createProfileFieldsArray();
+    var arrDefaultFields   = createColumnsArray();
 
     // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
     function addColumn() {
@@ -144,7 +145,7 @@ $javascriptCode = '
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
-        newCellCount.textContent = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
+        newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
@@ -228,209 +229,212 @@ $javascriptCode = '
     function createProfileFieldsArray() {
         var userFields = [];';
 
-// create a multidimensional array for all columns with the necessary data
-$i = 1;
-$oldCategoryNameIntern = '';
-$posEndOfMasterData = 0;
-$arrParticipientsInformation = array ('mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
-                                      'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
-                                      'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
-                                      'mem_comment'          => $gL10n->get('SYS_COMMENT'),
-                                      'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT'));
-
-foreach($gProfileFields->mProfileFields as $field)
-{
-    // at the end of category master data save positions for loginname and username
-    // they will be added after profile fields loop
-    if($oldCategoryNameIntern === 'MASTER_DATA' && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
-    {
-        $posEndOfMasterData = $i;
-        $i += 2;
-    }
-
-    // add profile field to user field array
-    if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
-    {
-        $javascriptCode .= '
-            userFields[' . $i . '] = {
-                "cat_id"   = '. $field->getValue('cat_id'). ',
-                "cat_name" = "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
-                "usf_id"   = "'. $field->getValue('usf_id'). '",
-                "usf_name" = "'. addslashes($field->getValue('usf_name')). '",
-                "usf_name_intern" = "'. addslashes($field->getValue('usf_name_intern')). '",
-                "usf_type" = "'. $field->getValue('usf_type'). '",
-                "usf_value_list" = {}
-            };';
-
-        // get avaiable values for current field type and push to array
-        if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
+        // create a multidimensional array for all columns with the necessary data
+        $i = 1;
+        $oldCategoryNameIntern = '';
+        $posEndOfMasterData = 0;
+        $arrParticipientsInformation = array('mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+                                             'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+                                             'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+                                             'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+                                             'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT'));
+    
+        foreach($gProfileFields->mProfileFields as $field)
         {
-            foreach($field->getValue('usf_value_list', 'text') as $key => $value)
+            // at the end of category master data save positions for loginname and username
+            // they will be added after profile fields loop
+            if($oldCategoryNameIntern === 'MASTER_DATA' && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
+            {
+                $posEndOfMasterData = $i;
+                $i += 2;
+            }
+        
+            // add profile field to user field array
+            if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
             {
                 $javascriptCode .= '
-                    userFields[' . $i . ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
+                        userFields['. $i . '] = {
+                            "cat_id"   : "'. $field->getValue('cat_id'). '",
+                            "cat_name" : "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
+                            "usf_id"   : "'. $field->getValue('usf_id'). '",
+                            "usf_name" : "'. addslashes($field->getValue('usf_name')). '",
+                            "usf_name_intern" : "'. addslashes($field->getValue('usf_name_intern')). '",
+                            "usf_type" : "'. $field->getValue('usf_type'). '",
+                            "usf_value_list" : {}
+                        };';
+        
+                // get avaiable values for current field type and push to array
+                if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
+                {
+                    foreach($field->getValue('usf_value_list', 'text') as $key => $value)
+                    {
+                        $javascriptCode .= '
+                                userFields[' . $i . ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
+                    }
+                }
+                else
+                {
+                    $javascriptCode .= '
+                            userFields['. $i . ']["usf_value_list"] = "";';
+                }
+        
+                $oldCategoryNameIntern = $field->getValue('cat_name_intern');
+                ++$i;
             }
         }
-        else
+
+        // Add loginname and photo at the end of category master data
+        // add new category with start and end date of role membership
+        if($posEndOfMasterData === 0)
         {
-            $javascriptCode .= '
-                userFields[' . $i . ']["usf_value_list"] = "";';
+            $posEndOfMasterData = $i;
+            $i += 2;
         }
-
-        $oldCategoryNameIntern = $field->getValue('cat_name_intern');
-        ++$i;
-    }
-}
-
-// Add loginname and photo at the end of category master data
-// add new category with start and end date of role membership
-if($posEndOfMasterData === 0)
-{
-    $posEndOfMasterData = $i;
-    $i += 2;
-}
-$javascriptCode .= '
-        userFields[' . $posEndOfMasterData . '] = {
-            "cat_id"   = userFields[1]["cat_id"],
-            "cat_name" = userFields[1]["cat_name"],
-            "usf_id"   = "usr_login_name",
-            "usf_name" = "'.$gL10n->get('SYS_USERNAME').'",
-            "usf_name_intern" = "'.$gL10n->get('SYS_USERNAME').'"
-        };
-
-        userFields[' . ($posEndOfMasterData + 1) . '] = {
-            "cat_id"   = userFields[1]["cat_id"],
-            "cat_name" = userFields[1]["cat_name"],
-            "usf_id"   = "usr_photo",
-            "usf_name" = "'.$gL10n->get('PHO_PHOTO').'",
-            "usf_name_intern" = "'.$gL10n->get('PHO_PHOTO').'"
-        };
-
-        userFields[' . $i . '] = {
-            "cat_id"   = -1,
-            "cat_name" = "'.$gL10n->get('LST_ROLE_INFORMATION').'",
-            "usf_id"   = "mem_begin",
-            "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_START').'",
-            "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_START').'"
-        };';
-
-++$i;
-$javascriptCode .= '
-        userFields[' . $i . '] = {
-            "cat_id"   = -1,
-            "cat_name" = "'.$gL10n->get('LST_ROLE_INFORMATION').'",
-            "usf_id"   = "mem_end",
-            "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_END').'",
-            "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_END').'"
-        };';
+        $javascriptCode .= '
+                userFields['. $posEndOfMasterData. '] = {
+                    "cat_id"   : userFields[1]["cat_id"],
+                    "cat_name" : userFields[1]["cat_name"],
+                    "usf_id"   : "usr_login_name",
+                    "usf_name" : "'.$gL10n->get('SYS_USERNAME').'",
+                    "usf_name_intern" : "'.$gL10n->get('SYS_USERNAME').'"
+                };
         
-    // add new category with participient information of events
-    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
-    {
+                userFields['. ($posEndOfMasterData + 1). '] = {
+                    "cat_id"   : userFields[1]["cat_id"],
+                    "cat_name" : userFields[1]["cat_name"],
+                    "usf_id"   : "usr_photo",
+                    "usf_name" : "'.$gL10n->get('PHO_PHOTO').'",
+                    "usf_name_intern" : "'.$gL10n->get('PHO_PHOTO').'"
+                };
+                
+                userFields['. $i . '] = {
+                    "cat_id"   : -1,
+                    "cat_name" : "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+                    "usf_id"   : "mem_begin",
+                    "usf_name" : "'.$gL10n->get('LST_MEMBERSHIP_START').'",
+                    "usf_name_intern" : "'.$gL10n->get('LST_MEMBERSHIP_START').'"
+                };';
+        
         ++$i;
         $javascriptCode .= '
-            userFields[' . $i . '] = {
-                "cat_id"   = -1;
-                "cat_name" = "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'";
-                "usf_id"   = "'.$memberStatus.'";
-                "usf_name"] = "'.$ColumnName.'";
-                "usf_name_intern" = "'.$ColumnName.'";
-        };
-        return userFields;
+                userFields['. $i . '] = {
+                    "cat_id"   : -1,
+                    "cat_name" : "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+                    "usf_id"   : "mem_end",
+                    "usf_name" : "'.$gL10n->get('LST_MEMBERSHIP_END').'",
+                    "usf_name_intern" : "'.$gL10n->get('LST_MEMBERSHIP_END').'"
+                };';
+        
+        // add new category with participient information of events
+        foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+        {
+            ++$i;
+            $javascriptCode .= '
+                    userFields['. $i . '] = {
+                        "cat_id"   : -1,
+                        "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
+                        "usf_id"   : "'.$memberStatus.'",
+                        "usf_name" : "'.$ColumnName.'",
+                        "usf_name_intern" : "'.$ColumnName.'",
+                    };';
+        }
+        
+        $javascriptCode .= '
+            return userFields;
     }
 
     function createColumnsArray()
     {
         var defaultFields = [];';
 
-// now add all columns to the javascript row objects
-$actualColumnNumber = 1;
-while(isset($formValues['column' . $actualColumnNumber]))
-{
-    $sortValue      = '';
-    $conditionValue = '';
-
-    if(isset($formValues['sort' . $actualColumnNumber]))
+    // now add all columns to the javascript row objects
+    $actualColumnNumber = 1;
+    while(isset($formValues['column' . $actualColumnNumber]))
     {
-        $sortValue = $formValues['sort' . $actualColumnNumber];
+        $sortValue      = '';
+        $conditionValue = '';
+    
+        if(isset($formValues['sort' . $actualColumnNumber]))
+        {
+            $sortValue = $formValues['sort' . $actualColumnNumber];
+        }
+        if(isset($formValues['condition' . $actualColumnNumber]))
+        {
+            $conditionValue = $formValues['condition' . $actualColumnNumber];
+        }
+    
+        $javascriptCode .= '
+                defaultFields['. $actualColumnNumber. '] = {
+                    "usf_id"    : "'. $formValues['column'. $actualColumnNumber]. '",
+                    "sort"      : "'. $sortValue. '",
+                    "condition" : "'. $conditionValue. '"
+                };';
+    
+        ++$actualColumnNumber;
     }
-    if(isset($formValues['condition' . $actualColumnNumber]))
-    {
-        $conditionValue = $formValues['condition' . $actualColumnNumber];
-    }
-
+    
     $javascriptCode .= '
-        defaultFields[' . $actualColumnNumber . '] = {
-            "usf_id"    = "' . $formValues['column' . $actualColumnNumber] . '",
-            "sort"      = "' . $sortValue . '",
-            "condition" = "' . $conditionValue . '"
-        };';
-
-    ++$actualColumnNumber;
-}
-
-$javascriptCode .= '
-        return defaultFields;
-    }
-
-    function getConditionField(columnNumber, columnName) {
-        htmlFormCondition = setConditonField(columnNumber, columnName);
-        $("#td_condition" + columnNumber).html(htmlFormCondition);
-    }
-
-    function setConditonField(fieldNumberShow, columnName) {
-        html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
-        var key;
-
-        for (key in arrUserFields) {
-            if (arrUserFields[key]["usf_name"] === columnName) {
-                if (arrUserFields[key]["usf_type"] === "DROPDOWN"
-                ||  arrUserFields[key]["usf_type"] === "RADIO_BUTTON") {
-                    html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
-                    "<option value=\"\">&nbsp;</option>";
-
-                    for (selectValue in arrUserFields[key]["usf_value_list"]) {
+            return defaultFields;
+        }
+    
+        function getConditionField(columnNumber, columnName) {
+            htmlFormCondition = setConditonField(columnNumber, columnName);
+            $("#td_condition" + columnNumber).html(htmlFormCondition);
+        }
+    
+        function setConditonField(fieldNumberShow, columnName) {
+            html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
+            var key;
+    
+            for (key in arrUserFields) {
+                if (arrUserFields[key]["usf_name"] == columnName) {
+                    if ( arrUserFields[key]["usf_type"] === "DROPDOWN"
+                      || arrUserFields[key]["usf_type"] === "RADIO_BUTTON") {
+                        html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
+                        "<option value=\"\">&nbsp;</option>";
+    
+                        for (selectValue in arrUserFields[key]["usf_value_list"]) {
+                            selected = "";
+    
+                            if (arrDefaultFields[fieldNumberShow]) {
+                                if (arrUserFields[key]["usf_id"] == arrDefaultFields[fieldNumberShow]["usf_id"]
+                                    && arrUserFields[key]["usf_value_list"][selectValue] == arrDefaultFields[fieldNumberShow]["condition"]) {
+                                    selected = " selected=\"selected\" ";
+                                }
+                            }
+                            html += "<option value=\"" + arrUserFields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arrUserFields[key]["usf_value_list"][selectValue] + "</option>";
+                            "</select>";
+                        }
+                    }
+    
+                    if (arrUserFields[key]["usf_type"] === "CHECKBOX") {
+                        html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
+                        "<option value=\"\">&nbsp;</option>";
+    
                         selected = "";
-
+    
                         if (arrDefaultFields[fieldNumberShow]) {
-                            if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
-                            &&  arrUserFields[key]["usf_value_list"][selectValue] == arrDefaultFields[fieldNumberShow]["condition"]) {
+                            if (arrUserFields[key]["usf_id"] == arrDefaultFields[fieldNumberShow]["usf_id"]
+                                && arrDefaultFields[fieldNumberShow]["condition"] == "1") {
                                 selected = " selected=\"selected\" ";
                             }
-                        }
-                        html += "<option value=\"" + arrUserFields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arrUserFields[key]["usf_value_list"][selectValue] + "</option>";
-                        "</select>";
-                    }
-                }
-
-                if (arrUserFields[key]["usf_type"] === "CHECKBOX") {
-                    html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
-                    "<option value=\"\">&nbsp;</option>";
-
-                    selected = "";
-
-                    if (arrDefaultFields[fieldNumberShow]) {
-                        if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
-                            && arrDefaultFields[fieldNumberShow]["condition"] == "1") {
-                            selected = " selected=\"selected\" ";
-                        }
-                            html += "<option value=\"1\" " + selected + ">'.$gL10n->get('SYS_YES').'</option>";
-                        selected = "";
-
-                        if (arrUserFields[key]["usf_id"] === arrDefaultFields[fieldNumberShow]["usf_id"]
-                            && arrDefaultFields[fieldNumberShow]["condition"] == "0") {
-                            selected = " selected=\"selected\" ";
-                        }
-                            html += "<option value=\"0\" " + selected + ">'.$gL10n->get('SYS_NO').'</option>" +
-                            "</select>";
-                    } else {
-                        html += "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
-                                "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
+                                html += "<option value=\"1\" " + selected + ">'.$gL10n->get('SYS_YES').'</option>";
+                            selected = "";
+    
+                            if (arrUserFields[key]["usf_id"] == arrDefaultFields[fieldNumberShow]["usf_id"]
+                                && arrDefaultFields[fieldNumberShow]["condition"] == "0") {
+                                selected = " selected=\"selected\" ";
+                            }
+                                html += "<option value=\"0\" " + selected + ">'.$gL10n->get('SYS_NO').'</option>" +
                                 "</select>";
+                        } else {
+                            html += "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
+                                    "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
+                                    "</select>";
+                        }
                     }
                 }
             }
-        }
         return html;
     }
 
