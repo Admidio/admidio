@@ -53,7 +53,7 @@ class AdmException extends Exception
     {
         global $gLogger, $gDb;
 
-        $gLogger->error('AdmException is thrown!', array('message' => $message, 'params' => array($param1, $param2, $param3, $param4)));
+        $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => array($param1, $param2, $param3, $param4)));
 
         if($gDb instanceof \Database)
         {

@@ -3,12 +3,12 @@
  ***********************************************************************************************
  * Birthday
  *
- * Version 1.9.0
+ * Version 2.0.0
  *
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
  *
- * Compatible with Admidio version 3.1
+ * Compatible with Admidio version 3.2
  *
  * @copyright 2004-2016 The Admidio Team
  * @see https://www.admidio.org/

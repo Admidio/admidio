@@ -3,12 +3,12 @@
  ***********************************************************************************************
  * Sidebar Announcements
  *
- * Version 1.9.0
+ * Version 2.0.0
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible with Admidio version 3.1
+ * Compatible with Admidio version 3.2
  *
  * @copyright 2004-2016 The Admidio Team
  * @see https://www.admidio.org/

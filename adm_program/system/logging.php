@@ -14,6 +14,13 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Processor\IntrospectionProcessor;
 
+// check log folder in "adm_my_files" and create if necessary
+$myFilesLogs = new MyFiles('LOGS');
+if (!$myFilesLogs->checkSettings())
+{
+    error_log('Log folder could not be created! [error_text: ' . $myFilesLogs->errorText . ', error_path: ' . $myFilesLogs->errorPath . ']');
+}
+
 $gLogger = new Logger('Admidio');
 
 $logLevel = Logger::WARNING;

@@ -469,7 +469,7 @@
   <string name="MAI_MESSAGE_WENT_TO">A mensagem foi enviada para</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
   <string name="MAI_RECIPIENTS_WITH_ROLES">Destinatário em cargos</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">Se um e-mail é enviado a um cargo, todos os endereços eletrônicos do cargo serão colocados no campo de cópia-oculta. O campo PARA conterá \"Destinatários ocultos\". Se ocorrer algum problema, esta opção pode ser usada para colocar os endereços no campo PARA. Os outros endereços continuarão no campo de cópia-oculta. (padrão: desativado)</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">E-mails para cargos contém todos os destinatários no campo de cópia-oculta. O campo PARA é então preenchido com \"Destinatários Não Revelados\". Caso haja problemas, esta configuração pode ser usada para preencher o campo (PARA) com o e-mail do remetente ou com o e-mail do administrador que estão cadastrados nas notificações do sistema. Todo e-mail para qualquer cargo será enviado também para estes destinatários. Os membros do cargo continuarão no campo de cópia-oculta. (padrão: Oculto)</string>
   <string name="MAI_SEND_COPY">Enviar uma cópia do e-mail para mim</string>
   <string name="MAI_SEND_EMAIL">Enviar e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Teu e-mail será enviado para todos os membros do cargo ou para todos os e-mails da lista.\n\nSe estiver em sessão, mais cargos e destinatários estarão disponíveis.</string>
@@ -477,9 +477,9 @@
   <string name="MAI_SEND_METHOD_DESC">A função mail() do PHP está limitada por alguns hospedeiros e algumas vezes resulta em suspeita de spam. É recomendado enviar e-mails via servidor SMTP. As configurações de SMTP podem ser definidas abaixo. (padrão: PHP mail())</string>
   <string name="MAI_SENDER">Remetente</string>
   <string name="MAI_SENDER_EMAIL">E-mail do remetente</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Alguns provedores não permitem remetentes sem identificação. Devido à isso, por favor, insira um endereço de e-mail como padrão para remetente que será usado pelo módulo de e-mail (ex.: outbox@#VAR1#).\nSe o campo continuar vazio, o e-mail do remetente registrado será usado como identificação do remetente. (padrão: vazio)</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Alguns provedores não permitem informações de envio sem identificação. Por isso, é necessário que informes um e-mail para servir como remetente padrão para o módulo de e-mail (exemplo: outbox@#VAR1#).\nSe este campo ficar em branco, o e-mail registrado do usuário que enviar será usado para as informações de envio. (padrão: vazio)</string>
   <string name="MAI_SENDER_NAME">Nome do remetente</string>
-  <string name="MAI_SENDER_NAME_DESC">Nome do remetente para usar no envio do e-mail.</string>
+  <string name="MAI_SENDER_NAME_DESC">Nome do remetente de acordo com o endereço de e-mail utilizado. Este campo deve ser preenchido apenas se um endereço de e-mail de remetente é também mantido. (padrão: vazio)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(O remetente não pôde ser identificado. Confira as credenciais.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">Quando esta opção está ativa, usuários em sessão receberão uma imagem com um código CAPTCHA ou um cálculo simples. É necessário preencher o código ou o resultado do cálculo para enviar o e-mail. O CAPTCHA é parte de uma solução anti-spam no Admidio. (padrão: sim)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -619,7 +619,7 @@
   <string name="ORG_CAPTCHA_COLOR_DESC">A cor do fundo deve manter um bom contraste com a cor da fonte. Se as cores de preenchimento e contorno forem a mesma, será mais difícil para scripts e robôs decifrarem o CAPTCHA. Todas as cores devem ser informadas como #VAR1#valor hexadecimal#VAR2#.</string>
   <string name="ORG_CAPTCHA_DISTORTION">Distorção</string>
   <string name="ORG_CAPTCHA_DISTORTION_DESC">Indica a distorção dos caracteres. 0 significa nenhuma distorção, e a partir de 3 alguns caracteres podem não ser identificáveis. (padrão: 0.75)</string>
-  <string name="ORG_CAPTCHA_FONT">Selecione o tipo de fonte para o código CAPTCHA. (padrão: Fonte do tema)</string>
+  <string name="ORG_CAPTCHA_FONT">Selecione o tipo de fonte para o código CAPTCHA. (padrão: AHGBold.ttf)</string>
   <string name="ORG_CAPTCHA_LINE_COLOR">Cor da linha</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS">Número de linhas</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Se um CAPTCHA possuir linhas, será difícil para scripts e robôs decifrarem. Quanto mais linhas, mais difícil de decifrar. Infelizmente, isso também vale para humanos. (padrão: 5)</string>
@@ -683,7 +683,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ao mudar a visualização todas as alteração não guardadas serão perdidas.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notificar o administrador sobre novos registros</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Número de entradas por página</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens exibidos numa página. A paginação será ativada caso o número total de itens ultrapasse este valor. As funções pré-visualizar impressão e exportar não serão afetadas. Se zero, todos os itens serão listados e a paginação não será ativada. (padrão: 10)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens a serem exibidos numa página. A paginação acontece quando o número de itens excede o valor definido. As funções de visualizar impressão e exportar não são afetadas. Se o valor é 0, todos os itens serão listados e a paginação é desativada. (padrão: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para usuários em sessão</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gerencie preferências gerais da organização ou preferências de módulo</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">A organização #VAR1_BOLD# foi adicionada com sucesso. Ela está agora elegível ao iniciar a sessão.\n\nSe tens uma página inicial separada para esta organização, por favor, adicione-a ao arquivo config.php da página separada.</string>

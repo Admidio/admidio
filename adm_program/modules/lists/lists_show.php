@@ -437,7 +437,7 @@ if ($getMode !== 'csv')
         //link to email-module
         if($showLinkMailToList)
         {
-            if ($role->allowedToAssignMembers($gCurrentUser))
+            if ($numberRoles === 1 && $role->allowedToAssignMembers($gCurrentUser))
             {
                 $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
             }

@@ -79,6 +79,8 @@
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registratie is gesloten.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Registreren voor deze afspraak inschakelen.</string>
   <string name="DAT_REMOVE_APPLICATION">Wilt u dit evenement verwijderen? Alle deelnemers zullen verwijderd worden.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Deelnemers mogen de deelnemerslijst tonen.</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Deelnemers mogen alle andere deelnemers berichten sturen.</string>
   <string name="DAT_ROOM_INFORMATIONS">Zaal informatie</string>
   <string name="DAT_ROOM_OVERHANG">Als er verder nog ruimte beschikbaar is (b.v. extra stoelen of staanplaaten), kunnen deze extra plaatsen hier worden opgegeven.</string>
   <string name="DAT_ROOM_RESERVED">Geselecteerde zaal is in dit tijdvlak al in gebruik.</string>
@@ -137,6 +139,7 @@
   <string name="DOW_NEW_FILE_NAME">Naam nieuw bestand</string>
   <string name="DOW_NEW_NAME">Nieuwe naam</string>
   <string name="DOW_PREVIOUS_NAME">Vorige naam</string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Op deze pagina kun je instellen wie de map #VAR1_BOLD# kan zien en de bestanden kan downloaden of uploaden. Deze rechten worden op alle submappen toegepast, rechten die deze mappen al hadden worden hierbij overschreven. De enige gebruikers die hier toegang tot kunnen krijgen zijn degene met toegang tot de bovengelegen map. Gebruiker van rol met de rechten #VAR2_BOLD# hebben altijd alle rechten voor de map.</string>
   <string name="DOW_SELECT_FILES">Bestanden kiezen</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Instellingen toegangsrechten map</string>
   <string name="DOW_UNMANAGED_FILES">Onbeheerde bestanden</string>
@@ -158,7 +161,9 @@
   <string name="ECA_SCALE_THUMBNAILS_DESC">Bepaal grootte van de lange zijde van thumbnails. (Standaard: 250 pixels)</string>
   <string name="ECA_SUCCESSFULLY_SEND">Uw Ecard is verzonden.</string>
   <string name="ECA_TEMPLATE">Template</string>
+  <string name="ECA_TEMPLATE_DESC">Stel standaard template in. (standaard: Postcard)</string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Toon volledige grootte</string>
+  <string name="ECA_TEMPLATE_FOLDER_OPEN">De Template map kan niet geopend en/of gelezen worden.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
   <string name="GBO_CAPTCHA_DESC">Als deze optie is geactiveerd zullen niet ingelogde bezoekers een afbeelding zien met captcha code of een simpele rekensom. Het is noodzakelijk om de juiste code of oplossing in te vullen. Captcha is onderdeel van antispam oplossing van Admidio. (standaard: ja)</string>
@@ -212,6 +217,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Vul hier je inloggegevens voor de database in. Hier kun je de prefix van de tabel naar wens wijzigen. Dit is nodig als je voor meerdere Admidio-installaties eenzelfde database wilt gebruiken.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Uw database versie is #VAR1#.\nUpdate naar versie #VAR2# is noodzakelijk</string>
   <string name="INS_DATABASE_SYSTEM">Database systeem</string>
+  <string name="INS_DATABASE_PORT_INFO">Indien dit veld niet gebruikt wordt, wordt de Standaardpoort van de database (MySQL: 3306, PostgreSQL: 5432) gebruikt. Gebruik jij of jouw Webhost een speciale poort dan kan deze hier ingevuld worden.</string>
   <string name="INS_DELETE_CONFIG_FILE">In de hoofdmap van Admidio #VAR1_BOLD# bestaat al een bestand config.php. Dit bestand is verplaatst naar de map adm_my_files. Verwijder alstublieft het bestand in de hoofdmap.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Configuratiebestand downloaden</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Het configuratiebestand #VAR1_BOLD# kon niet in de map #VAR2_BOLD# geplaatst worden. Zorg ervoor dat het rechtenset van de map goed is ingesteld en writeable is (via FTP het bestandsattribuut in 0777/drwxrwxrwx veranderen) of download het configuratiebestand en kopieer dit met een FTP-programma in de Admidio map #VAR3_BOLD#.\n\nNadat je het bestand daar geplaatst hebt, kun je doorgaan met de installatie. </string>
@@ -282,6 +288,27 @@
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Wilt u een link naar uw Xing profiel plaatsen? Uw Xing login naam is noodzakelijk. Log in op uw Xing account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Xing profiel direct openen.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
+  <string name="INS_BOYFRIEND">Vriend</string>
+  <string name="INS_BROTHER">Broer</string>
+  <string name="INS_CHILD">Kind</string>
+  <string name="INS_COHABITANT">Partner</string>
+  <string name="INS_COHABITANT_MALE">Partner</string>
+  <string name="INS_COHABITANT_FEMALE">Partner</string>
+  <string name="INS_COMPANION">Vriend(in)</string>
+  <string name="INS_DAUGHTER">Dochter</string>
+  <string name="INS_FATHER">Vader</string>
+  <string name="INS_GIRLFRIEND">Vriendin</string>
+  <string name="INS_HUSBAND">Echtgenoot</string>
+  <string name="INS_MOTHER">Moeder</string>
+  <string name="INS_PARENT">Ouder</string>
+  <string name="INS_SUBORDINATE">Ondergeschikte</string>
+  <string name="INS_SUBORDINATE_MALE">Ondergeschikte</string>
+  <string name="INS_SUBORDINATE_FEMALE">Ondergeschikte</string>
+  <string name="INS_SIBLING">Broers/Zussen</string>
+  <string name="INS_SISTER">Zus</string>
+  <string name="INS_SON">Zoon</string>
+  <string name="INS_SPOUSE">Levenspartner</string>
+  <string name="INS_WIFE">Echtgenote</string>
   <!--Phrases only in Inventorymodule-->
   <string name="INV_CREATE_ITEM">Nieuw artikel</string>
   <string name="INV_INVENTORY">Inventarisbeheer</string>
@@ -327,6 +354,7 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Geen standaard lijst-instellingen gedefinieerd door beheerder!\n\nNeem voor hulp contact met beheerder op.</string>
   <string name="LST_DELETE_CONFIGURATION">Verwijder instellingen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail leden</string>
+  <string name="LST_EMAIL_TO_LIST">E-mail aan de lijst</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers met zonder e-mail adres</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">De lijst #VAR1_BOLD# is de standaardconfiguratie voor lijsten in deze organisatie en kan niet verwijderd worden. Kies in de module-instellingen een andere configuratie als standaardconfiguratie en probeer dan nogmaals deze configuratie te verwijderen.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
@@ -366,6 +394,7 @@
   <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Zoek alle gebruikers met ingevuld e-mail adres</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Aantal rollen per pagina</string>
   <string name="LST_PRESET_CONFIGURATION">Vooraf bepaalde instellingen</string>
+  <string name="LST_PRESET_CONFIGURATION_DESC">Als beheerder kunt u de standaard instellingen voor alle leden bepalen. Maak rijen en kolommen en sla dit op door het een naam te geven.</string>
   <string name="LST_PRINT_PREVIEW">Print</string>
   <string name="LST_ROLE_INFORMATION">Rol informatie</string>
   <string name="LST_ROLE_MEMBERSHIP_IN_PERIOD">Leden in de periode:</string>
@@ -422,6 +451,7 @@
   <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# heeft volgende mail verstuurd naar alle oud-leden van rol #VAR3# in #VAR2#:</string>
   <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# heeft volgende mail verstuurd naar alle actieve en oud-leden van rol #VAR3# in #VAR2#:</string>
   <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# van #VAR2# heeft jou de volgende e-mail gestuurd:</string>
+  <string name="MAI_HIDDEN">Verborgen</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veiligheid niet mogelijk.</string>
   <string name="MAI_INTO_TO">Ontvanger in het TO-veld invullen, niet in het BCC-veld.</string>
@@ -431,14 +461,14 @@
   <string name="MAI_MAX_RECEIVER_DESC">Deze waarde geeft aan hoeveel ontvangers een E-mail kan hebben. Een rol wordt als een enkele ontvanger geteld.</string>
   <string name="MAI_MESSAGE_WENT_TO">Bericht is gestuurd naar</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES">Ontvanger bij rollen</string>
   <string name="MAI_SEND_COPY">Stuur kopie naar mijn e-mail adres</string>
   <string name="MAI_SEND_EMAIL">Stuur e-mail</string>
   <string name="MAI_SEND_METHOD">Stuur via</string>
   <string name="MAI_SEND_METHOD_DESC">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</string>
-  <string name="MAI_SENDER_EMAIL">E-mail adres verstuurder</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Sommige providers accepteren geen onbekende afzenders. Geef daarom een e-mail adres op wat als standaard e-mail adres wordt gebruik in deze module (b.v. outbox@#VAR1#).\nAls dit veld leeg blijft zal het e-mail adres van verstuurder als afzender gebruikt worden. (standaard: leeg)</string>
+  <string name="MAI_SENDER">Afzender</string>
+  <string name="MAI_SENDER_EMAIL">E-mail adres afzender</string>
   <string name="MAI_SENDER_NAME">Afzender</string>
-  <string name="MAI_SENDER_NAME_DESC">Afzender naam van het gebruikte e-mail adres.</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">Als gebruikers uitgelogd zijn zal bij het contactformulier een captcha verschijnen als deze module is geactiveerd. Dit is tegen misbruik van spammers. (standaard: ja)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -481,6 +511,7 @@
   <string name="MEM_DAYS_FIELD_HISTORY">Standaard tijdverdeling in de veranderingsgeschiedenis. (Dagen)</string>
   <string name="MEM_DUPLICATE">Kopieer</string>
   <string name="MEM_EDIT_USER">Bewerk gebruiker</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">Relaties bewerken en weergeven</string>
   <string name="MEM_EXISTING_USERS">Bestaande gebruiker</string>
   <string name="MEM_FILE_COLUMN">Bestand kolom</string>
   <string name="MEM_FIRST_LINE_COLUMN_NAME">Eerste regel bevat naam van kolom</string>
@@ -565,13 +596,21 @@
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (standaard: 20 minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Achtergrond kleur</string>
-  <string name="ORG_CAPTCHA_FONT">Kies font type voor captcha code. (standaard: Theme font)</string>
+  <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Achtergrondafbeelding</string>
+  <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Tekenkleur</string>
+  <string name="ORG_CAPTCHA_DISTORTION_DESC">Deze waarde geeft aan hoe sterk de karakters vertekend moeten worden. 0 betekend geen vertekening, 3 is al een zo sterke verandering dat sommige tekens niet meer herkend kunnen worden. (Standaard: 0.75)</string>
+  <string name="ORG_CAPTCHA_FONT">Kies font type voor Captcha-Code. (standaard: AHGBold.tff)</string>
+  <string name="ORG_CAPTCHA_LINE_COLOR">Lijnkleur</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS">Aantal lijnen</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha preview</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Na activering wordt een afbeelding met captcha code of een simpele rekensom getoond aan nieuwe gebruikers. Het is noodzakelijk dat alles correct wordt ingevuld. Captcha is onderdeel van anti-spam oplossing van Admidio. (standaard: ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha handtekening</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Vul handtekening voor de captcha in. Standaard font type van het huidige thema wordt gebruikt.</string>
+  <string name="ORG_CAPTCHA_SIGNS">Geaccepteerde karakters</string>
   <string name="ORG_CAPTCHA_TYPE">Captcha type</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Berekening</string>
+  <string name="ORG_CAPTCHA_TYPE_PIC">Willekeurige karakters</string>
+  <string name="ORG_CAPTCHA_TYPE_WORDS">Woorden (Engels)</string>
   <string name="ORG_CONFIRM_REGISTRATION">Bevestiging registratie na handmatige goedkeuring</string>
   <string name="ORG_CREATE_ITEM_FIELD">Nieuw artikelveld</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Maak profielveld</string>
@@ -585,6 +624,8 @@
   <string name="ORG_EMAIL_ALERTS">E-mail alert</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Alle leden van rollen met rechten voor #VAR1_BOLD# ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (standaard: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha activatie</string>
+  <string name="ORG_ENABLE_RSS_FEEDS">Activeer Web-Feeds</string>
+  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan eenn RSS-feed voor meerdere modules (mededelingen, afspraken, gastenboek, foto galerij en links) op de overzichtspagina van elke module plaatsen. Inschrijven is mogelijk via browser of feed reader. (standaard: ja)</string>
   <string name="ORG_FAST_REGISTRATION">Snelle registratie</string>
   <string name="ORG_FIELD_DESCRIPTION">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</string>
   <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht #VAR1_BOLD#</string>
@@ -613,13 +654,19 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Nieuw wachtwoord en activatie link</string>
   <string name="ORG_NO_FIELD_CREATED">Er zijn nog geen specifieke velden voor deze organistaie aangemaakt!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Bij het wisselen van weergave gaan alle niet opgeslagen instellingen verloren.</string>
+  <string name="ORG_NOTIFY_ADMINISTRATOR">Administrator informeren over nieuwe registraties</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal items per pagina</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">De organisatie #VAR1_BOLD# is toegevoegd. Bij de aanmelding kun je deze nu kiezen. \n\nAls je voor deze organisatie een aparte homepage hebt gemaakt, moet je enkel nog op de desbetreffende pagina deze organisatie aan het config.php bestand toevoegen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Hoofd organisatie</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofd organisatie. Hoofd organisatie kan bijvoorbeeld evenementen en mededelingen maken, die worden getoond in de geselecteerde (sub) organisatie.</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Wachtwoord sterkte</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Geen</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Klein</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Het midden</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoog</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profiel velden</string>
   <string name="ORG_REFUSE_REGISTRATION">Berichtgeving van registratie weigering</string>
@@ -810,6 +857,10 @@
   <string name="PRO_WANT_DELETE_PHOTO">Wilt u de geselecteerde foto verwijderen?</string>
   <string name="PRO_YEARS">jaar</string>
   <!--Phrases only in Relationssmodule-->
+  <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
+  <string name="REL_USER_RELATION_TYPE_FORWARD">Voorwaarts</string>
+  <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
+  <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirectional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Actieve rollen</string>
   <string name="ROL_ALL_GUESTS">Alle gebruikers van de website</string>
@@ -907,6 +958,7 @@
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio versie</string>
   <string name="SYS_ADMINISTRATION">Administratie</string>
+  <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax foutmelding.\nDetails foutmelding: #VAR1#</string>
   <string name="SYS_ALL">Iedereen</string>
   <string name="SYS_ALSO_VISITORS">ook bezoekers</string>
@@ -988,6 +1040,7 @@
   <string name="SYS_DONT_SHOW">Niet weergeven</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down box</string>
   <string name="SYS_EDIT">Bewerk</string>
+  <string name="SYS_EDIT_ENTRY">Bericht bewerken</string>
   <string name="SYS_EDIT_MEMBERS">Gebruikers aanpassen</string>
   <string name="SYS_EDIT_VAR">Bewerk #VAR1#</string>
   <string name="SYS_EDITED_BY">Laatst aangepast door</string>
@@ -1038,6 +1091,7 @@
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_ICAL_DISABLED">iCal is uitgeschakeld door de beheerder.</string>
   <string name="SYS_ICON">Icoon</string>
+  <string name="SYS_IMPORTANT">Belangrijk</string>
   <string name="SYS_INACTIVE">Inactief</string>
   <string name="SYS_INFORMATIONS">informatie</string>
   <string name="SYS_INTERNAL_NAME">Interne naam</string>
@@ -1141,6 +1195,7 @@
   <string name="SYS_PLEASE_CHOOSE">Selecteer</string>
   <string name="SYS_PLEASE_WAIT">Een moment geduld</string>
   <string name="SYS_PM">Privébericht</string>
+  <string name="SYS_PORT">Poort</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Staand</string>
   <string name="SYS_POST_MAX_SIZE">Max. grootte van plaatsing</string>
   <string name="SYS_POSTCODE">Postcode</string>
@@ -1159,6 +1214,7 @@
   <string name="SYS_REGISTERED_AS">Ingelogd als</string>
   <string name="SYS_REGISTRATION">Registratie</string>
   <string name="SYS_REGISTRATION_SAVED">Uw gegevens zijn opgeslagen.\n\nNa goedkeuring kunt u inloggen. U zult per e-mail hierover worden geinformeerd.</string>
+  <string name="SYS_RELOAD">Opnieuw laden</string>
   <string name="SYS_REMEMBER_ME">Blijf ingelogd</string>
   <string name="SYS_REMOVE">Verwijder</string>
   <string name="SYS_REPEAT">Herhaal</string>
@@ -1194,6 +1250,7 @@
   <string name="SYS_SIZE">Formaat</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Vanaf</string>
+  <string name="SYS_STATUS_CODE_INVALID">Ongeldige status-code</string>
   <string name="SYS_STILL_X_CHARACTERS">nog #VAR1# tekens</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">Zondag</string>
@@ -1235,5 +1292,6 @@
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Woensdag</string>
   <string name="SYS_WHAT_TO_DO">Wat moet u doen?</string>
+  <string name="SYS_WIDTH">Breedte</string>
   <string name="SYS_YES">Ja</string>
 </resources>

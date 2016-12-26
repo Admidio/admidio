@@ -303,9 +303,9 @@ class HtmlForm extends HtmlFormBasic
 
         // add a row with the captcha puzzle
         $this->openControlStructure('captcha_puzzle', '', FIELD_DEFAULT, '', '', $attributes['class']);
-        $onClickCode = 'document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random(); return false;';
+        $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?\' + Math.random(); return false;';
         $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
-                        <a class="admidio-icon-link" href="#" onclick="' . $onClickCode . '"><img
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '"><img
                             src="' . THEME_URL . '/icons/view-refresh.png" alt="' . $gL10n->get('SYS_RELOAD') . '" title="' . $gL10n->get('SYS_RELOAD') . '" /></a>');
         $this->closeControlStructure();
 
@@ -1071,12 +1071,12 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' ' . $optionsAll['class'];
         }
 
-        $this->openControlStructure('', $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
 
         // set one radio button with no value will be set in front of the other array.
         if ($optionsAll['showNoValueButton'])
         {
-            if ($optionsAll['defaultValue'] === '' && count($values) === 0)
+            if ($optionsAll['defaultValue'] === '')
             {
                 $attributes['checked'] = 'checked';
             }
@@ -1089,6 +1089,8 @@ class HtmlForm extends HtmlFormBasic
         // for each entry of the array create an input radio field
         foreach ($values as $key => $value)
         {
+            unset($attributes['checked']);
+
             if ($optionsAll['defaultValue'] == $key)
             {
                 $attributes['checked'] = 'checked';

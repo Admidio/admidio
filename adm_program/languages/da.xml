@@ -360,6 +360,7 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</string>
   <string name="LST_DELETE_CONFIGURATION">Slet liste indstillingen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail til medlemmer</string>
+  <string name="LST_EMAIL_TO_LIST">E-mail til liste</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Find alle brugere med et tomt adresse felt</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">Liste konfigurationen #VAR1_BOLD# er standard konfigurationen for lister i denne organisation og kan derfor ikke slettes. Vælg en anden konfiguration som standard konfiguration i modul indstillingerne og prøv så efterfølgende at slette denne konfiguration igen.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Niels</string>
@@ -468,7 +469,7 @@
   <string name="MAI_MESSAGE_WENT_TO">Beskeden blev sendt til</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
   <string name="MAI_RECIPIENTS_WITH_ROLES">Modtager i roller</string>
-  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">Hvis en e-mail er sendt til en rolle, vil alle modtager adresser blive placeret i BCC feltet. TIL feltet vil så indeholde ordet \"Undisclosed Recipients\". Hvis dette resulterer i en fejl, så kan du benytte dig af muligheden for at flytte adresserne til til-feltet. De andre adresser vil forblive i BCC feltet. (Standard: Deaktiveret)</string>
+  <string name="MAI_RECIPIENTS_WITH_ROLES_DESC">I e-mails til roller , findes alle modtager adresser i BCC feltet. Til feltet vil så indeholde ordet \"Undisclosed Recipients\". Hvis dette resulterer i en fejl, så kan du med denne indstilling benytte dig af muligheden for at fylde (TIL) feltet med afsender adressen eller administrator adressen fra system notifikationerne. Alle mails til enhver rolle vil blive sendt til disse modtagere. Rolle medlemmernes adresser vil forblive i BCC feltet. (Standard: Gemt)</string>
   <string name="MAI_SEND_COPY">Send kopi af e-mail til min egen adresse</string>
   <string name="MAI_SEND_EMAIL">Send e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Din email vil blive sendt til alle medlemmer der har en email adresse og som tilhører den valgte rolle eller de valgte modtagere.\n\nFlere roller og modtagere er tilgængelige kun for brugere der er logget ind.</string>
@@ -476,9 +477,9 @@
   <string name="MAI_SEND_METHOD_DESC">Mail () functionen i PHP er hos nogen hosts begrænset og betragtes sommmetider som spam. Det anbefales derfor at sende e-mails via en SMTP server. SMTP server indstillingerne kan konfigureres herunder. (Standard: PHP mail ())</string>
   <string name="MAI_SENDER">Afsender</string>
   <string name="MAI_SENDER_EMAIL">Afsenders e-mail</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Nogen service leverandører tillader ikke uidentificeret afsender information. Derfor bedes du angive en e-mail addrese som bliver standard afsender der bliver brugt af e-mail modulet (f.eks. udbakke@#VAR1#).\nHvis feltet forbliver tomt, så vil afsenders registrerede e-mail addresse bruges istedet. (Standard: tom)</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Nogen service leverandører vil ikke tillade uidentificerede at sende mails. Derfor bedes du angive en standard afsender e-mail adresse, som kan anvendes af e-mail modulet (f.eks.. outbox@#VAR1#).\nHvis dette felt er tomt vil afsenderens e-mail adresse blive brugt som afsender information. (Standard: tomt)</string>
   <string name="MAI_SENDER_NAME">Navn på afsender</string>
-  <string name="MAI_SENDER_NAME_DESC">Afsender e-mail adresse.</string>
+  <string name="MAI_SENDER_NAME_DESC">Navn på afsender ifølge den anvendte e-mail adresse. Dette felt må kun udfyldes hvis afsenders e-mail adresse er vedligeholdt. (Standard: Tomt)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Afsender var logget af. Derfor kan afsenders information være forkert.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">For brugere der er logget ud vil der fremkomme en alphanummerisk tekst når captcha modulet er aktiveret. Den viste tekst skal skrives i det dertil indrettede felt. Det bør forhindre misbrug af formularen fra spammere. (Standard: Ja)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -618,7 +619,7 @@
   <string name="ORG_CAPTCHA_COLOR_DESC">Baggrunds farven skal være i god kontrast til font farven. Hvis både linje og fyld farven er den samme, vil det være sværere for scripts og bots at læse CAPTACHA. Alle farver skal specificeres som #VAR1#hexidecimale værdier#VAR2#.</string>
   <string name="ORG_CAPTCHA_DISTORTION">Forvrængning</string>
   <string name="ORG_CAPTCHA_DISTORTION_DESC">Denne værdi angiver forvrængningen af karaktererne. 0 betyder ingen forvrængning. Med en værdi på 3, vil nogen karakterer ikke kunne læses mere. (Standard: 0.75)</string>
-  <string name="ORG_CAPTCHA_FONT">Vælg font type for captcha koden. (Standard: Tema font)</string>
+  <string name="ORG_CAPTCHA_FONT">Vælg en font type for CAPTCHA koden (Standard: AHGBold.ttf)</string>
   <string name="ORG_CAPTCHA_LINE_COLOR">Linje farve</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS">Antal linjer</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Med linjer i CAPTCHA, vil det være sværere for scripts og bots og løse den. Jo flere linjer der laves, jo sværerer er det at løse. Uheldigvis er det det samme for mennesker. (Standard: 5)</string>
@@ -682,13 +683,14 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ved ændringer i visningen vil alle ikke gemte ændringer være tabt.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notifikation til administratoren om nye registreringer</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definér antal poster vist pr. side. Sidenummerering træder i kraft hvis antallet af poster overskrider denne definerede værdi. Print eksempel og eksport funktionaliteten bliver ikke påvirket af dette. Hvis værdien er 0, vil alle poster blive listet og sidenummerering deaktiveret. (Standard: 10)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definer et antal emner som vises på en side. Sideskift sker hvis antallet af emner overskrider den definerede værdi. Print Preview og eksport funktionalitet er ikke påvirket. Hvis værdien er 0, vil alle emner blive vist og sideskift bliver deaktiveret. (Standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Administrer generelle organisations indstillinger og modul indstillinger.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organisationen #VAR1_BOLD# er blevet tilføjet. Den er nu til at vælge ved login.\n\nHvis du har en separat hjemmeside til denne organisation, venligst tilføj den til config.php filen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Forældre organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Definér forældre organisation her. Forældre organisationer kan f.eks. oprette events og beskeder der så vises i de valgte (børne) organisationer.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Kodeords styrke</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Her kan du specificere hvor sikre og komplekse kodeord som minimum skal være.\nVærdien i parentes indikerer hvor mange forsøg der skal til for at knække koden.\n\n No: risikabelt kodeord (&lt;10^3)\n Lav: Beskyttelse imod automatiserede online angreb. (&lt;10^6)\n Middel: Beskyttelse imod ubegrænsede online angreb.(&lt;10^8)\n Høj: Moderat beskyttelse imod offline hashing angreb. (&lt;10 ^10)\n Ekstrem: Stærk beskyttelse imod offline hashing angreb. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ingen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Lav</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middel</string>
@@ -860,6 +862,7 @@
   <string name="PRO_NO_DEFAULT_ROLE">Rolle administrationen indeholder ikke nogen standard rolle for nye brugere. Venligst kontakt en administrator der kan redigere denne indstilling.</string>
   <string name="PRO_NO_ROLES_VISIBLE">Ingen roller blev fundet. Der er muligvis roller som du ikke har rettigheder nok til at se.</string>
   <string name="PRO_PASSWORD_CHANGED">Kodeordet er blevet ændret.</string>
+  <string name="PRO_PASSWORD_DESCRIPTION">Kodeord skal have mindst 8 karakterer som inkluderer numre, bogstaver og specielle karakterer.\n\nStyrken af dit valgte kodeord vil blive vist i farver med en bar. Minimum styrken er indikeret via pilen i baren.</string>
   <string name="PRO_PASSWORD_LENGTH">Kodeord skal indeholde mindst 8 karakterer.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">Det gamle kodeord er ikke korrekt.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">Det originale og det genindtastede kodeord er ikke ens.</string>
@@ -1136,12 +1139,14 @@
   <string name="SYS_GEN_RANDOM_ERROR">En uventet fejl opstod under ved generering af en tilfældig streng.</string>
   <string name="SYS_GEN_RANDOM_FAIL">Programmet kan ikke generere en tilfældig streng.</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet forventer en streng med mindst to forskellige karakterer.</string>
+  <string name="SYS_HEADER_ALREADY_SENT">HTTP Header er allerede sendt!</string>
   <string name="SYS_HEADLINE">Overskrift</string>
   <string name="SYS_HELP">Hjælp</string>
   <string name="SYS_HIDE">Gem</string>
   <string name="SYS_HOMEPAGE">Hjemmeside</string>
   <string name="SYS_ICAL_DISABLED">ICal er blevet deaktiveret af system administratoren.</string>
   <string name="SYS_ICON">Ikon</string>
+  <string name="SYS_IMPORTANT">Vigtigt</string>
   <string name="SYS_INACTIVE">Inaktiv</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>
@@ -1264,6 +1269,7 @@
   <string name="SYS_QUANTITY">Mængde</string>
   <string name="SYS_RADIO_BUTTON">Radio knap</string>
   <string name="SYS_RECIPIENT">Modtager</string>
+  <string name="SYS_REDIRECT_URL_INVALID">Den specificerede redirect URL er ugyldig.</string>
   <string name="SYS_REGISTERED_AS">Logget ind som</string>
   <string name="SYS_REGISTRATION">Registrering</string>
   <string name="SYS_REGISTRATION_SAVED">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</string>
@@ -1305,6 +1311,7 @@
   <string name="SYS_SIZE">Størrelse</string>
   <string name="SYS_SOCIAL_NETWORKS">Sociale medier</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_CODE_INVALID">Ugyldig status kode!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# karakterer</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">søndag</string>

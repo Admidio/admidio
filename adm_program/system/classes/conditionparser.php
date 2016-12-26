@@ -147,14 +147,24 @@ class ConditionParser
                     break;
                 case '}':
                     // search for dates that are older than the age
-                    // because the age itself takes 1 year we must add 1 year and 1 day to age
-                    $dateObj->add($oneYear)->add($oneDay);
+                    // because the age itself takes 1 year we must subtract 1 year to age
+                    $dateObj->sub($oneYear)->add($oneDay);
                     $ageCondition = $dateObj->format('Y-m-d');
                     break;
                 case '{':
                     // search for dates that are younger than the age
                     // we must add 1 day to the date because the day itself belongs to the age
                     $dateObj->add($oneDay);
+                    $ageCondition = $dateObj->format('Y-m-d');
+                    break;
+                case ']':
+                    // search for dates that are older or equal than the age
+                    $ageCondition = $dateObj->format('Y-m-d');
+                    break;
+                case '[':
+                    // search for dates that are younger or equal than the age
+                    // because the age itself takes 1 year we must subtract another 1 year but the day itself must be ignored to age
+                    $dateObj->sub($oneYear)->add($oneDay);
                     $ageCondition = $dateObj->format('Y-m-d');
                     break;
             }
