@@ -232,6 +232,11 @@ $javascriptCode = '
 $i = 1;
 $oldCategoryNameIntern = '';
 $posEndOfMasterData = 0;
+$arrParticipientsInformation = array ('mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+                                      'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+                                      'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+                                      'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+                                      'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT'));
 
 foreach($gProfileFields->mProfileFields as $field)
 {
@@ -317,8 +322,20 @@ $javascriptCode .= '
             "usf_id"   = "mem_end",
             "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_END').'",
             "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_END').'"
+        };';
+        
+    // add new category with participient information of events
+    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    {
+        ++$i;
+        $javascriptCode .= '
+            userFields[' . $i . '] = {
+                "cat_id"   = -1;
+                "cat_name" = "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'";
+                "usf_id"   = "'.$memberStatus.'";
+                "usf_name"] = "'.$ColumnName.'";
+                "usf_name_intern" = "'.$ColumnName.'";
         };
-
         return userFields;
     }
 
@@ -653,4 +670,3 @@ $form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => 
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
