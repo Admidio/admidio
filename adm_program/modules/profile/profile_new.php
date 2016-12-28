@@ -29,7 +29,6 @@ $getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'int');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
-$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'bool');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 

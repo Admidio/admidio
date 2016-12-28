@@ -26,22 +26,30 @@ if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_r
     // => EXIT
 }
 
-$user = new User($gDb, $gProfileFields, $getUserId);
-
-if($user->getValue('usr_activation_code') === $getActivationId)
+try
 {
-    // activate the new password
-    $user->setPassword($user->getValue('usr_new_password'), false, false);
-    $user->setPassword('', true, false);
-    $user->setValue('usr_activation_code', '');
-    $user->save();
+    $user = new User($gDb, $gProfileFields, $getUserId);
 
-    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php', 2000);
-    $gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
-    // => EXIT
+    if($user->getValue('usr_activation_code') === $getActivationId)
+    {
+        // activate the new password
+        $user->saveChangesWithoutRights();
+        $user->setPassword($user->getValue('usr_new_password'), false, false);
+        $user->setPassword('', true, false);
+        $user->setValue('usr_activation_code', '');
+        $user->save();
+
+        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php', 2000);
+        $gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
+        // => EXIT
+    }
+    else
+    {
+        $gMessage->show($gL10n->get('SYS_PWACT_CODE_INVALID'));
+        // => EXIT
+    }
 }
-else
+catch(AdmException $e)
 {
-    $gMessage->show($gL10n->get('SYS_PWACT_CODE_INVALID'));
-    // => EXIT
+    $e->showHtml();
 }
