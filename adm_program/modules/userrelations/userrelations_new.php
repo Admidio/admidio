@@ -77,69 +77,97 @@ $sql = 'SELECT urt_id, urt_name
       ORDER BY urt_name';
 $form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql, array('property' => FIELD_REQUIRED));
 
+$sqlData = array();
 if($gCurrentUser->editUsers())
 {
     // the user has the edit right, therefore he can edit all visible users
-    $sql = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_ROLES.'
-                ON rol_id = mem_rol_id
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-        INNER JOIN '.TBL_USERS.'
-                ON usr_id = mem_usr_id
-         LEFT JOIN '.TBL_USER_DATA.' AS last_name
-                ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             WHERE usr_id <> '.$user->getValue('usr_id').'
-               AND rol_id IN ('.implode(',', $gCurrentUser->getAllVisibleRoles()).')
-               AND rol_valid   = 1
-               AND rol_visible = 1
-               AND ( cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                   OR cat_org_id IS NULL )
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end   >= \''.DATE_NOW.'\'
-               AND usr_valid  = 1
-          ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
+    $inPlaceHolders = implode(',', array_fill(0, count($gCurrentUser->getAllVisibleRoles()), '?'));
+    $sqlData['query'] = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
+                           FROM '.TBL_MEMBERS.'
+                     INNER JOIN '.TBL_ROLES.'
+                             ON rol_id = mem_rol_id
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                     INNER JOIN '.TBL_USERS.'
+                             ON usr_id = mem_usr_id
+                      LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                             ON last_name.usd_usr_id = usr_id
+                            AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                      LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                             ON first_name.usd_usr_id = usr_id
+                            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                          WHERE usr_id <> ? -- $user->getValue(\'usr_id\')
+                            AND rol_id IN ('.$inPlaceHolders.')
+                            AND rol_valid   = 1
+                            AND rol_visible = 1
+                            AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                OR cat_org_id IS NULL )
+                            AND mem_begin <= ? -- DATE_NOW
+                            AND mem_end   >= ? -- DATE_NOW
+                            AND usr_valid  = 1
+                       ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
+    $sqlData['params'] = array_merge(
+        array(
+            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            $user->getValue('usr_id')
+        ),
+        $gCurrentUser->getAllVisibleRoles(),
+        array(
+            $gCurrentOrganization->getValue('org_id'),
+            DATE_NOW,
+            DATE_NOW
+        )
+    );
 }
 else
 {
     // select all users which the current user can edit because of role leader rights
-    $sql = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_USERS.'
-                ON usr_id = mem_usr_id
-         LEFT JOIN '.TBL_USER_DATA.' AS last_name
-                ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-         LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-             WHERE usr_id <> '.$user->getValue('usr_id').'
-               AND mem_rol_id IN (SELECT mem_rol_id
-                                    FROM '.TBL_MEMBERS.'
-                              INNER JOIN '.TBL_ROLES.'
-                                      ON rol_id = mem_rol_id
-                              INNER JOIN '.TBL_CATEGORIES.'
-                                      ON cat_id = rol_cat_id
-                                   WHERE mem_usr_id  = '.$gCurrentUser->getValue('usr_id').'
-                                     AND mem_begin  <= \''.DATE_NOW.'\'
-                                     AND mem_end     > \''.DATE_NOW.'\'
-                                     AND mem_leader  = 1
-                                     AND rol_valid   = 1
-                                     AND rol_visible = 1
-                                     AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_EDIT.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
-                                     AND ( cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                                         OR cat_org_id IS NULL ))
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end   >= \''.DATE_NOW.'\'
-               AND usr_valid  = 1
-          ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
+    $sqlData['query'] = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
+                           FROM '.TBL_MEMBERS.'
+                     INNER JOIN '.TBL_USERS.'
+                             ON usr_id = mem_usr_id
+                      LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                             ON last_name.usd_usr_id = usr_id
+                            AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                      LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                             ON first_name.usd_usr_id = usr_id
+                            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                          WHERE usr_id <> ? -- $user->getValue(\'usr_id\')
+                            AND mem_rol_id IN (SELECT mem_rol_id
+                                                 FROM '.TBL_MEMBERS.'
+                                           INNER JOIN '.TBL_ROLES.'
+                                                   ON rol_id = mem_rol_id
+                                           INNER JOIN '.TBL_CATEGORIES.'
+                                                   ON cat_id = rol_cat_id
+                                                WHERE mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
+                                                  AND mem_begin  <= ? -- DATE_NOW
+                                                  AND mem_end     > ? -- DATE_NOW
+                                                  AND mem_leader  = 1
+                                                  AND rol_valid   = 1
+                                                  AND rol_visible = 1
+                                                  AND rol_leader_rights IN (?,?) -- ROLE_LEADER_MEMBERS_EDIT, ROLE_LEADER_MEMBERS_ASSIGN_EDIT
+                                                  AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                                      OR cat_org_id IS NULL ))
+                            AND mem_begin <= ? -- DATE_NOW
+                            AND mem_end   >= ? -- DATE_NOW
+                            AND usr_valid  = 1
+                       ORDER BY last_name.usd_value, first_name.usd_value, usr_id';
+    $sqlData['params'] = array(
+        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+        $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+        $user->getValue('usr_id'),
+        $gCurrentUser->getValue('usr_id'),
+        DATE_NOW,
+        DATE_NOW,
+        ROLE_LEADER_MEMBERS_EDIT,
+        ROLE_LEADER_MEMBERS_ASSIGN_EDIT,
+        $gCurrentOrganization->getValue('org_id'),
+        DATE_NOW,
+        DATE_NOW
+    );
 }
-$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'search' => true));
+$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData, array('property' => FIELD_REQUIRED, 'search' => true));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 

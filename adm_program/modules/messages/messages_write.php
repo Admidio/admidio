@@ -508,19 +508,23 @@ elseif (!isset($messageStatement))
 
         if($possible_emails > 1)
         {
-            $sql = 'SELECT email.usd_value AS ID, email.usd_value AS email
-                      FROM '.TBL_USERS.'
-                INNER JOIN '.TBL_USER_DATA.' AS email
-                        ON email.usd_usr_id = usr_id
-                       AND LENGTH(email.usd_value) > 0
-                INNER JOIN '.TBL_USER_FIELDS.' AS field
-                        ON field.usf_id = email.usd_usf_id
-                       AND field.usf_type = \'EMAIL\'
-                     WHERE usr_id = '. $gCurrentUser->getValue('usr_id'). '
-                       AND usr_valid = 1
-                  GROUP BY email.usd_value, email.usd_value';
+            $sqlData['params'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
+                                    FROM '.TBL_USERS.'
+                              INNER JOIN '.TBL_USER_DATA.' AS email
+                                      ON email.usd_usr_id = usr_id
+                                     AND LENGTH(email.usd_value) > 0
+                              INNER JOIN '.TBL_USER_FIELDS.' AS field
+                                      ON field.usf_id = email.usd_usf_id
+                                     AND field.usf_type = \'EMAIL\'
+                                   WHERE usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                                     AND usr_valid = 1
+                                GROUP BY email.usd_value, email.usd_value';
+            $sqlData['params'] = array($gCurrentUser->getValue('usr_id'));
 
-            $form->addSelectBoxFromSql('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sql, array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false));
+            $form->addSelectBoxFromSql(
+                'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sqlData,
+                array('maxLength' => 50, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
+            );
         }
         else
         {
