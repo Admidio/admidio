@@ -77,10 +77,9 @@ $showLinkMailToList = true;
 
 if ($numberRoles > 1)
 {
-    $inPlaceHolders = implode(',', array_fill(0, count($roleIds), '?'));
     $sql = 'SELECT rol_id, rol_name
               FROM '.TBL_ROLES.'
-             WHERE rol_id IN ('.$inPlaceHolders.')';
+             WHERE rol_id IN ('.replaceValuesArrWithQM($roleIds).')';
     $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
     $rolesData      = $rolesStatement->fetchAll();
 
@@ -131,10 +130,9 @@ $relationtypeName = '';
 $relationtypeIds = array_map('intval', array_filter(explode(',', $getRelationtypeIds), 'is_numeric'));
 if (count($relationtypeIds) > 0)
 {
-    $inPlaceHolders = implode(',', array_fill(0, count($relationtypeIds), '?'));
     $sql = 'SELECT urt_id, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-             WHERE urt_id IN ('.$inPlaceHolders.')
+             WHERE urt_id IN ('.replaceValuesArrWithQM($relationtypeIds).')
           ORDER BY urt_name';
     $relationtypesStatement = $gDb->queryPrepared($sql, $relationtypeIds);
 

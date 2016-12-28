@@ -197,12 +197,11 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 // list all roles where login users could send mails to
 $arrayMailRoles = $gCurrentUser->getAllMailRoles();
 
-$inPlaceHolders = implode(',', array_fill(0, count($arrayMailRoles), '?'));
 $sql = 'SELECT rol_id, rol_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_id IN ('.$inPlaceHolders.')
+         WHERE rol_id IN ('.replaceValuesArrWithQM($arrayMailRoles).')
            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
       ORDER BY rol_name';
 $statement = $gDb->queryPrepared($sql, $arrayMailRoles);

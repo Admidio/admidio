@@ -881,3 +881,13 @@ function noHTML($input, $encoding = 'UTF-8')
 
     return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
 }
+
+/**
+ * Get an string with question marks that are comma separated.
+ * @param array $valuesArray An array with the values that should be replaced with question marks
+ * @return string Question marks string
+ */
+function replaceValuesArrWithQM(array $valuesArray)
+{
+    return implode(',', array_fill(0, count($valuesArray), '?'));
+}

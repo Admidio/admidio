@@ -88,7 +88,6 @@ $arrAllVisibleRoles = $gCurrentUser->getAllVisibleRoles();
 
 if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
 {
-    $inPlaceHolders = implode(',', array_fill(0, count($arrAllVisibleRoles), '?'));
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
@@ -103,7 +102,7 @@ if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
              LEFT JOIN '.TBL_USER_DATA.' AS first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                 WHERE rol_id IN ('.$inPlaceHolders.')
+                 WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
@@ -340,19 +339,18 @@ elseif (!isset($messageStatement))
         else
         {
             // list array with all roles where user is allowed to send mail to
-            $inPlaceHolders = implode(',', array_fill(0, count($sqlRoleIds), '?'));
             $sql = 'SELECT rol_id, rol_name
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
                        AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR cat_org_id IS NULL)
-                     WHERE rol_id IN ('.$inPlaceHolders.')
+                     WHERE rol_id IN ('.replaceValuesArrWithQM($sqlRoleIds).')
                        AND rol_valid = 1
                            '.$sqlParticipationRoles.'
                   ORDER BY rol_name ASC';
             $queryParams = array($gCurrentOrganization->getValue('org_id'));
-            $rolesStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $inPlaceHolders));
+            $rolesStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $sqlRoleIds));
             $rolesArray = $rolesStatement->fetchAll();
 
             foreach($rolesArray as $roleArray)
@@ -378,7 +376,6 @@ elseif (!isset($messageStatement))
         if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
         {
             // if no special role was preselected then list users
-            $inPlaceHolders = implode(',', array_fill(0, count($listVisibleRoleArray), '?'));
             $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, rol_id, mem_begin, mem_end
                       FROM '.TBL_MEMBERS.'
                 INNER JOIN '.TBL_ROLES.'
@@ -397,7 +394,7 @@ elseif (!isset($messageStatement))
                  LEFT JOIN '.TBL_USER_DATA.' AS first_name
                         ON first_name.usd_usr_id = usr_id
                        AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                     WHERE rol_id IN ('.$inPlaceHolders.')
+                     WHERE rol_id IN ('.replaceValuesArrWithQM($listVisibleRoleArray).')
                        AND mem_begin <= ? -- DATE_NOW
                        AND usr_id    <> ? -- $gCurrentUser->getValue(\'usr_id\')
                            '.$sqlUserIds.'

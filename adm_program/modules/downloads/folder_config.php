@@ -59,16 +59,14 @@ try
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
         if(count($rolesViewRightParentFolder) > 0)
         {
-            $inPlaceHolders = implode(',', array_fill(0, count($rolesViewRightParentFolder), '?'));
-            $sqlRolesViewRight = ' AND rol_id IN ('.$inPlaceHolders.')';
+            $sqlRolesViewRight = ' AND rol_id IN ('.replaceValuesArrWithQM($rolesViewRightParentFolder).')';
         }
 
         // get assigned roles of the parent folder
         $rolesUploadRightParentFolder = $parentFolder->getRoleUploadArrayOfFolder();
         if(count($rolesUploadRightParentFolder) > 0)
         {
-            $inPlaceHolders = implode(',', array_fill(0, count($rolesUploadRightParentFolder), '?'));
-            $sqlRolesUploadRight = ' AND rol_id IN ('.$inPlaceHolders.')';
+            $sqlRolesUploadRight = ' AND rol_id IN ('.replaceValuesArrWithQM($rolesUploadRightParentFolder).')';
         }
     }
 }

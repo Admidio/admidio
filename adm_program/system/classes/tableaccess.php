@@ -514,7 +514,7 @@ class TableAccess
             // insert record and mark this object as not new and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.'
                            ('.implode(',', $sqlFieldArray).')
-                    VALUES ('.implode(',', array_fill(0, count($sqlFieldArray), '?')).')';
+                    VALUES ('.replaceValuesArrWithQM($sqlFieldArray).')';
             $this->db->queryPrepared($sql, $queryParams);
 
             $this->new_record = false;
