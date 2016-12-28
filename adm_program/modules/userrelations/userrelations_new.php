@@ -82,7 +82,7 @@ if($gCurrentUser->editUsers())
 {
     // the user has the edit right, therefore he can edit all visible users
     $inPlaceHolders = implode(',', array_fill(0, count($gCurrentUser->getAllVisibleRoles()), '?'));
-    $sqlData['query'] = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
+    $sqlData['query'] = 'SELECT usr_id, CONCAT(last_name.usd_value, \' \', first_name.usd_value) AS name
                            FROM '.TBL_MEMBERS.'
                      INNER JOIN '.TBL_ROLES.'
                              ON rol_id = mem_rol_id
@@ -123,7 +123,7 @@ if($gCurrentUser->editUsers())
 else
 {
     // select all users which the current user can edit because of role leader rights
-    $sqlData['query'] = 'SELECT usr_id, concat(last_name.usd_value, \' \', first_name.usd_value) AS name
+    $sqlData['query'] = 'SELECT usr_id, CONCAT(last_name.usd_value, \' \', first_name.usd_value) AS name
                            FROM '.TBL_MEMBERS.'
                      INNER JOIN '.TBL_USERS.'
                              ON usr_id = mem_usr_id
