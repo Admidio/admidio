@@ -845,7 +845,7 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$userId.', \''. DATETIME_NOW.'\')
     $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
     $gCurrentOrganization->setValue('org_longname', $_SESSION['orga_longname']);
     $gCurrentOrganization->setValue('org_shortname', $_SESSION['orga_shortname']);
-    $gCurrentOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
+    $gCurrentOrganization->setValue('org_homepage', ADMIDIO_URL);
     $gCurrentOrganization->save();
 
     // create administrator and assign roles

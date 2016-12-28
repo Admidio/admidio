@@ -52,7 +52,7 @@ class RSSfeed
         $this->channel['description'] = $description;
         $this->channel['copyright']   = $copyright;
         $this->items = array();
-        $this->feed  = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $this->feed  = CURRENT_URL;
     }
 
     /**

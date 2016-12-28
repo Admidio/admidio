@@ -529,6 +529,6 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
     header('Cache-Control: private');
     header('Pragma: public');
 
-    echo $date->getIcal($_SERVER['HTTP_HOST']);
+    echo $date->getIcal(DOMAIN);
     exit();
 }

@@ -340,7 +340,7 @@ switch($getMode)
         $newOrganization = new Organization($gDb, $_POST['orgaShortName']);
         $newOrganization->setValue('org_longname', $_POST['orgaLongName']);
         $newOrganization->setValue('org_shortname', $_POST['orgaShortName']);
-        $newOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
+        $newOrganization->setValue('org_homepage', ADMIDIO_URL);
         $newOrganization->save();
 
         // write all preferences from preferences.php in table adm_preferences

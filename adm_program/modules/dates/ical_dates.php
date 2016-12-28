@@ -89,7 +89,7 @@ if($datesResult['numResults'] > 0)
     {
         $date->clear();
         $date->setArray($row);
-        $iCal .= $date->getIcalVEvent($_SERVER['HTTP_HOST']);
+        $iCal .= $date->getIcalVEvent(DOMAIN);
     }
 }
 
