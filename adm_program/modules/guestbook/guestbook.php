@@ -209,7 +209,7 @@ $sql = 'SELECT *
                '.$conditionsSpecial.'
       ORDER BY gbo_timestamp_create DESC
          LIMIT '.$guestbookEntriesPerPage.' OFFSET '.$getStart;
-$guestbookStatement = $gDb->queryPrepared($sql, $queryParamsSpecial); // TODO add more params
+$guestbookStatement = $gDb->queryPrepared($sql, $queryParamsSpecial);
 
 $countGuestbookEntries = $guestbookStatement->rowCount();
 
