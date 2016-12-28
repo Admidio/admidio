@@ -80,7 +80,7 @@ $form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sq
 if($gCurrentUser->editUsers())
 {
     // the user has the edit right, therefore he can edit all visible users
-    $sql = 'SELECT usr_id, concat(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) AS name
+    $sql = 'SELECT usr_id, CONCAT(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) AS name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id
@@ -108,7 +108,7 @@ if($gCurrentUser->editUsers())
 else
 {
     // select all users which the current user can edit because of role leader rights
-    $sql = 'SELECT usr_id, concat(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) AS name
+    $sql = 'SELECT usr_id, CONCAT(LAST_NAME.usd_value, \' \', FIRST_NAME.usd_value) AS name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_USERS.'
                 ON usr_id = mem_usr_id
