@@ -30,6 +30,7 @@ $user = new TableUsers($gDb, $getUserId);
 if($user->getValue('usr_activation_code') === $getActivationId)
 {
     // activate the new password
+    $user->saveChangesWithoutRights();
     $user->setPassword($user->getValue('usr_new_password'), false, false);
     $user->setPassword('', true, false);
     $user->setValue('usr_activation_code', '');
