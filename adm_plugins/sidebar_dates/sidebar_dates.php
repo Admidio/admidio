@@ -85,7 +85,7 @@ if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
+    $plg_link_url = $g_root_path . FOLDER_MODULES . '/dates/dates.php';
 }
 
 // create Object

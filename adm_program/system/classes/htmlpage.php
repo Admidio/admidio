@@ -440,7 +440,7 @@ class HtmlPage
     public function show($directOutput = true)
     {
         global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $g_root_path;
 
         $headerContent    = '';
         $htmlMyHeader     = '';
