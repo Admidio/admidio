@@ -89,7 +89,7 @@ class MyFiles extends Folder
                     }
 
                     // set "adm_my_files" writable
-                    if(!chmod($serverPathAdmMyFiles, 0777))
+                    if(!@chmod($serverPathAdmMyFiles, 0777))
                     {
                         $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                         $this->errorPath = $this->webPath;
@@ -106,7 +106,7 @@ class MyFiles extends Folder
                 }
 
                 // set "adm_my_files" writable
-                if(!chmod($this->modulePath, 0777))
+                if(!@chmod($this->modulePath, 0777))
                 {
                     $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath;
@@ -128,7 +128,7 @@ class MyFiles extends Folder
             if(!is_writable($this->modulePath))
             {
                 // set module folder writable
-                if(!chmod($this->folderWithPath, 0777))
+                if(!@chmod($this->folderWithPath, 0777))
                 {
                     $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->webPath;
@@ -184,7 +184,7 @@ class MyFiles extends Folder
         // set folder writable
         if (!is_writable($tempServerPath))
         {
-            if (!chmod($tempServerPath, 0777))
+            if (!@chmod($tempServerPath, 0777))
             {
                 $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                 $this->errorPath = $tempWebPath;
