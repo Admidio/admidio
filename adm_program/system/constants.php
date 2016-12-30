@@ -44,7 +44,7 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
-define('SECURE_PROXY', isset($gSecureProxy) && $gSecureProxy === $_SERVER['HTTP_X_FORWARDED_HOST']);
+define('SECURE_PROXY', isset($gSecureProxy) && $gSecureProxy === getenv('HTTP_X_FORWARDED_HOST'));
 define('HTTPS', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || SECURE_PROXY); // true
 define('PORT', (int) $_SERVER['SERVER_PORT']); // 443
 
