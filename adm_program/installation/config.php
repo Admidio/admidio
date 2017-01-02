@@ -29,7 +29,7 @@ $g_root_path = '%ROOT_PATH%';
 
 // If you use a separate proxy for communications security with SSL than you must
 // enter the proxy address here. Admidio will use it to generate the full URL.
-// Example: 'MyProxy.com'
+// Example: 'https://MyProxy.com'
 $gSecureProxy = '';
 
 // Short description of the organization that is running Admidio
