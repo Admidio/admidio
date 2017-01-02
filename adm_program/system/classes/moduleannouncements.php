@@ -197,7 +197,7 @@ class ModuleAnnouncements extends Modules
         // In case ID was permitted and user has rights
         if ($id > 0)
         {
-            $sqlConditions .= ' AND dat_id = ' . $this->getParameter('id');
+            $sqlConditions .= ' AND ann_id = ' . $this->getParameter('id');
         }
         // ...otherwise get all additional announcements for a group
         else
