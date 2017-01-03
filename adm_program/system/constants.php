@@ -58,7 +58,7 @@ $admParts = explode('/adm_', dirname($_SERVER['SCRIPT_NAME']));
 define('ADMIDIO_SUBFOLDER', $admParts[0] === DIRECTORY_SEPARATOR ? '' : $admParts[0]); // /subfolder
 
 // URLS
-define('SERVER_URL',  (HTTPS ? (SECURE_PROXY ? $gSecureProxy . '/' : 'https://') : 'http://') . HOST); // https://www.example.org:1234
+define('SERVER_URL',  SECURE_PROXY ? $gSecureProxy . '/' . HOST : (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234
 define('ADMIDIO_URL', SERVER_URL . ADMIDIO_SUBFOLDER); // https://www.example.org:1234/subfolder
 define('FILE_URL',    SERVER_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
 define('CURRENT_URL', SERVER_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
