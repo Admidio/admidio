@@ -55,7 +55,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
         // Thumbnail loeschen
         if(is_file($photo_path))
         {
-            chmod($photo_path, 0777);
+            @chmod($photo_path, 0777);
             unlink($photo_path);
         }
     }
@@ -68,7 +68,7 @@ function tryDelete($path)
 {
     if(is_file($path))
     {
-        chmod($path, 0777);
+        @chmod($path, 0777);
         unlink($path);
     }
 }
@@ -81,7 +81,7 @@ function tryRename($path, $newPath)
 {
     if(is_file($path))
     {
-        chmod($path, 0777);
+        @chmod($path, 0777);
         rename($path, $newPath);
     }
 }

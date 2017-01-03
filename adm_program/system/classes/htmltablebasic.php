@@ -306,10 +306,8 @@ class HtmlTableBasic extends HtmlElement
      */
     public function addTableBody($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->tfoot && in_array('tfoot', $this->arrParentElements, true))
-        {
-            $this->closeParentElement('tr');
-        }
+        // always close tr if that was open before
+        $this->closeParentElement('tr');
 
         if ($this->tfoot)
         {

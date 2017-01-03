@@ -266,18 +266,18 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         {
             if ($onPage > 1 && $onPage < $totalPagesCount)
             {
-                $pageNavigationString .= ($onPage > 5) ? ' ... ' : '&nbsp;&nbsp;';
+                $pageNavigationString .= ($onPage > 5) ? '<li class="disabled"><a>...</a></li>' : '&nbsp;&nbsp;';
 
                 $initPageMin = ($onPage > 4) ? $onPage : 5;
                 $initPageMax = ($onPage < $totalPagesCount - 4) ? $onPage : $totalPagesCount - 4;
 
                 $pageNavigationString .= getListElementsFromTo($initPageMin - 1, $initPageMax + 2, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
 
-                $pageNavigationString .= ($onPage < $totalPagesCount - 4) ? ' ... ' : '&nbsp;&nbsp;';
+                $pageNavigationString .= ($onPage < $totalPagesCount - 4) ? '<li class="disabled"><a>...</a></li>' : '&nbsp;&nbsp;';
             }
             else
             {
-                $pageNavigationString .= ' ... ';
+                $pageNavigationString .= '<li class="disabled"><a>...</a></li>';
             }
 
             $pageNavigationString .= getListElementsFromTo($totalPagesCount - 2, $totalPagesCount + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);

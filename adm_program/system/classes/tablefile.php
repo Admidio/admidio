@@ -45,7 +45,7 @@ class TableFile extends TableAccess
      */
     public function delete()
     {
-        chmod($this->getCompletePathOfFile(), 0777);
+        @chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
         // Even if the delete won't work, return true, so that the entry of the DB disappears

@@ -616,7 +616,7 @@ elseif ($getMode === 6)  // Creating configuration file
         '%USER%'         => $_SESSION['db_user'],
         '%PASSWORD%'     => $_SESSION['db_password'],
         '%DATABASE%'     => $_SESSION['db_database'],
-        '%ROOT_PATH%'    => ADMIDIO_PATH,
+        '%ROOT_PATH%'    => ADMIDIO_URL,
         '%ORGANIZATION%' => $_SESSION['orga_shortname'],
         '%TIMEZONE%'     => $_SESSION['orga_timezone']
     );
