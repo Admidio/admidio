@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
                            Sidebar Dates
-                     2004 - 2016 The Admidio Team
+                     2004 - 2017 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
@@ -64,6 +64,6 @@ It is not allowed to remove the copyright notice in the source code.
 For more information you should read licence.txt.
 
 -------------------------------------------------------------------------
-                    2004 - 2016 The Admidio Team
+                    2004 - 2017 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
