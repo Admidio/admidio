@@ -40,7 +40,7 @@ $currUserId = (int) $gCurrentUser->getValue('usr_id');
 // Administrator could only send a generated password or set a password if no password was set before
 if(!isMember($getUserId)
 || (!$gCurrentUser->isAdministrator() && $currUserId !== $getUserId)
-|| ($gCurrentUser->isAdministrator() && $user->getValue('usr_password') !== '' && $user->getValue('EMAIL') === '' && $gPreferences['enable_system_mails'] == 1))
+|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gPreferences['enable_system_mails'] == 1))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
