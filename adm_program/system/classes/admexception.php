@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -132,6 +132,11 @@ class AdmException extends Exception
      */
     public function showText()
     {
+        if(!headers_sent())
+        {
+            header('Content-type: text/html; charset=utf-8');
+        }
+
         echo $this->getText();
         exit();
     }

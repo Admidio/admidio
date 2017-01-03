@@ -748,7 +748,6 @@
     <string name="UPD_NEW_BOTH">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
     <string name="UPD_NO_NEW">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
     <string name="UPD_STABLE_VERSION">Verfügbar</string>
-    <string name="UPD_TITLE">Update Prüfung</string>
     <!-- Phrases only in Photomodule -->
     <string name="PHO_ALBUM">Album</string>
     <string name="PHO_ALBUM_DELETE">Album Löschen</string>
