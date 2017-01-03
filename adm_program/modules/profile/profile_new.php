@@ -19,6 +19,7 @@
  *              3 - assign/accept a registration
  * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
  * firstname  : (Optional) First name could be set and will than be preassigned for new users
+ * copy       : true - The user of the user_id will be copied and the base for this new user
  *
  *****************************************************************************/
 
@@ -29,26 +30,9 @@ $getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'int');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
+$getCopy      = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
-
-// set headline of the script
-if($getNewUser === 1)
-{
-    $headline = $gL10n->get('PRO_ADD_USER');
-}
-elseif($getNewUser === 2)
-{
-    $headline = $gL10n->get('SYS_REGISTRATION');
-}
-elseif($getUserId === (int) $gCurrentUser->getValue('usr_id'))
-{
-    $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
-}
-else
-{
-    $headline = $gL10n->get('PRO_EDIT_PROFILE');
-}
 
 // if current user has no login then only show registration dialog
 if(!$gValidLogin)
@@ -71,6 +55,33 @@ if($getUserId > 0 && $getNewUser !== 0 && $getNewUser !== 3)
 
 // read user data
 $user = new User($gDb, $gProfileFields, $getUserId);
+
+// set headline of the script
+if($getCopy)
+{
+    // if we want to copy the user than set id = 0 and also his name
+    $getUserId = 0;
+    $getNewUser = 1;
+    $getLastname = '';
+    $getFirstname = '';
+    $headline = $gL10n->get('SYS_COPY_VAR', $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+}
+elseif($getNewUser === 1)
+{
+    $headline = $gL10n->get('PRO_ADD_USER');
+}
+elseif($getNewUser === 2)
+{
+    $headline = $gL10n->get('SYS_REGISTRATION');
+}
+elseif($getUserId === (int) $gCurrentUser->getValue('usr_id'))
+{
+    $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
+}
+else
+{
+    $headline = $gL10n->get('PRO_EDIT_PROFILE');
+}
 
 // pruefen, ob Modul aufgerufen werden darf
 switch($getNewUser)
