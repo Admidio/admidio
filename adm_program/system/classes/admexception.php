@@ -132,6 +132,11 @@ class AdmException extends Exception
      */
     public function showText()
     {
+        if(!headers_sent())
+        {
+            header('Content-type: text/html; charset=utf-8');
+        }
+
         echo $this->getText();
         exit();
     }

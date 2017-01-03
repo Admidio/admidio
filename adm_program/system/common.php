@@ -265,7 +265,9 @@ try
 }
 catch(AdmException $e)
 {
-    $e->showHtml();
+    $gMessage->showThemeBody(false);
+    $gMessage->hideButtons();
+    $gMessage->show($e->getText(), 'Admidio - '.$gL10n->get('INS_UPDATE'));
 }
 
 // set default homepage
