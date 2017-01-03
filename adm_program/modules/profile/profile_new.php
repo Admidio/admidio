@@ -62,8 +62,6 @@ if($getCopy)
     // if we want to copy the user than set id = 0 and also his name
     $getUserId = 0;
     $getNewUser = 1;
-    $getLastname = '';
-    $getFirstname = '';
     $headline = $gL10n->get('SYS_COPY_VAR', $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 }
 elseif($getNewUser === 1)
