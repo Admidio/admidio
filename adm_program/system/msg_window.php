@@ -132,12 +132,12 @@ switch ($getMessageId)
                         <td>'.$gL10n->get('LST_EXCLUDE_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
-                        <td>'.$gL10n->get('SYS_ADDRESS').'</td>
+                        <td>'.$gL10n->get('SYS_STREET').'</td>
                         <td><strong>'.$gL10n->get('SYS_EMPTY').'</strong></td>
                         <td>'.$gL10n->get('LST_EMPTY_EXAMPLE_DESC').'</td>
                     </tr>
                     <tr>
-                        <td>'.$gL10n->get('SYS_ADDRESS').'</td>
+                        <td>'.$gL10n->get('SYS_STREET').'</td>
                         <td><strong>'.$gL10n->get('SYS_NOT_EMPTY').'</strong></td>
                         <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
                     </tr>
