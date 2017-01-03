@@ -221,7 +221,7 @@ $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name
            AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
      LEFT JOIN '.TBL_USER_DATA.' AS address
             ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
+           AND address.usd_usf_id = '. $gProfileFields->getProperty('STREET', 'usf_id'). '
      LEFT JOIN '.TBL_USER_DATA.' AS zip_code
             ON zip_code.usd_usr_id = usr_id
            AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '

@@ -370,10 +370,10 @@ else
                     </a>';
 
                 // if valid login and enough information about address exist - calculate the route
-                if($gValidLogin && $gCurrentUser->getValue('ADDRESS') !== ''
+                if($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
                 && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                 {
-                    $route_url = 'https://maps.google.com/?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('ADDRESS'));
+                    $route_url = 'https://maps.google.com/?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('STREET'));
 
                     if($gCurrentUser->getValue('POSTCODE') !== '')
                     {
