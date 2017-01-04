@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create or edit a user profile
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -19,7 +19,6 @@
  *              3 - assign/accept a registration
  * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
  * firstname  : (Optional) First name could be set and will than be preassigned for new users
- * remove_url : true - Removes the last url from navigation cache
  *
  *****************************************************************************/
 
@@ -30,7 +29,6 @@ $getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'int');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
-$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'bool');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
@@ -62,11 +60,6 @@ if(!$gValidLogin)
 if($getUserId === 0 && $getNewUser === 0)
 {
     $getNewUser = 1;
-}
-
-if($getRemoveUrl == 1)
-{
-    $gNavigation->deleteLastUrl();
 }
 
 // User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird

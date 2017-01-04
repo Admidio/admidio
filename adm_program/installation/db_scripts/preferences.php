@@ -7,7 +7,7 @@
  *            then you must set these values for every organization
  *            in the update scripts
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -55,7 +55,7 @@ $defaultOrgPreferences = array(
 
     // System notifications
     'enable_system_mails'         => '1',
-    'email_administrator'         => 'webmaster@'. $_SERVER['HTTP_HOST'],
+    'email_administrator'         => 'webmaster@'. DOMAIN,
     'enable_email_notification'   => '0',
 
     // Captcha

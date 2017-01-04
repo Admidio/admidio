@@ -10,7 +10,7 @@
  *
  * Compatible with Admidio version 3.2
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -85,7 +85,7 @@ if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
+    $plg_link_url = $g_root_path . FOLDER_MODULES . '/dates/dates.php';
 }
 
 // create Object

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_files
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -45,7 +45,7 @@ class TableFile extends TableAccess
      */
     public function delete()
     {
-        chmod($this->getCompletePathOfFile(), 0777);
+        @chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
         // Even if the delete won't work, return true, so that the entry of the DB disappears

@@ -123,4 +123,4 @@ and sharing great software.
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
-Copyright (c) 2004 - 2016 The Admidio Team
+Copyright (c) 2004 - 2017 The Admidio Team

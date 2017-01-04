@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various common functions
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -264,20 +264,22 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 
         if ($totalPagesCount > 3)
         {
+            $disabledLink = '<li class="disabled"><a>...</a></li>';
+
             if ($onPage > 1 && $onPage < $totalPagesCount)
             {
-                $pageNavigationString .= ($onPage > 5) ? ' ... ' : '&nbsp;&nbsp;';
+                $pageNavigationString .= ($onPage > 5) ? $disabledLink : '&nbsp;&nbsp;';
 
                 $initPageMin = ($onPage > 4) ? $onPage : 5;
                 $initPageMax = ($onPage < $totalPagesCount - 4) ? $onPage : $totalPagesCount - 4;
 
                 $pageNavigationString .= getListElementsFromTo($initPageMin - 1, $initPageMax + 2, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
 
-                $pageNavigationString .= ($onPage < $totalPagesCount - 4) ? ' ... ' : '&nbsp;&nbsp;';
+                $pageNavigationString .= ($onPage < $totalPagesCount - 4) ? $disabledLink : '&nbsp;&nbsp;';
             }
             else
             {
-                $pageNavigationString .= ' ... ';
+                $pageNavigationString .= $disabledLink;
             }
 
             $pageNavigationString .= getListElementsFromTo($totalPagesCount - 2, $totalPagesCount + 1, $onPage, $baseUrl, $queryParamName, $itemsPerPage);
