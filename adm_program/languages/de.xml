@@ -1135,8 +1135,6 @@
     <string name="SYS_FRIDAY">Freitag</string>
     <string name="SYS_FULL_SCREEN">Vollbild</string>
     <string name="SYS_GENDER">Geschlecht</string>
-    <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zeichenkette aufgetreten.</string>
-    <string name="SYS_GEN_RANDOM_FAIL">Das Programm kann keine zufällige Zeichenkette erzeugen.</string>
     <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
     <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
     <string name="SYS_HEADLINE">Überschrift</string>
