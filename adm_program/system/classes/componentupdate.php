@@ -305,11 +305,11 @@ class ComponentUpdate extends Component
             $listId = (int) $listStatement->fetchColumn();
             
             $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter)
-                        VALUES (\''.$listId.'\', 1, 1, \'NULL\', \'ASC\', \'NULL\')
-                             , (\''.$listId.'\', 2, 2, \'NULL\', \'NULL\', \'NULL\')
-                             , (\''.$listId.'\', 3, \'NULL\', \'mem_approved\', \'NULL\', \'NULL\')
-                             , (\''.$listId.'\', 4, \'NULL\', \'mem_comment\', \'NULL\', \'NULL\')
-                             , (\''.$listId.'\', 5, \'NULL\', \'mem_count_guests\', \'NULL\', \'NULL\')';
+                        VALUES (\''.$listId.'\', 1, 1, NULL, \'ASC\', NULL)
+                             , (\''.$listId.'\', 2, 2, NULL, NULL, NULL)
+                             , (\''.$listId.'\', 3, NULL, \'mem_approved\', NULL, NULL)
+                             , (\''.$listId.'\', 4, NULL, \'mem_comment\', NULL, NULL)
+                             , (\''.$listId.'\', 5, NULL, \'mem_count_guests\', NULL, NULL)';
             $this->db->query($sql);
                              
             // Set as default configuration list
