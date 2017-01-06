@@ -328,20 +328,9 @@ while($row = $mglStatement->fetch())
         }
     }
 
-    if(strlen($row['email']) > 0)
-    {
-        if($gPreferences['enable_mail_module'] != 1)
-        {
-            $mailLink = 'mailto:'.$row['email'];
-        }
-        else
-        {
-            $mailLink = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'];
-        }
-
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_URL.'/icons/email.png"
-                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
-    }
+    
+    $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$row['usr_id'].'&amp;copy=1"><img
+                                src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
 
     // Link um User zu editieren
     // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
