@@ -27,8 +27,9 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
+// only users with the right to assign roles can view inactive roles
 // within PHP 5.3 false will not be set and therefore we must add 0 as value
-if($getActiveRole)
+if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
 {
     $getActiveRole  = 1;
 }
@@ -144,7 +145,7 @@ $javascriptCode = '
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
-        newCellCount.textContent = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
+        newCellCount.textContent = (fieldNumberShow) + ". '.$gL10n->get('LST_COLUMN').' :";
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
@@ -625,16 +626,28 @@ $form->closeButtonGroup();
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
-// show all roles where the user has the right to see them
-$sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '.TBL_ROLES.'
-    INNER JOIN '.TBL_CATEGORIES.'
-            ON cat_id = rol_cat_id
-         WHERE rol_valid   = '.$getActiveRole.'
-           AND rol_visible = 1
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )
-      ORDER BY cat_sequence, rol_name';
+// show all roles where the user has the right to view them
+if($getActiveRole)
+{
+    $sql = 'SELECT rol_id, rol_name, cat_name
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE rol_id IN (' . implode(',', $gCurrentUser->getAllVisibleRoles()) . ')
+          ORDER BY cat_sequence, rol_name';    
+}
+else
+{
+    $sql = 'SELECT rol_id, rol_name, cat_name
+              FROM '.TBL_ROLES.'
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+               AND cat_hidden = 0
+             WHERE rol_valid  = 0
+               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
+          ORDER BY cat_sequence, rol_name';
+}
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));

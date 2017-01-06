@@ -32,6 +32,17 @@ else
     $headline = $gL10n->get('LST_INACTIVE_ROLES');
 }
 
+// only users with the right to assign roles can view inactive roles
+// within PHP 5.3 false will not be set and therefore we must add 0 as value
+if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
+{
+    $getActiveRole  = 1;
+}
+else
+{
+    $getActiveRole  = 0;
+}
+
 // New Modulelist object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $getCatId);
