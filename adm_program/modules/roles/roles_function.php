@@ -13,12 +13,10 @@
  * Parameters:
  *
  * rol_id: ID of role, that should be edited
- * mode :  1 - show different consequences of role will be deleted
- *         2 - create or edit role
+ * mode :  2 - create or edit role
  *         3 - set role inaktive
  *         4 - delete role
  *         5 - set role active
- *         6 - ask if inactive role should be deleted
  *         9 - return if role has former members ? Return: 1 und 0
  *
  *****************************************************************************/
@@ -56,38 +54,7 @@ if($getRoleId > 0)
 $_SESSION['roles_request'] = $_POST;
 $rolName = $role->getValue('rol_name');
 
-if($getMode === 1)
-{
-    // create html page object
-    $page = new HtmlPage($gL10n->get('ROL_ROLE_DELETE'));
-
-    // add back link to module menu
-    $messageMenu = $page->getMenu();
-    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-
-    $page->addHtml('
-        <div class="message">
-            <p class="lead">
-                <img src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />
-                '.$gL10n->get('ROL_INACTIV_ROLE_DESC').'<br /><br />
-                <img src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" />
-                '.$gL10n->get('ROL_HINT_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
-            </p>
-
-            <button id="btn_inactive" type="button" class="btn btn-primary"
-                onclick="self.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
-                src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$gL10n->get('ROL_INACTIV_ROLE').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btn_delete" type="button" class="btn btn-primary"
-                onclick="self.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
-                src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
-        </div>'
-    );
-
-    $page->show();
-    exit();
-}
-elseif($getMode === 2)
+if($getMode === 2)
 {
     // Rolle anlegen oder updaten
 
@@ -344,55 +311,44 @@ elseif($getMode === 2)
 elseif($getMode === 3)
 {
     // Rolle zur inaktiven Rolle machen
-    $returnValue = $role->setInactive();
-
-    if($returnValue === false)
+    if($role->setInactive())
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        echo 'done';
     }
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_INACTIVE')));
-    // => EXIT
+    else
+    {
+        echo $gL10n->get('SYS_NO_RIGHTS');
+    }
+    exit();
 }
 elseif($getMode === 4)
 {
     // delete role from database
     try
     {
-        $role->delete();
+        if($role->delete())
+        {
+            echo 'done';
+        }
     }
     catch(AdmException $e)
     {
-        $e->showHtml();
+        $e->showText();
     }
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
-    // => EXIT
+    exit();
 }
 elseif($getMode === 5)
 {
     // Rolle wieder aktiv setzen
-    $returnValue = $role->setActive();
-
-    if($returnValue === false)
+    if($role->setActive())
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        echo 'done';
     }
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_ACTIVE')));
-    // => EXIT
-}
-elseif($getMode === 6)
-{
-    // Fragen, ob die inaktive Rolle geloescht werden soll
-    $gMessage->setForwardYesNo(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
-    $gMessage->show($gL10n->get('ROL_ROLE_DELETE_DESC', $rolName));
-    // => EXIT
+    else
+    {
+        $gL10n->get('SYS_NO_RIGHTS');
+    }
+    exit();
 }
 elseif($getMode === 9)
 {

@@ -76,6 +76,7 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 $page->addJavascript('$(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });', true);
 
@@ -257,12 +258,7 @@ while($row = $rolStatement->fetch())
     $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$rolId.'"><img
                                 src="'. THEME_URL. '/icons/list.png" alt="'.$gL10n->get('ROL_SHOW_MEMBERS').'" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'" /></a>';
 
-    if($getInactive)
-    {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=5"><img
-                                    src="'.THEME_URL.'/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
-    }
-    else
+    if(!$getInactive)
     {
         $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$rolId.'"><img
                                     src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
@@ -275,13 +271,17 @@ while($row = $rolStatement->fetch())
 
     if($getInactive)
     {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=5"><img
-                                    src="'. THEME_URL. '/icons/roles.png" alt="'.$gL10n->get('ROL_ACTIVATE_ROLE').'" title="'.$gL10n->get('ROL_ACTIVATE_ROLE').'" /></a>';
+        $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=rol_enable&amp;element_id=row_'.
+                                    $rolId.'&amp;name='.urlencode($rolName).'&amp;database_id='.$rolId.'"><img
+                                       src="'. THEME_URL. '/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
     }
     else
     {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=3"><img
-                                    src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_DISABLE_ROLE').'" title="'.$gL10n->get('ROL_DISABLE_ROLE').'" /></a>';
+        $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=rol_disable&amp;element_id=row_'.
+                                    $rolId.'&amp;name='.urlencode($rolName).'&amp;database_id='.$rolId.'"><img
+                                       src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_DISABLE_ROLE').'" title="'.$gL10n->get('ROL_DISABLE_ROLE').'" /></a>';
     }
 
     if($role->getValue('rol_administrator') == 1)
@@ -290,16 +290,10 @@ while($row = $rolStatement->fetch())
     }
     else
     {
-        if($getInactive)
-        {
-            $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=6"><img
-                                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
-        }
-        else
-        {
-            $linkAdministration .='<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=1"><img
-                                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
-        }
+        $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=rol&amp;element_id=row_'.
+                                    $rolId.'&amp;name='.urlencode($rolName).'&amp;database_id='.$rolId.'"><img
+                                       src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
     }
 
     // create array with all column values
@@ -311,7 +305,7 @@ while($row = $rolStatement->fetch())
         $linkAdministration
     );
 
-    $table->addRowByArray($columnValues);
+    $table->addRowByArray($columnValues, 'row_'. $rolId);
 }
 
 $page->addHtml($table->show());
