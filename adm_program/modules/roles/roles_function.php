@@ -19,8 +19,6 @@
  *         4 - delete role
  *         5 - set role active
  *         6 - ask if inactive role should be deleted
- *         7 - set role invisible
- *         8 - set role visible
  *         9 - return if role has former members ? Return: 1 und 0
  *
  *****************************************************************************/
@@ -394,24 +392,6 @@ elseif($getMode === 6)
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $gMessage->setForwardYesNo(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
     $gMessage->show($gL10n->get('ROL_ROLE_DELETE_DESC', $rolName));
-    // => EXIT
-}
-elseif($getMode === 7)
-{
-    $role->setValue('rol_visible', 0);
-    $role->save();
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_INVISIBLE')));
-    // => EXIT
-}
-elseif($getMode === 8)
-{
-    $role->setValue('rol_visible', 1);
-    $role->save();
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_VISIBLE')));
     // => EXIT
 }
 elseif($getMode === 9)

@@ -396,7 +396,6 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? '1' : '0');
             // role members are allowed to send mail to this role
             $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? '1' : '0');
-            $role->setValue('rol_visible', '0');
             $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
             $role->setValue('rol_max_members', $_POST['dat_max_members']);
         }

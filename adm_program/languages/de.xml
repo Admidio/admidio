@@ -907,6 +907,7 @@
     <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
     <!-- Phrases only in Rolesmodule -->
     <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
+    <string name="ROL_ACTIVATE_ROLE">Rolle aktivieren</string>
     <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
     <string name="ROL_ALL_MEMBERS">Alle angemeldeten Benutzer</string>
     <string name="ROL_ANNUALLY">Jährlich</string>
@@ -920,6 +921,7 @@
     <string name="ROL_DEFAULT_REGISTRATION_DESC">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
     <string name="ROL_DEPENDENCIES">Abhängigkeiten</string>
     <string name="ROL_DEPENDENT">Abhängig</string>
+    <string name="ROL_DISABLE_ROLE">Rolle deaktivieren</string>
     <string name="ROL_EDIT_ROLE">Rolle bearbeiten</string>
     <string name="ROL_ENABLE_ROLE">Rolle aktivieren</string>
     <string name="ROL_HINT_DELETE_ROLE">Wenn du #VAR1_BOLD# auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</string>
@@ -977,8 +979,6 @@
     <string name="ROL_SEND_MAIL_MEMBERS">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
     <string name="ROL_SEND_MAIL_ROLE">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</string>
     <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
-    <string name="ROL_SET_ROLE_INVISIBLE">Rolle unsichtbar machen</string>
-    <string name="ROL_SET_ROLE_VISIBLE">Rolle sichtbar machen</string>
     <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
     <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
     <string name="ROL_UNIQUELY">Einmalig</string>
@@ -1151,7 +1151,6 @@
     <string name="SYS_INTERNAL_NAME">Interner Name</string>
     <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</string>
     <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
-    <string name="SYS_INVISIBLE">Unsichtbar</string>
     <string name="SYS_IO_ERROR">E/A Fehler</string>
     <string name="SYS_ISO_8859_1">ISO-8859-1</string>
     <string name="SYS_ITEMNAME">Artikelname</string>

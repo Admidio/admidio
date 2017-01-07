@@ -617,7 +617,6 @@ create table %PREFIX%_roles
     rol_timestamp_change           timestamp     null default null,
     rol_valid                      boolean       not null default '1',
     rol_system                     boolean       not null default '0',
-    rol_visible                    boolean       not null default '1',
     rol_administrator              boolean       not null default '0',
     primary key (rol_id)
 )

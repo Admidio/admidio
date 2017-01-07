@@ -1569,7 +1569,7 @@ class HtmlForm extends HtmlFormBasic
                 case 'ROL':
                     // don't show system categories
                     $sqlTables = ' INNER JOIN ' . TBL_ROLES . ' ON cat_id = rol_cat_id';
-                    $sqlCondidtions = ' AND rol_visible = 1 ';
+                    $sqlCondidtions = ' AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\' ';
                     break;
                 case 'INF':
                     $sqlTables = ' INNER JOIN ' . TBL_INVENT_FIELDS . ' ON cat_id = inf_cat_id ';

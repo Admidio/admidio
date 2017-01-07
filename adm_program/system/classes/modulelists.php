@@ -97,41 +97,39 @@
  *                          [rol_valid] => 1
  *                          [36] => 0
  *                          [rol_system] => 0
- *                          [37] => 1
- *                          [rol_visible] => 1
- *                          [38] => 0
+ *                          [37] => 0
  *                          [rol_administrator] => 0
- *                          [39] => 3
+ *                          [38] => 3
  *                          [cat_id] => 3
- *                          [40] => 1
+ *                          [39] => 1
  *                          [cat_org_id] => 1
- *                          [41] => ROL
+ *                          [40] => ROL
  *                          [cat_type] => ROL
- *                          [42] => COMMON
+ *                          [41] => COMMON
  *                          [cat_name_intern] => COMMON
- *                          [43] => Allgemein
+ *                          [42] => Allgemein
  *                          [cat_name] => Allgemein
- *                          [44] => 0
+ *                          [43] => 0
  *                          [cat_hidden] => 0
- *                          [45] => 0
+ *                          [44] => 0
  *                          [cat_system] => 0
- *                          [46] => 0
+ *                          [45] => 0
  *                          [cat_default] => 0
- *                          [47] => 1
+ *                          [46] => 1
  *                          [cat_sequence] => 1
- *                          [48] => 1
+ *                          [47] => 1
  *                          [cat_usr_id_create] => 1
- *                          [49] => 2012-01-08 11:12:05
+ *                          [48] => 2012-01-08 11:12:05
  *                          [cat_timestamp_create] => 2012-01-08 11:12:05
- *                          [50] =>
+ *                          [49] =>
  *                          [cat_usr_id_change] =>
- *                          [51] =>
+ *                          [50] =>
  *                          [cat_timestamp_change] =>
- *                          [52] => 145
+ *                          [51] => 145
  *                          [num_members] => 145
- *                          [53] => 0
+ *                          [52] => 0
  *                          [num_leader] => 0
- *                          [54] => 5
+ *                          [53] => 5
  *                          [num_former] => 5
  *                      )
  *
@@ -288,7 +286,7 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' rol
             INNER JOIN '.TBL_CATEGORIES.' cat
                     ON cat_id = rol_cat_id
-                 WHERE rol_visible = 1
+                 WHERE cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                    AND rol_valid   = '.(int) $this->activeRole.'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
@@ -336,7 +334,7 @@ class ModuleLists extends Modules
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
                  WHERE rol_valid   = '.(int) $this->activeRole.'
-                   AND rol_visible = 1
+                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                    AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
