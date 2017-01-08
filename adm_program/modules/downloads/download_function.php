@@ -102,7 +102,7 @@ elseif ($getMode === 3)
     try
     {
         $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
-        $newFolderDescription = admFuncVariableIsValid($_POST, 'new_folder', 'string');
+        $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
         // get recordset of current folder from database
         $folder->getFolderForDownload($getFolderId);
