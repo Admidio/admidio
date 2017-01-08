@@ -128,6 +128,11 @@ $sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(31).' 17:00:00\'
          WHERE dat_id = 13 ';
 $db->query($sql);
 
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(20).' 13:00:00\'
+                               , dat_end = \''.addDaysToDate(20).' 14:00:00\'
+         WHERE dat_id = 14 ';
+$db->query($sql);
+
 $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_timestamp = \''.addDaysToDate(7, true).'\'
          WHERE fol_id = 1 ';
 $db->query($sql);
