@@ -488,7 +488,7 @@ class TableRoles extends TableAccess
             return false;
         }
 
-        if ($this->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
+        if ($this->getValue('cat_name_intern') !== 'EVENTS')
         {
             return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
         }

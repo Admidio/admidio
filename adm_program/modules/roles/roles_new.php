@@ -274,7 +274,7 @@ $sqlAllRoles = 'SELECT rol_id, rol_name, cat_name
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_valid   = 1
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'EVENTS\'
                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
               ORDER BY cat_sequence, rol_name';

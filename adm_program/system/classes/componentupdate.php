@@ -295,6 +295,56 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * Update the existing category confirmation of participation and make it
+     * organization depending.
+     */
+    public function updateStepEventCategory()
+    {
+        global $g_organization, $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            if($g_organization === $row['org_shortname'])
+            {
+                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_name_intern = \'EVENTS\'
+                                                    , cat_name = \''.$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION').'\'
+                                                    , cat_org_id = '.$row['org_id'].'
+                         WHERE cat_org_id IS NULL
+                           AND cat_type = \'ROL\'
+                           AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
+                $this->db->query($sql);
+            }
+            else
+            {
+                // create organization depending category for events
+                $category = new TableCategory($this->db);
+                $category->setValue('cat_org_id', $row['org_id']);
+                $category->setValue('cat_type', 'ROL');
+                $category->setValue('cat_name', $gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'));
+                $category->setValue('cat_hidden', '1');
+                $category->setValue('cat_system', '1');
+                $category->save();
+
+                // now set name intern explicit to EVENTS
+                $category->setValue('cat_name_intern', 'EVENTS');
+                $category->save();
+
+                // all existing events of this organization must get the new category
+                $sql = 'UPDATE '.TBL_ROLES.' SET rol_cat_id = '.$category->getValue('cat_id').'
+                         WHERE rol_id IN (SELECT dat_rol_id
+                                            FROM '.TBL_DATES.'
+                                           INNER JOIN '.TBL_CATEGORIES.' ON cat_id = dat_cat_id
+                                           WHERE dat_rol_id IS NOT NULL
+                                             AND cat_org_id = '.$row['org_id'].')';
+                $this->db->query($sql);
+            }
+        }
+    }
+
+    /**
      * This method migrate the data of the table adm_folder_roles to the
      * new table adm_roles_rights_data.
      */

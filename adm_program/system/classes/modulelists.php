@@ -286,7 +286,7 @@ class ModuleLists extends Modules
                   FROM '.TBL_ROLES.' rol
             INNER JOIN '.TBL_CATEGORIES.' cat
                     ON cat_id = rol_cat_id
-                 WHERE cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                 WHERE cat_name_intern <> \'EVENTS\'
                    AND rol_valid   = '.(int) $this->activeRole.'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
@@ -334,7 +334,7 @@ class ModuleLists extends Modules
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.' rol, '.TBL_CATEGORIES.' cat
                  WHERE rol_valid   = '.(int) $this->activeRole.'
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'EVENTS\'
                    AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )

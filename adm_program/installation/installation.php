@@ -766,8 +766,7 @@ elseif ($getMode === 8) // Start installation
     $categoryIdSocialNetworks = $db->lastInsertId();
 
     $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-            VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$userId.', \''. DATETIME_NOW.'\')
-                 , (NULL, \'USF\', \'ADDIDIONAL_DATA\',               \'INS_ADDIDIONAL_DATA\',               0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
+            VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\',               \'INS_ADDIDIONAL_DATA\',               0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
     $db->query($sql);
 
     // create inventory categories

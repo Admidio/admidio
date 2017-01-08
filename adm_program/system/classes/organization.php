@@ -130,6 +130,7 @@ class Organization extends TableAccess
                                         VALUES ('.$orgId.', \'ROL\', \'GROUPS\',    \'INS_GROUPS\',    0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
                                              , ('.$orgId.', \'ROL\', \'COURSES\',   \'INS_COURSES\',   0, 0, 0, 3, '.$systemUserId.', \''.DATETIME_NOW.'\')
                                              , ('.$orgId.', \'ROL\', \'TEAMS\',     \'INS_TEAMS\',     0, 0, 0, 4, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                                             , ('.$orgId.', \'ROL\', \'EVENTS\',    \'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.', \''. DATETIME_NOW.'\')
                                              , ('.$orgId.', \'LNK\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
                                              , ('.$orgId.', \'LNK\', \'INTERN\',    \'INS_INTERN\',    1, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')
                                              , ('.$orgId.', \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')

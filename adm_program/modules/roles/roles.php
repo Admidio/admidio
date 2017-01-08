@@ -39,7 +39,7 @@ unset($_SESSION['roles_request']);
 
 // per default show active and not event roles
 $sqlRolesStatus = ' AND rol_valid   = \'1\'
-                    AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\' ';
+                    AND cat_name_intern <> \'EVENTS\' ';
 
 if($getInactive)
 {
@@ -65,7 +65,7 @@ if($getInvisible)
     $visibleRolesImage = 'light_on.png';
     $visibleRolesFlag  = '0';
     // in invisible mode show active and inactive invisible roles
-    $sqlRolesStatus    = ' AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
+    $sqlRolesStatus    = ' AND cat_name_intern = \'EVENTS\' ';
 }
 else
 {

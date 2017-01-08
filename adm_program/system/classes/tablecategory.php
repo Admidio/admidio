@@ -189,7 +189,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                   AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'EVENTS\'
                    AND cat_org_id IS NULL ';
         $countCategoriesStatement = $this->db->query($sql);
         $rowCount = $countCategoriesStatement->fetchColumn();
@@ -225,42 +225,6 @@ class TableCategory extends TableAccess
         }
 
         $this->save();
-    }
-
-    /**
-     * Set table and table-column by cat_type
-     */
-    private function setTableAndColumnByCatType()
-    {
-        global $g_tbl_praefix;
-
-        switch ($this->getValue('cat_type'))
-        {
-            case 'ROL':
-                $this->elementTable = TBL_ROLES;
-                $this->elementColumn = 'rol_cat_id';
-                break;
-            case 'LNK':
-                $this->elementTable = TBL_LINKS;
-                $this->elementColumn = 'lnk_cat_id';
-                break;
-            case 'USF':
-                $this->elementTable = TBL_USER_FIELDS;
-                $this->elementColumn = 'usf_cat_id';
-                break;
-            case 'DAT':
-                $this->elementTable = TBL_DATES;
-                $this->elementColumn = 'dat_cat_id';
-                break;
-            case 'ANN':
-                $this->elementTable = TBL_ANNOUNCEMENTS;
-                $this->elementColumn = 'ann_cat_id';
-                break;
-            case 'AWA':
-                $this->elementTable = $g_tbl_praefix . '_user_awards';
-                $this->elementColumn = 'awa_cat_id';
-                break;
-        }
     }
 
     /**
@@ -369,6 +333,42 @@ class TableCategory extends TableAccess
         $this->db->endTransaction();
 
         return $returnValue;
+    }
+
+    /**
+     * Set table and table-column by cat_type
+     */
+    private function setTableAndColumnByCatType()
+    {
+        global $g_tbl_praefix;
+
+        switch ($this->getValue('cat_type'))
+        {
+            case 'ROL':
+                $this->elementTable = TBL_ROLES;
+                $this->elementColumn = 'rol_cat_id';
+                break;
+            case 'LNK':
+                $this->elementTable = TBL_LINKS;
+                $this->elementColumn = 'lnk_cat_id';
+                break;
+            case 'USF':
+                $this->elementTable = TBL_USER_FIELDS;
+                $this->elementColumn = 'usf_cat_id';
+                break;
+            case 'DAT':
+                $this->elementTable = TBL_DATES;
+                $this->elementColumn = 'dat_cat_id';
+                break;
+            case 'ANN':
+                $this->elementTable = TBL_ANNOUNCEMENTS;
+                $this->elementColumn = 'ann_cat_id';
+                break;
+            case 'AWA':
+                $this->elementTable = $g_tbl_praefix . '_user_awards';
+                $this->elementColumn = 'awa_cat_id';
+                break;
+        }
     }
 
     /**

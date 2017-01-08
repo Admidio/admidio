@@ -138,7 +138,7 @@ $sql = '(SELECT COUNT(*) AS count_this
             AND mem_begin  <= \''.DATE_NOW.'\'
             AND mem_end     > \''.DATE_NOW.'\'
             AND rol_valid = 1
-            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+            AND cat_name_intern <> \'EVENTS\'
             AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                 OR cat_org_id IS NULL ))';
 
@@ -167,7 +167,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
             AND mem_begin  <= \''.DATE_NOW.'\'
             AND mem_end     > \''.DATE_NOW.'\'
             AND rol_valid = 1
-            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+            AND cat_name_intern <> \'EVENTS\'
             AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').')';
 }
 else

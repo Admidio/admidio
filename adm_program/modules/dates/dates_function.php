@@ -386,7 +386,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             // Kategorie fuer Terminbestaetigungen einlesen
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
+                     WHERE cat_name_intern LIKE \'EVENTS\'';
             $pdoStatement = $gDb->query($sql);
             $role = new TableRoles($gDb);
 

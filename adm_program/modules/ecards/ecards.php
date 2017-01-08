@@ -202,7 +202,7 @@ $sql = 'SELECT rol_id, rol_name
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
          WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
-           AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+           AND cat_name_intern <> \'EVENTS\'
       ORDER BY rol_name';
 $statement = $gDb->query($sql);
 

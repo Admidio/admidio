@@ -97,7 +97,7 @@ if($gCurrentUser->editUsers())
              WHERE usr_id <> '.$user->getValue('usr_id').'
                AND rol_id IN ('.implode(',', $gCurrentUser->getAllVisibleRoles()).')
                AND rol_valid   = 1
-               AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+               AND cat_name_intern <> \'EVENTS\'
                AND ( cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL )
                AND mem_begin <= \''.DATE_NOW.'\'
@@ -130,7 +130,7 @@ else
                                      AND mem_end     > \''.DATE_NOW.'\'
                                      AND mem_leader  = 1
                                      AND rol_valid   = 1
-                                     AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                                     AND cat_name_intern <> \'EVENTS\'
                                      AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_EDIT.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
                                      AND ( cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                                          OR cat_org_id IS NULL ))

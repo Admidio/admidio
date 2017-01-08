@@ -177,7 +177,7 @@ class User extends TableAccess
 
                         // if role leader could assign new members then remember this setting
                         // roles for confirmation of dates should be ignored
-                        if ($row['cat_name_intern'] !== 'CONFIRMATION_OF_PARTICIPATION'
+                        if ($row['cat_name_intern'] !== 'EVENTS'
                         && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
                         {
                             $this->assignRoles = true;

@@ -1040,7 +1040,6 @@
     <string name="SYS_CONDITION">Bedingung</string>
     <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
     <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
-    <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Teilnahmebestätigung</string>
     <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
     <string name="SYS_CONTENT">Inhalt</string>
     <string name="SYS_CONTRIBUTION">Beitrag</string>
@@ -1101,6 +1100,7 @@
     <string name="SYS_ERROR">Fehler</string>
     <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
     <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
+    <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
     <string name="SYS_EXAMPLE">Beispiel</string>
     <string name="SYS_EXAMPLES">Beispiele</string>
     <string name="SYS_FADE_IN">Einblenden</string>
