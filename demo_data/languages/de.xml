@@ -23,7 +23,7 @@
     <string name="DEMO_DAT_TRIP_AMSTERDAM">Ausflug nach Amsterdam</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM_LOCATION">Amsterdam Gracht</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM_CONTENT">An diesem hoffentlich sonnigen Tag geht es nach Amsterdam.\n\nEine Grachtenfahrt, sowie ein Einkaufsbummel sind geplant.</string>
-    <string name="DEMO_DAT_YOGA">Yuga für Anfänger</string>
+    <string name="DEMO_DAT_YOGA">Yoga für Anfänger</string>
     <string name="DEMO_DAT_YOGA_LOCATION">Madrid Zentrum</string>
     <string name="DEMO_DAT_YOGA_CONTENT">In diesem Kurs werden die Grundlagen für Yoga vermittelt.\n\nEine Anmeldung zu diesem Kurs ist erforderlich.</string>
     <string name="DEMO_GBO_WEBMASTER_WELCOME">Willkommen im Gästebuch des Demo-Bereichs. \n\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\n\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.</string>

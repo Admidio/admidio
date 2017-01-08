@@ -11,8 +11,8 @@
  *
  * inactive:  false - (Default) show all active roles
  *            true  - show all inactive roles
- * invisible: false - (Default) show all visible roles
- *            true  - show all invisible roles
+ * events:    false - (Default) show all event roles
+ *            true  - show all roles except event roles
  ***********************************************************************************************
  */
 require_once('../../system/common.php');
@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'bool');
-$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'bool');
+$getEvents    = admFuncVariableIsValid($_GET, 'events',    'bool');
 
 // only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
@@ -47,8 +47,8 @@ if($getInactive)
     $listDescription  = $gL10n->get('ROL_INACTIV_ROLES');
     $activeRolesImage = 'roles.png';
     $activeRolesFlag  = '0';
-    // in inactive mode show visible and invisible inactive roles
-    $sqlRolesStatus   = ' AND rol_valid = \'0\' ';
+    $sqlRolesStatus   = ' AND rol_valid = \'0\'
+                          AND cat_name_intern <> \'EVENTS\' ';
 }
 else
 {
@@ -58,20 +58,26 @@ else
     $activeRolesFlag  = '1';
 }
 
-if($getInvisible)
+if($getEvents)
 {
-    $visibleRolesLinkDescription = $gL10n->get('ROL_VISIBLE_ROLES');
-    $listDescription   = $gL10n->get('ROL_INVISIBLE_ROLES');
-    $visibleRolesImage = 'light_on.png';
-    $visibleRolesFlag  = '0';
-    // in invisible mode show active and inactive invisible roles
+    if($gPreferences['enable_dates_module'] == 0)
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+
+    $eventsRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
+    $listDescription   = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
+    $eventsRolesImage = 'roles.png';
+    $eventsRolesFlag  = '0';
+    // in events mode show active and inactive events roles
     $sqlRolesStatus    = ' AND cat_name_intern = \'EVENTS\' ';
 }
 else
 {
-    $visibleRolesLinkDescription = $gL10n->get('ROL_INVISIBLE_ROLES');
-    $visibleRolesImage = 'light_off.png';
-    $visibleRolesFlag  = '1';
+    $eventsRolesLinkDescription = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
+    $eventsRolesImage = 'dates.png';
+    $eventsRolesFlag  = '1';
 }
 
 // create html page object
@@ -92,9 +98,13 @@ $rolesMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/
 // define link to show inactive roles
 $rolesMenu->addItem('menu_item_inactive_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?inactive='.$activeRolesFlag,
                     $activeRolesLinkDescription, $activeRolesImage);
-// define link to show hidden roles
-$rolesMenu->addItem('menu_item_hidden_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?invisible='.$visibleRolesFlag,
-                    $visibleRolesLinkDescription, $visibleRolesImage);
+
+if($gPreferences['enable_dates_module'] > 0)
+{
+    // if event module is enabled then define link to confirmation roles of event participations
+    $rolesMenu->addItem('menu_item_hidden_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?events='.$eventsRolesFlag,
+                        $eventsRolesLinkDescription, $eventsRolesImage);
+}
 
 // Create table
 $table = new HtmlTable('roles_table', $page, true, true);

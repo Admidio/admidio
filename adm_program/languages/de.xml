@@ -927,7 +927,6 @@
     <string name="ROL_ENABLE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
     <string name="ROL_INACTIV_ROLE">Inaktive Rolle</string>
     <string name="ROL_INACTIV_ROLES">Inaktive Rollen</string>
-    <string name="ROL_INVISIBLE_ROLES">Unsichtbare Rollen</string>
     <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
     <string name="ROL_LEADER_EDIT_MEMBERS">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
     <string name="ROL_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
@@ -970,6 +969,7 @@
     <string name="ROL_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
     <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
     <string name="ROL_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
+    <string name="ROL_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
     <string name="ROL_SAVE_ROLES">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</string>
     <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
     <string name="ROL_SEMIYEARLY">Halbjährlich</string>
@@ -984,7 +984,6 @@
     <string name="ROL_VALID_TO" description="Date valid to">Gültig bis</string>
     <string name="ROL_VIEW_LIST_MEMBERS">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</string>
     <string name="ROL_VIEW_LIST_ROLE">Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.</string>
-    <string name="ROL_VISIBLE_ROLES">Sichtbare Rollen</string>
     <string name="ROL_WEEKDAY">Wochentag</string>
     <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
     <!-- Phrases only in Roommodule -->

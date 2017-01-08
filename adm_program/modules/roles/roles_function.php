@@ -100,6 +100,15 @@ if($getMode === 2)
         $_POST['rol_mail_to_all']    = 1;
     }
 
+    if($role->getValue('cat_name_intern') === 'EVENTS')
+    {
+        $_POST['rol_start_date'] = '';
+        $_POST['rol_start_time'] = '';
+        $_POST['rol_end_date'] = '';
+        $_POST['rol_end_time'] = '';
+        $_POST['rol_max_members'] = '';
+    }
+
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
@@ -122,7 +131,8 @@ if($getMode === 2)
 
     foreach($checkboxes as $key => $value)
     {
-        if(!isset($_POST[$value]) || $_POST[$value] != 1)
+        // initialize the roles rights if value not set or not = 1 or its a event role
+        if(!isset($_POST[$value]) || $_POST[$value] != 1 || $role->getValue('cat_name_intern') === 'EVENTS')
         {
             $_POST[$value] = 0;
         }
@@ -256,7 +266,7 @@ if($getMode === 2)
     }
 
     // save role dependencies in database
-    if(array_key_exists('dependent_roles', $_POST))
+    if(array_key_exists('dependent_roles', $_POST) && $role->getValue('cat_name_intern') !== 'EVENTS')
     {
         $sentChildRoles = $_POST['dependent_roles'];
 
