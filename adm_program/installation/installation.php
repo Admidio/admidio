@@ -130,9 +130,9 @@ if (is_file($pathConfigFile))
         $_SESSION['db_type']     = $gDbType;
         $_SESSION['db_server']   = $g_adm_srv;
         $_SESSION['db_port']     = $g_adm_port;
+        $_SESSION['db_database'] = $g_adm_db;
         $_SESSION['db_user']     = $g_adm_usr;
         $_SESSION['db_password'] = $g_adm_pw;
-        $_SESSION['db_database'] = $g_adm_db;
         $_SESSION['prefix']      = $g_tbl_praefix;
 
         admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?mode=4');
@@ -227,8 +227,8 @@ elseif ($getMode === 3)  // Enter database access information
         $dbType   = $_SESSION['db_type'];
         $server   = $_SESSION['db_server'];
         $port     = $_SESSION['db_port'];
-        $user     = $_SESSION['db_user'];
         $database = $_SESSION['db_database'];
+        $user     = $_SESSION['db_user'];
         $prefix   = $_SESSION['prefix'];
     }
     else
@@ -236,8 +236,8 @@ elseif ($getMode === 3)  // Enter database access information
         $dbType   = 'mysql';
         $server   = '';
         $port     = '';
-        $user     = '';
         $database = '';
+        $user     = '';
         $prefix   = 'adm';
     }
 
@@ -247,12 +247,12 @@ elseif ($getMode === 3)  // Enter database access information
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
                                'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
-    $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('db_port', $gL10n->get('SYS_PORT'), $port, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
-    $form->addInput('db_user', $gL10n->get('SYS_USERNAME'), $user, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
-    $form->addInput('db_database', $gL10n->get('SYS_DATABASE'), $database, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+    $form->addInput('db_server',   $gL10n->get('SYS_SERVER'),       $server,   array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_port',     $gL10n->get('SYS_PORT'),         $port,     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
+    $form->addInput('db_database', $gL10n->get('SYS_DATABASE'),     $database, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_user',     $gL10n->get('SYS_USERNAME'),     $user,     array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'),     null,      array('type' => 'password'));
+    $form->addInput('db_prefix',   $gL10n->get('INS_TABLE_PREFIX'), $prefix,   array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=2'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
@@ -301,15 +301,15 @@ elseif ($getMode === 4)  // Creating organization
         $_SESSION['db_type']     = strStripTags($_POST['db_type']);
         $_SESSION['db_server']   = strStripTags($_POST['db_server']);
         $_SESSION['db_port']     = $dbPort;
+        $_SESSION['db_database'] = strStripTags($_POST['db_database']);
         $_SESSION['db_user']     = strStripTags($_POST['db_user']);
         $_SESSION['db_password'] = strStripTags($_POST['db_password']);
-        $_SESSION['db_database'] = strStripTags($_POST['db_database']);
         $_SESSION['prefix']      = strStripTags($_POST['db_prefix']);
 
         if ($_SESSION['db_type']     === ''
         ||  $_SESSION['db_server']   === ''
-        ||  $_SESSION['db_user']     === ''
-        ||  $_SESSION['db_database'] === '')
+        ||  $_SESSION['db_database'] === ''
+        ||  $_SESSION['db_user']     === '')
         {
             showNotice(
                 $gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'),
@@ -613,9 +613,9 @@ elseif ($getMode === 6)  // Creating configuration file
         '%DB_TYPE%'      => $_SESSION['db_type'],
         '%SERVER%'       => $_SESSION['db_server'],
         '\'%PORT%\''     => $port,
+        '%DATABASE%'     => $_SESSION['db_database'],
         '%USER%'         => $_SESSION['db_user'],
         '%PASSWORD%'     => $_SESSION['db_password'],
-        '%DATABASE%'     => $_SESSION['db_database'],
         '%ROOT_PATH%'    => ADMIDIO_URL,
         '%ORGANIZATION%' => $_SESSION['orga_shortname'],
         '%TIMEZONE%'     => $_SESSION['orga_timezone']
@@ -690,9 +690,9 @@ elseif ($getMode === 8) // Start installation
         || $gDbType        !== $_SESSION['db_type']
         || $g_adm_srv      !== $_SESSION['db_server']
         || $g_adm_port     !== $_SESSION['db_port']
+        || $g_adm_db       !== $_SESSION['db_database']
         || $g_adm_usr      !== $_SESSION['db_user']
         || $g_adm_pw       !== $_SESSION['db_password']
-        || $g_adm_db       !== $_SESSION['db_database']
         || $g_organization !== $_SESSION['orga_shortname']))
     {
         showNotice(
