@@ -46,9 +46,9 @@ require_once('../../system/common.php');
 
 // Initialize and check the parameters
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
-$getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
-$getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
-$getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+$getDraw    = admFuncVariableIsValid($_GET, 'draw',    'int',  array('requireValue' => true));
+$getStart   = admFuncVariableIsValid($_GET, 'start',   'int',  array('requireValue' => true));
+$getLength  = admFuncVariableIsValid($_GET, 'length',  'int',  array('requireValue' => true));
 $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $jsonArray = array('draw' => $getDraw);
@@ -328,7 +328,6 @@ while($row = $mglStatement->fetch())
         }
     }
 
-    
     $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$row['usr_id'].'&amp;copy=1"><img
                                 src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
 

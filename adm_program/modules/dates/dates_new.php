@@ -305,7 +305,7 @@ if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganiza
 $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
 $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
 $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
-                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_this_list_view'));
 $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), (bool) $role->getValue('rol_mail_this_role'));
 $form->closeGroupBox();
