@@ -716,6 +716,7 @@ class HtmlForm extends HtmlFormBasic
         // create array with all options
         $optionsDefault = array(
             'type'             => 'text',
+            'placeholder'      => '',
             'minLength'        => null,
             'maxLength'        => 0,
             'minNumber'        => null,
@@ -731,6 +732,8 @@ class HtmlForm extends HtmlFormBasic
             'htmlAfter'        => ''
         );
         $optionsAll = array_replace($optionsDefault, $options);
+
+        $attributes['placeholder'] = $optionsAll['placeholder'];
 
         // set min/max input length
         switch ($optionsAll['type'])
@@ -801,8 +804,14 @@ class HtmlForm extends HtmlFormBasic
         // add a nice modern datepicker to date inputs
         if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'datetime' || $optionsAll['type'] === 'birthday')
         {
-            $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
-            $javascriptCode = '';
+            if ($optionsAll['placeholder'] === '')
+            {
+                $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
+            }
+            else
+            {
+                $attributes['placeholder'] = $optionsAll['placeholder'];
+            }
 
             // if you have a birthday field than start with the years selection
             if ($optionsAll['type'] === 'birthday')
@@ -815,6 +824,8 @@ class HtmlForm extends HtmlFormBasic
                 $attributes['data-provide'] = 'datepicker';
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
+
+            $javascriptCode = '';
 
             if (!$this->datepickerInitialized || $optionsAll['type'] === 'birthday')
             {
