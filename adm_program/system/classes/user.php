@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class handle role rights, cards and other things of users
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -834,13 +834,13 @@ class User extends TableAccess
         {
             $vCard[] = 'TEL;HOME;FAX:' . $this->getValue('FAX');
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'ADDRESS')
+        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'STREET')
         &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'CITY')
         &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'POSTCODE')
         &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'COUNTRY'))
         {
             $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
-                utf8_decode($this->getValue('ADDRESS',  'database')) . ';' .
+                utf8_decode($this->getValue('STREET',  'database')) . ';' .
                 utf8_decode($this->getValue('CITY',     'database')) . ';;' .
                 utf8_decode($this->getValue('POSTCODE', 'database')) . ';' .
                 utf8_decode($this->getValue('COUNTRY',  'database'));
@@ -1300,7 +1300,7 @@ class User extends TableAccess
             // Email
             $this->getValue('EMAIL'),
             // Address
-            $this->getValue('ADDRESS'),
+            $this->getValue('STREET'),
             $this->getValue('CITY'),
             $this->getValue('POSTCODE'),
             $this->getValue('COUNTRY')

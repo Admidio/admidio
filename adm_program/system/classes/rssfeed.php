@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * RSS - Klasse
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -52,7 +52,7 @@ class RSSfeed
         $this->channel['description'] = $description;
         $this->channel['copyright']   = $copyright;
         $this->items = array();
-        $this->feed  = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $this->feed  = CURRENT_URL;
     }
 
     /**

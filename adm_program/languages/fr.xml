@@ -321,8 +321,6 @@
   <string name="MAI_MAX_ATTACHMENT_SIZE">Un nombre illimité de récipiendaire peut être ajouté. La taille total des fichiers ne doit pas dépasser #VAR1# MB.</string>
   <string name="MAI_SEND_COPY">Envoyer une copy du courriel à mon adresse</string>
   <string name="MAI_SEND_EMAIL">Envoyer le courriel</string>
-  <string name="MAI_SENDER_EMAIL">Courriel de l\'expéditeur</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certains services n\'autorise pas les expéditeur non identifié. Veuillez s\'il vous plait fournir un adresse courriel valide par défaut qui sera utilisé dans ce module (ex: cerclebleuets@#VAR1#). (Par default: vide)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(L\'expéditeur c\'est déconecté. Les informations de l\'expéditeur peuvent être incorrect.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">Pour les utilisateurs déconectés, un texte alphanumérique apparaitra quand le module capcha est activé. Le texte devra être inséré dans le champs approprier. Cette méthode empêchera l\'abu des spammers (Par défaut: oui)</string>
   <string name="MAI_SUBJECT">Sujet</string>
@@ -392,7 +390,6 @@
   <string name="ORG_BROWSER_UPDATE_CHECK">Message de mis à jour concernant navigateur désuet</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Après l\'activation les utilisateurs de navigateurs désuet devraient effectuer une mise à jour du navigateur. Des nouveaux navigateurs protègent contre la fraude, les virus, les chevaux de Troie, le vol d\'identité et les autres menaces qui mettent en péril votre vie privée et la sécurité. Chaque nouvelle génération de navigateurs améliore la vitesse et prend en charge des nouvelles technologies web. Pour cela les sites peuvent être présentés mieux. A cet effet, le service de https://browser-update.org/ est utilisé.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Couleur de fond</string>
-  <string name="ORG_CAPTCHA_FONT">Sélectionnez le type de police pour le code crypté. (par défaut: Thème de la police)</string>
   <string name="ORG_CAPTCHA_PREVIEW">aperçu Captcha</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Après l\'activation une image avec un code captcha ou un simple calcul sera affiché pour les nouveaux utilisateurs. Il est nécessaire de remplir le bon code ou le résultat. Le captcha est une partie de solution anti-spam dans Admidio. (par défaut: oui)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">signature Captcha</string>
@@ -430,7 +427,7 @@
   <string name="ORG_NO_FIELD_CREATED">Aucun champ d\'organisation spécifique ont été éviscérées encore!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">En changeant l\'affichage, toutes les modifications non sauvegardées sont perdues.</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Nombre d\'entrées par page</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Définir le nombre d\'éléments affichés sur une page. La pagination est fournie si nombre d\'éléments dépasse la valeur définie. Aperçu avant impression et la fonctionnalité d\'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront cotées et la pagination est désactivée. (Par défaut: 10)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Définir le nombre d\'éléments affichés sur une page. La pagination est fournie si nombre d\'éléments dépasse la valeur définie. Aperçu avant impression et la fonctionnalité d\'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront cotées et la pagination est désactivée. (Par défaut: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Pour les utilisateurs connectés uniquement</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gérer les préférences de l\'organisation générale ou préférences module ici.</string>
   <string name="ORG_PARENT_ORGANIZATION">Organisation parent</string>

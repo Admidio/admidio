@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -510,7 +510,7 @@ class ComponentUpdate extends Component
                         $returnValue = $returnValue && $this->updateStepRewriteFolderRights($resource);
 
                         // set rights to 0777
-                        $returnValue = $returnValue && chmod($resource, 0777);
+                        $returnValue = $returnValue && @chmod($resource, 0777);
                     }
                 }
             }

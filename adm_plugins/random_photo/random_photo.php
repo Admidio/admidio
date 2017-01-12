@@ -3,14 +3,14 @@
  ***********************************************************************************************
  * Random Photo
  *
- * Version 1.8.0
+ * Version 2.0.0
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und
  * und verlinkt neben dem Bild das dazugehörige Album
  *
- * Compatible with Admidio version 3.1
+ * Compatible with Admidio version 3.2
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -164,14 +164,14 @@ else
 
 // Ausgabe
 $pho_id = $album->getValue('pho_id');
-echo '<a class="'.$plg_link_class.'" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'" target="'. $plg_link_target. '"><img
+echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.FOLDER_MODULES.'/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'" target="'. $plg_link_target. '"><img
     class="thumbnail" alt="'.$linkText.'" title="'.$linkText.'"
-    src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
+    src="'.$g_root_path.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
 
 // Link zum Album
 if($plg_photos_show_link)
 {
-    echo '<a class="'.$plg_link_class.'" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.FOLDER_MODULES.'/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
 }
 
 echo '</div>';

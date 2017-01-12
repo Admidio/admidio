@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show user profile
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -338,12 +338,12 @@ $page->addHtml('
                             // don't show these fields in default profile list
                             break;
 
-                        case 'ADDRESS':
+                        case 'STREET':
                         case 'POSTCODE':
                         case 'CITY':
                         case 'COUNTRY':
                             if(!$bAddressOutput // output of address only once
-                            && (strlen($user->getValue('ADDRESS')) > 0 || strlen($user->getValue('POSTCODE')) > 0
+                            && (strlen($user->getValue('STREET')) > 0 || strlen($user->getValue('POSTCODE')) > 0
                                || strlen($user->getValue('CITY')) > 0 || strlen($user->getValue('COUNTRY')) > 0))
                             {
                                 $bAddressOutput = true;
@@ -351,18 +351,18 @@ $page->addHtml('
                                 $address        = '';
                                 $map_url        = 'https://maps.google.com/?q=';
                                 $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
-                                    urlencode($gCurrentUser->getValue('ADDRESS')).
+                                    urlencode($gCurrentUser->getValue('STREET')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
                                     ',%20'. urlencode($gCurrentUser->getValue('COUNTRY')).
                                     '&amp;daddr=';
 
-                                if(strlen($user->getValue('ADDRESS')) > 0
-                                && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
+                                if(strlen($user->getValue('STREET')) > 0
+                                && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('STREET', 'usf_hidden') == 0))
                                 {
-                                    $address   .= $user->getValue('ADDRESS'). '<br />';
-                                    $map_url   .= urlencode($user->getValue('ADDRESS'));
-                                    $route_url .= urlencode($user->getValue('ADDRESS'));
+                                    $address   .= $user->getValue('STREET'). '<br />';
+                                    $map_url   .= urlencode($user->getValue('STREET'));
+                                    $route_url .= urlencode($user->getValue('STREET'));
                                 }
 
                                 if(strlen($user->getValue('POSTCODE')) > 0
@@ -401,7 +401,7 @@ $page->addHtml('
                                 $htmlAddress .= $address;
 
                                 // show route or address link if function is enabled and user has filled address or city
-                                if($gPreferences['profile_show_map_link'] && strlen($user->getValue('ADDRESS')) > 0
+                                if($gPreferences['profile_show_map_link'] && strlen($user->getValue('STREET')) > 0
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '

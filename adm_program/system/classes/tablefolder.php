@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_folders
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -375,15 +375,20 @@ class TableFolder extends TableAccess
             // If user hasn't editDownloadRight, only show if folder exists
             elseif ($folderExists)
             {
-                // If user has a membership in a role that is assigned to the current folder, show it
-                if ($gValidLogin && $this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
-                {
-                    $addToArray = true;
-                }
                 // If folder is public and not locked, show it
                 if ($rowFolders->fol_public && !$rowFolders->fol_locked)
                 {
                     $addToArray = true;
+                }
+                // If user has a membership in a role that is assigned to the current subfolder, show it
+                elseif ($gValidLogin)
+                {
+                    $subfolderViewRolesObject = new RolesRights($this->db, 'folder_view', $rowFolders->fol_id);
+
+                    if($subfolderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
+                    {
+                        $addToArray = true;
+                    }
                 }
             }
 

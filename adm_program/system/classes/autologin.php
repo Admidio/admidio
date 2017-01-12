@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -109,7 +109,7 @@ class AutoLogin extends TableAccess
         $currDateTime = new DateTime();
         $oneYearDateInterval = new DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
-        $dateSessionDelete = $oneYearBeforeDateTime->format('Y.m.d H:i:s');
+        $dateSessionDelete = $oneYearBeforeDateTime->format('Y-m-d H:i:s');
 
         $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
                  WHERE atl_last_login < \''.$dateSessionDelete.'\'';

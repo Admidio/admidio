@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create or edit a user profile
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -19,7 +19,7 @@
  *              3 - assign/accept a registration
  * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
  * firstname  : (Optional) First name could be set and will than be preassigned for new users
- * remove_url : true - Removes the last url from navigation cache
+ * copy       : true - The user of the user_id will be copied and the base for this new user
  *
  *****************************************************************************/
 
@@ -30,12 +30,41 @@ $getUserId    = admFuncVariableIsValid($_GET, 'user_id',  'int');
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'int');
 $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'));
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
-$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'bool');
+$getCopy      = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
+// if current user has no login then only show registration dialog
+if(!$gValidLogin)
+{
+    $getNewUser = 2;
+}
+
+// if new_user isn't set and no user id is set then show dialog to create a user
+if($getUserId === 0 && $getNewUser === 0)
+{
+    $getNewUser = 1;
+}
+
+// User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
+if($getUserId > 0 && $getNewUser !== 0 && $getNewUser !== 3)
+{
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
+}
+
+// read user data
+$user = new User($gDb, $gProfileFields, $getUserId);
+
 // set headline of the script
-if($getNewUser === 1)
+if($getCopy)
+{
+    // if we want to copy the user than set id = 0 and also his name
+    $getUserId = 0;
+    $getNewUser = 1;
+    $headline = $gL10n->get('SYS_COPY_VAR', $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+}
+elseif($getNewUser === 1)
 {
     $headline = $gL10n->get('PRO_ADD_USER');
 }
@@ -51,33 +80,6 @@ else
 {
     $headline = $gL10n->get('PRO_EDIT_PROFILE');
 }
-
-// if current user has no login then only show registration dialog
-if(!$gValidLogin)
-{
-    $getNewUser = 2;
-}
-
-// if new_user isn't set and no user id is set then show dialog to create a user
-if($getUserId === 0 && $getNewUser === 0)
-{
-    $getNewUser = 1;
-}
-
-if($getRemoveUrl == 1)
-{
-    $gNavigation->deleteLastUrl();
-}
-
-// User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
-if($getUserId > 0 && $getNewUser !== 0 && $getNewUser !== 3)
-{
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    // => EXIT
-}
-
-// read user data
-$user = new User($gDb, $gProfileFields, $getUserId);
 
 // pruefen, ob Modul aufgerufen werden darf
 switch($getNewUser)
@@ -146,6 +148,7 @@ if(isset($_SESSION['profile_request']))
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();
+$page->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
 
 // add back link to module menu
 $profileEditMenu = $page->getMenu();
@@ -248,7 +251,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_URL. '/icons/key.png"
+                                href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='.$getUserId.'"><img src="'. THEME_URL. '/icons/key.png"
                                 alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }

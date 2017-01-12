@@ -361,7 +361,7 @@
     <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
     <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>
-    <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</string>
+    <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße nicht gefüllt haben</string>
     <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
     <string name="LST_EXCLUDE_EXAMPLE_DESC">Sucht alle Benutzer, die nicht Stefan heißen</string>
@@ -397,7 +397,7 @@
     <string name="LST_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
     <string name="LST_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
     <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
-    <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</string>
+    <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße gefüllt haben</string>
     <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
     <string name="LST_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
     <string name="LST_PRESET_CONFIGURATION_DESC">Als Administrator kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
@@ -683,7 +683,7 @@
     <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
     <string name="ORG_NOTIFY_ADMINISTRATOR">Benachrichtigung des Administrators nach einer Registrierung</string>
     <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
-    <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 0)</string>
+    <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: #VAR1#)</string>
     <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer</string>
     <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
     <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
@@ -748,7 +748,6 @@
     <string name="UPD_NEW_BOTH">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
     <string name="UPD_NO_NEW">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
     <string name="UPD_STABLE_VERSION">Verfügbar</string>
-    <string name="UPD_TITLE">Update Prüfung</string>
     <!-- Phrases only in Photomodule -->
     <string name="PHO_ALBUM">Album</string>
     <string name="PHO_ALBUM_DELETE">Album Löschen</string>
@@ -1314,6 +1313,7 @@
     <string name="SYS_STATUS_CODE_INVALID">Ungülter Status-Code!</string>
     <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
     <string name="SYS_STOP">Stop</string>
+    <string name="SYS_STREET">Straße</string>
     <string name="SYS_SUNDAY">Sonntag</string>
     <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
     <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Dein angefordertes Passwort\n#content# Hallo #user_first_name#,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>

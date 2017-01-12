@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -215,7 +215,7 @@ class Organization extends TableAccess
         $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $addressList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+        $addressList->addColumn(4, $gProfileFields->getProperty('STREET', 'usf_id'));
         $addressList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
         $addressList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
         $addressList->save();
@@ -245,7 +245,7 @@ class Organization extends TableAccess
         $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $contactList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $contactList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+        $contactList->addColumn(4, $gProfileFields->getProperty('STREET', 'usf_id'));
         $contactList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
         $contactList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
         $contactList->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));

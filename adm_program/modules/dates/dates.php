@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show a list of all events
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -370,10 +370,10 @@ else
                     </a>';
 
                 // if valid login and enough information about address exist - calculate the route
-                if($gValidLogin && $gCurrentUser->getValue('ADDRESS') !== ''
+                if($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
                 && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                 {
-                    $route_url = 'https://maps.google.com/?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('ADDRESS'));
+                    $route_url = 'https://maps.google.com/?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('STREET'));
 
                     if($gCurrentUser->getValue('POSTCODE') !== '')
                     {

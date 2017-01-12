@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create a custom list
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -248,13 +248,13 @@ foreach($gProfileFields->mProfileFields as $field)
     {
         $javascriptCode .= '
             userFields[' . $i . '] = {
-                "cat_id"   = '. $field->getValue('cat_id'). ',
-                "cat_name" = "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
-                "usf_id"   = "'. $field->getValue('usf_id'). '",
-                "usf_name" = "'. addslashes($field->getValue('usf_name')). '",
-                "usf_name_intern" = "'. addslashes($field->getValue('usf_name_intern')). '",
-                "usf_type" = "'. $field->getValue('usf_type'). '",
-                "usf_value_list" = {}
+                "cat_id": '. $field->getValue('cat_id'). ',
+                "cat_name": "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
+                "usf_id": "'. $field->getValue('usf_id'). '",
+                "usf_name": "'. addslashes($field->getValue('usf_name')). '",
+                "usf_name_intern": "'. addslashes($field->getValue('usf_name_intern')). '",
+                "usf_type": "'. $field->getValue('usf_type'). '",
+                "usf_value_list": {}
             };';
 
         // get avaiable values for current field type and push to array
@@ -286,37 +286,37 @@ if($posEndOfMasterData === 0)
 }
 $javascriptCode .= '
         userFields[' . $posEndOfMasterData . '] = {
-            "cat_id"   = userFields[1]["cat_id"],
-            "cat_name" = userFields[1]["cat_name"],
-            "usf_id"   = "usr_login_name",
-            "usf_name" = "'.$gL10n->get('SYS_USERNAME').'",
-            "usf_name_intern" = "'.$gL10n->get('SYS_USERNAME').'"
+            "cat_id": userFields[1]["cat_id"],
+            "cat_name": userFields[1]["cat_name"],
+            "usf_id": "usr_login_name",
+            "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
+            "usf_name_intern": "'.$gL10n->get('SYS_USERNAME').'"
         };
 
         userFields[' . ($posEndOfMasterData + 1) . '] = {
-            "cat_id"   = userFields[1]["cat_id"],
-            "cat_name" = userFields[1]["cat_name"],
-            "usf_id"   = "usr_photo",
-            "usf_name" = "'.$gL10n->get('PHO_PHOTO').'",
-            "usf_name_intern" = "'.$gL10n->get('PHO_PHOTO').'"
+            "cat_id": userFields[1]["cat_id"],
+            "cat_name": userFields[1]["cat_name"],
+            "usf_id": "usr_photo",
+            "usf_name": "'.$gL10n->get('PHO_PHOTO').'",
+            "usf_name_intern": "'.$gL10n->get('PHO_PHOTO').'"
         };
 
         userFields[' . $i . '] = {
-            "cat_id"   = -1,
-            "cat_name" = "'.$gL10n->get('LST_ROLE_INFORMATION').'",
-            "usf_id"   = "mem_begin",
-            "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_START').'",
-            "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_START').'"
+            "cat_id": -1,
+            "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+            "usf_id": "mem_begin",
+            "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_START').'",
+            "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
         };';
 
 ++$i;
 $javascriptCode .= '
         userFields[' . $i . '] = {
-            "cat_id"   = -1,
-            "cat_name" = "'.$gL10n->get('LST_ROLE_INFORMATION').'",
-            "usf_id"   = "mem_end",
-            "usf_name" = "'.$gL10n->get('LST_MEMBERSHIP_END').'",
-            "usf_name_intern" = "'.$gL10n->get('LST_MEMBERSHIP_END').'"
+            "cat_id": -1,
+            "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+            "usf_id": "mem_end",
+            "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
+            "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
         };
 
         return userFields;
@@ -344,9 +344,9 @@ while(isset($formValues['column' . $actualColumnNumber]))
 
     $javascriptCode .= '
         defaultFields[' . $actualColumnNumber . '] = {
-            "usf_id"    = "' . $formValues['column' . $actualColumnNumber] . '",
-            "sort"      = "' . $sortValue . '",
-            "condition" = "' . $conditionValue . '"
+            "usf_id": "' . $formValues['column' . $actualColumnNumber] . '",
+            "sort": "' . $sortValue . '",
+            "condition": "' . $conditionValue . '"
         };';
 
     ++$actualColumnNumber;

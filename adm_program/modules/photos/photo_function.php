@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Photofunktionen
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -55,7 +55,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
         // Thumbnail loeschen
         if(is_file($photo_path))
         {
-            chmod($photo_path, 0777);
+            @chmod($photo_path, 0777);
             unlink($photo_path);
         }
     }
@@ -68,7 +68,7 @@ function tryDelete($path)
 {
     if(is_file($path))
     {
-        chmod($path, 0777);
+        @chmod($path, 0777);
         unlink($path);
     }
 }
@@ -81,7 +81,7 @@ function tryRename($path, $newPath)
 {
     if(is_file($path))
     {
-        chmod($path, 0777);
+        @chmod($path, 0777);
         rename($path, $newPath);
     }
 }

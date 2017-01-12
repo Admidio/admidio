@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-    <step id="10">CREATE TABLE %PREFIX%_menu
+    <step id="10">UPDATE %PREFIX%_user_fields SET usf_name_intern = 'STREET' WHERE usf_name_intern = 'ADDRESS'</step>
+    <step id="20">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'SYS_ADDRESS'</step>
+    <step id="30">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'Adresse'</step>
+    <step id="40">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'Address'</step>
+    <step id="50">CREATE TABLE %PREFIX%_menu
                 (
                     men_id                         integer       unsigned not null AUTO_INCREMENT,
                     men_group                      integer,
@@ -18,8 +22,8 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="20">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
-    <step id="30">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
+    <step id="60">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
+    <step id="70">INSERT INTO %PREFIX%_menu (men_id, men_group, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
                VALUES (1, 2, 1, 1, 'overview', '/adm_program/index.php', '/icons/home.png', 'SYS_OVERVIEW', '', 0)
                     , (2, 2, 3, 1, 'download', '/adm_program/modules/downloads/downloads.php', '/icons/download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC', 1)
                     , (3, 2, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', '/icons/lists.png', 'LST_LISTS', 'LST_LISTS_DESC', 0)
@@ -36,7 +40,7 @@
                     , (15, 1, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', '/icons/user_administration.png', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC', 0)
                     , (16, 1, 3, 1, 'roladm', '/adm_program/modules/roles/roles.php', '/icons/roles.png', 'ROL_ROLE_ADMINISTRATION', 'ROL_ROLE_ADMINISTRATION_DESC', 0)
                     , (17, 1, 6, 1, 'menu', '/adm_program/modules/menu/menu.php', '/icons/application_view_tile.png', 'SYS_MENU', '', 0)</step>
-    <step id="40">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+    <step id="80">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
               VALUES ('men_display_right', '%PREFIX%_menu'),
                      ('men_display_index', '%PREFIX%_menu'),
                      ('men_display_boot', '%PREFIX%_menu')</step>

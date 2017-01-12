@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -306,10 +306,8 @@ class HtmlTableBasic extends HtmlElement
      */
     public function addTableBody($attribute = null, $value = null, $data = '', $col = 'td')
     {
-        if ($this->tfoot && in_array('tfoot', $this->arrParentElements, true))
-        {
-            $this->closeParentElement('tr');
-        }
+        // always close tr if that was open before
+        $this->closeParentElement('tr');
 
         if ($this->tfoot)
         {

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Save organization preferences
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -340,7 +340,7 @@ switch($getMode)
         $newOrganization = new Organization($gDb, $_POST['orgaShortName']);
         $newOrganization->setValue('org_longname', $_POST['orgaLongName']);
         $newOrganization->setValue('org_shortname', $_POST['orgaShortName']);
-        $newOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
+        $newOrganization->setValue('org_homepage', ADMIDIO_URL);
         $newOrganization->save();
 
         // write all preferences from preferences.php in table adm_preferences

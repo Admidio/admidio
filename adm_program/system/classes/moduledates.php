@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -191,7 +191,7 @@ class ModuleDates extends Modules
                            AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                            )
                        )
-                       ' . $this->sqlConditionsGet() . '
+                       ' . $this->getSqlConditions() . '
                        ORDER BY dat_begin ' . $this->order;
 
         // Parameter
@@ -270,7 +270,7 @@ class ModuleDates extends Modules
                                AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                                )
                            )'
-                           . $this->sqlConditionsGet();
+                           . $this->getSqlConditions();
 
             $statement = $gDb->query($sql);
 
@@ -415,7 +415,7 @@ class ModuleDates extends Modules
      * Prepare SQL Statement.
      * @return string
      */
-    private function sqlConditionsGet()
+    private function getSqlConditions()
     {
         global $gValidLogin, $gCurrentUser;
 

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Handle update of Admidio database to a new version
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -367,9 +367,9 @@ elseif ($getMode === 2)
 
     while($orgId = $orgaStatement->fetchColumn())
     {
-        $gCurrentOrganization->setValue('org_id', $orgId);
-        $gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
-        $gCurrentOrganization->setPreferences($updateOrgPreferences, true);
+        $organization = new Organization($gDb, $orgId);
+        $organization->setPreferences($defaultOrgPreferences, false);
+        $organization->setPreferences($updateOrgPreferences, true);
     }
 
     if ($gDbType === 'mysql')

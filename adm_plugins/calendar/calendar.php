@@ -3,15 +3,15 @@
  ***********************************************************************************************
  * Calendar
  *
- * Version 2.1.0
+ * Version 2.2.0
  *
  * Plugin shows the actual month with all the events and birthdays that are
  * coming. This plugin can be used to show the Admidio events and birthdays in a
  * sidebar within Admidio or in an external website.
  *
- * Compatible with Admidio version 3.1
+ * Compatible with Admidio version 3.2
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -30,7 +30,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'date_id',   'int');
+$getDateId = admFuncVariableIsValid($_GET, 'date_id',   'string');
 
 if(isset($_GET['ajax_change']) && $plg_ajax_change)
 {
@@ -85,7 +85,7 @@ if(!isset($plg_kal_cat_show))
 
 if(!isset($plg_link_url) || $plg_link_url === '')
 {
-    $plg_link_url = ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php';
+    $plg_link_url = $g_root_path . FOLDER_MODULES . '/dates/dates.php';
 }
 
 // ///////////////////////////////////////////////////// //
@@ -129,7 +129,7 @@ $currentYear  = '';
 $today        = 0;
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
-if($getDateId > 0)
+if($getDateId !== '')
 {
     $currentMonth = substr($getDateId, 0, 2);
     $currentYear  = substr($getDateId, 2, 4);
@@ -163,7 +163,7 @@ $birthdaysMonthDayArray = array();
 global $page;
 if(isset($page) && $page instanceof \HtmlPage)
 {
-    $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/calendar/calendar.css');
+    $page->addCssFile($g_root_path . FOLDER_PLUGINS . '/calendar/calendar.css');
 }
 
 // query of all events
@@ -393,22 +393,22 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
         if($plg_ajax_change)
         {
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
-                url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
+                url: \'' . $g_root_path . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php\',
                 cache: false,
-                data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'",
+                data: \'ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'\',
                 success: function(html) {
-                    $("#plgCalendarContent").replaceWith(html);
-                    $(".admidio-calendar-link").popover();
+                    $(\'#plgCalendarContent\').replaceWith(html);
+                    $(\'.admidio-calendar-link\').popover();
                 }
             }); return false;">&laquo;</a></th>';
             echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
             echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
-                url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
+                url: \'' . $g_root_path . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php\',
                 cache: false,
-                data: "ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'",
+                data: \'ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'\',
                 success: function(html) {
-                    $("#plgCalendarContent").replaceWith(html);
-                    $(".admidio-calendar-link").popover();
+                    $(\'#plgCalendarContent\').replaceWith(html);
+                    $(\'.admidio-calendar-link\').popover();
                 }
             }); return false;">&raquo;</a></th>';
         }
@@ -544,7 +544,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
                 if($plg_geb_icon)
                 {
-                    $icon = '<img src=\''.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/cake.png\' alt=\'Birthday\' /> ';
+                    $icon = '<img src=\''.$g_root_path . FOLDER_PLUGINS . '/' . $plugin_folder . '/cake.png\' alt=\'Birthday\' /> ';
                 }
                 else
                 {
@@ -679,7 +679,7 @@ echo '</table>';
 if($currentMonth.$currentYear !== date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.get({
-            url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
+            url: "' . $g_root_path . FOLDER_PLUGINS . '/' . $plugin_folder . '/calendar.php",
             cache: false,
             data: "ajax_change&amp;date_id='.date('mY').'",
             success: function(html) {

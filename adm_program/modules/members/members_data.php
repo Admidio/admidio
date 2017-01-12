@@ -1,14 +1,14 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  * Server side script for Datatables to return the requested userlist
  *
  * This script will read all necessary users and their data from the database. It is optimized to
- + work with the javascript DataTables and will return the data in json format.
+ * work with the javascript DataTables and will return the data in json format.
  *
  * @par Examples
  * @code // the returned json data string
@@ -238,6 +238,7 @@ $mglStatement = $gDb->query($sql);
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
 
+$jsonArray['data'] = array();
 while($row = $mglStatement->fetch())
 {
     ++$rowNumber;
@@ -327,20 +328,9 @@ while($row = $mglStatement->fetch())
         }
     }
 
-    if(strlen($row['email']) > 0)
-    {
-        if($gPreferences['enable_mail_module'] != 1)
-        {
-            $mailLink = 'mailto:'.$row['email'];
-        }
-        else
-        {
-            $mailLink = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'];
-        }
-
-        $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_URL.'/icons/email.png"
-                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
-    }
+    
+    $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$row['usr_id'].'&amp;copy=1"><img
+                                src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
 
     // Link um User zu editieren
     // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
@@ -386,12 +376,6 @@ if($getSearch !== '')
 else
 {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-}
-
-// add empty data element if no rows where found
-if(!array_key_exists('data', $jsonArray))
-{
-    $jsonArray['data'] = array();
 }
 
 echo json_encode($jsonArray);
