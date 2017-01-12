@@ -717,6 +717,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsDefault = array(
             'type'             => 'text',
             'placeholder'      => '',
+            'pattern'          => '',
             'minLength'        => null,
             'maxLength'        => 0,
             'minNumber'        => null,
@@ -744,6 +745,8 @@ class HtmlForm extends HtmlFormBasic
             case 'url':
             case 'tel':
             case 'password':
+                $attributes['pattern'] = $optionsAll['pattern'];
+
                 $attributes['minlength'] = $optionsAll['minLength'];
 
                 if ($optionsAll['maxLength'] > 0)
