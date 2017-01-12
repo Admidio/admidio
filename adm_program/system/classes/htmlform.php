@@ -826,6 +826,12 @@ class HtmlForm extends HtmlFormBasic
             $this->addJavascriptCode($javascriptCode, true);
         }
 
+        // Remove attributes that are not set
+        $attributes = array_filter($attributes, function($attribute)
+        {
+            return $attribute !== '' && $attribute !== null;
+        });
+
         if ($optionsAll['property'] !== FIELD_HIDDEN)
         {
             // now create html for the field
