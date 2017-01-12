@@ -1143,6 +1143,7 @@
     <string name="SYS_HELP">Hilfe</string>
     <string name="SYS_HIDE">Ausblenden</string>
     <string name="SYS_HOMEPAGE">Startseite</string>
+    <string name="SYS_HOST">Host</string>
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
     <string name="SYS_IMPORTANT">Wichtig</string>

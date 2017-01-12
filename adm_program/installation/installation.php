@@ -128,7 +128,7 @@ if (is_file($pathConfigFile))
     {
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;
-        $_SESSION['db_server']   = $g_adm_srv;
+        $_SESSION['db_host']     = $g_adm_srv;
         $_SESSION['db_port']     = $g_adm_port;
         $_SESSION['db_database'] = $g_adm_db;
         $_SESSION['db_user']     = $g_adm_usr;
@@ -222,10 +222,10 @@ elseif ($getMode === 3)  // Enter database access information
     $gLogger->info('INSTALLATION: Enter database access information');
 
     // initialize form data
-    if (isset($_SESSION['db_server']))
+    if (isset($_SESSION['db_host']))
     {
         $dbType   = $_SESSION['db_type'];
-        $server   = $_SESSION['db_server'];
+        $host     = $_SESSION['db_host'];
         $port     = $_SESSION['db_port'];
         $database = $_SESSION['db_database'];
         $user     = $_SESSION['db_user'];
@@ -234,7 +234,7 @@ elseif ($getMode === 3)  // Enter database access information
     else
     {
         $dbType   = 'mysql';
-        $server   = '';
+        $host     = '';
         $port     = '';
         $database = '';
         $user     = '';
@@ -247,7 +247,7 @@ elseif ($getMode === 3)  // Enter database access information
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
                                'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
-    $form->addInput('db_server',   $gL10n->get('SYS_SERVER'),       $server,   array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_host',     $gL10n->get('SYS_HOST'),         $host,     array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_port',     $gL10n->get('SYS_PORT'),         $port,     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
     $form->addInput('db_database', $gL10n->get('SYS_DATABASE'),     $database, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('db_user',     $gL10n->get('SYS_USERNAME'),     $user,     array('maxLength' => 50, 'property' => FIELD_REQUIRED));
@@ -262,7 +262,7 @@ elseif ($getMode === 4)  // Creating organization
 {
     $gLogger->info('INSTALLATION: Creating organisation');
 
-    if (isset($_POST['db_server']))
+    if (isset($_POST['db_host']))
     {
         if ($_POST['db_prefix'] === '')
         {
@@ -299,7 +299,7 @@ elseif ($getMode === 4)  // Creating organization
 
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         $_SESSION['db_type']     = strStripTags($_POST['db_type']);
-        $_SESSION['db_server']   = strStripTags($_POST['db_server']);
+        $_SESSION['db_host']     = strStripTags($_POST['db_host']);
         $_SESSION['db_port']     = $dbPort;
         $_SESSION['db_database'] = strStripTags($_POST['db_database']);
         $_SESSION['db_user']     = strStripTags($_POST['db_user']);
@@ -307,7 +307,7 @@ elseif ($getMode === 4)  // Creating organization
         $_SESSION['prefix']      = strStripTags($_POST['db_prefix']);
 
         if ($_SESSION['db_type']     === ''
-        ||  $_SESSION['db_server']   === ''
+        ||  $_SESSION['db_host']     === ''
         ||  $_SESSION['db_database'] === ''
         ||  $_SESSION['db_user']     === '')
         {
@@ -326,7 +326,7 @@ elseif ($getMode === 4)  // Creating organization
             // check database connections
             try
             {
-                $db = new Database($_SESSION['db_type'], $_SESSION['db_server'], $_SESSION['db_port'], $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
+                $db = new Database($_SESSION['db_type'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
             }
             catch (AdmException $e)
             {
@@ -611,7 +611,7 @@ elseif ($getMode === 6)  // Creating configuration file
     $replaceArray = array(
         '%PREFIX%'       => $_SESSION['prefix'],
         '%DB_TYPE%'      => $_SESSION['db_type'],
-        '%SERVER%'       => $_SESSION['db_server'],
+        '%SERVER%'       => $_SESSION['db_host'],
         '\'%PORT%\''     => $port,
         '%DATABASE%'     => $_SESSION['db_database'],
         '%USER%'         => $_SESSION['db_user'],
@@ -688,7 +688,7 @@ elseif ($getMode === 8) // Start installation
     if (isset($_SESSION['prefix'])
     &&    ($g_tbl_praefix  !== $_SESSION['prefix']
         || $gDbType        !== $_SESSION['db_type']
-        || $g_adm_srv      !== $_SESSION['db_server']
+        || $g_adm_srv      !== $_SESSION['db_host']
         || $g_adm_port     !== $_SESSION['db_port']
         || $g_adm_db       !== $_SESSION['db_database']
         || $g_adm_usr      !== $_SESSION['db_user']
