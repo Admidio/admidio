@@ -708,7 +708,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, array $options = array())
     {
-        global $gL10n, $gPreferences;
+        global $gL10n, $gPreferences, $gLogger;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -746,12 +746,28 @@ class HtmlForm extends HtmlFormBasic
                 if ($optionsAll['maxLength'] > 0)
                 {
                     $attributes['maxlength'] = $optionsAll['maxLength'];
+
+                    if ($attributes['minlength'] > $attributes['maxlength'])
+                    {
+                        $gLogger->warning(
+                            'Attribute "minlength" is greater than "maxlength"!',
+                            array('minlength' => $attributes['maxlength'], 'maxlength' => $attributes['maxlength'])
+                        );
+                    }
                 }
                 break;
             case 'number':
                 $attributes['min'] = $optionsAll['minNumber'];
                 $attributes['max'] = $optionsAll['maxNumber'];
                 $attributes['step'] = $optionsAll['step'];
+
+                if ($attributes['min'] > $attributes['max'])
+                {
+                    $gLogger->warning(
+                        'Attribute "min" is greater than "max"!',
+                        array('min' => $attributes['min'], 'max' => $attributes['max'])
+                    );
+                }
                 break;
         }
 
