@@ -600,6 +600,13 @@ elseif ($getMode === 6)  // Creating configuration file
             // => EXIT
         }
 
+        // check if password is strong enough
+        $userData = array(
+            $_SESSION['user_last_name'],
+            $_SESSION['user_first_name'],
+            $_SESSION['user_email'],
+            $_SESSION['user_login']
+        );
         // Admin Password should have a minimum strength of 1
         if (PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < 1)
         {
@@ -623,14 +630,6 @@ elseif ($getMode === 6)  // Creating configuration file
             );
             // => EXIT
         }
-
-        // check if password is strong enough
-        $userData = array(
-            $_SESSION['user_last_name'],
-            $_SESSION['user_first_name'],
-            $_SESSION['user_email'],
-            $_SESSION['user_login']
-        );
     }
 
     // if config file exists than don't create a new one
