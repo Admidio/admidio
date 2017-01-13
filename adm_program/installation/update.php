@@ -71,7 +71,7 @@ catch (AdmException $e)
 {
     showNotice(
         $gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()),
-        'installation.php?mode=3',
+        'installation.php?step=connect_database',
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );

@@ -176,7 +176,7 @@ switch ($step)
 
         // create form with selectbox where user can select a language
         // the possible languages will be read from a xml file
-        $form = new HtmlFormInstallation('installation-form', 'installation.php?welcome');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?step=welcome');
         $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
         $form->addSelectBoxFromXml(
             'system_language', $gL10n->get('SYS_LANGUAGE'), ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml',
@@ -197,7 +197,7 @@ switch ($step)
         {
             showNotice(
                 $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
-                'installation.php?choose_language',
+                'installation.php?step=choose_language',
                 $gL10n->get('SYS_BACK'),
                 'layout/back.png'
             );
@@ -235,9 +235,9 @@ switch ($step)
         }
 
         // create a page with the notice that the installation must be configured on the next pages
-        $form = new HtmlFormInstallation('installation-form', 'installation.php?connect_database');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?step=connect_database');
         $form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
-        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?choose_language'));
+        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=choose_language'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
         echo $form->show();
 
@@ -268,7 +268,7 @@ switch ($step)
         }
 
         // create a page to enter all necessary database connection information
-        $form = new HtmlFormInstallation('installation-form', 'installation.php?create_organization');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?step=create_organization');
         $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
         $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
         $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
@@ -280,7 +280,7 @@ switch ($step)
         $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'),     null,      array('type' => 'password'));
         $form->addInput('db_prefix',   $gL10n->get('INS_TABLE_PREFIX'), $prefix,   array('pattern' => trim($sqlIdentifiersRegex, '/'), 'maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
         $form->closeGroupBox();
-        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?welcome'));
+        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=welcome'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
         echo $form->show();
 
@@ -309,7 +309,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_DATABASE_CONNECTION_NOT_COMPLETELY'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -321,7 +321,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_DATABASE_TYPE_INVALID'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -334,7 +334,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_HOST_INVALID'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -354,7 +354,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_DATABASE_PORT_INVALID'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -366,7 +366,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_DATABASE_NAME_INVALID'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -378,7 +378,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_DATABASE_USER_INVALID'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -397,7 +397,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_TABLE_PREFIX_INVALID'),
-                    'installation.php?connect_database',
+                    'installation.php?step=connect_database',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -416,7 +416,7 @@ switch ($step)
                 {
                     showNotice(
                         $gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()),
-                        'installation.php?connect_database',
+                        'installation.php?step=connect_database',
                         $gL10n->get('SYS_BACK'),
                         'layout/back.png'
                     );
@@ -427,7 +427,7 @@ switch ($step)
                 $message = checkDatabaseVersion($db);
                 if ($message !== '')
                 {
-                    showNotice($message, 'installation.php?connect_database', $gL10n->get('SYS_BACK'), 'layout/back.png');
+                    showNotice($message, 'installation.php?step=connect_database', $gL10n->get('SYS_BACK'), 'layout/back.png');
                     // => EXIT
                 }
 
@@ -450,7 +450,7 @@ switch ($step)
         }
 
         // create a page to enter the organization names
-        $form = new HtmlFormInstallation('installation-form', 'installation.php?create_administrator');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?step=create_administrator');
 
         // initialize form data
         $shortnameProperty = FIELD_REQUIRED;
@@ -488,7 +488,7 @@ switch ($step)
         $form->addInput('orga_email',        $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
         $form->addSelectBox('orga_timezone', $gL10n->get('ORG_TIMEZONE'),            $timezones,     array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
         $form->closeGroupBox();
-        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?connect_database'));
+        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=connect_database'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
         echo $form->show();
 
@@ -512,7 +512,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'),
-                    'installation.php?create_organization',
+                    'installation.php?step=create_organization',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -539,7 +539,7 @@ switch ($step)
         $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
         // create a page to enter all necessary data to create a administrator user
-        $form = new HtmlFormInstallation('installation-form', 'installation.php?create_config');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?step=create_config');
         $form->addHeader('<script type="text/javascript" src="../libs/zxcvbn/dist/zxcvbn.js"></script>');
         $form->addHeader('
             <script type="text/javascript">
@@ -574,7 +574,7 @@ switch ($step)
             array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
         );
         $form->closeGroupBox();
-        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?create_organization'));
+        $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=create_organization'));
         $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
         echo $form->show();
 
@@ -602,7 +602,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'),
-                    'installation.php?create_administrator',
+                    'installation.php?step=create_administrator',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -614,7 +614,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')),
-                    'installation.php?create_administrator',
+                    'installation.php?step=create_administrator',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -628,7 +628,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')),
-                    'installation.php?create_administrator',
+                    'installation.php?step=create_administrator',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -640,7 +640,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('PRO_PASSWORD_LENGTH'),
-                    'installation.php?create_administrator',
+                    'installation.php?step=create_administrator',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -659,7 +659,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
-                    'installation.php?create_administrator',
+                    'installation.php?step=create_administrator',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -671,7 +671,7 @@ switch ($step)
             {
                 showNotice(
                     $gL10n->get('INS_PASSWORDS_NOT_EQUAL'),
-                    'installation.php?create_administrator',
+                    'installation.php?step=create_administrator',
                     $gL10n->get('SYS_BACK'),
                     'layout/back.png'
                 );
@@ -682,7 +682,7 @@ switch ($step)
         // if config file exists than don't create a new one
         if (is_file($pathConfigFile))
         {
-            admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?start_installation');
+            admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?step=start_installation');
             // => EXIT
         }
 
@@ -725,7 +725,7 @@ switch ($step)
             fclose($configFileHandle);
 
             // start installation
-            $form = new HtmlFormInstallation('installation-form', 'installation.php?start_installation');
+            $form = new HtmlFormInstallation('installation-form', 'installation.php?step=start_installation');
             $form->setFormDescription($gL10n->get('INS_DATA_FULLY_ENTERED'), $gL10n->get('INS_INSTALL_ADMIDIO'));
             $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
             echo $form->show();
@@ -733,10 +733,10 @@ switch ($step)
         else
         {
             // if user doesn't has write access then create a page with a download link for the config file
-            $form = new HtmlFormInstallation('installation-form', 'installation.php?start_installation');
+            $form = new HtmlFormInstallation('installation-form', 'installation.php?step=start_installation');
             $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', ADMIDIO_PATH . FOLDER_DATA, 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-            $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?create_administrator'));
-            $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?download_config'));
+            $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=create_administrator'));
+            $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?step=download_config'));
             $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
             echo $form->show();
         }
@@ -767,7 +767,7 @@ switch ($step)
         {
             showNotice(
                 $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'),
-                'installation.php?create_config',
+                'installation.php?step=create_config',
                 $gL10n->get('SYS_BACK'),
                 'layout/back.png'
             );
@@ -792,7 +792,7 @@ switch ($step)
         {
             showNotice(
                 $gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'),
-                'installation.php?create_config',
+                'installation.php?step=create_config',
                 $gL10n->get('SYS_BACK'),
                 'layout/back.png'
             );
@@ -804,7 +804,7 @@ switch ($step)
 
         if (is_string($sqlQueryResult))
         {
-            showNotice($sqlQueryResult, 'installation.php?create_config', $gL10n->get('SYS_BACK'), 'layout/back.png');
+            showNotice($sqlQueryResult, 'installation.php?step=create_config', $gL10n->get('SYS_BACK'), 'layout/back.png');
             // => EXIT
         }
 
