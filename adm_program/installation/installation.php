@@ -267,61 +267,102 @@ elseif ($getMode === 4)  // Creating organization
 
     if (isset($_POST['db_host']))
     {
-        if ($_POST['db_prefix'] === '')
-        {
-            $_POST['db_prefix'] = 'adm';
-        }
-        else
-        {
-            // wenn letztes Zeichen ein _ dann abschneiden
-            if (strrpos($_POST['db_prefix'], '_')+1 === strlen($_POST['db_prefix']))
-            {
-                $_POST['db_prefix'] = substr($_POST['db_prefix'], 0, -1);
-            }
-
-            // nur gueltige Zeichen zulassen
-            $anz = strspn($_POST['db_prefix'], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_');
-
-            if ($anz !== strlen($_POST['db_prefix']))
-            {
-                showNotice(
-                    $gL10n->get('INS_TABLE_PREFIX_INVALID'),
-                    'installation.php?mode=3',
-                    $gL10n->get('SYS_BACK'),
-                    'layout/back.png'
-                );
-                // => EXIT
-            }
-        }
-
-        $dbPort = null;
-        if (strStripTags($_POST['db_port']))
-        {
-            $dbPort = (int) strStripTags($_POST['db_port']);
-        }
-
-        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-        $_SESSION['db_type']     = strStripTags($_POST['db_type']);
-        $_SESSION['db_host']     = strStripTags($_POST['db_host']);
-        $_SESSION['db_port']     = $dbPort;
-        $_SESSION['db_database'] = strStripTags($_POST['db_database']);
-        $_SESSION['db_user']     = strStripTags($_POST['db_user']);
-        $_SESSION['db_password'] = $_POST['db_password'];
-        $_SESSION['prefix']      = strStripTags($_POST['db_prefix']);
-
-        if ($_SESSION['db_type']     === ''
-        ||  $_SESSION['db_host']     === ''
-        ||  $_SESSION['db_database'] === ''
-        ||  $_SESSION['db_user']     === '')
+        // Check DB-type
+        if (!in_array($_POST['db_type'], array('mysql', 'pgsql'), true))
         {
             showNotice(
-                $gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'),
+                $gL10n->get('INS_DATABASE_TYPE_INVALID'),
                 'installation.php?mode=3',
                 $gL10n->get('SYS_BACK'),
                 'layout/back.png'
             );
             // => EXIT
         }
+
+        // Check host
+        // TODO: unix_server is currently not supported
+        if ($_POST['db_host'] === '' || !(preg_match($hostnameRegex, $_POST['db_host']) === 1 || filter_var($_POST['db_host'], FILTER_VALIDATE_IP) !== false))
+        {
+            showNotice(
+                $gL10n->get('INS_HOST_INVALID'),
+                'installation.php?mode=3',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
+        // Check port
+        if ($_POST['db_port'] === '' || $_POST['db_port'] === null)
+        {
+            $dbPort = null;
+        }
+        elseif (is_numeric($_POST['db_port']) && (int) $_POST['db_port'] > 0 && (int) $_POST['db_port'] <= 65535)
+        {
+            $dbPort = (int) $_POST['db_port'];
+        }
+        else
+        {
+            showNotice(
+                $gL10n->get('INS_DATABASE_PORT_INVALID'),
+                'installation.php?mode=3',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
+        // Check database
+        if ($_POST['db_database'] === '' || strlen($_POST['db_database']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_POST['db_database']) !== 1)
+        {
+            showNotice(
+                $gL10n->get('INS_DATABASE_NAME_INVALID'),
+                'installation.php?mode=3',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
+        // Check user
+        if ($_POST['db_user'] === '' || strlen($_POST['db_user']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_POST['db_user']) !== 1)
+        {
+            showNotice(
+                $gL10n->get('INS_DATABASE_USER_INVALID'),
+                'installation.php?mode=3',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
+        // Check password
+        $zxcvbnScore = PasswordHashing::passwordStrength($_POST['db_password']);
+        if ($zxcvbnScore <= 3)
+        {
+            $gLogger->warning('Database password strength is weak! (zxcvbn lib)', array('score' => $zxcvbnScore));
+        }
+
+        // Check prefix
+        if ($_POST['db_prefix'] === '' || strlen($_POST['db_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_POST['db_prefix']) !== 1)
+        {
+            showNotice(
+                $gL10n->get('INS_TABLE_PREFIX_INVALID'),
+                'installation.php?mode=3',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
+        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
+        $_SESSION['db_type']     = $_POST['db_type'];
+        $_SESSION['db_host']     = $_POST['db_host'];
+        $_SESSION['db_port']     = $dbPort;
+        $_SESSION['db_database'] = $_POST['db_database'];
+        $_SESSION['db_user']     = $_POST['db_user'];
+        $_SESSION['db_password'] = $_POST['db_password'];
+        $_SESSION['prefix']      = $_POST['db_prefix'];
 
         // for security reasons only check database connection if no config file exists
         if (!is_file($pathConfigFile))
