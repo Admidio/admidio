@@ -443,10 +443,10 @@ elseif ($getMode === 4)  // Creating organization
 
     $form->setFormDescription($gL10n->get('ORG_NEW_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ORGANIZATION'));
-    $form->addInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small'));
-    $form->addInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addSelectBox('orga_timezone', $gL10n->get('ORG_TIMEZONE'), $timezones, array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
+    $form->addInput('orga_shortname',    $gL10n->get('SYS_NAME_ABBREVIATION'),   $orgaShortName, array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small'));
+    $form->addInput('orga_longname',     $gL10n->get('SYS_NAME'),                $orgaLongName,  array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('orga_email',        $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addSelectBox('orga_timezone', $gL10n->get('ORG_TIMEZONE'),            $timezones,     array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=3'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
@@ -519,15 +519,18 @@ elseif ($getMode === 5)  // Creating administrator
     ');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
-    $form->addInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('user_last_name',  $gL10n->get('SYS_LASTNAME'),  $userLastName,  array('maxLength' => 50, 'property' => FIELD_REQUIRED));
     $form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-    $form->addInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, array('maxLength' => 255, 'property' => FIELD_REQUIRED));
-    $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_REQUIRED));
+    $form->addInput('user_email',      $gL10n->get('SYS_EMAIL'),     $userEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+    $form->addInput('user_login',      $gL10n->get('SYS_USERNAME'),  $userLogin,     array('maxLength' => 35, 'property' => FIELD_REQUIRED));
     $form->addInput(
         'user_password', $gL10n->get('SYS_PASSWORD'), null,
         array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
     );
-    $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
+    $form->addInput(
+        'user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null,
+        array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+    );
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=4'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
