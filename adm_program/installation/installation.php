@@ -119,7 +119,7 @@ if (is_file($pathConfigFile))
     {
         showNotice(
             $gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()),
-            'installation.php?step=3',
+            'installation.php?step=connect_database',
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
         );
