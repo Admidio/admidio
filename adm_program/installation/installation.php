@@ -267,8 +267,32 @@ elseif ($getMode === 4)  // Creating organization
 
     if (isset($_POST['db_host']))
     {
+        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
+        $_SESSION['db_type']     = $_POST['db_type'];
+        $_SESSION['db_host']     = $_POST['db_host'];
+        $_SESSION['db_port']     = $_POST['db_port'];
+        $_SESSION['db_database'] = $_POST['db_database'];
+        $_SESSION['db_user']     = $_POST['db_user'];
+        $_SESSION['db_password'] = $_POST['db_password'];
+        $_SESSION['prefix']      = $_POST['db_prefix'];
+
+        if ($_SESSION['db_type']     === ''
+        ||  $_SESSION['db_host']     === ''
+        ||  $_SESSION['db_database'] === ''
+        ||  $_SESSION['db_user']     === ''
+        ||  $_SESSION['prefix']      === '')
+        {
+            showNotice(
+                $gL10n->get('INS_DATABASE_CONNECTION_NOT_COMPLETELY'),
+                'installation.php?mode=3',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
         // Check DB-type
-        if (!in_array($_POST['db_type'], array('mysql', 'pgsql'), true))
+        if (!in_array($_SESSION['db_type'], array('mysql', 'pgsql'), true))
         {
             showNotice(
                 $gL10n->get('INS_DATABASE_TYPE_INVALID'),
@@ -281,7 +305,7 @@ elseif ($getMode === 4)  // Creating organization
 
         // Check host
         // TODO: unix_server is currently not supported
-        if ($_POST['db_host'] === '' || !(preg_match($hostnameRegex, $_POST['db_host']) === 1 || filter_var($_POST['db_host'], FILTER_VALIDATE_IP) !== false))
+        if (!(preg_match($hostnameRegex, $_SESSION['db_host']) === 1 || filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) !== false))
         {
             showNotice(
                 $gL10n->get('INS_HOST_INVALID'),
@@ -293,13 +317,13 @@ elseif ($getMode === 4)  // Creating organization
         }
 
         // Check port
-        if ($_POST['db_port'] === '' || $_POST['db_port'] === null)
+        if ($_SESSION['db_port'] === '' || $_SESSION['db_port'] === null)
         {
-            $dbPort = null;
+            $_SESSION['db_port'] = null;
         }
-        elseif (is_numeric($_POST['db_port']) && (int) $_POST['db_port'] > 0 && (int) $_POST['db_port'] <= 65535)
+        elseif (is_numeric($_SESSION['db_port']) && (int) $_SESSION['db_port'] > 0 && (int) $_SESSION['db_port'] <= 65535)
         {
-            $dbPort = (int) $_POST['db_port'];
+            $_SESSION['db_port'] = (int) $_SESSION['db_port'];
         }
         else
         {
@@ -313,7 +337,7 @@ elseif ($getMode === 4)  // Creating organization
         }
 
         // Check database
-        if ($_POST['db_database'] === '' || strlen($_POST['db_database']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_POST['db_database']) !== 1)
+        if (strlen($_SESSION['db_database']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_SESSION['db_database']) !== 1)
         {
             showNotice(
                 $gL10n->get('INS_DATABASE_NAME_INVALID'),
@@ -325,7 +349,7 @@ elseif ($getMode === 4)  // Creating organization
         }
 
         // Check user
-        if ($_POST['db_user'] === '' || strlen($_POST['db_user']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_POST['db_user']) !== 1)
+        if (strlen($_SESSION['db_user']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_SESSION['db_user']) !== 1)
         {
             showNotice(
                 $gL10n->get('INS_DATABASE_USER_INVALID'),
@@ -337,14 +361,14 @@ elseif ($getMode === 4)  // Creating organization
         }
 
         // Check password
-        $zxcvbnScore = PasswordHashing::passwordStrength($_POST['db_password']);
+        $zxcvbnScore = PasswordHashing::passwordStrength($_SESSION['db_password']);
         if ($zxcvbnScore <= 3)
         {
             $gLogger->warning('Database password strength is weak! (zxcvbn lib)', array('score' => $zxcvbnScore));
         }
 
         // Check prefix
-        if ($_POST['db_prefix'] === '' || strlen($_POST['db_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_POST['db_prefix']) !== 1)
+        if (strlen($_SESSION['db_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['db_prefix']) !== 1)
         {
             showNotice(
                 $gL10n->get('INS_TABLE_PREFIX_INVALID'),
@@ -354,15 +378,6 @@ elseif ($getMode === 4)  // Creating organization
             );
             // => EXIT
         }
-
-        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-        $_SESSION['db_type']     = $_POST['db_type'];
-        $_SESSION['db_host']     = $_POST['db_host'];
-        $_SESSION['db_port']     = $dbPort;
-        $_SESSION['db_database'] = $_POST['db_database'];
-        $_SESSION['db_user']     = $_POST['db_user'];
-        $_SESSION['db_password'] = $_POST['db_password'];
-        $_SESSION['prefix']      = $_POST['db_prefix'];
 
         // for security reasons only check database connection if no config file exists
         if (!is_file($pathConfigFile))
