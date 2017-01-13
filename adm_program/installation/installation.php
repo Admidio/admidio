@@ -600,6 +600,18 @@ elseif ($getMode === 6)  // Creating configuration file
             // => EXIT
         }
 
+        // Admin Password should have a minimum strength of 1
+        if (PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < 1)
+        {
+            showNotice(
+                $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
+                'installation.php?mode=5',
+                $gL10n->get('SYS_BACK'),
+                'layout/back.png'
+            );
+            // => EXIT
+        }
+
         // password must be the same with password confirm
         if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm'])
         {
@@ -619,17 +631,6 @@ elseif ($getMode === 6)  // Creating configuration file
             $_SESSION['user_email'],
             $_SESSION['user_login']
         );
-        // Admin Password should have a minimum strength of 1
-        if (PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < 1)
-        {
-            showNotice(
-                $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
-                'installation.php?mode=5',
-                $gL10n->get('SYS_BACK'),
-                'layout/back.png'
-            );
-            // => EXIT
-        }
     }
 
     // if config file exists than don't create a new one
