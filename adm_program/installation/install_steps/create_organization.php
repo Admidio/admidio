@@ -53,7 +53,7 @@ if (isset($_POST['db_host']))
 
     // Check host
     // TODO: unix_server is currently not supported
-    if (!(preg_match($hostnameRegex, $_SESSION['db_host']) === 1 || filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) !== false))
+    if (preg_match($hostnameRegex, $_SESSION['db_host']) !== 1 && filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) === false)
     {
         showNotice(
             $gL10n->get('INS_HOST_INVALID'),
@@ -85,7 +85,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check database
-    if (strlen($_SESSION['db_database']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_SESSION['db_database']) !== 1)
+    if (strlen($_SESSION['db_database']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_database']) !== 1)
     {
         showNotice(
             $gL10n->get('INS_DATABASE_NAME_INVALID'),
@@ -97,7 +97,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check user
-    if (strlen($_SESSION['db_user']) > 64 || preg_match('/' . $sqlIdentifiersRegex . '/', $_SESSION['db_user']) !== 1)
+    if (strlen($_SESSION['db_user']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_user']) !== 1)
     {
         showNotice(
             $gL10n->get('INS_DATABASE_USER_INVALID'),

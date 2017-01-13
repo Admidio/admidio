@@ -25,7 +25,7 @@ if (isset($_SESSION['db_host']))
 }
 else
 {
-    $dbType   = 'mysql';
+    $dbType   = '';
     $host     = '';
     $port     = '';
     $database = '';
