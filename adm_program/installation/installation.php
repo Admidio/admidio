@@ -88,6 +88,9 @@ $language = $gL10n->getLanguage();
 
 $pathConfigFile = ADMIDIO_PATH . FOLDER_DATA . '/config.php';
 
+$hostnameRegex = '/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/';
+$sqlIdentifiersRegex = '/^[a-zA-Z]([a-zA-Z0-9_]*[a-zA-Z0-9])?$/';
+
 // if config file exists then connect to database
 if (is_file($pathConfigFile))
 {
@@ -247,12 +250,12 @@ elseif ($getMode === 3)  // Enter database access information
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
                                'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType));
-    $form->addInput('db_host',     $gL10n->get('SYS_HOST'),         $host,     array('maxLength' => 64, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_host',     $gL10n->get('SYS_HOST'),         $host,     array('pattern' => trim($hostnameRegex, '/'), 'maxLength' => 64, 'property' => FIELD_REQUIRED));
     $form->addInput('db_port',     $gL10n->get('SYS_PORT'),         $port,     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
-    $form->addInput('db_database', $gL10n->get('SYS_DATABASE'),     $database, array('maxLength' => 64, 'property' => FIELD_REQUIRED));
-    $form->addInput('db_user',     $gL10n->get('SYS_USERNAME'),     $user,     array('maxLength' => 64, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_database', $gL10n->get('SYS_DATABASE'),     $database, array('pattern' => trim($sqlIdentifiersRegex, '/'), 'maxLength' => 64, 'property' => FIELD_REQUIRED));
+    $form->addInput('db_user',     $gL10n->get('SYS_USERNAME'),     $user,     array('pattern' => trim($sqlIdentifiersRegex, '/'), 'maxLength' => 64, 'property' => FIELD_REQUIRED));
     $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'),     null,      array('type' => 'password'));
-    $form->addInput('db_prefix',   $gL10n->get('INS_TABLE_PREFIX'), $prefix,   array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+    $form->addInput('db_prefix',   $gL10n->get('INS_TABLE_PREFIX'), $prefix,   array('pattern' => trim($sqlIdentifiersRegex, '/'), 'maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
     $form->closeGroupBox();
     $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?mode=2'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
