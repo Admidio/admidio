@@ -303,7 +303,7 @@ elseif ($getMode === 4)  // Creating organization
         $_SESSION['db_port']     = $dbPort;
         $_SESSION['db_database'] = strStripTags($_POST['db_database']);
         $_SESSION['db_user']     = strStripTags($_POST['db_user']);
-        $_SESSION['db_password'] = strStripTags($_POST['db_password']);
+        $_SESSION['db_password'] = $_POST['db_password'];
         $_SESSION['prefix']      = strStripTags($_POST['db_prefix']);
 
         if ($_SESSION['db_type']     === ''
