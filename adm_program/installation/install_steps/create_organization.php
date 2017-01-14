@@ -110,13 +110,13 @@ if (isset($_POST['db_host']))
 
     // Check password
     $zxcvbnScore = PasswordHashing::passwordStrength($_SESSION['db_password']);
-    if ($zxcvbnScore <= 3)
+    if ($zxcvbnScore <= 2)
     {
-        $gLogger->warning('Database password strength is weak! (zxcvbn lib)', array('score' => $zxcvbnScore));
+        $gLogger->warning('Database password is weak! (zxcvbn lib)', array('score' => $zxcvbnScore));
     }
 
     // Check prefix
-    if (strlen($_SESSION['db_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['db_prefix']) !== 1)
+    if (strlen($_SESSION['prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['prefix']) !== 1)
     {
         showNotice(
             $gL10n->get('INS_TABLE_PREFIX_INVALID'),
