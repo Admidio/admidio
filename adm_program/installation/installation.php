@@ -856,7 +856,8 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$userId.', \''. DATETIME_NOW.'\')
                     , (14, 1, 1, 1, \'newreg\', \'/adm_program/modules/registration/registration.php\', \'/icons/new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\', 0)
                     , (15, 1, 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'/icons/user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
                     , (16, 1, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'/icons/roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
-                    , (17, 1, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'/icons/application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
+                    , (17, 1, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'/icons/application_view_tile.png\', \'SYS_MENU\', \'\', 0)
+                    , (18, 4, 1, 1, \'login\', \'/adm_plugins/login_form/login_form.php\', \'\', \'Login Form\', \'\', 0)';
     $db->query($sql);
 
     // Menu security
@@ -867,15 +868,8 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$userId.', \''. DATETIME_NOW.'\')
     // Menu security data
     $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
               VALUES (3, 1, 11, 1, \''. DATETIME_NOW.'\'),
-                     (4, 1, 11, 1, \''. DATETIME_NOW.'\'),
-                     (5, 1, 11, 1, \''. DATETIME_NOW.'\'),
                      (3, 1, 12, 1, \''. DATETIME_NOW.'\'),
-                     (4, 1, 12, 1, \''. DATETIME_NOW.'\'),
-                     (5, 1, 12, 1, \''. DATETIME_NOW.'\'),
-                     (3, 1, 17, 1, \''. DATETIME_NOW.'\'),
-                     (4, 1, 17, 1, \''. DATETIME_NOW.'\'),
-                     (5, 1, 17, 1, \''. DATETIME_NOW.'\')';
-                     error_log($sql);
+                     (3, 1, 17, 1, \''. DATETIME_NOW.'\')';
     $db->query($sql);
 
     disableSoundexSearchIfPgsql($db);

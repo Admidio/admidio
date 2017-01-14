@@ -139,6 +139,12 @@ while($menu_row = $menuStatement->fetch())
         $menuGroup = $menu->getValue('men_group');
     }
 
+    $naming = $menu->getValue('men_translate_name');
+    if($naming == '##' || $naming[0] == '#')
+    {
+        $naming = $menu->getValue('men_translate_name', 'database');
+    }
+
     $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu->getValue('men_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $headline).'" title="'.$gL10n->get('CAT_MOVE_UP', $headline).'" /></a>
                        <a class="admidio-icon-link" href="javascript:moveMenu(\'down\', '.$menu->getValue('men_id').')"><img
@@ -170,15 +176,9 @@ while($menu_row = $menuStatement->fetch())
     if($menu->getValue('men_standart') == 0)
     {
         $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_'.
-                                    $menu->getValue('men_id').'&amp;name='.urlencode($menu->getValue('men_modul_name')).'&amp;database_id='.$menu->getValue('men_id').'"><img
+                                    href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_men_'.
+                                    $menu->getValue('men_id').'&amp;name='.urlencode($naming).'&amp;database_id='.$menu->getValue('men_id').'"><img
                                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-    }
-
-    $naming = $menu->getValue('men_translate_name');
-    if($naming == '##' || $naming[0] == '#')
-    {
-        $naming = $menu->getValue('men_translate_name', 'database');
     }
 
     // create array with all column values

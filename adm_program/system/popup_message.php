@@ -119,6 +119,9 @@ switch ($getType)
     case 'ure':
         $url = ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?mode=2&ure_id='.$getDatabaseId;
         break;
+    case 'men':
+        $url = 'menu_function.php?mode=2&men_id='.$getDatabaseId;
+        break;
     default:
         $url = '';
         break;

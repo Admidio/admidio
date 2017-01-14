@@ -7,16 +7,12 @@
         </div><!-- closes "div.col-md-9" -->
         <div class="col-md-3">
             <div id="right-block" class="admidio-container">
-                <?php
-
-                include(SERVER_PATH . '/adm_plugins/login_form/login_form.php');
-
-                ?>
-                <div id="plugin_menu" class="admidio-plugin-content">
                     <?php
 
-                    // create html page object for adding the menu
+                    // create html page object
                     $page = new HtmlPage();
+
+                    // adding the special menu
                     $path_list = $page->showMenuByID(4);
                     foreach ($path_list as $path)
                     {
@@ -39,7 +35,6 @@
                     }
 
                     ?>
-                </div><!-- closes "div#plugin_menu" -->
             </div><!-- closes "div#right-block" -->
         </div><!-- closes "div.col-md-3" -->
     </div><!-- closes "div.row" -->
