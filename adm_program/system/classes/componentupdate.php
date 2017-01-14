@@ -395,7 +395,7 @@ class ComponentUpdate extends Component
 
         $gCurrentOrganization = $tempOrganization;
     }
-    
+
     /**
      * This method update the security settings for menus to standart values
      */
@@ -404,7 +404,7 @@ class ComponentUpdate extends Component
         global $g_tbl_praefix;
 
         // migrate adm_folder_roles to adm_roles_rights
-        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'men_display_right\' ';
+        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'men_display\' ';
         $menuRightsStatement = $this->db->query($sql);
         $menuRightId = $menuRightsStatement->fetchColumn();
 
@@ -412,53 +412,12 @@ class ComponentUpdate extends Component
                 SELECT '.$menuRightId.', 1, men_id
                   FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'mail\'';
         $this->db->query($sql);
-        
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'dbback\'';
-        $this->db->query($sql);
-        
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'orgprop\'';
-        $this->db->query($sql);
-        
-        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'men_display_index\' ';
-        $menuRightsStatement = $this->db->query($sql);
-        $menuRightId = $menuRightsStatement->fetchColumn();
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
                 SELECT '.$menuRightId.', 1, men_id
-                  FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'mail\'';
-        $this->db->query($sql);
-        
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
                   FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'dbback\'';
         $this->db->query($sql);
-        
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'orgprop\'';
-        $this->db->query($sql);
-        
-        /*$displayRight = new RolesRights($db, 'men_display_boot', 11);
-        $displayRight->addRoles(array(1));*/
-        
-        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'men_display_boot\' ';
-        $menuRightsStatement = $this->db->query($sql);
-        $menuRightId = $menuRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'mail\'';
-        $this->db->query($sql);
-        
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'dbback\'';
-        $this->db->query($sql);
-        
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
                 SELECT '.$menuRightId.', 1, men_id
                   FROM '.$g_tbl_praefix.'_menu where men_modul_name = \'orgprop\'';

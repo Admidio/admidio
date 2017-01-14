@@ -171,7 +171,7 @@ class HtmlPage
             while ($row = $statement->fetchObject())
             {
                 // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'men_display_right', $row->men_id);
+                $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
                 $rolesDisplayRight = $displayMenu->getRolesIds();
                 $men_display = true;
 
@@ -201,6 +201,7 @@ class HtmlPage
     public function showMainMenu($details = true)
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
+        $men_icon = '/icons/dummy.png';
 
         // display Menu
         $sql = 'SELECT *
@@ -234,11 +235,15 @@ class HtmlPage
                 if(strlen($row->men_translate_desc) > 2)
                 {
                     $desc = $gL10n->get($row->men_translate_desc);
+                    if($desc == '##' || $desc[0] == '#')
+                    {
+                        $desc = $row->men_translate_desc;
+                    }
                 }
 
                 // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'men_display_right', $row->men_id);
-                $rolesDisplayRight = $displayMenu->getRolesIds();
+                $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
+                $rolesDisplay = $displayMenu->getRolesIds();
 
                 if($row->men_need_enable == 1)
                 {
@@ -253,8 +258,17 @@ class HtmlPage
                 }
 
                 $men_url = $row->men_url;
-                $men_icon = $row->men_icon;
+
+                if(strlen($row->men_icon) > 2)
+                {
+                    $men_icon = $row->men_icon;
+                }
+
                 $men_translate_name = $gL10n->get($row->men_translate_name);
+                if($men_translate_name == '##' || $men_translate_name[0] == '#')
+                {
+                    $men_translate_name = $row->men_translate_name;
+                }
 
                 //special case because there are differnent links if you are logged in or out for mail
                 if($row->men_modul_name === 'mail' && $gValidLogin)
@@ -275,7 +289,7 @@ class HtmlPage
                     $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                 }
 
-                if(count($rolesDisplayRight) >= 1)
+                if(count($rolesDisplay) >= 1)
                 {
                     // check for rigth to show the menue
                     if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
@@ -344,10 +358,10 @@ class HtmlPage
     }
 
     /**
-     * Adds the default menu
+     * Adds the modal menu
      * @return void
      */
-    public function addDefaultMenu()
+    public function addModalMenu()
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
 
@@ -380,7 +394,7 @@ class HtmlPage
                 }
 
                 // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'men_display_boot', $row->men_id);
+                $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
                 $rolesDisplayRight = $displayMenu->getRolesIds();
 
                 if($row->men_need_enable == 1)
@@ -659,7 +673,7 @@ class HtmlPage
         if($this->showMenu)
         {
             // add modules and administration modules to the menu
-            $this->addDefaultMenu();
+            $this->addModalMenu();
             $htmlMenu = $this->menu->show();
         }
 

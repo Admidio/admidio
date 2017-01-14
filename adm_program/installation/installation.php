@@ -838,9 +838,9 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$userId.', \''. DATETIME_NOW.'\')
                  , ('.$categoryIdMasterInventory.', \'NUMBER\', \'ROOM_ID\',   \'SYS_ROOM\',     NULL, 1, 1, 1, 2, '.$userId.', \''. DATETIME_NOW.'\')
                  , ('.$categoryIdMasterInventory.', \'NUMBER\', \'PRICE\',     \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
     $db->query($sql);
-    
+
     // Menu entries for the standart installation
-    $sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_group, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable) 
+    $sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_group, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
                VALUES (1, 2, 1, 1, \'overview\', \'/adm_program/index.php\', \'/icons/home.png\', \'SYS_OVERVIEW\', \'\', 0)
                     , (2, 2, 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'/icons/download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1)
                     , (3, 2, 7, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'/icons/lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\', 0)
@@ -858,14 +858,12 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$userId.', \''. DATETIME_NOW.'\')
                     , (16, 1, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'/icons/roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
                     , (17, 1, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'/icons/application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
     $db->query($sql);
-    
+
     // Menu security
     $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
-              VALUES (\'men_display_right\', \''.$g_tbl_praefix.'_menu\'),
-                     (\'men_display_index\', \''.$g_tbl_praefix.'_menu\'),
-                     (\'men_display_boot\', \''.$g_tbl_praefix.'_menu\')';
+              VALUES (\'men_display\', \''.$g_tbl_praefix.'_menu\')';
     $db->query($sql);
-    
+
     // Menu security data
     $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
               VALUES (3, 1, 11, 1, \''. DATETIME_NOW.'\'),

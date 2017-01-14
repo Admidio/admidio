@@ -16,7 +16,7 @@
  ****************************************************************************/
 
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
- 
+
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
@@ -72,20 +72,17 @@ else
 
     $form->addInput('men_group', 'Menu Group',  'Special entry', array('property' => FIELD_DISABLED));
     $form->addInput('men_group', null, 4, array('type' => 'hidden'));
-    
-    $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+
+    $form->addInput('men_translate_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
     $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), 'plg_calendar', array('property' => FIELD_DISABLED));
     $form->addInput('men_modul_name', null, 'plg_calendar', array('type' => 'hidden'));
 
-    $form->addSelectBox('men_display_right', 'Display in right main menu '.$gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, 
+    $form->addSelectBox('men_display', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet,
                                        array('property'  => FIELD_REQUIRED, 'multiselect'  => true));
 
     $form->addInput('men_url', null, $plugin_folder, array('type' => 'hidden'));
     $form->addInput('men_url', $gL10n->get('ORG_URL'), $plugin_folder, array('property' => FIELD_DISABLED));
-
-    $form->addInput('men_display_index', null, $standart, array('type' => 'hidden'));
-    $form->addInput('men_display_boot', null, $standart, array('type' => 'hidden'));
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 

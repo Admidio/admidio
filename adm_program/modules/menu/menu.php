@@ -115,14 +115,14 @@ while($menu_row = $menuStatement->fetch())
 {
     $menu->clear();
     $menu->setArray($menu_row);
-    
+
     if($menuGroup != $menu->getValue('men_group'))
     {
         $block_id = 'admMenu_'.$menu->getValue('men_group');
 
         $menuOverview->addTableBody();
         $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-        
+
         if($menu->getValue('men_group') >= 4)
         {
             $group_head = 'Special (before or after rest)';
@@ -150,31 +150,31 @@ while($menu_row = $menuStatement->fetch())
     {
         $htmlEnabledMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
     }
-    
+
     $htmlStandartMenu = '&nbsp;';
     if($menu->getValue('men_standart') == 1)
     {
         $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
     }
-    
+
     $menuAdministration = '';
-    
+
     //don't allow change for special Menus
     if($special == false)
     {
         $menuAdministration .= '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu->getValue('men_id'). '"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     }
-    
+
     //don't allow delete for standart menus
     if($menu->getValue('men_standart') == 0)
     {
         $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_'.
-                                    $menu->getValue('men_id').'&amp;name='.urlencode($menu->getValue('men_name')).'&amp;database_id='.$menu->getValue('men_id').'"><img
+                                    $menu->getValue('men_id').'&amp;name='.urlencode($menu->getValue('men_modul_name')).'&amp;database_id='.$menu->getValue('men_id').'"><img
                                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
-    
+
     $naming = $menu->getValue('men_translate_name');
     if($naming == '##' || $naming[0] == '#')
     {

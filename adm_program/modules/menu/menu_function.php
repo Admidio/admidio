@@ -45,11 +45,11 @@ if($getMenId > 0)
 
 // create menu or update it
 if($getMode === 1)
-{   
+{
     $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_translate_desc',  'string', array('default' => ''));
     $postTranslateName = admFuncVariableIsValid($_POST, 'men_translate_name',  'string', array('default' => ''));
     $postIcon = admFuncVariableIsValid($_POST, 'men_icon',  'string', array('default' => ''));
-    
+
     try
     {
         $menu->setValue('men_group', $_POST['men_group']);
@@ -58,7 +58,7 @@ if($getMode === 1)
         $menu->setValue('men_icon', $postIcon);
         $menu->setValue('men_translate_name', $postTranslateName);
         $menu->setValue('men_translate_desc', $postTranslateDesc);
-        
+
         // check all values from Checkboxes, because if there is no value set, we need
         // to set it on 0 as default
         if(!isset($_POST['men_need_enable']) || $_POST['men_need_enable'] != 1)
@@ -69,7 +69,7 @@ if($getMode === 1)
         {
             $menu->setValue('men_need_enable', 1);
         }
-        
+
         $getMenId = $menu->getValue('men_id');
 
         // save Data to Table
@@ -79,48 +79,20 @@ if($getMode === 1)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-        
-        // Read current roles rights of the menu
-        $displayRight = new RolesRights($gDb, 'men_display_right', $getMenId);
-        $rolesDisplayRight = $displayRight->getRolesIds();
 
-        if(!is_array($_POST['men_display_right']))
+        // Read current roles of the menu
+        $displayMenu = new RolesRights($gDb, 'men_display', $getMenId);
+        $rolesDisplayRight = $displayMenu->getRolesIds();
+
+        if(!is_array($_POST['men_display']))
         {
             // remove all entries, so it is allowed without login
-            $displayRight->removeRoles($rolesDisplayRight);
+            $displayMenu->removeRoles($rolesDisplayRight);
         }
         else
         {
             // add new or update roles
-            $displayRight->addRoles($_POST['men_display_right']);
-        }
-
-        $displayIndex = new RolesRights($gDb, 'men_display_index', $getMenId);
-        $rolesDisplayIndex = $displayIndex->getRolesIds();
-
-        if(!is_array($_POST['men_display_index']))
-        {
-            // remove all entries, so it is allowed without login
-            $displayIndex->removeRoles($rolesDisplayIndex);
-        }
-        else
-        {
-            // add new or update roles
-            $displayIndex->addRoles($_POST['men_display_index']);
-        }
-
-        $displayBoot = new RolesRights($gDb, 'men_display_boot', $getMenId);
-        $rolesDisplayBoot = $displayBoot->getRolesIds();
-
-        if(!is_array($_POST['men_display_boot']))
-        {
-            // remove all entries, so it is allowed without login
-            $displayBoot->removeRoles($rolesDisplayIndex);
-        }
-        else
-        {
-            // add new or update roles
-            $displayBoot->addRoles($_POST['men_display_boot']);
+            $displayMenu->addRoles($_POST['men_display']);
         }
 
         if($gNavigation->count() > 1)
@@ -131,12 +103,12 @@ if($getMode === 1)
         {
             $gNavigation->addUrl($gHomepage, 'Home');
         }
-        
+
         unset($_SESSION['menu_request']);
 
         header('Location: '. $gNavigation->getUrl());
         exit();
-        
+
     }
     catch(AdmException $e)
     {
