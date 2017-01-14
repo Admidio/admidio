@@ -35,7 +35,7 @@ $g_root_path = 'https://www.your-website.de/admidio';
 
 // If you use a separate proxy for communications security with SSL than you must
 // enter the proxy address here. Admidio will use it to generate the full URL.
-// Example: 'https://MyProxy.com'
+// Example: 'MyProxy.com'
 $gSecureProxy = '';
 
 // Short description of the organization that is running Admidio
