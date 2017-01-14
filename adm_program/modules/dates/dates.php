@@ -510,7 +510,7 @@ else
             {
                 if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                 {
-                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id').'&amp;lst_id='.$gPreferences['dates_default_list_configuration'];
+                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id');
 
                     if ($getView === 'detail')
                     {
