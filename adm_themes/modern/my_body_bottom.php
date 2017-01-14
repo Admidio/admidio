@@ -48,5 +48,5 @@
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              style="border: 0; vertical-align: bottom;" />
     </a><br />
-    <span style="font-size: 9pt; padding-left: 8px;">2004 - 2017&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
+    <span style="font-size: 9pt; padding-left: 8px;">&copy; 2004 - 2017&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>

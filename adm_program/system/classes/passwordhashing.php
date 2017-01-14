@@ -150,7 +150,7 @@ class PasswordHashing
      * Generate a cryptographically strong random password
      * @param int    $length  The length of the generated password (default = 16)
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
-     * @throws AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS, SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
+     * @throws AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS
      * @return string Returns a cryptographically strong random password string
      * @link https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
@@ -188,7 +188,6 @@ class PasswordHashing
      * Generate a cryptographically strong random integer
      * @param int $min The min of the range (inclusive)
      * @param int $max The max of the range (inclusive)
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_FAIL
      * @return int Returns a cryptographically strong random integer
      */
     public static function genRandomInt($min, $max)
@@ -199,13 +198,13 @@ class PasswordHashing
         }
         catch (Error $e)
         {
-            // An unexpected error has occurred
-            throw new AdmException('SYS_GEN_RANDOM_ERROR');
+            // as a fallback we should use the rand method
+            $int = rand($min, $max);
         }
         catch (Exception $e)
         {
-            // If you get this message, the CSPRNG failed hard.
-            throw new AdmException('SYS_GEN_RANDOM_FAIL');
+            // as a fallback we should use the rand method
+            $int = rand($min, $max);
         }
 
         return $int;
