@@ -752,10 +752,10 @@ foreach ($membersList as $member)
             {
                 // Get User Information
                 $user = new User($gDb, $gProfileFields, $content);
-                
+
                 $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
             }
-            
+
             // format value for csv export
             if ($getMode === 'csv')
             {

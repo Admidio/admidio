@@ -263,7 +263,7 @@ class Organization extends TableAccess
         $formerList->addColumn(4, 'mem_begin');
         $formerList->addColumn(5, 'mem_end');
         $formerList->save();
-        
+
         $particpientList = new ListConfiguration($this->db);
         $particpientList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
         $particpientList->setValue('lst_org_id', $orgId);
@@ -274,7 +274,7 @@ class Organization extends TableAccess
         $particpientList->addColumn(4, 'mem_comment');
         $particpientList->addColumn(5, 'mem_count_guests');
         $particpientList->save();
-        
+
         // set participient list to default configuration in date module settings
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$particpientList->getValue('lst_id').'\'
                  WHERE prf_org_id = '.$orgId.'
