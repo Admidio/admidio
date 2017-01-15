@@ -39,6 +39,7 @@
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
     <string name="DAT_ATTEND_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
+    <string name="DAT_ATTEND_POSSIBLY">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
     <string name="DAT_CALENDAR">Kalender</string>
     <string name="DAT_CANCEL">Absagen</string>
     <string name="DAT_CANCEL_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
@@ -46,6 +47,8 @@
     <string name="DAT_DATE">Termin</string>
     <string name="DAT_DATES">Termine</string>
     <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
+    <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
+    <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
     <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
     <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
@@ -59,6 +62,7 @@
     <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: #VAR1#</string>
     <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
     <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</string>
+    <string name="DAT_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Teilnehmerlisten in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
     <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
     <string name="DAT_ICAL_DAYS_FUTURE">Anzahl iCal Tage Zukunft</string>
@@ -93,6 +97,9 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
+    <string name="DAT_USER_ATTEND">Ich nehme teil</string>
+    <string name="DAT_USER_ATTEND_POSSIBLY">Unter Vorbehalt</string>
+    <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
@@ -361,7 +368,7 @@
     <string name="LST_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
     <string name="LST_CREATE_OWN_LIST">Eigene Liste erstellen</string>
     <string name="LST_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
-    <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden in mit dieser Konfiguration angezeigt.</string>
+    <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
     <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
     <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
@@ -404,6 +411,8 @@
     <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
     <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße gefüllt haben</string>
     <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
+    <string name="LST_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
+    <string name="LST_PARTICIPATION_STATUS">Teilnehmerstatus</string>
     <string name="LST_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
     <string name="LST_PRESET_CONFIGURATION_DESC">Als Administrator kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
     <string name="LST_PRINT_PREVIEW">Druckvorschau</string>
@@ -427,6 +436,7 @@
     <string name="LST_SEARCH_TELEFON_DESC">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</string>
     <string name="LST_SEARCH_YES_NO_FIELD">Ja/Nein Feld</string>
     <string name="LST_SEARCH_YES_NO_FIELD_DESC">Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</string>
+    <string name="LST_SEAT_AMOUNT">Zusätzliche Plätze</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
     <string name="LST_SHOW_LIST">Liste anzeigen</string>
@@ -434,6 +444,7 @@
     <string name="LST_YOUR_CONFIGURATION">Deine Konfigurationen</string>
     <string name="LST_YOUR_LAST_CONFIGURATION">Deine letzten Konfigurationen</string>
     <string name="LST_YOUR_LISTS">Deine Listen</string>
+    <string name="LST_USER_CHANGED">Geändert von</string>
     <string name="LST_USER_PHOTO">Benutzerfoto</string>
     <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
     <string name="LST_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
@@ -695,7 +706,7 @@
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
-    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string> 
     <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>

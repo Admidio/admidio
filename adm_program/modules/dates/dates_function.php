@@ -16,6 +16,7 @@
  *          4 - vom Termin abmelden
  *          5 - Termin aendern
  *          6 - Termin im iCal-Format exportieren
+ *          7 - am Termin unter Vorbehalt anmelden
  * rol_id : vorselektierte Rolle der Rollenauswahlbox
  * copy   : true - The event of the dat_id will be copied and the base for this new event
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
@@ -497,7 +498,7 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -510,6 +511,15 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    // => EXIT
+}
+elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
+{
+    $member = new TableMembers($gDb);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
+
+    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->show($gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
     // => EXIT
 }
 elseif($getMode === 6)  // Termin im iCal-Format exportieren

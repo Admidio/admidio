@@ -232,6 +232,11 @@ $javascriptCode = '
 $i = 1;
 $oldCategoryNameIntern = '';
 $posEndOfMasterData = 0;
+$arrParticipientsInformation = array('mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+                                             'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+                                             'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+                                             'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+                                             'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT'));
 
 foreach($gProfileFields->mProfileFields as $field)
 {
@@ -277,50 +282,65 @@ foreach($gProfileFields->mProfileFields as $field)
     }
 }
 
-// Add loginname and photo at the end of category master data
-// add new category with start and end date of role membership
-if($posEndOfMasterData === 0)
-{
-    $posEndOfMasterData = $i;
-    $i += 2;
-}
-$javascriptCode .= '
-        userFields[' . $posEndOfMasterData . '] = {
-            "cat_id": userFields[1]["cat_id"],
-            "cat_name": userFields[1]["cat_name"],
-            "usf_id": "usr_login_name",
-            "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
-            "usf_name_intern": "'.$gL10n->get('SYS_USERNAME').'"
-        };
-
-        userFields[' . ($posEndOfMasterData + 1) . '] = {
-            "cat_id": userFields[1]["cat_id"],
-            "cat_name": userFields[1]["cat_name"],
-            "usf_id": "usr_photo",
-            "usf_name": "'.$gL10n->get('PHO_PHOTO').'",
-            "usf_name_intern": "'.$gL10n->get('PHO_PHOTO').'"
-        };
-
-        userFields[' . $i . '] = {
-            "cat_id": -1,
-            "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
-            "usf_id": "mem_begin",
-            "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_START').'",
-            "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
-        };';
-
-++$i;
-$javascriptCode .= '
-        userFields[' . $i . '] = {
-            "cat_id": -1,
-            "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
-            "usf_id": "mem_end",
-            "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
-            "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
-        };
-
-        return userFields;
+    // Add loginname and photo at the end of category master data
+    // add new category with start and end date of role membership
+    if($posEndOfMasterData === 0)
+    {
+        $posEndOfMasterData = $i;
+        $i += 2;
     }
+    $javascriptCode .= '
+            userFields[' . $posEndOfMasterData . '] = {
+                "cat_id": userFields[1]["cat_id"],
+                "cat_name": userFields[1]["cat_name"],
+                "usf_id": "usr_login_name",
+                "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
+                "usf_name_intern": "'.$gL10n->get('SYS_USERNAME').'"
+            };
+    
+            userFields[' . ($posEndOfMasterData + 1) . '] = {
+                "cat_id": userFields[1]["cat_id"],
+                "cat_name": userFields[1]["cat_name"],
+                "usf_id": "usr_photo",
+                "usf_name": "'.$gL10n->get('PHO_PHOTO').'",
+                "usf_name_intern": "'.$gL10n->get('PHO_PHOTO').'"
+            };
+    
+            userFields[' . $i . '] = {
+                "cat_id": -1,
+                "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+                "usf_id": "mem_begin",
+                "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_START').'",
+                "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
+            };';
+    
+    ++$i;
+    $javascriptCode .= '
+            userFields[' . $i . '] = {
+                "cat_id": -1,
+                "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
+                "usf_id": "mem_end",
+                "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
+                "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
+            };';
+    
+    // add new category with participient information of events
+    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    {
+        ++$i;
+        $javascriptCode .= '
+                userFields['. $i . '] = {
+                    "cat_id"   : -1,
+                    "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
+                    "usf_id"   : "'.$memberStatus.'",
+                    "usf_name" : "'.$ColumnName.'",
+                    "usf_name_intern" : "'.$ColumnName.'",
+                };';
+    }
+
+    $javascriptCode .= '
+        return userFields;
+}
 
     function createColumnsArray()
     {
