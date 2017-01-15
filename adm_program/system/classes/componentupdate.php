@@ -275,7 +275,7 @@ class ComponentUpdate extends Component
     /**
      * This method adds a new global list configuration for Participients of Events.
      */
-    public function updateStepAddDefaultParticpientList()
+    public function updateStepAddDefaultParticipantList()
     {
         global $gL10n;
 

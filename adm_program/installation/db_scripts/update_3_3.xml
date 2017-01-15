@@ -4,7 +4,7 @@
     <step id="20">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'SYS_ADDRESS'</step>
     <step id="30">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'Adresse'</step>
     <step id="40">UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_STREET' WHERE usf_name_intern = 'STREET' AND usf_name = 'Address'</step>
-    <step id="50">ComponentUpdate::updateStepAddDefaultParticpientList</step>
-    
+    <step id="50">ComponentUpdate::updateStepAddDefaultParticipantList</step>
+
     <step>stop</step>
 </update>
