@@ -92,7 +92,7 @@ class Organization extends TableAccess
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name <> \''.$gL10n->get('SYS_SYSTEM').'\'';
+                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 

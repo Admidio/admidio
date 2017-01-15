@@ -140,7 +140,7 @@ class TableMembers extends TableAccess
             $this->setValue('mem_end', DATE_MAX);
 
             // User hat Rollenmitgliedschaft bestätigt bzw. angepasst
-            if ($approvalState > 0 && is_int($approvalState))
+            if ($approvalState > 0)
             {
                 $this->setValue('mem_approved', $approvalState);
             }
