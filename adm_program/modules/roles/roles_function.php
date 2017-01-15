@@ -113,7 +113,7 @@ elseif($getMode === 2)
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_name   LIKE \''. $_POST['rol_name']. '\'
+                 WHERE rol_name   = \''. $_POST['rol_name']. '\'
                    AND rol_cat_id = '. $_POST['rol_cat_id']. '
                    AND rol_id    <> '. $getRoleId. '
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'

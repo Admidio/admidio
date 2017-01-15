@@ -302,7 +302,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     $structurelines[] = $structureline;
                 }
 
-                $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
+                $SQLquery  = 'SHOW TABLE STATUS = "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
                 $tablestatusStatement = $gDb->query($SQLquery);
                 if (!($TableStatusRow = $tablestatusStatement->fetch()))
                 {

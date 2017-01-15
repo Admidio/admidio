@@ -232,7 +232,7 @@ class ComponentUpdate extends Component
                 // save current version to all modules
                 $sql = 'UPDATE '.TBL_COMPONENTS.' SET com_version = \''.ADMIDIO_VERSION.'\'
                                                     , com_beta    = \''.ADMIDIO_VERSION_BETA.'\'
-                         WHERE com_type LIKE \'MODULE\' ';
+                         WHERE com_type = \'MODULE\' ';
                 $this->db->query($sql);
             }
 
@@ -251,7 +251,7 @@ class ComponentUpdate extends Component
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
@@ -282,7 +282,7 @@ class ComponentUpdate extends Component
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
@@ -299,7 +299,7 @@ class ComponentUpdate extends Component
             // Add list columns
             $sql = 'SELECT lst_id
                       FROM '.TBL_LISTS.'
-                     WHERE lst_name LIKE \''.$gL10n->get('SYS_PARTICIPANTS').'\'
+                     WHERE lst_name = \''.$gL10n->get('SYS_PARTICIPANTS').'\'
                        AND lst_org_id = \''.$row['org_id'].'\'';
             $listStatement = $this->db->query($sql);
             $listId = (int) $listStatement->fetchColumn();
@@ -329,7 +329,7 @@ class ComponentUpdate extends Component
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                 WHERE cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\'
                    AND NOT exists (SELECT 1
                                      FROM '.TBL_DATES.'
                                     WHERE dat_rol_id = rol_id)';

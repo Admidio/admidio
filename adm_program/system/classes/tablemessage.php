@@ -39,7 +39,7 @@ class TableMessage extends TableAccess
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->tableName.'
-                 WHERE msg_usr_id_receiver LIKE \''. $usrId .'\'
+                 WHERE msg_usr_id_receiver = \''. $usrId .'\'
                    AND msg_read = 1';
         $countStatement = $this->db->query($sql);
 
@@ -82,7 +82,7 @@ class TableMessage extends TableAccess
         $sql = 'UPDATE '.TBL_MESSAGES.'
                    SET msg_read = \'0\'
                  WHERE msg_id   = '.$this->msgId.'
-                   AND msg_usr_id_receiver LIKE \''.$usrId.'\'';
+                   AND msg_usr_id_receiver = \''.$usrId.'\'';
 
         return $this->db->query($sql);
     }

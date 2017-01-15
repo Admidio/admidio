@@ -95,7 +95,7 @@ while($rowOrga = $orgaStatement->fetch())
     // Alle Termine der neuen Kategorie zuordnen
     $sql = 'UPDATE '.TBL_DATES.' SET dat_cat_id = '. $categoryCommon. '
              WHERE dat_cat_id IS NULL
-               AND dat_org_shortname LIKE \''. $rowOrga['org_shortname']. '\'';
+               AND dat_org_shortname = \''. $rowOrga['org_shortname']. '\'';
     $gDb->query($sql);
 
     // bei allen Alben ohne Ersteller, die Erstellungs-ID mit Webmaster befuellen,

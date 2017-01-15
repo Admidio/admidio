@@ -189,7 +189,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                   AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_org_id IS NULL ';
         $countCategoriesStatement = $this->db->query($sql);
         $rowCount = $countCategoriesStatement->fetchColumn();
