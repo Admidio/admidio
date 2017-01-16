@@ -1352,12 +1352,7 @@ class HtmlForm extends HtmlFormBasic
             // add default values to multi select
             if (is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0)
             {
-                $htmlDefaultValues = '';
-                foreach ($optionsAll['defaultValue'] as $key => $htmlDefaultValue)
-                {
-                    $htmlDefaultValues .= '"' . $htmlDefaultValue . '",';
-                }
-                $htmlDefaultValues = substr($htmlDefaultValues, 0, -1);
+                $htmlDefaultValues = '"' . implode('", "', $optionsAll['defaultValue']) . '"';
 
                 $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change");';
             }
