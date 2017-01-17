@@ -201,11 +201,16 @@ switch ($getMode)
 
 // Array to assign names to tables
 $arrColName = array(
-    'usr_login_name' => $gL10n->get('SYS_USERNAME'),
-    'usr_photo'      => $gL10n->get('PHO_PHOTO'),
-    'mem_begin'      => $gL10n->get('SYS_START'),
-    'mem_end'        => $gL10n->get('SYS_END'),
-    'mem_leader'     => $gL10n->get('SYS_LEADERS')
+    'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
+    'usr_photo'            => $gL10n->get('PHO_PHOTO'),
+    'mem_begin'            => $gL10n->get('SYS_START'),
+    'mem_end'              => $gL10n->get('SYS_END'),
+    'mem_leader'           => $gL10n->get('SYS_LEADERS'),
+    'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+    'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+    'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+    'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+    'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
 );
 
 // Array for valid colums visible for current user.
@@ -735,7 +740,26 @@ foreach ($membersList as $member)
                     $content = $arrListValues[$member[$sqlColumnNumber]];
                 }
             }
-
+            elseif ($column->getValue('lsc_special_field') === 'mem_approved')
+            {
+                // Assign Integer to Language strings
+                if ((int) $content === 1)
+                {
+                    $content = $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
+                }
+                elseif ((int) $content === 2)
+                {
+                    $content = $gL10n->get('SYS_YES');
+                }
+            }
+            elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
+            {
+                // Get User Information
+                $user = new User($gDb, $gProfileFields, $content);
+                
+                $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
+            }
+            
             // format value for csv export
             if ($getMode === 'csv')
             {

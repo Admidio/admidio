@@ -326,8 +326,16 @@ class TableRoles extends TableAccess
             return $defaultListId;
         }
 
-        // read system default list configuration
-        return (int) $gPreferences['lists_default_configuration'];
+        if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
+        {
+            // read system default list configuration for events
+            return (int) $gPreferences['dates_default_list_configuration'];
+        }
+        else
+        {
+            // read system default list configuration
+            return (int) $gPreferences['lists_default_configuration'];
+        }
     }
 
     /**

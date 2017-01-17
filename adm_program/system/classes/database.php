@@ -630,7 +630,7 @@ class Database
                     'serial'   => strpos($properties['column_default'], 'nextval') !== false,
                     'null'     => $properties['is_nullable'] === 'YES',
                     'key'      => null,
-                    'default'  => $properties['Default'],
+                    'default'  => $properties['column_default'],
                     'unsigned' => null
                 );
 

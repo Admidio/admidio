@@ -191,7 +191,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), (bool) $role->getValue('rol_default_registration'),
                        array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC'));
     $form->addInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'),
-                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999));
+                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1));
     $form->addInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'),
                     array('maxLength' => 6, 'class' => 'form-control-small'));
     $form->addSelectBox('rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods(),

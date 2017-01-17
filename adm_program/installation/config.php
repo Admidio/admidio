@@ -19,9 +19,9 @@ $g_tbl_praefix = '%PREFIX%';
 // Access to the database of the MySQL-Server
 $g_adm_srv  = '%SERVER%';      // Server
 $g_adm_port = '%PORT%';        // Port
+$g_adm_db   = '%DATABASE%';    // Database
 $g_adm_usr  = '%USER%';        // User
 $g_adm_pw   = '%PASSWORD%';    // Password
-$g_adm_db   = '%DATABASE%';    // Database
 
 // URL to this Admidio installation
 // Example: 'https://www.admidio.org/example'
@@ -29,7 +29,7 @@ $g_root_path = '%ROOT_PATH%';
 
 // If you use a separate proxy for communications security with SSL than you must
 // enter the proxy address here. Admidio will use it to generate the full URL.
-// Example: 'https://MyProxy.com'
+// Example: 'MyProxy.com'
 $gSecureProxy = '';
 
 // Short description of the organization that is running Admidio
