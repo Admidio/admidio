@@ -132,9 +132,9 @@ if($getMode === 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type    = \''. $getType. '\'
-                   AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                   AND cat_id     <> '.$getCatId.
+                 WHERE cat_type = \''. $getType. '\'
+                   AND cat_name = \''. $_POST['cat_name']. '\'
+                   AND cat_id  <> '.$getCatId.
                        $sqlSearchOrga;
         $categoriesStatement = $gDb->query($sql);
 

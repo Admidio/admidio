@@ -232,7 +232,7 @@ else
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_administrator = 1
-                   AND rol_name LIKE \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
+                   AND rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                        OR cat_org_id IS NULL ) ';
         $administratorStatement = $gDb->query($sql);

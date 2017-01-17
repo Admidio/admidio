@@ -232,7 +232,7 @@ class ComponentUpdate extends Component
                 // save current version to all modules
                 $sql = 'UPDATE '.TBL_COMPONENTS.' SET com_version = \''.ADMIDIO_VERSION.'\'
                                                     , com_beta    = \''.ADMIDIO_VERSION_BETA.'\'
-                         WHERE com_type LIKE \'MODULE\' ';
+                         WHERE com_type = \'MODULE\' ';
                 $this->db->query($sql);
             }
 
@@ -251,7 +251,7 @@ class ComponentUpdate extends Component
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
@@ -275,14 +275,14 @@ class ComponentUpdate extends Component
     /**
      * This method adds a new global list configuration for Participients of Events.
      */
-    public function updateStepAddDefaultParticpientList()
+    public function updateStepAddDefaultParticipantList()
     {
         global $gL10n;
-        
+
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
@@ -295,15 +295,15 @@ class ComponentUpdate extends Component
             $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global)
                         VALUES (\''.$row['org_id'].'\', \''.$systemUserId.'\', \''.$gL10n->get('SYS_PARTICIPANTS').'\', \''.DATETIME_NOW.'\', 1)';
             $this->db->query($sql);
-            
+
             // Add list columns
             $sql = 'SELECT lst_id
                       FROM '.TBL_LISTS.'
-                     WHERE lst_name LIKE \''.$gL10n->get('SYS_PARTICIPANTS').'\'
+                     WHERE lst_name = \''.$gL10n->get('SYS_PARTICIPANTS').'\'
                        AND lst_org_id = \''.$row['org_id'].'\'';
             $listStatement = $this->db->query($sql);
             $listId = (int) $listStatement->fetchColumn();
-            
+
             $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter)
                         VALUES (\''.$listId.'\', 1, 1, NULL, \'ASC\', NULL)
                              , (\''.$listId.'\', 2, 2, NULL, NULL, NULL)
@@ -311,7 +311,7 @@ class ComponentUpdate extends Component
                              , (\''.$listId.'\', 4, NULL, \'mem_comment\', NULL, NULL)
                              , (\''.$listId.'\', 5, NULL, \'mem_count_guests\', NULL, NULL)';
             $this->db->query($sql);
-                             
+
             // Set as default configuration list
             $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$listId.'\'
                      WHERE prf_name = \'dates_default_list_configuration\'
@@ -319,7 +319,7 @@ class ComponentUpdate extends Component
             $this->db->query($sql);
         }
     }
-    
+
     /**
      * This method deletes all roles that belongs to still deleted dates.
      */
@@ -329,7 +329,7 @@ class ComponentUpdate extends Component
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                 WHERE cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\'
                    AND NOT exists (SELECT 1
                                      FROM '.TBL_DATES.'
                                     WHERE dat_rol_id = rol_id)';

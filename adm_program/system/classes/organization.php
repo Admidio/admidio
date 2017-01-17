@@ -92,7 +92,7 @@ class Organization extends TableAccess
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\'';
+                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
         $systemUserStatement = $this->db->query($sql);
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
@@ -264,20 +264,20 @@ class Organization extends TableAccess
         $formerList->addColumn(4, 'mem_begin');
         $formerList->addColumn(5, 'mem_end');
         $formerList->save();
-        
-        $particpientList = new ListConfiguration($this->db);
-        $particpientList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
-        $particpientList->setValue('lst_org_id', $orgId);
-        $particpientList->setValue('lst_global', 1);
-        $particpientList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-        $particpientList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-        $particpientList->addColumn(3, 'mem_approved');
-        $particpientList->addColumn(4, 'mem_comment');
-        $particpientList->addColumn(5, 'mem_count_guests');
-        $particpientList->save();
-        
+
+        $participantList = new ListConfiguration($this->db);
+        $participantList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
+        $participantList->setValue('lst_org_id', $orgId);
+        $participantList->setValue('lst_global', 1);
+        $participantList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $participantList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $participantList->addColumn(3, 'mem_approved');
+        $participantList->addColumn(4, 'mem_comment');
+        $participantList->addColumn(5, 'mem_count_guests');
+        $participantList->save();
+
         // set participient list to default configuration in date module settings
-        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$particpientList->getValue('lst_id').'\'
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$participantList->getValue('lst_id').'\'
                  WHERE prf_org_id = '.$orgId.'
                    AND prf_name   = \'dates_default_list_configuration\' ';
         $this->db->query($sql);

@@ -240,7 +240,7 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
             // pruefen, ob der Benutzername bereits vergeben ist
             $sql = 'SELECT usr_id
                       FROM '.TBL_USERS.'
-                     WHERE usr_login_name LIKE \''. $_POST['usr_login_name']. '\'';
+                     WHERE usr_login_name = \''. $_POST['usr_login_name']. '\'';
             $pdoStatement = $gDb->query($sql);
 
             if($pdoStatement->rowCount() > 0)

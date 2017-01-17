@@ -133,7 +133,8 @@ class ModuleMessages
         $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'PM\'
-                   AND msg_usr_id_receiver LIKE \'' . $userId . '\' AND msg_read = 1
+                   AND msg_usr_id_receiver = \'' . $userId . '\'
+                   AND msg_read = 1
               ORDER BY msg_id DESC';
 
         return $gDb->query($sql);
@@ -151,7 +152,7 @@ class ModuleMessages
         $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'PM\'
-                   AND ( (msg_usr_id_receiver LIKE \'' . $userId . '\' AND msg_read <> 1)
+                   AND ( (msg_usr_id_receiver = \'' . $userId . '\' AND msg_read <> 1)
                        OR (msg_usr_id_sender = ' . $userId . ' AND msg_read < 2))
               ORDER BY msg_id DESC';
 
