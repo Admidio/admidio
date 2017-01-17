@@ -78,7 +78,7 @@ if($objDateFrom > $objDateTo)
 }
 
 // if user should not view former roles members then disallow it
-if(!$gCurrentUser->viewFormerRolesMembers())
+if(!$gCurrentUser->hasRightViewFormerRolesMembers())
 {
     $getShowMembers = 0;
 }

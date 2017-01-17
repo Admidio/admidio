@@ -384,7 +384,8 @@ class ComponentUpdate extends Component
                 $sql = 'UPDATE '.TBL_ROLES.' SET rol_cat_id = '.$category->getValue('cat_id').'
                          WHERE rol_id IN (SELECT dat_rol_id
                                             FROM '.TBL_DATES.'
-                                           INNER JOIN '.TBL_CATEGORIES.' ON cat_id = dat_cat_id
+                                      INNER JOIN '.TBL_CATEGORIES.'
+                                              ON cat_id = dat_cat_id
                                            WHERE dat_rol_id IS NOT NULL
                                              AND cat_org_id = '.$row['org_id'].')';
                 $this->db->query($sql);

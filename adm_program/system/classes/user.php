@@ -1003,6 +1003,27 @@ class User extends TableAccess
     }
 
     /**
+     * Checks the necessary rights if this user could view former roles members. Therefore
+     * the user must also have the right to view the role. So you must also check this right.
+     * @return bool Return @b true if the user has the right to view former roles members
+     */
+    public function hasRightViewFormerRolesMembers()
+    {
+        global $gPreferences;
+
+        if($gPreferences['lists_show_former_members'] === '1' && $this->checkRolesRight('rol_assign_roles'))
+        {
+            return = true;
+        }
+        elseif($gPreferences['lists_show_former_members'] === '2' && $this->checkRolesRight('rol_edit_user'))
+        {
+            return = true;
+        }
+
+        return false;
+    }
+
+    /**
      * Checks if the current user is allowed to view the profile of the user of the parameter.
      * If will check if user has edit rights with method editProfile or if the user is a member
      * of a role where the current user has the right to view profiles.
@@ -1616,29 +1637,6 @@ class User extends TableAccess
         $this->setValue('usr_date_invalid', null);
         $this->setValue('usr_number_invalid', 0);
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
-    }
-
-    /**
-     * Checks the necessary rights if this user could view former roles members. Therefore
-     * the user must also have the right to view the role. So you must also check this right.
-     * @return bool Return @b true if the user has the right to view former roles members
-     */
-    public function viewFormerRolesMembers()
-    {
-        global $gPreferences;
-
-        $returnCode = false;
-
-        if($gPreferences['lists_show_former_members'] === '1' && $this->checkRolesRight('rol_assign_roles'))
-        {
-            $returnCode = true;
-        }
-        elseif($gPreferences['lists_show_former_members'] === '2' && $this->checkRolesRight('rol_edit_user'))
-        {
-            $returnCode = true;
-        }
-
-        return $returnCode;
     }
 
     /**

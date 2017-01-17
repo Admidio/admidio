@@ -67,11 +67,11 @@ if($getEvents)
     }
 
     $eventsRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
-    $listDescription   = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
+    $listDescription  = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
     $eventsRolesImage = 'roles.png';
     $eventsRolesFlag  = '0';
     // in events mode show active and inactive events roles
-    $sqlRolesStatus    = ' AND cat_name_intern = \'EVENTS\' ';
+    $sqlRolesStatus   = ' AND cat_name_intern = \'EVENTS\' ';
 }
 else
 {

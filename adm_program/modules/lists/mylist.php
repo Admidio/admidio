@@ -38,11 +38,11 @@ if ($gPreferences['lists_enable_module'] != 1)
 // within PHP 5.3 false will not be set and therefore we must add 0 as value
 if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
 {
-    $getActiveRole  = 1;
+    $getActiveRole = 1;
 }
 else
 {
-    $getActiveRole  = 0;
+    $getActiveRole = 0;
 }
 
 // set headline of the script

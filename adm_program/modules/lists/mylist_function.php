@@ -48,7 +48,7 @@ if($getMode === 2
     // => EXIT
 }
 
-if(!isset($_POST['sel_show_members']) || !$gCurrentUser->viewFormerRolesMembers())
+if(!isset($_POST['sel_show_members']) || !$gCurrentUser->hasRightViewFormerRolesMembers())
 {
     $_POST['sel_show_members'] = 0;
 }
