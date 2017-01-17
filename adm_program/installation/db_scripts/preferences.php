@@ -113,6 +113,7 @@ $defaultOrgPreferences = array(
     'lists_members_per_page'      => '25',
     'lists_hide_overview_details' => '0',
     'lists_default_configuration' => '',
+    'lists_show_former_members'   => '2',
 
     // Messages
     'enable_mail_module'          => '1',

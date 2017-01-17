@@ -1619,6 +1619,29 @@ class User extends TableAccess
     }
 
     /**
+     * Checks the necessary rights if this user could view former roles members. Therefore
+     * the user must also have the right to view the role. So you must also check this right.
+     * @return bool Return @b true if the user has the right to view former roles members
+     */
+    public function viewFormerRolesMembers()
+    {
+        global $gPreferences;
+
+        $returnCode = false;
+
+        if($gPreferences['lists_show_former_members'] === '1' && $this->checkRolesRight('rol_assign_roles'))
+        {
+            $returnCode = true;
+        }
+        elseif($gPreferences['lists_show_former_members'] === '2' && $this->checkRolesRight('rol_edit_user'))
+        {
+            $returnCode = true;
+        }
+
+        return $returnCode;
+    }
+
+    /**
      * Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
      * @return bool
      */

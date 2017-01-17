@@ -689,6 +689,8 @@ $page->addHtml('
                                    AND lst_global = 1
                               ORDER BY lst_name ASC, lst_timestamp DESC';
                         $form->addSelectBoxFromSql('lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES')), '2' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_EDIT_USER')));
+                        $form->addSelectBox('lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries, array('defaultValue' => $form_values['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_EDIT_USER')))));
                         $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ROL"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';

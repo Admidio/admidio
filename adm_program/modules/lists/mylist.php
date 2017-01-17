@@ -298,7 +298,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 "usf_name": "'.$gL10n->get('SYS_USERNAME').'",
                 "usf_name_intern": "'.$gL10n->get('SYS_USERNAME').'"
             };
-    
+
             userFields[' . ($posEndOfMasterData + 1) . '] = {
                 "cat_id": userFields[1]["cat_id"],
                 "cat_name": userFields[1]["cat_name"],
@@ -306,7 +306,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 "usf_name": "'.$gL10n->get('PHO_PHOTO').'",
                 "usf_name_intern": "'.$gL10n->get('PHO_PHOTO').'"
             };
-    
+
             userFields[' . $i . '] = {
                 "cat_id": -1,
                 "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
@@ -314,7 +314,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_START').'",
                 "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
             };';
-    
+
     ++$i;
     $javascriptCode .= '
             userFields[' . $i . '] = {
@@ -324,7 +324,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
                 "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
             };';
-    
+
     // add new category with participient information of events
     foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
     {
@@ -654,7 +654,7 @@ if($getActiveRole)
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
              WHERE rol_id IN (' . implode(',', $gCurrentUser->getAllVisibleRoles()) . ')
-          ORDER BY cat_sequence, rol_name';    
+          ORDER BY cat_sequence, rol_name';
 }
 else
 {
@@ -670,9 +670,13 @@ else
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
-$showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-$form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
+// if user could view former roles members than he should get a selectbox where he can choose to view them
+if($gCurrentUser->viewFormerRolesMembers())
+{
+    $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+    $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
+        array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
+}
 // select box showing all relation types
 $sql = 'SELECT urt_id, urt_name, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'

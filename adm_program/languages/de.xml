@@ -439,6 +439,9 @@
     <string name="LST_SEAT_AMOUNT">Zusätzliche Plätze</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
+    <string name="LST_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
+    <string name="LST_SHOW_FORMER_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer ehemalige Rollenmitglieder sehen darf. Der Benutzer muss allerdings auch das Recht haben die Rolle selber zu sehen. (Standard: #VAR1#)</string>
+    <string name="LST_SHOW_FORMER_MEMBERS_RIGHT">Benutzer mit dem Recht #VAR1_BOLD#</string>
     <string name="LST_SHOW_LIST">Liste anzeigen</string>
     <string name="LST_SHOW_LISTS">Listen anzeigen</string>
     <string name="LST_YOUR_CONFIGURATION">Deine Konfigurationen</string>
@@ -706,7 +709,7 @@
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
-    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string> 
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>

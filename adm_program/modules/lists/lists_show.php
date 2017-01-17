@@ -70,6 +70,12 @@ if($objDateFrom > $objDateTo)
     // => EXIT
 }
 
+// if user should not view former roles members then disallow it
+if(!$gCurrentUser->viewFormerRolesMembers())
+{
+    $getShowMembers = 0;
+}
+
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
@@ -85,7 +91,7 @@ if ($numberRoles > 1)
 
     foreach ($rolesData as $role)
     {
-        // check if user has right to view all roles 
+        // check if user has right to view all roles
         // only users with the right to assign roles can view inactive roles
         if (!$gCurrentUser->hasRightViewRole($role['rol_id'])
         || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
@@ -756,10 +762,10 @@ foreach ($membersList as $member)
             {
                 // Get User Information
                 $user = new User($gDb, $gProfileFields, $content);
-                
+
                 $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
             }
-            
+
             // format value for csv export
             if ($getMode === 'csv')
             {
