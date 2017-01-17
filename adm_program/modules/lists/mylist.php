@@ -680,7 +680,7 @@ else
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 // if user could view former roles members than he should get a selectbox where he can choose to view them
-if($gCurrentUser->viewFormerRolesMembers())
+if($gCurrentUser->hasRightViewFormerRolesMembers())
 {
     $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
     $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
