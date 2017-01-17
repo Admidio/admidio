@@ -30,10 +30,9 @@ $getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int');
 $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int');
 $getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

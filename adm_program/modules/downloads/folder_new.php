@@ -20,10 +20,9 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireV
 
 $headline = $gL10n->get('DOW_CREATE_FOLDER');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_download_module'] != 1)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

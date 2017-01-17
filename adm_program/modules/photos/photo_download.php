@@ -31,10 +31,9 @@ $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 //$tempfolder = "/is/htdocs/user_tmp/xxxxxx/";
 $tempfolder = sys_get_temp_dir();
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

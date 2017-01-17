@@ -56,7 +56,7 @@ if(!isset($plg_show_upload_timestamp))
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled
 if ($gPreferences['enable_download_module'] == 1)
 {
     echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
