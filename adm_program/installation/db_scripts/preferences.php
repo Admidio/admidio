@@ -109,6 +109,7 @@ $defaultOrgPreferences = array(
     'enable_guestbook_moderation'    => '0',
 
     // Lists
+    'lists_enable_module'         => '1',
     'lists_roles_per_page'        => '10',
     'lists_members_per_page'      => '25',
     'lists_hide_overview_details' => '0',

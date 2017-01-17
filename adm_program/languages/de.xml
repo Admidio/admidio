@@ -374,6 +374,8 @@
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
     <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>
     <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße nicht gefüllt haben</string>
+    <string name="LST_ENABLE_LISTS_MODULE">Listenmodul aktivieren</string>
+    <string name="LST_ENABLE_LISTS_MODULE_DESC">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</string>
     <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
     <string name="LST_EXCLUDE_EXAMPLE_DESC">Sucht alle Benutzer, die nicht Stefan heißen</string>

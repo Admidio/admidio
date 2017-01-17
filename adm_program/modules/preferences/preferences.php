@@ -678,6 +678,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('lists_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=lists', $page, array('class' => 'form-preferences'));
+                        $form->addCheckbox('lists_enable_module', $gL10n->get('LST_ENABLE_LISTS_MODULE'), (bool) $form_values['lists_enable_module'], array('helpTextIdInline' => 'LST_ENABLE_LISTS_MODULE_DESC'));
                         $form->addInput('lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $form_values['lists_roles_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10)));
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));

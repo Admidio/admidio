@@ -36,6 +36,13 @@ $getShowMembers     = admFuncVariableIsValid($_GET, 'show_members', 'int');
 $getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',      'string'); // could be int or int[], so string is necessary
 $getFullScreen      = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
 
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false)

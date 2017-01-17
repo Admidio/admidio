@@ -27,6 +27,13 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // only users with the right to assign roles can view inactive roles
 // within PHP 5.3 false will not be set and therefore we must add 0 as value
 if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))

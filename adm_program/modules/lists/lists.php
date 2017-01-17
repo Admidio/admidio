@@ -22,6 +22,13 @@ $getStart      = admFuncVariableIsValid($_GET, 'start',       'int');
 $getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // set headline
 if($getActiveRole)
 {

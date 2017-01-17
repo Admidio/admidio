@@ -164,7 +164,7 @@ switch($getMode)
                     break;
 
                 case 'lists':
-                    $checkboxes = array('lists_hide_overview_details');
+                    $checkboxes = array('lists_enable_module', 'lists_hide_overview_details');
                     break;
 
                 case 'messages':
