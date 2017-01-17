@@ -326,7 +326,7 @@ class TableRoles extends TableAccess
             return $defaultListId;
         }
 
-        if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
+        if($this->getValue('cat_name_intern') == 'EVENTS')
         {
             // read system default list configuration for events
             return (int) $gPreferences['dates_default_list_configuration'];
