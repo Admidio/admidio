@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for item fields
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -84,9 +84,9 @@ if($getMode === 1)
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_INVENT_FIELDS.'
-                 WHERE inf_name LIKE ? -- $_POST[\'inf_name\']
-                   AND inf_cat_id  = ? -- $_POST[\'inf_cat_id\']
-                   AND inf_id     <> ? -- $getInfId';
+                 WHERE inf_name   = ? -- $_POST[\'inf_name\']
+                   AND inf_cat_id = ? -- $_POST[\'inf_cat_id\']
+                   AND inf_id    <> ? -- $getInfId';
         $statement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $_POST['inf_cat_id'], $getInfId));
 
         if($statement->fetchColumn() > 0)

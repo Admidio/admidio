@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * messages form page
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -191,7 +191,7 @@ else
     $form_values['mailfrom']    = '';
     $form_values['subject']     = $getSubject;
     $form_values['msg_body']    = '';
-    $form_values['msg_to']      = 0;
+    $form_values['msg_to']      = '';
     $form_values['carbon_copy'] = $getCarbonCopy;
     $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
 }
@@ -298,9 +298,8 @@ elseif (!isset($messageStatement))
     $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
-    $preloadData = array();
-    $sqlRoleIds  = array();
-    $sqlUserIds  = '';
+    $sqlRoleIds = array();
+    $sqlUserIds = '';
     $sqlParticipationRoles = '';
 
     if ($getUserId > 0)
@@ -319,6 +318,7 @@ elseif (!isset($messageStatement))
     {
         // no user or role was committed then show list with all roles and users
         // where the current user has the right to send email
+        $preloadData = isset($form_values['msg_to']) ? $form_values['msg_to'] : '';
         $sqlRoleIds = $gCurrentUser->getAllMailRoles();
         $sqlParticipationRoles = ' AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\' ';
     }

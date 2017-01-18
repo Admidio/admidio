@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Save profile/registration data
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -240,7 +240,7 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
             // pruefen, ob der Benutzername bereits vergeben ist
             $sql = 'SELECT usr_id
                       FROM '.TBL_USERS.'
-                     WHERE usr_login_name LIKE ?';
+                     WHERE usr_login_name = ?';
             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
             if($pdoStatement->rowCount() > 0)

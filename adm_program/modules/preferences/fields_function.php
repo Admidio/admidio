@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for profile fields
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -114,9 +114,9 @@ if($getMode === 1)
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
-                 WHERE usf_name LIKE ? -- $_POST[\'usf_name\']
-                   AND usf_cat_id  = ? -- $_POST[\'usf_cat_id\']
-                   AND usf_id     <> ? -- $getUsfId';
+                 WHERE usf_name   = ? -- $_POST[\'usf_name\']
+                   AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
+                   AND usf_id    <> ? -- $getUsfId';
         $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], $_POST['usf_cat_id'], $getUsfId));
 
         if($pdoStatement->fetchColumn() > 0)

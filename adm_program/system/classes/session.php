@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -193,7 +193,7 @@ class Session extends TableAccess
 
         if ($path === '')
         {
-            $path = ADMIDIO_SUBFOLDER . '/';
+            $path = ADMIDIO_SUB_URL . '/';
         }
         if ($domain === '')
         {
@@ -452,7 +452,7 @@ class Session extends TableAccess
 
         $sql = 'DELETE FROM '.TBL_SESSIONS.'
                  WHERE ses_timestamp < ? -- $timestamp
-                   AND ses_session_id NOT LIKE ? -- $this->getValue(\'ses_session_id\')';
+                   AND ses_session_id <> ? -- $this->getValue(\'ses_session_id\')';
         $this->db->queryPrepared($sql, array($timestamp, $this->getValue('ses_session_id')));
     }
 
@@ -476,7 +476,7 @@ class Session extends TableAccess
         // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_SUBFOLDER . '/';
+            $path = ADMIDIO_SUB_URL . '/';
         }
         if ($domain === '')
         {

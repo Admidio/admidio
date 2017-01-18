@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -92,7 +92,7 @@ class Organization extends TableAccess
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name LIKE ? -- $gL10n->get(\'SYS_SYSTEM\')';
+                 WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
         $systemUserStatement = $this->db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
@@ -230,7 +230,7 @@ class Organization extends TableAccess
         $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $addressList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $addressList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+        $addressList->addColumn(4, $gProfileFields->getProperty('STREET', 'usf_id'));
         $addressList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
         $addressList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
         $addressList->save();
@@ -261,7 +261,7 @@ class Organization extends TableAccess
         $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $contactList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $contactList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+        $contactList->addColumn(4, $gProfileFields->getProperty('STREET', 'usf_id'));
         $contactList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
         $contactList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
         $contactList->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));
@@ -279,6 +279,23 @@ class Organization extends TableAccess
         $formerList->addColumn(4, 'mem_begin');
         $formerList->addColumn(5, 'mem_end');
         $formerList->save();
+
+        $participantList = new ListConfiguration($this->db);
+        $participantList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
+        $participantList->setValue('lst_org_id', $orgId);
+        $participantList->setValue('lst_global', 1);
+        $participantList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $participantList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $participantList->addColumn(3, 'mem_approved');
+        $participantList->addColumn(4, 'mem_comment');
+        $participantList->addColumn(5, 'mem_count_guests');
+        $participantList->save();
+
+        // set participient list to default configuration in date module settings
+        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$participantList->getValue('lst_id').'\'
+                 WHERE prf_org_id = '.$orgId.'
+                   AND prf_name   = \'dates_default_list_configuration\' ';
+        $this->db->query($sql);
     }
 
     /**

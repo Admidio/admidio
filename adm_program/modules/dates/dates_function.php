@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Verschiedene Funktionen fuer Termine
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -16,6 +16,7 @@
  *          4 - vom Termin abmelden
  *          5 - Termin aendern
  *          6 - Termin im iCal-Format exportieren
+ *          7 - am Termin unter Vorbehalt anmelden
  * rol_id : vorselektierte Rolle der Rollenauswahlbox
  * copy   : true - The event of the dat_id will be copied and the base for this new event
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
@@ -392,7 +393,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             // Kategorie fuer Terminbestaetigungen einlesen
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
+                     WHERE cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\'';
             $pdoStatement = $gDb->query($sql);
             $role = new TableRoles($gDb);
 
@@ -503,7 +504,7 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -516,6 +517,15 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    // => EXIT
+}
+elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
+{
+    $member = new TableMembers($gDb);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
+
+    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->show($gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
     // => EXIT
 }
 elseif($getMode === 6)  // Termin im iCal-Format exportieren
@@ -535,6 +545,6 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
     header('Cache-Control: private');
     header('Pragma: public');
 
-    echo $date->getIcal($_SERVER['HTTP_HOST']);
+    echo $date->getIcal(DOMAIN);
     exit();
 }

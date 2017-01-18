@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for download module
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -102,7 +102,7 @@ elseif ($getMode === 3)
     try
     {
         $newFolderName = admFuncVariableIsValid($_POST, 'new_folder', 'file', array('requireValue' => true));
-        $newFolderDescription = admFuncVariableIsValid($_POST, 'new_folder', 'string');
+        $newFolderDescription = admFuncVariableIsValid($_POST, 'new_description', 'string');
 
         // get recordset of current folder from database
         $folder->getFolderForDownload($getFolderId);

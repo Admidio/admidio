@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for roles handling
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -113,7 +113,7 @@ elseif($getMode === 2)
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_name LIKE ? -- $_POST[\'rol_name\']
+                 WHERE rol_name   = ? -- $_POST[\'rol_name\']
                    AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
                    AND rol_id    <> ? -- $getRoleId
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')

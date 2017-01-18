@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Configuration file of Admidio
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -25,13 +25,18 @@ $g_tbl_praefix = 'adm';
 // Access to the database of the MySQL-Server
 $g_adm_srv  = 'URL_to_your_MySQL-Server';    // Server
 $g_adm_port = null;                          // Port
+$g_adm_db   = 'Databasename';                // Database
 $g_adm_usr  = 'Username';                    // User
 $g_adm_pw   = 'Password';                    // Password
-$g_adm_db   = 'Databasename';                // Database
 
 // URL to this Admidio installation
 // Example: 'https://www.admidio.org/example'
 $g_root_path = 'https://www.your-website.de/admidio';
+
+// If you use a separate proxy for communications security with SSL than you must
+// enter the proxy address here. Admidio will use it to generate the full URL.
+// Example: 'MyProxy.com'
+$gSecureProxy = '';
 
 // Short description of the organization that is running Admidio
 // This short description must correspond to your input in the installation wizard !!!

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Data conversion for version 2.1.0
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -95,7 +95,7 @@ while($rowOrga = $orgaStatement->fetch())
     // Alle Termine der neuen Kategorie zuordnen
     $sql = 'UPDATE '.TBL_DATES.' SET dat_cat_id = '. $categoryCommon. '
              WHERE dat_cat_id IS NULL
-               AND dat_org_shortname LIKE \''. $rowOrga['org_shortname']. '\'';
+               AND dat_org_shortname = \''. $rowOrga['org_shortname']. '\'';
     $gDb->query($sql);
 
     // bei allen Alben ohne Ersteller, die Erstellungs-ID mit Webmaster befuellen,

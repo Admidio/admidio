@@ -4,7 +4,7 @@
     <step id="20">ALTER TABLE %PREFIX%_members ADD COLUMN mem_approved integer unsigned default null</step>
     <step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(4000)</step>
     <step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
-    <step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
+    <step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name = 'lists_members_per_page'</step>
     <step id="60">CREATE TABLE %PREFIX%_messages
         (
             msg_id                        integer         unsigned NOT NULL AUTO_INCREMENT,
@@ -32,11 +32,11 @@
         engine = InnoDB
         default character set = utf8
         collate = utf8_unicode_ci</step>
-    <step id="70">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name LIKE 'enable_pm_module'</step>
+    <step id="70">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name = 'enable_pm_module'</step>
     <step id="80">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_forum_interface', 'forum_version', 'forum_export_user', 'forum_praefix', 'forum_sqldata_from_admidio', 'forum_db', 'forum_srv', 'forum_usr', 'forum_pw', 'forum_set_admin', 'forum_link_intern', 'forum_width')</step>
     <step id="90">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('dates_show_calendar_select')</step>
-    <step id="100" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'system_show_all_users' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'members_show_all_users'</step>
-    <step id="105" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'system_show_all_users' AND pr1.prf_name LIKE 'members_show_all_users'</step>
+    <step id="100" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'system_show_all_users' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'members_show_all_users'</step>
+    <step id="105" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'system_show_all_users' AND pr1.prf_name = 'members_show_all_users'</step>
     <step id="110">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('system_show_all_users')</step>
     <step id="120" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(50) NOT NULL</step>
     <step id="130" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(50)</step>
@@ -125,8 +125,8 @@
                primary key (inv_id)
             )
             engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
-    <step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
-    <step id="435" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name LIKE 'ecard_view_width' AND pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
+    <step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'ecard_thumbs_scale'</step>
+    <step id="435" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'ecard_view_width' AND pr1.prf_name = 'ecard_thumbs_scale'</step>
     <step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients', 'photo_upload_mode', 'photo_slideshow_speed')</step>
     <step id="450">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory boolean not null default '0'</step>
     <step id="460">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
@@ -142,13 +142,13 @@
             default character set = utf8
             collate = utf8_unicode_ci;</step>
     <step id="530">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
-    <step id="540">UPDATE %PREFIX%_preferences SET prf_value = '13' WHERE prf_name LIKE 'captcha_signature_font_size' AND prf_value LIKE '9'</step>
+    <step id="540">UPDATE %PREFIX%_preferences SET prf_value = '13' WHERE prf_name = 'captcha_signature_font_size' AND prf_value = '9'</step>
     <step id="550">ComponentUpdate::updateStepDeleteDateRoles</step>
     <step id="560">create unique index IDX_%PREFIX%_IND_ITM_INF_ID on %PREFIX%_invent_data (ind_itm_id, ind_inf_id)</step>
     <step id="570">create unique index IDX_%PREFIX%_INF_NAME_INTERN on %PREFIX%_invent_fields (inf_name_intern)</step>
     <step id="580" database="mysql">ALTER TABLE %PREFIX%_components MODIFY COLUMN com_beta smallint not null default 0</step>
     <step id="590" database="pgsql">ALTER TABLE %PREFIX%_components ALTER COLUMN com_beta SET DEFAULT 0</step>
     <step id="600" database="pgsql">ALTER TABLE %PREFIX%_components ALTER COLUMN com_beta SET NOT NULL</step>
-    <step id="610">UPDATE %PREFIX%_preferences SET prf_value = 'modern' WHERE prf_name LIKE 'theme'</step>
+    <step id="610">UPDATE %PREFIX%_preferences SET prf_value = 'modern' WHERE prf_name = 'theme'</step>
     <step>stop</step>
 </update>

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create a custom list
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -232,6 +232,13 @@ $javascriptCode = '
 $i = 1;
 $oldCategoryNameIntern = '';
 $posEndOfMasterData = 0;
+$arrParticipientsInformation = array(
+    'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+    'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+    'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+    'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+    'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
+);
 
 foreach($gProfileFields->mProfileFields as $field)
 {
@@ -277,14 +284,14 @@ foreach($gProfileFields->mProfileFields as $field)
     }
 }
 
-// Add loginname and photo at the end of category master data
-// add new category with start and end date of role membership
-if($posEndOfMasterData === 0)
-{
-    $posEndOfMasterData = $i;
-    $i += 2;
-}
-$javascriptCode .= '
+    // Add loginname and photo at the end of category master data
+    // add new category with start and end date of role membership
+    if($posEndOfMasterData === 0)
+    {
+        $posEndOfMasterData = $i;
+        $i += 2;
+    }
+    $javascriptCode .= '
         userFields[' . $posEndOfMasterData . '] = {
             "cat_id": userFields[1]["cat_id"],
             "cat_name": userFields[1]["cat_name"],
@@ -309,18 +316,33 @@ $javascriptCode .= '
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
         };';
 
-++$i;
-$javascriptCode .= '
+    ++$i;
+    $javascriptCode .= '
         userFields[' . $i . '] = {
             "cat_id": -1,
             "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
             "usf_id": "mem_end",
             "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
-        };
+        };';
 
-        return userFields;
+    // add new category with participient information of events
+    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    {
+        ++$i;
+        $javascriptCode .= '
+            userFields['. $i . '] = {
+                "cat_id"   : -1,
+                "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
+                "usf_id"   : "'.$memberStatus.'",
+                "usf_name" : "'.$ColumnName.'",
+                "usf_name_intern" : "'.$ColumnName.'",
+            };';
     }
+
+    $javascriptCode .= '
+        return userFields;
+}
 
     function createColumnsArray()
     {

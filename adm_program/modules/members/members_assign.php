@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Search for existing user names and show users with similar names
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -40,18 +40,18 @@ $getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('req
 if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
 {
     $sqlSimilarName = '
-        (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(?), 1, 4) -- $gDb->escapeString($getLastname)
-           AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(?), 1, 4) ) -- $gDb->escapeString($getFirstname)
-        OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(?), 1, 4) -- $gDb->escapeString($getFirstname)
-           AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(?), 1, 4) ) ) -- $gDb->escapeString($getLastname)';
+        (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(?), 1, 4)     -- $gDb->escapeString($getLastname)
+           AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(?), 1, 4) )   -- $gDb->escapeString($getFirstname)
+        OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(?), 1, 4)     -- $gDb->escapeString($getFirstname)
+           AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(?), 1, 4) ) ) -- $gDb->escapeString($getLastname)';
 }
 else
 {
     $sqlSimilarName = '
-        (  (   last_name.usd_value  LIKE ? -- $gDb->escapeString($getLastname)
-           AND first_name.usd_value LIKE ?) -- $gDb->escapeString($getFirstname)
-        OR (   last_name.usd_value  LIKE ? -- $gDb->escapeString($getFirstname)
-           AND first_name.usd_value LIKE ?) ) -- $gDb->escapeString($getLastname)';
+        (  (   last_name.usd_value  = ?    -- $gDb->escapeString($getLastname)
+           AND first_name.usd_value = ?)   -- $gDb->escapeString($getFirstname)
+        OR (   last_name.usd_value  = ?    -- $gDb->escapeString($getFirstname)
+           AND first_name.usd_value = ?) ) -- $gDb->escapeString($getLastname)';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
@@ -68,7 +68,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS address
             ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'ADDRESS\', \'usf_id\')
+           AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS zip_code
             ON zip_code.usd_usr_id = usr_id
            AND zip_code.usd_usf_id = ? -- $gProfileFields->getProperty(\'POSTCODE\', \'usf_id\')
@@ -163,7 +163,7 @@ echo '
     <div class="panel-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
 
-        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1\'"><img
+        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'\'"><img
             src="'. THEME_URL. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
     </div>
 </div>';

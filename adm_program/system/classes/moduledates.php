@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -174,7 +174,7 @@ class ModuleDates extends Modules
         }
 
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_leader,' . $additionalFields . '
+        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state, mem.mem_leader,' . $additionalFields . '
                   FROM ' . TBL_DATE_ROLE . ' AS dtr
             INNER JOIN ' . TBL_DATES . ' AS dat
                     ON dat_id = dtr_dat_id

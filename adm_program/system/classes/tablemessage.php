@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_messages
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -40,7 +40,7 @@ class TableMessage extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->tableName.'
                  WHERE msg_read = 1
-                   AND msg_usr_id_receiver LIKE ? -- $usrId';
+                   AND msg_usr_id_receiver = ? -- $usrId';
         $countStatement = $this->db->queryPrepared($sql, array($usrId));
 
         return (int) $countStatement->fetchColumn();
@@ -82,7 +82,7 @@ class TableMessage extends TableAccess
         $sql = 'UPDATE '.TBL_MESSAGES.'
                    SET msg_read = \'0\'
                  WHERE msg_id   = ? -- $this->msgId
-                   AND msg_usr_id_receiver LIKE ? -- $usrId';
+                   AND msg_usr_id_receiver = ? -- $usrId';
 
         return $this->db->queryPrepared($sql, array($this->msgId, $usrId));
     }

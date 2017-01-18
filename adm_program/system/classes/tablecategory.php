@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_categories
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -190,7 +190,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_org_id IS NULL
-                   AND cat_name_intern NOT LIKE \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                    AND cat_type = ? -- $this->getValue(\'cat_type\')';
         $countCategoriesStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_type')));
         $rowCount = (int) $countCategoriesStatement->fetchColumn();

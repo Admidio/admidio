@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -708,7 +708,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, array $options = array())
     {
-        global $gL10n, $gPreferences;
+        global $gL10n, $gPreferences, $gLogger;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -716,11 +716,13 @@ class HtmlForm extends HtmlFormBasic
         // create array with all options
         $optionsDefault = array(
             'type'             => 'text',
+            'placeholder'      => '',
+            'pattern'          => '',
             'minLength'        => null,
-            'maxLength'        => 0,
+            'maxLength'        => null,
             'minNumber'        => null,
             'maxNumber'        => null,
-            'step'             => 1,
+            'step'             => null,
             'property'         => FIELD_DEFAULT,
             'passwordStrength' => false,
             'passwordUserData' => array(),
@@ -732,6 +734,8 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
+        $attributes['placeholder'] = $optionsAll['placeholder'];
+
         // set min/max input length
         switch ($optionsAll['type'])
         {
@@ -741,17 +745,35 @@ class HtmlForm extends HtmlFormBasic
             case 'url':
             case 'tel':
             case 'password':
+                $attributes['pattern'] = $optionsAll['pattern'];
+
                 $attributes['minlength'] = $optionsAll['minLength'];
 
                 if ($optionsAll['maxLength'] > 0)
                 {
                     $attributes['maxlength'] = $optionsAll['maxLength'];
+
+                    if ($attributes['minlength'] > $attributes['maxlength'])
+                    {
+                        $gLogger->warning(
+                            'Attribute "minlength" is greater than "maxlength"!',
+                            array('minlength' => $attributes['maxlength'], 'maxlength' => $attributes['maxlength'])
+                        );
+                    }
                 }
                 break;
             case 'number':
                 $attributes['min'] = $optionsAll['minNumber'];
                 $attributes['max'] = $optionsAll['maxNumber'];
                 $attributes['step'] = $optionsAll['step'];
+
+                if ($attributes['min'] > $attributes['max'])
+                {
+                    $gLogger->warning(
+                        'Attribute "min" is greater than "max"!',
+                        array('min' => $attributes['min'], 'max' => $attributes['max'])
+                    );
+                }
                 break;
         }
 
@@ -785,8 +807,14 @@ class HtmlForm extends HtmlFormBasic
         // add a nice modern datepicker to date inputs
         if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'datetime' || $optionsAll['type'] === 'birthday')
         {
-            $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
-            $javascriptCode = '';
+            if ($optionsAll['placeholder'] === '')
+            {
+                $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
+            }
+            else
+            {
+                $attributes['placeholder'] = $optionsAll['placeholder'];
+            }
 
             // if you have a birthday field than start with the years selection
             if ($optionsAll['type'] === 'birthday')
@@ -799,6 +827,8 @@ class HtmlForm extends HtmlFormBasic
                 $attributes['data-provide'] = 'datepicker';
                 $datepickerOptions = ' todayBtn: "linked", ';
             }
+
+            $javascriptCode = '';
 
             if (!$this->datepickerInitialized || $optionsAll['type'] === 'birthday')
             {
@@ -826,6 +856,12 @@ class HtmlForm extends HtmlFormBasic
             $this->addJavascriptCode($javascriptCode, true);
         }
 
+        // Remove attributes that are not set
+        $attributes = array_filter($attributes, function($attribute)
+        {
+            return $attribute !== '' && $attribute !== null;
+        });
+
         if ($optionsAll['property'] !== FIELD_HIDDEN)
         {
             // now create html for the field
@@ -844,7 +880,6 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' datetime-date-control';
             $this->addSimpleInput('text', $id, $id, $dateValue, $attributes);
             $attributes['class'] .= ' datetime-time-control';
-            $attributes['maxlength'] = '8';
             $attributes['data-provide'] = '';
             $this->addSimpleInput('text', $id . '_time', $id . '_time', $timeValue, $attributes);
         }
@@ -1317,12 +1352,7 @@ class HtmlForm extends HtmlFormBasic
             // add default values to multi select
             if (is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0)
             {
-                $htmlDefaultValues = '';
-                foreach ($optionsAll['defaultValue'] as $key => $htmlDefaultValue)
-                {
-                    $htmlDefaultValues .= '"' . $htmlDefaultValue . '",';
-                }
-                $htmlDefaultValues = substr($htmlDefaultValues, 0, -1);
+                $htmlDefaultValues = '"' . implode('", "', $optionsAll['defaultValue']) . '"';
 
                 $javascriptCode .= ' $("#' . $id . '").val([' . $htmlDefaultValues . ']).trigger("change");';
             }

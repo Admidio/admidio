@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create and edit rooms
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -69,9 +69,9 @@ $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL1
 $form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'),
                 array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 $form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),
-                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_REQUIRED));
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'property' => FIELD_REQUIRED));
 $form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'),
-                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
 $form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));

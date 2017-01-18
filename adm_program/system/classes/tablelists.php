@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_lists
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -47,6 +47,11 @@ class TableLists extends TableAccess
         if ($lstId === (int) $gPreferences['lists_default_configuration'])
         {
             throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
+        }
+        // if this list is the default configuration for particpation list than it couldn't be deleted
+        if ($lstId === (int) $gPreferences['dates_default_list_configuration'])
+        {
+            throw new AdmException('DAT_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }
 
         $this->db->startTransaction();

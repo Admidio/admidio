@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Login page
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -20,7 +20,7 @@ $sql = 'SELECT rol_id
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_name LIKE ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
+         WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
            AND rol_administrator = 1
            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                OR cat_org_id IS NULL )';

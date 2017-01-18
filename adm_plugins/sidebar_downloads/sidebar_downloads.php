@@ -9,7 +9,7 @@
  *
  * Compatible with Admidio version 3.2
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -129,7 +129,7 @@ if ($gPreferences['enable_download_module'] == 1)
                 }
 
                 echo '
-                <a class="btn '.$plg_link_class_downl.'" href="'. ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
+                <a class="btn '.$plg_link_class_downl.'" href="'. $g_root_path. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
                     src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
                     title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.$timestampHtml.'</a>';
 

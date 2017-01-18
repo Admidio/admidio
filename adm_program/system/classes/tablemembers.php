@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -103,9 +103,10 @@ class TableMembers extends TableAccess
      * @param int  $roleId Assign the membership to this role
      * @param int  $userId The user who should get a member of the role.
      * @param bool $leader If value @b 1 then the user will be a leader of the role and get more rights.
+     * @param int  $approvalState Option for User to confirm and adjust the membership ( @b 1 = User confirmed membership but maybe disagreed, @b 2 = user accepted membership
      * @return bool Return @b true if the assignment was successful.
      */
-    public function startMembership($roleId = 0, $userId = 0, $leader = null)
+    public function startMembership($roleId = 0, $userId = 0, $leader = null, $approvalState = null)
     {
         global $gCurrentUser;
 
@@ -137,6 +138,12 @@ class TableMembers extends TableAccess
             }
 
             $this->setValue('mem_end', DATE_MAX);
+
+            // User hat Rollenmitgliedschaft bestätigt bzw. angepasst
+            if ($approvalState > 0)
+            {
+                $this->setValue('mem_approved', $approvalState);
+            }
 
             if ($this->columnsValueChanged)
             {

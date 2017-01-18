@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Common functions for update and installation
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -142,7 +142,7 @@ function disableSoundexSearchIfPgsql($db)
     {
         // soundex is not a default function in PostgreSQL
         $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'0\'
-                 WHERE prf_name LIKE \'system_search_similar\'';
+                 WHERE prf_name = \'system_search_similar\'';
         $db->query($sql);
     }
 }

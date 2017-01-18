@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -134,7 +134,7 @@ class ModuleMessages
         $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'PM\'
-                   AND msg_usr_id_receiver LIKE ? -- $userId
+                   AND msg_usr_id_receiver = ? -- $userId
                    AND msg_read = 1
               ORDER BY msg_id DESC';
 
@@ -153,8 +153,8 @@ class ModuleMessages
         $sql = 'SELECT msg_id, msg_usr_id_sender, msg_usr_id_receiver
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'PM\'
-                   AND ( (msg_usr_id_receiver LIKE ? AND msg_read <> 1) -- $userId
-                       OR (msg_usr_id_sender  =    ? AND msg_read < 2)) -- $userId
+                   AND ( (msg_usr_id_receiver = ? AND msg_read <> 1) -- $userId
+                       OR (msg_usr_id_sender  = ? AND msg_read < 2)) -- $userId
               ORDER BY msg_id DESC';
 
         return $gDb->queryPrepared($sql, array($userId, $userId));

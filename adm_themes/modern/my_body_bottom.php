@@ -133,10 +133,10 @@
 
 <p id="copyright">
     <a href="<?php echo ADMIDIO_HOMEPAGE; ?>" style="text-decoration: none;">
-        <img src="<?php echo THEME_URL; ?>/images/admidio_logo_20.png"
+        <img src="<?php echo THEME_URL; ?>/images/admidio_writing_100.png"
              alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              style="border: 0; vertical-align: bottom;" />
-    </a>
-    <span style="font-size: 9pt; padding-left: 8px;">&copy; 2004 - 2016&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
+    </a><br />
+    <span style="font-size: 9pt; padding-left: 8px;">&copy; 2004 - 2017&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>

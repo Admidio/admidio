@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for categories
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -130,9 +130,9 @@ if($getMode === 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type    = ? -- $getType
-                   AND cat_name LIKE ? -- $_POST[\'cat_name\']
-                   AND cat_id     <> ? -- $getCatId
+                 WHERE cat_type = ? -- $getType
+                   AND cat_name = ? -- $_POST[\'cat_name\']
+                   AND cat_id  <> ? -- $getCatId
                        '.$sqlSearchOrga;
         $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatId, $orgId));
 

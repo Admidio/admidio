@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Handle update of Admidio database to a new version
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -71,7 +71,7 @@ catch (AdmException $e)
 {
     showNotice(
         $gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()),
-        'installation.php?mode=3',
+        'installation.php?step=connect_database',
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );

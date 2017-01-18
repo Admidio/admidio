@@ -12,7 +12,7 @@
  *
  * Compatible with Admidio version 3.2
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -77,7 +77,7 @@ if(!isset($plg_rank))
 global $page;
 if(isset($page) && $page instanceof \HtmlPage)
 {
-    $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/login_form/login_form.css');
+    $page->addCssFile($g_root_path . FOLDER_PLUGINS . '/login_form/login_form.css');
 }
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
@@ -95,12 +95,12 @@ if($gValidLogin)
     if($plg_link_target !== '' && strpos($plg_link_target, '_') === false)
     {
         $jsContentNextPage = '
-        parent.'. $plg_link_target. '.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';
+        parent.'. $plg_link_target. '.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';
         self.location.reload(); ';
     }
     else
     {
-        $jsContentNextPage = 'self.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';';
+        $jsContentNextPage = 'self.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';';
     }
 
     $jsContent = '$("#adm_logout_link").click(function() {'.$jsContentNextPage.'});';
@@ -154,7 +154,7 @@ if($gValidLogin)
 
     // create a static form
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
-    $form->addStaticControl('plg_user', $gL10n->get('SYS_MEMBER'), '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '"
+    $form->addStaticControl('plg_user', $gL10n->get('SYS_MEMBER'), '<a href="'. $g_root_path. FOLDER_MODULES. '/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '"
                 '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '</a>');
     $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gPreferences['system_time']));
     $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
@@ -166,12 +166,12 @@ if($gValidLogin)
     // show link for logout
     if($plg_show_icons)
     {
-        echo '<a id="adm_logout_link" class="btn" href="'.ADMIDIO_URL.'/adm_program/system/logout.php"><img
+        echo '<a id="adm_logout_link" class="btn" href="'.$g_root_path.'/adm_program/system/logout.php"><img
             src="'. THEME_URL. '/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" />'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
     else
     {
-        echo '<a id="adm_logout_link" href="'.ADMIDIO_URL.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>';
+        echo '<a id="adm_logout_link" href="'.$g_root_path.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>';
     }
     echo '</div>';
 }
@@ -183,7 +183,7 @@ else
         $iconCode  = THEME_URL. '/icons/key.png';
     }
 
-    $form = new HtmlForm('plugin-login-form', ADMIDIO_URL.'/adm_program/system/login_check.php', null,
+    $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null,
                          array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false));
     $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('property' => FIELD_REQUIRED, 'maxLength' => 35));
     // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
@@ -217,12 +217,12 @@ else
         if($plg_show_icons)
         {
             echo '
-            <a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php"><img
+            <a class="btn" href="'. $g_root_path. FOLDER_MODULES. '/registration/registration.php"><img
                 src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
         else
         {
-            echo '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/registration/registration.php" '. $plg_link_target. '>'.$gL10n->get('SYS_REGISTRATION').'</a>';
+            echo '<a href="'. $g_root_path. FOLDER_MODULES. '/registration/registration.php" '. $plg_link_target. '>'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
     }
 
@@ -234,7 +234,7 @@ else
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_administrator = 1
-                   AND rol_name LIKE ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
+                   AND rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
         $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrganization->getValue('org_id')));
@@ -248,13 +248,13 @@ else
         if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_system_mails'] == 1)
         {
             // neues Passwort zusenden
-            $linkUrl  = ADMIDIO_URL.'/adm_program/system/lost_password.php';
+            $linkUrl  = $g_root_path.'/adm_program/system/lost_password.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
         elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
             // show link of message module to send mail to administrator role
-            $linkUrl = ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php?rol_id='. $roleAdministrator->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $linkUrl = $g_root_path. FOLDER_MODULES. '/messages/messages_write.php?rol_id='. $roleAdministrator->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
         else
         {

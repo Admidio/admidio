@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -111,12 +111,21 @@ class Navigation
     }
 
     /**
-     * Removes the last url from the stack.
-     * @return string[] Returns the removed element
+     * Removes the last url from the stack. If there is only one element
+     * in the stack than don't remove it, because this will be the initial
+     * url that should be called.
+     * @return string[]|null Returns the removed element
      */
     public function deleteLastUrl()
     {
-        return array_pop($this->urlStack);
+        if($this->count() > 1)
+        {
+            return array_pop($this->urlStack);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**

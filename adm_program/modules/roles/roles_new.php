@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create and edit roles
  *
- * @copyright 2004-2016 The Admidio Team
+ * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -188,7 +188,7 @@ $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEnt
 $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), (bool) $role->getValue('rol_default_registration'),
                    array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC'));
 $form->addInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'),
-                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999));
+                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1));
 $form->addInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'),
                 array('maxLength' => 6, 'class' => 'form-control-small'));
 $form->addSelectBox('rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods(),
