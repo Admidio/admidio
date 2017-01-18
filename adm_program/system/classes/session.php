@@ -192,7 +192,7 @@ class Session extends TableAccess
 
         if ($path === '')
         {
-            $path = ADMIDIO_SUBFOLDER . '/';
+            $path = ADMIDIO_SUB_URL . '/';
         }
         if ($domain === '')
         {
@@ -471,7 +471,7 @@ class Session extends TableAccess
         // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_SUBFOLDER . '/';
+            $path = ADMIDIO_SUB_URL . '/';
         }
         if ($domain === '')
         {

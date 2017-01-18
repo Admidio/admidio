@@ -41,11 +41,6 @@ class Participants
         $this->checkId($rolId);
     }
 
-    public function __destruct()
-    {
-        unset($this);
-    }
-
     /**
      * This function checks the passed Id if it is numeric and compares it to the current object variable
      * If the values are different the current object variable will be updated with the new value
