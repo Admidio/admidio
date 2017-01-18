@@ -458,7 +458,14 @@ class HtmlPage
 
         if($this->headline !== '')
         {
-            $htmlHeadline = '<h1>'.$this->headline.'</h1>';
+            if($this->hasNavbar)
+            {
+                $htmlHeadline = '<h1 class="admidio-module-headline hidden-xs">'.$this->headline.'</h1>';
+            }
+            else
+            {
+                $htmlHeadline = '<h1 class="admidio-module-headline">'.$this->headline.'</h1>';
+            }
         }
 
         // add admidio css file at last because there the user can redefine all css
@@ -587,12 +594,6 @@ class HtmlPage
         $html .= '</div>';
         $html .= $htmlMyBodyBottom;
         $html .= '</body></html>';
-
-        if($this->hasNavbar)
-        {
-            // set css class to hide headline in mobile mode if navbar is shown
-            $html = str_replace('<h1>'.$this->headline.'</h1>', '<h1 class="hidden-xs">'.$this->headline.'</h1>', $html);
-        }
 
         // now show the complete html of the page
         if($directOutput)
