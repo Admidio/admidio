@@ -291,11 +291,12 @@ class Organization extends TableAccess
         $participantList->addColumn(5, 'mem_count_guests');
         $participantList->save();
 
-        // set participient list to default configuration in date module settings
-        $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$participantList->getValue('lst_id').'\'
-                 WHERE prf_org_id = '.$orgId.'
-                   AND prf_name   = \'dates_default_list_configuration\' ';
-        $this->db->query($sql);
+        // set participant list to default configuration in date module settings
+        $sql = 'UPDATE '.TBL_PREFERENCES.'
+                   SET prf_value = ? -- $participantList->getValue(\'lst_id\')
+                 WHERE prf_name   = \'dates_default_list_configuration\'
+                   AND prf_org_id = ? --.$orgId';
+        $this->db->queryPrepared($sql, array($participantList->getValue('lst_id'), $orgId));
     }
 
     /**

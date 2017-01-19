@@ -374,8 +374,8 @@ class User extends TableAccess
 
         $sql = 'SELECT org_longname
                   FROM '.TBL_ORGANIZATIONS.'
-                 WHERE org_id = '.$this->organizationId;
-        $orgStatement = $this->db->query($sql);
+                 WHERE org_id = ?';
+        $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
         $org = $orgStatement->fetch();
 
         $sqlAdministrator = '';
