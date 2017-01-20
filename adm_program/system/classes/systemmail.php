@@ -88,7 +88,7 @@ class SystemMail extends Email
         // zusaetzliche Variablen ersetzen
         foreach ($this->smVariables as $number => $value)
         {
-            $mailSrcText = preg_replace('/#variable'.$number.'#/', $value, $mailSrcText);
+            $mailSrcText = str_replace('#variable'.$number.'#', $value, $mailSrcText);
         }
 
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
