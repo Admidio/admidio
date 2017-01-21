@@ -619,8 +619,8 @@ INSERT INTO %PREFIX%_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
 
 INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
 (1, 1, NULL, 'DOWNLOAD', 'download_demo', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07'),
-(2, 1, 1, 'DOWNLOAD', 'licenses', NULL, '/adm_my_files/download', 0, 1, NULL, '2014-02-05 14:05:34'),
-(3, 1, 1, 'DOWNLOAD', 'board-meeting', NULL, '/adm_my_files/download', 0, 0, NULL, '2016-04-15 13:25:06'),
+(2, 1, 1, 'DOWNLOAD', 'licenses', NULL, '/adm_my_files/download_demo', 0, 1, NULL, '2014-02-05 14:05:34'),
+(3, 1, 1, 'DOWNLOAD', 'board-meeting', NULL, '/adm_my_files/download_demo', 0, 0, NULL, '2016-04-15 13:25:06'),
 (100, 2, NULL, 'DOWNLOAD', 'download_test', NULL, '/adm_my_files', 0, 1, NULL, '2014-01-01 22:35:07');
 
 
