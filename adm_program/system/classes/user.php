@@ -371,6 +371,12 @@ class User extends TableAccess
             return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
         }
 
+        $sql = 'SELECT org_longname
+                  FROM '.TBL_ORGANIZATIONS.'
+                 WHERE org_id = '.$this->organizationId;
+        $orgStatement = $this->db->query($sql);
+        $org = $orgStatement->fetch();
+
         $sqlAdministrator = '';
         // only check for administrator role if version > 3.1 because before it was webmaster role
         if ($isAdministrator && version_compare($installedDbVersion, '3.2', '>='))
@@ -384,40 +390,59 @@ class User extends TableAccess
         }
 
         // Check if user is currently member of a role of an organisation
-        $sql = 'SELECT DISTINCT mem_usr_id, org_longname'.$sqlAdministrator.'
+        $sql = 'SELECT DISTINCT mem_usr_id'.$sqlAdministrator.'
                   FROM '.TBL_MEMBERS.'
             INNER JOIN '.TBL_ROLES.'
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-            INNER JOIN '.TBL_ORGANIZATIONS.'
-                    ON org_id = cat_org_id
                  WHERE mem_usr_id = '.$this->getValue('usr_id').'
-                   AND rol_valid  = 1
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
+                   AND rol_valid  = 1
                    AND cat_org_id = '.$this->organizationId;
-        $userStatement = $this->db->query($sql);
-        $userRow = $userStatement->fetch();
+        $pdoStatement = $this->db->query($sql);
+        $rowsCount = $pdoStatement->rowCount();
 
-        $loggingObject = array(
-            'username'     => $this->getValue('usr_login_name'),
-            'password'     => '******',
-            'organisation' => $userRow['org_longname']
-        );
-
-        if ($userStatement->rowCount() === 0)
+        if ($rowsCount === 0)
         {
+            $loggingObject = array(
+                'username'     => $this->getValue('usr_login_name'),
+                'password'     => '******',
+                'organisation' => $org['org_longname']
+            );
+
             $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
 
-            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $userRow['org_longname']);
+            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $org['org_longname']);
         }
 
-        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && $userRow['administrator'] == 0)
+        if ($isAdministrator)
         {
-            $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
+            if ($rowsCount === 1)
+            {
+                $row = $pdoStatement->fetch();
+                $isAdmin = (bool) $row['administrator'];
+            }
+            else
+            {
+                $rows = $pdoStatement->fetchAll();
+                $isAdmin = $rows[0]['administrator'] || $rows[1]['administrator'];
+            }
 
-            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $userRow['org_longname']);
+            if (!$isAdmin && version_compare($installedDbVersion, '2.4', '>='))
+            {
+                $loggingObject = array(
+                    'username'     => $this->getValue('usr_login_name'),
+                    'password'     => '******',
+                    'organisation' => $org['org_longname'],
+                    'admin'        => $isAdmin
+                );
+
+                $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
+
+                return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $org['org_longname']);
+            }
         }
 
         // Rehash password if the hash is outdated and rehashing is enabled

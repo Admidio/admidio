@@ -14,7 +14,7 @@ $plg_announcements_count = 2;
 
 // Soll ein Vorschau-Text der Ankündigung gezeigt werden?
 // 0 = keine Voranzeige
-// >0 = Anzahl Zeichen des Vorschau-Textes
+// 70 = Anzahl Zeichen des Vorschau-Textes
 $plg_show_preview = 70;
 
 // Name einer CSS-Klasse fuer Links

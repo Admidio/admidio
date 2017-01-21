@@ -278,7 +278,7 @@ foreach($listsResult['recordset'] as $row)
                 $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
 
                 // Leader of role
-                if($row['num_leader']>0)
+                if($row['num_leader'] > 0)
                 {
                     $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADERS'), $row['num_leader']);
                 }

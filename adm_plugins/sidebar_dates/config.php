@@ -19,7 +19,7 @@ $plg_show_date_end = 1;
 
 // Soll ein Vorschau-Text der Ankündigung gezeigt werden?
 // 0 = keine Voranzeige
-// >0 = Anzahl Zeichen des Vorschau-Textes
+// 70 = Anzahl Zeichen des Vorschau-Textes
 $plg_dates_show_preview = 70;
 
 // Maximale Anzahl von Zeichen in einem Wort,

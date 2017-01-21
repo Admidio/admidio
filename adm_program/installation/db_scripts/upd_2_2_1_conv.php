@@ -15,8 +15,8 @@ $textsStatement = $gDb->query($sql);
 
 while($rowTexts = $textsStatement->fetch())
 {
-    $rowTexts['txt_text'] = preg_replace('/#Betreff#/', '#subject#', $rowTexts['txt_text']);
-    $rowTexts['txt_text'] = preg_replace('/#Inhalt#/',  '#content#', $rowTexts['txt_text']);
+    $rowTexts['txt_text'] = str_replace('#Betreff#', '#subject#', $rowTexts['txt_text']);
+    $rowTexts['txt_text'] = str_replace('#Inhalt#',  '#content#', $rowTexts['txt_text']);
 
     $sql = 'UPDATE '.TBL_TEXTS.' SET txt_text = \''.addslashes($rowTexts['txt_text']). '\'
              WHERE txt_id = '.$rowTexts['txt_id'];
