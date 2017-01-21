@@ -123,6 +123,23 @@ if(count($roleUploadSet) === 0)
     $roleUploadSet[] = '';
 }
 
+// read all download module administrator roles
+$arrayAdministratorRoles = array();
+$sqlAdministratorRoles =  'SELECT rol_id, rol_name, cat_name
+                FROM '.TBL_ROLES.'
+          INNER JOIN '.TBL_CATEGORIES.'
+                  ON cat_id = rol_cat_id
+               WHERE rol_valid  = 1
+                 AND rol_download = 1
+                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+            ORDER BY cat_sequence, rol_name';
+$statementAdminRoles = $gDb->query($sqlAdministratorRoles);
+
+while($row = $statementAdminRoles->fetch())
+{
+    $arrayAdministratorRoles[] .= $row['rol_name'];
+}
+
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -130,7 +147,7 @@ $page = new HtmlPage($headline);
 $folderConfigMenu = $page->getMenu();
 $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-$page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', $folder->getValue('fol_name'), $gL10n->get('ROL_RIGHT_DOWNLOAD')).'</p>');
+$page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', $folder->getValue('fol_name')).'</p>');
 
 // show form
 $form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
@@ -155,6 +172,14 @@ $form->addSelectBoxFromSql(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
         'multiselect'  => true
+    )
+);
+$form->addStaticControl(
+    'adm_administrators',
+    $gL10n->get('SYS_ADMINISTRATORS'),
+    implode(', ', $arrayAdministratorRoles),
+    array(
+        'helpTextIdLabel' => array('DOW_ADMINISTRATORS_DESC', $gL10n->get('ROL_RIGHT_DOWNLOAD'))
     )
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_URL.'/icons/disk.png',

@@ -108,6 +108,7 @@
     <!-- Phrases only in Downloadsmodule -->
     <string name="DOW_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
     <string name="DOW_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
+    <string name="DOW_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
     <string name="DOW_COUNTER">Zähler</string>
     <string name="DOW_CREATE_FOLDER">Ordner anlegen</string>
     <string name="DOW_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
@@ -146,7 +147,7 @@
     <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
     <string name="DOW_NEW_NAME">Neuer Name</string>
     <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
-    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Benutzer von Rollen mit der Berechtigung #VAR2_BOLD# haben immer alle Rechte für den Ordner.</string>
+    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
     <string name="DOW_SELECT_FILES">Dateien auswählen</string>
     <string name="DOW_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
     <string name="DOW_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
@@ -706,7 +707,7 @@
     <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
     <string name="ORG_PARENT_ORGANIZATION_DESC">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
-    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string> 
+    <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nExtrem: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
     <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
@@ -1023,6 +1024,7 @@
     <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
     <string name="SYS_ADMINISTRATION">Administration</string>
     <string name="SYS_ADMINISTRATOR">Administrator</string>
+    <string name="SYS_ADMINISTRATORS">Administratoren</string>
     <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
     <string name="SYS_ALL">Alle</string>
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
