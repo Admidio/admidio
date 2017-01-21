@@ -600,7 +600,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
  * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited, $timestampEdited)
+function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = '')
 {
     global $gDb, $gProfileFields, $gL10n, $gPreferences;
 
