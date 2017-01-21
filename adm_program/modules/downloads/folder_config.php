@@ -104,15 +104,15 @@ if(count($roleViewSet) === 0)
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlUploadRoles =  'SELECT rol_id, rol_name, cat_name
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_system = 0
-                     '.$sqlRolesUploadRight.'
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY cat_sequence, rol_name';
+$sqlUploadRoles = 'SELECT rol_id, rol_name, cat_name
+                     FROM '.TBL_ROLES.'
+               INNER JOIN '.TBL_CATEGORIES.'
+                       ON cat_id = rol_cat_id
+                    WHERE rol_valid  = 1
+                      AND rol_system = 0
+                          '.$sqlRolesUploadRight.'
+                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                 ORDER BY cat_sequence, rol_name';
 
 // get assigned roles of this folder
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
@@ -124,17 +124,17 @@ if(count($roleUploadSet) === 0)
 }
 
 // read all download module administrator roles
-$arrayAdministratorRoles = array();
-$sqlAdministratorRoles =  'SELECT rol_id, rol_name, cat_name
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_download = 1
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY cat_sequence, rol_name';
+$sqlAdministratorRoles = 'SELECT rol_id, rol_name, cat_name
+                            FROM '.TBL_ROLES.'
+                      INNER JOIN '.TBL_CATEGORIES.'
+                              ON cat_id = rol_cat_id
+                           WHERE rol_valid  = 1
+                             AND rol_download = 1
+                             AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                        ORDER BY cat_sequence, rol_name';
 $statementAdminRoles = $gDb->query($sqlAdministratorRoles);
 
+$arrayAdministratorRoles = array();
 while($row = $statementAdminRoles->fetch())
 {
     $arrayAdministratorRoles[] .= $row['rol_name'];
