@@ -621,6 +621,11 @@ input[type="time"] {
 
 /* Information block with user and timestamp who created and edited the data */
 
+.admidio-admidio-info-created-edited {
+    font-size: 8pt;
+    margin-top: 8px;
+}
+
 .admidio-info-created {
     display: block;
 }
