@@ -542,7 +542,6 @@ if($gPreferences['profile_show_roles'] == 1)
     // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
     foreach($rolesRights as $rolesRightsDbName)
     {
-        $rightsOrigin[$rolesRightsDbName] = null;
         $roles = array();
 
         $sql = 'SELECT rol_name
@@ -566,74 +565,84 @@ if($gPreferences['profile_show_roles'] == 1)
             $roles[] = $roleName;
         }
 
-        $rightsOrigin[$rolesRightsDbName] = implode(', ', $roles);
+        if(count($roles) > 0)
+        {
+            $rightsOrigin[$rolesRightsDbName] = implode(', ', $roles);
+        }
     }
 
     $page->addHtml('
     <div class="panel panel-default" id="profile_authorizations_box">
         <div class="panel-heading">'.$gL10n->get('SYS_AUTHORIZATION').'</div>
         <div class="panel-body row" id="profile_authorizations_box_body">');
-            $profileRightsArray = array();
 
-            //checkRolesRight($right)
-            if($user->checkRolesRight('rol_assign_roles'))
+            if(count($rightsOrigin) > 0)
             {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_assign_roles'], 'right' => $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'), 'icon' => 'roles.png');
-            }
-            if($user->checkRolesRight('rol_approve_users'))
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_approve_users'], 'right' => $gL10n->get('ROL_RIGHT_APPROVE_USERS'), 'icon' => 'new_registrations.png');
-            }
-            if($user->checkRolesRight('rol_edit_user'))
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_edit_user'], 'right' => $gL10n->get('ROL_RIGHT_EDIT_USER'), 'icon' => 'group.png');
-            }
+                $profileRightsArray = array();
 
-            if($user->checkRolesRight('rol_mail_to_all'))
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_mail_to_all'], 'right' => $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'), 'icon' => 'email.png');
-            }
-            if($user->checkRolesRight('rol_profile'))
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_profile'], 'right' => $gL10n->get('ROL_RIGHT_PROFILE'), 'icon' => 'profile.png');
-            }
-            if($user->checkRolesRight('rol_announcements') && $gPreferences['enable_announcements_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_announcements'], 'right' => $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), 'icon' => 'announcements.png');
-            }
-            if($user->checkRolesRight('rol_dates') && $gPreferences['enable_dates_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_dates'], 'right' => $gL10n->get('ROL_RIGHT_DATES'), 'icon' => 'dates.png');
-            }
-            if($user->checkRolesRight('rol_photo') && $gPreferences['enable_photo_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_photo'], 'right' => $gL10n->get('ROL_RIGHT_PHOTO'), 'icon' => 'photo.png');
-            }
-            if($user->checkRolesRight('rol_download') && $gPreferences['enable_download_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_download'], 'right' => $gL10n->get('ROL_RIGHT_DOWNLOAD'), 'icon' => 'download.png');
-            }
-            if($user->checkRolesRight('rol_guestbook') && $gPreferences['enable_guestbook_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_guestbook'], 'right' => $gL10n->get('ROL_RIGHT_GUESTBOOK'), 'icon' => 'guestbook.png');
-            }
-            if($user->checkRolesRight('rol_guestbook_comments') && $gPreferences['enable_guestbook_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_guestbook_comments'], 'right' => $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'), 'icon' => 'comment.png');
-            }
-            if($user->checkRolesRight('rol_weblinks') && $gPreferences['enable_weblinks_module'] > 0)
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_weblinks'], 'right' => $gL10n->get('ROL_RIGHT_WEBLINKS'), 'icon' => 'weblinks.png');
-            }
-            if($user->checkRolesRight('rol_all_lists_view'))
-            {
-                $profileRightsArray[] = array('roles' => $rightsOrigin['rol_all_lists_view'], 'right' => $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'), 'icon' => 'lists.png');
-            }
+                if($user->checkRolesRight('rol_assign_roles'))
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_assign_roles'], 'right' => $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'), 'icon' => 'roles.png');
+                }
+                if($user->checkRolesRight('rol_approve_users'))
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_approve_users'], 'right' => $gL10n->get('ROL_RIGHT_APPROVE_USERS'), 'icon' => 'new_registrations.png');
+                }
+                if($user->checkRolesRight('rol_edit_user'))
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_edit_user'], 'right' => $gL10n->get('ROL_RIGHT_EDIT_USER'), 'icon' => 'group.png');
+                }
 
-            foreach($profileRightsArray as $profileRight)
+                if($user->checkRolesRight('rol_mail_to_all'))
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_mail_to_all'], 'right' => $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'), 'icon' => 'email.png');
+                }
+                if($user->checkRolesRight('rol_profile'))
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_profile'], 'right' => $gL10n->get('ROL_RIGHT_PROFILE'), 'icon' => 'profile.png');
+                }
+                if($user->checkRolesRight('rol_announcements') && $gPreferences['enable_announcements_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_announcements'], 'right' => $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), 'icon' => 'announcements.png');
+                }
+                if($user->checkRolesRight('rol_dates') && $gPreferences['enable_dates_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_dates'], 'right' => $gL10n->get('ROL_RIGHT_DATES'), 'icon' => 'dates.png');
+                }
+                if($user->checkRolesRight('rol_photo') && $gPreferences['enable_photo_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_photo'], 'right' => $gL10n->get('ROL_RIGHT_PHOTO'), 'icon' => 'photo.png');
+                }
+                if($user->checkRolesRight('rol_download') && $gPreferences['enable_download_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_download'], 'right' => $gL10n->get('ROL_RIGHT_DOWNLOAD'), 'icon' => 'download.png');
+                }
+                if($user->checkRolesRight('rol_guestbook') && $gPreferences['enable_guestbook_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_guestbook'], 'right' => $gL10n->get('ROL_RIGHT_GUESTBOOK'), 'icon' => 'guestbook.png');
+                }
+                if($user->checkRolesRight('rol_guestbook_comments') && $gPreferences['enable_guestbook_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_guestbook_comments'], 'right' => $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'), 'icon' => 'comment.png');
+                }
+                if($user->checkRolesRight('rol_weblinks') && $gPreferences['enable_weblinks_module'] > 0)
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_weblinks'], 'right' => $gL10n->get('ROL_RIGHT_WEBLINKS'), 'icon' => 'weblinks.png');
+                }
+                if($user->checkRolesRight('rol_all_lists_view'))
+                {
+                    $profileRightsArray[] = array('roles' => $rightsOrigin['rol_all_lists_view'], 'right' => $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'), 'icon' => 'lists.png');
+                }
+
+                foreach($profileRightsArray as $profileRight)
+                {
+                    $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto" data-content="'.$gL10n->get('PRO_ASSIGNED_BY_ROLES'). ': <strong>'. $profileRight['roles'].'</strong>"><img
+                    class="admidio-icon-info" src="'.THEME_URL.'/icons/'.$profileRight['icon'].'" alt="Help" title="" />'. $profileRight['right']. '</div>');
+                }
+            }
+            else
             {
-                $page->addHtml('<div class="col-sm-6 col-md-4 admidio-profile-user-right" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto" data-content="'.$gL10n->get('PRO_ASSIGNED_BY_ROLES'). ': <strong>'. $profileRight['roles'].'</strong>"><img
-                class="admidio-icon-info" src="'.THEME_URL.'/icons/'.$profileRight['icon'].'" alt="Help" title="" />'. $profileRight['right']. '</div>');
+                $page->addHtml('<div class="col-sm-12">'.$gL10n->get('PRO_NO_AUTHORIZATIONS_ASSIGNED').'</div>');
             }
 
             $page->addHtml('
