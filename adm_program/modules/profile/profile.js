@@ -15,7 +15,6 @@ function ProfileJS(gRootPath) {
     this.userId                  = 0;
     this.deleteRole_ConfirmText  = "";
     this.deleteFRole_ConfirmText = "";
-    this.setBy_Text              = "";
     this.errorID                 = 0;
 
     this.reloadRoleMemberships = function() {

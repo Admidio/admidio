@@ -1315,7 +1315,6 @@
     <string name="SYS_SENDER">Absender</string>
     <string name="SYS_SERVER">Server</string>
     <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
-    <string name="SYS_SET_BY">Gesetzt durch</string>
     <string name="SYS_SETTINGS">Einstellungen</string>
     <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
     <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
