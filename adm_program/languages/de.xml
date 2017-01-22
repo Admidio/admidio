@@ -875,7 +875,7 @@
     <string name="PRO_MY_PROFILE">Mein Profil</string>
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
-    <string name="PRO_NO_AUTHORIZATIONS_ASSIGNED">Keine Berechtigungen vergeben</string>
+    <string name="PRO_NO_AUTHORIZATIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
