@@ -114,6 +114,7 @@ elseif($getModule === 'downloads')
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     $headline = $gL10n->get('DOW_UPLOAD_FILES');

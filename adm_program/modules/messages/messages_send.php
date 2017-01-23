@@ -120,6 +120,7 @@ if ($getMsgType === 'EMAIL')
         catch (AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 }

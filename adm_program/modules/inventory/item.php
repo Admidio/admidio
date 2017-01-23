@@ -94,7 +94,6 @@ $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
     profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
     profileJS.inv_id                  = '.$inventory->getValue('inv_id').';
 
     function showHideMembershipInformation(element) {

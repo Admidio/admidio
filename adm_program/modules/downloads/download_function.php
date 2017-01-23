@@ -162,6 +162,7 @@ elseif ($getMode === 3)
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
+        // => EXIT
     }
 }
 
@@ -269,6 +270,7 @@ elseif ($getMode === 4)
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
+        // => EXIT
     }
 }
 
@@ -331,6 +333,7 @@ elseif ($getMode === 6)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     // Pruefen ob das neue Element eine Datei order ein Ordner ist.
@@ -461,5 +464,6 @@ elseif ($getMode === 7)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 }

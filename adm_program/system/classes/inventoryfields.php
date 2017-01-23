@@ -253,7 +253,7 @@ class InventoryFields
                 // replace a variable in url with user value
                 if(strpos($infUrl, '#user_content#') !== false)
                 {
-                    $htmlValue = preg_replace('/#user_content#/', $value, $htmlValue);
+                    $htmlValue = str_replace('#user_content#', $value, $htmlValue);
                 }
             }
             $value = $htmlValue;
