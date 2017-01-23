@@ -71,7 +71,7 @@ if($password === '')
 $sql = 'SELECT usr_id
           FROM '.TBL_USERS.'
          WHERE UPPER(usr_login_name) = UPPER(?)';
-$userStatement = $gDb->querySecure($sql, array($loginname));
+$userStatement = $gDb->queryPrepared($sql, array($loginname));
 
 if ($userStatement->rowCount() === 0)
 {
