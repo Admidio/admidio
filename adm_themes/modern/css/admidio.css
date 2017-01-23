@@ -750,6 +750,10 @@ input[type="time"] {
     display: inline;
 }
 
+#profile_authorizations_box_body div {
+    margin-bottom: 5px;
+}
+
 .admidio-list-roles-assign li,
 .admidio-list-roles-assign-pos li {
     border-width: 0;

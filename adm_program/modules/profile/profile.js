@@ -15,7 +15,6 @@ function ProfileJS(gRootPath) {
     this.userId                  = 0;
     this.deleteRole_ConfirmText  = "";
     this.deleteFRole_ConfirmText = "";
-    this.setBy_Text              = "";
     this.errorID                 = 0;
 
     this.reloadRoleMemberships = function() {
@@ -71,15 +70,10 @@ function ProfileJS(gRootPath) {
         return "leader-" + number;
     }
 
-    this.showInfo = function(name) {
-        $("#profile_authorization_content:first-child").text(this.setBy_Text + ": " + name);
-    };
-    this.deleteShowInfo = function() {
-        $("#profile_authorization_content:first-child").text(this.setBy_Text + ": ");
-    };
     this.toggleDetailsOn = function(memberId) {
         $("#membership_period_" + memberId).css({"visibility": "visible", "display": "block"});
     };
+
     this.toggleDetailsOff = function(memberId) {
         $("#membership_period_" + memberId).css({"visibility": "hidden", "display": "none"});
     };
