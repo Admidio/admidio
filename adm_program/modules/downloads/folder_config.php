@@ -87,6 +87,7 @@ $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                         '.$sqlRolesViewRight.'
                     AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                ORDER BY cat_sequence, rol_name';
+$firstEntryViewRoles = '';
 
 $firstEntryViewRoles = '';
 if (count($rolesViewRightParentFolder) === 0)
@@ -153,8 +154,7 @@ $form->addSelectBoxFromSql(
     'adm_roles_upload_right', $gL10n->get('DOW_UPLOAD_FILES'), $gDb, $sqlDataUpload,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $roleUploadSet, 'multiselect' => true)
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_URL.'/icons/disk.png',
-                                                                  'class' => ' col-sm-offset-3'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));
