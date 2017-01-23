@@ -462,39 +462,41 @@ $javascriptCode .= '
             }
         }
 
+        var myListConfigForm = document.getElementById("mylist_configuration_form");
+
         switch (mode) {
             case "show":
-                document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
-                document.getElementById("mylist_configuration_form").submit();
+                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
+                myListConfigForm.submit();
                 break;
 
             case "save":
-                document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
-                document.getElementById("mylist_configuration_form").submit();
+                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
+                myListConfigForm.submit();
                 break;
 
             case "save_as":
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
-                if (listName != null) {
-                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
-                    document.getElementById("mylist_configuration_form").submit();
+                if (listName !== "") {
+                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
+                    myListConfigForm.submit();
                 }
                 break;
 
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if (msg_result) {
-                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
-                    document.getElementById("mylist_configuration_form").submit();
+                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
+                    myListConfigForm.submit();
                 }
                 break;
 
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
-                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
-                    document.getElementById("mylist_configuration_form").submit();
+                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
+                    myListConfigForm.submit();
                 }
                 break;
         }

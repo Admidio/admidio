@@ -268,7 +268,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $room->readDataById($_POST['dat_room_id']);
             $number = (int) $room->getValue('room_capacity') + (int) $room->getValue('room_overhang');
             $date->setValue('dat_max_members', $number);
-            if($_POST['dat_max_members']<$number && $_POST['dat_max_members']>0)
+            if($_POST['dat_max_members'] < $number && $_POST['dat_max_members'] > 0)
             {
                 $date->setValue('dat_max_members', $_POST['dat_max_members']);
             }

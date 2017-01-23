@@ -135,6 +135,7 @@ if ($getMode === 1 || $getMode === 3)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 
@@ -324,6 +325,7 @@ elseif($getMode === 4 || $getMode === 8)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 

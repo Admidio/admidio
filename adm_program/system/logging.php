@@ -48,18 +48,19 @@ $gLogger->notice('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KiB'
 
 // Log Constants
 $constants = array(
-    'ADMIDIO_HOMEPAGE' => ADMIDIO_HOMEPAGE,
+    'ADMIDIO_HOMEPAGE'  => ADMIDIO_HOMEPAGE,
     'HTTPS'             => HTTPS,
     'PORT'              => PORT,
     'HOST'              => HOST,
     'DOMAIN'            => DOMAIN,
     'ADMIDIO_SUBFOLDER' => ADMIDIO_SUBFOLDER,
+    'ADMIDIO_SUB_URL'   => ADMIDIO_SUB_URL,
     'URLS' => array(
         'SERVER_URL'  => SERVER_URL,
         'ADMIDIO_URL' => ADMIDIO_URL,
         'FILE_URL'    => FILE_URL,
         'CURRENT_URL' => CURRENT_URL
-)   ,
+    ),
     'PATHS' => array(
         'WWW_PATH'     => WWW_PATH, // Will get "SERVER_PATH" in v4.0
         'ADMIDIO_PATH' => ADMIDIO_PATH,

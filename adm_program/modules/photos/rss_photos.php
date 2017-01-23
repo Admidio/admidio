@@ -133,7 +133,7 @@ while ($row = $statement->fetch())
     $description = $description. '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
 
     // show the last five photos as examples
-    if($photo_album->getValue('pho_quantity') >0)
+    if($photo_album->getValue('pho_quantity') > 0)
     {
         $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for($photoNr = $photo_album->getValue('pho_quantity'); $photoNr >= $photo_album->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr)

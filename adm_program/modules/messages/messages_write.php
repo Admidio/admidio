@@ -178,7 +178,7 @@ else
     $form_values['mailfrom']    = '';
     $form_values['subject']     = $getSubject;
     $form_values['msg_body']    = '';
-    $form_values['msg_to']      = 0;
+    $form_values['msg_to']      = '';
     $form_values['carbon_copy'] = $getCarbonCopy;
     $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
 }
@@ -285,9 +285,8 @@ elseif (!isset($messageStatement))
     $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
-    $preloadData = array();
-    $sqlRoleIds  = '';
-    $sqlUserIds  = '';
+    $sqlRoleIds = '';
+    $sqlUserIds = '';
     $sqlParticipationRoles = '';
 
     if ($getUserId > 0)
@@ -306,6 +305,7 @@ elseif (!isset($messageStatement))
     {
         // no user or role was committed then show list with all roles and users
         // where the current user has the right to send email
+        $preloadData = isset($form_values['msg_to']) ? $form_values['msg_to'] : '';
         $sqlRoleIds = implode(',', $gCurrentUser->getAllMailRoles());
         $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
     }

@@ -343,7 +343,8 @@ elseif($getMode === 4)
     }
     catch(AdmException $e)
     {
-        $e->showText();
+        $e->showHtml();
+        // => EXIT
     }
     exit();
 }

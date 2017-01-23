@@ -278,6 +278,7 @@ class HtmlNavbar
         if ($this->type === 'default')
         {
             $cssClassBrand = 'visible-xs-block';
+            $cssClassNavbar = 'navbar-menu';
         }
         elseif ($this->type === 'filter')
         {
