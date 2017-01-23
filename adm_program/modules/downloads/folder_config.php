@@ -37,6 +37,11 @@ if (!$gCurrentUser->editDownloadRight())
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
+$rolesViewRightParentFolder   = array();
+$rolesUploadRightParentFolder = array();
+$sqlRolesViewRight   = '';
+$sqlRolesUploadRight = '';
+
 try
 {
     // get recordset of current folder from database
@@ -44,11 +49,6 @@ try
     $folder->getFolderForDownload($getFolderId);
 
     // Parentordner holen
-    $rolesViewRightParentFolder = array();
-    $rolesUploadRightParentFolder = array();
-    $sqlRolesViewRight = '';
-    $sqlRolesUploadRight = '';
-
     if ($folder->getValue('fol_fol_id_parent'))
     {
         // get recordset of parent folder from database
@@ -78,15 +78,15 @@ catch(AdmException $e)
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlViewRoles =  'SELECT rol_id, rol_name, cat_name
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_system = 0
-                     '.$sqlRolesViewRight.'
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY cat_sequence, rol_name';
+$sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
+                   FROM '.TBL_ROLES.'
+             INNER JOIN '.TBL_CATEGORIES.'
+                     ON cat_id = rol_cat_id
+                  WHERE rol_valid  = 1
+                    AND rol_system = 0
+                        '.$sqlRolesViewRight.'
+                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+               ORDER BY cat_sequence, rol_name';
 $firstEntryViewRoles = '';
 
 if (count($rolesViewRightParentFolder) === 0)
@@ -105,15 +105,15 @@ if(count($roleViewSet) === 0)
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlUploadRoles =  'SELECT rol_id, rol_name, cat_name
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_system = 0
-                     '.$sqlRolesUploadRight.'
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY cat_sequence, rol_name';
+$sqlUploadRoles = 'SELECT rol_id, rol_name, cat_name
+                     FROM '.TBL_ROLES.'
+               INNER JOIN '.TBL_CATEGORIES.'
+                       ON cat_id = rol_cat_id
+                    WHERE rol_valid  = 1
+                      AND rol_system = 0
+                          '.$sqlRolesUploadRight.'
+                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                 ORDER BY cat_sequence, rol_name';
 
 // get assigned roles of this folder
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
@@ -158,8 +158,7 @@ $form->addSelectBoxFromSql(
         'multiselect'  => true
     )
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_URL.'/icons/disk.png',
-                                                                  'class' => ' col-sm-offset-3'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));
