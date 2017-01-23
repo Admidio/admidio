@@ -182,7 +182,7 @@ if($plgDatesResult['numResults'] > 0)
             echo '<div>'.$textPrev.'</div>';
         }
 
-        echo '<hr>';
+        echo '<hr />';
     }
 
     // forward to $plg_link_url without any addional parameters
