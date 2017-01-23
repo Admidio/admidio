@@ -368,6 +368,7 @@ elseif($getMode === 4)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);

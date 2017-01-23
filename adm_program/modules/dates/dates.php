@@ -72,6 +72,7 @@ try
 catch(AdmException $e)
 {
     $e->showHtml();
+    // => EXIT
 }
 
 if($getCatId > 0)

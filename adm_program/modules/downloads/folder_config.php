@@ -73,6 +73,7 @@ try
 catch(AdmException $e)
 {
     $e->showHtml();
+    // => EXIT
 }
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt

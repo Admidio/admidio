@@ -135,6 +135,7 @@ elseif ($getMode === 3)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     // go back to list configuration
