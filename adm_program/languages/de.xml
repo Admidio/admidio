@@ -846,6 +846,7 @@
     <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
     <string name="PRO_ADD_USER">Benutzer anlegen</string>
     <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
+    <string name="PRO_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
     <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
     <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
     <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
@@ -879,6 +880,7 @@
     <string name="PRO_MY_PROFILE">Mein Profil</string>
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
+    <string name="PRO_NO_AUTHORIZATIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
@@ -1313,7 +1315,6 @@
     <string name="SYS_SENDER">Absender</string>
     <string name="SYS_SERVER">Server</string>
     <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
-    <string name="SYS_SET_BY">Gesetzt durch</string>
     <string name="SYS_SETTINGS">Einstellungen</string>
     <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
     <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>
