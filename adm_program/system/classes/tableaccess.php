@@ -496,12 +496,15 @@ class TableAccess
                 else
                 {
                     $sqlSetArray[] = $key . ' = ?';
-                    $queryParams[] = $value;
 
                     // Daten fuer ein Update aufbereiten
                     if ($value === '' || $value === null)
                     {
                         $queryParams[] = null;
+                    }
+                    else
+                    {
+                        $queryParams[] = $value;
                     }
                 }
 
