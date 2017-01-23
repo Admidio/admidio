@@ -204,6 +204,7 @@ $page->addHtml('
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if(!$gCurrentOrganization->hasChildOrganizations())
                         {
+                            $sqlData = array();
                             $sqlData['query'] = 'SELECT org_id, org_longname
                                                    FROM '.TBL_ORGANIZATIONS.'
                                                   WHERE org_id <> ? -- $gCurrentOrganization->getValue(\'org_id\')
@@ -686,6 +687,7 @@ $page->addHtml('
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), (bool) $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
                         // read all global lists
+                        $sqlData = array();
                         $sqlData['query'] = 'SELECT lst_id, lst_name
                                                FROM '.TBL_LISTS.'
                                               WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
@@ -795,7 +797,17 @@ $page->addHtml('
                         $form->addInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC'));
                         $form->addInput('dates_ical_days_future', $gL10n->get('DAT_ICAL_DAYS_FUTURE'), $form_values['dates_ical_days_future'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC'));
                         $form->addCheckbox('dates_show_map_link', $gL10n->get('DAT_SHOW_MAP_LINK'), (bool) $form_values['dates_show_map_link'], array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC'));
-                        $form->addSelectBoxFromSql('dates_default_list_configuration', $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC'));
+                        $sqlData = array();
+                        $sqlData['query'] = 'SELECT lst_id, lst_name
+                                               FROM '.TBL_LISTS.'
+                                              WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                                AND lst_global = 1
+                                           ORDER BY lst_name ASC, lst_timestamp DESC';
+                        $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+                        $form->addSelectBoxFromSql(
+                            'dates_default_list_configuration', $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'), $gDb, $sqlData,
+                            array('defaultValue' => $form_values['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
+                        );
                         $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
