@@ -139,7 +139,7 @@ else
                 admFuncShowCreateChangeInfoByName(
                     $row['create_name'], $room->getValue('room_timestamp_create'),
                     $row['change_name'], $room->getValue('room_timestamp_change'),
-                    $room->getValue('room_usr_id_create'), $room->getValue('room_usr_id_change')
+                    (int) $room->getValue('room_usr_id_create'), (int) $room->getValue('room_usr_id_change')
                 ).'
             </div>
         </div>');
