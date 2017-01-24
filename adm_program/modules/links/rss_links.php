@@ -88,13 +88,14 @@ while ($row = $statement->fetch())
     // submit links to object
     $weblink->clear();
     $weblink->setArray($row);
+
     $lnkUrl = $weblink->getValue('lnk_url');
 
     // add entry to RSS feed
     $rss->addItem(
-        noHTML($weblink->getValue('lnk_name')),
+        $weblink->getValue('lnk_name'),
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
-        ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. $weblink->getValue('lnk_id'),
+        ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. (int) $weblink->getValue('lnk_id'),
         $row['create_name'],
         DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create'))->format('r')
     );
