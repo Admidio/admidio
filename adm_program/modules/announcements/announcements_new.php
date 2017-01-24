@@ -107,8 +107,8 @@ if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganiza
 $form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'), array('property' => FIELD_REQUIRED, 'height' => '400'));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
-    $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')
+    (int) $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
+    (int) $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')
 ));
 
 // add form to html page and show page

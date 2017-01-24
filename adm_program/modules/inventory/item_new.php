@@ -318,7 +318,10 @@ $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEM
 if($getNewItem == 0)
 {
     // show information about inventory who creates the recordset and changed it
-    $form->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
+    $form->addHtml(admFuncShowCreateChangeInfoById(
+        (int) $inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'),
+        (int) $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')
+    ));
 }
 
 $page->addHtml($form->show(false));

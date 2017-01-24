@@ -949,7 +949,10 @@ if($gPreferences['members_enable_user_relations'] == 1)
             {
                 $page->addHtml(
                     '<div id="relation_info_'.$relation->getValue('ure_id').'_Content" style="display: none;">'.
-                    admFuncShowCreateChangeInfoById($relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'), $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')).
+                    admFuncShowCreateChangeInfoById(
+                        (int) $relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'),
+                        (int) $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')
+                    ).
                     '</div>'
                 );
             }
@@ -965,6 +968,9 @@ if($gPreferences['members_enable_user_relations'] == 1)
 }
 
 // show information about user who creates the recordset and changed it
-$page->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
+$page->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'),
+    (int) $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')
+));
 
 $page->show();

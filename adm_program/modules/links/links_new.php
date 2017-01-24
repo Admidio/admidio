@@ -86,7 +86,10 @@ $form->addSelectBoxForCategories('lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb
 $form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'), array('height' => '150px'));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'), $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'),
+    (int) $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));
