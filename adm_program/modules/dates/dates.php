@@ -686,7 +686,7 @@ else
                     admFuncShowCreateChangeInfoByName(
                         $row['create_name'], $date->getValue('dat_timestamp_create'),
                         $row['change_name'], $date->getValue('dat_timestamp_change'),
-                        $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')
+                        (int) $date->getValue('dat_usr_id_create'), (int) $date->getValue('dat_usr_id_change')
                     ).'
                     </div>
                 </div>');

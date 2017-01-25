@@ -70,12 +70,16 @@ $statement = $gDb->query($sql);
 
 // start defining the RSS Feed
 
+$orgLongname = $gCurrentOrganization->getValue('org_longname');
+
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline,
-                   $gCurrentOrganization->getValue('org_homepage'),
-                   $gL10n->get('LNK_LINKS_FROM',
-                   $gCurrentOrganization->getValue('org_longname')),
-                   $gCurrentOrganization->getValue('org_longname'));
+$rss = new RSSfeed(
+    $orgLongname.' - '.$getHeadline,
+    $gCurrentOrganization->getValue('org_homepage'),
+    $gL10n->get('LNK_LINKS_FROM', $orgLongname),
+    $orgLongname
+);
+
 $weblink = new TableWeblink($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -85,16 +89,16 @@ while ($row = $statement->fetch())
     $weblink->clear();
     $weblink->setArray($row);
 
-    // set data for attributes of this entry
-    $title = $weblink->getValue('lnk_name');
-    $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank">'.$weblink->getValue('lnk_url').'</a>'.
-                   '<br /><br />'. $weblink->getValue('lnk_description');
-    $link    = ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. $weblink->getValue('lnk_id');
-    $author  = $row['create_name'];
-    $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
+    $lnkUrl = $weblink->getValue('lnk_url');
 
     // add entry to RSS feed
-    $rss->addItem($title, $description, $link, $author, $pubDate);
+    $rss->addItem(
+        $weblink->getValue('lnk_name'),
+        '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
+        ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. (int) $weblink->getValue('lnk_id'),
+        $row['create_name'],
+        DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create'))->format('r')
+    );
 }
 
 // jetzt nur noch den Feed generieren lassen
