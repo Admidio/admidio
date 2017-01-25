@@ -20,11 +20,11 @@ $sql = 'SELECT rol_id
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
+         WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
            AND rol_administrator = 1
-           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
+           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                OR cat_org_id IS NULL )';
-$pdoStatement = $gDb->query($sql);
+$pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrganization->getValue('org_id')));
 
 // create role object for administrator
 $roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());

@@ -28,15 +28,15 @@ function getRolesFromDatabase($userId)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE mem_usr_id  = '.$userId.'
-               AND mem_begin  <= \''.DATE_NOW.'\'
-               AND mem_end    >= \''.DATE_NOW.'\'
+             WHERE mem_usr_id  = ? -- $userId
+               AND mem_begin  <= ? -- DATE_NOW
+               AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
-    return $gDb->query($sql);
+    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
 }
 
 /**
@@ -54,14 +54,14 @@ function getFutureRolesFromDatabase($userId)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE mem_usr_id  = '.$userId.'
-               AND mem_begin   > \''.DATE_NOW.'\'
+             WHERE mem_usr_id  = ? -- $userId
+               AND mem_begin   > ? -- DATE_NOW
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
-    return $gDb->query($sql);
+    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
 }
 
 /**
@@ -79,14 +79,14 @@ function getFormerRolesFromDatabase($userId)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE mem_usr_id  = '.$userId.'
-               AND mem_end     < \''.DATE_NOW.'\'
+             WHERE mem_usr_id  = ? -- $userId
+               AND mem_end     < ? -- DATE_NOW
                AND rol_valid   = 1
                AND rol_visible = 1
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
-    return $gDb->query($sql);
+    return $gDb->queryPrepared($sql, array($userId, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
 }
 
 /**

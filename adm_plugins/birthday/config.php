@@ -55,8 +55,8 @@ $plg_link_target = '_self';
 $plg_rolle_sql = '';
 
 // Angabe in welcher Sortierfolge die Geburtstage dargestellt werden sollen
-// Aufsteigend bzw. absteigend "asc bzw. desc"
-$plg_sort_sql = 'desc';
+// Aufsteigend bzw. absteigend "ASC bzw. DESC"
+$plg_sort_sql = 'DESC';
 
 // Soll die Überschrift des Plugins angezeigt werden
 // 1 = (Default) Überschrift wird angezeigt

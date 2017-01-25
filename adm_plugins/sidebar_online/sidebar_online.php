@@ -79,19 +79,23 @@ $sql = 'SELECT ses_usr_id, usr_login_name
           FROM '.TBL_SESSIONS.'
      LEFT JOIN '.TBL_USERS.'
             ON usr_id = ses_usr_id
-         WHERE ses_timestamp BETWEEN \''.$refDate.'\' AND \''.DATETIME_NOW.'\'
-           AND ses_org_id = '.$gCurrentOrganization->getValue('org_id');
-
+         WHERE ses_timestamp BETWEEN ? AND ? -- $refDate AND DATETIME_NOW
+           AND ses_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+$queryParams = array($refDate, DATETIME_NOW, $gCurrentOrganization->getValue('org_id'));
 if(!$plg_show_visitors)
 {
-    $sql .= ' AND ses_usr_id IS NOT NULL ';
+    $sql .= '
+        AND ses_usr_id IS NOT NULL';
 }
 if(!$plg_show_self && $gValidLogin)
 {
-    $sql .= ' AND ses_usr_id <> '. $gCurrentUser->getValue('usr_id');
+    $sql .= '
+         AND ses_usr_id <> ? -- $gCurrentUser->getValue(\'usr_id\')';
+    $queryParams[] = $gCurrentUser->getValue('usr_id');
 }
-$sql .= ' ORDER BY ses_usr_id ';
-$onlineUsersStatement = $gDb->query($sql);
+$sql .= '
+     ORDER BY ses_usr_id';
+$onlineUsersStatement = $gDb->queryPrepared($sql, $queryParams);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
 if($plg_show_headline)

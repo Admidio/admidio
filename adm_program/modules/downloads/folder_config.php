@@ -58,7 +58,7 @@ try
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
         if(count($rolesViewRightParentFolder) > 0)
         {
-            $sqlRolesViewRight = ' AND rol_id IN ('.implode(',', $rolesViewRightParentFolder).')';
+            $sqlRolesViewRight = ' AND rol_id IN ('.replaceValuesArrWithQM($rolesViewRightParentFolder).')';
         }
     }
 }
@@ -77,10 +77,11 @@ $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                   WHERE rol_valid  = 1
                     AND rol_system = 0
                         '.$sqlRolesViewRight.'
-                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                ORDER BY cat_sequence, rol_name';
 $firstEntryViewRoles = '';
 
+$firstEntryViewRoles = '';
 if (count($rolesViewRightParentFolder) === 0)
 {
     $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
@@ -94,6 +95,11 @@ if(count($roleViewSet) === 0)
 {
     $roleViewSet[] = 0;
 }
+
+$sqlDataView = array(
+    'query'  => $sqlViewRoles,
+    'params' => array_merge($rolesViewRightParentFolder, array($gCurrentOrganization->getValue('org_id')))
+);
 
 // get assigned roles of this folder
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
@@ -121,6 +127,11 @@ while($row = $statementAdminRoles->fetch())
     $arrayAdministratorRoles[] .= $row['rol_name'];
 }
 
+$sqlDataUpload = array(
+    'query'  => $sqlUploadRoles,
+    'params' => array_merge($rolesUploadRightParentFolder, array($gCurrentOrganization->getValue('org_id')))
+);
+
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -133,22 +144,14 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'
 // show form
 $form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
 $form->addSelectBoxFromSql(
-    'adm_roles_view_right',
-    $gL10n->get('DAT_VISIBLE_TO'),
-    $gDb,
-    $sqlViewRoles,
-    array(
-        'property'     => FIELD_REQUIRED,
-        'defaultValue' => $roleViewSet,
-        'multiselect'  => true,
-        'firstEntry'   => $firstEntryViewRoles
-    )
+    'adm_roles_view_right', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlDataView,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $roleViewSet, 'multiselect' => true, 'firstEntry' => $firstEntryViewRoles)
 );
 $form->addSelectBoxFromSql(
     'adm_roles_upload_right',
     $gL10n->get('DOW_UPLOAD_FILES'),
     $gDb,
-    $sqlViewRoles,
+    $sqlDataUpload,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,

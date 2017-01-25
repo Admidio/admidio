@@ -79,21 +79,21 @@ if(!isset($plg_show_future) || !is_numeric($plg_show_names_extern))
 // Prüfen, ob die Rollenbedingung gesetzt wurde
 if(!isset($plg_rolle_sql) || $plg_rolle_sql === '')
 {
-    $rol_sql = 'IS NOT NULL';
+    $sqlRol = 'IS NOT NULL';
 }
 else
 {
-    $rol_sql = 'IN '.$plg_rolle_sql;
+    $sqlRol = 'IN '.$plg_rolle_sql;
 }
 
-// Prüfen, ob die Sotierbedingung gesetzt wurde
+// Prüfen, ob die Sortierbedingung gesetzt wurde
 if(!isset($plg_sort_sql) || $plg_sort_sql === '')
 {
-    $sort_sql = 'DESC';
+    $sqlSort = 'DESC';
 }
 else
 {
-    $sort_sql = $plg_sort_sql;
+    $sqlSort = $plg_sort_sql;
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
@@ -110,61 +110,78 @@ if(isset($page) && $page instanceof \HtmlPage)
     $page->addCssFile($g_root_path . FOLDER_PLUGINS . '/birthday/birthday.css');
 }
 
+$fieldBirthday = $gProfileFields->getProperty('BIRTHDAY', 'usf_id');
+
 $sql = 'SELECT DISTINCT usr_id, usr_login_name,
                         last_name.usd_value AS last_name, first_name.usd_value AS first_name,
                         birthday.bday AS birthday, birthday.bdate,
-                        DATEDIFF(birthday.bdate, \''.DATETIME_NOW.'\') AS days_to_bdate,
+                        DATEDIFF(birthday.bdate, ?) AS days_to_bdate, -- DATE_NOW
                         YEAR(bdate) - YEAR(bday) AS age,
                         email.usd_value AS email, gender.usd_value AS gender
-          FROM '.TBL_USERS.' users
+          FROM '.TBL_USERS.' AS users
     INNER JOIN ( (SELECT usd_usr_id, usd_value AS bday,
-                         CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')) AS bdate
-                    FROM '.TBL_USER_DATA.' bd1
-                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\'), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
-                         BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+                         CONCAT(YEAR(?), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')) AS bdate -- DATE_NOW
+                    FROM '.TBL_USER_DATA.' AS bd1
+                   WHERE DATEDIFF(CONCAT(YEAR(?), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')), ?) -- DATE_NOW,DATE_NOW
+                 BETWEEN ? AND ? -- -$plg_show_zeitraum AND $plg_show_future
+                     AND usd_usf_id = ?) -- $fieldBirthday
                UNION
                  (SELECT usd_usr_id, usd_value AS bday,
-                         CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')) AS bdate
-                    FROM '.TBL_USER_DATA.' bd2
-                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
-                         BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+                         CONCAT(YEAR(?)-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')) AS bdate -- DATE_NOW
+                    FROM '.TBL_USER_DATA.' AS bd2
+                   WHERE DATEDIFF(CONCAT(YEAR(?)-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')), ?) -- DATE_NOW,DATE_NOW
+                 BETWEEN ? AND ? -- -$plg_show_zeitraum AND $plg_show_future
+                     AND usd_usf_id = ?) -- $fieldBirthday
                UNION
                  (SELECT usd_usr_id, usd_value AS bday,
-                         CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')) AS bdate
-                    FROM '.TBL_USER_DATA.' bd3
-                   WHERE DATEDIFF(CONCAT(YEAR(\''.DATETIME_NOW.'\')+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')), \''.DATETIME_NOW.'\')
-                         BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-                     AND usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').')
+                         CONCAT(YEAR(?)+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')) AS bdate -- DATE_NOW
+                    FROM '.TBL_USER_DATA.' AS bd3
+                   WHERE DATEDIFF(CONCAT(YEAR(?)+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')), ?) -- DATE_NOW,DATE_NOW
+                 BETWEEN ? AND ? -- -$plg_show_zeitraum AND $plg_show_future
+                     AND usd_usf_id = ?) -- $fieldBirthday
                ) birthday
             ON birthday.usd_usr_id = usr_id
      LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
+           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS gender
             ON gender.usd_usr_id = usr_id
-           AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
+           AND gender.usd_usf_id = ? -- $gProfileFields->getProperty(\'GENDER\', \'usf_id\')
      LEFT JOIN '.TBL_MEMBERS.'
             ON mem_usr_id = usr_id
-           AND mem_begin <= \''.DATE_NOW.'\'
-           AND mem_end    > \''.DATE_NOW.'\'
+           AND mem_begin <= ? -- DATE_NOW
+           AND mem_end    > ? -- DATE_NOW
     INNER JOIN '.TBL_ROLES.'
             ON mem_rol_id = rol_id
            AND rol_valid  = 1
     INNER JOIN '.TBL_CATEGORIES.'
             ON rol_cat_id = cat_id
-           AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+           AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
          WHERE usr_valid = 1
-           AND mem_rol_id '.$rol_sql.'
-      ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
-$birthdayStatement = $gDb->query($sql);
+           AND mem_rol_id '.$sqlRol.'
+      ORDER BY days_to_bdate '.$sqlSort.', last_name, first_name';
+
+$queryParams = array(
+    DATE_NOW,
+    DATE_NOW, DATE_NOW, DATE_NOW, -$plg_show_zeitraum, $plg_show_future, $fieldBirthday,
+    DATE_NOW, DATE_NOW, DATE_NOW, -$plg_show_zeitraum, $plg_show_future, $fieldBirthday,
+    DATE_NOW, DATE_NOW, DATE_NOW, -$plg_show_zeitraum, $plg_show_future, $fieldBirthday,
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('EMAIL', 'usf_id'),
+    $gProfileFields->getProperty('GENDER', 'usf_id'),
+    DATE_NOW,
+    DATE_NOW,
+    $gCurrentOrganization->getValue('org_id')
+    // TODO add more params
+);
+$birthdayStatement = $gDb->queryPrepared($sql, $queryParams);
 
 $numberBirthdays = $birthdayStatement->rowCount();
 
