@@ -200,15 +200,15 @@ $page->addHtml('
                             {
                                 $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') AS name
                                           FROM '.TBL_ROOMS.'
-                                         WHERE room_id = ' . $field['value'];
+                                         WHERE room_id = ? -- $field[\'value\']';
                             }
                             else
                             {
                                 $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' AS name
                                           FROM '.TBL_ROOMS.'
-                                         WHERE room_id = ' . $field['value'];
+                                         WHERE room_id = ? -- $field[\'value\']';
                             }
-                            $pdoStatement = $gDb->query($sql);
+                            $pdoStatement = $gDb->queryPrepared($sql, array($field['value']));
 
                             if($pdoStatement->rowCount() > 0)
                             {
@@ -317,6 +317,9 @@ if($category !== '')
 }
 
 // show information about user who creates the recordset and changed it
-$page->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
+$page->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'),
+    (int) $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')
+));
 
 $page->show();

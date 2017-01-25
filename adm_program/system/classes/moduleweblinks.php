@@ -122,7 +122,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb, $gValidLogin;
+        global $gCurrentOrganization, $gPreferences, $gDb, $gValidLogin;
 
         // Parameter
         if($limit === null)
@@ -151,7 +151,7 @@ class ModuleWeblinks extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_type   = \'LNK\'
-                   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
@@ -163,7 +163,7 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $weblinksStatement = $gDb->query($sql);
+        $weblinksStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         // array for results
         return array(
@@ -185,12 +185,12 @@ class ModuleWeblinks extends Modules
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_LINKS.'
-            INNER JOIN '. TBL_CATEGORIES .'
+            INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_type   = \'LNK\'
-                   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions;
-        $pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }

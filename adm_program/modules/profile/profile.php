@@ -549,14 +549,15 @@ if($gPreferences['profile_show_roles'] == 1)
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_valid  = 1
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_usr_id = '.$userId.'
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND mem_usr_id = ? -- $userId
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND '.$rolesRightsDbName.' = 1
               ORDER BY cat_org_id, cat_sequence, rol_name';
-        $roleStatement = $gDb->query($sql);
+        $queryParams = array(DATE_NOW, DATE_NOW, $userId, $gCurrentOrganization->getValue('org_id'));
+        $roleStatement = $gDb->queryPrepared($sql, $queryParams);
 
         $roles = array();
         while($roleName = $roleStatement->fetchColumn())
@@ -795,14 +796,14 @@ if($gPreferences['profile_show_extern_roles'] == 1
                 ON cat_id = rol_cat_id
         INNER JOIN '.TBL_ORGANIZATIONS.'
                 ON org_id = cat_org_id
-             WHERE mem_usr_id  = '.$userId.'
-               AND mem_begin  <= \''.DATE_NOW.'\'
-               AND mem_end    >= \''.DATE_NOW.'\'
+             WHERE mem_usr_id  = ? -- $userId
+               AND mem_begin  <= ? -- DATE_NOW
+               AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = 1
                AND cat_name_intern <> \'EVENTS\'
-               AND org_id     <> '.$gCurrentOrganization->getValue('org_id').'
+               AND org_id     <> ? -- $gCurrentOrganization->getValue(\'org_id\')
           ORDER BY org_shortname, cat_sequence, rol_name';
-    $roleStatement = $gDb->query($sql);
+    $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
 
     if($roleStatement->rowCount() > 0)
     {
@@ -874,11 +875,11 @@ if($gPreferences['members_enable_user_relations'] == 1)
               FROM ' . TBL_USER_RELATIONS . '
         INNER JOIN ' . TBL_USER_RELATION_TYPES . '
                 ON ure_urt_id  = urt_id
-             WHERE ure_usr_id1 = ' . $userId . '
+             WHERE ure_usr_id1 = ? -- $userId
                AND urt_name        <> \'\'
                AND urt_name_male   <> \'\'
                AND urt_name_female <> \'\'';
-    $statement = $gDb->query($sql);
+    $statement = $gDb->queryPrepared($sql, array($userId));
     $count = (int) $statement->fetchColumn();
 
     if($count > 0)
@@ -892,12 +893,12 @@ if($gPreferences['members_enable_user_relations'] == 1)
                   FROM '.TBL_USER_RELATIONS.'
             INNER JOIN '.TBL_USER_RELATION_TYPES.'
                     ON ure_urt_id  = urt_id
-                 WHERE ure_usr_id1 = '.$userId.'
+                 WHERE ure_usr_id1 = ? -- $userId
                    AND urt_name        <> \'\'
                    AND urt_name_male   <> \'\'
                    AND urt_name_female <> \'\'
               ORDER BY urt_name';
-        $relationStatement = $gDb->query($sql);
+        $statement = $gDb->queryPrepared($sql, array($userId));
 
         $relationtype = new TableUserRelationType($gDb);
         $relation     = new TableUserRelation($gDb);
@@ -949,7 +950,10 @@ if($gPreferences['members_enable_user_relations'] == 1)
             {
                 $page->addHtml(
                     '<div id="relation_info_'.$relation->getValue('ure_id').'_Content" style="display: none;">'.
-                    admFuncShowCreateChangeInfoById($relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'), $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')).
+                    admFuncShowCreateChangeInfoById(
+                        (int) $relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'),
+                        (int) $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')
+                    ).
                     '</div>'
                 );
             }
@@ -965,6 +969,9 @@ if($gPreferences['members_enable_user_relations'] == 1)
 }
 
 // show information about user who creates the recordset and changed it
-$page->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
+$page->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'),
+    (int) $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')
+));
 
 $page->show();

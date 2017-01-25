@@ -261,7 +261,10 @@ if($gPreferences['dates_show_rooms'] == true)
                   FROM '.TBL_ROOMS.'
               ORDER BY room_name';
     }
-    $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, array('defaultValue' => $date->getValue('dat_room_id')));
+    $form->addSelectBoxFromSql(
+        'dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql,
+        array('defaultValue' => $date->getValue('dat_room_id'))
+    );
 }
 $form->closeGroupBox();
 
@@ -276,20 +279,21 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
 // add a multiselectbox to the form where the user can choose all roles that should see this event
 // first read all relevant roles from database and create an array with them
-$sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '.TBL_ROLES.'
-    INNER JOIN '.TBL_CATEGORIES.'
-            ON cat_id = rol_cat_id
-         WHERE rol_valid   = 1
-           AND cat_name_intern <> \'EVENTS\'
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )
-      ORDER BY cat_sequence, rol_name';
+$sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                       FROM '.TBL_ROLES.'
+                 INNER JOIN '.TBL_CATEGORIES.'
+                         ON cat_id = rol_cat_id
+                      WHERE rol_valid   = 1
+                        AND cat_name_intern <> \'EVENTS\'
+                        AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                            OR cat_org_id IS NULL )
+                   ORDER BY cat_sequence, rol_name';
+$sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
 $firstEntry = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
-$form->addSelectBoxFromSql('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sql, array('property'     => FIELD_REQUIRED,
-                                                                                          'defaultValue' => $dateRoles,
-                                                                                          'multiselect'  => true,
-                                                                                          'firstEntry'   => $firstEntry));
+$form->addSelectBoxFromSql(
+    'date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlData,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $dateRoles, 'multiselect' => true, 'firstEntry' => $firstEntry)
+);
 
 $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $date->getValue('dat_highlight'));
 
@@ -315,7 +319,10 @@ $form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'), $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'),
+    (int) $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

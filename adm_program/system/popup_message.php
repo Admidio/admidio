@@ -42,7 +42,7 @@ switch ($getType)
         $url = 'backup_file_function.php?job=delete&filename='.$getDatabaseId;
         break;
     case 'cat':
-        $url  = 'categories_function.php?cat_id='.$getDatabaseId.'&mode=2&type='.$getDatabaseId2;
+        $url = 'categories_function.php?cat_id='.$getDatabaseId.'&mode=2&type='.$getDatabaseId2;
 
         // get special message for calendars
         if($getDatabaseId2 === 'DAT')

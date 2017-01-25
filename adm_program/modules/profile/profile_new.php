@@ -236,7 +236,10 @@ foreach($gProfileFields->mProfileFields as $field)
                         $sql = 'SELECT org_id, org_longname
                                   FROM '.TBL_ORGANIZATIONS.'
                               ORDER BY org_longname ASC, org_shortname ASC';
-                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_REQUIRED, 'defaultValue' => $registrationOrgId));
+                        $form->addSelectBoxFromSql(
+                            'reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
+                            array('property' => FIELD_REQUIRED, 'defaultValue' => $registrationOrgId)
+                        );
                     }
                 }
                 else
@@ -442,7 +445,10 @@ else
 if($getNewUser === 0)
 {
     // show information about user who creates the recordset and changed it
-    $form->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
+    $form->addHtml(admFuncShowCreateChangeInfoById(
+        (int) $user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'),
+        (int) $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')
+    ));
 }
 
 $page->addHtml($form->show(false));

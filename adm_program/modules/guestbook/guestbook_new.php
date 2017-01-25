@@ -95,10 +95,11 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK.'
-             WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
-               AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_address'). '\'';
-    $pdoStatement = $gDb->query($sql);
+             WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+               AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
+    $queryParams = array($gPreferences['flooding_protection_time'], $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
+    $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     if($pdoStatement->fetchColumn() > 0)
     {
@@ -150,7 +151,10 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 
 // show information about user who creates the recordset and changed it
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($guestbook->getValue('gbo_usr_id_create'), $guestbook->getValue('gbo_timestamp_create'), $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $guestbook->getValue('gbo_usr_id_create'), $guestbook->getValue('gbo_timestamp_create'),
+    (int) $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

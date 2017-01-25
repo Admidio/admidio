@@ -180,12 +180,12 @@ $categoriesOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
           FROM '.TBL_CATEGORIES.'
-         WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+         WHERE (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                OR cat_org_id IS NULL )
-           AND cat_type   = \''.$getType.'\'
+           AND cat_type = ? -- $getType
       ORDER BY cat_sequence ASC';
 
-$categoryStatement = $gDb->query($sql);
+$categoryStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $getType));
 $flagTbodyWritten = false;
 $flagTbodyAllOrgasWritten = false;
 

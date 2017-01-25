@@ -94,8 +94,7 @@ else
 if(count($arrayRoles) > 0)
 // Wenn schon dann alle Namen und die dazugehörigen Emails auslesen und in die versand Liste hinzufügen
 {
-    $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name,
-                   email.usd_value AS email, rol_name
+    $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email, rol_name
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id
@@ -105,22 +104,30 @@ if(count($arrayRoles) > 0)
                 ON usr_id = mem_usr_id
         RIGHT JOIN '.TBL_USER_DATA.' AS email
                 ON email.usd_usr_id = usr_id
-               AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
+               AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
                AND LENGTH(email.usd_value) > 0
          LEFT JOIN '.TBL_USER_DATA.' AS last_name
                 ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
          LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE rol_id           IN ('.implode(',', $arrayRoles).')
-               AND cat_org_id       = '.$gCurrentOrganization->getValue('org_id').'
-               AND mem_begin       <= \''.DATE_NOW.'\'
-               AND mem_end          > \''.DATE_NOW.'\'
+               AND cat_org_id       = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND mem_begin       <= ? -- DATE_NOW
+               AND mem_end          > ? -- DATE_NOW
                AND usr_valid        = 1
                AND email.usd_usr_id = email.usd_usr_id
           ORDER BY last_name, first_name';
-    $usersStatement = $gDb->query($sql);
+    $queryParams = array(
+        $gProfileFields->getProperty('EMAIL', 'usf_id'),
+        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+        $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+        $gCurrentOrganization->getValue('org_id'),
+        DATE_NOW,
+        DATE_NOW
+    );
+    $usersStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while($row = $usersStatement->fetch())
     {

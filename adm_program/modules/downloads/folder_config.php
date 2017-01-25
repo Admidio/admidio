@@ -36,6 +36,11 @@ if (!$gCurrentUser->editDownloadRight())
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
+$rolesViewRightParentFolder   = array();
+$rolesUploadRightParentFolder = array();
+$sqlRolesViewRight   = '';
+$sqlRolesUploadRight = '';
+
 try
 {
     // get recordset of current folder from database
@@ -43,11 +48,6 @@ try
     $folder->getFolderForDownload($getFolderId);
 
     // Parentordner holen
-    $rolesViewRightParentFolder = array();
-    $rolesUploadRightParentFolder = array();
-    $sqlRolesViewRight = '';
-    $sqlRolesUploadRight = '';
-
     if ($folder->getValue('fol_fol_id_parent'))
     {
         // get recordset of parent folder from database
@@ -58,14 +58,14 @@ try
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
         if(count($rolesViewRightParentFolder) > 0)
         {
-            $sqlRolesViewRight = ' AND rol_id IN ('.implode(',', $rolesViewRightParentFolder).')';
+            $sqlRolesViewRight = ' AND rol_id IN ('.replaceValuesArrWithQM($rolesViewRightParentFolder).')';
         }
 
         // get assigned roles of the parent folder
         $rolesUploadRightParentFolder = $parentFolder->getRoleUploadArrayOfFolder();
         if(count($rolesUploadRightParentFolder) > 0)
         {
-            $sqlRolesUploadRight = ' AND rol_id IN ('.implode(',', $rolesUploadRightParentFolder).')';
+            $sqlRolesUploadRight = ' AND rol_id IN ('.replaceValuesArrWithQM($rolesUploadRightParentFolder).')';
         }
     }
 }
@@ -77,17 +77,18 @@ catch(AdmException $e)
 
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlViewRoles =  'SELECT rol_id, rol_name, cat_name
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_system = 0
-                     '.$sqlRolesViewRight.'
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY cat_sequence, rol_name';
+$sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
+                   FROM '.TBL_ROLES.'
+             INNER JOIN '.TBL_CATEGORIES.'
+                     ON cat_id = rol_cat_id
+                  WHERE rol_valid  = 1
+                    AND rol_system = 0
+                        '.$sqlRolesViewRight.'
+                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               ORDER BY cat_sequence, rol_name';
 $firstEntryViewRoles = '';
 
+$firstEntryViewRoles = '';
 if (count($rolesViewRightParentFolder) === 0)
 {
     $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
@@ -102,17 +103,22 @@ if(count($roleViewSet) === 0)
     $roleViewSet[] = 0;
 }
 
+$sqlDataView = array(
+    'query'  => $sqlViewRoles,
+    'params' => array_merge($rolesViewRightParentFolder, array($gCurrentOrganization->getValue('org_id')))
+);
+
 // wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
 // alle aus der DB aus lesen
-$sqlUploadRoles =  'SELECT rol_id, rol_name, cat_name
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_system = 0
-                     '.$sqlRolesUploadRight.'
-                 AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-            ORDER BY cat_sequence, rol_name';
+$sqlUploadRoles = 'SELECT rol_id, rol_name, cat_name
+                     FROM '.TBL_ROLES.'
+               INNER JOIN '.TBL_CATEGORIES.'
+                       ON cat_id = rol_cat_id
+                    WHERE rol_valid  = 1
+                      AND rol_system = 0
+                          '.$sqlRolesUploadRight.'
+                      AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 ORDER BY cat_sequence, rol_name';
 
 // get assigned roles of this folder
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
@@ -122,6 +128,11 @@ if(count($roleUploadSet) === 0)
 {
     $roleUploadSet[] = '';
 }
+
+$sqlDataUpload = array(
+    'query'  => $sqlUploadRoles,
+    'params' => array_merge($rolesUploadRightParentFolder, array($gCurrentOrganization->getValue('org_id')))
+);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -135,30 +146,14 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'
 // show form
 $form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
 $form->addSelectBoxFromSql(
-    'adm_roles_view_right',
-    $gL10n->get('DAT_VISIBLE_TO'),
-    $gDb,
-    $sqlViewRoles,
-    array(
-        'property'     => FIELD_REQUIRED,
-        'defaultValue' => $roleViewSet,
-        'multiselect'  => true,
-        'firstEntry'   => $firstEntryViewRoles
-    )
+    'adm_roles_view_right', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlDataView,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $roleViewSet, 'multiselect' => true, 'firstEntry' => $firstEntryViewRoles)
 );
 $form->addSelectBoxFromSql(
-    'adm_roles_upload_right',
-    $gL10n->get('DOW_UPLOAD_FILES'),
-    $gDb,
-    $sqlUploadRoles,
-    array(
-        'property'     => FIELD_REQUIRED,
-        'defaultValue' => $roleUploadSet,
-        'multiselect'  => true
-    )
+    'adm_roles_upload_right', $gL10n->get('DOW_UPLOAD_FILES'), $gDb, $sqlDataUpload,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $roleUploadSet, 'multiselect' => true)
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon'  => THEME_URL.'/icons/disk.png',
-                                                                  'class' => ' col-sm-offset-3'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

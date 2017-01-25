@@ -113,7 +113,7 @@ class ComponentUpdate extends Component
                 // replace prefix with installation specific table prefix
                 $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
 
-                $this->db->query($sql, $showError);
+                $this->db->query($sql, $showError); // TODO add more params
             }
 
             // set the type if the id to integer because otherwise the system thinks it's not numeric !!!
@@ -230,10 +230,11 @@ class ComponentUpdate extends Component
                 $this->save();
 
                 // save current version to all modules
-                $sql = 'UPDATE '.TBL_COMPONENTS.' SET com_version = \''.ADMIDIO_VERSION.'\'
-                                                    , com_beta    = \''.ADMIDIO_VERSION_BETA.'\'
-                         WHERE com_type = \'MODULE\' ';
-                $this->db->query($sql);
+                $sql = 'UPDATE '.TBL_COMPONENTS.'
+                           SET com_version = ? -- ADMIDIO_VERSION
+                             , com_beta    = ? -- ADMIDIO_VERSION_BETA
+                         WHERE com_type = \'MODULE\'';
+                $this->db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
             }
 
             // reset subversion because we want to start update for next main version with subversion 0
@@ -251,8 +252,8 @@ class ComponentUpdate extends Component
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE usr_login_name = \''.$gL10n->get('SYS_SYSTEM').'\'';
-        $systemUserStatement = $this->db->query($sql);
+                 WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
+        $systemUserStatement = $this->db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
         $systemUserId = (int) $systemUserStatement->fetchColumn();
 
         $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
@@ -263,12 +264,15 @@ class ComponentUpdate extends Component
             $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                         VALUES ('.$row['org_id'].', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
                              , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\',   \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
-            $this->db->query($sql);
+            $this->db->query($sql); // TODO add more params
 
-            $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id =
-                           (SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ANN\' AND cat_name_intern = \'COMMON\')
-                     WHERE ann_org_id = '.$row['org_id'];
-            $this->db->query($sql);
+            $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.'
+                       SET ann_cat_id = (SELECT cat_id
+                                           FROM '.TBL_CATEGORIES.'
+                                          WHERE cat_type = \'ANN\'
+                                            AND cat_name_intern = \'COMMON\')
+                     WHERE ann_org_id = ? -- $row[\'org_id\']';
+            $this->db->queryPrepared($sql, array($row['org_id']));
         }
     }
 
@@ -402,28 +406,34 @@ class ComponentUpdate extends Component
         global $g_tbl_praefix, $g_organization;
 
         // migrate adm_folder_roles to adm_roles_rights
-        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'folder_view\' ';
+        $sql = 'SELECT ror_id
+                  FROM '.TBL_ROLES_RIGHTS.'
+                 WHERE ror_name_intern = \'folder_view\'';
         $rolesRightsStatement = $this->db->query($sql);
         $rolesRightId = $rolesRightsStatement->fetchColumn();
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
                 SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id
                   FROM '.$g_tbl_praefix.'_folder_roles ';
-        $this->db->query($sql);
+        $this->db->query($sql); // TODO add more params
 
         // add new right folder_update to adm_roles_rights
-        $sql = 'SELECT fol_id FROM '.TBL_FOLDERS.'
+        $sql = 'SELECT fol_id
+                  FROM '.TBL_FOLDERS.'
                  WHERE fol_type = \'DOWNLOAD\'
                    AND fol_name = \'download\' ';
         $rolesRightsStatement = $this->db->query($sql);
         $folderId = (int) $rolesRightsStatement->fetchColumn();
 
-        $sql = 'SELECT rol_id FROM '.TBL_ROLES.'
-                  LEFT JOIN '.TBL_CATEGORIES.' ON cat_id = rol_cat_id
-                  LEFT JOIN '.TBL_ORGANIZATIONS.' ON org_id = cat_org_id
-                   AND org_shortname = \''.$g_organization.'\'
-                 WHERE rol_download = 1 ';
-        $rolesDownloadStatement = $this->db->query($sql);
+        $sql = 'SELECT rol_id
+                  FROM '.TBL_ROLES.'
+             LEFT JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+             LEFT JOIN '.TBL_ORGANIZATIONS.'
+                    ON org_id = cat_org_id
+                 WHERE rol_download  = 1
+                   AND org_shortname = ? -- $g_organization';
+        $rolesDownloadStatement = $this->db->queryPrepared($sql, array($g_organization));
 
         $rolesArray = array();
         while($roleId = $rolesDownloadStatement->fetchColumn())
@@ -461,10 +471,11 @@ class ComponentUpdate extends Component
         {
             $gCurrentOrganization->readDataById($row['org_id']);
 
-            $sql = 'SELECT fol_id, fol_name FROM '.TBL_FOLDERS.'
-                     WHERE fol_org_id = '.$row['org_id'].'
-                       AND fol_fol_id_parent IS NULL ';
-            $folderStatement = $this->db->query($sql);
+            $sql = 'SELECT fol_id, fol_name
+                      FROM '.TBL_FOLDERS.'
+                     WHERE fol_fol_id_parent IS NULL
+                       AND fol_org_id = ? -- $row[\'org_id\']';
+            $folderStatement = $this->db->queryPrepared($sql, array($row['org_id']));
 
             if($rowFolder = $folderStatement->fetch())
             {
@@ -473,9 +484,10 @@ class ComponentUpdate extends Component
                 $folder->setValue('fol_name', TableFolder::getRootFolderName());
                 $folder->save();
 
-                $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName().'\')
+                $sql = 'UPDATE '.TBL_FOLDERS.'
+                           SET fol_path = REPLACE(fol_path, \'/'.$rowFolder['fol_name'].'\', \'/'.TableFolder::getRootFolderName().'\')
                          WHERE fol_org_id = '.$row['org_id'];
-                $this->db->query($sql);
+                $this->db->query($sql); // TODO add more params
 
                 if($row['org_shortname'] === $g_organization)
                 {
@@ -488,7 +500,7 @@ class ComponentUpdate extends Component
                                                      fol_locked, fol_public, fol_timestamp)
                                              VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'' . FOLDER_DATA . '\',
                                                      0, 1, \''.DATETIME_NOW.'\')';
-                $this->db->query($sql);
+                $this->db->query($sql); // TODO add more params
             }
         }
 
@@ -502,13 +514,15 @@ class ComponentUpdate extends Component
     {
         global $gL10n;
 
-        $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'_1\'
-                 WHERE rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'';
-        $this->db->query($sql);
+        $sql = 'UPDATE '.TBL_ROLES.'
+                   SET rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')_1
+                 WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')';
+        $this->db->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR') . '_1', $gL10n->get('SYS_ADMINISTRATOR')));
 
-        $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
-                 WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\'';
-        $this->db->query($sql);
+        $sql = 'UPDATE '.TBL_ROLES.'
+                   SET rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
+                 WHERE rol_name = ? -- $gL10n->get(\'SYS_WEBMASTER\')';
+        $this->db->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gL10n->get('SYS_WEBMASTER')));
     }
 
     /**
@@ -563,16 +577,17 @@ class ComponentUpdate extends Component
         {
             $sql = 'SELECT lst_id
                       FROM '.TBL_LISTS.'
-                     WHERE lst_org_id  = '. $organization['org_id'].'
-                       AND lst_default = 1 ';
-            $defaultListStatement = $this->db->query($sql);
+                     WHERE lst_default = 1
+                       AND lst_org_id  = ? -- $organization[\'org_id\']';
+            $defaultListStatement = $this->db->queryPrepared($sql, array($organization['org_id']));
             $listId = $defaultListStatement->fetchColumn();
 
             // save default list to preferences
-            $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$listId.'\'
-                     WHERE prf_org_id = '.$organization['org_id'].'
-                       AND prf_name   = \'lists_default_configuation\' ';
-            $this->db->query($sql);
+            $sql = 'UPDATE '.TBL_PREFERENCES.'
+                       SET prf_value  = ? -- $listId
+                     WHERE prf_name   = \'lists_default_configuation\'
+                       AND prf_org_id = ? -- $organization[\'org_id\']';
+            $this->db->queryPrepared($sql, array($listId, $organization['org_id']));
         }
     }
 
@@ -592,6 +607,6 @@ class ComponentUpdate extends Component
                      , (6, \''.$gL10n->get('INS_COMPANION').'\', \''.$gL10n->get('INS_BOYFRIEND').'\', \''.$gL10n->get('INS_GIRLFRIEND').'\', 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                      , (7, \''.$gL10n->get('INS_SUPERIOR').'\', \''.$gL10n->get('INS_SUPERIOR_MALE').'\', \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\', 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                      , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
-        $this->db->query($sql);
+        $this->db->query($sql); // TODO add more params
     }
 }

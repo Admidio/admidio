@@ -57,19 +57,9 @@ if (isset($gForceHTTPS) && $gForceHTTPS && !HTTPS)
     exit();
 }
 
-// remove HTML & PHP-Code from all parameters
-$_GET    = admStrStripTagsSpecial($_GET);
-$_POST   = admStrStripTagsSpecial($_POST);
-$_COOKIE = admStrStripTagsSpecial($_COOKIE);
-
-// escape all quotes so db queries are save
-// deprecated
-if(!get_magic_quotes_gpc())
-{
-    $_GET    = strAddSlashesDeep($_GET);
-    $_POST   = strAddSlashesDeep($_POST);
-    $_COOKIE = strAddSlashesDeep($_COOKIE);
-}
+// Remove HTML & PHP-Code and escape all quotes from all request parameters
+// If debug is on and change is made, log it
+require_once(ADMIDIO_PATH . '/adm_program/system/global_request_params.php');
 
 // global parameters
 $gValidLogin = false;

@@ -173,11 +173,11 @@ $selectBoxEntries = array(0 => $gL10n->get('ROL_SYSTEM_DEFAULT_LIST'));
 // SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen
 $sql = 'SELECT lst_id, lst_name
           FROM '.TBL_LISTS.'
-         WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
            AND lst_global = 1
            AND lst_name IS NOT NULL
       ORDER BY lst_global ASC, lst_name ASC';
-$pdoStatement = $gDb->query($sql);
+$pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
 while($row = $pdoStatement->fetch())
 {
@@ -277,23 +277,28 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $roleName).'</p>');
 
     //  list all roles that the user is allowed to see
-    $sqlAllRoles = 'SELECT rol_id, rol_name, cat_name
-                      FROM '.TBL_ROLES.'
-                INNER JOIN '.TBL_CATEGORIES.'
-                        ON cat_id = rol_cat_id
-                     WHERE rol_valid   = 1
-                       AND cat_name_intern <> \'EVENTS\'
-                       AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                           OR cat_org_id IS NULL )
-                  ORDER BY cat_sequence, rol_name';
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                          WHERE rol_valid   = 1
+                            AND cat_name_intern <> \'EVENTS\'
+                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                OR cat_org_id IS NULL )
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
 
-    $form->addSelectBoxFromSql('dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlAllRoles,
-                               array('defaultValue' => $childRoles, 'multiselect' => true));
-    $form->closeGroupBox();
-}
+    $form->addSelectBoxFromSql(
+        'dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlData,
+        array('defaultValue' => $childRoles, 'multiselect' => true)
+);
+$form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'), $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'),
+    (int) $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

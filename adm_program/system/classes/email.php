@@ -354,47 +354,47 @@ class Email extends PHPMailer
      * @param string $editorEmail
      * @return bool|string
      */
-    public function adminNotfication($subject, $message, $editorName = '', $editorEmail = '')
+    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '')
     {
         global $gPreferences, $gCurrentOrganization;
 
-        if($gPreferences['enable_email_notification'] == 1)
+        if ($gPreferences['enable_email_notification'] == 0)
         {
-            // Send Notifivation to Admin
-            $this->addRecipient($gPreferences['email_administrator']);
-
-            // Set Sender
-            if($editorEmail === '')
-            {
-                $this->setSender($gPreferences['email_administrator']);
-            }
-            else
-            {
-                $this->setSender($editorEmail, $editorName);
-            }
-
-            // Set Subject
-            $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
-
-            // send html if preference is set
-            if($gPreferences['mail_html_registered_users'] == 1)
-            {
-                $this->sendDataAsHtml();
-            }
-            else
-            {
-                // html linebreaks should be converted in simple linefeed
-                $message = str_replace('<br />', "\n", $message);
-            }
-
-            // Set Text
-            $this->setText($message);
-
-            // Verschicken
-            return $this->sendEmail();
+            return false;
         }
 
-        return false;
+        // Send Notification to Admin
+        $this->addRecipient($gPreferences['email_administrator']);
+
+        // Set Sender
+        if ($editorEmail === '')
+        {
+            $this->setSender($gPreferences['email_administrator']);
+        }
+        else
+        {
+            $this->setSender($editorEmail, $editorName);
+        }
+
+        // Set Subject
+        $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
+
+        // send html if preference is set
+        if ($gPreferences['mail_html_registered_users'] == 1)
+        {
+            $this->sendDataAsHtml();
+        }
+        else
+        {
+            // html linebreaks should be converted in simple linefeed
+            $message = str_replace('<br />', "\n", $message);
+        }
+
+        // Set Text
+        $this->setText($message);
+
+        // Verschicken
+        return $this->sendEmail();
     }
 
     /**
@@ -529,5 +529,19 @@ class Email extends PHPMailer
         $this->clearAddresses();
 
         return true;
+    }
+
+    /**
+     * Mailbenachrichtigung für Admin
+     * @deprecated 3.3.0:4.0.0 "adminNotfication()" is a typo. Use "adminNotification()" instead.
+     * @param string $subject
+     * @param string $message
+     * @param string $editorName
+     * @param string $editorEmail
+     * @return bool|string
+     */
+    public function adminNotfication($subject, $message, $editorName = '', $editorEmail = '')
+    {
+        return $this->adminNotification($subject, $message, $editorName, $editorEmail);
     }
 }

@@ -79,30 +79,9 @@ if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
     echo json_encode(array('error' => $gL10n->get('LST_NO_RIGHTS_VIEW_LIST')));
 }
 
-$rowNumber = $getStart; // count for every row
-$memberOfThisOrganizationSelect = '';
-$memberOfThisOrganizationCondition = '';
-$filterRoleCondition = '';
-$searchCondition = '';
-$limitCondition = '';
+// create order statement
 $orderCondition = '';
 $orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'address', 'leader_this_role');
-$searchColumns = array(array('last_name', 'string'), array('first_name', 'string'), array('birthday', 'datetime'), array('address', 'string'), array('city', 'string'), array('zip_code', 'string'), array('country', 'string'));
-
-if($getMembersShowAll)
-{
-    $getFilterRoleId = 0;
-}
-else
-{
-    // show only members of current organization
-    if($getFilterRoleId > 0)
-    {
-        $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
-    }
-}
-
-// create order statement
 if(array_key_exists('order', $_GET))
 {
     foreach($_GET['order'] as $order)
@@ -135,56 +114,68 @@ else
 }
 
 // create search conditions
-if($getSearch !== '')
+$searchCondition = '';
+$queryParamsSearch = array();
+$searchColumns = array(
+    array('last_name', 'string'),
+    array('first_name', 'string'),
+    array('birthday', 'datetime'),
+    array('address', 'string'),
+    array('city', 'string'),
+    array('zip_code', 'string'),
+    array('country', 'string')
+);
+if($getSearch !== '' && count($searchColumns) > 0)
 {
-
+    $searchArray = array();
     foreach($searchColumns as $columnsArray)
     {
-        if($searchCondition === '')
-        {
-            $searchCondition = ' WHERE ( ';
-        }
-        else
-        {
-            $searchCondition .= ' OR ';
-        }
-
-         $searchCondition .= $columnsArray[0]. ' LIKE \'%'.$getSearch.'%\' ';
+        $searchArray[] = $columnsArray[0] . ' LIKE ? '; // $getSearch
+        $queryParamsSearch[] = '%' . $getSearch . '%';
     }
 
-    $searchCondition .= ') ';
+    $searchCondition = ' WHERE ( ' . implode(' OR ', $searchArray) . ' ) ';
+}
+
+$filterRoleCondition = '';
+if($getMembersShowAll)
+{
+    $getFilterRoleId = 0;
+}
+else
+{
+    // show only members of current organization
+    if($getFilterRoleId > 0)
+    {
+        $filterRoleCondition = ' AND mem_rol_id = '.$getFilterRoleId.' ';
+    }
 }
 
 // create a subselect to check if the user is an acitve member of the current organization
-$sql = '(SELECT COUNT(*) AS count_this
-           FROM '.TBL_MEMBERS.'
-     INNER JOIN '.TBL_ROLES.'
-             ON rol_id = mem_rol_id
-     INNER JOIN '.TBL_CATEGORIES.'
-             ON cat_id = rol_cat_id
-          WHERE mem_usr_id  = usr_id
-            AND mem_begin  <= \''.DATE_NOW.'\'
-            AND mem_end     > \''.DATE_NOW.'\'
-                '.$filterRoleCondition.'
-            AND rol_valid = 1
-            AND cat_name_intern <> \'EVENTS\'
-            AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
+$sqlSubSelect = '(SELECT COUNT(*) AS count_this
+                    FROM '.TBL_MEMBERS.'
+              INNER JOIN '.TBL_ROLES.'
+                      ON rol_id = mem_rol_id
+              INNER JOIN '.TBL_CATEGORIES.'
+                      ON cat_id = rol_cat_id
+                   WHERE mem_usr_id  = usr_id
+                     AND mem_begin  <= \''.DATE_NOW.'\'
+                     AND mem_end     > \''.DATE_NOW.'\'
+                         '.$filterRoleCondition.'
+                     AND rol_valid = 1
+                     AND cat_name_intern <> \'EVENTS\'
+                     AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
 
 if($getMembersShowAll)
 {
     // show all users
     $memberOfThisOrganizationCondition = '';
-    $memberOfThisOrganizationSelect = $sql;
+    $memberOfThisOrganizationSelect = $sqlSubSelect;
 }
 else
 {
-    $memberOfThisOrganizationCondition = ' AND '.$sql.' > 0 ';
+    $memberOfThisOrganizationCondition = ' AND '.$sqlSubSelect.' > 0 ';
     $memberOfThisOrganizationSelect = ' 1 ';
-}
-
-if($getLength > 0)
-{
-    $limitCondition = ' LIMIT '.$getLength.' OFFSET '.$getStart;
 }
 
 // get count of all found users
@@ -192,67 +183,92 @@ $sql = 'SELECT COUNT(*) AS count_total
           FROM '.TBL_USERS.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
     INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
          WHERE usr_valid = 1
                '.$memberOfThisOrganizationCondition;
-$countTotalStatement = $gDb->query($sql);
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+);
+$countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
 $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
-$mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday,
-               city.usd_value AS city, address.usd_value AS address, zip_code.usd_value AS zip_code, country.usd_value AS country,
-               mem_usr_id AS member_this_role, mem_leader AS leader_this_role, '.$memberOfThisOrganizationSelect.' AS member_this_orga
-          FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' AS birthday
-            ON birthday.usd_usr_id = usr_id
-           AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' AS city
-            ON city.usd_usr_id = usr_id
-           AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' AS address
-            ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = '. $gProfileFields->getProperty('STREET', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' AS zip_code
-            ON zip_code.usd_usr_id = usr_id
-           AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
-     LEFT JOIN '.TBL_USER_DATA.' AS country
-            ON country.usd_usr_id = usr_id
-           AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
-     LEFT JOIN '.TBL_ROLES.' rol
-            ON rol.rol_valid   = 1
-           AND rol.rol_id      = '.$getRoleId.'
-     LEFT JOIN '.TBL_MEMBERS.' mem
-            ON mem.mem_rol_id  = rol.rol_id
-           AND mem.mem_begin  <= \''.DATE_NOW.'\'
-           AND mem.mem_end     > \''.DATE_NOW.'\'
-           AND mem.mem_usr_id  = usr_id
-         WHERE usr_valid = 1
-               '. $memberOfThisOrganizationCondition;
+$mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
+                   birthday.usd_value AS birthday, city.usd_value AS city, address.usd_value AS address,
+                   zip_code.usd_value AS zip_code, country.usd_value AS country, mem_usr_id AS member_this_role,
+                   mem_leader AS leader_this_role, '.$memberOfThisOrganizationSelect.' AS member_this_orga
+              FROM '.TBL_USERS.'
+        INNER JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+        INNER JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS birthday
+                ON birthday.usd_usr_id = usr_id
+               AND birthday.usd_usf_id = ? -- $gProfileFields->getProperty(\'BIRTHDAY\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS city
+                ON city.usd_usr_id = usr_id
+               AND city.usd_usf_id = ? -- $gProfileFields->getProperty(\'CITY\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS address
+                ON address.usd_usr_id = usr_id
+               AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS zip_code
+                ON zip_code.usd_usr_id = usr_id
+               AND zip_code.usd_usf_id = ? -- $gProfileFields->getProperty(\'POSTCODE\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS country
+                ON country.usd_usr_id = usr_id
+               AND country.usd_usf_id = ? -- $gProfileFields->getProperty(\'COUNTRY\', \'usf_id\')
+         LEFT JOIN '.TBL_ROLES.' AS rol
+                ON rol.rol_valid   = 1
+               AND rol.rol_id      = ? -- $getRoleId
+         LEFT JOIN '.TBL_MEMBERS.' AS mem
+                ON mem.mem_rol_id  = rol.rol_id
+               AND mem.mem_begin  <= ? -- DATE_NOW
+               AND mem.mem_end     > ? -- DATE_NOW
+               AND mem.mem_usr_id  = usr_id
+             WHERE usr_valid = 1
+                   '. $memberOfThisOrganizationCondition;
+$queryParamsMain = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
+    $gProfileFields->getProperty('CITY', 'usf_id'),
+    $gProfileFields->getProperty('ADDRESS', 'usf_id'),
+    $gProfileFields->getProperty('POSTCODE', 'usf_id'),
+    $gProfileFields->getProperty('COUNTRY', 'usf_id'),
+    $getRoleId,
+    DATE_NOW,
+    DATE_NOW
+); // TODO add more params
+
+$limitCondition = '';
+if($getLength > 0)
+{
+    $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
+}
 
 if($getSearch === '')
 {
     // no search condition entered then return all records in dependence of order, limit and offset
-    $sql = $mainSql. $orderCondition. $limitCondition;
+    $sql = $mainSql . $orderCondition . $limitCondition;
 }
 else
 {
     $sql = 'SELECT usr_id, last_name, first_name, birthday, city, address, zip_code, country, member_this_role, leader_this_role, member_this_orga
-              FROM ('.$mainSql.') members
+              FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
                 .$limitCondition;
 }
-$userStatement = $gDb->query($sql);
+$userStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch)); // TODO add more params
+
+$rowNumber = $getStart; // count for every row
 
 // show rows with all organization users
 while($user = $userStatement->fetch())
@@ -352,9 +368,9 @@ if($getSearch !== '')
     {
         // read count of all filtered records without limit and offset
         $sql = 'SELECT COUNT(*) AS count
-                  FROM ('.$mainSql.') members
+                  FROM ('.$mainSql.') AS members
                        '.$searchCondition;
-        $countFilteredStatement = $gDb->query($sql);
+        $countFilteredStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch));
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }
 }

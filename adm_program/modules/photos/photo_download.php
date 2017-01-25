@@ -130,22 +130,28 @@ if($getPhotoNr == null)
     // get sub albums
     $sql = 'SELECT pho_id
               FROM '.TBL_PHOTOS.'
-             WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
+             WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+    $queryParams = array($gCurrentOrganization->getValue('org_id'));
     if($getPhotoId === 0)
     {
-        $sql .= ' AND (pho_pho_id_parent IS NULL) ';
+        $sql .= '
+            AND (pho_pho_id_parent IS NULL)';
     }
     if($getPhotoId > 0)
     {
-        $sql .= ' AND pho_pho_id_parent = '.$getPhotoId.'';
+        $sql .= '
+            AND pho_pho_id_parent = ? -- $getPhotoId';
+        $queryParams[] = $getPhotoId;
     }
     if (!$gCurrentUser->editPhotoRight())
     {
-        $sql .= ' AND pho_locked = 0 ';
+        $sql .= '
+            AND pho_locked = 0 ';
     }
 
-    $sql .= ' ORDER BY pho_begin DESC';
-    $pdoStatement = $gDb->query($sql);
+    $sql .= '
+        ORDER BY pho_begin DESC';
+    $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     // number of sub albums
     $albums = $pdoStatement->rowCount();

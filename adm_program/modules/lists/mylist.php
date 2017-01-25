@@ -546,11 +546,11 @@ $numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
           FROM '.TBL_LISTS.'
-         WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
-           AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
+         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+           AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
                OR lst_global = 1)
       ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
-$configurationsStatement = $gDb->query($sql);
+$configurationsStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $gCurrentUser->getValue('usr_id')));
 
 $configurations = $configurationsStatement->fetchAll();
 
@@ -657,10 +657,11 @@ $form->closeButtonGroup();
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
+
 // show all roles where the user has the right to view them
 if($getActiveRole)
 {
-    $sql = 'SELECT rol_id, rol_name, cat_name
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
@@ -669,17 +670,18 @@ if($getActiveRole)
 }
 else
 {
-    $sql = 'SELECT rol_id, rol_name, cat_name
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
                AND cat_hidden = 0
              WHERE rol_valid  = 0
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
 }
-$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
+$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 // if user could view former roles members than he should get a selectbox where he can choose to view them
 if($gCurrentUser->hasRightViewFormerRolesMembers())
@@ -688,12 +690,15 @@ if($gCurrentUser->hasRightViewFormerRolesMembers())
     $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
         array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
 }
+
 // select box showing all relation types
 $sql = 'SELECT urt_id, urt_name, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
       ORDER BY urt_name';
-$form->addSelectBoxFromSql('sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
-    array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : ''));
+$form->addSelectBoxFromSql(
+    'sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+    array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
+);
 $form->closeGroupBox();
 
 $form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary'));

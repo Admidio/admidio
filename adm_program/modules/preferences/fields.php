@@ -102,10 +102,10 @@ $sql = 'SELECT *
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = usf_cat_id
          WHERE cat_type = \'USF\'
-           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+           AND (  cat_org_id = ?
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence ASC, usf_sequence ASC';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
 // Create table
 $table = new HtmlTable('tbl_profile_fields', $page, true);

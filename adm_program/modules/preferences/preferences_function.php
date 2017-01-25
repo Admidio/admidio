@@ -358,7 +358,7 @@ switch($getMode)
         if($gCurrentOrganization->countAllRecords() === 2)
         {
             $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = 1
-                     WHERE prf_name = \'system_organization_select\' ';
+                     WHERE prf_name = \'system_organization_select\'';
             $gDb->query($sql);
         }
 

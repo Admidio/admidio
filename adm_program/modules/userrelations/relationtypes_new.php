@@ -128,10 +128,8 @@ $form->addInput(
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    $relationtype1->getValue('urt_usr_id_create'),
-    $relationtype1->getValue('urt_timestamp_create'),
-    $relationtype1->getValue('urt_usr_id_change'),
-    $relationtype1->getValue('urt_timestamp_change')
+    (int) $relationtype1->getValue('urt_usr_id_create'), $relationtype1->getValue('urt_timestamp_create'),
+    (int) $relationtype1->getValue('urt_usr_id_change'), $relationtype1->getValue('urt_timestamp_change')
 ));
 
 // add form to html page and show page

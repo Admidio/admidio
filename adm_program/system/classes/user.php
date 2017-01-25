@@ -89,8 +89,8 @@ class User extends TableAccess
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_default_registration = 1
-                   AND cat_org_id = '.$this->organizationId;
-        $defaultRolesStatement = $this->db->query($sql);
+                   AND cat_org_id = ? -- $this->organizationId';
+        $defaultRolesStatement = $this->db->queryPrepared($sql, array($this->organizationId));
 
         if ($defaultRolesStatement->rowCount() === 0)
         {
@@ -152,13 +152,14 @@ class User extends TableAccess
                         ON cat_id = rol_cat_id
                  LEFT JOIN '.TBL_MEMBERS.'
                         ON mem_rol_id = rol_id
-                       AND mem_usr_id = '.$this->getValue('usr_id').'
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'
+                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_begin <= ? -- DATE_NOW
+                       AND mem_end    > ? -- DATE_NOW
                      WHERE rol_valid  = 1
-                       AND (  cat_org_id = '.$this->organizationId.'
+                       AND (  cat_org_id = ? -- $this->organizationId
                            OR cat_org_id IS NULL )';
-            $rolesStatement = $this->db->query($sql);
+            $queryParams = array($this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+            $rolesStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $rolesStatement->fetch())
             {
@@ -373,8 +374,8 @@ class User extends TableAccess
 
         $sql = 'SELECT org_longname
                   FROM '.TBL_ORGANIZATIONS.'
-                 WHERE org_id = '.$this->organizationId;
-        $orgStatement = $this->db->query($sql);
+                 WHERE org_id = ?';
+        $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
         $org = $orgStatement->fetch();
 
         $sqlAdministrator = '';
@@ -396,12 +397,13 @@ class User extends TableAccess
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = '.$this->getValue('usr_id').'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
+                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
                    AND rol_valid  = 1
-                   AND cat_org_id = '.$this->organizationId;
-        $pdoStatement = $this->db->query($sql);
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND cat_org_id = ? -- $this->organizationId';
+        $queryParams = array($this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
         $rowsCount = $pdoStatement->rowCount();
 
         if ($rowsCount === 0)
@@ -521,7 +523,7 @@ class User extends TableAccess
     /**
      * Deletes the selected user of the table and all the many references in other tables.
      * After that the class will be initialize.
-     * @return true|void @b true if no error occurred
+     * @return bool @b true if no error occurred
      */
     public function delete()
     {
@@ -656,7 +658,7 @@ class User extends TableAccess
 
         foreach ($sqlQueries as $sqlQuery)
         {
-            $this->db->query($sqlQuery);
+            $this->db->query($sqlQuery); // TODO add more params
         }
 
         $returnValue = parent::delete();
@@ -1084,12 +1086,13 @@ class User extends TableAccess
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_valid  = 1
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
-                   AND mem_usr_id = '.$user->getValue('usr_id').'
-                   AND (  cat_org_id = '.$this->organizationId.'
+                   AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND (  cat_org_id = ? -- $this->organizationId
                        OR cat_org_id IS NULL ) ';
-        $listViewStatement = $this->db->query($sql);
+        $queryParams = array($this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $listViewStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($listViewStatement->rowCount() > 0)
         {
@@ -1410,11 +1413,17 @@ class User extends TableAccess
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = '.$id.'
-                       AND mem_usr_id = '.$this->getValue('usr_id').'
-                       AND mem_begin <= \''.$endDate.'\'
-                       AND mem_end   >= \''.$startDate.'\'
+                     WHERE mem_rol_id = ? -- $id
+                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_begin <= ? -- $endDate
+                       AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin ASC';
+            $queryParams = array(
+                $id,
+                $this->getValue('usr_id'),
+                $endDate,
+                $startDate
+            );
         }
         else
         {
@@ -1422,14 +1431,21 @@ class User extends TableAccess
 
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_id    <> '.$id.'
-                       AND mem_rol_id = '.$member->getValue('mem_rol_id').'
-                       AND mem_usr_id = '.$this->getValue('usr_id').'
-                       AND mem_begin <= \''.$endDate.'\'
-                       AND mem_end   >= \''.$startDate.'\'
+                     WHERE mem_id    <> ? -- $id
+                       AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
+                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_begin <= ? -- $endDate
+                       AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin ASC';
+            $queryParams = array(
+                $id,
+                $member->getValue('mem_rol_id'),
+                $this->getValue('usr_id'),
+                $endDate,
+                $startDate
+            );
         }
-        $membershipStatement = $this->db->query($sql);
+        $membershipStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($membershipStatement->rowCount() === 1)
         {

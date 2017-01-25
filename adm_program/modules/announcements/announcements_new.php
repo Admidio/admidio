@@ -90,9 +90,9 @@ $announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 
 // show form
 $form = new HtmlForm('announcements_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1', $page);
-$form->addInput('ann_headline', $gL10n->get('SYS_TITLE'), $announcement->getValue('ann_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+$form->addInput('ann_headline', $gL10n->get('SYS_TITLE'), noHTML($announcement->getValue('ann_headline')), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 $form->addSelectBoxForCategories('ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'EDIT_CATEGORIES',
-                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $announcement->getValue('ann_cat_id')));
+                                 array('property' => FIELD_REQUIRED, 'defaultValue' => (int) $announcement->getValue('ann_cat_id')));
 
 // if current organization has a parent organization or is child organizations then show option to set this announcement to global
 if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
@@ -106,8 +106,8 @@ if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganiza
 $form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'), array('property' => FIELD_REQUIRED, 'height' => '400'));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
-    $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')
+    (int) $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
+    (int) $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')
 ));
 
 // add form to html page and show page
