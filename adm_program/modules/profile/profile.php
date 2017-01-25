@@ -693,7 +693,7 @@ if($gPreferences['profile_show_roles'] == 1)
     }
     else
     {
-        $page->addHtml('<div class="col-sm-12">'.$gL10n->get('PRO_NO_AUTHORIZATIONS_ASSIGNED').'</div>');
+        $page->addHtml('<div class="col-sm-12">'.$gL10n->get('PRO_NO_PERMISSIONS_ASSIGNED').'</div>');
     }
 
     $page->addHtml('

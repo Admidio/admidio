@@ -37,10 +37,9 @@ if (!$gCurrentUser->editDownloadRight())
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-$rolesViewRightParentFolder   = array();
-$rolesUploadRightParentFolder = array();
-$sqlRolesViewRight   = '';
-$sqlRolesUploadRight = '';
+$rolesViewRightParentFolder = array();
+$sqlRolesViewRight          = '';
+$sqlRolesUploadRight        = '';
 
 try
 {
@@ -60,13 +59,6 @@ try
         if(count($rolesViewRightParentFolder) > 0)
         {
             $sqlRolesViewRight = ' AND rol_id IN ('.implode(',', $rolesViewRightParentFolder).')';
-        }
-
-        // get assigned roles of the parent folder
-        $rolesUploadRightParentFolder = $parentFolder->getRoleUploadArrayOfFolder();
-        if(count($rolesUploadRightParentFolder) > 0)
-        {
-            $sqlRolesUploadRight = ' AND rol_id IN ('.implode(',', $rolesUploadRightParentFolder).')';
         }
     }
 }
@@ -102,18 +94,6 @@ if(count($roleViewSet) === 0)
 {
     $roleViewSet[] = 0;
 }
-
-// wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-// alle aus der DB aus lesen
-$sqlUploadRoles = 'SELECT rol_id, rol_name, cat_name
-                     FROM '.TBL_ROLES.'
-               INNER JOIN '.TBL_CATEGORIES.'
-                       ON cat_id = rol_cat_id
-                    WHERE rol_valid  = 1
-                      AND rol_system = 0
-                          '.$sqlRolesUploadRight.'
-                      AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                 ORDER BY cat_sequence, rol_name';
 
 // get assigned roles of this folder
 $roleUploadSet = $folder->getRoleUploadArrayOfFolder();
@@ -168,11 +148,12 @@ $form->addSelectBoxFromSql(
     'adm_roles_upload_right',
     $gL10n->get('DOW_UPLOAD_FILES'),
     $gDb,
-    $sqlUploadRoles,
+    $sqlViewRoles,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
-        'multiselect'  => true
+        'multiselect'  => true,
+        'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
     )
 );
 $form->addStaticControl(

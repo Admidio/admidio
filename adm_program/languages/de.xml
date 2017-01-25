@@ -146,6 +146,7 @@
     <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</string>
     <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
     <string name="DOW_NEW_NAME">Neuer Name</string>
+    <string name="DOW_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
     <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
     <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
     <string name="DOW_SELECT_FILES">Dateien auswählen</string>
@@ -876,8 +877,8 @@
     <string name="PRO_MY_PROFILE">Mein Profil</string>
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
-    <string name="PRO_NO_AUTHORIZATIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
+    <string name="PRO_NO_PERMISSIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
     <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke deines gewählten Passworts wird dir farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt dir der Pfeil im Balken an.</string>
