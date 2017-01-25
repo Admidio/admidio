@@ -228,10 +228,10 @@ elseif ($getMode === 8)
         // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
         $sql = 'SELECT mem_usr_id
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '.$getRoleId.'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end > \''.DATE_NOW.'\'';
-        $pdoStatement = $gDb->query($sql);
+                 WHERE mem_rol_id = ? -- $getRoleId
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW';
+        $pdoStatement = $gDb->queryPrepared($sql, array($getRoleId, DATE_NOW, DATE_NOW));
 
         while($memberUserId = $pdoStatement->fetchColumn())
         {

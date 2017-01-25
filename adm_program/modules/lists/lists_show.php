@@ -79,8 +79,8 @@ if ($numberRoles > 1)
 {
     $sql = 'SELECT rol_id, rol_name
               FROM '.TBL_ROLES.'
-             WHERE rol_id IN ('.implode(',', $roleIds).')';
-    $rolesStatement = $gDb->query($sql);
+             WHERE rol_id IN ('.replaceValuesArrWithQM($roleIds).')';
+    $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
     $rolesData      = $rolesStatement->fetchAll();
 
     foreach ($rolesData as $role)
@@ -132,9 +132,10 @@ if (count($relationtypeIds) > 0)
 {
     $sql = 'SELECT urt_id, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-             WHERE urt_id IN ('.implode(',', $relationtypeIds).')
+             WHERE urt_id IN ('.replaceValuesArrWithQM($relationtypeIds).')
           ORDER BY urt_name';
-    $relationtypesStatement = $gDb->query($sql);
+    $relationtypesStatement = $gDb->queryPrepared($sql, $relationtypeIds);
+
     while($relationtype = $relationtypesStatement->fetch())
     {
         $relationtypeName .= (empty($relationtypeName) ? '' : ', ').$relationtype['urt_name'];
@@ -209,7 +210,7 @@ $arrColName = array(
     'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
 );
 
-// Array for valid colums visible for current user.
+// Array for valid columns visible for current user.
 // Needed for PDF export to set the correct colspan for the layout
 // Maybe there are hidden fields.
 $arrValidColumns = array();
@@ -222,14 +223,13 @@ try
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
     $mainSql = $list->getSQL($roleIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationtypeIds);
-    // echo $mainSql; exit();
 }
 catch (AdmException $e)
 {
     $e->showHtml();
 }
 // determine the number of users in this list
-$listStatement = $gDb->query($mainSql);
+$listStatement = $gDb->query($mainSql); // TODO add more params
 $numMembers = $listStatement->rowCount();
 
 // get all members and their data of this list in an array

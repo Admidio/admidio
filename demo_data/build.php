@@ -158,8 +158,7 @@ catch(AdmException $e)
 if($gDbType === 'mysql')
 {
     // disable foreign key checks for mysql, so tables can easily deleted
-    $sql = 'SET foreign_key_checks = 0 ';
-    $db->query($sql);
+    $db->query('SET foreign_key_checks = 0');
 }
 
 /**
@@ -227,7 +226,7 @@ include_once('data_edit.php');
 // in postgresql all sequences must get a new start value because our inserts have given ids
 if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
 {
-    $sql = 'SELECT relname FROM pg_class WHERE relkind = \'S\' ';
+    $sql = 'SELECT relname FROM pg_class WHERE relkind = \'S\'';
     $sqlStatement = $db->query($sql);
 
     while($relname = $sqlStatement->fetchColumn())
@@ -238,15 +237,15 @@ if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibi
 }
 
 // set parameter lang to default language for this installation
-$sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = \''.$getLanguage.'\'
-         WHERE prf_name = \'system_language\' ';
-$db->query($sql);
+$sql = 'UPDATE '.$g_tbl_praefix.'_preferences
+           SET prf_value = ? -- $getLanguage
+         WHERE prf_name = \'system_language\'';
+$db->queryPrepared($sql, array($getLanguage));
 
 if($gDbType === 'mysql')
 {
     // activate foreign key checks, so database is consistent
-    $sql = 'SET foreign_key_checks = 1 ';
-    $db->query($sql);
+    $db->query('SET foreign_key_checks = 1');
 }
 
 echo 'Installation successful !<br />';

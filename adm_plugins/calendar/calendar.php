@@ -215,12 +215,12 @@ if($plg_ter_aktiv)
                 ON dat_id = dtr_dat_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
-             WHERE dat_begin <= \''.$dateMonthEnd.'\'
-               AND dat_end   >= \''.$dateMonthStart.'\'
+             WHERE dat_begin <= ? -- $dateMonthEnd
+               AND dat_end   >= ? -- $dateMonthStart
                    '.$sqlLogin.'
                    '.$sqlSyntax.'
           ORDER BY dat_begin ASC';
-    $datesStatement = $gDb->query($sql);
+    $datesStatement = $gDb->queryPrepared($sql, array($dateMonthEnd, $dateMonthStart));
 
     while($row = $datesStatement->fetch())
     {
@@ -320,8 +320,7 @@ if($plg_geb_aktiv)
 
     // database query for all birthdays of this month
     $sql = 'SELECT DISTINCT
-                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
-                   birthday.usd_value AS birthday
+                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, birthday.usd_value AS birthday
               FROM '.TBL_MEMBERS.'
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = mem_rol_id
@@ -331,22 +330,31 @@ if($plg_geb_aktiv)
                 ON usr_id = mem_usr_id
         INNER JOIN '.TBL_USER_DATA.' AS birthday
                 ON birthday.usd_usr_id = usr_id
-               AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
-               AND '.$sqlMonthOfBirthday.' = '.$currentMonth.'
+               AND birthday.usd_usf_id = ? -- $gProfileFields->getProperty(\'BIRTHDAY\', \'usf_id\')
+               AND '.$sqlMonthOfBirthday.' = ? -- $currentMonth
          LEFT JOIN '.TBL_USER_DATA.' AS last_name
                 ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
          LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
              WHERE usr_valid  = 1
-               AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+               AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND rol_id '.$sqlRoleIds.'
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end    > \''.DATE_NOW.'\'
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end    > ? -- DATE_NOW
           ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
 
-    $birthdayStatement = $gDb->query($sql);
+    $queryParams = array(
+        $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
+        $currentMonth,
+        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+        $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+        $gCurrentOrganization->getValue('org_id'),
+        DATE_NOW,
+        DATE_NOW
+    );
+    $birthdayStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while($row = $birthdayStatement->fetch())
     {

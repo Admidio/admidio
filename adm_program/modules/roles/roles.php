@@ -117,11 +117,11 @@ $sql = 'SELECT *
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
          WHERE cat_type = \'ROL\'
-           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                OR cat_org_id IS NULL )
+           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               OR cat_org_id IS NULL )
                '.$sqlRolesStatus.'
       ORDER BY cat_sequence ASC, rol_name ASC';
-$rolStatement = $gDb->query($sql);
+$rolStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
 // Create role object
 $role = new TableRoles($gDb);

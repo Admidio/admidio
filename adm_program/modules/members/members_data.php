@@ -65,16 +65,9 @@ if (!$gCurrentUser->editUsers())
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
 }
 
-$memberOfThisOrganizationCondition = '';
-$memberOfThisOrganizationSelect = '';
-$memberOfOtherOrganizationSelect = '';
-$searchCondition = '';
-$limitCondition = '';
+// create order statement
 $orderCondition = '';
 $orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
-$searchColumns = array(array('name', 'string'), array('usr_login_name', 'string'), array('CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' END ', 'string'), array('birthday', 'datetime'), array('timestamp', 'datetime'));
-
-// create order statement
 if(array_key_exists('order', $_GET))
 {
     foreach($_GET['order'] as $order)
@@ -107,53 +100,74 @@ else
 }
 
 // create search conditions
-if($getSearch !== '')
+$searchCondition = '';
+$queryParamsSearch = array();
+$searchColumns = array(
+    array('name', 'string'),
+    array('usr_login_name', 'string'),
+    array('CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' END ', 'string'),
+    array('birthday', 'datetime'),
+    array('timestamp', 'datetime')
+);
+if($getSearch !== '' && count($searchColumns) > 0)
 {
-
+    $searchArray = array();
     foreach($searchColumns as $columnsArray)
     {
-        if($searchCondition === '')
-        {
-            $searchCondition = ' WHERE ( ';
-        }
-        else
-        {
-            $searchCondition .= ' OR ';
-        }
-
-         $searchCondition .= $columnsArray[0]. ' LIKE \'%'.$getSearch.'%\' ';
+        $searchArray[] = $columnsArray[0] . ' LIKE ? '; // $getSearch
+        $queryParamsSearch[] = '%' . $getSearch . '%';
     }
 
-    $searchCondition .= ') ';
+    $searchCondition = ' WHERE ( ' . implode(' OR ', $searchArray) . ' ) ';
 }
 
-// create a subselect to check if the user is an acitve member of the current organization
-$sql = '(SELECT COUNT(*) AS count_this
-           FROM '.TBL_MEMBERS.'
-     INNER JOIN '.TBL_ROLES.'
-             ON rol_id = mem_rol_id
-     INNER JOIN '.TBL_CATEGORIES.'
-             ON cat_id = rol_cat_id
-          WHERE mem_usr_id  = usr_id
-            AND mem_begin  <= \''.DATE_NOW.'\'
-            AND mem_end     > \''.DATE_NOW.'\'
-            AND rol_valid = 1
-            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
-            AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                OR cat_org_id IS NULL ))';
+// create a subselect to check if the user is an active member of the current organization
+$sqlSubSelect = '(SELECT COUNT(*) AS count_this
+                    FROM '.TBL_MEMBERS.'
+              INNER JOIN '.TBL_ROLES.'
+                      ON rol_id = mem_rol_id
+              INNER JOIN '.TBL_CATEGORIES.'
+                      ON cat_id = rol_cat_id
+                   WHERE mem_usr_id  = usr_id
+                     AND mem_begin  <= \''.DATE_NOW.'\'
+                     AND mem_end     > \''.DATE_NOW.'\'
+                     AND rol_valid = 1
+                     AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                     AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                         OR cat_org_id IS NULL ))';
 
 if($getMembers)
 {
-    $memberOfThisOrganizationCondition = ' AND '.$sql.' > 0 ';
+    $memberOfThisOrganizationCondition = ' AND '.$sqlSubSelect.' > 0 ';
     $memberOfThisOrganizationSelect = ' 1 ';
 }
 else
 {
     $memberOfThisOrganizationCondition = '';
-    $memberOfThisOrganizationSelect = $sql;
+    $memberOfThisOrganizationSelect = $sqlSubSelect;
 }
 
+// get count of all found users
+$sql = 'SELECT COUNT(*) AS count_total
+          FROM '.TBL_USERS.'
+    INNER JOIN '.TBL_USER_DATA.' AS last_name
+            ON last_name.usd_usr_id = usr_id
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+    INNER JOIN '.TBL_USER_DATA.' AS first_name
+            ON first_name.usd_usr_id = usr_id
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+         WHERE usr_valid = 1
+               '.$memberOfThisOrganizationCondition;
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+);
+$countTotalStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
+
+$jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
+
 // create a subselect to check if the user is also an active member of another organization
+$memberOfOtherOrganizationSelect = ' 0 ';
 if($gCurrentOrganization->countAllRecords() > 1)
 {
     $memberOfOtherOrganizationSelect = '
@@ -170,70 +184,59 @@ if($gCurrentOrganization->countAllRecords() > 1)
             AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
             AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').')';
 }
-else
-{
-    $memberOfOtherOrganizationSelect = ' 0 ';
-}
-
-if($getLength > 0)
-{
-    $limitCondition = ' LIMIT '.$getLength.' OFFSET '.$getStart;
-}
-
-// get count of all found users
-$sql = 'SELECT COUNT(*) AS count_total
-          FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-         WHERE usr_valid = 1
-               '.$memberOfThisOrganizationCondition;
-$countTotalStatement = $gDb->query($sql);
-
-$jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
 // show all members (not accepted users should not be shown)
 $mainSql = 'SELECT usr_id, last_name.usd_value || \', \' || first_name.usd_value AS name,
-               email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
-               usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
-               '.$memberOfThisOrganizationSelect.' AS member_this_orga,
-               '.$memberOfOtherOrganizationSelect.' AS member_other_orga
-          FROM '.TBL_USERS.'
-    INNER JOIN '.TBL_USER_DATA.' AS last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-    INNER JOIN '.TBL_USER_DATA.' AS first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' AS email
-            ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' AS gender
-            ON gender.usd_usr_id = usr_id
-           AND gender.usd_usf_id = '.$gProfileFields->getProperty('GENDER', 'usf_id').'
-     LEFT JOIN '.TBL_USER_DATA.' AS birthday
-            ON birthday.usd_usr_id = usr_id
-           AND birthday.usd_usf_id = '.$gProfileFields->getProperty('BIRTHDAY', 'usf_id').'
-         WHERE usr_valid = 1
-               '.$memberOfThisOrganizationCondition;
+                   email.usd_value AS email, gender.usd_value AS gender, birthday.usd_value AS birthday,
+                   usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) AS timestamp,
+                   '.$memberOfThisOrganizationSelect.' AS member_this_orga,
+                   '.$memberOfOtherOrganizationSelect.' AS member_other_orga
+              FROM '.TBL_USERS.'
+        INNER JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+        INNER JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS email
+                ON email.usd_usr_id = usr_id
+               AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS gender
+                ON gender.usd_usr_id = usr_id
+               AND gender.usd_usf_id = ? -- $gProfileFields->getProperty(\'GENDER\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS birthday
+                ON birthday.usd_usr_id = usr_id
+               AND birthday.usd_usf_id = ? -- $gProfileFields->getProperty(\'BIRTHDAY\', \'usf_id\')
+             WHERE usr_valid = 1
+                   '.$memberOfThisOrganizationCondition;
+$queryParamsMain = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('EMAIL', 'usf_id'),
+    $gProfileFields->getProperty('GENDER', 'usf_id'),
+    $gProfileFields->getProperty('BIRTHDAY', 'usf_id')
+); // TODO add more params
+
+$limitCondition = '';
+if($getLength > 0)
+{
+    $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
+}
 
 if($getSearch === '')
 {
     // no search condition entered then return all records in dependence of order, limit and offset
-    $sql = $mainSql. $orderCondition. $limitCondition;
+    $sql = $mainSql . $orderCondition . $limitCondition;
 }
 else
 {
     $sql = 'SELECT usr_id, name, email, gender, birthday, usr_login_name, timestamp, member_this_orga, member_other_orga
-              FROM ('.$mainSql.') members
+              FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
                 .$limitCondition;
 }
-$mglStatement = $gDb->query($sql);
+$mglStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch)); // TODO add more params
 
 $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
@@ -365,9 +368,9 @@ if($getSearch !== '')
     {
         // read count of all filtered records without limit and offset
         $sql = 'SELECT COUNT(*) AS count
-                  FROM ('.$mainSql.') members
+                  FROM ('.$mainSql.') AS members
                        '.$searchCondition;
-        $countFilteredStatement = $gDb->query($sql);
+        $countFilteredStatement = $gDb->queryPrepared($sql, array_merge($queryParamsMain, $queryParamsSearch));
 
         $jsonArray['recordsFiltered'] = (int) $countFilteredStatement->fetchColumn();
     }

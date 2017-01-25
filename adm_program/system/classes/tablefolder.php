@@ -42,10 +42,10 @@ class TableFolder extends TableAccess
     private function getSubfolderStatement($folderId, array $columns = array('fol_id'))
     {
         // select all subfolders of the current folder
-        $sqlSubfolders = 'SELECT ' . implode(',', $columns) . '
-                            FROM '.TBL_FOLDERS.'
-                           WHERE fol_fol_id_parent = ' . $folderId;
-        return $this->db->query($sqlSubfolders);
+        $sql = 'SELECT ' . implode(',', $columns) . '
+                  FROM '.TBL_FOLDERS.'
+                 WHERE fol_fol_id_parent = ? -- $folderId';
+        return $this->db->queryPrepared($sql, array($folderId));
     }
 
     /**
@@ -172,8 +172,8 @@ class TableFolder extends TableAccess
 
         // In der DB die Files der aktuellen folder_id loeschen
         $sqlDeleteFiles = 'DELETE FROM '.TBL_FILES.'
-                            WHERE fil_fol_id = '.$folderId;
-        $this->db->query($sqlDeleteFiles);
+                            WHERE fil_fol_id = ? -- $folderId';
+        $this->db->queryPrepared($sqlDeleteFiles, array($folderId));
 
         // delete all roles assignments that have the right to view this folder
         if ($folderId === $folId)
@@ -191,8 +191,8 @@ class TableFolder extends TableAccess
 
         // In der DB den Eintrag des Ordners selber loeschen
         $sqlDeleteFolder = 'DELETE FROM '.TBL_FOLDERS.'
-                             WHERE fol_id = '.$folderId;
-        $this->db->query($sqlDeleteFolder);
+                             WHERE fol_id = ? -- $folderId';
+        $this->db->queryPrepared($sqlDeleteFolder, array($folderId));
 
         // Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
         if ($folderPath !== '')
@@ -218,14 +218,14 @@ class TableFolder extends TableAccess
      * Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
      * und allen darin enthaltenen Unterordnern und Dateien rekursiv
      * @param bool $lockedFlag
-     * @param int $folderId
+     * @param int  $folderId
      */
     public function editLockedFlagOnFolder($lockedFlag, $folderId = 0)
     {
         if ($folderId === 0)
         {
             $folderId = (int) $this->getValue('fol_id');
-            $this->setValue('fol_locked', $lockedFlag);
+            $this->setValue('fol_locked', (int) $lockedFlag);
         }
 
         $this->db->startTransaction();
@@ -240,15 +240,15 @@ class TableFolder extends TableAccess
 
         // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
         $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
-                         SET fol_locked = \''.$lockedFlag.'\'
-                       WHERE fol_id = '.$folderId;
-        $this->db->query($sqlUpdate);
+                         SET fol_locked = ? -- $lockedFlag
+                       WHERE fol_id = ? -- $folderId';
+        $this->db->queryPrepared($sqlUpdate, array((int) $lockedFlag, $folderId));
 
         //...und natuerlich auch fuer alle Files die in diesem Ordner sind
         $sqlUpdate = 'UPDATE '.TBL_FILES.'
-                         SET fil_locked = \''.$lockedFlag.'\'
-                       WHERE fil_fol_id = '.$folderId;
-        $this->db->query($sqlUpdate);
+                         SET fil_locked = ? -- $lockedFlag
+                       WHERE fil_fol_id = ? -- $folderId';
+        $this->db->queryPrepared($sqlUpdate, array((int) $lockedFlag, $folderId));
 
         $this->db->endTransaction();
     }
@@ -276,9 +276,9 @@ class TableFolder extends TableAccess
 
         // Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
         $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
-                         SET fol_public = \''.(int) $publicFlag.'\'
-                       WHERE fol_id = '.$folderId;
-        $this->db->query($sqlUpdate);
+                         SET fol_public = ? -- $publicFlag
+                       WHERE fol_id = ? -- $folderId';
+        $this->db->queryPrepared($sqlUpdate, array((int) $publicFlag, $folderId));
 
     }
 
@@ -296,17 +296,19 @@ class TableFolder extends TableAccess
         if ($folderId > 0)
         {
             // get folder of the parameter
-            $condition = ' fol_id   = '.$folderId.'
+            $condition = ' fol_id   = ? -- $folderId
                        AND fol_type = \'DOWNLOAD\' ';
+            $queryParams = array($folderId);
         }
         else
         {
             // get first folder of current organization
             $condition = ' fol_fol_id_parent IS NULL
-                       AND fol_type   = \'DOWNLOAD\'
-                       AND fol_org_id = '.$gCurrentOrganization->getValue('org_id');
+                       AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       AND fol_type   = \'DOWNLOAD\' ';
+            $queryParams = array($gCurrentOrganization->getValue('org_id'));
         }
-        $this->readData($condition);
+        $this->readData($condition, $queryParams);
 
         // Check if a dataset is found
         if ((int) $this->getValue('fol_id') === 0)
@@ -356,10 +358,10 @@ class TableFolder extends TableAccess
         $sqlFolders = 'SELECT *
                          FROM '.TBL_FOLDERS.'
                         WHERE fol_type          = \'DOWNLOAD\'
-                          AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
-                          AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
+                          AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
+                          AND fol_org_id        = ? -- $gCurrentOrganization->getValue(\'org_id\')
                      ORDER BY fol_name';
-        $foldersStatement = $this->db->query($sqlFolders);
+        $foldersStatement = $this->db->queryPrepared($sqlFolders, array($this->getValue('fol_id'), $gCurrentOrganization->getValue('org_id')));
 
         while ($rowFolders = $foldersStatement->fetchObject())
         {
@@ -422,9 +424,9 @@ class TableFolder extends TableAccess
         // Get all files of the current folder
         $sqlFiles = 'SELECT *
                        FROM '.TBL_FILES.'
-                      WHERE fil_fol_id = '. $this->getValue('fol_id'). '
+                      WHERE fil_fol_id = ? -- $this->getValue(\'fol_id\')
                    ORDER BY fil_name';
-        $filesStatement = $this->db->query($sqlFiles);
+        $filesStatement = $this->db->queryPrepared($sqlFiles, array($this->getValue('fol_id')));
 
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetchObject())
@@ -590,8 +592,8 @@ class TableFolder extends TableAccess
             // Get infos from requested folder
             $sqlCurrentFolder = 'SELECT fol_id, fol_fol_id_parent, fol_name
                                    FROM '.TBL_FOLDERS.'
-                                  WHERE fol_id = '.$folderId;
-            $currentFolderStatement = $this->db->query($sqlCurrentFolder);
+                                  WHERE fol_id = ? -- $folderId';
+            $currentFolderStatement = $this->db->queryPrepared($sqlCurrentFolder, array($folderId));
             $currentFolderRow = $currentFolderStatement->fetchObject();
 
             if ($currentFolderRow->fol_fol_id_parent)
@@ -621,8 +623,8 @@ class TableFolder extends TableAccess
                             FROM '.TBL_FOLDERS.'
                            WHERE fol_type   = \'DOWNLOAD\'
                              AND fol_fol_id_parent IS NULL
-                             AND fol_org_id = '.$gCurrentOrganization->getValue('org_id');
-        $rootFolderStatement = $this->db->query($sqlRootFolder);
+                             AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+        $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array($gCurrentOrganization->getValue('org_id')));
         $rootFolderId = $rootFolderStatement->fetchColumn();
 
         $link = '
@@ -705,13 +707,14 @@ class TableFolder extends TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array  $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition)
+    protected function readData($sqlWhereCondition, array $queryParams = array())
     {
-        if (parent::readData($sqlWhereCondition))
+        if (parent::readData($sqlWhereCondition, $queryParams))
         {
             $folId = (int) $this->getValue('fol_id');
             $this->folderViewRolesObject   = new RolesRights($this->db, 'folder_view', $folId);
@@ -742,9 +745,9 @@ class TableFolder extends TableAccess
 
         // Set new path in database for folderId
         $sqlUpdate = 'UPDATE '.TBL_FOLDERS.'
-                         SET fol_path = \''.$newPath.'\'
-                       WHERE fol_id = '.$folderId;
-        $this->db->query($sqlUpdate);
+                         SET fol_path = ? -- $newPath
+                       WHERE fol_id = ? -- $folderId';
+        $this->db->queryPrepared($sqlUpdate, array($newPath, $folderId));
 
         $subfoldersStatement = $this->getSubfolderStatement($folderId, array('fol_id', 'fol_name'));
 

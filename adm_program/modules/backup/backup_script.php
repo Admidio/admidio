@@ -79,8 +79,8 @@ $newfullfilename = $backupabsolutepath.$fullbackupfilename;
 unset($SelectedTables, $tables);
 
 // create a list with all tables with configured table prefix
-$sql = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';
-$statement = $gDb->query($sql);
+$sql = 'SHOW TABLES LIKE ?';
+$statement = $gDb->queryPrepared($sql, array($g_tbl_praefix . '\_%'));
 $tables = array();
 while($table = $statement->fetch())
 {

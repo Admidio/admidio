@@ -22,27 +22,25 @@ $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 
 if ($getGbcId > 0)
 {
-    $conditions = '';
-
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
     if($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
     {
-        $conditions .= ' AND gbc_locked = 1 ';
+        $conditions = ' AND gbc_locked = 1 ';
     }
     else
     {
-        $conditions .= ' AND gbc_locked = 0 ';
+        $conditions = ' AND gbc_locked = 0 ';
     }
 
     $sql = 'SELECT *
               FROM '.TBL_GUESTBOOK_COMMENTS.'
         INNER JOIN '.TBL_GUESTBOOK.'
                 ON gbo_id = gbc_gbo_id
-             WHERE gbo_id     = '.$getGbcId.'
-               AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id').
-                   $conditions.'
+             WHERE gbo_id     = ? -- $getGbcId
+               AND gbo_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   '.$conditions.'
           ORDER BY gbc_timestamp_create ASC';
-    $commentStatement = $gDb->query($sql);
+    $commentStatement = $gDb->queryPrepared($sql, array($getGbcId, $gCurrentOrganization->getValue('org_id')));
 
     if($commentStatement->rowCount() > 0)
     {

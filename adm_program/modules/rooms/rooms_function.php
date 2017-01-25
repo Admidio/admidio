@@ -74,8 +74,8 @@ elseif ($getMode === 2)
 {
     $sql = 'SELECT *
               FROM '.TBL_DATES.'
-             WHERE dat_room_id = '.$getRoomId;
-    $statement = $gDb->query($sql);
+             WHERE dat_room_id = ?';
+    $statement = $gDb->queryPrepared($sql, array($getRoomId));
 
     if($statement->rowCount() === 0)
     {

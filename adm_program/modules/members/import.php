@@ -79,11 +79,11 @@ $sql = 'SELECT *
             ON cat_id = rol_cat_id
          WHERE rol_valid   = 1
            AND rol_visible = 1
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )'.
-               $condition.'
+           AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               OR cat_org_id IS NULL )
+               '.$condition.'
       ORDER BY cat_sequence, rol_name';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 $roles = array();
 
 while($row = $statement->fetch())
