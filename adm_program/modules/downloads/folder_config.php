@@ -127,11 +127,6 @@ while($row = $statementAdminRoles->fetch())
     $arrayAdministratorRoles[] .= $row['rol_name'];
 }
 
-$sqlDataUpload = array(
-    'query'  => $sqlUploadRoles,
-    'params' => array_merge($rolesUploadRightParentFolder, array($gCurrentOrganization->getValue('org_id')))
-);
-
 // create html page object
 $page = new HtmlPage($headline);
 
@@ -151,7 +146,7 @@ $form->addSelectBoxFromSql(
     'adm_roles_upload_right',
     $gL10n->get('DOW_UPLOAD_FILES'),
     $gDb,
-    $sqlDataUpload,
+    $sqlDataView,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
