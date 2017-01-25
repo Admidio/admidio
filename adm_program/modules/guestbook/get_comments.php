@@ -106,7 +106,10 @@ if ($getGbcId > 0)
             // show information about user who edit the recordset
             if(strlen($gbComment->getValue('gbc_usr_id_change')) > 0)
             {
-                echo '<div class="panel-footer">'.admFuncShowCreateChangeInfoById(0, '', $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')).'</div>';
+                echo '<div class="panel-footer">'.admFuncShowCreateChangeInfoById(
+                    0, '',
+                    (int) $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')
+                ).'</div>';
             }
             echo '</div>';
         }

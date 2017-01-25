@@ -94,7 +94,6 @@ $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
     profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
     profileJS.inv_id                  = '.$inventory->getValue('inv_id').';
 
     function showHideMembershipInformation(element) {
@@ -318,6 +317,9 @@ if($category !== '')
 }
 
 // show information about user who creates the recordset and changed it
-$page->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
+$page->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'),
+    (int) $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')
+));
 
 $page->show();

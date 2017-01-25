@@ -51,11 +51,11 @@ class TableAccess
      */
     public function __construct(&$database, $tableName, $columnPrefix, $id = '')
     {
+        $this->db          =& $database;
         $this->tableName    = $tableName;
         $this->columnPrefix = $columnPrefix;
-        $this->db =& $database;
 
-        // only initialize if not set before through child constructur
+        // only initialize if not set before through child constructor
         if(!is_array($this->additionalTables))
         {
             $this->additionalTables = array();

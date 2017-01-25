@@ -79,14 +79,19 @@ else
 
 // show form
 $form = new HtmlForm('weblinks_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate, $page);
-$form->addInput('lnk_name', $gL10n->get('LNK_LINK_NAME'), $link->getValue('lnk_name'), array('maxLength' => 250, 'property' => FIELD_REQUIRED));
+$form->addInput('lnk_name', $gL10n->get('LNK_LINK_NAME'), noHTML($link->getValue('lnk_name')), array('maxLength' => 250, 'property' => FIELD_REQUIRED));
 $form->addInput('lnk_url', $gL10n->get('LNK_LINK_ADDRESS'), $link->getValue('lnk_url'), array('maxLength' => 2000, 'property' => FIELD_REQUIRED));
-$form->addSelectBoxForCategories('lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'EDIT_CATEGORIES',
-                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $link->getValue('lnk_cat_id')));
+$form->addSelectBoxForCategories(
+    'lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'EDIT_CATEGORIES',
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $link->getValue('lnk_cat_id'))
+);
 $form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'), array('height' => '150px'));
-
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'), $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')));
+
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'),
+    (int) $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

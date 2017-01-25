@@ -133,6 +133,7 @@ if(!empty($_POST['recipient_email']))
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 }
 else

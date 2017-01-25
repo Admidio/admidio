@@ -315,7 +315,10 @@ $form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'), $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'),
+    (int) $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

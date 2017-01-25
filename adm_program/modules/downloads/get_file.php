@@ -34,6 +34,7 @@ try
 catch(AdmException $e)
 {
     $e->showHtml();
+    // => EXIT
 }
 
 // kompletten Pfad der Datei holen

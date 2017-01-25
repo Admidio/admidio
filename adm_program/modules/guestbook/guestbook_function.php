@@ -136,6 +136,7 @@ if ($getMode === 1 || $getMode === 3)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 
@@ -237,7 +238,7 @@ if ($getMode === 1 || $getMode === 3)
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             $notification = new Email();
-            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -325,6 +326,7 @@ elseif($getMode === 4 || $getMode === 8)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 
@@ -424,7 +426,7 @@ elseif($getMode === 4 || $getMode === 8)
             }
             $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));
             $notification = new Email();
-            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
+            $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
 
         }
 

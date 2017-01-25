@@ -52,4 +52,5 @@ try
 catch(AdmException $e)
 {
     $e->showHtml();
+    // => EXIT
 }

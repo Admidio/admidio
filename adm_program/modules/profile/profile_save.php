@@ -276,6 +276,7 @@ if($getNewUser === 2)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 }
@@ -295,6 +296,7 @@ catch(AdmException $e)
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gNavigation->deleteLastUrl();
     $e->showHtml();
+    // => EXIT
 }
 
 $gDb->endTransaction();
@@ -328,6 +330,7 @@ if($getNewUser === 1 || $getNewUser === 3)
         {
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
             $e->showHtml();
+            // => EXIT
         }
     }
     else

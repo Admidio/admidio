@@ -224,7 +224,10 @@ function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement
                     $roleMemHTML .= '</div></li>
                     <li class="list-group-item" id="member_info_'.$memberId.'_Content" style="display: none;">';
                         // show information about user who creates the recordset and changed it
-                        $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')).'
+                        $roleMemHTML .= admFuncShowCreateChangeInfoById(
+                            (int) $member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'),
+                            (int) $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')
+                        ).'
                     </li>
                 </ul>
             </li>';
