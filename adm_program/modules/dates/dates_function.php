@@ -513,7 +513,17 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    
+    if (!$gPreferences['dates_save_all_confirmations'])
+    {
+        // Delete entry
+        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    }
+    else
+    {
+        // Set user status to refused
+        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
+    }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));

@@ -182,7 +182,7 @@ switch($getMode)
                     break;
 
                 case 'events':
-                    $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms');
+                    $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms', 'dates_save_all_confirmations');
                     break;
 
                 case 'links':

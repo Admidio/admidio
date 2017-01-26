@@ -471,6 +471,10 @@ else
                         $buttonText =  $gL10n->get('DAT_USER_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_USER_ATTEND').'" title="'.$gL10n->get('DAT_USER_ATTEND').'"/>';
                         break;
+                    case '3':
+                        $buttonText =  $gL10n->get('DAT_USER_REFUSED');
+                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_USER_REFUSED').'" title="'.$gL10n->get('DAT_USER_REFUSED').'"/>';
+                        break;
                     default:
                         $buttonText =  $gL10n->get('DAT_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'"/>';
@@ -512,8 +516,12 @@ else
                     // Check limit of participants
                     if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
                     {
-                        $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
-                        $iconParticipationStatus = '';
+                        // check participation of current user. If user is member of the event role, he/she should also has the functionality to change the approval state.
+                        if (!$participants->isMemberofDate($gCurrentUser->getValue('usr_id')))
+                        {
+                            $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                            $iconParticipationStatus = '';
+                        }
                     }
                 }
 
