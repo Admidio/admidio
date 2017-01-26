@@ -1165,6 +1165,8 @@ class HtmlForm extends HtmlFormBasic
      *                          created within the $_POST array.
      *                        - @b search : If set to @b true the jQuery plugin Select2 will be used to create a selectbox
      *                          with a search field.
+     *                        - @placeholder : When using the jQuery plugin Select2 you can set a placeholder that will be shown
+     *                          if no entry is selected
      *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
@@ -1200,6 +1202,7 @@ class HtmlForm extends HtmlFormBasic
             'firstEntry'                     => '',
             'multiselect'                    => false,
             'search'                         => false,
+            'placeholder'                    => '',
             'maximumSelectionNumber'         => 0,
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
@@ -1219,7 +1222,6 @@ class HtmlForm extends HtmlFormBasic
             $attributes['required'] = 'required';
         }
 
-        $placeholder = '';
         if ($optionsAll['multiselect'])
         {
             $attributes['multiple'] = 'multiple';
@@ -1232,7 +1234,10 @@ class HtmlForm extends HtmlFormBasic
 
             if ($optionsAll['showContextDependentFirstEntry'] && $optionsAll['property'] === FIELD_REQUIRED)
             {
-                $placeholder = $gL10n->get('SYS_SELECT_FROM_LIST');
+                if($optionsAll['placeholder'] === '')
+                {
+                    $optionsAll['placeholder'] = $gL10n->get('SYS_SELECT_FROM_LIST');
+                }
 
                 // reset the preferences so the logic for not multiselect will not be performed
                 $optionsAll['showContextDependentFirstEntry'] = false;
@@ -1345,7 +1350,7 @@ class HtmlForm extends HtmlFormBasic
                     theme: "bootstrap",
                     allowClear: ' . $allowClear . ',
                     ' . $maximumSelectionNumber . '
-                    placeholder: "' . $placeholder . '",
+                    placeholder: "' . $optionsAll['placeholder'] . '",
                     language: "' . $gL10n->getLanguage() . '"
                 });';
 
