@@ -37,7 +37,7 @@ class TableFolder extends TableAccess
      * @param array[] $completeFolder
      * @return array[]
      */
-    private function addAdditionalToFolderContents($completeFolder)
+    private function addAdditionalToFolderContents(array $completeFolder)
     {
         global $gCurrentUser;
 
@@ -242,8 +242,7 @@ class TableFolder extends TableAccess
         {
             return;
         }
-        global $gLogger;
-$gLogger->warning(print_r($rolesArray, true));
+
         if ($folderId === 0)
         {
             $folderId = (int) $this->getValue('fol_id');
@@ -251,7 +250,7 @@ $gLogger->warning(print_r($rolesArray, true));
 
         $this->db->startTransaction();
 
-        if($recursive)
+        if ($recursive)
         {
             $subfoldersStatement = $this->getSubfolderStatement($folderId);
 
@@ -369,9 +368,9 @@ $gLogger->warning(print_r($rolesArray, true));
         // Get all files of the current folder
         $sqlFiles = 'SELECT *
                        FROM '.TBL_FILES.'
-                      WHERE fil_fol_id = '. $this->getValue('fol_id'). '
+                      WHERE fil_fol_id = ? -- $this->getValue(\'fol_id\')
                    ORDER BY fil_name';
-        $filesStatement = $this->db->query($sqlFiles);
+        $filesStatement = $this->db->queryPrepared($sqlFiles, array($this->getValue('fol_id')));
 
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetchObject())
@@ -603,8 +602,8 @@ $gLogger->warning(print_r($rolesArray, true));
         // select all subfolders of the current folder
         $sqlSubfolders = 'SELECT ' . implode(',', $columns) . '
                             FROM '.TBL_FOLDERS.'
-                           WHERE fol_fol_id_parent = ' . $folderId;
-        return $this->db->query($sqlSubfolders);
+                           WHERE fol_fol_id_parent = ? --$folderId';
+        return $this->db->queryPrepared($sqlSubfolders, array($folderId));
     }
 
     /**
@@ -614,16 +613,16 @@ $gLogger->warning(print_r($rolesArray, true));
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
-        $folders = array();
-
         // Get all subfolder of the current folder
         $sqlFolders = 'SELECT *
                          FROM '.TBL_FOLDERS.'
                         WHERE fol_type          = \'DOWNLOAD\'
-                          AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
-                          AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
+                          AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
+                          AND fol_org_id        = ? -- $gCurrentOrganization->getValue(\'org_id\')
                      ORDER BY fol_name';
-        $foldersStatement = $this->db->query($sqlFolders);
+        $foldersStatement = $this->db->queryPrepared($sqlFolders, array($this->getValue('fol_id'), $gCurrentOrganization->getValue('org_id')));
+
+        $folders = array();
 
         while ($rowFolders = $foldersStatement->fetchObject())
         {
@@ -649,7 +648,7 @@ $gLogger->warning(print_r($rolesArray, true));
                 {
                     $subfolderViewRolesObject = new RolesRights($this->db, 'folder_view', $rowFolders->fol_id);
 
-                    if($subfolderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
+                    if ($subfolderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
                     {
                         $addToArray = true;
                     }
