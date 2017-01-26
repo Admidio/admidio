@@ -33,13 +33,13 @@ $sql = 'SELECT inv_id, item_name.ind_value AS item_name, room_id.ind_value AS ro
           FROM '.TBL_INVENT.'
     INNER JOIN '.TBL_INVENT_DATA.' AS item_name
             ON item_name.ind_itm_id = inv_id
-           AND item_name.ind_inf_id = '. $gInventoryFields->getProperty('ITEM_NAME', 'inf_id'). '
+           AND item_name.ind_inf_id = ? -- $gInventoryFields->getProperty(\'ITEM_NAME\', \'inf_id\')
     INNER JOIN '.TBL_INVENT_DATA.' AS room_id
             ON room_id.ind_itm_id = inv_id
-           AND room_id.ind_inf_id = '. $gInventoryFields->getProperty('ROOM_ID', 'inf_id'). '
+           AND room_id.ind_inf_id = ? -- $gInventoryFields->getProperty(\'ROOM_ID\', \'inf_id\')
          WHERE inv_valid = 1
       ORDER BY item_name.ind_value, room_id.ind_value ';
-$mglStatement = $gDb->query($sql);
+$mglStatement = $gDb->queryPrepared($sql, array($gInventoryFields->getProperty('ITEM_NAME', 'inf_id'), $gInventoryFields->getProperty('ROOM_ID', 'inf_id')));
 
 // create html page object
 $page = new HtmlPage($headline);

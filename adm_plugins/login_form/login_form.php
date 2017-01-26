@@ -195,8 +195,10 @@ else
         $sql = 'SELECT org_id, org_longname
                   FROM '.TBL_ORGANIZATIONS.'
               ORDER BY org_longname ASC, org_shortname ASC';
-        $form->addSelectBoxFromSql('plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-            array('defaultValue' => $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false));
+        $form->addSelectBoxFromSql(
+            'plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
+            array('defaultValue' => $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false)
+        );
     }
 
     if($gPreferences['enable_auto_login'] == 1)
@@ -232,10 +234,10 @@ else
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                  WHERE rol_administrator = 1
-                   AND rol_name = \''.$gL10n->get('SYS_ADMINISTRATOR').'\'
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                       OR cat_org_id IS NULL ) ';
-        $administratorStatement = $gDb->query($sql);
+                   AND rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR cat_org_id IS NULL )';
+        $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrganization->getValue('org_id')));
 
         // create role object for administrator
         $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());

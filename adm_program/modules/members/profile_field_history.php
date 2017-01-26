@@ -41,9 +41,6 @@ else
     $headline = $gL10n->get('MEM_CHANGE_HISTORY');
 }
 
-// Initialize local parameteres
-$sqlConditions = '';
-
 // if profile log is activated and current user is allowed to edit users
 // then the profile field history will be shown otherwise show error
 if ($gPreferences['profile_log_edit_fields'] == 0
@@ -94,39 +91,51 @@ $dateToIntern   = $objDateTo->format('Y-m-d');
 $dateToHtml     = $objDateTo->format($gPreferences['system_date']);
 
 // create sql conditions
+$sqlConditions = '';
+$queryParamsConditions = array();
 if($getUserId > 0)
 {
-    $sqlConditions .= ' AND usl_usr_id = '.$getUserId;
+    $sqlConditions = ' AND usl_usr_id = ? -- $getUserId';
+    $queryParamsConditions = array($getUserId);
 }
 
 // get total count of relevant profile field changes
 $sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_USER_LOG.'
-         WHERE 1 = 1 '.
-               $sqlConditions;
-$pdoStatement = $gDb->query($sql);
+         WHERE 1 = 1
+               '.$sqlConditions;
+$pdoStatement = $gDb->queryPrepared($sql, $queryParamsConditions);
 $countChanges = (int) $pdoStatement->fetchColumn();
 
 // create select statement with all necessary data
-$sql = 'SELECT usl_usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id, usl_value_old, usl_value_new,
-               usl_usr_id_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name, usl_timestamp_create
+$sql = 'SELECT usl_usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, usl_usf_id,
+               usl_value_old, usl_value_new, usl_usr_id_create, create_last_name.usd_value AS create_last_name,
+               create_first_name.usd_value AS create_first_name, usl_timestamp_create
           FROM '.TBL_USER_LOG.'
     INNER JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usl_usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
     INNER JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usl_usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
     INNER JOIN '.TBL_USER_DATA.' AS create_last_name
             ON create_last_name.usd_usr_id = usl_usr_id_create
-           AND create_last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+           AND create_last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
     INNER JOIN '.TBL_USER_DATA.' AS create_first_name
             ON create_first_name.usd_usr_id = usl_usr_id_create
-           AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-         WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
-               $sqlConditions.'
+           AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+         WHERE usl_timestamp_create BETWEEN ? AND ? -- $dateFromIntern AND $dateToIntern
+               '.$sqlConditions.'
       ORDER BY usl_timestamp_create DESC';
-$fieldHistoryStatement = $gDb->query($sql);
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $dateFromIntern . ' 00:00:00',
+    $dateToIntern . ' 23:59:59'
+);
+$fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $queryParamsConditions));
 
 if($fieldHistoryStatement->rowCount() === 0)
 {

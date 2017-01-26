@@ -45,11 +45,11 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT *
           FROM '.TBL_GUESTBOOK.'
-         WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id').'
+         WHERE gbo_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
            AND gbo_locked = 0
       ORDER BY gbo_timestamp_create DESC
          LIMIT 10';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
 // ab hier wird der RSS-Feed zusammengestellt
 

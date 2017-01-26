@@ -94,14 +94,15 @@ class Session extends TableAccess
                 $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
                 $userId = $autoLoginParts[0];
 
-                $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = atl_number_invalid + 1
-                         WHERE atl_usr_id = '.$userId;
-                $this->db->query($sql);
+                $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
+                           SET atl_number_invalid = atl_number_invalid + 1
+                         WHERE atl_usr_id = ? -- $userId';
+                $this->db->queryPrepared($sql, array($userId));
 
                 $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                         WHERE atl_usr_id = '.$userId.'
+                         WHERE atl_usr_id = ? -- $userId
                            AND atl_number_invalid > 3 ';
-                $this->db->query($sql);
+                $this->db->queryPrepared($sql, array($userId));
             }
         }
     }
@@ -373,13 +374,17 @@ class Session extends TableAccess
     public function renewUserObject($userId = 0)
     {
         $sqlCondition = '';
+        $queryParams = array();
         if ($userId > 0)
         {
-            $sqlCondition = ' WHERE ses_usr_id = ' . $userId;
+            $sqlCondition = ' WHERE ses_usr_id = ? -- $userId';
+            $queryParams[] = $userId;
         }
 
-        $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1 ' . $sqlCondition;
-        $this->db->query($sql);
+        $sql = 'UPDATE ' . TBL_SESSIONS . '
+                   SET ses_renew = 1
+                       ' . $sqlCondition;
+        $this->db->queryPrepared($sql, $queryParams);
     }
 
     /**
@@ -446,9 +451,9 @@ class Session extends TableAccess
         $timestamp = $now->sub($minutesBack)->format('Y-m-d H:i:s');
 
         $sql = 'DELETE FROM '.TBL_SESSIONS.'
-                 WHERE ses_timestamp < \''.$timestamp.'\'
-                   AND ses_session_id <> \''.$this->getValue('ses_session_id').'\'';
-        $this->db->query($sql);
+                 WHERE ses_timestamp < ? -- $timestamp
+                   AND ses_session_id <> ? -- $this->getValue(\'ses_session_id\')';
+        $this->db->queryPrepared($sql, array($timestamp, $this->getValue('ses_session_id')));
     }
 
     /**
