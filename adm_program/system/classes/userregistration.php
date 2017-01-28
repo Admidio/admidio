@@ -111,7 +111,9 @@ class UserRegistration extends User
     {
         global $gMessage, $gL10n, $gPreferences;
 
-        $userEmail = $this->getValue('EMAIL');
+        $userEmail     = $this->getValue('EMAIL');
+        $userFirstName = $this->getValue('FIRST_NAME');
+        $userLastName  = $this->getValue('LAST_NAME');
 
         $this->db->startTransaction();
 
@@ -140,7 +142,7 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
+            $sysmail->addRecipient($userEmail, $userFirstName. ' '. $userLastName);
             $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
         }
 

@@ -293,7 +293,7 @@ elseif($getMode === 2)
     // save role dependencies in database
     if(array_key_exists('dependent_roles', $_POST))
     {
-        $sentChildRoles = $_POST['dependent_roles'];
+        $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
 
         $roleDep = new RoleDependency($gDb);
 
@@ -318,7 +318,7 @@ elseif($getMode === 2)
         {
             foreach ($sentChildRoles as $sentChildRole)
             {
-                if($sentChildRole > 0 && count($dbChildRoles) > 0 && !in_array($sentChildRole, $dbChildRoles, true))
+                if($sentChildRole > 0 && !in_array($sentChildRole, $dbChildRoles, true))
                 {
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);

@@ -238,8 +238,15 @@ if ($getMode === 1 || $getMode === 3)
                 $gbo_email = $gPreferences['email_administrator'];
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
-            $notification = new Email();
-            $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            try
+            {
+                $notification = new Email();
+                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            }
+            catch(AdmException $e)
+            {
+                $e->showHtml();
+            }
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -426,9 +433,21 @@ elseif($getMode === 4 || $getMode === 8)
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));
+<<<<<<< HEAD
             $notification = new Email();
             $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
 
+=======
+            try
+            {
+                $notification = new Email();
+                $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
+            }
+            catch(AdmException $e)
+            {
+                $e->showHtml();
+            }
+>>>>>>> v3.2
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
