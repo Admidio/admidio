@@ -391,7 +391,15 @@ class Email extends PHPMailer
             $this->setText($message);
 
             // Verschicken
-            return $this->sendEmail();
+            $returnCode = $this->sendEmail();
+
+            // if something went wrong then throw an exception with the error message
+            if($returnCode !== true)
+            {
+                throw new AdmException('SYS_EMAIL_NOT_SEND', $gPreferences['email_administrator'], $this->sendEmail());
+            }
+
+            return true;
         }
 
         return false;
