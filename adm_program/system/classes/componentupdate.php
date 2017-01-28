@@ -116,12 +116,8 @@ class ComponentUpdate extends Component
                 $this->db->query($sql, $showError); // TODO add more params
             }
 
-            // set the type if the id to integer because otherwise the system thinks it's not numeric !!!
-            $stepId = $xmlNode['id'];
-            settype($stepId, 'integer');
-
             // save the successful executed update step in database
-            $this->setValue('com_update_step', $stepId);
+            $this->setValue('com_update_step', (int) $xmlNode['id']);
             $this->save();
         }
     }
