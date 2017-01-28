@@ -426,7 +426,10 @@ $page->addHtml('
                         {
                             $form->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
                         }
-                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
+
+                        $component = new ComponentUpdate($gDb);
+                        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step') . ' / ' . $component->getMaxUpdateStep());
 
                         if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
                         {
