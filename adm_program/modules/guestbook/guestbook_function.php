@@ -433,11 +433,6 @@ elseif($getMode === 4 || $getMode === 8)
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));
-<<<<<<< HEAD
-            $notification = new Email();
-            $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
-
-=======
             try
             {
                 $notification = new Email();
@@ -447,7 +442,6 @@ elseif($getMode === 4 || $getMode === 8)
             {
                 $e->showHtml();
             }
->>>>>>> v3.2
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
