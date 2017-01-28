@@ -1040,11 +1040,11 @@ class User extends TableAccess
 
         if($gPreferences['lists_show_former_members'] === '1' && $this->checkRolesRight('rol_assign_roles'))
         {
-            return = true;
+            return true;
         }
         elseif($gPreferences['lists_show_former_members'] === '2' && $this->checkRolesRight('rol_edit_user'))
         {
-            return = true;
+            return true;
         }
 
         return false;
