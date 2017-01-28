@@ -659,26 +659,29 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
 
 // show all roles where the user has the right to view them
+$sqlData = array();
 if($getActiveRole)
 {
+    $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
-              FROM '.TBL_ROLES.'
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-             WHERE rol_id IN (' . implode(',', $gCurrentUser->getAllVisibleRoles()) . ')
-          ORDER BY cat_sequence, rol_name';
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                          WHERE rol_id IN (' . replaceValuesArrWithQM($allVisibleRoles) . ')
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = $allVisibleRoles;
 }
 else
 {
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
-              FROM '.TBL_ROLES.'
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-               AND cat_hidden = 0
-             WHERE rol_valid  = 0
-               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                   OR cat_org_id IS NULL )
-          ORDER BY cat_sequence, rol_name';
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                            AND cat_hidden = 0
+                          WHERE rol_valid  = 0
+                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                OR cat_org_id IS NULL )
+                       ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,

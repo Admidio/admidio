@@ -361,13 +361,14 @@ class ComponentUpdate extends Component
         {
             if($g_organization === $row['org_shortname'])
             {
-                $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_name_intern = \'EVENTS\'
-                                                    , cat_name = \''.$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION').'\'
-                                                    , cat_org_id = '.$row['org_id'].'
+                $sql = 'UPDATE '.TBL_CATEGORIES.'
+                           SET cat_name_intern = \'EVENTS\'
+                             , cat_name   = ? -- $gL10n->get(\'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\')
+                             , cat_org_id = ? -- $row[\'org_id\']
                          WHERE cat_org_id IS NULL
-                           AND cat_type = \'ROL\'
+                           AND cat_type        = \'ROL\'
                            AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
-                $this->db->query($sql);
+                $this->db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', $row['org_id'])));
             }
             else
             {
@@ -385,14 +386,15 @@ class ComponentUpdate extends Component
                 $category->save();
 
                 // all existing events of this organization must get the new category
-                $sql = 'UPDATE '.TBL_ROLES.' SET rol_cat_id = '.$category->getValue('cat_id').'
+                $sql = 'UPDATE '.TBL_ROLES.'
+                           SET rol_cat_id = ? -- $category->getValue(\'cat_id\')
                          WHERE rol_id IN (SELECT dat_rol_id
                                             FROM '.TBL_DATES.'
                                       INNER JOIN '.TBL_CATEGORIES.'
                                               ON cat_id = dat_cat_id
                                            WHERE dat_rol_id IS NOT NULL
-                                             AND cat_org_id = '.$row['org_id'].')';
-                $this->db->query($sql);
+                                             AND cat_org_id = ?) -- $row[\'org_id\']';
+                $this->db->queryPrepared($sql, array($category->getValue('cat_id'), $row['org_id']));
             }
         }
     }
