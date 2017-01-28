@@ -16,8 +16,8 @@
  * form         - The name of the form preferences that were submitted.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
@@ -344,7 +344,7 @@ switch($getMode)
         $newOrganization->save();
 
         // write all preferences from preferences.php in table adm_preferences
-        require_once('../../installation/db_scripts/preferences.php');
+        require_once(__DIR__ . '/../../installation/db_scripts/preferences.php');
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];

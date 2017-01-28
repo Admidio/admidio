@@ -14,7 +14,7 @@
  *              (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
@@ -30,7 +30,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // set headline of the script
@@ -52,7 +52,7 @@ $guestbook = new TableGuestbook($gDb);
 if($getGboId > 0)
 {
     // Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
-    require('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 
     if (!$gCurrentUser->editGuestbookRight())
     {

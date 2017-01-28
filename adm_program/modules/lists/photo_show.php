@@ -12,8 +12,8 @@
  * usr_id : Id of the user whose photo should be shown
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('requireValue' => true, 'directOutput' => true));
 

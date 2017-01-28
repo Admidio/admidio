@@ -20,7 +20,7 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['announcements_request']);
 
@@ -42,7 +42,7 @@ if ($gPreferences['enable_announcements_module'] == 0)
 elseif($gPreferences['enable_announcements_module'] == 2)
 {
     // Access only with valid login
-    require('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // create object for announcements

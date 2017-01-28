@@ -15,8 +15,8 @@
  * copy : true - The announcement of the ann_id will be copied and the base for this new announcement
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_announcements_module'] == 0)

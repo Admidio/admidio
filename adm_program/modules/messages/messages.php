@@ -9,7 +9,7 @@
  *
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // check if the call of the page was allowed
 if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1 && $gPreferences['enable_chat_module'] != 1)
@@ -104,7 +104,7 @@ $moduleMessages = new ModuleMessages();
 $statement = $moduleMessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
 if(isset($statement))
 {
-    require_once('messages_functions.php');
+    require_once(__DIR__ . '/messages_functions.php');
 
     while ($row = $statement->fetch())
     {

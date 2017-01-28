@@ -42,7 +42,7 @@
  * search[value] - Global search value.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));

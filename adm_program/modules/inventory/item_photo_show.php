@@ -14,8 +14,8 @@
  *             true  show uploaded photo of current session
  ***********************************************************************************************
  */
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getItemId   = admFuncVariableIsValid($_GET, 'inv_id',    'int', array('requireValue' => true));

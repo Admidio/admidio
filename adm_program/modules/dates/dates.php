@@ -28,7 +28,7 @@
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
  *****************************************************************************/
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['dates_request']);
 
@@ -54,7 +54,7 @@ if($gPreferences['enable_dates_module'] == 0)
 elseif($gPreferences['enable_dates_module'] == 2)
 {
     // module only for valid Users
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // create object and get recordset of available dates

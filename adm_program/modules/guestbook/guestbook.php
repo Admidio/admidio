@@ -17,7 +17,7 @@
  *              true - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
@@ -31,7 +31,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -345,7 +345,7 @@ else
 
                             // read all comments of this guestbook entry
                             ob_start();
-                            include('get_comments.php');
+                            include(__DIR__ . '/get_comments.php');
                             $page->addHtml(ob_get_contents());
                             ob_end_clean();
                         }
@@ -368,7 +368,7 @@ else
                 if ($countGuestbookEntries > 0 && $getGboId > 0)
                 {
                     ob_start();
-                    include('get_comments.php');
+                    include(__DIR__ . '/get_comments.php');
                     $page->addHtml(ob_get_contents());
                     ob_end_clean();
                 }

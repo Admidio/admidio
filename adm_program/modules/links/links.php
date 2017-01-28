@@ -14,7 +14,7 @@
  * id        : Show only one link.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['links_request']);
 
@@ -34,7 +34,7 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 elseif($gPreferences['enable_weblinks_module'] == 2)
 {
     // avaiable only with valid login
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Create Link object

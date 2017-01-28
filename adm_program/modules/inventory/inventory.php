@@ -10,7 +10,7 @@
  * Parameters:
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())

@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($gPreferences['enable_rss'] != 1)

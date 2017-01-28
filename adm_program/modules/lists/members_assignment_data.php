@@ -43,8 +43,8 @@
  *                 be returned (although that negates any benefits of server-side processing!)
  * search[value] - Global search value.
  *****************************************************************************/
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int', array('requireValue' => true, 'directOutput' => true));

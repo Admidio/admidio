@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMsgType     = admFuncVariableIsValid($_GET, 'msg_type',     'string');
@@ -589,7 +589,7 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    require_once('messages_functions.php');
+    require_once(__DIR__ . '/messages_functions.php');
 
     $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())

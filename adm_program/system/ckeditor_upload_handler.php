@@ -14,8 +14,8 @@
  * langCode        : language code
  ***********************************************************************************************
  */
-require_once('common.php');
-require_once('login_valid.php');
+require_once(__DIR__ . '/common.php');
+require(__DIR__ . '/login_valid.php');
 
 $getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor',        'string', array('directOutput' => true, 'requireValue' => true));
 $getCKEditorFuncNum = admFuncVariableIsValid($_GET, 'CKEditorFuncNum', 'string', array('directOutput' => true, 'requireValue' => true));

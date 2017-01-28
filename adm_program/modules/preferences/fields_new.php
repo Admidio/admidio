@@ -12,8 +12,8 @@
  * usf_id : profile field id that should be edited
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'int');

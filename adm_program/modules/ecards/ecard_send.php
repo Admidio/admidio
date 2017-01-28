@@ -8,8 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('ecard_function.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/ecard_function.php');
 
 // Initialize and check the parameters
 $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));

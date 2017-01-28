@@ -13,7 +13,7 @@
  * usr_id   ..  Id of the user who wants a new password
  ***********************************************************************************************
  */
-require_once('common.php');
+require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
 $getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string', array('requireValue' => true));

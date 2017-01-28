@@ -22,7 +22,7 @@
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 if($_GET['mode'] == 2)
 {
@@ -49,7 +49,7 @@ if($gPreferences['enable_dates_module'] == 0)
 if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat

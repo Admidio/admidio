@@ -15,7 +15,7 @@
  *                 (Default) Gaestebuch
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
@@ -55,7 +55,7 @@ else
 if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0) && $getGboId > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 
     if (!$gCurrentUser->commentGuestbookRight())
     {
@@ -68,7 +68,7 @@ if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook
 if($getGbcId > 0)
 {
     // Zum editieren von Kommentaren muss der User auch eingeloggt sein
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 
     if (!$gCurrentUser->editGuestbookRight())
     {

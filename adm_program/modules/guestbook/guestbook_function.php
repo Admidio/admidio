@@ -22,7 +22,7 @@
  *            (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
@@ -41,7 +41,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
@@ -53,7 +53,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($gPreferences['enable_gbook_comments4all'] == 0)
         {
-            require_once('../../system/login_valid.php');
+            require(__DIR__ . '/../../system/login_valid.php');
 
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$gCurrentUser->commentGuestbookRight())
@@ -67,7 +67,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
     else
     {
         // Der User muss fuer die anderen Modes auf jeden Fall eingeloggt sein
-        require_once('../../system/login_valid.php');
+        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     if ($getMode === 2 || $getMode === 3 || $getMode === 5 || $getMode === 8)

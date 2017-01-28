@@ -26,7 +26,7 @@ if(!defined('PLUGIN_PATH'))
 }
 
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden

@@ -16,8 +16,8 @@
  * id     : Id of the current object (folder, album) where the files should be uploaded
  ***********************************************************************************************
  */
-require_once('common.php');
-require_once('login_valid.php');
+require_once(__DIR__ . '/common.php');
+require(__DIR__ . '/login_valid.php');
 
 // Initialize and check the parameters
 $getModule = admFuncVariableIsValid($_GET, 'module', 'string', array('validValues' => array('photos', 'downloads')));

@@ -14,8 +14,8 @@
  *           change : Change password in database
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 header('Content-type: text/html; charset=utf-8');
 

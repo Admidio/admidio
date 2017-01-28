@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'int', array('requireValue' => true));
@@ -31,7 +31,7 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 if($gPreferences['enable_weblinks_module'] == 2)
 {
     // avaiable only with valid login
-    require('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // read link from id

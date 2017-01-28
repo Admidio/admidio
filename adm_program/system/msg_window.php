@@ -13,7 +13,7 @@
  * inline        - true : message should not be shown in separate window
  ***********************************************************************************************
  */
-require_once('common.php');
+require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
 $getMessageId    = admFuncVariableIsValid($_GET, 'message_id',    'string', array('directOutput' => true, 'requireValue' => true));

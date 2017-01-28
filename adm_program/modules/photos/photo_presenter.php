@@ -13,7 +13,7 @@
  * pho_id   : Id of the album of the photo that should be shown
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int', array('requireValue' => true));
@@ -29,7 +29,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 elseif($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // erfassen des Albums falls noch nicht in Session gespeichert

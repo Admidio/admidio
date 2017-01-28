@@ -13,9 +13,9 @@
  *           the profile of the current log will be shown.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
-require_once('roles_functions.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/roles_functions.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'user_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));

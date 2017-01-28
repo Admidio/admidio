@@ -19,8 +19,8 @@
  * file_id   : Id of the file in the database
  * name      : Name of the file/folder that should be added to the database
  ***********************************************************************************************/
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)

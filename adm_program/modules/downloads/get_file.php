@@ -12,7 +12,7 @@
  * file_id      :  Die Id der Datei, welche heruntergeladen werden soll
  ***********************************************************************************************
  */
-require('../../system/common.php');
+require(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getFileId = admFuncVariableIsValid($_GET, 'file_id', 'int', array('requireValue' => true));

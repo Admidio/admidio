@@ -12,8 +12,8 @@
  * usr_id : user id of the first user in the new relation
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');

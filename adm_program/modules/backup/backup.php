@@ -21,8 +21,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('backup.functions.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/backup.functions.php');
 
 // Initialize and check the parameters
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_list', 'validValues' => array('show_list', 'create_backup')));
@@ -141,7 +141,7 @@ if($getMode === 'show_list')
 elseif($getMode === 'create_backup')
 {
     ob_start();
-    include(ADMIDIO_PATH. FOLDER_MODULES.'/backup/backup_script.php');
+    include(__DIR__ . '/backup_script.php');
     $page->addHtml(ob_get_contents());
     ob_end_clean();
 
