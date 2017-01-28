@@ -50,10 +50,10 @@ require_once('../../system/login_valid.php');
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int', array('requireValue' => true, 'directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool', array('defaultValue' => false));
-$getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
-$getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
-$getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-$getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+$getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
+$getStart  = admFuncVariableIsValid($_GET, 'start',  'int', array('requireValue' => true));
+$getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+$getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $gLogger->info('mem_show_all: ' . $getMembersShowAll);
 
