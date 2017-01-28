@@ -79,8 +79,8 @@ $page->addJavascript('
         event.preventDefault();
 
         $.post({
-            url:     action,
-            data:    $(this).serialize(),
+            url: action,
+            data: $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
                     if (id === "captcha_preferences_form") {
@@ -104,12 +104,14 @@ $page->addJavascript('
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
         $("#admidio_version_content").prepend("<img src=\''.THEME_URL.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
-        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode:"2"}, function(htmlVersion) {
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
             $("#admidio_version_content").empty();
             $("#admidio_version_content").append(htmlVersion);
         });
         return false;
-    });    ', true);
+    });',
+    true
+);
 
 if($showOption !== '')
 {
