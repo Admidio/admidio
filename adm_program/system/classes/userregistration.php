@@ -111,7 +111,9 @@ class UserRegistration extends User
     {
         global $gMessage, $gL10n, $gPreferences;
 
-        $userEmail = $this->getValue('EMAIL');
+        $userEmail     = $this->getValue('EMAIL');
+        $userFirstName = $this->getValue('FIRST_NAME');
+        $userLastName  = $this->getValue('LAST_NAME');
 
         $this->db->startTransaction();
 
@@ -124,8 +126,8 @@ class UserRegistration extends User
         {
             $sql = 'SELECT reg_id
                       FROM '.TBL_REGISTRATIONS.'
-                     WHERE reg_usr_id = '.$this->getValue('usr_id');
-            $registrationsStatement = $this->db->query($sql);
+                     WHERE reg_usr_id = ? -- $this->getValue(\'usr_id\')';
+            $registrationsStatement = $this->db->queryPrepared($sql, array($this->getValue('usr_id')));
 
             if($registrationsStatement->rowCount() === 0)
             {
@@ -140,7 +142,7 @@ class UserRegistration extends User
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
+            $sysmail->addRecipient($userEmail, $userFirstName. ' '. $userLastName);
             $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this); // TODO Exception handling
         }
 
@@ -196,22 +198,30 @@ class UserRegistration extends User
                             ON cat_id = rol_cat_id
                     INNER JOIN '.TBL_USERS.'
                             ON usr_id = mem_usr_id
-                    RIGHT JOIN '.TBL_USER_DATA.' email
+                    RIGHT JOIN '.TBL_USER_DATA.' AS email
                             ON email.usd_usr_id = usr_id
-                           AND email.usd_usf_id = '. $this->mProfileFieldsData->getProperty('EMAIL', 'usf_id'). '
+                           AND email.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'EMAIL\', \'usf_id\')
                            AND LENGTH(email.usd_value) > 0
-                     LEFT JOIN '.TBL_USER_DATA.' first_name
+                     LEFT JOIN '.TBL_USER_DATA.' AS first_name
                             ON first_name.usd_usr_id = usr_id
-                           AND first_name.usd_usf_id = '. $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id'). '
-                     LEFT JOIN '.TBL_USER_DATA.' last_name
+                           AND first_name.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'FIRST_NAME\', \'usf_id\')
+                     LEFT JOIN '.TBL_USER_DATA.' AS last_name
                             ON last_name.usd_usr_id = usr_id
-                           AND last_name.usd_usf_id = '. $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'). '
+                           AND last_name.usd_usf_id = ? -- $this->mProfileFieldsData->getProperty(\'LAST_NAME\', \'usf_id\')
                          WHERE rol_approve_users = 1
-                           AND usr_valid         = 1
-                           AND cat_org_id        = '.$this->organizationId.'
-                           AND mem_begin        <= \''.DATE_NOW.'\'
-                           AND mem_end           > \''.DATE_NOW.'\'';
-                $emailStatement = $this->db->query($sql);
+                           AND usr_valid  = 1
+                           AND cat_org_id = ? -- $this->organizationId
+                           AND mem_begin <= ? -- DATE_NOW
+                           AND mem_end    > ? -- DATE_NOW';
+                $queryParams = array(
+                    $this->mProfileFieldsData->getProperty('EMAIL', 'usf_id'),
+                    $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id'),
+                    $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
+                    $this->organizationId,
+                    DATE_NOW,
+                    DATE_NOW
+                );
+                $emailStatement = $this->db->queryPrepared($sql, $queryParams);
 
                 while($row = $emailStatement->fetch())
                 {

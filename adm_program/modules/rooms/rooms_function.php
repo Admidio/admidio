@@ -14,7 +14,7 @@
  *           2 - delete room
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'int');
@@ -74,8 +74,8 @@ elseif ($getMode === 2)
 {
     $sql = 'SELECT *
               FROM '.TBL_DATES.'
-             WHERE dat_room_id = '.$getRoomId;
-    $statement = $gDb->query($sql);
+             WHERE dat_room_id = ?';
+    $statement = $gDb->queryPrepared($sql, array($getRoomId));
 
     if($statement->rowCount() === 0)
     {

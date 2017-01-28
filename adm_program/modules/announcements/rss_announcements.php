@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
@@ -45,13 +45,16 @@ if ($gPreferences['enable_announcements_module'] != 1)
 // Objekt anlegen
 $announcements = new ModuleAnnouncements();
 
-/*** ab hier wird der RSS-Feed zusammengestellt**/
+// ab hier wird der RSS-Feed zusammengestellt
+$orgLongname = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline,
-            $gCurrentOrganization->getValue('org_homepage'),
-            $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
-            $gCurrentOrganization->getValue('org_longname'));
+$rss = new RSSfeed(
+    $orgLongname.' - '.$getHeadline,
+    $gCurrentOrganization->getValue('org_homepage'),
+    $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $orgLongname),
+    $orgLongname
+);
 
 // Wenn Ankündigungen vorhanden laden
 if($announcements->getDataSetCount() > 0)
@@ -65,15 +68,14 @@ if($announcements->getDataSetCount() > 0)
         $announcement->clear();
         $announcement->setArray($row);
 
-        // set data for attributes of this entry
-        $title       = $announcement->getValue('ann_headline');
-        $description = $announcement->getValue('ann_description');
-        $link        = ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
-        $author      = $row['create_name'];
-        $pubDate     = date('r', strtotime($announcement->getValue('ann_timestamp_create')));
-
         // add entry to RSS feed
-        $rss->addItem($title, $description, $link, $author, $pubDate);
+        $rss->addItem(
+            $announcement->getValue('ann_headline'),
+            $announcement->getValue('ann_description'),
+            ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?id='.(int) $announcement->getValue('ann_id').'&headline='.$getHeadline,
+            $row['create_name'],
+            DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create'))->format('r')
+        );
     }
 }
 

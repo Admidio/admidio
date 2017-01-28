@@ -446,6 +446,44 @@ class Database
     }
 
     /**
+     * @param string $sql
+     * @return string
+     */
+    private function preparePgSqlQuery($sql)
+    {
+        $sqlCompare = strtolower($sql);
+
+        // prepare the sql statement to be compatible with PostgreSQL
+        if (strpos($sqlCompare, 'create table') !== false)
+        {
+            // on a create-table-statement if necessary cut existing MySQL table options
+            $sql = substr($sql, 0, strrpos($sql, ')') + 1);
+        }
+        if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
+        {
+            $replaceArray = array(
+                // PostgreSQL doesn't know unsigned
+                'unsigned' => '',
+                // PostgreSQL interprets a boolean as string so transform it to a smallint
+                'boolean'  => 'smallint',
+                // A blob is in PostgreSQL a bytea datatype
+                'blob'     => 'bytea'
+            );
+            $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
+
+            // Auto_Increment must be replaced with Serial
+            $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
+            if ($posAutoIncrement > 0)
+            {
+                $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
+                $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
      * Send a sql statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a @b SELECT statement
      * then also the number of rows will be logged. If an error occurred the script will
@@ -463,34 +501,7 @@ class Database
 
         if ($this->dbEngine === 'pgsql')
         {
-            $sqlCompare = strtolower($sql);
-
-            // prepare the sql statement to be compatible with PostgreSQL
-            if (strpos($sqlCompare, 'create table') !== false)
-            {
-                // on a create-table-statement if necessary cut existing MySQL table options
-                $sql = substr($sql, 0, strrpos($sql, ')') + 1);
-            }
-            if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
-            {
-                $replaceArray = array(
-                    // PostgreSQL doesn't know unsigned
-                    'unsigned' => '',
-                    // PostgreSQL interprets a boolean as string so transform it to a smallint
-                    'boolean'  => 'smallint',
-                    // A blob is in PostgreSQL a bytea datatype
-                    'blob'     => 'bytea'
-                );
-                $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
-
-                // Auto_Increment must be replaced with Serial
-                $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
-                if ($posAutoIncrement > 0)
-                {
-                    $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
-                    $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
-                }
-            }
+            $sql = $this->preparePgSqlQuery($sql);
         }
 
         // if debug mode then log all sql statements
@@ -504,6 +515,59 @@ class Database
             if ($this->pdoStatement !== false && strpos(strtoupper($sql), 'SELECT') === 0)
             {
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
+            }
+        }
+        catch (PDOException $e)
+        {
+            if ($showError)
+            {
+                $this->showError();
+                // => EXIT
+            }
+            return false;
+        }
+
+        return $this->pdoStatement;
+    }
+
+    /**
+     * Send a sql statement to the database that will be executed. If debug mode is set
+     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then also the number of rows will be logged. If an error occurred the script will
+     * be terminated and the error with a backtrace will be send to the browser.
+     * @param string $sql        A string with the sql statement that should be executed in database.
+     * @param array  $params     An array of parameters to bind to the prepared statement.
+     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
+     *                           occurred the error with a backtrace will be send to the browser. If set to
+     *                           @b false no error will be shown and the script will be continued.
+     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
+     */
+    public function queryPrepared($sql, array $params = array(), $showError = true)
+    {
+        global $gLogger;
+
+        if ($this->dbEngine === 'pgsql')
+        {
+            $sql = $this->preparePgSqlQuery($sql);
+        }
+
+        // if debug mode then log all sql statements
+        $gLogger->info('SQL: ' . preg_replace('/\s+/', ' ', $sql), $params);
+
+        try
+        {
+            $this->fetchArray = array();
+            $this->pdoStatement = $this->pdo->prepare($sql);
+
+            if ($this->pdoStatement !== false)
+            {
+                $this->pdoStatement->execute($params);
+
+                if (strpos(strtoupper($sql), 'SELECT') === 0)
+                {
+                    $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
+                }
             }
         }
         catch (PDOException $e)
@@ -620,8 +684,8 @@ class Database
         {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type
                       FROM information_schema.columns
-                     WHERE table_name = \'' . $table . '\'';
-            $columnsStatement = $this->query($sql);
+                     WHERE table_name = ?';
+            $columnsStatement = $this->queryPrepared($sql, array($table));
             $columnsList = $columnsStatement->fetchAll();
 
             foreach ($columnsList as $properties)

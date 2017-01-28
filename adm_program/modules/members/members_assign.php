@@ -8,8 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // this script should return errors in ajax mode
 $gMessage->showHtmlTextOnly(true);
@@ -39,19 +39,19 @@ $getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('req
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
 if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
 {
-    $sql_similar_name =
-    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getLastname).'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getFirstname).'\'), 1, 4) )
-     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getFirstname).'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getLastname).'\'), 1, 4) ) )';
+    $sqlSimilarName = '
+        (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(?), 1, 4)     -- $gDb->escapeString($getLastname)
+           AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(?), 1, 4) )   -- $gDb->escapeString($getFirstname)
+        OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(?), 1, 4)     -- $gDb->escapeString($getFirstname)
+           AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(?), 1, 4) ) ) -- $gDb->escapeString($getLastname)';
 }
 else
 {
-    $sql_similar_name =
-    '(  (   last_name.usd_value  LIKE \''. $gDb->escapeString($getLastname).'\'
-        AND first_name.usd_value LIKE \''. $gDb->escapeString($getFirstname).'\')
-     OR (   last_name.usd_value  LIKE \''. $gDb->escapeString($getFirstname).'\'
-        AND first_name.usd_value LIKE \''. $gDb->escapeString($getLastname).'\') )';
+    $sqlSimilarName = '
+        (  (   last_name.usd_value  = ?    -- $gDb->escapeString($getLastname)
+           AND first_name.usd_value = ?)   -- $gDb->escapeString($getFirstname)
+        OR (   last_name.usd_value  = ?    -- $gDb->escapeString($getFirstname)
+           AND first_name.usd_value = ?) ) -- $gDb->escapeString($getLastname)';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
@@ -62,25 +62,37 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
           FROM '.TBL_USERS.'
     RIGHT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
     RIGHT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS address
             ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = '. $gProfileFields->getProperty('STREET', 'usf_id'). '
+           AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS zip_code
             ON zip_code.usd_usr_id = usr_id
-           AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
+           AND zip_code.usd_usf_id = ? -- $gProfileFields->getProperty(\'POSTCODE\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS city
             ON city.usd_usr_id = usr_id
-           AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
+           AND city.usd_usf_id = ? -- $gProfileFields->getProperty(\'CITY\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
+           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
          WHERE usr_valid = 1
-           AND '.$sql_similar_name;
-$usrStatement = $gDb->query($sql);
+           AND '.$sqlSimilarName;
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('ADDRESS', 'usf_id'),
+    $gProfileFields->getProperty('POSTCODE', 'usf_id'),
+    $gProfileFields->getProperty('CITY', 'usf_id'),
+    $gProfileFields->getProperty('EMAIL', 'usf_id'),
+    $gDb->escapeString($getLastname),
+    $gDb->escapeString($getFirstname),
+    $gDb->escapeString($getFirstname),
+    $gDb->escapeString($getLastname)
+);
+$usrStatement = $gDb->queryPrepared($sql, $queryParams);
 $memberCount = $usrStatement->rowCount();
 
 if($memberCount === 0)

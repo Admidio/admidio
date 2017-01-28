@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-require_once('common.php');
+require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
 $getUrl = admFuncVariableIsValid($_GET, 'url', 'string', array('requireValue' => true));

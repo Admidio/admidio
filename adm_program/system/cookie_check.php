@@ -12,7 +12,7 @@
  * message_code : ID of the message from language-XML-file, that is shown after login
  ***********************************************************************************************
  */
-require_once('common.php');
+require_once(__DIR__ . '/common.php');
 
 // Initialize and check the parameters
 $getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', array('requireValue' => true));

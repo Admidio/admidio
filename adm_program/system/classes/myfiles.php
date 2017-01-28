@@ -38,8 +38,6 @@ class MyFiles extends Folder
      */
     public function __construct($module)
     {
-        global $gCurrentOrganization;
-
         if($module === 'DOWNLOAD')
         {
             $folderName = TableFolder::getRootFolderName();

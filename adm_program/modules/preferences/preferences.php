@@ -13,8 +13,8 @@
  *               Example: SYS_COMMON or
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
@@ -79,8 +79,8 @@ $page->addJavascript('
         event.preventDefault();
 
         $.post({
-            url:     action,
-            data:    $(this).serialize(),
+            url: action,
+            data: $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
                     if (id === "captcha_preferences_form") {
@@ -104,12 +104,14 @@ $page->addJavascript('
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
         $("#admidio_version_content").prepend("<img src=\''.THEME_URL.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
-        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode:"2"}, function(htmlVersion) {
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
             $("#admidio_version_content").empty();
             $("#admidio_version_content").append(htmlVersion);
         });
         return false;
-    });    ', true);
+    });',
+    true
+);
 
 if($showOption !== '')
 {
@@ -204,13 +206,17 @@ $page->addHtml('
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if(!$gCurrentOrganization->hasChildOrganizations())
                         {
-                            $sql = 'SELECT org_id, org_longname
-                                      FROM '.TBL_ORGANIZATIONS.'
-                                     WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
-                                       AND org_org_id_parent IS NULL
-                                  ORDER BY org_longname ASC, org_shortname ASC';
-                            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, array('defaultValue'     => $form_values['org_org_id_parent'],
-                                                                                                                                      'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC'));
+                            $sqlData = array();
+                            $sqlData['query'] = 'SELECT org_id, org_longname
+                                                   FROM '.TBL_ORGANIZATIONS.'
+                                                  WHERE org_id <> ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                                    AND org_org_id_parent IS NULL
+                                               ORDER BY org_longname ASC, org_shortname ASC';
+                            $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+                            $form->addSelectBoxFromSql(
+                                'org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sqlData,
+                                array('defaultValue' => $form_values['org_org_id_parent'], 'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC')
+                            );
                         }
 
                         if($gCurrentOrganization->countAllRecords() > 1)
@@ -420,7 +426,10 @@ $page->addHtml('
                         {
                             $form->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
                         }
-                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
+
+                        $component = new ComponentUpdate($gDb);
+                        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step') . ' / ' . $component->getMaxUpdateStep());
 
                         if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
                         {
@@ -683,12 +692,17 @@ $page->addHtml('
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), (bool) $form_values['lists_hide_overview_details'], array('helpTextIdInline' => 'LST_HIDE_DETAILS_DESC'));
                         // read all global lists
-                        $sql = 'SELECT lst_id, lst_name
-                                  FROM '.TBL_LISTS.'
-                                 WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
-                                   AND lst_global = 1
-                              ORDER BY lst_name ASC, lst_timestamp DESC';
-                        $form->addSelectBoxFromSql('lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sql, array('defaultValue' => $form_values['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC'));
+                        $sqlData = array();
+                        $sqlData['query'] = 'SELECT lst_id, lst_name
+                                               FROM '.TBL_LISTS.'
+                                              WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                                AND lst_global = 1
+                                           ORDER BY lst_name ASC, lst_timestamp DESC';
+                        $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+                        $form->addSelectBoxFromSql(
+                            'lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
+                            array('defaultValue' => $form_values['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC')
+                        );
                         $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ROL"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
@@ -788,6 +802,17 @@ $page->addHtml('
                         $form->addInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_PAST_DESC'));
                         $form->addInput('dates_ical_days_future', $gL10n->get('DAT_ICAL_DAYS_FUTURE'), $form_values['dates_ical_days_future'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'DAT_ICAL_DAYS_FUTURE_DESC'));
                         $form->addCheckbox('dates_show_map_link', $gL10n->get('DAT_SHOW_MAP_LINK'), (bool) $form_values['dates_show_map_link'], array('helpTextIdInline' => 'DAT_SHOW_MAP_LINK_DESC'));
+                        $sqlData = array();
+                        $sqlData['query'] = 'SELECT lst_id, lst_name
+                                               FROM '.TBL_LISTS.'
+                                              WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                                AND lst_global = 1
+                                           ORDER BY lst_name ASC, lst_timestamp DESC';
+                        $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+                        $form->addSelectBoxFromSql(
+                            'dates_default_list_configuration', $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'), $gDb, $sqlData,
+                            array('defaultValue' => $form_values['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
+                        );
                         $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';

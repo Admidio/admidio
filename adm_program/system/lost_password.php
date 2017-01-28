@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once('common.php');
+require_once(__DIR__ . '/common.php');
 
 $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 
@@ -52,17 +52,24 @@ if(!empty($_POST['recipient_email']))
                         ON usr_id = mem_usr_id
                 INNER JOIN '.TBL_USER_DATA.' AS email
                         ON email.usd_usr_id = usr_id
-                       AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
-                       AND email.usd_value  = \''.$_POST['recipient_email'].'\'
+                       AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
+                       AND email.usd_value  = ? -- $_POST[\'recipient_email\']
                      WHERE LENGTH(usr_login_name) > 0
                        AND rol_valid  = 1
                        AND usr_valid  = 1
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'
-                       AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       AND mem_begin <= ? -- DATE_NOW
+                       AND mem_end    > ? -- DATE_NOW
+                       AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR cat_org_id IS NULL )
                   GROUP BY usr_id';
-            $userStatement = $gDb->query($sql);
+            $queryParams = array(
+                $gProfileFields->getProperty('EMAIL', 'usf_id'),
+                $_POST['recipient_email'],
+                DATE_NOW,
+                DATE_NOW,
+                $gCurrentOrganization->getValue('org_id')
+            );
+            $userStatement = $gDb->queryPrepared($sql, $queryParams);
             $count = $userStatement->rowCount();
         }
         else
@@ -76,15 +83,21 @@ if(!empty($_POST['recipient_email']))
                         ON cat_id = rol_cat_id
                 INNER JOIN '.TBL_USERS.'
                         ON usr_id = mem_usr_id
-                     WHERE usr_login_name = \''.$_POST['recipient_email'].'\'
+                     WHERE usr_login_name = ? -- $_POST[\'recipient_email\']
                        AND rol_valid  = 1
                        AND usr_valid  = 1
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'
-                       AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       AND mem_begin <= ? -- DATE_NOW
+                       AND mem_end    > ? -- DATE_NOW
+                       AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR cat_org_id IS NULL )
                   GROUP BY usr_id';
-            $userStatement = $gDb->query($sql);
+            $queryParams = array(
+                $_POST['recipient_email'],
+                DATE_NOW,
+                DATE_NOW,
+                $gCurrentOrganization->getValue('org_id')
+            );
+            $userStatement = $gDb->queryPrepared($sql, $queryParams);
             $count = $userStatement->rowCount();
         }
 
@@ -133,6 +146,7 @@ if(!empty($_POST['recipient_email']))
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 }
 else

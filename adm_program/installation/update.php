@@ -305,8 +305,8 @@ elseif ($getMode === 2)
         // Search for username
         $sql = 'SELECT usr_id
                   FROM '.TBL_USERS.'
-                 WHERE UPPER(usr_login_name) = UPPER(\''.$loginName.'\')';
-        $userStatement = $gDb->query($sql);
+                 WHERE UPPER(usr_login_name) = UPPER(?)';
+        $userStatement = $gDb->queryPrepared($sql, array($loginName));
 
         if ($userStatement->rowCount() === 0)
         {
@@ -356,7 +356,7 @@ elseif ($getMode === 2)
     ++$versionPatch;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
-    require_once('db_scripts/preferences.php');
+    require_once(__DIR__ . '/db_scripts/preferences.php');
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
@@ -375,8 +375,7 @@ elseif ($getMode === 2)
     if ($gDbType === 'mysql')
     {
         // disable foreign key checks for mysql, so tables can easily deleted
-        $sql = 'SET foreign_key_checks = 0';
-        $gDb->query($sql);
+        $gDb->query('SET foreign_key_checks = 0');
     }
 
     // in version 2 we had an other update mechanism which will be handled here
@@ -456,8 +455,10 @@ elseif ($getMode === 2)
     if ($versionMain >= 3)
     {
         // set system user as current user, but this user only exists since version 3
-        $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'' . $gL10n->get('SYS_SYSTEM') . '\'';
-        $systemUserStatement = $gDb->query($sql);
+        $sql = 'SELECT usr_id
+                  FROM ' . TBL_USERS . '
+                 WHERE usr_login_name = ?';
+        $systemUserStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
 
         $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
 
@@ -471,8 +472,7 @@ elseif ($getMode === 2)
     if ($gDbType === 'mysql')
     {
         // activate foreign key checks, so database is consistent
-        $sql = 'SET foreign_key_checks = 1';
-        $gDb->query($sql);
+        $gDb->query('SET foreign_key_checks = 1');
     }
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen

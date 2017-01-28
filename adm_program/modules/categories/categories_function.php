@@ -27,8 +27,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
@@ -109,8 +109,6 @@ if($getMode === 1)
         // => EXIT
     }
 
-    $sqlSearchOrga = '';
-
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
     if(($getType === 'USF'
@@ -119,7 +117,7 @@ if($getMode === 1)
     {
         $category->setValue('cat_org_id', '0');
         $sqlSearchOrga = ' AND (  cat_org_id  = '. $orgId. '
-                             OR cat_org_id IS NULL )';
+                               OR cat_org_id IS NULL )';
     }
     else
     {
@@ -132,11 +130,11 @@ if($getMode === 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
-                 WHERE cat_type    = \''. $getType. '\'
-                   AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                   AND cat_id     <> '.$getCatId.
-                       $sqlSearchOrga;
-        $categoriesStatement = $gDb->query($sql);
+                 WHERE cat_type = ? -- $getType
+                   AND cat_name = ? -- $_POST[\'cat_name\']
+                   AND cat_id  <> ? -- $getCatId
+                       '.$sqlSearchOrga;
+        $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $_POST['cat_name'], $getCatId, $orgId));
 
         if($categoriesStatement->fetchColumn() > 0)
         {
@@ -182,11 +180,11 @@ if($getMode === 1)
 
     $sql = 'SELECT *
               FROM '.TBL_CATEGORIES.'
-             WHERE cat_type = \''. $getType. '\'
-               AND (  cat_org_id  = '. $orgId. '
+             WHERE cat_type = ? -- $getType
+               AND (  cat_org_id  = ? -- $orgId
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id ASC, cat_sequence ASC';
-    $categoriesStatement = $gDb->query($sql);
+    $categoriesStatement = $gDb->queryPrepared($sql, array($getType, $orgId));
 
     while($row = $categoriesStatement->fetch())
     {

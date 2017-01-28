@@ -19,8 +19,8 @@
  * file_id   : Id of the file in the database
  * name      : Name of the file/folder that should be added to the database
  ***********************************************************************************************/
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
@@ -162,6 +162,7 @@ elseif ($getMode === 3)
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
+        // => EXIT
     }
 }
 
@@ -269,6 +270,7 @@ elseif ($getMode === 4)
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
         $e->showHtml();
+        // => EXIT
     }
 }
 
@@ -331,6 +333,7 @@ elseif ($getMode === 6)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     // Pruefen ob das neue Element eine Datei order ein Ordner ist.
@@ -380,15 +383,16 @@ elseif ($getMode === 6)
 // save view or upload rights for a folder
 elseif ($getMode === 7)
 {
-    if(!isset($_POST['adm_roles_view_right'], $_POST['adm_roles_upload_right']))
+    if(!isset($_POST['adm_roles_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
         // => EXIT
     }
     if(!isset($_POST['adm_roles_upload_right']))
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DOW_UPLOAD_FILES')));
-        // => EXIT
+        // upload right need not to be set because download module administrators still
+        // have the right, so initialize the parameter
+        $_POST['adm_roles_upload_right'] = array();
     }
 
     if ($getFolderId === 0 || !is_array($_POST['adm_roles_view_right']) || !is_array($_POST['adm_roles_upload_right']))
@@ -417,9 +421,17 @@ elseif ($getMode === 7)
             $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
         }
 
-        // Read current roles rights of the folder
+        // Read current view roles rights of the folder
         $rightFolderView = new RolesRights($gDb, 'folder_view', $getFolderId);
         $rolesFolderView = $rightFolderView->getRolesIds();
+
+        // Read current upload roles rights of the folder
+        $rightFolderUpload = new RolesRights($gDb, 'folder_upload', $getFolderId);
+        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
+
+        // get new roles and removed roles
+        $addUploadRoles = array_diff($_POST['adm_roles_upload_right'], $rolesFolderUpload);
+        $removeUploadRoles = array_diff($rolesFolderUpload, $_POST['adm_roles_upload_right']);
 
         if(in_array('0', $_POST['adm_roles_view_right'], true))
         {
@@ -434,23 +446,18 @@ elseif ($getMode === 7)
             $folder->editPublicFlagOnFolder(false);
 
             // get new roles and removed roles
-            $addRoles = array_diff($_POST['adm_roles_view_right'], $rolesFolderView);
-            $removeRoles = array_diff($rolesFolderView, $_POST['adm_roles_view_right']);
+            $addViewRoles = array_merge(array_diff($_POST['adm_roles_view_right'], $rolesFolderView), $_POST['adm_roles_upload_right'], $rolesFolderUpload);
+            $removeViewRoles = array_diff($rolesFolderView, $_POST['adm_roles_view_right']);
 
-            $folder->addRolesOnFolder('folder_view', $addRoles);
-            $folder->removeRolesOnFolder('folder_view', $removeRoles);
+            $folder->addRolesOnFolder('folder_view', $addViewRoles);
+            $folder->removeRolesOnFolder('folder_view', $removeViewRoles);
+
+            // upload right should not contain removed view roles
+            $removeUploadRoles = array_merge($removeUploadRoles, $removeViewRoles);
         }
 
-        // save upload right
-        $rightFolderUpload = new RolesRights($gDb, 'folder_upload', $getFolderId);
-        $rolesFolderUpload = $rightFolderUpload->getRolesIds();
-
-        // get new roles and removed roles
-        $addRoles = array_diff($_POST['adm_roles_upload_right'], $rolesFolderUpload);
-        $removeRoles = array_diff($rolesFolderUpload, $_POST['adm_roles_upload_right']);
-
-        $folder->addRolesOnFolder('folder_upload', $addRoles);
-        $folder->removeRolesOnFolder('folder_upload', $removeRoles);
+        $folder->addRolesOnFolder('folder_upload', $addUploadRoles);
+        $folder->removeRolesOnFolder('folder_upload', $removeUploadRoles);
 
         $folder->save();
 
@@ -461,5 +468,6 @@ elseif ($getMode === 7)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 }

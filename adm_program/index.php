@@ -16,7 +16,7 @@ if(!is_file('../adm_my_files/config.php'))
     exit();
 }
 
-require_once('system/common.php');
+require_once(__DIR__ . '/system/common.php');
 
 $headline = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 

@@ -17,7 +17,7 @@
  *              true - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
@@ -31,7 +31,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -102,49 +102,52 @@ else
     $page->setHeadline($getHeadline);
 }
 
+$orgId = (int) $gCurrentOrganization->getValue('org_id');
+
 // ------------------------------------------------------
 // SQL-Statements zur Anzeige der Eintraege zusammensetzen
 // ------------------------------------------------------
-$conditions = '';
-
+$conditionsSpecial = '';
+$queryParamsSpecial = array($orgId);
 // falls eine id fuer einen bestimmten Gaestebucheintrag uebergeben worden ist...
 if ($getGboId > 0)
 {
-    $conditions .= ' AND gbo_id = '. $getGboId;
+    $conditionsSpecial .= ' AND gbo_id = ? ';
+    $queryParamsSpecial[] = $getGboId;
 }
 // pruefen ob das Modul Moderation aktiviert ist
 if ($gPreferences['enable_guestbook_moderation'] > 0)
 {
     if($getModeration)
     {
-        $conditions .= ' AND (  gbo_locked = 1
-                             OR EXISTS (SELECT 1
-                                          FROM '.TBL_GUESTBOOK_COMMENTS.'
-                                         WHERE gbc_gbo_id = gbo_id
-                                           AND gbc_locked = 1)) ';
+        $conditionsSpecial .= ' AND (  gbo_locked = 1
+                                    OR EXISTS (SELECT 1
+                                                 FROM '.TBL_GUESTBOOK_COMMENTS.'
+                                                WHERE gbc_gbo_id = gbo_id
+                                                  AND gbc_locked = 1)) ';
     }
     else
     {
-        $conditions .= ' AND gbo_locked = 0 ';
+        $conditionsSpecial .= ' AND gbo_locked = 0 ';
     }
 }
 
 // Maximale Anzahl an Gaestebucheintraegen ermitteln, die angezeigt werden sollen
 $sql = 'SELECT COUNT(*) AS count
           FROM '.TBL_GUESTBOOK.'
-         WHERE gbo_org_id = '.$gCurrentOrganization->getValue('org_id').
-               $conditions;
-$pdoStatement = $gDb->query($sql);
-$num_guestbook = (int) $pdoStatement->fetchColumn();
+         WHERE gbo_org_id = ? -- $orgId
+               '.$conditionsSpecial;
+$pdoStatement = $gDb->queryPrepared($sql, $queryParamsSpecial);
+$guestbookEntries = (int) $pdoStatement->fetchColumn();
 
 // Anzahl Gaestebucheintraege pro Seite
 if($gPreferences['guestbook_entries_per_page'] > 0)
 {
-    $guestbook_entries_per_page = (int) $gPreferences['guestbook_entries_per_page'];
+    $guestbookEntriesPerPage = (int) $gPreferences['guestbook_entries_per_page'];
 }
 else
 {
-    $guestbook_entries_per_page = $num_guestbook;
+    $guestbookEntriesPerPage = $guestbookEntries;
 }
 
 // get module menu
@@ -169,17 +172,17 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enab
     // show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK.'
-                     WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                     WHERE gbo_org_id = ? -- $orgId
                        AND gbo_locked = 1) AS count_locked_guestbook,
                    (SELECT COUNT(*) AS count
                       FROM '.TBL_GUESTBOOK_COMMENTS.'
                 INNER JOIN '.TBL_GUESTBOOK.'
                         ON gbo_id = gbc_gbo_id
-                     WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                     WHERE gbo_org_id = ? -- $orgId
                        AND gbc_locked = 1) AS count_locked_comments
               FROM '.TBL_ORGANIZATIONS.'
-             WHERE org_id = '.$gCurrentOrganization->getValue('org_id');
-    $pdoStatement = $gDb->query($sql);
+             WHERE org_id = ? -- $orgId';
+    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, $orgId, $orgId));
     $row = $pdoStatement->fetch();
     $countLockedEntries = $row['count_locked_guestbook'] + $row['count_locked_comments'];
 
@@ -201,12 +204,12 @@ $guestbook = new TableGuestbook($gDb);
 
 // Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln
 $sql = 'SELECT *
-          FROM '.TBL_GUESTBOOK.' gbo
-         WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               '.$conditions.'
+          FROM '.TBL_GUESTBOOK.' AS gbo
+         WHERE gbo_org_id = ? -- $orgId
+               '.$conditionsSpecial.'
       ORDER BY gbo_timestamp_create DESC
-         LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
-$guestbookStatement = $gDb->query($sql);
+         LIMIT '.$guestbookEntriesPerPage.' OFFSET '.$getStart;
+$guestbookStatement = $gDb->queryPrepared($sql, $queryParamsSpecial);
 
 $countGuestbookEntries = $guestbookStatement->rowCount();
 
@@ -284,25 +287,23 @@ else
                     </div>');
                 }
 
-                $conditions = '';
-
                 // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
                 if ($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
                 {
-                    $conditions .= ' AND gbc_locked = 1 ';
+                    $conditions = ' AND gbc_locked = 1 ';
                 }
                 else
                 {
-                    $conditions .= ' AND gbc_locked = 0 ';
+                    $conditions = ' AND gbc_locked = 0 ';
                 }
 
                 // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...
                 $sql = 'SELECT *
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
-                         WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
+                         WHERE gbc_gbo_id = ? -- $guestbook->getValue(\'gbo_id\')
                                '.$conditions.'
                       ORDER BY gbc_timestamp_create ASC';
-                $commentStatement = $gDb->query($sql);
+                $commentStatement = $gDb->queryPrepared($sql, array($guestbook->getValue('gbo_id')));
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
                 if ($getGboId === 0 && $commentStatement->rowCount() > 0)
@@ -344,7 +345,7 @@ else
 
                             // read all comments of this guestbook entry
                             ob_start();
-                            include('get_comments.php');
+                            include(__DIR__ . '/get_comments.php');
                             $page->addHtml(ob_get_contents());
                             ob_end_clean();
                         }
@@ -367,7 +368,7 @@ else
                 if ($countGuestbookEntries > 0 && $getGboId > 0)
                 {
                     ob_start();
-                    include('get_comments.php');
+                    include(__DIR__ . '/get_comments.php');
                     $page->addHtml(ob_get_contents());
                     ob_end_clean();
                 }
@@ -376,7 +377,10 @@ else
             // show information about user who edit the recordset
             if(strlen($guestbook->getValue('gbo_usr_id_change')) > 0)
             {
-                $page->addHtml('<div class="panel-footer">'.admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')).'</div>');
+                $page->addHtml('<div class="panel-footer">'.admFuncShowCreateChangeInfoById(
+                    0, '',
+                    (int) $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')
+                ).'</div>');
             }
         $page->addHtml('</div>');
     }  // Ende While-Schleife
@@ -384,7 +388,7 @@ else
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $base_url = ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
-$page->addHtml(admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, true));
+$page->addHtml(admFuncGeneratePagination($base_url, $guestbookEntries, $guestbookEntriesPerPage, $getStart, true));
 
 // show html of complete page
 $page->show();

@@ -621,6 +621,11 @@ input[type="time"] {
 
 /* Information block with user and timestamp who created and edited the data */
 
+.admidio-info-created-edited {
+    font-size: 8pt;
+    margin-top: 8px;
+}
+
 .admidio-info-created {
     display: block;
 }
@@ -743,6 +748,10 @@ input[type="time"] {
 
 #profile_photo {
     display: inline;
+}
+
+#profile_authorizations_box_body div {
+    margin-bottom: 5px;
 }
 
 .admidio-list-roles-assign li,

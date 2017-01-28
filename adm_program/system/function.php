@@ -83,14 +83,14 @@ function hasRole($roleName, $userId = 0)
                 ON rol_id = mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-             WHERE mem_usr_id = '.$userId.'
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end    > \''.DATE_NOW.'\'
-               AND rol_name   = \''.$roleName.'\'
+             WHERE mem_usr_id = ? -- $userId
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end    > ? -- DATE_NOW
+               AND rol_name   = ? -- $roleName
                AND rol_valid  = 1
-               AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )';
-    $statement = $gDb->query($sql);
+    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, $gCurrentOrganization->getValue('org_id')));
 
     return $statement->rowCount() === 1;
 }
@@ -112,13 +112,13 @@ function isMember($userId)
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = '.$userId.'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
+                 WHERE mem_usr_id = ? -- $userId
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
                    AND rol_valid  = 1
-                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
-        $statement = $gDb->query($sql);
+        $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
 
         if ($statement->fetchColumn() > 0)
         {
@@ -148,18 +148,20 @@ function isGroupLeader($userId, $roleId = 0)
                     ON rol_id = mem_rol_id
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = '.$userId.'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'
+                 WHERE mem_usr_id = ? -- $userId
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
                    AND mem_leader = 1
                    AND rol_valid  = 1
-                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
+        $queryParams = array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
         if ($roleId > 0)
         {
-            $sql .= ' AND mem_rol_id = '.$roleId;
+            $sql .= ' AND mem_rol_id = ? -- $roleId';
+            $queryParams[] = $roleId;
         }
-        $statement = $gDb->query($sql);
+        $statement = $gDb->queryPrepared($sql, $queryParams);
 
         if ($statement->rowCount() > 0)
         {
@@ -600,7 +602,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
  * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited, $timestampEdited)
+function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = '')
 {
     global $gDb, $gProfileFields, $gL10n, $gPreferences;
 
@@ -880,4 +882,14 @@ function noHTML($input, $encoding = 'UTF-8')
     }
 
     return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+}
+
+/**
+ * Get an string with question marks that are comma separated.
+ * @param array $valuesArray An array with the values that should be replaced with question marks
+ * @return string Question marks string
+ */
+function replaceValuesArrWithQM(array $valuesArray)
+{
+    return implode(',', array_fill(0, count($valuesArray), '?'));
 }

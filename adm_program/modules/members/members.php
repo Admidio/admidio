@@ -13,7 +13,7 @@
  *           false  : Show active and inactive members of all organizations in database
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['import_request']);
 

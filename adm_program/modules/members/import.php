@@ -8,8 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // nur berechtigte User duerfen User importieren
 if(!$gCurrentUser->editUsers())
@@ -79,11 +79,11 @@ $sql = 'SELECT *
             ON cat_id = rol_cat_id
          WHERE rol_valid   = 1
            AND rol_visible = 1
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )'.
-               $condition.'
+           AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               OR cat_org_id IS NULL )
+               '.$condition.'
       ORDER BY cat_sequence, rol_name';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 $roles = array();
 
 while($row = $statement->fetch())

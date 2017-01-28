@@ -22,7 +22,7 @@
  *                  true  - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($list);
 
@@ -79,8 +79,8 @@ if ($numberRoles > 1)
 {
     $sql = 'SELECT rol_id, rol_name
               FROM '.TBL_ROLES.'
-             WHERE rol_id IN ('.implode(',', $roleIds).')';
-    $rolesStatement = $gDb->query($sql);
+             WHERE rol_id IN ('.replaceValuesArrWithQM($roleIds).')';
+    $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
     $rolesData      = $rolesStatement->fetchAll();
 
     foreach ($rolesData as $role)
@@ -132,9 +132,10 @@ if (count($relationtypeIds) > 0)
 {
     $sql = 'SELECT urt_id, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-             WHERE urt_id IN ('.implode(',', $relationtypeIds).')
+             WHERE urt_id IN ('.replaceValuesArrWithQM($relationtypeIds).')
           ORDER BY urt_name';
-    $relationtypesStatement = $gDb->query($sql);
+    $relationtypesStatement = $gDb->queryPrepared($sql, $relationtypeIds);
+
     while($relationtype = $relationtypesStatement->fetch())
     {
         $relationtypeName .= (empty($relationtypeName) ? '' : ', ').$relationtype['urt_name'];
@@ -197,14 +198,19 @@ switch ($getMode)
 
 // Array to assign names to tables
 $arrColName = array(
-    'usr_login_name' => $gL10n->get('SYS_USERNAME'),
-    'usr_photo'      => $gL10n->get('PHO_PHOTO'),
-    'mem_begin'      => $gL10n->get('SYS_START'),
-    'mem_end'        => $gL10n->get('SYS_END'),
-    'mem_leader'     => $gL10n->get('SYS_LEADERS')
+    'usr_login_name'       => $gL10n->get('SYS_USERNAME'),
+    'usr_photo'            => $gL10n->get('PHO_PHOTO'),
+    'mem_begin'            => $gL10n->get('SYS_START'),
+    'mem_end'              => $gL10n->get('SYS_END'),
+    'mem_leader'           => $gL10n->get('SYS_LEADERS'),
+    'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+    'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+    'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+    'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+    'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
 );
 
-// Array for valid colums visible for current user.
+// Array for valid columns visible for current user.
 // Needed for PDF export to set the correct colspan for the layout
 // Maybe there are hidden fields.
 $arrValidColumns = array();
@@ -217,14 +223,13 @@ try
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
     $mainSql = $list->getSQL($roleIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationtypeIds);
-    // echo $mainSql; exit();
 }
 catch (AdmException $e)
 {
     $e->showHtml();
 }
 // determine the number of users in this list
-$listStatement = $gDb->query($mainSql);
+$listStatement = $gDb->query($mainSql); // TODO add more params
 $numMembers = $listStatement->rowCount();
 
 // get all members and their data of this list in an array
@@ -730,6 +735,25 @@ foreach ($membersList as $member)
                     $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
                     $content = $arrListValues[$member[$sqlColumnNumber]];
                 }
+            }
+            elseif ($column->getValue('lsc_special_field') === 'mem_approved')
+            {
+                // Assign Integer to Language strings
+                if ((int) $content === 1)
+                {
+                    $content = $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
+                }
+                elseif ((int) $content === 2)
+                {
+                    $content = $gL10n->get('SYS_YES');
+                }
+            }
+            elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
+            {
+                // Get User Information
+                $user = new User($gDb, $gProfileFields, $content);
+
+                $content = $user->getValue('LAST_NAME').', '.$user->getValue('FIRST_NAME');
             }
 
             // format value for csv export

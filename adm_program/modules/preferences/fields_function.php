@@ -20,8 +20,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'int');
@@ -114,10 +114,10 @@ if($getMode === 1)
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
-                 WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
-                   AND usf_cat_id  = '.$_POST['usf_cat_id'].'
-                   AND usf_id     <> '.$getUsfId;
-        $pdoStatement = $gDb->query($sql);
+                 WHERE usf_name   = ? -- $_POST[\'usf_name\']
+                   AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
+                   AND usf_id    <> ? -- $getUsfId';
+        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], $_POST['usf_cat_id'], $getUsfId));
 
         if($pdoStatement->fetchColumn() > 0)
         {

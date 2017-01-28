@@ -17,8 +17,8 @@
  * mem_show_all - true  : (Default) Show active and inactive members of all organizations in database
  *                false : Show only active members of the current organization
  *****************************************************************************/
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 if(isset($_GET['mode']) && $_GET['mode'] === 'assign')
 {
@@ -220,17 +220,18 @@ else
         $membersAssignmentMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     }
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-    $sql = 'SELECT rol_id, rol_name, cat_name
-              FROM '.TBL_ROLES.'
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-             WHERE rol_valid   = 1
-               AND rol_visible = 1
-               AND (  cat_org_id  = '.$gCurrentOrganization->getValue('org_id').'
-                   OR cat_org_id IS NULL )
-          ORDER BY cat_sequence, rol_name';
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                          WHERE rol_valid   = 1
+                            AND rol_visible = 1
+                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                OR cat_org_id IS NULL )
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
     $navbarForm->addSelectBoxFromSql(
-        'filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sql,
+        'filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
         array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))
     );
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), false, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));

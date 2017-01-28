@@ -10,7 +10,7 @@
  */
 if(is_file('adm_my_files/config.php'))
 {
-    require_once('adm_program/system/common.php');
+    require_once(__DIR__ . '/adm_program/system/common.php');
 
     // connect to database
     try

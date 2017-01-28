@@ -14,7 +14,7 @@
  *              1 - Create a new item
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getItemId  = admFuncVariableIsValid($_GET, 'item_id',  'int');
@@ -163,6 +163,7 @@ catch(AdmException $e)
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gNavigation->deleteLastUrl();
     $e->showHtml();
+    // => EXIT
 }
 
 $gDb->endTransaction();

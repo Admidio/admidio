@@ -14,7 +14,7 @@
  *             true  - show uploaded photo of current session
  ***********************************************************************************************
  */
-require('../../system/common.php');
+require(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id',    'int', array('requireValue' => true));

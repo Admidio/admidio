@@ -13,8 +13,8 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/template.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/template.php');
 
 // Initialize and check the parameters
 $getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
@@ -120,6 +120,7 @@ if ($getMsgType === 'EMAIL')
         catch (AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 }
@@ -183,10 +184,10 @@ if ($getMsgType === 'EMAIL')
                           FROM '.TBL_ROLES.'
                     INNER JOIN '.TBL_CATEGORIES.'
                             ON cat_id = rol_cat_id
-                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                OR cat_org_id IS NULL)
-                         WHERE rol_id = '.$group['id'];
-                $statement = $gDb->query($sql);
+                         WHERE rol_id = ? -- $group[\'id\']';
+                $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $group['id']));
                 $row = $statement->fetch();
 
                 // logged out ones just to role with permission level "all visitors"
@@ -200,21 +201,32 @@ if ($getMsgType === 'EMAIL')
                     // => EXIT
                 }
 
+                $queryParams = array(
+                    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+                    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+                    $group['id'],
+                    $gCurrentOrganization->getValue('org_id')
+                );
+
                 if ($group['status'] === 'former' && (bool) $gPreferences['mail_show_former'])
                 {
                     // only former members
-                    $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
+                    $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
+                    $queryParams[] = DATE_NOW;
                 }
                 elseif ($group['status'] === 'active_former' && (bool) $gPreferences['mail_show_former'])
                 {
                     // former members and active members
-                    $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';
+                    $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
+                    $queryParams[] = DATE_NOW;
                 }
                 else
                 {
                     // only active members
-                    $sqlConditions = ' AND mem_begin  <= \''.DATE_NOW.'\'
-                                       AND mem_end     > \''.DATE_NOW.'\' ';
+                    $sqlConditions = ' AND mem_begin <= ? -- DATE_NOW
+                                       AND mem_end    > ? -- DATE_NOW ';
+                    $queryParams[] = DATE_NOW;
+                    $queryParams[] = DATE_NOW;
                 }
 
                 $sql = 'SELECT first_name.usd_value AS firstName, last_name.usd_value AS lastName, email.usd_value AS email
@@ -233,23 +245,25 @@ if ($getMsgType === 'EMAIL')
                            AND field.usf_type = \'EMAIL\'
                      LEFT JOIN '.TBL_USER_DATA.' AS last_name
                             ON last_name.usd_usr_id = usr_id
-                           AND last_name.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
                      LEFT JOIN '.TBL_USER_DATA.' AS first_name
                             ON first_name.usd_usr_id = usr_id
-                           AND first_name.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-                         WHERE rol_id    = '.$group['id'].'
-                           AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                         WHERE rol_id    = ? -- $group[\'id\']
+                           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                OR cat_org_id IS NULL )
-                           AND usr_valid = 1 '.
-                               $sqlConditions;
+                           AND usr_valid = 1
+                               '.$sqlConditions;
 
                 // Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen,
                 // damit er die Mail nicht an sich selber schickt.
                 if ($gValidLogin)
                 {
-                    $sql .= ' AND usr_id <> '.$userId;
+                    $sql .= '
+                        AND usr_id <> ? -- $userId';
+                    $queryParams[] = $userId;
                 }
-                $statement = $gDb->query($sql);
+                $statement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($statement->rowCount() > 0)
                 {
@@ -433,7 +447,7 @@ if ($getMsgType === 'EMAIL')
     // add sender and receiver to email if template include the variables
     $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
 
-    require_once('messages_functions.php');
+    require_once(__DIR__ . '/messages_functions.php');
 
     if ($postListId > 0)
     {
@@ -497,23 +511,24 @@ else
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
                 VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', \''.$userId.'\', \''.$postTo[0].'\', CURRENT_TIMESTAMP, \'1\')';
 
-        $gDb->query($sql);
+        $gDb->query($sql); // TODO add more params
         $getMsgId = $gDb->lastInsertId();
     }
     else
     {
         $pmId = $message->countMessageParts() + 1;
 
-        $sql = 'UPDATE '. TBL_MESSAGES. ' SET  msg_read = \'1\', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = \''.$userId.'\', msg_usr_id_receiver = \''.$postTo[0].'\'
-                WHERE msg_id = '.$getMsgId;
+        $sql = 'UPDATE '. TBL_MESSAGES. '
+                   SET msg_read = \'1\', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = \''.$userId.'\', msg_usr_id_receiver = \''.$postTo[0].'\'
+                 WHERE msg_id = '.$getMsgId;
 
-        $gDb->query($sql);
+        $gDb->query($sql); // TODO add more params
     }
 
     $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
             VALUES (\''.$getMsgId.'\', \''.$pmId.'\', \''.$userId.'\', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
-    if ($gDb->query($sql))
+    if ($gDb->query($sql)) // TODO add more params
     {
         $sendResult = true;
     }
@@ -528,13 +543,13 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
                 VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$userId.', \''.$receiverString.'\', CURRENT_TIMESTAMP, 0)';
 
-        $gDb->query($sql);
+        $gDb->query($sql); // TODO add more params
         $getMsgId = $gDb->lastInsertId();
 
         $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
                 VALUES ('.$getMsgId.', 1, '.$userId.', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
-        $gDb->query($sql);
+        $gDb->query($sql); // TODO add more params
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page

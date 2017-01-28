@@ -12,8 +12,8 @@
  * inf_id : profile field id that should be edited
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getInfId = admFuncVariableIsValid($_GET, 'inf_id', 'int');
@@ -168,7 +168,10 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($itemField->getValue('inf_usr_id_create'), $itemField->getValue('inf_timestamp_create'), $itemField->getValue('inf_usr_id_change'), $itemField->getValue('inf_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $itemField->getValue('inf_usr_id_create'), $itemField->getValue('inf_timestamp_create'),
+    (int) $itemField->getValue('inf_usr_id_change'), $itemField->getValue('inf_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

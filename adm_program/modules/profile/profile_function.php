@@ -21,9 +21,9 @@
  * mem_id  : Id of role membership to should be edited
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
-require_once('roles_functions.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/roles_functions.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'int');
@@ -228,10 +228,10 @@ elseif ($getMode === 8)
         // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
         $sql = 'SELECT mem_usr_id
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '.$getRoleId.'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end > \''.DATE_NOW.'\'';
-        $pdoStatement = $gDb->query($sql);
+                 WHERE mem_rol_id = ? -- $getRoleId
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW';
+        $pdoStatement = $gDb->queryPrepared($sql, array($getRoleId, DATE_NOW, DATE_NOW));
 
         while($memberUserId = $pdoStatement->fetchColumn())
         {

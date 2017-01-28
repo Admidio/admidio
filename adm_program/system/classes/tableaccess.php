@@ -51,11 +51,11 @@ class TableAccess
      */
     public function __construct(&$database, $tableName, $columnPrefix, $id = '')
     {
+        $this->db          =& $database;
         $this->tableName    = $tableName;
         $this->columnPrefix = $columnPrefix;
-        $this->db =& $database;
 
-        // only initialize if not set before through child constructur
+        // only initialize if not set before through child constructor
         if(!is_array($this->additionalTables))
         {
             $this->additionalTables = array();
@@ -136,7 +136,7 @@ class TableAccess
 
     /**
      * Adds a table with the connected fields to a member array. This table will be add to the
-     * select statement if data is read and the connected record is avaiable in this class.
+     * select statement if data is read and the connected record is available in this class.
      * The connected table must have a foreign key in the class table.
      * @param string $table                     Database table name that should be connected. This can be the define of the table.
      * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
@@ -179,8 +179,8 @@ class TableAccess
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '')
         {
             $sql = 'DELETE FROM '.$this->tableName.'
-                     WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';
-            $this->db->query($sql);
+                     WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
+            $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
         }
 
         $this->clear();
@@ -302,11 +302,12 @@ class TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array  $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition)
+    protected function readData($sqlWhereCondition, array $queryParams = array())
     {
         $sqlAdditionalTables = '';
 
@@ -321,7 +322,7 @@ class TableAccess
         }
 
         // if condition starts with AND then remove this
-        if (strpos(strtoupper($sqlWhereCondition), 'AND') < 2)
+        if (strpos(strtoupper(ltrim($sqlWhereCondition)), 'AND') === 0)
         {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
@@ -329,9 +330,10 @@ class TableAccess
         if ($sqlWhereCondition !== '')
         {
             $sql = 'SELECT *
-                      FROM '.$this->tableName.$sqlAdditionalTables.'
+                      FROM '.$this->tableName.'
+                           '.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
-            $readDataStatement = $this->db->query($sql);
+            $readDataStatement = $this->db->queryPrepared($sql, $queryParams); // TODO add more params
 
             if ($readDataStatement->rowCount() === 1)
             {
@@ -377,7 +379,7 @@ class TableAccess
         if ($id > 0)
         {
             // call method to read data out of database
-            return $this->readData(' AND ' . $this->keyColumnName . ' = \'' . $id . '\' ');
+            return $this->readData(' AND ' . $this->keyColumnName . ' = ? ', array($id));
         }
 
         return false;
@@ -470,9 +472,9 @@ class TableAccess
         }
 
         // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-        $itemConnection = '';
-        $sqlFieldList   = '';
-        $sqlValueList   = '';
+        $sqlFieldArray = array();
+        $sqlSetArray = array();
+        $queryParams = array();
 
         // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen
         foreach ($this->dbColumns as $key => $value)
@@ -487,52 +489,25 @@ class TableAccess
                     if ($value !== '')
                     {
                         // Daten fuer ein Insert aufbereiten
-                        $sqlFieldList .= ' ' . $itemConnection . ' ' . $key . ' ';
-                        $sqlValueList .= ' ' . $itemConnection;
-
-                        // unterscheiden zwischen Numerisch und Text
-                        if (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
-                        ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
-                        {
-                            $sqlValueList .= ' ' . $value . ' ';
-                        }
-                        else
-                        {
-                            // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
-                            // damit sie auf jeden Fall da sind
-                            $value = addslashes(stripslashes($value));
-                            $sqlValueList .= ' \'' . $value . '\' ';
-                        }
+                        $sqlFieldArray[] = $key;
+                        $queryParams[] = $value;
                     }
                 }
                 else
                 {
-                    $sqlFieldList .= ' ' . $itemConnection . ' ' . $key;
+                    $sqlSetArray[] = $key . ' = ?';
 
                     // Daten fuer ein Update aufbereiten
                     if ($value === '' || $value === null)
                     {
-                        $sqlFieldList .= ' = NULL ';
-                    }
-                    elseif (strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
-                        ||  strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
-                    {
-                        // numerisch
-                        $sqlFieldList .= ' = ' . $value . ' ';
+                        $queryParams[] = null;
                     }
                     else
                     {
-                        // Slashs (falls vorhanden) erst einmal entfernen und dann neu Zuordnen,
-                        // damit sie auf jeden Fall da sind
-                        $value = addslashes(stripslashes($value));
-                        $sqlFieldList .= ' = \'' . $value . '\' ';
+                        $queryParams[] = $value;
                     }
                 }
 
-                if ($itemConnection === '' && $sqlFieldList !== '')
-                {
-                    $itemConnection = ',';
-                }
                 $this->columnsInfos[$key]['changed'] = false;
             }
         }
@@ -540,8 +515,11 @@ class TableAccess
         if ($this->new_record)
         {
             // insert record and mark this object as not new and remember the new id
-            $sql = 'INSERT INTO '.$this->tableName.' ('.$sqlFieldList.') VALUES ('.$sqlValueList.') ';
-            $this->db->query($sql);
+            $sql = 'INSERT INTO '.$this->tableName.'
+                           ('.implode(',', $sqlFieldArray).')
+                    VALUES ('.replaceValuesArrWithQM($sqlFieldArray).')';
+            $this->db->queryPrepared($sql, $queryParams);
+
             $this->new_record = false;
             if ($this->keyColumnName !== '')
             {
@@ -550,9 +528,11 @@ class TableAccess
         }
         else
         {
-            $sql = 'UPDATE '.$this->tableName.' SET '.$sqlFieldList.'
-                     WHERE '.$this->keyColumnName.' = \''.$this->dbColumns[$this->keyColumnName].'\'';
-            $this->db->query($sql);
+            $sql = 'UPDATE '.$this->tableName.'
+                       SET '.implode(',', $sqlSetArray).'
+                     WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
+            $queryParams[] = $this->dbColumns[$this->keyColumnName];
+            $this->db->queryPrepared($sql, $queryParams);
         }
 
         $this->columnsValueChanged = false;

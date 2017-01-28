@@ -236,7 +236,7 @@ $administrator->setValue('usr_timestamp_create', DATETIME_NOW);
 $administrator->save(false); // no registered user -> UserIdCreate couldn't be filled
 
 // write all preferences from preferences.php in table adm_preferences
-require_once('db_scripts/preferences.php');
+require_once(__DIR__ . '/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
 $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];

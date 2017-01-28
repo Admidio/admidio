@@ -22,7 +22,7 @@
  *            (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
@@ -41,7 +41,7 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
@@ -53,7 +53,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($gPreferences['enable_gbook_comments4all'] == 0)
         {
-            require_once('../../system/login_valid.php');
+            require(__DIR__ . '/../../system/login_valid.php');
 
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$gCurrentUser->commentGuestbookRight())
@@ -67,7 +67,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
     else
     {
         // Der User muss fuer die anderen Modes auf jeden Fall eingeloggt sein
-        require_once('../../system/login_valid.php');
+        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     if ($getMode === 2 || $getMode === 3 || $getMode === 5 || $getMode === 8)
@@ -136,6 +136,7 @@ if ($getMode === 1 || $getMode === 3)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 
@@ -185,10 +186,11 @@ if ($getMode === 1 || $getMode === 3)
                 // einen GB-Eintrag erzeugt hat...
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK.'
-                         WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
-                           AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                           AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_adress'). '\'';
-                $pdoStatement = $gDb->query($sql);
+                         WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+                           AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                           AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_adress\')';
+                $queryParams = array($gPreferences['flooding_protection_time'], $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_adress'));
+                $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if($pdoStatement->fetchColumn() > 0)
                 {
@@ -236,8 +238,15 @@ if ($getMode === 1 || $getMode === 3)
                 $gbo_email = $gPreferences['email_administrator'];
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
-            $notification = new Email();
-            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            try
+            {
+                $notification = new Email();
+                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            }
+            catch(AdmException $e)
+            {
+                $e->showHtml();
+            }
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -325,6 +334,7 @@ elseif($getMode === 4 || $getMode === 8)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 
@@ -374,9 +384,9 @@ elseif($getMode === 4 || $getMode === 8)
                 // einen GB-Eintrag/Kommentar erzeugt hat...
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
-                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
-                           AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_adress'). '\'';
-                $pdoStatement = $gDb->query($sql);
+                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+                           AND gbc_ip_address = ? -- $guestbook_comment->getValue(\'gbc_ip_adress\')';
+                $pdoStatement = $gDb->queryPrepared($sql, array($gPreferences['flooding_protection_time'], $guestbook_comment->getValue('gbc_ip_adress')));
 
                 if($pdoStatement->fetchColumn() > 0)
                 {
@@ -423,9 +433,15 @@ elseif($getMode === 4 || $getMode === 8)
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));
-            $notification = new Email();
-            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
-
+            try
+            {
+                $notification = new Email();
+                $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
+            }
+            catch(AdmException $e)
+            {
+                $e->showHtml();
+            }
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht

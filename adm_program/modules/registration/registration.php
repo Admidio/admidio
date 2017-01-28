@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // check if module is active
 if($gPreferences['registration_mode'] == 0)
@@ -45,17 +45,23 @@ $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value AS las
             ON usr_id = reg_usr_id
      LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
+           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
          WHERE usr_valid = 0
-           AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
+           AND reg_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
       ORDER BY last_name, first_name';
-$usrStatement = $gDb->query($sql);
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('EMAIL', 'usf_id'),
+    $gCurrentOrganization->getValue('org_id')
+);
+$usrStatement = $gDb->queryPrepared($sql, $queryParams);
 
 if ($usrStatement->rowCount() === 0)
 {

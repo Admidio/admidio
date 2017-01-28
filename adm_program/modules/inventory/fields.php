@@ -9,8 +9,8 @@
  *
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // only users with the right to edit inventory could use this script
 if (!$gCurrentUser->editInventory())
@@ -96,10 +96,10 @@ $sql = 'SELECT *
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = inf_cat_id
          WHERE cat_type = \'INF\'
-           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+           AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence ASC, inf_sequence ASC';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
 
 // Create table
 $table = new HtmlTable('tbl_profile_fields', $page, true);

@@ -13,8 +13,8 @@
  * file_id      :  Id of the file that should be renamed
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
@@ -61,8 +61,10 @@ if (!$targetFolder->hasUploadRight())
     // => EXIT
 }
 
-$originalName = '';
-$fileType     = '';
+$originalName    = '';
+$fileType        = '';
+$createUserId    = 0;
+$createTimestamp = '';
 
 try
 {
@@ -72,8 +74,10 @@ try
         $file = new TableFile($gDb);
         $file->getFileForDownload($getFileId);
 
-        $originalName = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);
-        $fileType     = pathinfo($file->getValue('fil_name'), PATHINFO_EXTENSION);
+        $originalName    = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);
+        $fileType        = pathinfo($file->getValue('fil_name'), PATHINFO_EXTENSION);
+        $createUserId    = $file->getValue('fil_usr_id');
+        $createTimestamp = $file->getValue('fil_timestamp');
 
         if ($form_values['new_name'] === null)
         {
@@ -92,7 +96,9 @@ try
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getFolderId);
 
-        $originalName = $folder->getValue('fol_name');
+        $originalName    = $folder->getValue('fol_name');
+        $createUserId    = $folder->getValue('fol_usr_id');
+        $createTimestamp = $folder->getValue('fol_timestamp');
 
         if ($form_values['new_name'] == null)
         {
@@ -108,6 +114,7 @@ try
 catch(AdmException $e)
 {
     $e->showHtml();
+    // => EXIT
 }
 
 // create html page object
@@ -127,6 +134,7 @@ $form->addInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName
 $form->addInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], array('maxLength' => 255, 'property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'DOW_FILE_NAME_RULES'));
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, array('maxLength' => 255));
 $form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
+$form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 
 $page->addHtml($form->show(false));
 $page->show();

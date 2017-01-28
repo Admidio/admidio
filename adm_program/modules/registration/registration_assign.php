@@ -12,8 +12,8 @@
  * new_user_id : ID of user who should be assigned
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'int', array('requireValue' => true));
@@ -45,47 +45,54 @@ $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 if($gDbType === 'mysql' && $gPreferences['system_search_similar'] == 1)
 {
     $sqlSimilarName =
-        '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4)
-            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $firstName.'\'), 1, 4) )
-         OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $firstName.'\'), 1, 4)
-            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4) ) )';
+        '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4)
+            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(\''. $firstName.'\'), 1, 4) )
+         OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(\''. $firstName.'\'), 1, 4)
+            AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4) ) )';
 }
 else
 {
     $sqlSimilarName =
-        '(  (   last_name.usd_value  LIKE \''. $lastName.'\'
-            AND first_name.usd_value LIKE \''. $firstName.'\')
-         OR (   last_name.usd_value  LIKE \''. $firstName.'\'
-            AND first_name.usd_value LIKE \''. $lastName.'\') )';
+        '(  (   last_name.usd_value  = \''. $lastName.'\'
+            AND first_name.usd_value = \''. $firstName.'\')
+         OR (   last_name.usd_value  = \''. $firstName.'\'
+            AND first_name.usd_value = \''. $lastName.'\') )';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
                first_name.usd_value AS first_name, address.usd_value AS address,
-               zip_code.usd_value AS zip_code, city.usd_value AS city,
-               email.usd_value AS email
+               zip_code.usd_value AS zip_code, city.usd_value AS city, email.usd_value AS email
           FROM '.TBL_USERS.'
     RIGHT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
     RIGHT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS address
             ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = '. $gProfileFields->getProperty('STREET', 'usf_id'). '
+           AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS zip_code
             ON zip_code.usd_usr_id = usr_id
-           AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
+           AND zip_code.usd_usf_id = ? -- $gProfileFields->getProperty(\'POSTCODE\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS city
             ON city.usd_usr_id = usr_id
-           AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
+           AND city.usd_usf_id = ? -- $gProfileFields->getProperty(\'CITY\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
+           AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
          WHERE usr_valid = 1
            AND '.$sqlSimilarName;
-$usrStatement = $gDb->query($sql);
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('ADDRESS', 'usf_id'),
+    $gProfileFields->getProperty('POSTCODE', 'usf_id'),
+    $gProfileFields->getProperty('CITY', 'usf_id'),
+    $gProfileFields->getProperty('EMAIL', 'usf_id')
+);
+$usrStatement = $gDb->queryPrepared($sql, $queryParams);
 
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())

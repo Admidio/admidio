@@ -8,8 +8,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 if ($gPreferences['members_enable_user_relations'] == 0)
 {
@@ -56,8 +56,9 @@ $relationtypesOverview->addRowHeadingByArray($columnHeading);
 $sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS urt_name_male_inverse, urt2.urt_name_female AS urt_name_female_inverse
           FROM '.TBL_USER_RELATION_TYPES.' AS urt1
     LEFT OUTER JOIN '.TBL_USER_RELATION_TYPES.' AS urt2
-            ON urt1.urt_id_inverse=urt2.urt_id
-         WHERE urt1.urt_id <= urt1.urt_id_inverse OR urt1.urt_id_inverse IS NULL
+            ON urt1.urt_id_inverse = urt2.urt_id
+         WHERE urt1.urt_id <= urt1.urt_id_inverse
+            OR urt1.urt_id_inverse IS NULL
       ORDER BY urt1.urt_name, urt2.urt_name';
 
 $relationtypesStatement = $gDb->query($sql);

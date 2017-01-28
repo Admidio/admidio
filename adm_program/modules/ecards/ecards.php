@@ -14,9 +14,9 @@
  * usr_id:      (optional) Id of the user who should receive the ecard
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('ecard_function.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/ecard_function.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',    'int', array('requireValue' => true));
@@ -201,10 +201,10 @@ $sql = 'SELECT rol_id, rol_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
+         WHERE rol_id IN ('.replaceValuesArrWithQM($arrayMailRoles).')
            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
       ORDER BY rol_name';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql, $arrayMailRoles);
 
 while($row = $statement->fetch())
 {
@@ -215,8 +215,7 @@ while($row = $statement->fetch())
 $arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getAllVisibleRoles());
 $arrayUniqueRoles = array_unique($arrayRoles);
 
-$sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name,
-               email.usd_value AS email
+$sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
           FROM '.TBL_MEMBERS.'
     INNER JOIN '.TBL_USERS.'
             ON usr_id = mem_usr_id
@@ -228,17 +227,23 @@ $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value A
            AND field.usf_type = \'EMAIL\'
      LEFT JOIN '.TBL_USER_DATA.' AS last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+           AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+           AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
          WHERE usr_valid  = 1
-           AND mem_begin <= \''.DATE_NOW.'\'
-           AND mem_end    > \''.DATE_NOW.'\'
+           AND mem_begin <= ? -- DATE_NOW
+           AND mem_end    > ? -- DATE_NOW
            AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
       GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
       ORDER BY last_name, first_name';
-$statement = $gDb->query($sql);
+$queryParams = array(
+    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+    $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+    DATE_NOW,
+    DATE_NOW
+);
+$statement = $gDb->queryPrepared($sql, $queryParams);
 
 while ($row = $statement->fetch())
 {

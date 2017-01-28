@@ -131,18 +131,19 @@ class RolesRights extends TableAccess
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array  $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
-    protected function readData($sqlWhereCondition)
+    protected function readData($sqlWhereCondition, array $queryParams = array())
     {
-        if(parent::readData($sqlWhereCondition))
+        if(parent::readData($sqlWhereCondition, $queryParams))
         {
             $sql = 'SELECT * FROM '.TBL_ROLES_RIGHTS_DATA.'
-                     WHERE rrd_ror_id    = '.$this->getValue('ror_id').'
-                       AND rrd_object_id = '.$this->objectId;
-            $rolesRightsStatement = $this->db->query($sql);
+                     WHERE rrd_ror_id    = ? -- $this->getValue(\'ror_id\')
+                       AND rrd_object_id = ? -- $this->objectId';
+            $rolesRightsStatement = $this->db->queryPrepared($sql, array($this->getValue('ror_id'), $this->objectId));
 
             while($row = $rolesRightsStatement->fetch())
             {

@@ -39,6 +39,7 @@
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
     <string name="DAT_ATTEND_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
+    <string name="DAT_ATTEND_POSSIBLY">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
     <string name="DAT_CALENDAR">Kalender</string>
     <string name="DAT_CANCEL">Absagen</string>
     <string name="DAT_CANCEL_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
@@ -46,6 +47,8 @@
     <string name="DAT_DATE">Termin</string>
     <string name="DAT_DATES">Termine</string>
     <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
+    <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
+    <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
     <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
     <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
@@ -59,6 +62,7 @@
     <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Angelegt am: #VAR1#</string>
     <string name="DAT_ENABLE_ICAL">iCal-Funktion aktivieren</string>
     <string name="DAT_ENABLE_ICAL_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</string>
+    <string name="DAT_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Teilnehmerlisten in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
     <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
     <string name="DAT_ICAL_DAYS_FUTURE">Anzahl iCal Tage Zukunft</string>
@@ -93,6 +97,9 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
+    <string name="DAT_USER_ATTEND">Ich nehme teil</string>
+    <string name="DAT_USER_ATTEND_POSSIBLY">Unter Vorbehalt</string>
+    <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
@@ -101,6 +108,7 @@
     <!-- Phrases only in Downloadsmodule -->
     <string name="DOW_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
     <string name="DOW_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
+    <string name="DOW_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
     <string name="DOW_COUNTER">Zähler</string>
     <string name="DOW_CREATE_FOLDER">Ordner anlegen</string>
     <string name="DOW_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
@@ -138,8 +146,9 @@
     <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</string>
     <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
     <string name="DOW_NEW_NAME">Neuer Name</string>
+    <string name="DOW_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
     <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
-    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Benutzer von Rollen mit der Berechtigung #VAR2_BOLD# haben immer alle Rechte für den Ordner.</string>
+    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
     <string name="DOW_SELECT_FILES">Dateien auswählen</string>
     <string name="DOW_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
     <string name="DOW_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
@@ -361,7 +370,7 @@
     <string name="LST_CREATE_NEW_CONFIGURATION">Neue Konfiguration erstellen</string>
     <string name="LST_CREATE_OWN_LIST">Eigene Liste erstellen</string>
     <string name="LST_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
-    <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden in mit dieser Konfiguration angezeigt.</string>
+    <string name="LST_DEFAULT_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
     <string name="LST_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
     <string name="LST_DELETE_CONFIGURATION">Konfiguration löschen</string>
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
@@ -404,6 +413,8 @@
     <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
     <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße gefüllt haben</string>
     <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Anzahl Rollen pro Seite</string>
+    <string name="LST_PARTICIPATION_INFORMATION">Teilnehmerinformationen</string>
+    <string name="LST_PARTICIPATION_STATUS">Teilnehmerstatus</string>
     <string name="LST_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
     <string name="LST_PRESET_CONFIGURATION_DESC">Als Administrator kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
     <string name="LST_PRINT_PREVIEW">Druckvorschau</string>
@@ -427,6 +438,7 @@
     <string name="LST_SEARCH_TELEFON_DESC">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</string>
     <string name="LST_SEARCH_YES_NO_FIELD">Ja/Nein Feld</string>
     <string name="LST_SEARCH_YES_NO_FIELD_DESC">Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</string>
+    <string name="LST_SEAT_AMOUNT">Zusätzliche Plätze</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
     <string name="LST_SHOW_LIST">Liste anzeigen</string>
@@ -434,6 +446,7 @@
     <string name="LST_YOUR_CONFIGURATION">Deine Konfigurationen</string>
     <string name="LST_YOUR_LAST_CONFIGURATION">Deine letzten Konfigurationen</string>
     <string name="LST_YOUR_LISTS">Deine Listen</string>
+    <string name="LST_USER_CHANGED">Geändert von</string>
     <string name="LST_USER_PHOTO">Benutzerfoto</string>
     <string name="LST_VARIOUS_ROLES">Verschiedene Rollen</string>
     <string name="LST_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
@@ -830,6 +843,7 @@
     <string name="PRO_ACCEPT_NEW_PICTURE">Neues Profilfoto übernehmen</string>
     <string name="PRO_ADD_USER">Benutzer anlegen</string>
     <string name="PRO_ADD_USER_RELATION">Beziehung erstellen</string>
+    <string name="PRO_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
     <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</string>
     <string name="PRO_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
     <string name="PRO_CANCEL_USER_RELATION">Beziehung löschen</string>
@@ -864,6 +878,7 @@
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
     <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
+    <string name="PRO_NO_PERMISSIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
     <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke deines gewählten Passworts wird dir farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt dir der Pfeil im Balken an.</string>
@@ -1012,6 +1027,7 @@
     <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
     <string name="SYS_ADMINISTRATION">Administration</string>
     <string name="SYS_ADMINISTRATOR">Administrator</string>
+    <string name="SYS_ADMINISTRATORS">Administratoren</string>
     <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
     <string name="SYS_ALL">Alle</string>
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
@@ -1303,7 +1319,6 @@
     <string name="SYS_SENDER">Absender</string>
     <string name="SYS_SERVER">Server</string>
     <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
-    <string name="SYS_SET_BY">Gesetzt durch</string>
     <string name="SYS_SETTINGS">Einstellungen</string>
     <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
     <string name="SYS_SHOW_PROFILE">Profil anzeigen</string>

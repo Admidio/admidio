@@ -25,8 +25,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
@@ -113,12 +113,12 @@ elseif($getMode === 2)
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                 WHERE rol_name   LIKE \''. $_POST['rol_name']. '\'
-                   AND rol_cat_id = '. $_POST['rol_cat_id']. '
-                   AND rol_id    <> '. $getRoleId. '
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
+                 WHERE rol_name   = ? -- $_POST[\'rol_name\']
+                   AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
+                   AND rol_id    <> ? -- $getRoleId
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
-        $pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['rol_name'], $_POST['rol_cat_id'], $getRoleId, $gCurrentOrganization->getValue('org_id')));
 
         if($pdoStatement->fetchColumn() > 0)
         {
@@ -293,7 +293,7 @@ elseif($getMode === 2)
     // save role dependencies in database
     if(array_key_exists('dependent_roles', $_POST))
     {
-        $sentChildRoles = $_POST['dependent_roles'];
+        $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
 
         $roleDep = new RoleDependency($gDb);
 
@@ -318,7 +318,7 @@ elseif($getMode === 2)
         {
             foreach ($sentChildRoles as $sentChildRole)
             {
-                if($sentChildRole > 0 && count($dbChildRoles) > 0 && !in_array($sentChildRole, $dbChildRoles, true))
+                if($sentChildRole > 0 && !in_array($sentChildRole, $dbChildRoles, true))
                 {
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);
@@ -368,6 +368,7 @@ elseif($getMode === 4)
     catch(AdmException $e)
     {
         $e->showHtml();
+        // => EXIT
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);

@@ -13,8 +13,8 @@
  *           an error will be shown.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'int');
@@ -94,7 +94,6 @@ $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
     profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.setBy_Text              = "'.$gL10n->get('SYS_SET_BY').'";
     profileJS.inv_id                  = '.$inventory->getValue('inv_id').';
 
     function showHideMembershipInformation(element) {
@@ -201,15 +200,15 @@ $page->addHtml('
                             {
                                 $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') AS name
                                           FROM '.TBL_ROOMS.'
-                                         WHERE room_id = ' . $field['value'];
+                                         WHERE room_id = ? -- $field[\'value\']';
                             }
                             else
                             {
                                 $sql = 'SELECT room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' AS name
                                           FROM '.TBL_ROOMS.'
-                                         WHERE room_id = ' . $field['value'];
+                                         WHERE room_id = ? -- $field[\'value\']';
                             }
-                            $pdoStatement = $gDb->query($sql);
+                            $pdoStatement = $gDb->queryPrepared($sql, array($field['value']));
 
                             if($pdoStatement->rowCount() > 0)
                             {
@@ -318,6 +317,9 @@ if($category !== '')
 }
 
 // show information about user who creates the recordset and changed it
-$page->addHtml(admFuncShowCreateChangeInfoById($inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'), $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')));
+$page->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $inventory->getValue('inv_usr_id_create'), $inventory->getValue('inv_timestamp_create'),
+    (int) $inventory->getValue('inv_usr_id_change'), $inventory->getValue('inv_timestamp_change')
+));
 
 $page->show();

@@ -59,10 +59,10 @@ class RoleDependency
      */
     public function delete()
     {
-        $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES.
-               ' WHERE rld_rol_id_child  = '.$this->roleIdChildOrig.
-                 ' AND rld_rol_id_parent = '.$this->roleIdParentOrig;
-        $this->db->query($sql);
+        $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
+                 WHERE rld_rol_id_child  = ? -- $this->roleIdChildOrig
+                   AND rld_rol_id_parent = ? -- $this->roleIdParentOrig';
+        $this->db->queryPrepared($sql, array($this->roleIdChildOrig, $this->roleIdParentOrig));
 
         $this->clear();
     }
@@ -83,10 +83,10 @@ class RoleDependency
         }
 
         $sql = 'SELECT *
-                  FROM '. TBL_ROLE_DEPENDENCIES.
-               ' WHERE rld_rol_id_child  = '.$childRoleId.'
-                   AND rld_rol_id_parent = '.$parentRoleId;
-        $roleDependenciesStatement = $this->db->query($sql);
+                  FROM '. TBL_ROLE_DEPENDENCIES.'
+                 WHERE rld_rol_id_child  = ? -- $childRoleId
+                   AND rld_rol_id_parent = ? -- $parentRoleId';
+        $roleDependenciesStatement = $this->db->queryPrepared($sql, array($childRoleId, $parentRoleId));
 
         $row = $roleDependenciesStatement->fetchObject();
         if ($row)
@@ -117,9 +117,9 @@ class RoleDependency
         if ($childId > 0)
         {
             $sql = 'SELECT rld_rol_id_parent
-                      FROM '.TBL_ROLE_DEPENDENCIES.
-                ' WHERE rld_rol_id_child = '.$childId;
-            $pdoStatement = $database->query($sql);
+                      FROM '.TBL_ROLE_DEPENDENCIES.'
+                     WHERE rld_rol_id_child = ? -- $childId';
+            $pdoStatement = $database->queryPrepared($sql, array($childId));
 
             if ($pdoStatement->rowCount() > 0)
             {
@@ -145,9 +145,9 @@ class RoleDependency
         if ($parentId > 0)
         {
             $sql = 'SELECT rld_rol_id_child
-                      FROM '. TBL_ROLE_DEPENDENCIES.
-                   ' WHERE rld_rol_id_parent = '.$parentId;
-            $pdoStatement = $database->query($sql);
+                      FROM '.TBL_ROLE_DEPENDENCIES.'
+                     WHERE rld_rol_id_parent = ? -- $parentId';
+            $pdoStatement = $database->queryPrepared($sql, array($parentId));
 
             if ($pdoStatement->rowCount() > 0)
             {
@@ -180,8 +180,9 @@ class RoleDependency
         {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
                                 (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES ('.$this->roleIdParent.', '.$this->roleIdChild.', \''.$this->comment.'\', '.$loginUserId.', \''.DATETIME_NOW.'\') ';
-            $this->db->query($sql);
+                         VALUES (?,?,?,?,?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
+            $queryParams = array($this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW);
+            $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;
 
             return true;
@@ -199,9 +200,9 @@ class RoleDependency
     {
         if ($parentId > 0)
         {
-            $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.
-                   ' WHERE rld_rol_id_parent = '.$parentId;
-            $database->query($sql);
+            $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
+                     WHERE rld_rol_id_parent = ? -- $parentId';
+            $database->queryPrepared($sql, array($parentId));
 
             return true;
         }
@@ -252,14 +253,24 @@ class RoleDependency
     {
         if ($loginUserId > 0 && !$this->isEmpty())
         {
-            $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_rol_id_parent = \''.$this->roleIdParent.'\'
-                                                       , rld_rol_id_child  = \''.$this->roleIdChild.'\'
-                                                       , rld_comment       = \''.$this->comment.'\'
-                                                       , rld_timestamp     = \''.DATETIME_NOW.'\'
-                                                       , rld_usr_id        = '.$loginUserId.'
-                     WHERE rld_rol_id_parent = '.$this->roleIdParentOrig.'
-                       AND rld_rol_id_child  = '.$this->roleIdChildOrig;
-            $this->db->query($sql);
+            $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
+                       SET rld_rol_id_parent = ? -- $this->roleIdParent
+                         , rld_rol_id_child  = ? -- $this->roleIdChild
+                         , rld_comment       = ? -- $this->comment
+                         , rld_timestamp     = ? -- DATETIME_NOW
+                         , rld_usr_id        = ? -- $loginUserId
+                     WHERE rld_rol_id_parent = ? -- $this->roleIdParentOrig
+                       AND rld_rol_id_child  = ? -- $this->roleIdChildOrig';
+            $queryParams = array(
+                $this->roleIdParent,
+                $this->roleIdChild,
+                $this->comment,
+                DATETIME_NOW,
+                $loginUserId,
+                $this->roleIdParentOrig,
+                $this->roleIdChildOrig
+            );
+            $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;
 
             return true;
@@ -282,11 +293,11 @@ class RoleDependency
         }
 
         $sql = 'SELECT mem_usr_id
-                  FROM '.TBL_MEMBERS.
-               ' WHERE mem_rol_id = '.$this->roleIdChild.'
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'';
-        $membershipStatement = $this->db->query($sql);
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = ? -- $this->roleIdChild
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW';
+        $membershipStatement = $this->db->queryPrepared($sql, array($this->roleIdChild, DATE_NOW, DATE_NOW));
 
         if ($membershipStatement->rowCount() > 0)
         {

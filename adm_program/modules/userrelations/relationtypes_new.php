@@ -12,8 +12,8 @@
  * urt_id : Id of the relation type that should be edited
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUrtId = admFuncVariableIsValid($_GET, 'urt_id', 'int');
@@ -128,10 +128,8 @@ $form->addInput(
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    $relationtype1->getValue('urt_usr_id_create'),
-    $relationtype1->getValue('urt_timestamp_create'),
-    $relationtype1->getValue('urt_usr_id_change'),
-    $relationtype1->getValue('urt_timestamp_change')
+    (int) $relationtype1->getValue('urt_usr_id_create'), $relationtype1->getValue('urt_timestamp_create'),
+    (int) $relationtype1->getValue('urt_usr_id_change'), $relationtype1->getValue('urt_timestamp_change')
 ));
 
 // add form to html page and show page

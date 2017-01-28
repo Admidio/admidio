@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($gPreferences['enable_rss'] != 1)
@@ -41,7 +41,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 elseif($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -50,34 +50,39 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 if($gPreferences['system_show_create_edit'] == 1)
 {
     // show firstname and lastname of create and last change user
-    $additionalFields = '
-        cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
+    $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
     $additionalTables = '
-                         LEFT JOIN '. TBL_USER_DATA .' cre_surname
+                         LEFT JOIN '. TBL_USER_DATA .' AS cre_surname
                                 ON cre_surname.usd_usr_id = pho_usr_id_create
-                               AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-                         LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+                               AND cre_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                         LEFT JOIN '. TBL_USER_DATA .' AS cre_firstname
                                 ON cre_firstname.usd_usr_id = pho_usr_id_create
-                               AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+                               AND cre_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')';
+    $queryParams = array(
+        $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+        $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+    );
 }
 else
 {
     // show username of create and last change user
     $additionalFields = ' cre_username.usr_login_name AS create_name ';
     $additionalTables = '
-                         LEFT JOIN '. TBL_USERS .' cre_username
+                         LEFT JOIN '. TBL_USERS .' AS cre_username
                                 ON cre_username.usr_id = pho_usr_id_create ';
+    $queryParams = array();
 }
 
 // read albums from database
 $sql = 'SELECT pho.*, '.$additionalFields.'
-          FROM '.TBL_PHOTOS.' pho
+          FROM '.TBL_PHOTOS.' AS pho
                '.$additionalTables.'
-         WHERE (   pho_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+         WHERE (   pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND pho_locked = 0)
       ORDER BY pho_timestamp_create DESC
          LIMIT 10';
-$statement = $gDb->query($sql);
+$queryParams[] = $gCurrentOrganization->getValue('org_id');
+$statement = $gDb->queryPrepared($sql, $queryParams);
 
 $photo_album = new TablePhotos($gDb);
 
@@ -105,10 +110,10 @@ while ($row = $statement->fetch())
     while($pho_parent_id > 0)
     {
         // Erfassen des Eltern Albums
-        $sql = ' SELECT *
+        $sql = 'SELECT *
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_id = '.$pho_parent_id;
-        $parentsStatement = $gDb->query($sql);
+                 WHERE pho_id = ? -- $pho_parent_id';
+        $parentsStatement = $gDb->queryPrepared($sql, array($pho_parent_id));
         $adm_photo_parent = $parentsStatement->fetch();
 
         // Link zusammensetzen
@@ -134,7 +139,7 @@ while ($row = $statement->fetch())
     $description = $description. '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
 
     // show the last five photos as examples
-    if($photo_album->getValue('pho_quantity') >0)
+    if($photo_album->getValue('pho_quantity') > 0)
     {
         $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for($photoNr = $photo_album->getValue('pho_quantity'); $photoNr >= $photo_album->getValue('pho_quantity')-4 && $photoNr > 0; --$photoNr)

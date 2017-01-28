@@ -15,9 +15,9 @@
  * available at http://www.silisoftware.com/scripts/index.php?scriptname=backupDB
  *********************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
-require_once('backup.functions.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/backup.functions.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // only administrators are allowed to create backups
 if(!$gCurrentUser->isAdministrator())
@@ -79,8 +79,8 @@ $newfullfilename = $backupabsolutepath.$fullbackupfilename;
 unset($SelectedTables, $tables);
 
 // create a list with all tables with configured table prefix
-$sql = 'SHOW TABLES LIKE \''.$g_tbl_praefix.'\_%\'';
-$statement = $gDb->query($sql);
+$sql = 'SHOW TABLES LIKE ?';
+$statement = $gDb->queryPrepared($sql, array($g_tbl_praefix . '\_%'));
 $tables = array();
 while($table = $statement->fetch())
 {
@@ -302,7 +302,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     $structurelines[] = $structureline;
                 }
 
-                $SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
+                $SQLquery  = 'SHOW TABLE STATUS = "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
                 $tablestatusStatement = $gDb->query($SQLquery);
                 if (!($TableStatusRow = $tablestatusStatement->fetch()))
                 {

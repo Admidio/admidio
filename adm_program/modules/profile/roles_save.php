@@ -22,8 +22,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'int');
@@ -79,41 +79,43 @@ if($gCurrentUser->manageRoles())
                 ON cat_id = rol_cat_id
          LEFT JOIN '.TBL_MEMBERS.'
                 ON mem_rol_id = rol_id
-               AND mem_usr_id = '.$getUserId.'
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end    > \''.DATE_NOW.'\'
+               AND mem_usr_id = ? -- $getUserId
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end    > ? -- DATE_NOW
              WHERE rol_valid   = 1
                AND rol_visible = 1
-               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
+    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
 }
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
     $sql = 'SELECT rol_id, rol_name, rol_max_members, rol_administrator, mgl.mem_id, mgl.mem_begin, mgl.mem_end
-              FROM '.TBL_MEMBERS.' bm
+              FROM '.TBL_MEMBERS.' AS bm
         INNER JOIN '.TBL_ROLES.'
                 ON rol_id = bm.mem_rol_id
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
-         LEFT JOIN '.TBL_MEMBERS.' mgl
+         LEFT JOIN '.TBL_MEMBERS.' AS mgl
                 ON rol_id         = mgl.mem_rol_id
-               AND mgl.mem_usr_id = '.$getUserId.'
-               AND mgl.mem_begin <= \''.DATE_NOW.'\'
-               AND mgl.mem_end    > \''.DATE_NOW.'\'
-             WHERE bm.mem_usr_id  = '. $gCurrentUser->getValue('usr_id'). '
-               AND bm.mem_begin  <= \''.DATE_NOW.'\'
-               AND bm.mem_end     > \''.DATE_NOW.'\'
+               AND mgl.mem_usr_id = ? -- $getUserId
+               AND mgl.mem_begin <= ? -- DATE_NOW
+               AND mgl.mem_end    > ? -- DATE_NOW
+             WHERE bm.mem_usr_id  = ? -- $gCurrentUser->getValue(\'usr_id\')
+               AND bm.mem_begin  <= ? -- DATE_NOW
+               AND bm.mem_end     > ? -- DATE_NOW
                AND bm.mem_leader  = 1
                AND rol_leader_rights IN (1,3)
                AND rol_valid      = 1
                AND rol_visible    = 1
-               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
+    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, $gCurrentUser->getValue('usr_id'), DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
 }
-$rolesStatement = $gDb->query($sql);
+$rolesStatement = $gDb->queryPrepared($sql, $queryParams);
 $rolesList      = $rolesStatement->fetchAll();
 
 $assignedCount = 0;
@@ -127,23 +129,23 @@ foreach($rolesList as $row)
         // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = '.$row['rol_id'].'
-                   AND mem_usr_id = '.$getUserId.'
+                 WHERE mem_rol_id = ? -- $row[\'rol_id\']
+                   AND mem_usr_id = ? -- $getUserId
                    AND mem_leader = 0
-                   AND mem_begin <= \''.DATE_NOW.'\'
-                   AND mem_end    > \''.DATE_NOW.'\'';
-        $pdoStatement = $gDb->query($sql);
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW';
+        $pdoStatement = $gDb->queryPrepared($sql, array($row['rol_id'], $getUserId, DATE_NOW, DATE_NOW));
 
         if((int) $pdoStatement->fetchColumn() === 0)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = '.$row['rol_id'].'
+                     WHERE mem_rol_id = ? -- $row[\'rol_id\']
                        AND mem_leader = 0
-                       AND mem_begin <= \''.DATE_NOW.'\'
-                       AND mem_end    > \''.DATE_NOW.'\'';
-            $pdoStatement = $gDb->query($sql);
+                       AND mem_begin <= ? -- DATE_NOW
+                       AND mem_end    > ? -- DATE_NOW';
+            $pdoStatement = $gDb->queryPrepared($sql, array($row['rol_id'], DATE_NOW, DATE_NOW));
 
             // Bedingungen fuer Abbruch und Abbruch
             if($pdoStatement->fetchColumn() >= $row['rol_max_members']

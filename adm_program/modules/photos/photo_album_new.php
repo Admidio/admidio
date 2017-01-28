@@ -13,8 +13,8 @@
  *          - change (edit album)
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
@@ -88,22 +88,24 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
+    $queryParams = array($photoAlbum->getValue('pho_id'), $gCurrentOrganization->getValue('org_id'));
     // Erfassen des auszugebenden Albums
     if($parentId > 0)
     {
-        $sqlConditionParentId .= ' AND pho_pho_id_parent = \''.$parentId.'\' ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent = ? -- $parentId';
+        $queryParams[] = $parentId;
     }
     else
     {
-        $sqlConditionParentId .= ' AND pho_pho_id_parent IS NULL ';
+        $sqlConditionParentId .= ' AND pho_pho_id_parent IS NULL';
     }
 
     $sql = 'SELECT *
               FROM '.TBL_PHOTOS.'
-             WHERE pho_id <> '. $photoAlbum->getValue('pho_id').
-                   $sqlConditionParentId.'
-               AND pho_org_id = '.$gCurrentOrganization->getValue('org_id');
-    $childStatement = $gDb->query($sql);
+             WHERE pho_id    <> ? -- $photoAlbum->getValue(\'pho_id\')
+               AND pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   '.$sqlConditionParentId;
+    $childStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while($adm_photo_child = $childStatement->fetch())
     {
@@ -148,7 +150,10 @@ $form->addInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbu
 $form->addCheckbox('pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), (bool) $photoAlbum->getValue('pho_locked'), array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC'));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'),
+    (int) $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)
@@ -33,7 +33,7 @@ if ($gPreferences['enable_photo_module'] == 0)
 elseif ($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -413,10 +413,8 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 
     // show information about user who creates the recordset and changed it
     $page->addHtml(admFuncShowCreateChangeInfoById(
-        $photoAlbum->getValue('pho_usr_id_create'),
-        $photoAlbum->getValue('pho_timestamp_create'),
-        $photoAlbum->getValue('pho_usr_id_change'),
-        $photoAlbum->getValue('pho_timestamp_change')
+        (int) $photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'),
+        (int) $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')
     ));
 
     // show page navigations through thumbnails
@@ -435,23 +433,29 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 // erfassen der Alben die in der Albentabelle ausgegeben werden sollen
 $sql = 'SELECT *
           FROM '.TBL_PHOTOS.'
-         WHERE pho_org_id = '.$gCurrentOrganization->getValue('org_id');
+         WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
+$queryParams = array($gCurrentOrganization->getValue('org_id'));
 if($getPhotoId === 0)
 {
-    $sql .= ' AND (pho_pho_id_parent IS NULL) ';
+    $sql .= '
+        AND (pho_pho_id_parent IS NULL) ';
 }
 if($getPhotoId > 0)
 {
-    $sql .= ' AND pho_pho_id_parent = '.$getPhotoId.'';
+    $sql .= '
+        AND pho_pho_id_parent = ? -- $getPhotoId';
+    $queryParams[] = $getPhotoId;
 }
 if(!$gCurrentUser->editPhotoRight())
 {
-    $sql .= ' AND pho_locked = 0 ';
+    $sql .= '
+        AND pho_locked = 0 ';
 }
 
-$sql .= ' ORDER BY pho_begin DESC';
+$sql .= '
+    ORDER BY pho_begin DESC';
 
-$albumStatement = $gDb->query($sql);
+$albumStatement = $gDb->queryPrepared($sql, $queryParams);
 $albumList      = $albumStatement->fetchAll();
 
 // Gesamtzahl der auszugebenden Alben

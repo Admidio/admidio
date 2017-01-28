@@ -15,7 +15,7 @@
  *                 (Default) Gaestebuch
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
@@ -55,7 +55,7 @@ else
 if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0) && $getGboId > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 
     if (!$gCurrentUser->commentGuestbookRight())
     {
@@ -68,7 +68,7 @@ if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook
 if($getGbcId > 0)
 {
     // Zum editieren von Kommentaren muss der User auch eingeloggt sein
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 
     if (!$gCurrentUser->editGuestbookRight())
     {
@@ -121,9 +121,9 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK_COMMENTS.'
-             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
-               AND gbc_ip_address = \''. $guestbook_comment->getValue('gbc_ip_address'). '\'';
-    $pdoStatement = $gDb->query($sql);
+             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+               AND gbc_ip_address = ? -- $guestbook_comment->getValue(\'gbc_ip_address\')';
+    $pdoStatement = $gDb->queryPrepared($sql, array($gPreferences['flooding_protection_time'], $guestbook_comment->getValue('gbc_ip_address')));
 
     if($pdoStatement->fetchColumn() > 0)
     {
@@ -164,7 +164,10 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 
 // show information about user who creates the recordset and changed it
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($guestbook_comment->getValue('gbc_usr_id_create'), $guestbook_comment->getValue('gbc_timestamp_create'), $guestbook_comment->getValue('gbc_usr_id_change'), $guestbook_comment->getValue('gbc_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $guestbook_comment->getValue('gbc_usr_id_create'), $guestbook_comment->getValue('gbc_timestamp_create'),
+    (int) $guestbook_comment->getValue('gbc_usr_id_change'), $guestbook_comment->getValue('gbc_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

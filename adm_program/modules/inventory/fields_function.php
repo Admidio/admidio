@@ -16,8 +16,8 @@
  * sequence : new sequence for item field
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getInfId    = admFuncVariableIsValid($_GET, 'inf_id',   'int');
@@ -84,10 +84,10 @@ if($getMode === 1)
         // Schauen, ob das Feld bereits existiert
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_INVENT_FIELDS.'
-                 WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
-                   AND inf_cat_id  = '.$_POST['inf_cat_id'].'
-                   AND inf_id     <> '.$getInfId;
-        $statement = $gDb->query($sql);
+                 WHERE inf_name   = ? -- $_POST[\'inf_name\']
+                   AND inf_cat_id = ? -- $_POST[\'inf_cat_id\']
+                   AND inf_id    <> ? -- $getInfId';
+        $statement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $_POST['inf_cat_id'], $getInfId));
 
         if($statement->fetchColumn() > 0)
         {

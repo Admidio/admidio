@@ -18,8 +18,8 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
@@ -232,6 +232,13 @@ $javascriptCode = '
 $i = 1;
 $oldCategoryNameIntern = '';
 $posEndOfMasterData = 0;
+$arrParticipientsInformation = array(
+    'mem_approved'         => $gL10n->get('LST_PARTICIPATION_STATUS'),
+    'mem_usr_id_change'    => $gL10n->get('LST_USER_CHANGED'),
+    'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
+    'mem_comment'          => $gL10n->get('SYS_COMMENT'),
+    'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
+);
 
 foreach($gProfileFields->mProfileFields as $field)
 {
@@ -277,14 +284,14 @@ foreach($gProfileFields->mProfileFields as $field)
     }
 }
 
-// Add loginname and photo at the end of category master data
-// add new category with start and end date of role membership
-if($posEndOfMasterData === 0)
-{
-    $posEndOfMasterData = $i;
-    $i += 2;
-}
-$javascriptCode .= '
+    // Add loginname and photo at the end of category master data
+    // add new category with start and end date of role membership
+    if($posEndOfMasterData === 0)
+    {
+        $posEndOfMasterData = $i;
+        $i += 2;
+    }
+    $javascriptCode .= '
         userFields[' . $posEndOfMasterData . '] = {
             "cat_id": userFields[1]["cat_id"],
             "cat_name": userFields[1]["cat_name"],
@@ -309,18 +316,33 @@ $javascriptCode .= '
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_START').'"
         };';
 
-++$i;
-$javascriptCode .= '
+    ++$i;
+    $javascriptCode .= '
         userFields[' . $i . '] = {
             "cat_id": -1,
             "cat_name": "'.$gL10n->get('LST_ROLE_INFORMATION').'",
             "usf_id": "mem_end",
             "usf_name": "'.$gL10n->get('LST_MEMBERSHIP_END').'",
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
-        };
+        };';
 
-        return userFields;
+    // add new category with participient information of events
+    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    {
+        ++$i;
+        $javascriptCode .= '
+            userFields['. $i . '] = {
+                "cat_id"   : -1,
+                "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
+                "usf_id"   : "'.$memberStatus.'",
+                "usf_name" : "'.$ColumnName.'",
+                "usf_name_intern" : "'.$ColumnName.'",
+            };';
     }
+
+    $javascriptCode .= '
+        return userFields;
+}
 
     function createColumnsArray()
     {
@@ -432,39 +454,41 @@ $javascriptCode .= '
             }
         }
 
+        var myListConfigForm = document.getElementById("mylist_configuration_form");
+
         switch (mode) {
             case "show":
-                document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
-                document.getElementById("mylist_configuration_form").submit();
+                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
+                myListConfigForm.submit();
                 break;
 
             case "save":
-                document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
-                document.getElementById("mylist_configuration_form").submit();
+                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
+                myListConfigForm.submit();
                 break;
 
             case "save_as":
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
-                if (listName != null) {
-                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
-                    document.getElementById("mylist_configuration_form").submit();
+                if (listName !== "") {
+                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
+                    myListConfigForm.submit();
                 }
                 break;
 
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if (msg_result) {
-                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
-                    document.getElementById("mylist_configuration_form").submit();
+                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
+                    myListConfigForm.submit();
                 }
                 break;
 
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
-                    document.getElementById("mylist_configuration_form").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
-                    document.getElementById("mylist_configuration_form").submit();
+                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
+                    myListConfigForm.submit();
                 }
                 break;
         }
@@ -514,11 +538,11 @@ $numberLastConfigurations    = 0;
 
 $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
           FROM '.TBL_LISTS.'
-         WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
-           AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
+         WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+           AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
                OR lst_global = 1)
       ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
-$configurationsStatement = $gDb->query($sql);
+$configurationsStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $gCurrentUser->getValue('usr_id')));
 
 $configurations = $configurationsStatement->fetchAll();
 
@@ -626,17 +650,20 @@ $form->closeGroupBox();
 
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
 // show all roles where the user has the right to see them
-$sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '.TBL_ROLES.'
-    INNER JOIN '.TBL_CATEGORIES.'
-            ON cat_id = rol_cat_id
-         WHERE rol_valid   = '.$getActiveRole.'
-           AND rol_visible = 1
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )
-      ORDER BY cat_sequence, rol_name';
-$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+$sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                       FROM '.TBL_ROLES.'
+                 INNER JOIN '.TBL_CATEGORIES.'
+                         ON cat_id = rol_cat_id
+                      WHERE rol_valid   = '.$getActiveRole.'
+                        AND rol_visible = 1
+                        AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                            OR cat_org_id IS NULL )
+                   ORDER BY cat_sequence, rol_name';
+$sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+$form->addSelectBoxFromSql(
+    'sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
+);
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
 $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
@@ -644,8 +671,10 @@ $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showM
 $sql = 'SELECT urt_id, urt_name, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
       ORDER BY urt_name';
-$form->addSelectBoxFromSql('sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
-    array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : ''));
+$form->addSelectBoxFromSql(
+    'sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+    array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
+);
 $form->closeGroupBox();
 
 $form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary'));

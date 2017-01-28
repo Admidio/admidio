@@ -21,8 +21,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getMode      = admFuncVariableIsValid($_GET, 'mode',        'int', array('requireValue' => true));
@@ -78,6 +78,7 @@ if($getMode === 1 || $getMode === 2)
         $user->save();
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
+        // => EXIT
     }
 }
 
@@ -110,6 +111,7 @@ if($getMode === 1 || $getMode === 3)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
     else
@@ -145,6 +147,7 @@ elseif($getMode === 5)
     {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
+        // => EXIT
     }
 
     // if current user has the right to assign roles then show roles dialog
@@ -174,6 +177,7 @@ elseif($getMode === 6)
     {
         $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
         $e->showHtml();
+        // => EXIT
     }
 
     // Zugangsdaten neu verschicken

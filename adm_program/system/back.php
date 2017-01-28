@@ -10,7 +10,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-include('common.php');
+require_once(__DIR__ . '/common.php');
 
 // delete the last url from the stack. This should be the actual page.
 $gNavigation->deleteLastUrl();

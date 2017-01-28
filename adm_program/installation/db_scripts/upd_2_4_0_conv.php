@@ -134,10 +134,10 @@ while($rowOrga = $orgaStatement->fetch())
 // Make all Profilefilds deletable, except FIRSTNAME, LASTNAME, EMAIL
 $sql = 'UPDATE '.TBL_USER_FIELDS.'
            SET usf_system = 0
-         WHERE usf_name LIKE \'SYS_ADDRESS\'
-            OR usf_name LIKE \'SYS_POSTCODE\'
-            OR usf_name LIKE \'SYS_CITY\'
-            OR usf_name LIKE \'SYS_COUNTRY\'
-            OR usf_name LIKE \'SYS_BIRTHDAY\'
-            OR usf_name LIKE \'SYS_WEBSITE\'';
+         WHERE usf_name = \'SYS_ADDRESS\'
+            OR usf_name = \'SYS_POSTCODE\'
+            OR usf_name = \'SYS_CITY\'
+            OR usf_name = \'SYS_COUNTRY\'
+            OR usf_name = \'SYS_BIRTHDAY\'
+            OR usf_name = \'SYS_WEBSITE\'';
 $gDb->query($sql);

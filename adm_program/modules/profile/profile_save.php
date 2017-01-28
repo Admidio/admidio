@@ -20,7 +20,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id',  'int');
@@ -240,8 +240,8 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
             // pruefen, ob der Benutzername bereits vergeben ist
             $sql = 'SELECT usr_id
                       FROM '.TBL_USERS.'
-                     WHERE usr_login_name LIKE \''. $_POST['usr_login_name']. '\'';
-            $pdoStatement = $gDb->query($sql);
+                     WHERE usr_login_name = ?';
+            $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
             if($pdoStatement->rowCount() > 0)
             {
@@ -276,6 +276,7 @@ if($getNewUser === 2)
         catch(AdmException $e)
         {
             $e->showHtml();
+            // => EXIT
         }
     }
 }
@@ -295,6 +296,7 @@ catch(AdmException $e)
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
     $gNavigation->deleteLastUrl();
     $e->showHtml();
+    // => EXIT
 }
 
 $gDb->endTransaction();
@@ -328,6 +330,7 @@ if($getNewUser === 1 || $getNewUser === 3)
         {
             $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
             $e->showHtml();
+            // => EXIT
         }
     }
     else

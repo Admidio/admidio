@@ -16,12 +16,13 @@
  *          4 - vom Termin abmelden
  *          5 - Termin aendern
  *          6 - Termin im iCal-Format exportieren
+ *          7 - am Termin unter Vorbehalt anmelden
  * rol_id : vorselektierte Rolle der Rollenauswahlbox
  * copy   : true - The event of the dat_id will be copied and the base for this new event
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 if($_GET['mode'] == 2)
 {
@@ -48,7 +49,7 @@ if($gPreferences['enable_dates_module'] == 0)
 if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
@@ -250,11 +251,17 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_DATES.'
-                     WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
-                       AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
-                       AND dat_room_id = '.$_POST['dat_room_id'].'
-                       AND dat_id     <> '.$getDateId;
-            $datesStatement = $gDb->query($sql);
+                     WHERE dat_begin  <= ? -- $endDateTime->format(\'Y-m-d H:i:s\')
+                       AND dat_end    >= ? -- $startDateTime->format(\'Y-m-d H:i:s\')
+                       AND dat_room_id = ? -- $_POST[\'dat_room_id\']
+                       AND dat_id     <> ? -- $getDateId';
+            $queryParams = array(
+                $endDateTime->format('Y-m-d H:i:s'),
+                $startDateTime->format('Y-m-d H:i:s'),
+                $_POST['dat_room_id'],
+                $getDateId
+            );
+            $datesStatement = $gDb->queryPrepared($sql, $queryParams);
 
             if($datesStatement->fetchColumn())
             {
@@ -267,7 +274,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $room->readDataById($_POST['dat_room_id']);
             $number = (int) $room->getValue('room_capacity') + (int) $room->getValue('room_overhang');
             $date->setValue('dat_max_members', $number);
-            if($_POST['dat_max_members']<$number && $_POST['dat_max_members']>0)
+            if($_POST['dat_max_members'] < $number && $_POST['dat_max_members'] > 0)
             {
                 $date->setValue('dat_max_members', $_POST['dat_max_members']);
             }
@@ -314,10 +321,10 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
 
-        $sql_cal = 'SELECT cat_name
+        $sqlCal = 'SELECT cat_name
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_id = '.$_POST['dat_cat_id'];
-        $pdoStatement = $gDb->query($sql_cal);
+                     WHERE cat_id = ?';
+        $pdoStatement = $gDb->queryPrepared($sqlCal, array($_POST['dat_cat_id']));
         $calendar = $pdoStatement->fetchColumn();
 
         if(strlen($_POST['dat_location']) > 0)
@@ -343,23 +350,30 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $teilnehmer = 'n/a';
         }
 
-        $notification = new Email();
+        try
+        {
+            $notification = new Email();
 
-        if($getMode === 1)
-        {
-            $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
-                      .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                      .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
-            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
-                $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            if($getMode === 1)
+            {
+                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+                $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
+                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            }
+            else
+            {
+                $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+                $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
+                    $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            }
         }
-        else
+        catch(AdmException $e)
         {
-            $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
-                      .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                      .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
-            $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
-                $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+            $e->showHtml();
         }
     }
 
@@ -375,8 +389,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             // copy original role with their settings
             $sql = 'SELECT dat_rol_id
                       FROM '.TBL_DATES.'
-                     WHERE dat_id = '.$originalDateId;
-            $pdoStatement = $gDb->query($sql);
+                     WHERE dat_id = ?';
+            $pdoStatement = $gDb->queryPrepared($sql, array($originalDateId));
 
             $role = new TableRoles($gDb, (int) $pdoStatement->fetchColumn());
             $role->setValue('rol_id', '0');
@@ -386,7 +400,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             // Kategorie fuer Terminbestaetigungen einlesen
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
+                     WHERE cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\'';
             $pdoStatement = $gDb->query($sql);
             $role = new TableRoles($gDb);
 
@@ -497,7 +511,7 @@ elseif($getMode === 2)  // Termin loeschen
 elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
@@ -510,6 +524,15 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    // => EXIT
+}
+elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
+{
+    $member = new TableMembers($gDb);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
+
+    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->show($gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
     // => EXIT
 }
 elseif($getMode === 6)  // Termin im iCal-Format exportieren

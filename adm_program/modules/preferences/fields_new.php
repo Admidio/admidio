@@ -12,8 +12,8 @@
  * usf_id : profile field id that should be edited
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'int');
@@ -199,9 +199,10 @@ $form->addEditor('usf_description', null, $userField->getValue('usf_description'
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
-$form->addHtml(admFuncShowCreateChangeInfoById($userField->getValue('usf_usr_id_create'),
-               $userField->getValue('usf_timestamp_create'), $userField->getValue('usf_usr_id_change'),
-               $userField->getValue('usf_timestamp_change')));
+$form->addHtml(admFuncShowCreateChangeInfoById(
+    (int) $userField->getValue('usf_usr_id_create'), $userField->getValue('usf_timestamp_create'),
+    (int) $userField->getValue('usf_usr_id_change'), $userField->getValue('usf_timestamp_change')
+));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));
