@@ -118,11 +118,11 @@ if($getViewMode === 'html')
     }
 
     $page->addJavascript('
-        $("#sel_change_view").change(function () {
+        $("#sel_change_view").change(function() {
             self.location.href = "dates.php?view=" + $("#sel_change_view").val() + "&mode='.$getMode.'&headline='.$getHeadline.'&date_from='.$dates->getParameter('dateStartFormatAdmidio').'&date_to='.$dates->getParameter('dateEndFormatAdmidio').'&cat_id='.$getCatId.'";
         });
 
-        $("#menu_item_print_view").click(function () {
+        $("#menu_item_print_view").click(function() {
             window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view='.$getView.'&mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'", "_blank");
         });', true);
 

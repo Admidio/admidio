@@ -66,8 +66,7 @@ if($gPreferences['enable_rss'] == 1)
 $page->addJavascript('
     function getComments(commentId) {
         // RequestObjekt abschicken und Kommentar laden
-        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.',
-        function(data) {
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.', function(data) {
             $("#comments_" + commentId).html(data);
         });
     }
@@ -84,10 +83,11 @@ $page->addJavascript('
     }
 
     function toggleDiv(objectId) {
-        if ($("#" + objectId).is(":hidden")) {
-            $("#" + objectId).show();
+        var divElement = $("#" + objectId);
+        if (divElement.is(":hidden")) {
+            divElement.show();
         } else {
-            $("#" + objectId).hide();
+            divElement.hide();
         }
     }
 ');

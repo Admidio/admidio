@@ -116,16 +116,12 @@ $page->enableModal();
 $page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.min.js');
 
 $page->addJavascript('
-    $(document).delegate(
-        "*[data-toggle=\"lightbox\"]",
-        "click",
-        function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        }
-    );
+    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
 
-    $("#admidio_modal").on("show.bs.modal", function () {
+    $("#admidio_modal").on("show.bs.modal", function() {
         $(this).find(".modal-dialog").css({width: "800px"});
     });
 
@@ -144,7 +140,9 @@ $page->addJavascript('
         });
 
         return false;
-    }); ', true);
+    });',
+    true
+);
 
 // add back link to module menu
 $ecardMenu = $page->getMenu();

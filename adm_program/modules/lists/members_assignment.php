@@ -167,28 +167,28 @@ else
         $("#tbl_assign_role_membership").on("click", "input[type=checkbox].memlist_checkbox", function() {
             var checkbox = $(this);
             // get user id
-            var row_id = $(this).attr("id");
-            var pos = row_id.search("_");
-            var userid = row_id.substring(pos+1);
+            var rowId = $(this).attr("id");
+            var pos = rowId.search("_");
+            var userId = rowId.substring(pos + 1);
 
-            var member_checked = $("input[type=checkbox]#member_"+userid).prop("checked");
-            var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
+            var memberChecked = $("input[type=checkbox]#member_" + userId).prop("checked");
+            var leaderChecked = $("input[type=checkbox]#leader_" + userId).prop("checked");
 
             // Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if (checkbox.hasClass("memlist_leader") && leader_checked) {
-                $("input[type=checkbox]#member_"+userid).prop("checked", true);
-                member_checked = true;
+            if (checkbox.hasClass("memlist_leader") && leaderChecked) {
+                $("input[type=checkbox]#member_" + userId).prop("checked", true);
+                memberChecked = true;
             }
 
             // Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if (checkbox.hasClass("memlist_member") && member_checked == false) {
-                $("input[type=checkbox]#leader_"+userid).prop("checked", false);
-                leader_checked = false;
+            if (checkbox.hasClass("memlist_member") && !memberChecked) {
+                $("input[type=checkbox]#leader_" + userId).prop("checked", false);
+                leaderChecked = false;
             }
 
             // change data in database
-            $.post("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
-                "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
+            $.post("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id=" + userId,
+                "member_" + userId + "=" + memberChecked + "&leader_" + userId + "=" + leaderChecked,
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {
@@ -196,7 +196,7 @@ else
                         if (checkbox.prop("checked")) {
                             checkbox.prop("checked", false);
                             if (checkbox.hasClass("memlist_leader")) {
-                                $("input[type=checkbox]#member_"+userid).prop("checked", false);
+                                $("input[type=checkbox]#member_" + userId).prop("checked", false);
                             }
                         } else {
                             checkbox.prop("checked", true);

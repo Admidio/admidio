@@ -635,7 +635,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $javascriptCode = '
                 // add new line to add new attachment to this mail
-                $("#btn_add_attachment_' . $id . '").click(function () {
+                $("#btn_add_attachment_' . $id . '").click(function() {
                     newAttachment = document.createElement("input");
                     $(newAttachment).attr("type", "file");
                     $(newAttachment).attr("name", "userfile[]");

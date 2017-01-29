@@ -385,23 +385,25 @@ if ($getMode !== 'csv')
 
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
-            $("#export_list_to").change(function () {
+            $("#export_list_to").change(function() {
                 if ($(this).val().length > 1) {
                     var result = $(this).val();
-                    $(this).prop("selectedIndex",0);
+                    $(this).prop("selectedIndex", 0);
                     self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?" +
                         "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
 
-            $("#menu_item_mail_to_list").click(function () {
-                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id : "'.$getListId.'", userIdList : "'.implode(',', $userIdList).'" } );
+            $("#menu_item_mail_to_list").click(function() {
+                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id: "'.$getListId.'", userIdList: "'.implode(',', $userIdList).'" });
                 return false;
             });
 
-            $("#menu_item_print_view").click(function () {
+            $("#menu_item_print_view").click(function() {
                 window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
-            });', true);
+            });',
+            true
+        );
 
         // get module menu
         $listsMenu = $page->getMenu();

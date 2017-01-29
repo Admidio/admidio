@@ -192,7 +192,8 @@ $page->addJavascript('
         } else {
             $("#dat_country_group").hide();
         }
-    }');
+    }'
+);
 
 $page->addJavascript('
     var dateRoleID = '.$dateRoleID.';
@@ -201,24 +202,34 @@ $page->addJavascript('
     setDateParticipation();
     setLocationCountry();
 
-    $("#date_registration_possible").click(function() { setDateParticipation(); });
-    $("#dat_all_day").click(function() { setAllDay(); });
-    $("#dat_location").change(function() { setLocationCountry(); });
-    $("#date_from").change(function() { setDateTo(); });
+    $("#date_registration_possible").click(function() {
+        setDateParticipation();
+    });
+    $("#dat_all_day").click(function() {
+        setAllDay();
+    });
+    $("#dat_location").change(function() {
+        setLocationCountry();
+    });
+    $("#date_from").change(function() {
+        setDateTo();
+    });
 
     // if date participation should be removed than ask user
-    $("#btn_save").click(function (event) {
+    $("#btn_save").click(function(event) {
         event.preventDefault();
 
-        if (dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
+        if (dateRoleID > 0 && $("#date_registration_possible").is(":checked") === false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
-            if(msg_result) {
+            if (msg_result) {
                 $("#dates_edit_form").submit();
             }
         } else {
             $("#dates_edit_form").submit();
         }
-    });', true);
+    });',
+    true
+);
 
 // add back link to module menu
 $datesMenu = $page->getMenu();

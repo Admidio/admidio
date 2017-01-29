@@ -20,7 +20,7 @@ if (!$gCurrentUser->editUsers())
 
 echo '
 <script type="text/javascript">
-    $("body").on("shown.bs.modal", ".modal", function () {
+    $("body").on("shown.bs.modal", ".modal", function() {
         $("#form_members_create_user:first *:input[type!=hidden]:first").focus();
     });
 
@@ -33,23 +33,23 @@ echo '
         event.preventDefault();
 
         $.post({
-            url:  action,
+            url: action,
             data: $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
                     formMembersAlert.attr("class", "alert alert-success form-alert");
                     formMembersAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     formMembersAlert.fadeIn("slow");
-                    setTimeout(function () {
-                        self.location.href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
-                    },2500);
+                    setTimeout(function() {
+                        self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
+                    }, 2500);
                 } else {
                     if (data.length > 1000) {
                         $(".modal-body").html(data);
                     } else {
                         formMembersAlert.attr("class", "alert alert-danger form-alert");
                         formMembersAlert.fadeIn();
-                        formMembersAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        formMembersAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                     }
                 }
             }

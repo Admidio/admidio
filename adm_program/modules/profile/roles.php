@@ -97,7 +97,7 @@ if($getInline)
                         } else {
                             rolesFormAlert.attr("class", "alert alert-danger form-alert");
                             rolesFormAlert.fadeIn();
-                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                         }
                     }
                 });

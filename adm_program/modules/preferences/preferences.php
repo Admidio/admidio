@@ -73,7 +73,8 @@ $page->addJavascript('
     $(".form-preferences").submit(function(event) {
         var id = $(this).attr("id");
         var action = $(this).attr("action");
-        $("#"+id+" .form-alert").hide();
+        var formAlert = $("#" + id + " .form-alert");
+        formAlert.hide();
 
         // disable default form submit
         event.preventDefault();
@@ -87,15 +88,15 @@ $page->addJavascript('
                         // reload captcha if form is saved
                         $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random());
                     }
-                    $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                    $("#"+id+" .form-alert").fadeIn("slow");
-                    $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
-                    $("#"+id+" .form-alert").fadeOut("slow");
+                    formAlert.attr("class", "alert alert-success form-alert");
+                    formAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    formAlert.fadeIn("slow");
+                    formAlert.animate({opacity: 1.0}, 2500);
+                    formAlert.fadeOut("slow");
                 } else {
-                    $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
-                    $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                    formAlert.attr("class", "alert alert-danger form-alert");
+                    formAlert.fadeIn();
+                    formAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                 }
             }
         });
@@ -103,7 +104,7 @@ $page->addJavascript('
 
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
-        $("#admidio_version_content").prepend("<img src=\''.THEME_URL.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
+        $("#admidio_version_content").prepend("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
         $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
             $("#admidio_version_content").empty();
             $("#admidio_version_content").append(htmlVersion);

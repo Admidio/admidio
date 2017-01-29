@@ -30,7 +30,12 @@ unset($_SESSION['fields_request']);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-$page->addJavascript('$(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });', true);
+$page->addJavascript('
+    $(".admidio-group-heading").click(function() {
+        showHideBlock($(this).attr("id"));
+    });',
+    true
+);
 $page->addJavascript('
     function moveCategory(direction, usfID) {
         var actRow = document.getElementById("row_usf_" + usfID);
@@ -61,12 +66,12 @@ $page->addJavascript('
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
         if (direction === "up") {
-            if (prevNode != null) {
+            if (prevNode !== null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
             }
         } else {
-            if (nextNode != null) {
+            if (nextNode !== null) {
                 actRow.parentNode.insertBefore(nextNode, actRow);
                 secondSequence = actSequence + 1;
             }
@@ -76,7 +81,8 @@ $page->addJavascript('
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
             $.get(gRootPath + "/adm_program/modules/inventory/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
-    }');
+    }'
+);
 
 // get module menu
 $fieldsMenu = $page->getMenu();

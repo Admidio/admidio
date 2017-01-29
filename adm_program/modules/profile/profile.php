@@ -183,19 +183,23 @@ $page->addJavascript('
     }
 ');
 $page->addJavascript('
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
+    $(".admMemberInfo").click(function() {
+        showHideMembershipInformation($(this))
+    });
     $("#menu_item_password").attr("data-toggle", "modal");
     $("#menu_item_password").attr("data-target", "#admidio_modal");
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
 
     $("input[data-provide=\'datepicker\']").datepicker({
-                            language: "'.$gL10n->getLanguageIsoCode().'",
-                            format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                            todayHighlight: "true",
-                            autoclose: "true"
-                        });
-    formSubmitEvent(); ', true);
+        language: "'.$gL10n->getLanguageIsoCode().'",
+        format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+        todayHighlight: "true",
+        autoclose: "true"
+    });
+    formSubmitEvent();',
+    true
+);
 
 // get module menu
 $profileMenu = $page->getMenu();

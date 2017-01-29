@@ -541,7 +541,12 @@ class HtmlPage
         // add code for a modal window
         if($this->showModal)
         {
-            $this->addJavascript('$("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); });', true);
+            $this->addJavascript('
+                $("body").on("hidden.bs.modal", ".modal", function() {
+                    $(this).removeData("bs.modal");
+                });',
+                true
+            );
             $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog"><div class="modal-content"></div></div>
                             </div>');
