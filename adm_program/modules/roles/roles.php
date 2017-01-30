@@ -11,8 +11,8 @@
  *
  * inactive:  false - (Default) show all active roles
  *            true  - show all inactive roles
- * invisible: false - (Default) show all visible roles
- *            true  - show all invisible roles
+ * events:    false - (Default) show all event roles
+ *            true  - show all roles except event roles
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -20,7 +20,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getInactive  = admFuncVariableIsValid($_GET, 'inactive',  'bool');
-$getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'bool');
+$getEvents    = admFuncVariableIsValid($_GET, 'events',    'bool');
 
 // only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
@@ -37,9 +37,9 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 unset($_SESSION['roles_request']);
 
-// per default show active and visible roles
+// per default show active and not event roles
 $sqlRolesStatus = ' AND rol_valid   = \'1\'
-                    AND rol_visible = \'1\' ';
+                    AND cat_name_intern <> \'EVENTS\' ';
 
 if($getInactive)
 {
@@ -47,8 +47,8 @@ if($getInactive)
     $listDescription  = $gL10n->get('ROL_INACTIV_ROLES');
     $activeRolesImage = 'roles.png';
     $activeRolesFlag  = '0';
-    // in inactive mode show visible and invisible inactive roles
-    $sqlRolesStatus   = ' AND rol_valid = \'0\' ';
+    $sqlRolesStatus   = ' AND rol_valid = \'0\'
+                          AND cat_name_intern <> \'EVENTS\' ';
 }
 else
 {
@@ -58,24 +58,31 @@ else
     $activeRolesFlag  = '1';
 }
 
-if($getInvisible)
+if($getEvents)
 {
-    $visibleRolesLinkDescription = $gL10n->get('ROL_VISIBLE_ROLES');
-    $listDescription   = $gL10n->get('ROL_INVISIBLE_ROLES');
-    $visibleRolesImage = 'light_on.png';
-    $visibleRolesFlag  = '0';
-    // in invisible mode show active and inactive invisible roles
-    $sqlRolesStatus   = ' AND rol_visible = \'0\' ';
+    if($gPreferences['enable_dates_module'] == 0)
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+
+    $eventsRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
+    $listDescription  = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
+    $eventsRolesImage = 'roles.png';
+    $eventsRolesFlag  = '0';
+    // in events mode show active and inactive events roles
+    $sqlRolesStatus   = ' AND cat_name_intern = \'EVENTS\' ';
 }
 else
 {
-    $visibleRolesLinkDescription = $gL10n->get('ROL_INVISIBLE_ROLES');
-    $visibleRolesImage = 'light_off.png';
-    $visibleRolesFlag  = '1';
+    $eventsRolesLinkDescription = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
+    $eventsRolesImage = 'dates.png';
+    $eventsRolesFlag  = '1';
 }
 
 // create html page object
 $page = new HtmlPage($headline);
+$page->enableModal();
 
 $page->addJavascript('$(".admidio-group-heading").click(function() { showHideBlock($(this).attr("id")); });', true);
 
@@ -91,9 +98,13 @@ $rolesMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/
 // define link to show inactive roles
 $rolesMenu->addItem('menu_item_inactive_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?inactive='.$activeRolesFlag,
                     $activeRolesLinkDescription, $activeRolesImage);
-// define link to show hidden roles
-$rolesMenu->addItem('menu_item_hidden_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?invisible='.$visibleRolesFlag,
-                    $visibleRolesLinkDescription, $visibleRolesImage);
+
+if($gPreferences['enable_dates_module'] > 0)
+{
+    // if event module is enabled then define link to confirmation roles of event participations
+    $rolesMenu->addItem('menu_item_hidden_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?events='.$eventsRolesFlag,
+                        $eventsRolesLinkDescription, $eventsRolesImage);
+}
 
 // Create table
 $table = new HtmlTable('roles_table', $page, true, true);
@@ -257,12 +268,7 @@ while($row = $rolStatement->fetch())
     $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$rolId.'"><img
                                 src="'. THEME_URL. '/icons/list.png" alt="'.$gL10n->get('ROL_SHOW_MEMBERS').'" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'" /></a>';
 
-    if($getInactive)
-    {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=5"><img
-                                    src="'.THEME_URL.'/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
-    }
-    else
+    if(!$getInactive)
     {
         $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$rolId.'"><img
                                     src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
@@ -273,32 +279,31 @@ while($row = $rolStatement->fetch())
                 alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $rolName).'"
                 title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $rolName).'"/></a>';
 
+    if($getInactive)
+    {
+        $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=rol_enable&amp;element_id=row_'.
+                                    $rolId.'&amp;name='.urlencode($rolName).'&amp;database_id='.$rolId.'"><img
+                                       src="'. THEME_URL. '/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
+    }
+    else
+    {
+        $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=rol_disable&amp;element_id=row_'.
+                                    $rolId.'&amp;name='.urlencode($rolName).'&amp;database_id='.$rolId.'"><img
+                                       src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_DISABLE_ROLE').'" title="'.$gL10n->get('ROL_DISABLE_ROLE').'" /></a>';
+    }
+
     if($role->getValue('rol_administrator') == 1)
     {
         $linkAdministration .= '<a class="admidio-icon-link"><img src="'. THEME_URL. '/icons/dummy.png" alt="dummy" /></a>';
     }
     else
     {
-        if($getInactive)
-        {
-            $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=6"><img
-                                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
-        }
-        else
-        {
-            $linkAdministration .='<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=1"><img
-                                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
-        }
-    }
-    if($getInvisible)
-    {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=8"><img
-                                    src="'. THEME_URL. '/icons/light_on.png" alt="'.$gL10n->get('ROL_SET_ROLE_VISIBLE').'" title="'.$gL10n->get('ROL_SET_ROLE_VISIBLE').'" /></a>';
-    }
-    else
-    {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$rolId.'&amp;mode=7"><img
-                                    src="'. THEME_URL. '/icons/light_off.png" alt="'.$gL10n->get('ROL_SET_ROLE_INVISIBLE').'" title="'.$gL10n->get('ROL_SET_ROLE_INVISIBLE').'" /></a>';
+        $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=rol&amp;element_id=row_'.
+                                    $rolId.'&amp;name='.urlencode($rolName).'&amp;database_id='.$rolId.'"><img
+                                       src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
     }
 
     // create array with all column values
@@ -310,7 +315,7 @@ while($row = $rolStatement->fetch())
         $linkAdministration
     );
 
-    $table->addRowByArray($columnValues);
+    $table->addRowByArray($columnValues, 'row_'. $rolId);
 }
 
 $page->addHtml($table->show());

@@ -133,6 +133,7 @@ class Organization extends TableAccess
                 VALUES (?, \'ROL\', \'GROUPS\',    \'INS_GROUPS\',    0, 0, 0, 2, ?, ?)
                      , (?, \'ROL\', \'COURSES\',   \'INS_COURSES\',   0, 0, 0, 3, ?, ?)
                      , (?, \'ROL\', \'TEAMS\',     \'INS_TEAMS\',     0, 0, 0, 4, ?, ?)
+                     , (?, \'ROL\', \'EVENTS\',    \'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, ?, ?)
                      , (?, \'LNK\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, ?, ?)
                      , (?, \'LNK\', \'INTERN\',    \'INS_INTERN\',    1, 0, 0, 2, ?, ?)
                      , (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, ?, ?)

@@ -34,10 +34,9 @@ if ($gPreferences['enable_rss'] != 1)
     // => EXIT
 }
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_dates_module'] != 1)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

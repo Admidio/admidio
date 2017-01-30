@@ -22,10 +22,9 @@ $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
 $getGbcId    = admFuncVariableIsValid($_GET, 'cid',      'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

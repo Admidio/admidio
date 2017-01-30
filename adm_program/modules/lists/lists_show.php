@@ -36,6 +36,13 @@ $getShowMembers     = admFuncVariableIsValid($_GET, 'show_members', 'int');
 $getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',      'string'); // could be int or int[], so string is necessary
 $getFullScreen      = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
 
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false)
@@ -70,6 +77,12 @@ if($objDateFrom > $objDateTo)
     // => EXIT
 }
 
+// if user should not view former roles members then disallow it
+if(!$gCurrentUser->hasRightViewFormerRolesMembers())
+{
+    $getShowMembers = 0;
+}
+
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
@@ -77,7 +90,7 @@ $showLinkMailToList = true;
 
 if ($numberRoles > 1)
 {
-    $sql = 'SELECT rol_id, rol_name
+    $sql = 'SELECT rol_id, rol_name, rol_valid
               FROM '.TBL_ROLES.'
              WHERE rol_id IN ('.replaceValuesArrWithQM($roleIds).')';
     $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
@@ -86,7 +99,9 @@ if ($numberRoles > 1)
     foreach ($rolesData as $role)
     {
         // check if user has right to view all roles
-        if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
+        // only users with the right to assign roles can view inactive roles
+        if (!$gCurrentUser->hasRightViewRole($role['rol_id'])
+        || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
@@ -109,7 +124,9 @@ else
     $role = new TableRoles($gDb, $roleIds[0]);
 
     // check if user has right to view role
-    if (!$gCurrentUser->hasRightViewRole($roleIds[0]))
+    // only users with the right to assign roles can view inactive roles
+    if (!$gCurrentUser->hasRightViewRole($roleIds[0])
+    || ((int) $role->getValue('rol_valid') === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

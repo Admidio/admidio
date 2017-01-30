@@ -804,7 +804,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND org_id     <> ? -- $gCurrentOrganization->getValue(\'org_id\')
           ORDER BY org_shortname, cat_sequence, rol_name';
     $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));

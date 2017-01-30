@@ -31,10 +31,9 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 
 $getHeadline = urlencode($getHeadline);
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }

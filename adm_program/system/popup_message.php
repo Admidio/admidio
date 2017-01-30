@@ -102,6 +102,18 @@ switch ($getType)
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackFormerRoles';
         break;
+    case 'rol':
+        $url = 'roles_function.php?mode=4&rol_id='.$getDatabaseId;
+        $text = 'ROL_ROLE_DELETE_DESC';
+        break;
+    case 'rol_enable':
+        $url = 'roles_function.php?mode=5&rol_id='.$getDatabaseId;
+        $text = 'ROL_ENABLE_ROLE_DESC';
+        break;
+    case 'rol_disable':
+        $url = 'roles_function.php?mode=3&rol_id='.$getDatabaseId;
+        $text = 'ROL_DISABLE_ROLE_DESC';
+        break;
     case 'room':
         $url = 'rooms_function.php?mode=2&room_id='.$getDatabaseId;
         break;
