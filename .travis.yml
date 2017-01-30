@@ -1,0 +1,26 @@
+language: php
+
+php:
+#  - 5.3
+#  - 5.4
+#  - 5.5
+  - 5.6
+#  - nightly
+
+#env:
+#  - DB=mysql
+#  - DB=pgsql
+
+before_script:
+  - wget http://get.sensiolabs.org/php-cs-fixer.phar -O php-cs-fixer.phar
+
+script:
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal index.php
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal demo_data/
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_my_files/
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_themes/
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_plugins/
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_program/index.php
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_program/installation
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_program/modules
+  - php php-cs-fixer.phar fix --fixers=encoding,short_tag,elseif,function_call_space,function_decleration,line_after_namespace,lowercase_constant,lowercase_keywords,method_argument_space,multiple_use,parenthesis,trailing_spaces,visibility,duplicate_semicolon,phpdoc_params,standardize_not_equal adm_program/system
