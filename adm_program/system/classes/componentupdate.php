@@ -364,7 +364,7 @@ class ComponentUpdate extends Component
                          WHERE cat_org_id IS NULL
                            AND cat_type        = \'ROL\'
                            AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
-                $this->db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', $row['org_id'])));
+                $this->db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'), $row['org_id']));
             }
             else
             {
