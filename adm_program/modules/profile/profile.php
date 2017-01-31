@@ -902,7 +902,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
                    AND urt_name_male   <> \'\'
                    AND urt_name_female <> \'\'
               ORDER BY urt_name';
-        $statement = $gDb->queryPrepared($sql, array($userId));
+        $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
         $relationtype = new TableUserRelationType($gDb);
         $relation     = new TableUserRelation($gDb);
