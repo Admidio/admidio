@@ -27,8 +27,16 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-$getDateFrom        = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-$getDateTo          = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
+if($gCurrentUser->hasRightViewFormerRolesMembers())
+{
+    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
+    $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
+}
+else
+{
+    $getDateFrom = DATE_NOW;
+    $getDateTo   = DATE_NOW;
+}
 $getMode            = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getListId          = admFuncVariableIsValid($_GET, 'lst_id',       'int');
 $getRoleIds         = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
@@ -384,8 +392,8 @@ if ($getMode !== 'csv')
         $page->setTitle($title);
         $page->setHeadline($headline);
 
-        // Only for active members of a role
-        if ($getShowMembers === 0)
+        // Only for active members of a role and if user has right to view former members
+        if ($getShowMembers === 0 && $gCurrentUser->hasRightViewFormerRolesMembers())
         {
             // create filter menu with elements for start-/enddate
             $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
