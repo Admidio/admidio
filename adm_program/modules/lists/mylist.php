@@ -450,7 +450,7 @@ $javascriptCode .= '
     function loadList() {
         var listId = $("#sel_select_configuation").val();
         var showMembers = $("#sel_show_members").val();
-        if(showMembers === undefined) {
+        if (showMembers === undefined) {
             showMembers = 0;
         }
         self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
