@@ -291,8 +291,9 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     $form->addSelectBoxFromSql(
         'dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlData,
         array('defaultValue' => $childRoles, 'multiselect' => true)
-);
-$form->closeGroupBox();
+    );
+    $form->closeGroupBox();
+}
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
