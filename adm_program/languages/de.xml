@@ -111,6 +111,7 @@
     <!-- Phrases only in Downloadsmodule -->
     <string name="DOW_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
     <string name="DOW_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
+    <string name="DOW_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Downloadmoduls und haben somit auf alle Ordner und Dateien Zugriff. Sie können Dateien hochladen, herunterladen und die Zugriffsrechte vergeben. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
     <string name="DOW_COUNTER">Zähler</string>
     <string name="DOW_CREATE_FOLDER">Ordner anlegen</string>
     <string name="DOW_CREATE_FOLDER_DESC">Der neue Ordner wird im bestehenden Ordner #VAR1_BOLD# angelegt.</string>
@@ -148,8 +149,9 @@
     <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3MB)</string>
     <string name="DOW_NEW_FILE_NAME">Neuer Dateiname</string>
     <string name="DOW_NEW_NAME">Neuer Name</string>
+    <string name="DOW_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
     <string name="DOW_PREVIOUS_NAME">Bisheriger Name</string>
-    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Benutzer von Rollen mit der Berechtigung #VAR2_BOLD# haben immer alle Rechte für den Ordner.</string>
+    <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administratoren besitzen alle Berechtigungen für den Ordner.</string>
     <string name="DOW_SELECT_FILES">Dateien auswählen</string>
     <string name="DOW_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
     <string name="DOW_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
@@ -878,8 +880,8 @@
     <string name="PRO_MY_PROFILE">Mein Profil</string>
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
-    <string name="PRO_NO_AUTHORIZATIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_DEFAULT_ROLE">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Administrator, der diese Einstellung vornehmen kann.</string>
+    <string name="PRO_NO_PERMISSIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
     <string name="PRO_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
     <string name="PRO_PASSWORD_CHANGED">Das Passwort wurde erfolgreich geändert.</string>
     <string name="PRO_PASSWORD_DESCRIPTION">Das Passwort muss aus mindestens 8 Zeichen bestehen. Es sollte sowohl Zahlen, Buchstaben als auch Sonderzeichen beinhalten.\n\nDie Stärke deines gewählten Passworts wird dir farblich über einen Balken dargestellt. Die mindestens notwendige Stärke zeigt dir der Pfeil im Balken an.</string>
@@ -1028,6 +1030,7 @@
     <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
     <string name="SYS_ADMINISTRATION">Administration</string>
     <string name="SYS_ADMINISTRATOR">Administrator</string>
+    <string name="SYS_ADMINISTRATORS">Administratoren</string>
     <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
     <string name="SYS_ALL">Alle</string>
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
