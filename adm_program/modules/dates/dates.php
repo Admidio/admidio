@@ -368,7 +368,7 @@ else
             if($gPreferences['dates_show_map_link'] && $countLocationWords > 1 && $getViewMode === 'html')
             {
                 // Create Google-Maps-Link for location
-                $location_url = 'https://maps.google.com/?q='.$date->getValue('dat_location');
+                $location_url = 'https://www.google.com/maps?q='.$date->getValue('dat_location');
 
                 if($date->getValue('dat_country') !== '')
                 {
@@ -385,7 +385,7 @@ else
                 if($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
                 && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                 {
-                    $route_url = 'https://maps.google.com/?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('STREET'));
+                    $route_url = 'https://www.google.com/maps?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('STREET'));
 
                     if($gCurrentUser->getValue('POSTCODE') !== '')
                     {

@@ -351,8 +351,8 @@ $page->addHtml('
                                 $bAddressOutput = true;
                                 $htmlAddress    = '';
                                 $address        = '';
-                                $map_url        = 'https://maps.google.com/?q=';
-                                $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
+                                $map_url        = 'https://www.google.com/maps?q=';
+                                $route_url      = 'https://www.google.com/maps?f=d&amp;saddr='.
                                     urlencode($gCurrentUser->getValue('STREET')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
