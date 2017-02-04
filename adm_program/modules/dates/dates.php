@@ -292,6 +292,10 @@ else
         // write of current event data to date object
         $date->setArray($row);
 
+        $dateId       = (int) $date->getValue('dat_id');
+        $dateRolId    = (int) $date->getValue('dat_rol_id');
+        $dateHeadline = $date->getValue('dat_headline');
+
         // initialize all output elements
         $outputEndDate      = '';
         $outputButtonIcal   = '';
@@ -321,7 +325,7 @@ else
             if($gPreferences['enable_dates_ical'] == 1)
             {
                 $outputButtonIcal = '
-                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id='.$date->getValue('dat_id'). '&amp;mode=6">
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id='.$dateId. '&amp;mode=6">
                         <img src="'.THEME_URL.'/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
             }
 
@@ -331,10 +335,10 @@ else
                 if($date->editRight())
                 {
                     $outputButtonCopy = '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'">
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id='.$dateId. '&amp;copy=1&amp;headline='.$getHeadline.'">
                             <img src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
                     $outputButtonEdit = '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id='.$date->getValue('dat_id'). '&amp;headline='.$getHeadline.'">
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id='.$dateId. '&amp;headline='.$getHeadline.'">
                             <img src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                 }
 
@@ -343,21 +347,21 @@ else
                 {
                     $outputButtonDelete = '
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
-                            $date->getValue('dat_id').'&amp;name='.
-                            urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.
-                            $date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'">
+                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.$dateId.
+                            '&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$dateHeadline).
+                            '&amp;database_id='.$dateId.'">
                             <img src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
             }
         }
 
-        if ($date->getValue('dat_location') !== '')
+        $dateLocation = $date->getValue('dat_location');
+        if ($dateLocation !== '')
         {
             // Show map link, when at least 2 words available
             // having more than 3 characters each
             $countLocationWords = 0;
-            foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
+            foreach(preg_split('/[,; ]/', $dateLocation) as $key => $value)
             {
                 if(strlen($value) > 3)
                 {
@@ -367,67 +371,70 @@ else
 
             if($gPreferences['dates_show_map_link'] && $countLocationWords > 1 && $getViewMode === 'html')
             {
-                // Create Google-Maps-Link for location
-                $location_url = 'https://www.google.com/maps?q='.$date->getValue('dat_location');
+                $dateCountry = $date->getValue('dat_country');
 
-                if($date->getValue('dat_country') !== '')
+                // Create Google-Maps-Link for location
+                $locationUrl = 'https://www.google.com/maps?q='.$dateLocation;
+
+                if($dateCountry !== '')
                 {
                     // Better results with additional country information
-                    $location_url .= ',%20'.$date->getValue('dat_country');
+                    $locationUrl .= ',%20'.$dateCountry;
                 }
 
                 $outputLinkLocation = '
-                    <a href="'.$location_url.'" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/>
-                        <strong>'.$date->getValue('dat_location').'</strong>
+                    <a href="'.$locationUrl.'" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/>
+                        <strong>'.$dateLocation.'</strong>
                     </a>';
 
                 // if valid login and enough information about address exist - calculate the route
                 if($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
                 && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                 {
-                    $route_url = 'https://www.google.com/maps?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('STREET'));
+                    $routeUrl = 'https://www.google.com/maps?f=d&amp;saddr='.urlencode($gCurrentUser->getValue('STREET'));
 
                     if($gCurrentUser->getValue('POSTCODE') !== '')
                     {
-                        $route_url .= ',%20'.urlencode($gCurrentUser->getValue('POSTCODE'));
+                        $routeUrl .= ',%20'.urlencode($gCurrentUser->getValue('POSTCODE'));
                     }
                     if($gCurrentUser->getValue('CITY') !== '')
                     {
-                        $route_url .= ',%20'.urlencode($gCurrentUser->getValue('CITY'));
+                        $routeUrl .= ',%20'.urlencode($gCurrentUser->getValue('CITY'));
                     }
                     if($gCurrentUser->getValue('COUNTRY') !== '')
                     {
-                        $route_url .= ',%20'.urlencode($gCurrentUser->getValue('COUNTRY'));
+                        $routeUrl .= ',%20'.urlencode($gCurrentUser->getValue('COUNTRY'));
                     }
 
-                    $route_url .= '&amp;daddr='.urlencode($date->getValue('dat_location'));
+                    $routeUrl .= '&amp;daddr='.urlencode($dateLocation);
 
-                    if($date->getValue('dat_country') !== '')
+                    if($dateCountry !== '')
                     {
                         // With information about country Google finds the location much better
-                        $route_url .= ',%20'.$date->getValue('dat_country');
+                        $routeUrl .= ',%20'.$dateCountry;
                     }
 
                     $outputLinkLocation .= '
-                        <a class="admidio-icon-link" href="'.$route_url.'" target="_blank">
+                        <a class="admidio-icon-link" href="'.$routeUrl.'" target="_blank">
                             <img src="'.THEME_URL.'/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" />
                         </a>';
                 }
             }
             else
             {
-                $outputLinkLocation = $date->getValue('dat_location');
+                $outputLinkLocation = $dateLocation;
             }
         }
 
         // if active, then show room information
-        if($date->getValue('dat_room_id') > 0)
+        $dateRoomId = (int) $date->getValue('dat_room_id');
+        if($dateRoomId > 0)
         {
-            $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
+            $room = new TableRooms($gDb, $dateRoomId);
 
             if($getViewMode === 'html')
             {
-                $roomLink = ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                $roomLink = ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$dateRoomId.'&amp;inline=true';
                 $outputLinkRoom = '<strong><a data-toggle="modal" data-target="#admidio_modal" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
             }
             else // $getViewMode = 'print'
@@ -437,15 +444,15 @@ else
         }
 
         // count participants of the date
-        if($date->getValue('dat_rol_id') > 0)
+        if($dateRolId > 0)
         {
-            $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+            $participants = new Participants($gDb, $dateRolId);
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
 
             if($getView === 'participants')
             {
-                $participantsArray = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
+                $participantsArray = $participants->getParticipantsArray($dateRolId);
             }
 
             // Links for the participation only in html mode
@@ -490,17 +497,17 @@ else
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id').'">
+                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id='.$dateId.'">
                                     <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'"/>'.$gL10n->get('DAT_ATTEND').'
                                 </a>
                             </li>
                             <li>
-                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id='.$date->getValue('dat_id').'">
+                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id='.$dateId.'">
                                     <img src="'.THEME_URL.'/icons/help_violett.png" alt="'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'" title="'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'"/>'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'
                                 </a>
                             </li>
                             <li>
-                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">
+                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id='.$dateId.'">
                                     <img src="'.THEME_URL.'/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" title="'.$gL10n->get('DAT_CANCEL').'"/>'.$gL10n->get('DAT_CANCEL').'
                                 </a>
                             </li>
@@ -510,7 +517,7 @@ else
                 if($date->getValue('dat_max_members'))
                 {
                     // Check limit of participants
-                    if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
+                    if($participants->getCount($dateRolId) >= $date->getValue('dat_max_members'))
                     {
                         $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                         $iconParticipationStatus = '';
@@ -518,11 +525,11 @@ else
                 }
 
                 // Link to participants list
-                if($gValidLogin && $gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id')))
+                if($gValidLogin && $gCurrentUser->hasRightViewRole($dateRolId))
                 {
                     if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                     {
-                        $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$date->getValue('dat_rol_id');
+                        $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='.$dateRolId;
 
                         if ($getView === 'detail')
                         {
@@ -540,11 +547,11 @@ else
                 }
 
                 // Link to send email to participants
-                if($gValidLogin && $gCurrentUser->hasRightSendMailToRole($date->getValue('dat_rol_id')))
+                if($gValidLogin && $gCurrentUser->hasRightSendMailToRole($dateRolId))
                 {
                     if($outputNumberMembers > 0 || $outputNumberLeaders > 0)
                     {
-                        $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?rol_id='.$date->getValue('dat_rol_id');
+                        $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?rol_id='.$dateRolId;
 
                         if ($getView === 'detail')
                         {
@@ -566,7 +573,7 @@ else
                 // Link for managing new participants
                 if($row['mem_leader'])
                 {
-                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$date->getValue('dat_rol_id');
+                    $buttonURL = ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$dateRolId;
 
                     if ($getView === 'detail')
                     {
@@ -660,11 +667,11 @@ else
             }
 
             $page->addHtml('
-                <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
+                <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$dateId.'">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="'.$date->getValue('dat_headline').'" />' .
-                            $date->getValue('dat_begin', $gPreferences['system_date']).$outputEndDate.' '.$date->getValue('dat_headline') . '
+                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="'.$dateHeadline.'" />' .
+                            $date->getValue('dat_begin', $gPreferences['system_date']).$outputEndDate.' '.$dateHeadline . '
                         </div>
                         <div class="pull-right text-right">' .
                             $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '
@@ -755,11 +762,11 @@ else
 
             if($getViewMode === 'html')
             {
-                $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&view=detail&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
+                $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id='.$dateId.'&amp;view_mode=html&view=detail&amp;headline='.$dateHeadline.'">'.$dateHeadline.'</a>';
             }
             else
             {
-                $columnValues[] = $date->getValue('dat_headline');
+                $columnValues[] = $dateHeadline;
             }
 
             if ($getView === 'room')
@@ -772,7 +779,7 @@ else
             {
                 case 'compact':
                 case 'room':
-                    if ($date->getValue('dat_rol_id') > 0)
+                    if ($dateRolId > 0)
                     {
                         if ($date->getValue('dat_max_members') > 0)
                         {

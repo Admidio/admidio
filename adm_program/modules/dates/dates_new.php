@@ -246,7 +246,7 @@ if($gPreferences['dates_show_map_link'] == true)
 {
     $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
 
-    if(strlen($date->getValue('dat_country')) === 0 && $getDateId === 0)
+    if($date->getValue('dat_country') === '' && $getDateId === 0)
     {
         $date->setValue('dat_country', $gPreferences['default_country']);
     }
