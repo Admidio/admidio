@@ -787,9 +787,15 @@ else
 
                 if(is_array($participantsArray))
                 {
-                    foreach($participantsArray as $participant)
+                    // Only show participants if user has right to view the list, is leader or has permission to create/edit events
+                    if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id')) 
+                        || $row['mem_leader'] == 1 
+                        || $gCurrentUser->editDates())
                     {
-                        $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
+                        foreach($participantsArray as $participant)
+                        {
+                            $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
+                        }
                     }
                 }
                 $columnValues[] = substr($columnValue, 0, -2);
