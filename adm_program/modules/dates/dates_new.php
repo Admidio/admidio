@@ -233,7 +233,7 @@ $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_h
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
 if($gPreferences['dates_show_map_link'] == true)
 {
-    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
+    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
 
     if(strlen($date->getValue('dat_country')) === 0 && $getDateId === 0)
     {
@@ -243,7 +243,7 @@ if($gPreferences['dates_show_map_link'] == true)
 }
 else
 {
-    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50));
+    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 100));
 }
 
 // if room selection is activated then show a selectbox with all rooms
