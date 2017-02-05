@@ -81,14 +81,14 @@ if($getGbcId > 0)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Gaestebuchkommentarobjekt anlegen
-$guestbook_comment = new TableGuestbookComment($gDb);
+$gbComment = new TableGuestbookComment($gDb);
 
 if($getGbcId > 0)
 {
-    $guestbook_comment->readDataById($getGbcId);
+    $gbComment->readDataById($getGbcId);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-    if((int) $guestbook_comment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    if((int) $gbComment->getValue('gbo_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -99,7 +99,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $guestbook_comment->setArray($_SESSION['guestbook_comment_request']);
+    $gbComment->setArray($_SESSION['guestbook_comment_request']);
     unset($_SESSION['guestbook_comment_request']);
 }
 
@@ -107,8 +107,8 @@ if(isset($_SESSION['guestbook_comment_request']))
 // koennen zumindest Name und Emailadresse vorbelegt werden...
 if($getGbcId === 0 && $gValidLogin)
 {
-    $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
-    $guestbook_comment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
+    $gbComment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
+    $gbComment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
 }
 
 if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
@@ -121,8 +121,8 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK_COMMENTS.'
              WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
-               AND gbc_ip_address = ? -- $guestbook_comment->getValue(\'gbc_ip_address\')';
-    $pdoStatement = $gDb->queryPrepared($sql, array($gPreferences['flooding_protection_time'], $guestbook_comment->getValue('gbc_ip_address')));
+               AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_address\')';
+    $pdoStatement = $gDb->queryPrepared($sql, array($gPreferences['flooding_protection_time'], $gbComment->getValue('gbc_ip_address')));
 
     if($pdoStatement->fetchColumn() > 0)
     {
@@ -144,14 +144,14 @@ $form = new HtmlForm('guestbook_comment_edit_form', ADMIDIO_URL.FOLDER_MODULES.'
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name
-    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_DISABLED));
+    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_DISABLED));
 }
 else
 {
-    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_REQUIRED));
+    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_REQUIRED));
 }
-$form->addInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), array('type' => 'email', 'maxLength' => 254));
-$form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $guestbook_comment->getValue('gbc_text'), array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
+$form->addInput('gbc_email', $gL10n->get('SYS_EMAIL'), $gbComment->getValue('gbc_email'), array('type' => 'email', 'maxLength' => 254));
+$form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $gbComment->getValue('gbc_text'), array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
 
 // if captchas are enabled then visitors of the website must resolve this
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
@@ -164,8 +164,8 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 // show information about user who creates the recordset and changed it
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
-    (int) $guestbook_comment->getValue('gbc_usr_id_create'), $guestbook_comment->getValue('gbc_timestamp_create'),
-    (int) $guestbook_comment->getValue('gbc_usr_id_change'), $guestbook_comment->getValue('gbc_timestamp_change')
+    (int) $gbComment->getValue('gbc_usr_id_create'), $gbComment->getValue('gbc_timestamp_create'),
+    (int) $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')
 ));
 
 // add form to html page and show page
