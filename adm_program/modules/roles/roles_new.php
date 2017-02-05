@@ -134,8 +134,8 @@ $page->addJavascript('
         if (!document.getElementById(srcRight).checked && !checked) {
             document.getElementById(destRight).checked = false;
         }
-    }'
-);
+    }
+');
 
 // add back link to module menu
 $rolesEditMenu = $page->getMenu();

@@ -85,8 +85,8 @@ $page->addJavascript('
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
             $.get(gRootPath + "/adm_program/modules/preferences/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
-    }'
-);
+    }
+');
 
 // get module menu
 $fieldsMenu = $page->getMenu();

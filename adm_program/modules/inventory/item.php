@@ -101,8 +101,8 @@ $page->addJavascript('
      */
     function showHideMembershipInformation(element) {
         $("#" + element.attr("id") + "_Content").toggle("fast");
-    }'
-);
+    }
+');
 $page->addJavascript('
     profileJS.init();
     $(".admidio-icon-link-popup").colorbox({

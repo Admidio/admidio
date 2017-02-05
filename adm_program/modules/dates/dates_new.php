@@ -196,8 +196,8 @@ $page->addJavascript('
         } else {
             $("#dat_country_group").hide();
         }
-    }'
-);
+    }
+');
 
 $page->addJavascript('
     var dateRoleID = '.$dateRoleID.';
