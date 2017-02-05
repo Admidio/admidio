@@ -141,7 +141,9 @@ $javascriptCode = '
     var arrUserFields     = createProfileFieldsArray();
     var arrDefaultFields  = createColumnsArray();
 
-    // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
+    /**
+     * Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
+     */
     function addColumn() {
         '.$mySqlMaxColumnAlert.'
 
@@ -386,11 +388,19 @@ $javascriptCode .= '
         return defaultFields;
     }
 
+    /**
+     * @param {int}    columnNumber
+     * @param {string} columnName
+     */
     function getConditionField(columnNumber, columnName) {
         htmlFormCondition = setConditonField(columnNumber, columnName);
         $("#td_condition" + columnNumber).html(htmlFormCondition);
     }
 
+    /**
+     * @param {int}    columnNumber
+     * @param {string} columnName
+     */
     function setConditonField(fieldNumberShow, columnName) {
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
@@ -456,6 +466,9 @@ $javascriptCode .= '
         self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
     }
 
+    /**
+     * @param {string} mode
+     */
     function send(mode) {
         for (var i = 1; i <= fieldNumberIntern; i++) {
             if (document.getElementById("condition" + i)) {

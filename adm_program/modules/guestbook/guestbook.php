@@ -63,6 +63,9 @@ if($gPreferences['enable_rss'] == 1)
 }
 
 $page->addJavascript('
+    /**
+     * @param {int} commentId
+     */
     function getComments(commentId) {
         // RequestObjekt abschicken und Kommentar laden
         $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.', function(data) {
@@ -70,6 +73,9 @@ $page->addJavascript('
         });
     }
 
+    /**
+     * @param {int} commentId
+     */
     function toggleComments(commentId) {
         toggleDiv("admCommentsInvisible_" + commentId);
         toggleDiv("admCommentsVisible_" + commentId);
@@ -81,6 +87,9 @@ $page->addJavascript('
         }
     }
 
+    /**
+     * @param {string} objectId
+     */
     function toggleDiv(objectId) {
         var divElement = $("#" + objectId);
         if (divElement.is(":hidden")) {

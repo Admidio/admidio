@@ -35,6 +35,9 @@ $page->addHeader('<meta http-equiv="refresh" content="' . $gPreferences['weblink
 
 // Counter zählt die sekunden bis zur Weiterleitung runter
 $page->addJavascript('
+    /**
+     * @param {bool} init
+     */
     function countDown(init) {
         if (init || --document.getElementById("counter").firstChild.nodeValue > 0) {
             window.setTimeout("countDown()", 1000);

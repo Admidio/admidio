@@ -103,7 +103,9 @@ $page->addJavascript('
 );
 
 $page->addJavascript('
-    // show/hide role dependencies if max count members will be changed
+    /**
+     * show/hide role dependencies if max count members will be changed
+     */
     function checkMaxMemberCount() {
         // Wenn eine Maximale Mitgliederzahl angeben wurde, duerfen keine Rollenabhaengigkeiten bestehen
         if ($("#rol_max_members").val() > 0) {
@@ -118,11 +120,13 @@ $page->addJavascript('
         }
     }
 
-    // Set dependent role right if another role right changed
-    // srcRight  - ID des Rechts, welches das Ereignis ausloest
-    // destRight - ID des Rechts, welches angepasst werden soll
-    // checked   - true destRight wird auf checked gesetzt
-    //             false destRight wird auf unchecked gesetzt
+    /**
+     * Set dependent role right if another role right changed
+     * @param {string} srcRight  ID des Rechts, welches das Ereignis ausloest
+     * @param {string} destRight ID des Rechts, welches angepasst werden soll
+     * @param {bool}   checked   true destRight wird auf checked gesetzt
+     *                           false destRight wird auf unchecked gesetzt
+     */
     function markRoleRight(srcRight, destRight, checked) {
         if (document.getElementById(srcRight).checked && checked) {
             document.getElementById(destRight).checked = true;
@@ -130,8 +134,8 @@ $page->addJavascript('
         if (!document.getElementById(srcRight).checked && !checked) {
             document.getElementById(destRight).checked = false;
         }
-    }'
-);
+    }
+');
 
 // add back link to module menu
 $rolesEditMenu = $page->getMenu();

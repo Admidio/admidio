@@ -126,7 +126,11 @@ if($gPreferences['enable_rss'] == 1)
 if($gCurrentUser->editPhotoRight())
 {
     $page->addJavascript('
-        // rotate image
+        /**
+         * rotate image
+         * @param {int}    img
+         * @param {string} direction
+         */
         function imgrotate(img, direction) {
             $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 // Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten

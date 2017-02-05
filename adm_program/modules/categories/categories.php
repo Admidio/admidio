@@ -102,6 +102,10 @@ $page = new HtmlPage($headline);
 $page->enableModal();
 
 $page->addJavascript('
+    /**
+     * @param {string} direction
+     * @param {int}    catId
+     */
     function moveCategory(direction, catId) {
         var actRow = document.getElementById("row_" + catId);
         var childs = actRow.parentNode.childNodes;
@@ -146,7 +150,8 @@ $page->addJavascript('
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
             $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catId + "&type='. $getType. '&mode=4&sequence=" + direction);
         }
-    }');
+    }
+');
 
 $htmlIconLoginUser = '&nbsp;';
 if($getType !== 'USF')

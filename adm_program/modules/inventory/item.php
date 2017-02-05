@@ -96,10 +96,13 @@ $page->addJavascript('
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.inv_id                  = '.$inventory->getValue('inv_id').';
 
+    /**
+     * @param {object} element
+     */
     function showHideMembershipInformation(element) {
         $("#" + element.attr("id") + "_Content").toggle("fast");
-    }'
-);
+    }
+');
 $page->addJavascript('
     profileJS.init();
     $(".admidio-icon-link-popup").colorbox({
