@@ -149,7 +149,9 @@ $page = new HtmlPage($headline);
 
 $page->addJavascriptFile('adm_program/system/js/date-functions.js');
 $page->addJavascript('
-    // Funktion blendet Zeitfelder ein/aus
+    /**
+     * Funktion blendet Zeitfelder ein/aus
+     */
     function setAllDay() {
         if ($("#dat_all_day:checked").val() !== undefined) {
             $("#date_from_time").hide();
@@ -174,7 +176,9 @@ $page->addJavascript('
         }
     }
 
-    // Funktion belegt das Datum-bis entsprechend dem Datum-Von
+    /**
+     * Funktion belegt das Datum-bis entsprechend dem Datum-Von
+     */
     function setDateTo() {
         var dateFrom = Date.parseDate($("#date_from").val(), "'.$gPreferences['system_date'].'");
         var dateTo   = Date.parseDate($("#date_to").val(), "'.$gPreferences['system_date'].'");

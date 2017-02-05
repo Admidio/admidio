@@ -102,6 +102,10 @@ $page = new HtmlPage($headline);
 $page->enableModal();
 
 $page->addJavascript('
+    /**
+     * @param {string} direction
+     * @param {int}    catId
+     */
     function moveCategory(direction, catId) {
         var actRow = document.getElementById("row_" + catId);
         var childs = actRow.parentNode.childNodes;

@@ -37,6 +37,10 @@ $page->addJavascript('
     true
 );
 $page->addJavascript('
+    /**
+     * @param {string} direction
+     * @param {int}    usfID
+     */
     function moveCategory(direction, usfID) {
         var actRow = document.getElementById("row_usf_" + usfID);
         var childs = actRow.parentNode.childNodes;
