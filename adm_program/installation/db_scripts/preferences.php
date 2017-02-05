@@ -166,3 +166,4 @@ $defaultOrgPreferences = array(
     // Inventory
     'enable_inventory_module'   => '0'
  );
+ 
