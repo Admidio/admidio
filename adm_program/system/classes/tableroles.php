@@ -169,7 +169,7 @@ class TableRoles extends TableAccess
                        AND mem_end     > ? -- DATE_NOW
                        AND (mem_approved IS NULL
                             OR mem_approved < 3)';
-                            
+
             $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $exceptUserId, DATE_NOW, DATE_NOW));
 
             $this->countMembers = (int) $pdoStatement->fetchColumn();

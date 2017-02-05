@@ -90,7 +90,7 @@ class Participants
                    AND mem_end   >= ? -- DATE_NOW
                    AND (mem_approved IS NULL
                             OR mem_approved < 3)';
-                            
+
         $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
 
         // Write all member Id´s and leader status in an array
@@ -200,16 +200,16 @@ class Participants
                 'surname'   => $row['surname'],
                 'firstname' => $row['firstname'],
                 'leader'    => $row['mem_leader'],
-                'approved'    => $row['mem_approved']
+                'approved'  => $row['mem_approved']
             );
         }
         $this->memberDate = $participants;
 
         return $this->memberDate;
     }
-    
+
     /**
-     * Look for an user ID exists in the current participants array. If the user Id exists the check the approval state of the user. If not disagreed ( Integer 3 ) User is member of the event role  
+     * Look for an user ID exists in the current participants array. If the user Id exists the check the approval state of the user. If not disagreed ( Integer 3 ) User is member of the event role
      * @param int    $userId
      * @return bool Returns true if userID is found and approval state is not set to disagreement (value: 3)
      */
@@ -223,11 +223,11 @@ class Participants
         {
             if ($eventMember[$userId]['approved'] !== 3)
             {
-            // Is participiant of date
-            return true;
+                // Is participiant of date
+                return true;
             }
         }
-        
-        return false; 
+
+        return false;
     }
 }

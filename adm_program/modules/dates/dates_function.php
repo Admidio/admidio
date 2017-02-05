@@ -519,7 +519,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-    
+
     if (!$gPreferences['dates_save_all_confirmations'])
     {
         // Delete entry

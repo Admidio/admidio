@@ -499,15 +499,15 @@ else
                 {
                     // No further members allowed
                     $participationPossible = false;
-                    
+
                     // Check current user. If user is member of the event role then get his current approval status and set the options
                     $key = array_search((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'));
-                    
+
                     if (false !== $key)
-                    {   
+                    {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
-                            case 1: 
+                            case 1:
                                 $userStatusTentative = 'disabled';
                                 break;
                             case 2:
@@ -521,7 +521,7 @@ else
                         }
                     }
                 }
-                
+
                 $outputButtonParticipation = '
                     <div class="btn-group" role="group">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
@@ -842,7 +842,7 @@ else
                         foreach ($participantsArray as $participant)
                         {
                             $columnValue[] = $participant['firstname']. ' ' . $participant['surname'];
-                        } 
+                        }
                     }
                     $columnValues[] = implode(', ', $columnValue);
                     break;
@@ -869,7 +869,7 @@ else
             }
 
             $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
-        }   
+        }
     }  // End foreach
 
     // Output table bottom for compact view
