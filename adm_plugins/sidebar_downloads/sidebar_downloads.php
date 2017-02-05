@@ -39,6 +39,11 @@ if(!isset($plg_downloads_count) || !is_numeric($plg_downloads_count))
     $plg_downloads_count = 10;
 }
 
+if(!isset($plgMaxCharsFilename) || !is_numeric($plgMaxCharsFilename))
+{
+    $plgMaxCharsFilename = 0;
+}
+
 if(isset($plg_link_class_downl))
 {
     $plg_link_class_downl = strip_tags($plg_link_class_downl);
@@ -72,19 +77,16 @@ if ($gPreferences['enable_download_module'] == 1)
               FROM '.TBL_FILES.'
         INNER JOIN '.TBL_FOLDERS.'
                 ON fol_id = fil_fol_id
-          ORDER BY fil_timestamp DESC';
+          ORDER BY fil_timestamp DESC
+             LIMIT '.$plg_downloads_count;
 
     $filesStatement = $gDb->query($sql);
 
     if($filesStatement->rowCount() > 0)
     {
-        $anzahl = 0;
-
-        while($plg_row = $filesStatement->fetchObject())
+        while($rowFile = $filesStatement->fetchObject())
         {
-            $errorCode     = '';
-            $html          = '';
-            $timestampHtml = '';
+            $errorCode = '';
 
             echo '<div class="btn-group-vertical" role="group">';
 
@@ -92,7 +94,7 @@ if ($gPreferences['enable_download_module'] == 1)
             {
                 // get recordset of current file from database
                 $file = new TableFile($gDb);
-                $file->getFileForDownload($plg_row->fil_id);
+                $file->getFileForDownload($rowFile->fil_id);
             }
             catch(AdmException $e)
             {
@@ -108,10 +110,19 @@ if ($gPreferences['enable_download_module'] == 1)
             // only show download if user has rights to view folder
             if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
             {
-                // Ermittlung der Dateiendung
-                $fileExtension = mb_strtolower(substr($plg_row->fil_name, strrpos($plg_row->fil_name, '.')+1), 'UTF-8');
+                // get filename without extension and extension separatly
+                $fileName      = substr($rowFile->fil_name, 0, strrpos($rowFile->fil_name, '.'));
+                $fileExtension = admStrToLower(substr($rowFile->fil_name, strrpos($rowFile->fil_name, '.')+1));
+                $fullFolderFileName = $rowFile->fol_path. '/'. $rowFile->fol_name. '/'.$rowFile->fil_name;
+                $tooltip       = $fullFolderFileName;
+    
+                // if max chars are set then limit characters of shown filename
+                if($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename)
+                {
+                    $fileName = substr($fileName, 0, $plgMaxCharsFilename). '...';
+                }
 
-                // Auszugebendes Icon ermitteln
+                // get icon of file extension
                 $iconFile = 'page_white_question.png';
                 if(array_key_exists($fileExtension, $iconFileExtension))
                 {
@@ -122,31 +133,17 @@ if ($gPreferences['enable_download_module'] == 1)
                 if($plg_show_upload_timestamp)
                 {
                     // Vorname und Nachname abfragen (Upload der Datei)
-                    $mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
+                    $mein_user = new User($gDb, $gProfileFields, $rowFile->fil_usr_id);
 
-                    $timestampHtml = '<img class="admidio-icon-info" data-html="true" src="'. THEME_URL. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'"
-                        title="'. $plg_row->fil_timestamp. ',<br />'. $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'). '" />';
+                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'), $rowFile->fil_timestamp);
                 }
 
                 echo '
-                <a class="btn '.$plg_link_class_downl.'" href="'. $g_root_path. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img
-                    src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/"
-                    title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.$timestampHtml.'</a>';
-
-                ++$anzahl;
-
-                if ($anzahl === $plg_downloads_count)
-                {
-                    break;
-                }
+                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. $g_root_path. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $rowFile->fil_id. '"><img
+                    src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $fullFolderFileName. '/" />'.$fileName.'.'.$fileExtension. '</a>';
             }
 
             echo '</div>';
-        }
-
-        if ($anzahl === 0)
-        {
-            echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
         }
     }
     else
