@@ -43,6 +43,10 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
 $getView     = admFuncVariableIsValid($_GET, 'view',      'string', array('defaultValue' => $gPreferences['dates_view'], 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
+$participationPossible = true;
+$userStatusAttend    = '';
+$userStatusTentative = '';
+$userStatusNo        = '';
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -449,11 +453,7 @@ else
             $participants = new Participants($gDb, $dateRolId);
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
-
-            if($getView === 'participants')
-            {
-                $participantsArray = $participants->getParticipantsArray($dateRolId);
-            }
+            $participantsArray   = $participants->getParticipantsArray($dateRolId);
 
             // Links for the participation only in html mode
             if($getViewMode === 'html')
@@ -490,10 +490,38 @@ else
 
                 if ($getView !== 'detail')
                 {
-                    // Status text only in deteil view
+                    // Status text only in detail view
                     $buttonText = '';
                 }
 
+                // Check limit of participants
+                if ($date->getValue('dat_max_members') && $participants->getCount($dateRolId) >= $date->getValue('dat_max_members'))
+                {
+                    // No further members allowed
+                    $participationPossible = false;
+                    
+                    // Check current user. If user is member of the event role then get his current approval status and set the options
+                    $key = array_search((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'));
+                    
+                    if (false !== $key)
+                    {   
+                        switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
+                        {
+                            case 1: 
+                                $userStatusTentative = 'disabled';
+                                break;
+                            case 2:
+                                $userStatusAttend    = 'disabled';
+                                break;
+                            case 3:
+                                $userStatusAttend    = 'disabled';
+                                $userStatusTentative = 'disabled';
+                                $userStatusNo        = 'disabled';
+                                break;
+                        }
+                    }
+                }
+                
                 $outputButtonParticipation = '
                     <div class="btn-group" role="group">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
@@ -501,12 +529,12 @@ else
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id='.$dateId.'">
+                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id='.$dateId.'"'.$userStatusAttend.'>
                                     <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" title="'.$gL10n->get('DAT_ATTEND').'"/>'.$gL10n->get('DAT_ATTEND').'
                                 </a>
                             </li>
                             <li>
-                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id='.$dateId.'">
+                                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id='.$dateId.'"'.$userStatusTentative.'>
                                     <img src="'.THEME_URL.'/icons/help_violett.png" alt="'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'" title="'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'"/>'.$gL10n->get('DAT_USER_ATTEND_POSSIBLY').'
                                 </a>
                             </li>
@@ -518,17 +546,13 @@ else
                         </ul>
                     </div>';
 
-                if($date->getValue('dat_max_members'))
+                if ($participationPossible === false)
                 {
-                    // Check limit of participants
-                    if($participants->getCount($dateRolId) >= $date->getValue('dat_max_members'))
+                    // check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
+                    if (!$participants->isMemberofEvent($gCurrentUser->getValue('usr_id')))
                     {
-                        // check participation of current user. If user is member of the event role, he/she should also has the functionality to change the approval state.
-                        if (!$participants->isMemberofDate($gCurrentUser->getValue('usr_id')))
-                        {
-                            $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
-                            $iconParticipationStatus = '';
-                        }
+                        $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                        $iconParticipationStatus = '';
                     }
                 }
 
@@ -818,7 +842,7 @@ else
                         foreach ($participantsArray as $participant)
                         {
                             $columnValue[] = $participant['firstname']. ' '. $participant['surname'];
-                        }
+                        } 
                     }
                     $columnValues[] = implode(', ', $columnValue);
                     break;
@@ -845,7 +869,7 @@ else
             }
 
             $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
-        }
+        }   
     }  // End foreach
 
     // Output table bottom for compact view
