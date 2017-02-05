@@ -2881,7 +2881,3 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1915, 357, 6, 'DEU'),
 (1916, 357, 10, '2014-01-21'),
 (1917, 357, 11, '1');
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 6d5b8cc... Updated demo data
