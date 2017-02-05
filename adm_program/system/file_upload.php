@@ -25,6 +25,8 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultVal
 $getId     = admFuncVariableIsValid($_GET, 'id',     'int',    array('requireValue' => true));
 
 // Initialize variables
+$uploadDir               = '';
+$uploadUrl               = '';
 $headline                = '';
 $textFileUploaded        = '';
 $textUploadSuccessful    = '';
@@ -224,16 +226,23 @@ elseif($getMode === 'upload_files')
     // upload files to temp upload folder
     if($getModule === 'photos')
     {
-        $uploadHandler = new UploadHandlerPhoto(array('upload_dir'        => $uploadDir,
-                                                      'upload_url'        => $uploadUrl,
-                                                      'image_versions'    => array(),
-                                                      'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
-                                                      array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
+        $uploadHandler = new UploadHandlerPhoto(
+            array(
+                'upload_dir'        => $uploadDir,
+                'upload_url'        => $uploadUrl,
+                'image_versions'    => array(),
+                'accept_file_types' => '/\.(jpe?g|png)$/i'
+            ),
+            true,
+            array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))
+        );
     }
     elseif($getModule === 'downloads')
     {
-        $uploadHandler = new UploadHandlerDownload(array('upload_dir'     => $uploadDir,
-                                                         'upload_url'     => $uploadUrl,
-                                                         'image_versions' => array()));
+        $uploadHandler = new UploadHandlerDownload(array(
+            'upload_dir'     => $uploadDir,
+            'upload_url'     => $uploadUrl,
+            'image_versions' => array()
+        ));
     }
 }
