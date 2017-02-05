@@ -21,19 +21,18 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 elseif ($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -131,7 +130,7 @@ if($gCurrentUser->editPhotoRight())
         function imgrotate(img, direction) {
             $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 // Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
-                $("#img_"+img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr="+img+"&thumb=1&rand="+Math.random());
+                $("#img_" + img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr=" + img + "&thumb=1&rand=" + Math.random());
                 return false;
             });
         }'
@@ -145,31 +144,27 @@ if($gPreferences['photo_show_mode'] == 1)
     $page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.js');
 
     $page->addJavascript('
-        $(document).delegate(
-            "*[data-toggle=\"lightbox\"]",
-            "click",
-            function(event) {
-                event.preventDefault();
-                $(this).ekkoLightbox();
-            }
-        );',
+        $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });',
         true
     );
 }
 
 $page->addJavascript('
-    $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
+    $("body").on("hidden.bs.modal", ".modal", function() {
+        $(this).removeData("bs.modal");
+        location.reload();
+    });
     $("#menu_item_upload_photo").attr("data-toggle", "modal");
     $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
     $(".admidio-btn-album-upload").click(function(event) {
-        $.get("'.ADMIDIO_URL.'/adm_program/system/file_upload.php?module=photos&id=" + $(this).attr("data-pho-id"),
-            function(response) {
-                $(".modal-content").html(response);
-                $("#admidio_modal").modal();
-            }
-        );
-    });
-    ',
+        $.get("'.ADMIDIO_URL.'/adm_program/system/file_upload.php?module=photos&id=" + $(this).attr("data-pho-id"), function(response) {
+            $(".modal-content").html(response);
+            $("#admidio_modal").modal();
+        });
+    });',
     true
 );
 

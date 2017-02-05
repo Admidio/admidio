@@ -356,7 +356,7 @@ elseif ($getMode === 2)
     ++$versionPatch;
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
-    require_once('db_scripts/preferences.php');
+    require_once(__DIR__ . '/db_scripts/preferences.php');
 
     // calculate the best cost value for your server performance
     $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);

@@ -12,8 +12,8 @@
  * folder_id : Id of the current folder that should be shown
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/file_extension_icons.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/file_extension_icons.php');
 
 unset($_SESSION['download_request']);
 
@@ -65,10 +65,15 @@ $page = new HtmlPage($headline);
 
 $page->enableModal();
 $page->addJavascript('
-    $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
+    $("body").on("hidden.bs.modal", ".modal", function() {
+        $(this).removeData("bs.modal");
+        location.reload();
+    });
     $("#menu_item_upload_files").attr("data-toggle", "modal");
     $("#menu_item_upload_files").attr("data-target", "#admidio_modal");
-    ', true);
+    ',
+    true
+);
 
 // get module menu
 $DownloadsMenu = $page->getMenu();

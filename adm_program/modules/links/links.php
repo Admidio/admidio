@@ -14,7 +14,7 @@
  * id        : Show only one link.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['links_request']);
 
@@ -34,7 +34,7 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 elseif($gPreferences['enable_weblinks_module'] == 2)
 {
     // avaiable only with valid login
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Create Link object
@@ -96,7 +96,12 @@ if($weblinks->getId() === 0)
                             $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
     }
 
-    $page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit(); });', true);
+    $page->addJavascript('
+        $("#cat_id").change(function() {
+            $("#navbar_cat_id_form").submit();
+        });',
+        true
+    );
 
     $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));

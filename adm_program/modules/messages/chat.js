@@ -66,7 +66,7 @@ function Chat() {
                 success: function(data) {
                     if (data.text) {
                         var chatArea = $(self.chatId);
-                        data.text.forEach(function (text) {
+                        data.text.forEach(function(text) {
                             chatArea.append($("<p>" + text + "</p>"));
                         });
                         chatArea.scrollTop(chatArea[0].scrollHeight);
@@ -89,7 +89,7 @@ function Chat() {
     this.send = function(message) {
         var self = this;
 
-        this.update(function () {
+        this.update(function() {
             $.post({
                 url: "process.php",
                 data: {

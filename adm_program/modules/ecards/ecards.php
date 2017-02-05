@@ -14,9 +14,9 @@
  * usr_id:      (optional) Id of the user who should receive the ecard
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('ecard_function.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/ecard_function.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',    'int', array('requireValue' => true));
@@ -30,10 +30,9 @@ $templates = $funcClass->getFileNames(THEME_ADMIDIO_PATH. '/ecard_templates/');
 $template  = THEME_ADMIDIO_PATH. '/ecard_templates/';
 $headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_ecard_module'] != 1)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -116,16 +115,12 @@ $page->enableModal();
 $page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.min.js');
 
 $page->addJavascript('
-    $(document).delegate(
-        "*[data-toggle=\"lightbox\"]",
-        "click",
-        function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        }
-    );
+    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
 
-    $("#admidio_modal").on("show.bs.modal", function () {
+    $("#admidio_modal").on("show.bs.modal", function() {
         $(this).find(".modal-dialog").css({width: "800px"});
     });
 
@@ -144,7 +139,9 @@ $page->addJavascript('
         });
 
         return false;
-    }); ', true);
+    });',
+    true
+);
 
 // add back link to module menu
 $ecardMenu = $page->getMenu();
@@ -202,7 +199,7 @@ $sql = 'SELECT rol_id, rol_name
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
          WHERE rol_id IN ('.replaceValuesArrWithQM($arrayMailRoles).')
-           AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+           AND cat_name_intern <> \'EVENTS\'
       ORDER BY rol_name';
 $statement = $gDb->queryPrepared($sql, $arrayMailRoles);
 

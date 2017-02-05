@@ -22,8 +22,8 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id',   'int');
@@ -83,7 +83,7 @@ if($gCurrentUser->manageRoles())
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
              WHERE rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
@@ -109,7 +109,7 @@ else
                AND bm.mem_leader  = 1
                AND rol_leader_rights IN (1,3)
                AND rol_valid      = 1
-               AND rol_visible    = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';

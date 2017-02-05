@@ -26,7 +26,7 @@ if(!defined('PLUGIN_PATH'))
 }
 
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
@@ -56,7 +56,7 @@ if(!isset($plg_show_upload_timestamp))
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled
 if ($gPreferences['enable_download_module'] == 1)
 {
     echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';

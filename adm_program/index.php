@@ -16,7 +16,7 @@ if(!is_file('../adm_my_files/config.php'))
     exit();
 }
 
-require_once('system/common.php');
+require_once(__DIR__ . '/system/common.php');
 
 $headline = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 
@@ -106,11 +106,11 @@ if($gPreferences['enable_guestbook_module'] == 1
                          $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook_big.png',
                          $gL10n->get('GBO_GUESTBOOK_DESC'));
 }
-$moduleMenu->addItem('lists', FOLDER_MODULES . '/lists/lists.php',
+if($gPreferences['lists_enable_module'] == 1 && $gValidLogin)
+{
+    $moduleMenu->addItem('lists', FOLDER_MODULES . '/lists/lists.php',
                      $gL10n->get('LST_LISTS'), '/icons/lists_big.png',
                      $gL10n->get('LST_LISTS_DESC'));
-if($gValidLogin)
-{
     $moduleMenu->addSubItem('lists', 'mylist', FOLDER_MODULES . '/lists/mylist.php',
                             $gL10n->get('LST_MY_LIST'));
     $moduleMenu->addSubItem('lists', 'rolinac', FOLDER_MODULES . '/lists/lists.php?active_role=0',

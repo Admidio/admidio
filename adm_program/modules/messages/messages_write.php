@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMsgType     = admFuncVariableIsValid($_GET, 'msg_type',     'string');
@@ -103,7 +103,7 @@ if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'EVENTS\'
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND mem_begin <= ? -- DATE_NOW
@@ -320,7 +320,7 @@ elseif (!isset($messageStatement))
         // where the current user has the right to send email
         $preloadData = isset($form_values['msg_to']) ? $form_values['msg_to'] : '';
         $sqlRoleIds = $gCurrentUser->getAllMailRoles();
-        $sqlParticipationRoles = ' AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\' ';
+        $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
     }
 
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
@@ -589,7 +589,7 @@ elseif (!isset($messageStatement))
 
 if (isset($messageStatement))
 {
-    require_once('messages_functions.php');
+    require_once(__DIR__ . '/messages_functions.php');
 
     $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())

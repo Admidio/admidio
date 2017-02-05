@@ -15,9 +15,9 @@
  * available at http://www.silisoftware.com/scripts/index.php?scriptname=backupDB
  *********************************************************************************/
 
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
-require_once('backup.functions.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/backup.functions.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // only administrators are allowed to create backups
 if(!$gCurrentUser->isAdministrator())

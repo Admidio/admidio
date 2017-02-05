@@ -17,21 +17,20 @@
  *              true - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Initialize and check the parameters
@@ -66,8 +65,7 @@ if($gPreferences['enable_rss'] == 1)
 $page->addJavascript('
     function getComments(commentId) {
         // RequestObjekt abschicken und Kommentar laden
-        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.',
-        function(data) {
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.(int) $getModeration.', function(data) {
             $("#comments_" + commentId).html(data);
         });
     }
@@ -84,10 +82,11 @@ $page->addJavascript('
     }
 
     function toggleDiv(objectId) {
-        if ($("#" + objectId).is(":hidden")) {
-            $("#" + objectId).show();
+        var divElement = $("#" + objectId);
+        if (divElement.is(":hidden")) {
+            divElement.show();
         } else {
-            $("#" + objectId).hide();
+            divElement.hide();
         }
     }
 ');
@@ -345,7 +344,7 @@ else
 
                             // read all comments of this guestbook entry
                             ob_start();
-                            include('get_comments.php');
+                            include(__DIR__ . '/get_comments.php');
                             $page->addHtml(ob_get_contents());
                             ob_end_clean();
                         }
@@ -368,7 +367,7 @@ else
                 if ($countGuestbookEntries > 0 && $getGboId > 0)
                 {
                     ob_start();
-                    include('get_comments.php');
+                    include(__DIR__ . '/get_comments.php');
                     $page->addHtml(ob_get_contents());
                     ob_end_clean();
                 }

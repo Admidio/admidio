@@ -11,8 +11,8 @@
 
 // preview will be called before form is send, so there are now POST parameters available
 // then show nothing. Second call is with POST parameters then show preview
-require_once('../../system/common.php');
-require_once('ecard_function.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/ecard_function.php');
 
 //$gMessage->showTextOnly(true);
 $gMessage->showThemeBody(false);

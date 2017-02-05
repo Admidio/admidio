@@ -116,12 +116,8 @@ class ComponentUpdate extends Component
                 $this->db->query($sql, $showError); // TODO add more params
             }
 
-            // set the type if the id to integer because otherwise the system thinks it's not numeric !!!
-            $stepId = $xmlNode['id'];
-            settype($stepId, 'integer');
-
             // save the successful executed update step in database
-            $this->setValue('com_update_step', $stepId);
+            $this->setValue('com_update_step', (int) $xmlNode['id']);
             $this->save();
         }
     }
@@ -343,6 +339,59 @@ class ComponentUpdate extends Component
         {
             $role = new TableRoles($this->db, (int) $roleId);
             $role->delete(); // TODO Exception handling
+        }
+    }
+
+    /**
+     * Update the existing category confirmation of participation and make it
+     * organization depending.
+     */
+    public function updateStepEventCategory()
+    {
+        global $g_organization, $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            if($g_organization === $row['org_shortname'])
+            {
+                $sql = 'UPDATE '.TBL_CATEGORIES.'
+                           SET cat_name_intern = \'EVENTS\'
+                             , cat_name   = ? -- $gL10n->get(\'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\')
+                             , cat_org_id = ? -- $row[\'org_id\']
+                         WHERE cat_org_id IS NULL
+                           AND cat_type        = \'ROL\'
+                           AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
+                $this->db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'), $row['org_id']));
+            }
+            else
+            {
+                // create organization depending category for events
+                $category = new TableCategory($this->db);
+                $category->setValue('cat_org_id', $row['org_id']);
+                $category->setValue('cat_type', 'ROL');
+                $category->setValue('cat_name', $gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'));
+                $category->setValue('cat_hidden', '1');
+                $category->setValue('cat_system', '1');
+                $category->save();
+
+                // now set name intern explicit to EVENTS
+                $category->setValue('cat_name_intern', 'EVENTS');
+                $category->save();
+
+                // all existing events of this organization must get the new category
+                $sql = 'UPDATE '.TBL_ROLES.'
+                           SET rol_cat_id = ? -- $category->getValue(\'cat_id\')
+                         WHERE rol_id IN (SELECT dat_rol_id
+                                            FROM '.TBL_DATES.'
+                                      INNER JOIN '.TBL_CATEGORIES.'
+                                              ON cat_id = dat_cat_id
+                                           WHERE dat_rol_id IS NOT NULL
+                                             AND cat_org_id = ?) -- $row[\'org_id\']';
+                $this->db->queryPrepared($sql, array($category->getValue('cat_id'), $row['org_id']));
+            }
         }
     }
 

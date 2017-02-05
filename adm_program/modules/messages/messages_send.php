@@ -13,8 +13,8 @@
  * msg_type  - set message type
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/template.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/template.php');
 
 // Initialize and check the parameters
 $getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
@@ -447,7 +447,7 @@ if ($getMsgType === 'EMAIL')
     // add sender and receiver to email if template include the variables
     $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
 
-    require_once('messages_functions.php');
+    require_once(__DIR__ . '/messages_functions.php');
 
     if ($postListId > 0)
     {

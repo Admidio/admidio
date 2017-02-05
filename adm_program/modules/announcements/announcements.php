@@ -20,7 +20,7 @@
  *             if no date information is delivered
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 unset($_SESSION['announcements_request']);
 
@@ -42,7 +42,7 @@ if ($gPreferences['enable_announcements_module'] == 0)
 elseif($gPreferences['enable_announcements_module'] == 2)
 {
     // Access only with valid login
-    require('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // create object for announcements
@@ -87,7 +87,12 @@ if($gCurrentUser->editAnnouncements())
                                 $gL10n->get('SYS_CREATE_ENTRY'), 'add.png');
 }
 
-$page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit(); });', true);
+$page->addJavascript('
+    $("#cat_id").change(function() {
+        $("#navbar_cat_id_form").submit();
+    });',
+    true
+);
 
 $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));

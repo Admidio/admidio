@@ -600,10 +600,11 @@ class TableFolder extends TableAccess
     private function getSubfolderStatement($folderId, array $columns = array('fol_id'))
     {
         // select all subfolders of the current folder
-        $sqlSubfolders = 'SELECT ' . implode(',', $columns) . '
-                            FROM '.TBL_FOLDERS.'
-                           WHERE fol_fol_id_parent = ? --$folderId';
-        return $this->db->queryPrepared($sqlSubfolders, array($folderId));
+        $sql = 'SELECT ' . implode(',', $columns) . '
+                  FROM '.TBL_FOLDERS.'
+                 WHERE fol_fol_id_parent = ? -- $folderId';
+
+        return $this->db->queryPrepared($sql, array($folderId));
     }
 
     /**

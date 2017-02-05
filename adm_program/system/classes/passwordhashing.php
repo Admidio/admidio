@@ -199,12 +199,12 @@ class PasswordHashing
         catch (Error $e)
         {
             // as a fallback we should use the rand method
-            $int = rand($min, $max);
+            $int = mt_rand($min, $max);
         }
         catch (Exception $e)
         {
             // as a fallback we should use the rand method
-            $int = rand($min, $max);
+            $int = mt_rand($min, $max);
         }
 
         return $int;

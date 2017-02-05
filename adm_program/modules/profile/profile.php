@@ -13,9 +13,9 @@
  *           the profile of the current log will be shown.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
-require_once('roles_functions.php');
+require_once(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/roles_functions.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'user_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
@@ -183,19 +183,23 @@ $page->addJavascript('
     }
 ');
 $page->addJavascript('
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
+    $(".admMemberInfo").click(function() {
+        showHideMembershipInformation($(this))
+    });
     $("#menu_item_password").attr("data-toggle", "modal");
     $("#menu_item_password").attr("data-target", "#admidio_modal");
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
 
     $("input[data-provide=\'datepicker\']").datepicker({
-                            language: "'.$gL10n->getLanguageIsoCode().'",
-                            format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                            todayHighlight: "true",
-                            autoclose: "true"
-                        });
-    formSubmitEvent(); ', true);
+        language: "'.$gL10n->getLanguageIsoCode().'",
+        format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+        todayHighlight: "true",
+        autoclose: "true"
+    });
+    formSubmitEvent();',
+    true
+);
 
 // get module menu
 $profileMenu = $page->getMenu();
@@ -347,8 +351,8 @@ $page->addHtml('
                                 $bAddressOutput = true;
                                 $htmlAddress    = '';
                                 $address        = '';
-                                $map_url        = 'https://maps.google.com/?q=';
-                                $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
+                                $map_url        = 'https://www.google.com/maps?q=';
+                                $route_url      = 'https://www.google.com/maps?f=d&amp;saddr='.
                                     urlencode($gCurrentUser->getValue('STREET')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
@@ -713,9 +717,14 @@ if($gPreferences['profile_show_roles'] == 1)
     // Ausgabe
     $page->addHtml('
     <div class="panel panel-default" id="profile_roles_box">
-        <div class="panel-heading">
-            '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
-        </div>
+        <div class="panel-heading"><div class="pull-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>');
+            // if you have the right to assign roles then show the link to assign new roles to this user
+            if($gCurrentUser->assignRoles())
+            {
+                $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_role_memberships_change" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$userId.'&amp;inline=1"><img
+                    src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" /></a></div>');
+            }
+        $page->addHtml('</div>
         <div class="panel-body" id="profile_roles_box_body">
             '.getRoleMemberships('role_list', $user, $roleStatement, $count_role, false).'
         </div>
@@ -800,7 +809,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND org_id     <> ? -- $gCurrentOrganization->getValue(\'org_id\')
           ORDER BY org_shortname, cat_sequence, rol_name';
     $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
@@ -886,7 +895,14 @@ if($gPreferences['members_enable_user_relations'] == 1)
     {
         $page->addHtml('
         <div class="panel panel-default" id="profile_user_relations_box">
-            <div class="panel-heading">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>
+            <div class="panel-heading"><div class="pull-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
+                // show link to create relations
+                if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
+                {
+                    $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_relations_new_entry" href="'.ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId.'"><img
+                        src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('PRO_ADD_USER_RELATION').'" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'" /></a></div>');
+                }
+            $page->addHtml('</div>
             <div class="panel-body" id="profile_user_relations_box_body">');
 
         $sql = 'SELECT *
@@ -898,7 +914,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
                    AND urt_name_male   <> \'\'
                    AND urt_name_female <> \'\'
               ORDER BY urt_name';
-        $statement = $gDb->queryPrepared($sql, array($userId));
+        $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
         $relationtype = new TableUserRelationType($gDb);
         $relation     = new TableUserRelation($gDb);

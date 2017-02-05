@@ -18,8 +18,8 @@
  *                2 - show active and former members of role
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id',       'int');
@@ -27,14 +27,22 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
-// within PHP 5.3 false will not be set and therefore we must add 0 as value
-if($getActiveRole)
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
 {
-    $getActiveRole  = 1;
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
+// only users with the right to assign roles can view inactive roles
+// within PHP 5.3 false will not be set and therefore we must add 0 as value
+if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
+{
+    $getActiveRole = 1;
 }
 else
 {
-    $getActiveRole  = 0;
+    $getActiveRole = 0;
 }
 
 // set headline of the script
@@ -144,7 +152,7 @@ $javascriptCode = '
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
-        newCellCount.textContent = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
+        newCellCount.textContent = (fieldNumberShow) + ". '.$gL10n->get('LST_COLUMN').' :";
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
@@ -442,6 +450,9 @@ $javascriptCode .= '
     function loadList() {
         var listId = $("#sel_select_configuation").val();
         var showMembers = $("#sel_show_members").val();
+        if (showMembers === undefined) {
+            showMembers = 0;
+        }
         self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
     }
 
@@ -649,24 +660,43 @@ $form->closeButtonGroup();
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
-// show all roles where the user has the right to see them
-$sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
-                       FROM '.TBL_ROLES.'
-                 INNER JOIN '.TBL_CATEGORIES.'
-                         ON cat_id = rol_cat_id
-                      WHERE rol_valid   = '.$getActiveRole.'
-                        AND rol_visible = 1
-                        AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                            OR cat_org_id IS NULL )
-                   ORDER BY cat_sequence, rol_name';
-$sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
-$form->addSelectBoxFromSql(
-    'sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
-);
-$showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-$form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
+
+// show all roles where the user has the right to view them
+$sqlData = array();
+if($getActiveRole)
+{
+    $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                          WHERE rol_id IN (' . replaceValuesArrWithQM($allVisibleRoles) . ')
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = $allVisibleRoles;
+}
+else
+{
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                            AND cat_hidden = 0
+                          WHERE rol_valid  = 0
+                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                OR cat_org_id IS NULL )
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+}
+$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+// if user could view former roles members than he should get a selectbox where he can choose to view them
+if($gCurrentUser->hasRightViewFormerRolesMembers())
+{
+    $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+    $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
+        array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
+}
+
 // select box showing all relation types
 $sql = 'SELECT urt_id, urt_name, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'

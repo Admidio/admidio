@@ -13,8 +13,8 @@
  *               Example: SYS_COMMON or
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
@@ -73,29 +73,30 @@ $page->addJavascript('
     $(".form-preferences").submit(function(event) {
         var id = $(this).attr("id");
         var action = $(this).attr("action");
-        $("#"+id+" .form-alert").hide();
+        var formAlert = $("#" + id + " .form-alert");
+        formAlert.hide();
 
         // disable default form submit
         event.preventDefault();
 
         $.post({
-            url:     action,
-            data:    $(this).serialize(),
+            url: action,
+            data: $(this).serialize(),
             success: function(data) {
                 if (data === "success") {
                     if (id === "captcha_preferences_form") {
                         // reload captcha if form is saved
                         $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random());
                     }
-                    $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
-                    $("#"+id+" .form-alert").fadeIn("slow");
-                    $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
-                    $("#"+id+" .form-alert").fadeOut("slow");
+                    formAlert.attr("class", "alert alert-success form-alert");
+                    formAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    formAlert.fadeIn("slow");
+                    formAlert.animate({opacity: 1.0}, 2500);
+                    formAlert.fadeOut("slow");
                 } else {
-                    $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
-                    $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                    formAlert.attr("class", "alert alert-danger form-alert");
+                    formAlert.fadeIn();
+                    formAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                 }
             }
         });
@@ -103,13 +104,15 @@ $page->addJavascript('
 
     $("#link_check_for_update").click(function() {
         $("#admidio_version_content").empty();
-        $("#admidio_version_content").prepend("<img src=\''.THEME_URL.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
-        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode:"2"}, function(htmlVersion) {
+        $("#admidio_version_content").prepend("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
             $("#admidio_version_content").empty();
             $("#admidio_version_content").append(htmlVersion);
         });
         return false;
-    });    ', true);
+    });',
+    true
+);
 
 if($showOption !== '')
 {
@@ -424,7 +427,10 @@ $page->addHtml('
                         {
                             $form->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
                         }
-                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
+
+                        $component = new ComponentUpdate($gDb);
+                        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step') . ' / ' . $component->getMaxUpdateStep());
 
                         if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
                         {
@@ -682,6 +688,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('lists_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=lists', $page, array('class' => 'form-preferences'));
+                        $form->addCheckbox('lists_enable_module', $gL10n->get('LST_ENABLE_LISTS_MODULE'), (bool) $form_values['lists_enable_module'], array('helpTextIdInline' => 'LST_ENABLE_LISTS_MODULE_DESC'));
                         $form->addInput('lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $form_values['lists_roles_per_page'], array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10)));
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, array('defaultValue' => $form_values['lists_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_MEMBERS_PER_PAGE_DESC'));
@@ -698,6 +705,8 @@ $page->addHtml('
                             'lists_default_configuration', $gL10n->get('LST_DEFAULT_CONFIGURATION'), $gDb, $sqlData,
                             array('defaultValue' => $form_values['lists_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'LST_DEFAULT_CONFIGURATION_DESC')
                         );
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES')), '2' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_EDIT_USER')));
+                        $form->addSelectBox('lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries, array('defaultValue' => $form_values['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_EDIT_USER')))));
                         $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ROL"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';

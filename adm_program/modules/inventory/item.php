@@ -13,8 +13,8 @@
  *           an error will be shown.
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getItemId = admFuncVariableIsValid($_GET, 'item_id', 'int');
@@ -98,7 +98,8 @@ $page->addJavascript('
 
     function showHideMembershipInformation(element) {
         $("#" + element.attr("id") + "_Content").toggle("fast");
-    }');
+    }'
+);
 $page->addJavascript('
     profileJS.init();
     $(".admidio-icon-link-popup").colorbox({
@@ -108,8 +109,12 @@ $page->addJavascript('
             $("#admButtonNo").focus();
         }
     });
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)); });
-    $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo(); });
+    $(".admMemberInfo").click(function() {
+        showHideMembershipInformation($(this));
+    });
+    $("#profile_authorizations_box_body").mouseout(function() {
+        profileJS.deleteShowInfo();
+    });
 
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
@@ -143,7 +148,9 @@ $page->addJavascript('
                 }
             }
         });
-    });', true);
+    });',
+    true
+);
 
 // get module menu
 $profileMenu = $page->getMenu();

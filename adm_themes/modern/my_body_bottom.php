@@ -66,11 +66,10 @@
                                              $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png');
                     }
 
-                    $moduleMenu->addItem('lists', FOLDER_MODULES . '/lists/lists.php',
-                                         $gL10n->get('LST_LISTS'), '/icons/lists.png');
-
-                    if($gValidLogin)
+                    if($gPreferences['lists_enable_module'] == 1 && $gValidLogin)
                     {
+                        $moduleMenu->addItem('lists', FOLDER_MODULES . '/lists/lists.php',
+                                             $gL10n->get('LST_LISTS'), '/icons/lists.png');
                         $moduleMenu->addItem('mylist', FOLDER_MODULES . '/lists/mylist.php',
                                              $gL10n->get('LST_MY_LIST'), '/icons/mylist.png');
                     }

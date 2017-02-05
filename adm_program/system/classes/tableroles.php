@@ -289,7 +289,7 @@ class TableRoles extends TableAccess
      *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
      * @return string[]|string Array with all cost or if param costPeriod is set than the full name of that cost period
      */
-    public static function getCostPeriods($costPeriod = 0)
+    public static function getCostPeriods($costPeriod = null)
     {
         global $gL10n;
 
@@ -301,7 +301,7 @@ class TableRoles extends TableAccess
             12 => $gL10n->get('ROL_MONTHLY')
         );
 
-        if ($costPeriod > 0)
+        if ($costPeriod !== null)
         {
             return $costPeriods[$costPeriod];
         }
@@ -326,7 +326,7 @@ class TableRoles extends TableAccess
             return $defaultListId;
         }
 
-        if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
+        if($this->getValue('cat_name_intern') === 'EVENTS')
         {
             // read system default list configuration for events
             return (int) $gPreferences['dates_default_list_configuration'];
@@ -497,7 +497,7 @@ class TableRoles extends TableAccess
             return false;
         }
 
-        if ($this->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
+        if ($this->getValue('cat_name_intern') !== 'EVENTS')
         {
             return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
         }

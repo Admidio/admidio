@@ -14,8 +14,8 @@
  * filename : Der Name der Datei, welche heruntergeladen werden soll
  ***********************************************************************************************
  */
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getJob      = admFuncVariableIsValid($_GET, 'job',      'string', array('requireValue' => true, 'validValues' => array('delete', 'get_file')));

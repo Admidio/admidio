@@ -178,7 +178,7 @@ class User extends TableAccess
 
                         // if role leader could assign new members then remember this setting
                         // roles for confirmation of dates should be ignored
-                        if ($row['cat_name_intern'] !== 'CONFIRMATION_OF_PARTICIPATION'
+                        if ($row['cat_name_intern'] !== 'EVENTS'
                         && ($rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
                         {
                             $this->assignRoles = true;
@@ -1027,6 +1027,27 @@ class User extends TableAccess
     public function hasRightSendMailToRole($roleId)
     {
         return $this->hasRightRole($this->listMailRights, 'rol_mail_to_all', $roleId);
+    }
+
+    /**
+     * Checks the necessary rights if this user could view former roles members. Therefore
+     * the user must also have the right to view the role. So you must also check this right.
+     * @return bool Return @b true if the user has the right to view former roles members
+     */
+    public function hasRightViewFormerRolesMembers()
+    {
+        global $gPreferences;
+
+        if($gPreferences['lists_show_former_members'] === '1' && $this->checkRolesRight('rol_assign_roles'))
+        {
+            return true;
+        }
+        elseif($gPreferences['lists_show_former_members'] === '2' && $this->checkRolesRight('rol_edit_user'))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**

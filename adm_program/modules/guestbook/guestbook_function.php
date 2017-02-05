@@ -22,7 +22,7 @@
  *            (Default) GBO_GUESTBOOK
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
@@ -31,17 +31,16 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 
 $getHeadline = urlencode($getHeadline);
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once('../../system/login_valid.php');
+    require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
@@ -53,7 +52,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($gPreferences['enable_gbook_comments4all'] == 0)
         {
-            require_once('../../system/login_valid.php');
+            require(__DIR__ . '/../../system/login_valid.php');
 
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$gCurrentUser->commentGuestbookRight())
@@ -67,7 +66,7 @@ if ($getMode === 2 || $getMode === 3 || $getMode === 4 || $getMode === 5 || $get
     else
     {
         // Der User muss fuer die anderen Modes auf jeden Fall eingeloggt sein
-        require_once('../../system/login_valid.php');
+        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     if ($getMode === 2 || $getMode === 3 || $getMode === 5 || $getMode === 8)
@@ -238,8 +237,15 @@ if ($getMode === 1 || $getMode === 3)
                 $gbo_email = $gPreferences['email_administrator'];
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
-            $notification = new Email();
-            $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            try
+            {
+                $notification = new Email();
+                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
+            }
+            catch(AdmException $e)
+            {
+                $e->showHtml();
+            }
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -426,9 +432,15 @@ elseif($getMode === 4 || $getMode === 8)
                 $sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));
-            $notification = new Email();
-            $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
-
+            try
+            {
+                $notification = new Email();
+                $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);
+            }
+            catch(AdmException $e)
+            {
+                $e->showHtml();
+            }
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht

@@ -16,8 +16,8 @@
  * name   : (optional) Name of the list that should be used to save list
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getListId = admFuncVariableIsValid($_GET, 'lst_id', 'int');
@@ -25,6 +25,13 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue'
 $getName   = admFuncVariableIsValid($_GET, 'name',   'string');
 
 $_SESSION['mylist_request'] = $_POST;
+
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
 
 // Mindestens ein Feld sollte zugeordnet sein
 if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
@@ -41,7 +48,7 @@ if($getMode === 2
     // => EXIT
 }
 
-if(!isset($_POST['sel_show_members']))
+if(!isset($_POST['sel_show_members']) || !$gCurrentUser->hasRightViewFormerRolesMembers())
 {
     $_POST['sel_show_members'] = 0;
 }

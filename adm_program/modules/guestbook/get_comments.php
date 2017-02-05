@@ -14,7 +14,7 @@
  *              true  - Moderation mode, every entry could be released
  ***********************************************************************************************
  */
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getGbcId      = admFuncVariableIsValid($_GET, 'cid',        'int');

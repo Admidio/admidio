@@ -519,6 +519,8 @@ class Database
         }
         catch (PDOException $e)
         {
+            $gLogger->critical('PDOException: ' . $e->getMessage());
+
             if ($showError)
             {
                 $this->showError();
@@ -572,6 +574,8 @@ class Database
         }
         catch (PDOException $e)
         {
+            $gLogger->critical('PDOException: ' . $e->getMessage());
+
             if ($showError)
             {
                 $this->showError();
@@ -771,7 +775,7 @@ class Database
         $errorCode = $this->pdo->errorCode();
         $errorInfo = $this->pdo->errorInfo();
 
-        $gLogger->critical($errorCode.': '.$errorInfo[1]."\n".$errorInfo[2]);
+        $gLogger->critical($errorCode.': '.$errorInfo[1].' | '.$errorInfo[2]);
 
         $htmlOutput = '
             <div style="font-family: monospace;">

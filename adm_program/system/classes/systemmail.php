@@ -144,7 +144,7 @@ class SystemMail extends Email
         // if something went wrong then throw an exception with the error message
         if($returnMessage !== true)
         {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $this->sendEmail());
+            throw new AdmException('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $returnMessage);
         }
 
         return true;

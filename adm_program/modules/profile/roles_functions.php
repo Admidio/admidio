@@ -32,7 +32,7 @@ function getRolesFromDatabase($userId)
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
@@ -57,7 +57,7 @@ function getFutureRolesFromDatabase($userId)
              WHERE mem_usr_id  = ? -- $userId
                AND mem_begin   > ? -- DATE_NOW
                AND rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
@@ -82,7 +82,7 @@ function getFormerRolesFromDatabase($userId)
              WHERE mem_usr_id  = ? -- $userId
                AND mem_end     < ? -- DATE_NOW
                AND rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_org_id, cat_sequence, rol_name';
@@ -108,7 +108,7 @@ function getRoleMemberships($htmlListId, User $user, PDOStatement $roleStatement
 
     while($row = $roleStatement->fetch())
     {
-        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible'] == 1)
+        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']))
         {
             $futureMembership = false;
             $showRoleEndDate  = false;
