@@ -519,6 +519,8 @@ class Database
         }
         catch (PDOException $e)
         {
+            $gLogger->critical('PDOException: ' . $e->getMessage());
+
             if ($showError)
             {
                 $this->showError();
@@ -572,6 +574,8 @@ class Database
         }
         catch (PDOException $e)
         {
+            $gLogger->critical('PDOException: ' . $e->getMessage());
+
             if ($showError)
             {
                 $this->showError();
