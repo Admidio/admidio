@@ -602,7 +602,7 @@ class TableFolder extends TableAccess
         // select all subfolders of the current folder
         $sql = 'SELECT ' . implode(',', $columns) . '
                   FROM '.TBL_FOLDERS.'
-                 WHERE fol_fol_id_parent = ? --$folderId';
+                 WHERE fol_fol_id_parent = ? -- $folderId';
 
         return $this->db->queryPrepared($sql, array($folderId));
     }
