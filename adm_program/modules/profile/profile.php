@@ -717,9 +717,14 @@ if($gPreferences['profile_show_roles'] == 1)
     // Ausgabe
     $page->addHtml('
     <div class="panel panel-default" id="profile_roles_box">
-        <div class="panel-heading">
-            '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
-        </div>
+        <div class="panel-heading"><div class="pull-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>');
+            // if you have the right to assign roles then show the link to assign new roles to this user
+            if($gCurrentUser->assignRoles())
+            {
+                $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_role_memberships_change" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$userId.'&amp;inline=1"><img
+                    src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" /></a></div>');
+            }
+        $page->addHtml('</div>
         <div class="panel-body" id="profile_roles_box_body">
             '.getRoleMemberships('role_list', $user, $roleStatement, $count_role, false).'
         </div>
@@ -890,7 +895,14 @@ if($gPreferences['members_enable_user_relations'] == 1)
     {
         $page->addHtml('
         <div class="panel panel-default" id="profile_user_relations_box">
-            <div class="panel-heading">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>
+            <div class="panel-heading"><div class="pull-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
+                // show link to create relations
+                if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
+                {
+                    $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_relations_new_entry" href="'.ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId.'"><img
+                        src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('PRO_ADD_USER_RELATION').'" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'" /></a></div>');
+                }
+            $page->addHtml('</div>
             <div class="panel-body" id="profile_user_relations_box_body">');
 
         $sql = 'SELECT *
