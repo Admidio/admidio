@@ -221,7 +221,7 @@ class Participants
         $key = array_search((int) $userId, array_column($eventMember, 'usrId'));
         if (false !== $key)
         {
-            if ($eventMember[$user]['approved'] !== 3)
+            if ($eventMember[$userId]['approved'] !== 3)
             {
             // Is participiant of date
             return true;
