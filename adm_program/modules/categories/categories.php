@@ -197,10 +197,10 @@ $flagTbodyAllOrgasWritten = false;
 $category = new TableCategory($gDb);
 
 // Get data
-while($cat_row = $categoryStatement->fetch())
+while($catRow = $categoryStatement->fetch())
 {
     $category->clear();
-    $category->setArray($cat_row);
+    $category->setArray($catRow);
 
     if($category->getValue('cat_system') == 1 && $getType === 'USF')
     {

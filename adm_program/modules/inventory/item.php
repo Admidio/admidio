@@ -43,8 +43,6 @@ function getFieldCode($fieldNameIntern, $item)
 {
     global $gPreferences, $inventory, $gL10n, $gInventoryFields;
     $html      = array('label' => '', 'value' => '');
-    $value     = '';
-    $msg_image = '';
 
     if($gInventoryFields->getProperty($fieldNameIntern, 'inf_hidden') == 1)
     {

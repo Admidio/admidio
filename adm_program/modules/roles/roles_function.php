@@ -225,9 +225,9 @@ if($getMode === 2)
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
         $role->setValue('rol_max_members', $_POST['rol_max_members']);
-        $num_free_places = $role->countVacancies();
+        $numFreePlaces = $role->countVacancies();
 
-        if($num_free_places < 0)
+        if($numFreePlaces < 0)
         {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $rolName));
             // => EXIT

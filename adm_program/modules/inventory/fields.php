@@ -144,14 +144,14 @@ while($row = $statement->fetch())
 
     if($categoryId !== (int) $userField->getValue('cat_id'))
     {
-        $block_id = 'admCategory'.$userField->getValue('inf_cat_id');
+        $blockId = 'admCategory'.$userField->getValue('inf_cat_id');
 
         $table->addTableBody();
         $table->addRow();
-        $table->addColumn('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$block_id), 'td');
+        $table->addColumn('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$blockId), 'td');
         $table->addAttribute('colspan', '8');
-        $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'));
-        $table->addTableBody('id', $block_id);
+        $table->addData('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'));
+        $table->addTableBody('id', $blockId);
 
         $categoryId = (int) $userField->getValue('inf_cat_id');
     }

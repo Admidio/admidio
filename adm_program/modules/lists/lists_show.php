@@ -657,16 +657,11 @@ foreach ($membersList as $member)
         // the Index to the row must be set to 2 directly
         $sqlColumnNumber = $columnNumber + 1;
 
+        $usfId = 0;
         if ($column->getValue('lsc_usf_id') > 0)
         {
             // check if customs field and remember
-            $b_user_field = true;
             $usfId = (int) $column->getValue('lsc_usf_id');
-        }
-        else
-        {
-            $b_user_field = false;
-            $usfId = 0;
         }
 
         if ($columnNumber === 1)

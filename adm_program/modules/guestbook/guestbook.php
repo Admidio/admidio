@@ -323,27 +323,23 @@ else
                 {
                     if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration)
                     {
-                        $visibility_show_comments = 'hidden';
-                        $display_show_comments    = 'none';
-                        $visibility_others        = 'visible';
-                        $display_others           = 'block';
+                        $displayShowComments = 'none';
+                        $displayOthers       = 'block';
                     }
                     else
                     {
-                        $visibility_show_comments = 'visible';
-                        $display_show_comments    = 'block';
-                        $visibility_others        = 'hidden';
-                        $display_others           = 'none';
+                        $displayShowComments = 'block';
+                        $displayOthers       = 'none';
                     }
 
                     // this link will be shown when comments where loaded
                     $page->addHtml('
-                    <a id="admCommentsVisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $display_others. ';"><img
+                    <a id="admCommentsVisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $displayOthers. ';"><img
                         src="'. THEME_URL. '/icons/comment.png" alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" />'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>');
 
                     // this link will be invisible when comments where loaded
                     $page->addHtml('
-                    <a id="admCommentsInvisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $display_show_comments. ';"><img
+                    <a id="admCommentsInvisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $displayShowComments. ';"><img
                         src="'. THEME_URL. '/icons/comment.png" alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $commentStatement->rowCount()).'</a>');
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
@@ -398,8 +394,8 @@ else
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
-$page->addHtml(admFuncGeneratePagination($base_url, $guestbookEntries, $guestbookEntriesPerPage, $getStart, true));
+$baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
+$page->addHtml(admFuncGeneratePagination($baseUrl, $guestbookEntries, $guestbookEntriesPerPage, $getStart, true));
 
 // show html of complete page
 $page->show();

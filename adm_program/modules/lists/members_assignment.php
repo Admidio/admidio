@@ -87,10 +87,10 @@ if($getMode === 'assign')
         $member = new TableMembers($gDb);
 
         // Datensatzupdate
-        $mem_count = $role->countMembers($getUserId);
+        $memCount = $role->countMembers($getUserId);
 
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $mem_count || (int) $role->getValue('rol_max_members') === 0)))
+        if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0)))
         {
             $member->startMembership((int) $role->getValue('rol_id'), $getUserId, $leadership);
 

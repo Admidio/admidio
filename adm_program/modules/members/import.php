@@ -34,14 +34,14 @@ if(isset($_SESSION['import_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $form_values = $_SESSION['import_request'];
+    $formValues = $_SESSION['import_request'];
     unset($_SESSION['import_request']);
 }
 else
 {
-    $form_values['user_import_mode'] = 1;
-    $form_values['import_coding']    = 'iso-8859-1';
-    $form_values['import_role_id']   = 0;
+    $formValues['user_import_mode'] = 1;
+    $formValues['import_coding']    = 'iso-8859-1';
+    $formValues['import_role_id']   = 0;
 }
 
 // create html page object
@@ -56,7 +56,7 @@ $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/i
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
 $form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values')));
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 'defaultValue' => $form_values['import_coding']));
+$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['import_coding']));
 
 // add a selectbox to the form where the user can choose a role from all roles he could see
 // first read all relevant roles from database and create an array with them
@@ -91,12 +91,12 @@ while($row = $statement->fetch())
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
 $form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property'        => FIELD_REQUIRED,
-                                                                                    'defaultValue'    => $form_values['import_role_id'],
+                                                                                    'defaultValue'    => $formValues['import_role_id'],
                                                                                     'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'));
 
 $selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
 $form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property'                       => FIELD_REQUIRED,
-                                                                                                    'defaultValue'                   => $form_values['user_import_mode'],
+                                                                                                    'defaultValue'                   => $formValues['user_import_mode'],
                                                                                                     'showContextDependentFirstEntry' => false,
                                                                                                     'helpTextIdLabel'                => 'MEM_IDENTIFY_USERS'));
 $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png', 'class' => ' col-sm-offset-3'));

@@ -41,13 +41,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
-    $form_values = strStripSlashesDeep($_SESSION['download_request']);
+    $formValues = strStripSlashesDeep($_SESSION['download_request']);
     unset($_SESSION['download_request']);
 }
 else
 {
-    $form_values['new_name'] = null;
-    $form_values['new_description'] = null;
+    $formValues['new_name'] = null;
+    $formValues['new_description'] = null;
 }
 
 // check the rights of the current folder
@@ -78,14 +78,14 @@ try
         $createUserId    = $file->getValue('fil_usr_id');
         $createTimestamp = $file->getValue('fil_timestamp');
 
-        if ($form_values['new_name'] === null)
+        if ($formValues['new_name'] === null)
         {
-            $form_values['new_name'] = $originalName;
+            $formValues['new_name'] = $originalName;
         }
 
-        if ($form_values['new_description'] === null)
+        if ($formValues['new_description'] === null)
         {
-            $form_values['new_description'] = $file->getValue('fil_description');
+            $formValues['new_description'] = $file->getValue('fil_description');
         }
 
     }
@@ -99,14 +99,14 @@ try
         $createUserId    = $folder->getValue('fol_usr_id');
         $createTimestamp = $folder->getValue('fol_timestamp');
 
-        if ($form_values['new_name'] == null)
+        if ($formValues['new_name'] == null)
         {
-            $form_values['new_name'] = $originalName;
+            $formValues['new_name'] = $originalName;
         }
 
-        if ($form_values['new_description'] == null)
+        if ($formValues['new_description'] == null)
         {
-            $form_values['new_description'] = $folder->getValue('fol_description');
+            $formValues['new_description'] = $folder->getValue('fol_description');
         }
     }
 }
@@ -130,8 +130,8 @@ if ($getFileId)
     $form->addInput('file_type', $gL10n->get('DOW_FILE_TYPE'), $fileType, array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
 }
 $form->addInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, array('property' => FIELD_DISABLED));
-$form->addInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], array('maxLength' => 255, 'property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'DOW_FILE_NAME_RULES'));
-$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, array('maxLength' => 255));
+$form->addInput('new_name', $gL10n->get('DOW_NEW_NAME'), $formValues['new_name'], array('maxLength' => 255, 'property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'DOW_FILE_NAME_RULES'));
+$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $formValues['new_description'], 4, array('maxLength' => 255));
 $form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
 $form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 

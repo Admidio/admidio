@@ -248,14 +248,14 @@ while($row = $statement->fetch())
     // if new category than display a category header
     if($category !== (int) $role->getValue('cat_id'))
     {
-        $block_id = 'admCategory'.$role->getValue('cat_id');
+        $blockId = 'admCategory'.$role->getValue('cat_id');
 
         $table->addTableBody();
-        $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$block_id));
+        $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$blockId));
         $table->addColumn();
         $table->addAttribute('colspan', '4', 'td');
-        $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name'));
-        $table->addTableBody('id', $block_id);
+        $table->addData('<span id="caret_'.$blockId.'" class="caret"></span>'.$role->getValue('cat_name'));
+        $table->addTableBody('id', $blockId);
 
         $category = (int) $role->getValue('cat_id');
     }

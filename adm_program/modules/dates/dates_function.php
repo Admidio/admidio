@@ -296,9 +296,9 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     $date->setVisibleRoles(array_map('intval', $_POST['date_roles']));
 
     // save event in database
-    $return_code = $date->save();
+    $returnCode = $date->save();
 
-    if($return_code === true && $gPreferences['enable_email_notification'] == 1)
+    if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
     {
         // Benachrichtigungs-Email für neue Einträge
 
@@ -418,8 +418,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         $role->setValue('rol_description', $date->getValue('dat_headline'));
 
         // save role in database
-        $return_code2 = $role->save();
-        if($return_code < 0 || $return_code2 < 0)
+        $returnCode2 = $role->save();
+        if($returnCode < 0 || $returnCode2 < 0)
         {
             $date->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -428,8 +428,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
         // dat_rol_id anpassen (Referenz zwischen date und role)
         $date->setValue('dat_rol_id', $role->getValue('rol_id'));
-        $return_code = $date->save();
-        if($return_code < 0)
+        $returnCode = $date->save();
+        if($returnCode < 0)
         {
             $role->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

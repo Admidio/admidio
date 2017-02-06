@@ -39,11 +39,11 @@ if(!$gCurrentUser->editUsers())
 // nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
 if(isMember($getUserId))
 {
-    $this_orga = true;
+    $thisOrga = true;
 }
 else
 {
-    $this_orga = false;
+    $thisOrga = false;
 }
 
 if($getMode !== 1)
@@ -110,7 +110,7 @@ elseif($getMode === 2)
 
     // User muss zur aktuellen Orga dazugehoeren
     // kein Suizid ermoeglichen
-    if(!$this_orga || (int) $gCurrentUser->getValue('usr_id') === $getUserId)
+    if(!$thisOrga || (int) $gCurrentUser->getValue('usr_id') === $getUserId)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -172,7 +172,7 @@ elseif($getMode === 4)
     // only administrators are allowed to send new login data
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if(!$gCurrentUser->isAdministrator() || $gPreferences['enable_system_mails'] != 1 || !$this_orga)
+    if(!$gCurrentUser->isAdministrator() || $gPreferences['enable_system_mails'] != 1 || !$thisOrga)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -213,14 +213,14 @@ elseif($getMode === 5)
 }
 elseif($getMode === 6)
 {
-    if($this_orga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
+    if($thisOrga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
     {
         // only administrators are allowed to do this
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
         admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php?usr_id=' . $getUserId . '&mode=1');
         // => EXIT
     }
-    elseif(!$this_orga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
+    elseif(!$thisOrga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
     {
         // only administrators are allowed to do this
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden

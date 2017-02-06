@@ -145,13 +145,13 @@ while($row = $statement->fetch())
 
     if($categoryId !== (int) $userField->getValue('cat_id'))
     {
-        $block_id = 'admCategory'.$userField->getValue('usf_cat_id');
+        $blockId = 'admCategory'.$userField->getValue('usf_cat_id');
 
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading'));
-        $table->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'),
-                          array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
-        $table->addTableBody('id', $block_id);
+        $table->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'),
+                          array('id' => 'group_'.$blockId, 'colspan' => '8'), 'td');
+        $table->addTableBody('id', $blockId);
 
         $categoryId = (int) $userField->getValue('usf_cat_id');
     }

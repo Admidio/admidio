@@ -327,8 +327,8 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
-$page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart, true));
+$baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
+$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart, true));
 
 $page->addHtml('</div>');
 $page->show();

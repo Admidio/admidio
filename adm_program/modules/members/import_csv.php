@@ -192,7 +192,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
         $maxUserId = (int) $pdoStatement->fetchColumn();
         if($maxUserId > 0)
         {
-            $duplicate_user = new User($gDb, $gProfileFields, $maxUserId);
+            $duplicateUser = new User($gDb, $gProfileFields, $maxUserId);
         }
 
         if($maxUserId > 0)
@@ -200,40 +200,40 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
             if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
                 // delete all user data of profile fields
-                $duplicate_user->deleteUserFieldData();
+                $duplicateUser->deleteUserFieldData();
             }
 
             if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
             || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
                 // edit data of user, if user already exists
-                foreach($importedFields as $key => $field_name_intern)
+                foreach($importedFields as $key => $fieldNameIntern)
                 {
-                    if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
+                    if($duplicateUser->getValue($fieldNameIntern) != $user->getValue($fieldNameIntern))
                     {
-                        if($gProfileFields->getProperty($field_name_intern, 'usf_type') === 'DATE')
+                        if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DATE')
                         {
                             // the date must be formated
-                            $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $gPreferences['system_date']));
+                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, $gPreferences['system_date']));
                         }
-                        elseif($field_name_intern === 'COUNTRY')
+                        elseif($fieldNameIntern === 'COUNTRY')
                         {
                             // we need the iso-code and not the name of the country
-                            $duplicate_user->setValue($field_name_intern, $gL10n->getCountryByName($user->getValue($field_name_intern)));
+                            $duplicateUser->setValue($fieldNameIntern, $gL10n->getCountryByName($user->getValue($fieldNameIntern)));
                         }
-                        elseif($gProfileFields->getProperty($field_name_intern, 'usf_type') === 'DROPDOWN'
-                            || $gProfileFields->getProperty($field_name_intern, 'usf_type') === 'RADIO_BUTTON')
+                        elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DROPDOWN'
+                            || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'RADIO_BUTTON')
                         {
                             // get number and not value of entry
-                            $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'database'));
+                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, 'database'));
                         }
                         else
                         {
-                            $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
+                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern));
                         }
                     }
                 }
-                $user = $duplicate_user;
+                $user = $duplicateUser;
             }
         }
 

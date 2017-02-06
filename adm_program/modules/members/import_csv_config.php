@@ -30,28 +30,28 @@ $headline = $gL10n->get('MEM_ASSIGN_FIELDS');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
-$count_comma     = 0;
-$count_semicolon = 0;
-$count_tabulator = 0;
+$countComma     = 0;
+$countSemicolon = 0;
+$countTabulator = 0;
 
 $line = reset($_SESSION['file_lines']);
 for($i = 0, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 {
     $count = substr_count($line, ',');
-    $count_comma += $count;
+    $countComma += $count;
     $count = substr_count($line, ';');
-    $count_semicolon += $count;
+    $countSemicolon += $count;
     $count = substr_count($line, "\t");
-    $count_tabulator += $count;
+    $countTabulator += $count;
 
     $line = next($_SESSION['file_lines']);
 }
 
-if($count_semicolon > $count_comma && $count_semicolon > $count_tabulator)
+if($countSemicolon > $countComma && $countSemicolon > $countTabulator)
 {
     $_SESSION['value_separator'] = ';';
 }
-elseif($count_tabulator > $count_semicolon && $count_tabulator > $count_comma)
+elseif($countTabulator > $countSemicolon && $countTabulator > $countComma)
 {
     $_SESSION['value_separator'] = "\t";
 }
@@ -64,18 +64,18 @@ if(isset($_SESSION['import_csv_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $form_values = $_SESSION['import_csv_request'];
+    $formValues = $_SESSION['import_csv_request'];
     unset($_SESSION['import_csv_request']);
     if(!isset($form['first_row']))
     {
-        $form_values['first_row'] = false;
+        $formValues['first_row'] = false;
     }
 }
 else
 {
-    $form_values['first_row'] = true;
-    $form_values['import_coding']  = 'iso-8859-1';
-    $form_values['import_role_id'] = 0;
+    $formValues['first_row'] = true;
+    $formValues['import_coding']  = 'iso-8859-1';
+    $formValues['import_role_id'] = 0;
 }
 
 // create html page object
@@ -89,7 +89,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 
 // show form
 $form = new HtmlForm('import_assign_fields_form', ADMIDIO_URL. FOLDER_MODULES.'/members/import_csv.php', $page, array('type' => 'vertical'));
-$form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $form_values['first_row']);
+$form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $formValues['first_row']);
 $htmlFieldTable = '
     <table class="table table-condensed">
         <thead>
@@ -133,7 +133,7 @@ $htmlFieldTable = '
                     $htmlFieldTable .= '</label></td>
                 <td>
                     <select class="form-control" size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">';
-                        if(isset($form_values['usf-'.$field->getValue('usf_id')]) && $form_values['usf-'. $field->getValue('usf_id')] > 0)
+                        if(isset($formValues['usf-'.$field->getValue('usf_id')]) && $formValues['usf-'. $field->getValue('usf_id')] > 0)
                         {
                             $htmlFieldTable .= '<option value=""></option>';
                         }
@@ -143,19 +143,19 @@ $htmlFieldTable = '
                         }
 
                         // Alle Spalten aus der Datei in Combobox auflisten
-                        foreach($arrayCsvColumns as $col_key => $col_value)
+                        foreach($arrayCsvColumns as $colKey => $colValue)
                         {
-                            $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
+                            $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                            if(isset($form_values['usf-'. $field->getValue('usf_id')])
-                            && strlen($form_values['usf-'. $field->getValue('usf_id')]) > 0
-                            && $form_values['usf-'. $field->getValue('usf_id')] == $col_key)
+                            if(isset($formValues['usf-'. $field->getValue('usf_id')])
+                            && strlen($formValues['usf-'. $field->getValue('usf_id')]) > 0
+                            && $formValues['usf-'. $field->getValue('usf_id')] == $colKey)
                             {
-                                $htmlFieldTable .= '<option value="'.$col_key.'" selected="selected">'.$col_value.'</option>';
+                                $htmlFieldTable .= '<option value="'.$colKey.'" selected="selected">'.$colValue.'</option>';
                             }
                             else
                             {
-                                $htmlFieldTable .= '<option value="'.$col_key.'">'.$col_value.'</option>';
+                                $htmlFieldTable .= '<option value="'.$colKey.'">'.$colValue.'</option>';
                             }
                         }
                     $htmlFieldTable .= '</select>
