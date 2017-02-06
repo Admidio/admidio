@@ -8,7 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$systemmails_texts = array(
+$systemmailsTexts = array(
     'SYSMAIL_REGISTRATION_USER' => '#Betreff# Anmeldung bei #organization_long_name#
 #Inhalt# Hallo #user_first_name#,
 
@@ -78,10 +78,10 @@ $orgaStatement = $gDb->query($sql);
 while($rowOrga = $orgaStatement->fetch())
 {
     $sql = 'INSERT INTO '.TBL_TEXTS.' (txt_org_id, txt_name, txt_text)
-                 VALUES ('.$rowOrga['org_id'].', \'SYSMAIL_REGISTRATION_USER\',      \''.$systemmails_texts['SYSMAIL_REGISTRATION_USER'].'\')
-                      , ('.$rowOrga['org_id'].', \'SYSMAIL_REGISTRATION_WEBMASTER\', \''.$systemmails_texts['SYSMAIL_REGISTRATION_WEBMASTER'].'\')
-                      , ('.$rowOrga['org_id'].', \'SYSMAIL_NEW_PASSWORD\',           \''.$systemmails_texts['SYSMAIL_NEW_PASSWORD'].'\')
-                      , ('.$rowOrga['org_id'].', \'SYSMAIL_ACTIVATION_LINK\',        \''.$systemmails_texts['SYSMAIL_ACTIVATION_LINK'].'\') ';
+                 VALUES ('.$rowOrga['org_id'].', \'SYSMAIL_REGISTRATION_USER\',      \''.$systemmailsTexts['SYSMAIL_REGISTRATION_USER'].'\')
+                      , ('.$rowOrga['org_id'].', \'SYSMAIL_REGISTRATION_WEBMASTER\', \''.$systemmailsTexts['SYSMAIL_REGISTRATION_WEBMASTER'].'\')
+                      , ('.$rowOrga['org_id'].', \'SYSMAIL_NEW_PASSWORD\',           \''.$systemmailsTexts['SYSMAIL_NEW_PASSWORD'].'\')
+                      , ('.$rowOrga['org_id'].', \'SYSMAIL_ACTIVATION_LINK\',        \''.$systemmailsTexts['SYSMAIL_ACTIVATION_LINK'].'\') ';
     $gDb->query($sql);
 
     // Default-Kategorie fuer Datum eintragen

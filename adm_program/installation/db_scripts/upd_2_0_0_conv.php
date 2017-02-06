@@ -162,7 +162,7 @@ while($rowOrga = $orgaStatement->fetchObject())
                                         VALUES (NULL, \'USF\', \'Zusätzliche Daten\', 0, 2)';
     }
     $gDb->query($sql);
-    $cat_id_data = $gDb->lastInsertId();
+    $catIdData = $gDb->lastInsertId();
 
     // Systemeinstellungen anlegen
     $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
@@ -173,7 +173,7 @@ while($rowOrga = $orgaStatement->fetchObject())
              WHERE prf_name = \'lists_members_per_page\'';
     $gDb->query($sql);
 
-    $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_cat_id = '.$cat_id_data.'
+    $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_cat_id = '.$catIdData.'
              WHERE usf_org_shortname = '.$rowOrga->org_shortname;
     $gDb->query($sql);
 
