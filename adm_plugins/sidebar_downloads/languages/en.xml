@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
-  <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">There are no uploaded files for download.</string>
+  <string name="PLG_DOWNLOADS_MORE_DOWNLOADS">More downloads</string>
+  <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">There are no files available for download.</string>
+  <string name="PLG_DOWNLOADS_UPLOAD_FROM_AT">Uploaded by #VAR1# on #VAR2#</string>
 </resources>
