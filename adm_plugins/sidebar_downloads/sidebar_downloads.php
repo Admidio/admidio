@@ -64,21 +64,28 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] == 1)
 {
+    $countVisibleDownloads = 0;
+    $sqlCondition          = '';
+
     echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
     if($plg_show_headline)
     {
         echo '<h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3>';
     }
 
-    // erst pruefen, ob der User auch die entsprechenden Rechte hat
-    // nun alle relevanten Downloads finden
+    if(!$gValidLogin)
+    {
+        $sqlCondition = ' AND fol_public = 1 ';
+    }
 
+    // read all downloads from database and then check the rights for each download
     $sql = 'SELECT fil_timestamp, fil_name, fil_usr_id, fol_name, fol_path, fil_id, fil_fol_id
               FROM '.TBL_FILES.'
         INNER JOIN '.TBL_FOLDERS.'
                 ON fol_id = fil_fol_id
-          ORDER BY fil_timestamp DESC
-             LIMIT '.$plg_downloads_count;
+             WHERE fol_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                   '.$sqlCondition.'
+          ORDER BY fil_timestamp DESC';
 
     $filesStatement = $gDb->query($sql);
 
@@ -114,7 +121,8 @@ if ($gPreferences['enable_download_module'] == 1)
                 $fileName      = substr($rowFile->fil_name, 0, strrpos($rowFile->fil_name, '.'));
                 $fileExtension = admStrToLower(substr($rowFile->fil_name, strrpos($rowFile->fil_name, '.')+1));
                 $fullFolderFileName = $rowFile->fol_path. '/'. $rowFile->fol_name. '/'.$rowFile->fil_name;
-                $tooltip       = $fullFolderFileName;
+                $tooltip            = $fullFolderFileName;
+                $countVisibleDownloads++;
     
                 // if max chars are set then limit characters of shown filename
                 if($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename)
@@ -133,22 +141,32 @@ if ($gPreferences['enable_download_module'] == 1)
                 if($plg_show_upload_timestamp)
                 {
                     // Vorname und Nachname abfragen (Upload der Datei)
-                    $mein_user = new User($gDb, $gProfileFields, $rowFile->fil_usr_id);
+                    $user = new User($gDb, $gProfileFields, $rowFile->fil_usr_id);
 
-                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'), $rowFile->fil_timestamp);
+                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile->fil_timestamp);
                 }
 
                 echo '
                 <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. $g_root_path. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $rowFile->fil_id. '"><img
                     src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $fullFolderFileName. '/" />'.$fileName.'.'.$fileExtension. '</a>';
+
+                if($countVisibleDownloads === $plg_downloads_count)
+                {
+                    break;
+                }
             }
 
             echo '</div>';
         }
     }
-    else
+
+    if($countVisibleDownloads === 0)
     {
         echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
+    }
+    else
+    {
+        echo '<a class="btn '.$plg_link_class_downl.'" href="'.$g_root_path.FOLDER_MODULES.'/downloads/downloads.php">'.$gL10n->get('PLG_DOWNLOADS_MORE_DOWNLOADS').'</a>';
     }
     echo '</div>';
 }
