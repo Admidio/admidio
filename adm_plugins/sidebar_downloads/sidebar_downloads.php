@@ -123,7 +123,7 @@ if ($gPreferences['enable_download_module'] == 1)
                 $fullFolderFileName = $rowFile->fol_path. '/'. $rowFile->fol_name. '/'.$rowFile->fil_name;
                 $tooltip            = $fullFolderFileName;
                 $countVisibleDownloads++;
-    
+
                 // if max chars are set then limit characters of shown filename
                 if($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename)
                 {
