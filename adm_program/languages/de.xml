@@ -789,6 +789,7 @@
     <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto speichern</string>
     <string name="PHO_DOWNLOAD_ENABLED">Download aktivieren</string>
     <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
+    <string name="PHP_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
     <string name="PHO_EDIT_ALBUM">Album Bearbeiten</string>
     <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
     <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
