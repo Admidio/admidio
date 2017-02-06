@@ -90,8 +90,8 @@
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
     <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
     <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</string>
-    <string name="DAT_SAVE_ALL_CONFIRMATIONS">Absagen zu Terminen archivieren</string>
-    <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Absagen von Teilnehmern zu Terminen können in der Datenbank gespeichert werden. Die Absagen werden dann in der Teilnehmerliste ebenfalls gelistet. Alternativ werden die Einträge aus der Datenbank gelöscht und können nicht mehr eingsehen werden, wenn die Option nicht aktiv ist. Diese Option gilt ab Zeitpunkt der Einstellung und kann rückwirkend nicht reprodiziert werden! (Standard : Ja)</string>
+    <string name="DAT_SAVE_ALL_CONFIRMATIONS">Absagen zu Terminen speichern</string>
+    <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Absagen von Teilnehmern zu Terminen können gespeichert werden. Die Absagen werden dann in der Teilnehmerliste ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Teilnehmerliste auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Standard : Ja)</string>
     <string name="DAT_SHOW_MAP_LINK">Kartenlink anzeigen</string>
     <string name="DAT_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
     <string name="DAT_SHOW_ON_MAP">Auf Karte zeigen</string>
