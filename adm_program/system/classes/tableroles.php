@@ -22,7 +22,7 @@
  *                          requires userObject of user for this should be checked
  * allowedToEditMembers - checks if user is allowed to edit members of this role
  *                        requires userObject of user for this should be checked
- * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
+ * countVacancies($countLeaders = false) - gibt die freien Plaetze der Rolle zurueck
  *                    dies ist interessant, wenn rol_max_members gesetzt wurde
  * hasFormerMembers() - Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
  * setInactive()    - setzt die Rolle auf inaktiv
