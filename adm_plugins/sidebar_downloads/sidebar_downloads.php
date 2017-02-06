@@ -16,21 +16,21 @@
  */
 
 // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
-$plugin_file_pos = strpos(__FILE__, 'sidebar_downloads.php');
-$plugin_folder = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
+$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
+$pluginFilePos   = strpos(__FILE__, 'sidebar_downloads.php');
+$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
 }
 
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
-require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -59,7 +59,7 @@ if(!isset($plg_show_upload_timestamp))
 }
 
 // Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // check if the module is enabled
 if ($gPreferences['enable_download_module'] == 1)
@@ -67,7 +67,7 @@ if ($gPreferences['enable_download_module'] == 1)
     $countVisibleDownloads = 0;
     $sqlCondition          = '';
 
-    echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
+    echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if($plg_show_headline)
     {
         echo '<h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3>';

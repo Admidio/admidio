@@ -15,19 +15,19 @@
  */
 
 // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
-$plugin_file_pos   = strpos(__FILE__, 'sidebar_online.php');
-$plugin_folder     = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
+$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
+$pluginFilePos   = strpos(__FILE__, 'sidebar_online.php');
+$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -97,7 +97,7 @@ $sql .= '
      ORDER BY ses_usr_id';
 $onlineUsersStatement = $gDb->queryPrepared($sql, $queryParams);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
+echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 if($plg_show_headline)
 {
     echo '<h3>'.$gL10n->get('PLG_ONLINE_HEADLINE').'</h3>';
@@ -106,14 +106,15 @@ if($plg_show_headline)
 if($onlineUsersStatement->rowCount() > 0)
 {
     echo $plg_online_text;
-    $usr_id_merker  = 0;
-    $count_visitors = 0;
+
+    $usrIdMerker   = 0;
+    $countVisitors = 0;
 
     while($row = $onlineUsersStatement->fetchObject())
     {
         if($row->ses_usr_id > 0)
         {
-            if((int) $row->ses_usr_id !== $usr_id_merker)
+            if((int) $row->ses_usr_id !== $usrIdMerker)
             {
                 echo '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
                     href="'. $g_root_path. FOLDER_MODULES. '/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></strong>';
@@ -127,18 +128,18 @@ if($onlineUsersStatement->rowCount() > 0)
                 {
                     echo '<br />';
                 }
-                $usr_id_merker = (int) $row->ses_usr_id;
+                $usrIdMerker = (int) $row->ses_usr_id;
             }
         }
         else
         {
-            ++$count_visitors;
+            ++$countVisitors;
         }
     }
 
-    if($plg_show_visitors && $count_visitors > 0)
+    if($plg_show_visitors && $countVisitors > 0)
     {
-        echo $gL10n->get('PLG_ONLINE_VAR_NUM_VISITORS', $count_visitors);
+        echo $gL10n->get('PLG_ONLINE_VAR_NUM_VISITORS', $countVisitors);
     }
 }
 else

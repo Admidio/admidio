@@ -17,19 +17,19 @@
  */
 
 // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
-$plugin_file_pos   = strpos(__FILE__, 'birthday.php');
-$plugin_folder     = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
+$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
+$pluginFilePos   = strpos(__FILE__, 'birthday.php');
+$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // integrate language file of plugin
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -185,7 +185,7 @@ $birthdayStatement = $gDb->queryPrepared($sql, $queryParams);
 
 $numberBirthdays = $birthdayStatement->rowCount();
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
+echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 if($plg_show_headline)
 {
     echo '<h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3>';
@@ -203,19 +203,19 @@ if($numberBirthdays > 0)
                 switch ($plg_show_names)
                 {
                     case 1:  // Vorname, Nachname
-                        $plg_show_name = $row['first_name']. ' '. $row['last_name'];
+                        $plgShowName = $row['first_name']. ' '. $row['last_name'];
                         break;
                     case 2:  // Nachname, Vorname
-                        $plg_show_name = $row['last_name']. ', '. $row['first_name'];
+                        $plgShowName = $row['last_name']. ', '. $row['first_name'];
                         break;
                     case 3:  // Vorname
-                        $plg_show_name = $row['first_name'];
+                        $plgShowName = $row['first_name'];
                         break;
                     case 4:  // Loginname
-                        $plg_show_name = $row['usr_login_name'];
+                        $plgShowName = $row['usr_login_name'];
                         break;
                     default: // Vorname, Nachname
-                        $plg_show_name = $row['first_name']. ' '. $row['last_name'];
+                        $plgShowName = $row['first_name']. ' '. $row['last_name'];
                 }
 
                 // ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
@@ -223,31 +223,31 @@ if($numberBirthdays > 0)
                 {
                     if ($row['gender'] > 1)
                     {
-                        $plg_show_name = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row['last_name']);
+                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row['last_name']);
                     }
                     else
                     {
-                        $plg_show_name = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', $row['last_name']);
+                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', $row['last_name']);
                     }
                 }
 
                 // Namen mit Alter und Mail-Link anzeigen
                 if($gValidLogin)
                 {
-                    $plg_show_name = '<a href="'. $g_root_path. FOLDER_MODULES. '/profile/profile.php?user_id='. $row['usr_id']. '"
-                        target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plg_show_name. '</a>';
+                    $plgShowName = '<a href="'. $g_root_path. FOLDER_MODULES. '/profile/profile.php?user_id='. $row['usr_id']. '"
+                        target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plgShowName. '</a>';
 
                     // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
                     if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
                     {
-                        $plg_show_name = $plg_show_name.'
+                        $plgShowName .= '
                             <a class="admidio-icon-link" href="'. $g_root_path. FOLDER_MODULES. '/messages/messages_write.php?usr_id='. $row['usr_id']. '"><img
                             src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                     }
                 }
                 elseif($plg_show_email_extern === 1 && strlen($row['email']) > 0)
                 {
-                    $plg_show_name = $plg_show_name.'
+                    $plgShowName .= '
                         <a class="admidio-icon-link" href="mailto:'. $row['email']. '"><img
                         src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                 }
@@ -259,7 +259,7 @@ if($numberBirthdays > 0)
                     if((int) $row['days_to_bdate'] === 0)
                     {
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
-                        echo '<li><span id="plgBirthdayNameHighlight">'.$gL10n->get('PLG_BIRTHDAY_TODAY', $plg_show_name, $row['age']).'</span></li>';
+                        echo '<li><span id="plgBirthdayNameHighlight">'.$gL10n->get('PLG_BIRTHDAY_TODAY', $plgShowName, $row['age']).'</span></li>';
                     }
                     else
                     {
@@ -296,7 +296,7 @@ if($numberBirthdays > 0)
                         }
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
                         echo '<li><span id="'.$plgCssClass.'">'.
-                            $gL10n->get($birthdayText, $plg_show_name, $plgDays, $row['age'], $birthayDate->format($gPreferences['system_date'])).
+                            $gL10n->get($birthdayText, $plgShowName, $plgDays, $row['age'], $birthayDate->format($gPreferences['system_date'])).
                         '</span></li>';
                     }
                 }

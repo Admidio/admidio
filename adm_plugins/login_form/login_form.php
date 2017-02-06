@@ -19,23 +19,23 @@
  */
 
 // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
-$plugin_file_pos   = strpos(__FILE__, 'login_form.php');
-$plugin_folder     = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
+$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
+$pluginFilePos   = strpos(__FILE__, 'login_form.php');
+$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
 
 // initialize parameters
 $iconCode = null;
 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 
 // Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
-require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -80,7 +80,7 @@ if(isset($page) && $page instanceof \HtmlPage)
     $page->addCssFile($g_root_path . FOLDER_PLUGINS . '/login_form/login_form.css');
 }
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
+echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
     if($gValidLogin)
     {
         echo '<h3>'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';

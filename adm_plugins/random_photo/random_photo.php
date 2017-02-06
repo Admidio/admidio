@@ -17,16 +17,16 @@
  */
 
 // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
-$plugin_file_pos   = strpos(__FILE__, 'random_photo.php');
-$plugin_folder     = substr(__FILE__, $plugin_folder_pos + 1, $plugin_file_pos - $plugin_folder_pos - 2);
+$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
+$pluginFilePos   = strpos(__FILE__, 'random_photo.php');
+$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -75,7 +75,7 @@ if(!isset($plg_photos_show_link))
     $plg_photos_show_link = true;
 }
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admidio-plugin-content">';
+echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 if($plg_show_headline)
 {
     echo '<h3>'.$gL10n->get('PHO_PHOTOS').'</h3>';
@@ -135,10 +135,6 @@ if(!is_file($picPath))
 // Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize($picPath);
 
-// Popupfenstergröße
-$popup_height = $gPreferences['photo_show_height'] + 210;
-$popup_width  = $gPreferences['photo_show_width'] + 70;
-
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {
     // Linktext umbrechen wenn noetig
@@ -163,15 +159,15 @@ else
 }
 
 // Ausgabe
-$pho_id = $album->getValue('pho_id');
-echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.FOLDER_MODULES.'/photos/photos.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'" target="'. $plg_link_target. '"><img
+$phoId = (int) $album->getValue('pho_id');
+echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.FOLDER_MODULES.'/photos/photos.php?pho_id='.$phoId.'&amp;photo_nr='.$picNr.'" target="'. $plg_link_target. '"><img
     class="thumbnail" alt="'.$linkText.'" title="'.$linkText.'"
-    src="'.$g_root_path.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$picNr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
+    src="'.$g_root_path.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$phoId.'&amp;photo_nr='.$picNr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
 
 // Link zum Album
 if($plg_photos_show_link)
 {
-    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.FOLDER_MODULES.'/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.FOLDER_MODULES.'/photos/photos.php?pho_id='.$phoId.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
 }
 
 echo '</div>';
