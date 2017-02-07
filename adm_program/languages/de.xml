@@ -100,7 +100,7 @@
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
-    <string name="DAT_USER_ATTEND_POSSIBLY">Unter Vorbehalt</string>
+    <string name="DAT_USER_TENTATIVE">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_USER_REFUSED">Abgesagt</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>

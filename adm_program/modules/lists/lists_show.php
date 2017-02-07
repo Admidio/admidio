@@ -769,13 +769,13 @@ foreach ($membersList as $member)
                 switch ((int) $content)
                 {
                     case 1:
-                        $content = $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
+                        $content = $gL10n->get('DAT_USER_TENTATIVE');
                         break;
                     case 2:
                         $content = $gL10n->get('SYS_YES');
                         break;
                     case 3:
-                        $content = $gL10n->get('DAT_USER_REFUSED');
+                        $content = $gL10n->get('SYS_NO');
                         break;
                 }
             }

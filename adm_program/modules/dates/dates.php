@@ -471,7 +471,7 @@ else
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/warning.png" alt="' . $gL10n->get('DAT_USER_INVITED') . '" title="' . $gL10n->get('DAT_USER_INVITED') . '"/>';
                         break;
                     case '1':
-                        $buttonText =  $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
+                        $buttonText =  $gL10n->get('DAT_USER_TENTATIVE');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '" title="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '"/>';
                         break;
                     case '2':
@@ -535,7 +535,7 @@ else
                             </li>
                             <li>
                                 <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id=' . $dateId . '"' . $userStatusTentative . '>
-                                    <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_ATTEND_POSSIBLY') . '" title="' . $gL10n->get('DAT_USER_ATTEND_POSSIBLY') . '"/>' . $gL10n->get('DAT_USER_ATTEND_POSSIBLY') . '
+                                    <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                 </a>
                             </li>
                             <li>
