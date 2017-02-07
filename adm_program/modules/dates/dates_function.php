@@ -474,9 +474,9 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
     && !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
-        // user wants to participate -> add him to date
+        // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
