@@ -113,7 +113,7 @@ class TableGuestbookComment extends TableAccess
             return parent::setValue($columnName, $newValue, false);
         }
 
-        if ($newValue !== '' && $columnName === 'gbc_email')
+        if ($columnName === 'gbc_email' && $newValue !== '')
         {
             $newValue = admStrToLower($newValue);
 

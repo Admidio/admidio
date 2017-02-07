@@ -73,7 +73,7 @@ if($getGboId > 0)
 // Name, Emailadresse und Homepage vorbelegt werden...
 if ($getGboId === 0 && $gValidLogin)
 {
-    $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
+    $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
     $guestbook->setValue('gbo_homepage', $gCurrentUser->getValue('WEBSITE'));
 }
