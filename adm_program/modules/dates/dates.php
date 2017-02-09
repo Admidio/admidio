@@ -699,7 +699,7 @@ else
             }
 
             $page->addHtml('
-                <div class="panel panel-primary' . $cssClassHighlight . '" id="dat_' . $dateId . '">
+                <div class="panel panel-primary ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
                     <div class="panel-heading">
                         <div class="pull-left">
                             <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="' . $dateHeadline . '" />' .
