@@ -501,7 +501,7 @@ else
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if(array_search((int) $userId, array_column($eventMember, 'usrId')) !== false) 
+                    if (array_search((int) $userId, array_column($eventMember, 'usrId')) !== false) 
                     {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
