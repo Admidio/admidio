@@ -501,9 +501,7 @@ else
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    $key = array_search((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'));
-
-                    if (false !== $key)
+                    if(array_search((int) $userId, array_column($eventMember, 'usrId')) !== false) 
                     {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
@@ -549,7 +547,7 @@ else
                 if ($participationPossible === false)
                 {
                     // check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                    if (!$participants->isMemberofEvent($gCurrentUser->getValue('usr_id')))
+                    if (!$participants->isMemberOfEvent($gCurrentUser->getValue('usr_id')))
                     {
                         $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                         $iconParticipationStatus = '';
