@@ -772,10 +772,10 @@ foreach ($membersList as $member)
                         $content = $gL10n->get('DAT_USER_TENTATIVE');
                         break;
                     case 2:
-                        $content = $gL10n->get('SYS_YES');
+                        $content = $gL10n->get('DAT_USER_WILL_ATTEND');
                         break;
                     case 3:
-                        $content = $gL10n->get('SYS_NO');
+                        $content = $gL10n->get('DAT_USER_REFUSED');
                         break;
                 }
             }

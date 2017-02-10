@@ -99,6 +99,7 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
+    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
     <string name="DAT_USER_TENTATIVE">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
