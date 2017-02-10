@@ -213,17 +213,16 @@ class Participants
      * @param int    $userId
      * @return bool Returns true if userID is found and approval state is not set to disagreement (value: 3)
      */
-    public function isMemberofEvent($userId)
+    public function isMemberOfEvent($userId)
     {
         // Read participants of current event role
         $eventMember = $this->getParticipantsArray($this->rolId);
         // Search for user in array
-        $key = array_search((int) $userId, array_column($eventMember, 'usrId'));
-        if (false !== $key)
+        if (array_search((int) $userId, array_column($eventMember, 'usrId')) !== false) 
         {
             if ($eventMember[$userId]['approved'] !== 3)
             {
-                // Is participiant of date
+                // Is participiant of event
                 return true;
             }
         }
