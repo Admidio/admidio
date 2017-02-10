@@ -53,7 +53,7 @@ if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6)
+if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -474,9 +474,9 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
     && !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
-        // user wants to participate -> add him to date
+        // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
@@ -519,7 +519,17 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+
+    if (!$gPreferences['dates_save_all_confirmations'])
+    {
+        // Delete entry
+        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    }
+    else
+    {
+        // Set user status to refused
+        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
+    }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));

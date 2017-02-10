@@ -90,6 +90,8 @@
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
     <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
     <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</string>
+    <string name="DAT_SAVE_ALL_CONFIRMATIONS">Absagen zu Terminen speichern</string>
+    <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Absagen von Teilnehmern zu Terminen können gespeichert werden. Die Absagen werden dann in der Teilnehmerliste ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Teilnehmerliste auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Standard : Ja)</string>
     <string name="DAT_SHOW_MAP_LINK">Kartenlink anzeigen</string>
     <string name="DAT_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
     <string name="DAT_SHOW_ON_MAP">Auf Karte zeigen</string>
@@ -97,9 +99,11 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
+    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
-    <string name="DAT_USER_ATTEND_POSSIBLY">Unter Vorbehalt</string>
+    <string name="DAT_USER_TENTATIVE">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
+    <string name="DAT_USER_REFUSED">Abgesagt</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>

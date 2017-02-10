@@ -155,6 +155,7 @@ $defaultOrgPreferences = array(
     'dates_ical_days_past'              => '30',
     'dates_ical_days_future'            => '365',
     'dates_default_list_configuration'  => '',
+    'dates_save_all_confirmations'      => '1',
 
     // Weblinks
     'enable_weblinks_module'    => '1',
@@ -164,4 +165,4 @@ $defaultOrgPreferences = array(
 
     // Inventory
     'enable_inventory_module'   => '0'
- );
+);

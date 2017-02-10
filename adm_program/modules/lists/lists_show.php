@@ -761,13 +761,17 @@ foreach ($membersList as $member)
             elseif ($column->getValue('lsc_special_field') === 'mem_approved')
             {
                 // Assign Integer to Language strings
-                if ((int) $content === 1)
+                switch ((int) $content)
                 {
-                    $content = $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
-                }
-                elseif ((int) $content === 2)
-                {
-                    $content = $gL10n->get('SYS_YES');
+                    case 1:
+                        $content = $gL10n->get('DAT_USER_TENTATIVE');
+                        break;
+                    case 2:
+                        $content = $gL10n->get('DAT_USER_WILL_ATTEND');
+                        break;
+                    case 3:
+                        $content = $gL10n->get('DAT_USER_REFUSED');
+                        break;
                 }
             }
             elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)
