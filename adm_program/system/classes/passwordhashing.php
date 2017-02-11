@@ -192,6 +192,8 @@ class PasswordHashing
      */
     public static function genRandomInt($min, $max)
     {
+        global $gLogger;
+
         try
         {
             $int = random_int($min, $max);
@@ -200,11 +202,13 @@ class PasswordHashing
         {
             // as a fallback we should use the rand method
             $int = mt_rand($min, $max);
+            $gLogger->warning('SECURITY: Could not generate secure random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
         }
         catch (Exception $e)
         {
             // as a fallback we should use the rand method
             $int = mt_rand($min, $max);
+            $gLogger->warning('SECURITY: Could not generate secure random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
         }
 
         return $int;
