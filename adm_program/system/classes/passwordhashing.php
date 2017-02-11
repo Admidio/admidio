@@ -177,8 +177,8 @@ class PasswordHashing
         $randomString = '';
         for ($i = 0; $i < $length; ++$i)
         {
-            $r = self::genRandomInt(0, $charsetMax);
-            $randomString .= $charset[$r];
+            $randomInt = self::genRandomInt(0, $charsetMax);
+            $randomString .= $charset[$randomInt];
         }
 
         return $randomString;

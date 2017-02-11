@@ -112,7 +112,8 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
     // read system component
     $gSystemComponent =& $gCurrentSession->getObject('gSystemComponent');
     // read language data from session and assign them to the language object
-    $gL10n->addLanguageData($gCurrentSession->getObject('gLanguageData'));
+    $gLanguageData =& $gCurrentSession->getObject('gLanguageData');
+    $gL10n->addLanguageData($gLanguageData);
     // read organization data from session object
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gPreferences = $gCurrentOrganization->getPreferences();
