@@ -143,11 +143,7 @@ else
             $textPrev = substr($textPrev, 0, $plg_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
                 <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-<<<<<<< HEAD
-                    href="'. $g_root_path. FOLDER_MODULES. '/announcements/announcements.php?id='. $plgAnnouncement->getValue('ann_id'). '&amp;headline='. $plg_headline. '"><span
-=======
-                    href="'. ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php?id='. $plg_announcement->getValue('ann_id'). '&amp;headline='. $plg_headline. '"><span
->>>>>>> v3.2
+                    href="'. ADMIDIO_URL. FOLDER_MODULES. '/announcements/announcements.php?id='. $plgAnnouncement->getValue('ann_id'). '&amp;headline='. $plg_headline. '"><span
                     class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_MORE').'</a>';
             $textPrev = pluginAnnouncementsCloseTags($textPrev);
 
