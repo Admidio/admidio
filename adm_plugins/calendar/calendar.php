@@ -30,12 +30,12 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'date_id',   'string');
+$getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
 
 if(isset($_GET['ajax_change']) && $plg_ajax_change)
 {
     // Header kodieren
-    header('Content-Type: text/html; charset=UTF-8');
+    header('Content-Type: text/html; charset=utf-8');
 }
 
 // Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen

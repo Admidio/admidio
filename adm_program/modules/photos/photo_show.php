@@ -101,7 +101,7 @@ if ($getThumbnail)
         }
         else
         {
-            header('content-type: image/jpg');
+            header('Content-Type: image/jpeg');
             echo readfile($picThumbPath);
         }
     }
