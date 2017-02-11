@@ -123,7 +123,7 @@ if ($gPreferences['enable_download_module'] == 1)
                 $fullFolderFileName = $rowFile->fol_path. '/'. $rowFile->fol_name. '/'.$rowFile->fil_name;
                 $tooltip            = $fullFolderFileName;
                 $countVisibleDownloads++;
-    
+
                 // if max chars are set then limit characters of shown filename
                 if($plgMaxCharsFilename > 0 && strlen($fileName) > $plgMaxCharsFilename)
                 {
@@ -147,7 +147,7 @@ if ($gPreferences['enable_download_module'] == 1)
                 }
 
                 echo '
-                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. $g_root_path. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $rowFile->fil_id. '"><img
+                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php?file_id='. $rowFile->fil_id. '"><img
                     src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $fullFolderFileName. '/" />'.$fileName.'.'.$fileExtension. '</a>';
 
                 if($countVisibleDownloads === $plg_downloads_count)
@@ -166,7 +166,7 @@ if ($gPreferences['enable_download_module'] == 1)
     }
     else
     {
-        echo '<a class="btn '.$plg_link_class_downl.'" href="'.$g_root_path.FOLDER_MODULES.'/downloads/downloads.php">'.$gL10n->get('PLG_DOWNLOADS_MORE_DOWNLOADS').'</a>';
+        echo '<a class="btn '.$plg_link_class_downl.'" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php">'.$gL10n->get('PLG_DOWNLOADS_MORE_DOWNLOADS').'</a>';
     }
     echo '</div>';
 }

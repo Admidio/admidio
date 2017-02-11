@@ -25,6 +25,6 @@ if(!$gValidLogin)
     }
 
     // User not logged in -> Request login site
-    admRedirect($g_root_path . '/adm_program/system/login.php');
+    admRedirect(ADMIDIO_URL . '/adm_program/system/login.php');
     // => EXIT
 }
