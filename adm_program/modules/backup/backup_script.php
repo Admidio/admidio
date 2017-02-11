@@ -489,11 +489,15 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                     if (($currentrow % MYSQL_RECONNECT_INTERVAL) == 0)
                     {
-                        $gDb->close();
-                        if (!@$gDb->connect(DB_HOST, DB_USER, DB_PASS))
+                        // reconnect to database
+                        try
                         {
-                            mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
-                            exit('There was a problem connecting to the database:<br />'.LINE_TERMINATOR.$gDb->db_error());
+                            $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+                        }
+                        catch(AdmException $e)
+                        {
+                            OutputInformation('topprogress', $e->getText());
+                            exit();
                         }
                     }
                 }
