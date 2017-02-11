@@ -252,11 +252,11 @@ $page->addHtml('
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
                                             array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC'));
                         $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $formValues['system_date'], array('maxLength'        => 20,
-                                                                                                                          'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', '<a href="https://secure.php.net/manual/en/function.date.php">date()</a>'),
-                                                                                                                          'class'            => 'form-control-small'));
+                                                                                                                         'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', '<a href="https://secure.php.net/manual/en/function.date.php">date()</a>'),
+                                                                                                                         'class'            => 'form-control-small'));
                         $form->addInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $formValues['system_time'], array('maxLength'        => 20,
-                                                                                                                          'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', '<a href="https://secure.php.net/manual/en/function.date.php">date()</a>'),
-                                                                                                                          'class'            => 'form-control-small'));
+                                                                                                                         'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', '<a href="https://secure.php.net/manual/en/function.date.php">date()</a>'),
+                                                                                                                         'class'            => 'form-control-small'));
                         $form->addInput('system_currency', $gL10n->get('ORG_CURRENCY'), $formValues['system_currency'], array('maxLength' => 20, 'helpTextIdInline' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small'));
                         $form->addSubmitButton('btn_save_regional_settings', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));
