@@ -61,7 +61,7 @@ define('ADMIDIO_PATH', substr(__FILE__, 0, -33)); // /var/www/subfolder
 define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
 
 // SUBFOLDERS
-define('ADMIDIO_SUB_FOLDER', substr(ADMIDIO_PATH, strlen(WWW_PATH))); // /subfolder
+define('ADMIDIO_SUB_FOLDER', str_replace('\\', '/', substr(ADMIDIO_PATH, strlen(WWW_PATH)))); // /subfolder
 define('ADMIDIO_SUB_URL', (SECURE_PROXY ? '/' . $host : '') . ADMIDIO_SUB_FOLDER); // /subfolder | /www.example.com/subfolder
 
 $subfolderLength = strlen(ADMIDIO_SUB_FOLDER);
