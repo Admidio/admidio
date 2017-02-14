@@ -631,17 +631,26 @@ $sql = 'SELECT rol_id, rol_name, cat_name
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence, rol_name';
-$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+$form->addSelectBoxFromSql(
+    'sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sql,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
+);
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-$form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
-// select box showing all relation types
-$sql = 'SELECT urt_id, urt_name, urt_name
-          FROM '.TBL_USER_RELATION_TYPES.'
-      ORDER BY urt_name';
-$form->addSelectBoxFromSql('sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
-    array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : ''));
+$form->addSelectBox(
+    'sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false)
+);
+if ($gPreferences['members_enable_user_relations'] > 0)
+{
+    // select box showing all relation types
+    $sql = 'SELECT urt_id, urt_name, urt_name
+              FROM '.TBL_USER_RELATION_TYPES.'
+          ORDER BY urt_name';
+    $form->addSelectBoxFromSql(
+        'sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+        array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
+    );
+}
 $form->closeGroupBox();
 
 $form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary'));
