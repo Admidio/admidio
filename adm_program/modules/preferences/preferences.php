@@ -817,7 +817,7 @@ $page->addHtml('
                             'dates_default_list_configuration', $gL10n->get('DAT_DEFAULT_LIST_CONFIGURATION'), $gDb, $sqlData,
                             array('defaultValue' => $formValues['dates_default_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'DAT_DEFAULT_LIST_CONFIGURATION_DESC')
                         );
-                        $form->addCheckbox('dates_save_all_confirmations', $gL10n->get('DAT_SAVE_ALL_CONFIRMATIONS'), (bool) $form_values['dates_save_all_confirmations'], array('helpTextIdInline' => 'DAT_SAVE_ALL_CONFIRMATIONS_DESC'));
+                        $form->addCheckbox('dates_save_all_confirmations', $gL10n->get('DAT_SAVE_ALL_CONFIRMATIONS'), (bool) $formValues['dates_save_all_confirmations'], array('helpTextIdInline' => 'DAT_SAVE_ALL_CONFIRMATIONS_DESC'));
                         $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
                                     src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
