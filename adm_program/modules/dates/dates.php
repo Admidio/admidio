@@ -127,6 +127,7 @@ if($getViewMode === 'html')
         });
 
         $("#menu_item_print_view").click(function() {
+            window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&id=' . $getId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
