@@ -196,13 +196,13 @@ function strValidCharacters($string, $checkType)
             $validRegex = '/^[\w.@+-]+$/';
             break;
         case 'email':
-            $validRegex = '/^[\wáàâåäæçéèêñóòôöõøœúùûüß.@+-]+$/';
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/';
             break;
         case 'file':
-            $validRegex = '/^[\wáàâåäæçéèêñóòôöõøœúùûüß$&!?() .@+-]+$/';
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() .@+-]+$/';
             break;
         case 'url':
-            $validRegex = '/^[\wáàâåäæçéèêñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/';
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/';
             break;
         case 'phone':
             $validRegex = '/^[\d() \/+-]+$/';

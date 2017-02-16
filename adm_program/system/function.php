@@ -65,16 +65,11 @@ spl_autoload_register('admFuncAutoload');
  */
 function hasRole($roleName, $userId = 0)
 {
-    global $gCurrentUser, $gCurrentOrganization, $gDb;
-
-    if (!is_numeric($userId))
-    {
-        return false;
-    }
+    global $gDb, $gCurrentUser, $gCurrentOrganization;
 
     if ($userId === 0)
     {
-        $userId = $gCurrentUser->getValue('usr_id');
+        $userId = (int) $gCurrentUser->getValue('usr_id');
     }
 
     $sql = 'SELECT mem_id
@@ -90,7 +85,7 @@ function hasRole($roleName, $userId = 0)
                AND rol_valid  = 1
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )';
-    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, $gCurrentOrganization->getValue('org_id')));
+    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $roleName, (int) $gCurrentOrganization->getValue('org_id')));
 
     return $statement->rowCount() === 1;
 }
@@ -102,30 +97,28 @@ function hasRole($roleName, $userId = 0)
  */
 function isMember($userId)
 {
-    global $gCurrentOrganization, $gDb;
+    global $gDb, $gCurrentOrganization;
 
-    if (is_numeric($userId) && $userId > 0)
+    if ($userId === 0)
     {
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = ? -- $userId
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
-                   AND rol_valid  = 1
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL )';
-        $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
-
-        if ($statement->fetchColumn() > 0)
-        {
-            return true;
-        }
+        return false;
     }
-    return false;
+
+    $sql = 'SELECT COUNT(*) AS count
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE mem_usr_id = ? -- $userId
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end    > ? -- DATE_NOW
+               AND rol_valid  = 1
+               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   OR cat_org_id IS NULL )';
+    $statement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
+
+    return $statement->fetchColumn() > 0;
 }
 
 /**
@@ -138,37 +131,37 @@ function isMember($userId)
  */
 function isGroupLeader($userId, $roleId = 0)
 {
-    global $gCurrentOrganization, $gDb;
+    global $gDb, $gCurrentOrganization;
 
-    if (is_numeric($userId) && $userId > 0 && is_numeric($roleId))
+    if ($userId === 0)
     {
-        $sql = 'SELECT mem_id
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = ? -- $userId
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
-                   AND mem_leader = 1
-                   AND rol_valid  = 1
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL )';
-        $queryParams = array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
-        if ($roleId > 0)
-        {
-            $sql .= ' AND mem_rol_id = ? -- $roleId';
-            $queryParams[] = $roleId;
-        }
-        $statement = $gDb->queryPrepared($sql, $queryParams);
-
-        if ($statement->rowCount() > 0)
-        {
-            return true;
-        }
+        return false;
     }
-    return false;
+
+    $sql = 'SELECT mem_id
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE mem_usr_id = ? -- $userId
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end    > ? -- DATE_NOW
+               AND mem_leader = 1
+               AND rol_valid  = 1
+               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   OR cat_org_id IS NULL )';
+    $queryParams = array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
+
+    if ($roleId > 0)
+    {
+        $sql .= ' AND mem_rol_id = ? -- $roleId';
+        $queryParams[] = $roleId;
+    }
+
+    $statement = $gDb->queryPrepared($sql, $queryParams);
+
+    return $statement->rowCount() > 0;
 }
 
 /**
@@ -325,7 +318,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 function admFuncGetBytesFromSize($data, $decimalMulti = false)
 {
     $value = (float) substr(trim($data), 0, -1);
-    $unit  = admStrToUpper(substr(trim($data), -1));
+    $unit  = strtoupper(substr(trim($data), -1));
 
     $multi = 1024;
     if ($decimalMulti)
@@ -430,7 +423,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     $optionsAll     = array_replace($optionsDefault, $options);
 
     $errorMessage = '';
-    $datatype = admStrToLower($datatype);
+    $datatype = strtolower($datatype);
     $value = null;
 
     // set default value for each datatype if no value is given and no value was required
@@ -849,6 +842,7 @@ function admRedirect($url, $statusCode = 303)
         // => EXIT
     }
 
+    // Check if $url starts with the Admidio URL
     if (strpos($url, ADMIDIO_URL) === 0)
     {
         $gLogger->info('REDIRECT: Redirecting to internal URL!', $loggerObject);
