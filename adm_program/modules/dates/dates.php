@@ -127,7 +127,6 @@ if($getViewMode === 'html')
         });
 
         $("#menu_item_print_view").click(function() {
-            window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -136,15 +135,16 @@ if($getViewMode === 'html')
         // add back link to module menu
         $datesMenu = $page->getMenu();
         $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
     }
 
     // get module menu
-    $DatesMenu = $page->getMenu();
+    $datesMenu = $page->getMenu();
 
     // Add new event
     if($gCurrentUser->editDates() && $getId === 0)
     {
-        $DatesMenu->addItem('admMenuItemAdd',
+        $datesMenu->addItem('admMenuItemAdd',
                             ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?headline=' . $getHeadline,
                             $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
     }
@@ -172,20 +172,20 @@ if($getViewMode === 'html')
             );
         }
         $form->addSelectBox('sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries, array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false));
-        $DatesMenu->addForm($form->show(false));
+        $datesMenu->addForm($form->show(false));
 
         // show print button
-        $DatesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
         if($gPreferences['enable_dates_ical'] == 1 || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
         {
-            $DatesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+            $datesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
         }
 
         // ical Download
         if($gPreferences['enable_dates_ical'] == 1)
         {
-            $DatesMenu->addItem('admMenuItemICal',
+            $datesMenu->addItem('admMenuItemICal',
                                 ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php?headline=' . $getHeadline . '&amp;cat_id=' . $getCatId,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
@@ -193,14 +193,14 @@ if($getViewMode === 'html')
         if($gCurrentUser->isAdministrator())
         {
             // show link to system preferences of weblinks
-            $DatesMenu->addItem('admMenuItemPreferencesLinks',
+            $datesMenu->addItem('admMenuItemPreferencesLinks',
                                 ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=events',
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
         }
         elseif($gCurrentUser->editDates())
         {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $DatesMenu->addItem('admMenuItemCategories',
+            $datesMenu->addItem('admMenuItemCategories',
                                 FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
                                 $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras');
         }
