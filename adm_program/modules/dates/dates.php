@@ -861,29 +861,6 @@ else
                     $columnValues[] = '';
                 }
             }
-            elseif($getView === 'participants')
-            {
-                $columnValue = '';
-
-                if(is_array($participantsArray))
-                {
-                    // Only show participants if user has right to view the list, is leader or has permission to create/edit events
-                    if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
-                        || $row['mem_leader'] == 1
-                        || $gCurrentUser->editDates())
-                    {
-                        foreach($participantsArray as $participant)
-                        {
-                            $columnValue .= $participant['firstname']. ' '. $participant['surname']. ', ';
-                        }
-                    }
-                }
-                $columnValues[] = substr($columnValue, 0, -2);
-            }
-            elseif($getView === 'description')
-            {
-                $columnValues[] = $date->getValue('dat_description');
-            }
 
             if($getViewMode === 'html')
             {
