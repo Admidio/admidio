@@ -237,6 +237,14 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     {
         $_POST['dat_max_members'] = 0;
     }
+    if(!is_numeric($_POST['dat_allow_comments']))
+    {
+        $_POST['dat_allow_comments'] = 0;
+    }
+    if(!is_numeric($_POST['dat_additional_guests']))
+    {
+        $_POST['dat_additional_guests'] = 0;
+    }
 
     // make html in description secure
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
