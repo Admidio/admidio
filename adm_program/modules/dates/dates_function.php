@@ -572,3 +572,4 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
     echo $date->getIcal(DOMAIN);
     exit();
 }
+
