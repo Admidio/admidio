@@ -31,7 +31,7 @@ if ($gPreferences['members_enable_user_relations'] == 0)
     // => EXIT
 }
 
-// nur berechtigte User duerfen Funktionen aufrufen
+// only users who can edit all users are allowed to create user relations
 if(!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

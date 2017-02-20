@@ -24,6 +24,13 @@ if ($gPreferences['members_enable_user_relations'] == 0)
     // => EXIT
 }
 
+// only users who can edit all users are allowed to create user relations
+if(!$gCurrentUser->editUsers())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+
 if($getUsrId <= 0)
 {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
@@ -35,12 +42,6 @@ $user = new User($gDb, $gProfileFields, $getUsrId);
 if($user->isNewRecord())
 {
     $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
-    // => EXIT
-}
-
-if(!$gCurrentUser->hasRightEditProfile($user))
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
