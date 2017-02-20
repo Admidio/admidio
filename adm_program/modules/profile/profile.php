@@ -265,7 +265,7 @@ if($gCurrentUser->assignRoles())
 }
 
 // show link to create relations
-if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
+if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->editUsers())
 {
     $profileMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
         $gL10n->get('PRO_ADD_USER_RELATION'), 'user_administration.png', 'right', 'menu_item_extras');
