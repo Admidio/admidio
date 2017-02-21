@@ -8,6 +8,7 @@ php:
 #  - 5.5
   - 5.6
 #  - 7.0
+#  - 7.1
 #  - hhvm
 #  - nightly
 
@@ -20,11 +21,11 @@ php:
 #  - postgresql
 
 #addons:
-#  postgresql: 9.3
-#  mariadb: 10.0
+#  postgresql: 9.6
+#  mariadb: 10.1
 
 before_script:
   - wget http://get.sensiolabs.org/php-cs-fixer.phar -O php-cs-fixer.phar
 
 script:
-  - php php-cs-fixer.phar fix --config-file=".php_cs" --verbose --dry-run
+  - php php-cs-fixer.phar fix --verbose --dry-run
