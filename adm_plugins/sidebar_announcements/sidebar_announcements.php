@@ -176,7 +176,7 @@ function pluginAnnouncementsCloseTags($html) {
         return $html;
     }
     $openedtags = array_reverse($openedtags);
-    for ($i = 0; $i < $lenOpened; $i++)
+    for ($i = 0; $i < $lenOpened; ++$i)
     {
         if (!in_array($openedtags[$i], $closedtags, true))
         {

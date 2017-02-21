@@ -98,7 +98,7 @@ class PasswordHashing
             }
 
             $status = 0;
-            for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; $i++) {
+            for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; ++$i) {
                 $status |= (ord($passwordHash[$i]) ^ ord($hash[$i]));
             }
 
