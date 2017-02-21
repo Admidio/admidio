@@ -586,6 +586,7 @@ class ComponentUpdate extends Component
             $this->db->queryPrepared($sql, array($listId, $organization['org_id']));
         }
     }
+
     /**
      * This method set the approval states for all members of an event in the past to confirmed.
      */
@@ -606,6 +607,7 @@ class ComponentUpdate extends Component
 
         $this->db->queryPrepared($sql, array(DATE_NOW));
     }
+
     /**
      * This method installs the default user relation types
      */

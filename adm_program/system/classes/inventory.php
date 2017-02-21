@@ -328,5 +328,4 @@ class Inventory extends TableInventory
         }
         return $viewProfile;
     }
-
 }

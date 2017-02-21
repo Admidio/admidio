@@ -857,7 +857,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // Remove attributes that are not set
-        $attributes = array_filter($attributes, function($attribute)
+        $attributes = array_filter($attributes, function ($attribute)
         {
             return $attribute !== '' && $attribute !== null;
         });

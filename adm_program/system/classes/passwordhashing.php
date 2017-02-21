@@ -152,7 +152,7 @@ class PasswordHashing
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
      * @throws AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS
      * @return string Returns a cryptographically strong random password string
-     * @link https://paragonie.com/b/JvICXzh_jhLyt4y3
+     * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
     public static function genRandomPassword($length = 16, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
