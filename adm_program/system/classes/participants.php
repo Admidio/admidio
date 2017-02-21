@@ -98,7 +98,10 @@ class Participants
 
         while ($row = $membersStatement->fetch())
         {
-            $numParticipants [] = array('member' => $row['mem_usr_id'], 'leader' => $row['mem_leader']);
+            $numParticipants[] = array(
+                'member' => (int) $row['mem_usr_id'],
+                'leader' => (bool) $row['mem_leader']
+            );
         }
 
         // count the number of leaders of the date
@@ -195,12 +198,12 @@ class Participants
         $participants = array();
         while ($row = $membersStatement->fetch())
         {
-            $participants[$row['mem_usr_id']] = array(
-                'usrId'     => $row['mem_usr_id'],
+            $participants[(int) $row['mem_usr_id']] = array(
+                'usrId'     => (int) $row['mem_usr_id'],
                 'surname'   => $row['surname'],
                 'firstname' => $row['firstname'],
-                'leader'    => $row['mem_leader'],
-                'approved'  => $row['mem_approved']
+                'leader'    => (bool) $row['mem_leader'],
+                'approved'  => (int) $row['mem_approved']
             );
         }
         $this->memberDate = $participants;
@@ -218,11 +221,11 @@ class Participants
         // Read participants of current event role
         $eventMember = $this->getParticipantsArray($this->rolId);
         // Search for user in array
-        if (array_search((int) $userId, array_column($eventMember, 'usrId')) !== false)
+        if (!in_array((int) $userId, array_column($eventMember, 'usrId'), true))
         {
             if ($eventMember[$userId]['approved'] !== 3)
             {
-                // Is participiant of event
+                // Is participant of event
                 return true;
             }
         }
