@@ -666,7 +666,7 @@ foreach ($membersList as $member)
 
         if ($columnNumber === 1)
         {
-            if ($getMode === 'html' || $getMode === 'print' || $getMode === 'pdf')
+            if (in_array($getMode, array('html', 'print', 'pdf'), true))
             {
                 // add serial
                 $columnValues[] = $listRowNumber;

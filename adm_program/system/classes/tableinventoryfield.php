@@ -276,8 +276,7 @@ class TableInventoryField extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // name, category and type couldn't be edited if it's a system field
-        if(($columnName === 'inf_name' || $columnName === 'inf_cat_id' || $columnName === 'inf_type')
-        && $this->getValue('inf_system') == 1)
+        if(in_array($columnName, array('inf_name', 'inf_cat_id', 'inf_type'), true) && $this->getValue('inf_system') == 1)
         {
             return false;
         }

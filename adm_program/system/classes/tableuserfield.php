@@ -374,8 +374,7 @@ class TableUserField extends TableAccess
         }
 
         // name, category and type couldn't be edited if it's a system field
-        if (($columnName === 'usf_cat_id' || $columnName === 'usf_type' || $columnName === 'usf_name')
-        && (int) $this->getValue('usf_system') === 1)
+        if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1)
         {
             return false;
         }
