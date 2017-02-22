@@ -660,8 +660,9 @@ class HtmlPage
      */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
+        global $g_root_path; // Deprecated
 
         $headerContent    = '';
         $htmlMyHeader     = '';
@@ -762,7 +763,12 @@ class HtmlPage
         // add code for a modal window
         if($this->showModal)
         {
-            $this->addJavascript('$("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); });', true);
+            $this->addJavascript('
+                $("body").on("hidden.bs.modal", ".modal", function() {
+                    $(this).removeData("bs.modal");
+                });',
+                true
+            );
             $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog"><div class="modal-content"></div></div>
                             </div>');
@@ -792,9 +798,9 @@ class HtmlPage
             <head>
                 <!-- (c) 2004 - 2016 The Admidio Team - https://www.admidio.org/ -->
 
-                <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-                <meta http-equiv="X-UA-Compatible" content="IE=edge">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
 
                 <title>'.$this->title.'</title>
 
