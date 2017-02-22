@@ -178,6 +178,7 @@ class ListConfiguration extends TableLists
      *                             2 - Active and former members of a role
      * @param string $startDate
      * @param string $endDate
+     * @param int[]  $relationtypeIds
      * @return string
      */
     public function getSQL(array $roleIds, $memberStatus = 0, $startDate = null, $endDate = null, array $relationtypeIds = array())
@@ -353,7 +354,7 @@ class ListConfiguration extends TableLists
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
                                 ON usr_id = mem_usr_id';
         $sqlRelationtypeWhere = '';
-        if ($relationtypeIds)
+        if (count($relationtypeIds) > 0)
         {
             $sqlUserJoin = 'INNER JOIN '.TBL_USER_RELATIONS.'
                                     ON ure_usr_id1 = mem_usr_id

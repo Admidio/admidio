@@ -20,10 +20,9 @@ require_once(__DIR__ . '/../../system/common.php');
 $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -74,7 +73,7 @@ if($getGboId > 0)
 // Name, Emailadresse und Homepage vorbelegt werden...
 if ($getGboId === 0 && $gValidLogin)
 {
-    $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
+    $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
     $guestbook->setValue('gbo_homepage', $gCurrentUser->getValue('WEBSITE'));
 }

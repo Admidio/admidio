@@ -30,10 +30,9 @@ $getMaxWidth  = admFuncVariableIsValid($_GET, 'max_width',  'int');
 $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int');
 $getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -47,7 +46,7 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 $image = null;
 
 // read album data out of session or database
-if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
+if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
     $photoAlbum->setDatabase($gDb);
@@ -59,89 +58,90 @@ else
 }
 
 // Bildpfad zusammensetzten
-$ordner  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $getPhotoId;
-$picpath = $ordner.'/'.$getPhotoNr.'.jpg';
+$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $getPhotoId;
+$picPath      = $albumFolder . '/' . $getPhotoNr . '.jpg';
+$picThumbPath = $albumFolder . '/thumbnails/' . $getPhotoNr . '.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
-$gLogger->info('ImagePath: ' . $picpath);
+$gLogger->info('ImagePath: ' . $picPath);
 
 // Wenn Thumbnail existiert laengere Seite ermitteln
-if($getThumbnail)
+if ($getThumbnail)
 {
-    if($getPhotoNr > 0)
+    if ($getPhotoNr > 0)
     {
-        $thumb_length = 1;
-        if(is_file($ordner.'/thumbnails/'.$getPhotoNr.'.jpg'))
+        $thumbLength = 1;
+        if (is_file($picThumbPath))
         {
             // Ermittlung der Original Bildgroesse
-            $bildgroesse = getimagesize($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
+            $imageSize = getimagesize($picThumbPath);
 
-            $thumb_length = $bildgroesse[1];
-            if($bildgroesse[0] > $bildgroesse[1])
+            $thumbLength = $imageSize[1];
+            if ($imageSize[0] > $imageSize[1])
             {
-                $thumb_length = $bildgroesse[0];
+                $thumbLength = $imageSize[0];
             }
         }
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if(!is_file($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length != $gPreferences['photo_thumbs_scale'])
+        if (!is_file($picThumbPath) || $thumbLength != $gPreferences['photo_thumbs_scale'])
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
-            if(!is_dir($ordner.'/thumbnails'))
+            if (!is_dir($albumFolder . '/thumbnails'))
             {
-                $folder = new Folder($ordner);
+                $folder = new Folder($albumFolder);
                 $folder->createFolder('thumbnails', true);
             }
 
             // nun das Thumbnail anlegen
-            $image = new Image($picpath);
+            $image = new Image($picPath);
             $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
-            $image->copyToFile(null, $ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
+            $image->copyToFile(null, $picThumbPath);
         }
         else
         {
-            header('content-type: image/jpg');
-            echo readfile($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
+            header('Content-Type: image/jpeg');
+            echo readfile($picThumbPath);
         }
     }
     else
     {
         // kein Bild uebergeben, dann NoPix anzeigen
-        $image = new Image(THEME_ADMIDIO_PATH. '/images/nopix.jpg');
+        $image = new Image(THEME_ADMIDIO_PATH . '/images/nopix.jpg');
         $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
     }
 }
 else
 {
-    if(!is_file($picpath))
+    if (!is_file($picPath))
     {
-        $picpath = THEME_ADMIDIO_PATH. '/images/nopix.jpg';
+        $picPath = THEME_ADMIDIO_PATH . '/images/nopix.jpg';
     }
     // Bild einlesen und scalieren
-    $image = new Image($picpath);
+    $image = new Image($picPath);
     $image->scale($getMaxWidth, $getMaxHeight);
 }
 
-if($image !== null)
+if ($image !== null)
 {
     // insert copyright text into photo if photo size is larger than 200px
     if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')
     {
-        $font_c = imagecolorallocate($image->imageResource, 255, 255, 255);
-        $font_ttf = THEME_ADMIDIO_PATH.'/font.ttf';
-        if($gPreferences['photo_image_text_size'] > 0)
+        if ($gPreferences['photo_image_text_size'] > 0)
         {
-            $font_s = $getMaxWidth / $gPreferences['photo_image_text_size'];
+            $fontSize = $getMaxWidth / $gPreferences['photo_image_text_size'];
         }
         else
         {
-            $font_s = $getMaxWidth / 40;
+            $fontSize = $getMaxWidth / 40;
         }
-        $font_x = $font_s;
-        $font_y = $image->imageHeight-$font_s;
+        $fontX = $fontSize;
+        $fontY = $image->imageHeight-$fontSize;
+        $fontColor = imagecolorallocate($image->imageResource, 255, 255, 255);
+        $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
         $text = $gPreferences['photo_image_text'];
-        imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
+        imagettftext($image->imageResource, $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 
     // Rueckgabe des neuen Bildes

@@ -43,8 +43,6 @@ function getFieldCode($fieldNameIntern, $item)
 {
     global $gPreferences, $inventory, $gL10n, $gInventoryFields;
     $html      = array('label' => '', 'value' => '');
-    $value     = '';
-    $msg_image = '';
 
     if($gInventoryFields->getProperty($fieldNameIntern, 'inf_hidden') == 1)
     {
@@ -96,9 +94,13 @@ $page->addJavascript('
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.inv_id                  = '.$inventory->getValue('inv_id').';
 
+    /**
+     * @param {object} element
+     */
     function showHideMembershipInformation(element) {
         $("#" + element.attr("id") + "_Content").toggle("fast");
-    }');
+    }
+');
 $page->addJavascript('
     profileJS.init();
     $(".admidio-icon-link-popup").colorbox({
@@ -108,8 +110,12 @@ $page->addJavascript('
             $("#admButtonNo").focus();
         }
     });
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)); });
-    $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo(); });
+    $(".admMemberInfo").click(function() {
+        showHideMembershipInformation($(this));
+    });
+    $("#profile_authorizations_box_body").mouseout(function() {
+        profileJS.deleteShowInfo();
+    });
 
     $(".admidio-form-membership-period").submit(function(event) {
         var id = $(this).attr("id");
@@ -143,7 +149,9 @@ $page->addJavascript('
                 }
             }
         });
-    });', true);
+    });',
+    true
+);
 
 // get module menu
 $profileMenu = $page->getMenu();

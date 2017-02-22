@@ -109,6 +109,9 @@ $page->addJavascript('
     profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
     profileJS.userId                  = '.$userId.';
 
+    /**
+     * @param {object} element
+     */
     function showHideMembershipInformation(element) {
         $("#" + element.attr("id") + "_Content").toggle("fast");
     }
@@ -183,19 +186,23 @@ $page->addJavascript('
     }
 ');
 $page->addJavascript('
-    $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
+    $(".admMemberInfo").click(function() {
+        showHideMembershipInformation($(this))
+    });
     $("#menu_item_password").attr("data-toggle", "modal");
     $("#menu_item_password").attr("data-target", "#admidio_modal");
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
 
     $("input[data-provide=\'datepicker\']").datepicker({
-                            language: "'.$gL10n->getLanguageIsoCode().'",
-                            format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                            todayHighlight: "true",
-                            autoclose: "true"
-                        });
-    formSubmitEvent(); ', true);
+        language: "'.$gL10n->getLanguageIsoCode().'",
+        format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+        todayHighlight: "true",
+        autoclose: "true"
+    });
+    formSubmitEvent();',
+    true
+);
 
 // get module menu
 $profileMenu = $page->getMenu();
@@ -258,7 +265,7 @@ if($gCurrentUser->assignRoles())
 }
 
 // show link to create relations
-if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
+if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->editUsers())
 {
     $profileMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
         $gL10n->get('PRO_ADD_USER_RELATION'), 'user_administration.png', 'right', 'menu_item_extras');
@@ -347,8 +354,8 @@ $page->addHtml('
                                 $bAddressOutput = true;
                                 $htmlAddress    = '';
                                 $address        = '';
-                                $map_url        = 'https://maps.google.com/?q=';
-                                $route_url      = 'https://maps.google.com/?f=d&amp;saddr='.
+                                $mapUrl         = 'https://www.google.com/maps?q=';
+                                $routeUrl       = 'https://www.google.com/maps?f=d&amp;saddr='.
                                     urlencode($gCurrentUser->getValue('STREET')).
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
@@ -358,23 +365,23 @@ $page->addHtml('
                                 if(strlen($user->getValue('STREET')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('STREET', 'usf_hidden') == 0))
                                 {
-                                    $address   .= $user->getValue('STREET'). '<br />';
-                                    $map_url   .= urlencode($user->getValue('STREET'));
-                                    $route_url .= urlencode($user->getValue('STREET'));
+                                    $address  .= $user->getValue('STREET'). '<br />';
+                                    $mapUrl   .= urlencode($user->getValue('STREET'));
+                                    $routeUrl .= urlencode($user->getValue('STREET'));
                                 }
 
                                 if(strlen($user->getValue('POSTCODE')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                 {
-                                    $address   .= $user->getValue('POSTCODE');
-                                    $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
-                                    $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
+                                    $address  .= $user->getValue('POSTCODE');
+                                    $mapUrl   .= ',%20'. urlencode($user->getValue('POSTCODE'));
+                                    $routeUrl .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
                                     // City and postcode should be shown in one line
                                     if(strlen($user->getValue('CITY')) === 0
                                     || (!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
                                     {
-                                        $address   .= '<br />';
+                                        $address .= '<br />';
                                     }
                                 }
 
@@ -382,18 +389,18 @@ $page->addHtml('
                                 && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                 {
                                     // City and postcode should be shown in one line
-                                    $address   .= ' '. $user->getValue('CITY'). '<br />';
-                                    $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
-                                    $route_url .= ',%20'. urlencode($user->getValue('CITY'));
+                                    $address  .= ' '. $user->getValue('CITY'). '<br />';
+                                    $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
+                                    $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
 
                                 if(strlen($user->getValue('COUNTRY')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                 {
-                                    $country    = $user->getValue('COUNTRY');
-                                    $address   .= $country. '<br />';
-                                    $map_url   .= ',%20'. urlencode($country);
-                                    $route_url .= ',%20'. urlencode($country);
+                                    $country   = $user->getValue('COUNTRY');
+                                    $address  .= $country. '<br />';
+                                    $mapUrl   .= ',%20'. urlencode($country);
+                                    $routeUrl .= ',%20'. urlencode($country);
                                 }
 
                                 $htmlAddress .= $address;
@@ -403,13 +410,13 @@ $page->addHtml('
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '
-                                    <a class="btn" href="'. $map_url. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
+                                    <a class="btn" href="'. $mapUrl. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
                                     if($userId !== $currUserId)
                                     {
-                                        $htmlAddress .= ' - <a href="'.$route_url.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
+                                        $htmlAddress .= ' - <a href="'.$routeUrl.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
                                 }
 
@@ -706,18 +713,22 @@ if($gPreferences['profile_show_roles'] == 1)
     // *******************************************************************************
 
     // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-    $count_show_roles = 0;
-    $roleStatement    = getRolesFromDatabase($userId);
-    $count_role       = $roleStatement->rowCount();
+    $roleStatement  = getRolesFromDatabase($userId);
+    $countRole      = $roleStatement->rowCount();
 
     // Ausgabe
     $page->addHtml('
     <div class="panel panel-default" id="profile_roles_box">
-        <div class="panel-heading">
-            '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
-        </div>
+        <div class="panel-heading"><div class="pull-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>');
+            // if you have the right to assign roles then show the link to assign new roles to this user
+            if($gCurrentUser->assignRoles())
+            {
+                $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_role_memberships_change" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$userId.'&amp;inline=1"><img
+                    src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" /></a></div>');
+            }
+        $page->addHtml('</div>
         <div class="panel-body" id="profile_roles_box_body">
-            '.getRoleMemberships('role_list', $user, $roleStatement, $count_role, false).'
+            '.getRoleMemberships('role_list', $user, $roleStatement, $countRole, false).'
         </div>
     </div>');
 
@@ -725,25 +736,24 @@ if($gPreferences['profile_show_roles'] == 1)
     // block with future memberships
     // *******************************************************************************
 
-    $count_show_roles = 0;
-    $roleStatement    = getFutureRolesFromDatabase($userId);
-    $count_role       = $roleStatement->rowCount();
-    $visible          = '';
+    $roleStatement  = getFutureRolesFromDatabase($userId);
+    $countRole      = $roleStatement->rowCount();
+    $visible        = '';
 
-    if($count_role === 0)
+    if($countRole === 0)
     {
         $visible = ' style="display: none;" ';
     }
     else
     {
-        $page->addHtml('<script type="text/javascript">profileJS.futureRoleCount="'.$count_role.'";</script>');
+        $page->addHtml('<script type="text/javascript">profileJS.futureRoleCount="'.$countRole.'";</script>');
     }
 
     $page->addHtml('
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_future_roles_box_body">
-            '.getRoleMemberships('future_role_list', $user, $roleStatement, $count_role, false).'
+            '.getRoleMemberships('future_role_list', $user, $roleStatement, $countRole, false).'
         </div>
     </div>');
 }
@@ -756,25 +766,24 @@ if($gPreferences['profile_show_former_roles'] == 1)
 
     // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
-    $count_show_roles = 0;
-    $roleStatement    = getFormerRolesFromDatabase($userId);
-    $count_role       = $roleStatement->rowCount();
-    $visible          = '';
+    $roleStatement  = getFormerRolesFromDatabase($userId);
+    $countRole      = $roleStatement->rowCount();
+    $visible        = '';
 
-    if($count_role === 0)
+    if($countRole === 0)
     {
         $visible = ' style="display: none;" ';
     }
     else
     {
-        $page->addHtml('<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>');
+        $page->addHtml('<script type="text/javascript">profileJS.formerRoleCount="'.$countRole.'";</script>');
     }
 
     $page->addHtml('
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_former_roles_box_body">
-            '.getRoleMemberships('former_role_list', $user, $roleStatement, $count_role, false).'
+            '.getRoleMemberships('former_role_list', $user, $roleStatement, $countRole, false).'
         </div>
     </div>');
 }
@@ -800,7 +809,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end    >= ? -- DATE_NOW
                AND rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND org_id     <> ? -- $gCurrentOrganization->getValue(\'org_id\')
           ORDER BY org_shortname, cat_sequence, rol_name';
     $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
@@ -886,7 +895,14 @@ if($gPreferences['members_enable_user_relations'] == 1)
     {
         $page->addHtml('
         <div class="panel panel-default" id="profile_user_relations_box">
-            <div class="panel-heading">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>
+            <div class="panel-heading"><div class="pull-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
+                // show link to create relations
+                if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->editUsers())
+                {
+                    $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_relations_new_entry" href="'.ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId.'"><img
+                        src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('PRO_ADD_USER_RELATION').'" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'" /></a></div>');
+                }
+            $page->addHtml('</div>
             <div class="panel-body" id="profile_user_relations_box_body">');
 
         $sql = 'SELECT *
@@ -898,7 +914,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
                    AND urt_name_male   <> \'\'
                    AND urt_name_female <> \'\'
               ORDER BY urt_name';
-        $statement = $gDb->queryPrepared($sql, array($userId));
+        $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
         $relationtype = new TableUserRelationType($gDb);
         $relation     = new TableUserRelation($gDb);
@@ -931,7 +947,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
                             $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a><span>');
             $page->addHtml('<span class="pull-right text-right">');
 
-             if($gCurrentUser->hasRightEditProfile($otherUser))
+             if($gCurrentUser->editUsers())
              {
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                  href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=ure&amp;element_id=row_ure_'.

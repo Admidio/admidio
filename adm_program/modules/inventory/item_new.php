@@ -87,10 +87,10 @@ if(isset($_SESSION['profile_request']))
 
     foreach($gInventoryFields->mInventoryFields as $field)
     {
-        $field_name = 'inf-'. $field->getValue('inf_id');
-        if(isset($_SESSION['profile_request'][$field_name]))
+        $fieldName = 'inf-'. $field->getValue('inf_id');
+        if(isset($_SESSION['profile_request'][$fieldName]))
         {
-            $inventory->setValue($field->getValue('inf_name_intern'), $_SESSION['profile_request'][$field_name]);
+            $inventory->setValue($field->getValue('inf_name_intern'), $_SESSION['profile_request'][$fieldName]);
         }
     }
 

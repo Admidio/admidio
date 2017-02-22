@@ -42,22 +42,19 @@ if (!$gCurrentUser->editPhotoRight())
 
 /**
  * Loeschen eines Thumbnails
- * @param \TablePhotos $photo_album Referenz auf Objekt des relevanten Albums
- * @param int          $pic_nr      Nr des Bildes dessen Thumbnail geloescht werden soll
+ * @param \TablePhotos $photoAlbum Referenz auf Objekt des relevanten Albums
+ * @param int          $picNr      Nr des Bildes dessen Thumbnail geloescht werden soll
  */
-function deleteThumbnail(&$photo_album, $pic_nr)
+function deleteThumbnail(&$photoAlbum, $picNr)
 {
-    if(is_numeric($pic_nr))
-    {
-        // Ordnerpfad zusammensetzen
-        $photo_path = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id') . '/thumbnails/' . $pic_nr . '.jpg';
+    // Ordnerpfad zusammensetzen
+    $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
 
-        // Thumbnail loeschen
-        if(is_file($photo_path))
-        {
-            @chmod($photo_path, 0777);
-            unlink($photo_path);
-        }
+    // Thumbnail loeschen
+    if (is_file($photoPath))
+    {
+        @chmod($photoPath, 0777);
+        unlink($photoPath);
     }
 }
 
@@ -66,7 +63,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
  */
 function tryDelete($path)
 {
-    if(is_file($path))
+    if (is_file($path))
     {
         @chmod($path, 0777);
         unlink($path);
@@ -79,7 +76,7 @@ function tryDelete($path)
  */
 function tryRename($path, $newPath)
 {
-    if(is_file($path))
+    if (is_file($path))
     {
         @chmod($path, 0777);
         rename($path, $newPath);
@@ -88,95 +85,91 @@ function tryRename($path, $newPath)
 
 /**
  * Loeschen eines Bildes
- * @param int $pho_id
- * @param int $pic_nr
+ * @param int $phoId
+ * @param int $picNr
  */
-function deletePhoto($pho_id, $pic_nr)
+function deletePhoto($phoId, $picNr)
 {
     global $gDb;
 
-    // nur bei gueltigen Uebergaben weiterarbeiten
-    if(is_numeric($pho_id) && is_numeric($pic_nr))
+    // einlesen des Albums
+    $photoAlbum = new TablePhotos($gDb, $phoId);
+
+    // Speicherort
+    $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+
+    // delete photos
+    tryDelete($albumPath.'/'.$picNr.'.jpg');
+    tryDelete($albumPath.'/originals/'.$picNr.'.jpg');
+    tryDelete($albumPath.'/originals/'.$picNr.'.png');
+
+    // Umbenennen der Restbilder und Thumbnails loeschen
+    $newPicNr = $picNr;
+    $thumbnailDelete = false;
+
+    for ($actPicNr = 1; $actPicNr <= $photoAlbum->getValue('pho_quantity'); ++$actPicNr)
     {
-        // einlesen des Albums
-        $photo_album = new TablePhotos($gDb, $pho_id);
-
-        // Speicherort
-        $album_path = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id');
-
-        // delete photos
-        tryDelete($album_path.'/'.$pic_nr.'.jpg');
-        tryDelete($album_path.'/originals/'.$pic_nr.'.jpg');
-        tryDelete($album_path.'/originals/'.$pic_nr.'.png');
-
-        // Umbenennen der Restbilder und Thumbnails loeschen
-        $new_pic_nr = $pic_nr;
-        $thumbnail_delete = false;
-
-        for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue('pho_quantity'); ++$act_pic_nr)
+        if (is_file($albumPath.'/'.$actPicNr.'.jpg'))
         {
-            if(is_file($album_path.'/'.$act_pic_nr.'.jpg'))
+            if ($actPicNr > $newPicNr)
             {
-                if($act_pic_nr > $new_pic_nr)
-                {
-                    tryRename($album_path.'/'.$act_pic_nr.'.jpg', $album_path.'/'.$new_pic_nr.'.jpg');
-                    tryRename($album_path.'/originals/'.$act_pic_nr.'.jpg', $album_path.'/originals/'.$new_pic_nr.'.jpg');
-                    tryRename($album_path.'/originals/'.$act_pic_nr.'.png', $album_path.'/originals/'.$new_pic_nr.'.png');
-                    ++$new_pic_nr;
-                }
+                tryRename($albumPath.'/'.$actPicNr.'.jpg', $albumPath.'/'.$newPicNr.'.jpg');
+                tryRename($albumPath.'/originals/'.$actPicNr.'.jpg', $albumPath.'/originals/'.$newPicNr.'.jpg');
+                tryRename($albumPath.'/originals/'.$actPicNr.'.png', $albumPath.'/originals/'.$newPicNr.'.png');
+                ++$newPicNr;
             }
-            else
-            {
-                $thumbnail_delete = true;
-            }
+        }
+        else
+        {
+            $thumbnailDelete = true;
+        }
 
-            if($thumbnail_delete)
-            {
-                // Alle Thumbnails ab dem geloeschten Bild loeschen
-                deleteThumbnail($photo_album, $act_pic_nr);
-            }
-        }//for
+        if ($thumbnailDelete)
+        {
+            // Alle Thumbnails ab dem geloeschten Bild loeschen
+            deleteThumbnail($photoAlbum, $actPicNr);
+        }
+    }//for
 
-        // Aendern der Datenbankeintaege
-        $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')-1);
-        $photo_album->save();
-    }
+    // Aendern der Datenbankeintaege
+    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')-1);
+    $photoAlbum->save();
 }
 
 // Foto um 90° drehen
-if($getJob === 'rotate')
+if ($getJob === 'rotate')
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
-    if($getDirection !== '')
+    if ($getDirection !== '')
     {
         // Aufruf des ggf. uebergebenen Albums
-        $photo_album = new TablePhotos($gDb, $getPhotoId);
+        $photoAlbum = new TablePhotos($gDb, $getPhotoId);
 
         // Thumbnail loeschen
-        deleteThumbnail($photo_album, $getPhotoNr);
+        deleteThumbnail($photoAlbum, $getPhotoNr);
 
         // Ordnerpfad zusammensetzen
-        $photo_path = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photo_album->getValue('pho_begin', 'Y-m-d') . '_' . $photo_album->getValue('pho_id') . '/' . $getPhotoNr . '.jpg';
+        $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/' . $getPhotoNr . '.jpg';
 
         // Bild drehen
-        $image = new Image($photo_path);
+        $image = new Image($photoPath);
         $image->rotate($getDirection);
         $image->delete();
     }
 }
-elseif($getJob === 'delete')
+elseif ($getJob === 'delete')
 {
     // das entsprechende Bild wird physikalisch und in der DB geloescht
     deletePhoto($getPhotoId, $getPhotoNr);
 
     // Neu laden der Albumdaten
-    $photo_album = new TablePhotos($gDb);
-    if($getPhotoId > 0)
+    $photoAlbum = new TablePhotos($gDb);
+    if ($getPhotoId > 0)
     {
-        $photo_album->readDataById($getPhotoId);
+        $photoAlbum->readDataById($getPhotoId);
     }
 
-    $_SESSION['photo_album'] = $photo_album;
+    $_SESSION['photo_album'] = $photoAlbum;
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';

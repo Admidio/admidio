@@ -116,7 +116,7 @@ $rowCat = $orgaStatement->fetch();
 
 // neue Kategorie fuer Terminbestaetigungen
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \''.$gL10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'\', 1, 1, '.$rowCat['sequence'].', '.$rowWebmaster['webmaster_id'].',\''. DATETIME_NOW.'\')';
+                                VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 1, '.$rowCat['sequence'].', '.$rowWebmaster['webmaster_id'].',\''. DATETIME_NOW.'\')';
 $gDb->query($sql);
 
 // Daten pro Organisation wegschreiben

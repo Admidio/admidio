@@ -90,6 +90,8 @@
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
     <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
     <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</string>
+    <string name="DAT_SAVE_ALL_CONFIRMATIONS">Absagen zu Terminen speichern</string>
+    <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Absagen von Teilnehmern zu Terminen können gespeichert werden. Die Absagen werden dann in der Teilnehmerliste ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Teilnehmerliste auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Standard : Ja)</string>
     <string name="DAT_SHOW_MAP_LINK">Kartenlink anzeigen</string>
     <string name="DAT_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
     <string name="DAT_SHOW_ON_MAP">Auf Karte zeigen</string>
@@ -97,9 +99,11 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
+    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
-    <string name="DAT_USER_ATTEND_POSSIBLY">Unter Vorbehalt</string>
+    <string name="DAT_USER_TENTATIVE">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
+    <string name="DAT_USER_REFUSED">Abgesagt</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
@@ -376,6 +380,8 @@
     <string name="LST_EMAIL_TO_MEMBERS">E-Mail an Mitglieder</string>
     <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>
     <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße nicht gefüllt haben</string>
+    <string name="LST_ENABLE_LISTS_MODULE">Listenmodul aktivieren</string>
+    <string name="LST_ENABLE_LISTS_MODULE_DESC">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</string>
     <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
     <string name="LST_EXCLUDE_EXAMPLE_DESC">Sucht alle Benutzer, die nicht Stefan heißen</string>
@@ -441,6 +447,9 @@
     <string name="LST_SEAT_AMOUNT">Zusätzliche Plätze</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
+    <string name="LST_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
+    <string name="LST_SHOW_FORMER_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer ehemalige Rollenmitglieder sehen darf. Der Benutzer muss allerdings auch das Recht haben die Rolle selber zu sehen. (Standard: #VAR1#)</string>
+    <string name="LST_SHOW_FORMER_MEMBERS_RIGHT">Benutzer mit dem Recht #VAR1_BOLD#</string>
     <string name="LST_SHOW_LIST">Liste anzeigen</string>
     <string name="LST_SHOW_LISTS">Listen anzeigen</string>
     <string name="LST_YOUR_CONFIGURATION">Deine Konfigurationen</string>
@@ -784,6 +793,7 @@
     <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto speichern</string>
     <string name="PHO_DOWNLOAD_ENABLED">Download aktivieren</string>
     <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
+    <string name="PHP_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
     <string name="PHO_EDIT_ALBUM">Album Bearbeiten</string>
     <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
     <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neues Fotoalbum bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
@@ -940,13 +950,13 @@
     <string name="ROL_DEFAULT_REGISTRATION_DESC">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
     <string name="ROL_DEPENDENCIES">Abhängigkeiten</string>
     <string name="ROL_DEPENDENT">Abhängig</string>
+    <string name="ROL_DISABLE_ROLE">Rolle deaktivieren</string>
+    <string name="ROL_DISABLE_ROLE_DESC">Wenn du #VAR1_BOLD# auswählst, wird die Rolle und alle Mitgliedszuordnungen endgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</string>
     <string name="ROL_EDIT_ROLE">Rolle bearbeiten</string>
     <string name="ROL_ENABLE_ROLE">Rolle aktivieren</string>
-    <string name="ROL_HINT_DELETE_ROLE">Wenn du #VAR1_BOLD# auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</string>
+    <string name="ROL_ENABLE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
     <string name="ROL_INACTIV_ROLE">Inaktive Rolle</string>
-    <string name="ROL_INACTIV_ROLE_DESC">Du kannst die Rolle zu einer inaktiven Rolle machen. Dies hat den Vorteil, dass die Daten (Mitgliederzuordnung) erhalten bleiben und du später immer wieder sehen kannst, welche Personen dieser Rolle zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.</string>
     <string name="ROL_INACTIV_ROLES">Inaktive Rollen</string>
-    <string name="ROL_INVISIBLE_ROLES">Unsichtbare Rollen</string>
     <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</string>
     <string name="ROL_LEADER_EDIT_MEMBERS">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</string>
     <string name="ROL_LEADER_ASSIGN_MEMBERS">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</string>
@@ -984,12 +994,12 @@
     <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
     <string name="ROL_ROLE_DELETE">Rolle löschen</string>
-    <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</string>
+    <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</string>
     <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
     <string name="ROL_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
     <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
     <string name="ROL_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
-    <string name="ROL_ROLE_SET_MODE">Die Rolle #VAR1_BOLD# wurde auf #VAR2_BOLD# gesetzt.</string>
+    <string name="ROL_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
     <string name="ROL_SAVE_ROLES">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</string>
     <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
     <string name="ROL_SEMIYEARLY">Halbjährlich</string>
@@ -997,8 +1007,6 @@
     <string name="ROL_SEND_MAIL_MEMBERS">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
     <string name="ROL_SEND_MAIL_ROLE">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</string>
     <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
-    <string name="ROL_SET_ROLE_INVISIBLE">Rolle unsichtbar machen</string>
-    <string name="ROL_SET_ROLE_VISIBLE">Rolle sichtbar machen</string>
     <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
     <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
     <string name="ROL_UNIQUELY">Einmalig</string>
@@ -1006,7 +1014,6 @@
     <string name="ROL_VALID_TO" description="Date valid to">Gültig bis</string>
     <string name="ROL_VIEW_LIST_MEMBERS">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</string>
     <string name="ROL_VIEW_LIST_ROLE">Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.</string>
-    <string name="ROL_VISIBLE_ROLES">Sichtbare Rollen</string>
     <string name="ROL_WEEKDAY">Wochentag</string>
     <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
     <!-- Phrases only in Roommodule -->
@@ -1018,7 +1025,6 @@
     <!-- System-Phrases for use in every module -->
     <string name="SYS_ABORT">Abbrechen</string>
     <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
-    <string name="SYS_ACTIVE">Aktiv</string>
     <string name="SYS_ACTIVATED">Aktiviert</string>
     <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
     <string name="SYS_ADDRESS">Adresse</string>
@@ -1064,7 +1070,6 @@
     <string name="SYS_CONDITION">Bedingung</string>
     <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
     <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
-    <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Teilnahmebestätigung</string>
     <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
     <string name="SYS_CONTENT">Inhalt</string>
     <string name="SYS_CONTRIBUTION">Beitrag</string>
@@ -1125,6 +1130,7 @@
     <string name="SYS_ERROR">Fehler</string>
     <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
     <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
+    <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Termine - Teilnahmebestätigung</string>
     <string name="SYS_EXAMPLE">Beispiel</string>
     <string name="SYS_EXAMPLES">Beispiele</string>
     <string name="SYS_FADE_IN">Einblenden</string>
@@ -1166,12 +1172,10 @@
     <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
     <string name="SYS_ICON">Icon</string>
     <string name="SYS_IMPORTANT">Wichtig</string>
-    <string name="SYS_INACTIVE">Inaktiv</string>
     <string name="SYS_INFORMATIONS">Informationen</string>
     <string name="SYS_INTERNAL_NAME">Interner Name</string>
     <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</string>
     <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
-    <string name="SYS_INVISIBLE">Unsichtbar</string>
     <string name="SYS_IO_ERROR">E/A Fehler</string>
     <string name="SYS_ISO_8859_1">ISO-8859-1</string>
     <string name="SYS_ITEMNAME">Artikelname</string>

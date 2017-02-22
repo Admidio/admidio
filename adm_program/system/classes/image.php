@@ -28,7 +28,7 @@
  *                  - dreht das Bild um 90° in eine Richtung ("left"/"right")
  * scaleLargerSide($newMaxSize)
  *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
- * scale($newXSize, $newYSize, $aspect_ratio = true)
+ * scale($newXSize, $newYSize, $maintainAspectRatio = true)
  *                  - das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
  * delete()         - entfernt das Bild aus dem Speicher
  */

@@ -17,5 +17,6 @@
 !/adm_plugins/sidebar_dates/
 !/adm_plugins/sidebar_downloads/
 !/adm_plugins/sidebar_online/
-adm_my_files/mail_templates/template.html
-my_page.php
+
+# For custom configuration
+.php_cs

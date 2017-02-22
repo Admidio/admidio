@@ -26,6 +26,13 @@ $getName   = admFuncVariableIsValid($_GET, 'name',   'string');
 
 $_SESSION['mylist_request'] = $_POST;
 
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // Mindestens ein Feld sollte zugeordnet sein
 if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 {
@@ -41,7 +48,7 @@ if($getMode === 2
     // => EXIT
 }
 
-if(!isset($_POST['sel_show_members']))
+if(!isset($_POST['sel_show_members']) || !$gCurrentUser->hasRightViewFormerRolesMembers())
 {
     $_POST['sel_show_members'] = 0;
 }

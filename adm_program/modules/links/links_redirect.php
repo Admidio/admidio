@@ -60,12 +60,16 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
 
     // Counter zählt die sekunden bis zur Weiterleitung runter
     $page->addJavascript('
+        /**
+         * @param {bool} init
+         */
         function countDown(init) {
             if (init || --document.getElementById("counter").firstChild.nodeValue > 0 ) {
                 window.setTimeout( "countDown()" , 1000 );
             }
         };
-        countDown(true);');
+        countDown(true);
+    ');
 
     // Html des Modules ausgeben
     $page->addHtml('

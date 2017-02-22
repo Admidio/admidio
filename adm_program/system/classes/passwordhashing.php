@@ -98,7 +98,7 @@ class PasswordHashing
             }
 
             $status = 0;
-            for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; $i++) {
+            for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; ++$i) {
                 $status |= (ord($passwordHash[$i]) ^ ord($hash[$i]));
             }
 
@@ -152,7 +152,7 @@ class PasswordHashing
      * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
      * @throws AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS
      * @return string Returns a cryptographically strong random password string
-     * @link https://paragonie.com/b/JvICXzh_jhLyt4y3
+     * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
      */
     public static function genRandomPassword($length = 16, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
@@ -177,8 +177,8 @@ class PasswordHashing
         $randomString = '';
         for ($i = 0; $i < $length; ++$i)
         {
-            $r = self::genRandomInt(0, $charsetMax);
-            $randomString .= $charset[$r];
+            $randomInt = self::genRandomInt(0, $charsetMax);
+            $randomString .= $charset[$randomInt];
         }
 
         return $randomString;
@@ -192,6 +192,8 @@ class PasswordHashing
      */
     public static function genRandomInt($min, $max)
     {
+        global $gLogger;
+
         try
         {
             $int = random_int($min, $max);
@@ -200,11 +202,13 @@ class PasswordHashing
         {
             // as a fallback we should use the rand method
             $int = mt_rand($min, $max);
+            $gLogger->warning('SECURITY: Could not generate secure random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
         }
         catch (Exception $e)
         {
             // as a fallback we should use the rand method
             $int = mt_rand($min, $max);
+            $gLogger->warning('SECURITY: Could not generate secure random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
         }
 
         return $int;

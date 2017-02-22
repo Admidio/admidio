@@ -59,5 +59,4 @@ class TableInventory extends TableAccess
         $this->db->endTransaction();
         return $return;
     }
-
 }

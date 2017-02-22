@@ -50,26 +50,27 @@ define('PORT', SECURE_PROXY ? 443 : (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
 $port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; // :1234
 $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port; // www.example.org:1234
+
 define('HOST', SECURE_PROXY ? $gSecureProxy : $host); // www.example.org:1234 | www.myproxy.com:1234
+define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 
-$hostParts = explode(':', HOST);
-define('DOMAIN', $hostParts[0]); // www.example.org | www.myproxy.com
+// PATHS
+define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
+// 33 is string length of: '/adm_program/system/constants.php'
+define('ADMIDIO_PATH', substr(__FILE__, 0, -33)); // /var/www/subfolder
+define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
 
-$admParts = explode('/adm_', dirname($_SERVER['SCRIPT_NAME']));
-define('ADMIDIO_SUBFOLDER', $admParts[0] === DIRECTORY_SEPARATOR ? '' : $admParts[0]); // /subfolder
-define('ADMIDIO_SUB_URL', SECURE_PROXY ? '/' . $host . ADMIDIO_SUBFOLDER : ADMIDIO_SUBFOLDER); // /subfolder | /www.example.com/subfolder
+// SUBFOLDERS
+define('ADMIDIO_SUB_FOLDER', str_replace('\\', '/', substr(ADMIDIO_PATH, strlen(WWW_PATH)))); // /subfolder
+define('ADMIDIO_SUB_URL', (SECURE_PROXY ? '/' . $host : '') . ADMIDIO_SUB_FOLDER); // /subfolder | /www.example.com/subfolder
+
+$subfolderLength = strlen(ADMIDIO_SUB_FOLDER);
 
 // URLS
 define('SERVER_URL',  (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234 | https://www.myproxy.com:1234
 define('ADMIDIO_URL', SERVER_URL . ADMIDIO_SUB_URL); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    ADMIDIO_URL . substr($_SERVER['SCRIPT_NAME'], strlen(ADMIDIO_SUBFOLDER))); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', ADMIDIO_URL . substr($_SERVER['REQUEST_URI'], strlen(ADMIDIO_SUBFOLDER))); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
-
-// PATHS
-$admParts = explode(DIRECTORY_SEPARATOR . 'adm_', __DIR__);
-define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
-define('ADMIDIO_PATH', $admParts[0]); // /var/www/subfolder
-define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
+define('FILE_URL',    ADMIDIO_URL . substr($_SERVER['SCRIPT_NAME'], $subfolderLength)); // https://www.example.org:1234/subfolder/adm_program/index.php
+define('CURRENT_URL', ADMIDIO_URL . substr($_SERVER['REQUEST_URI'], $subfolderLength)); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
@@ -155,8 +156,8 @@ define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN
 // ###  DEPRECATED  ###
 // ####################
 
-// Old ADMIDIO_PATH
 define('SERVER_PATH', ADMIDIO_PATH);
+define('ADMIDIO_SUBFOLDER', ADMIDIO_SUB_FOLDER);
 
 // Define Constants for PHP 5.3
 if (!defined('JSON_UNESCAPED_SLASHES'))

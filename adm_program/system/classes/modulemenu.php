@@ -167,7 +167,7 @@ class ModuleMenu
             $html .= '
                 <script type="text/javascript">
                     $(function() {
-                        $("#'.$menuEntry['id'].'").click(function () {
+                        $("#'.$menuEntry['id'].'").click(function() {
                             '.$menuEntry['js'].'
                         });
                     });

@@ -37,6 +37,10 @@ $page->addJavascript('
     true
 );
 $page->addJavascript('
+    /**
+     * @param {string} direction
+     * @param {int}    usfID
+     */
     function moveCategory(direction, usfID) {
         var actRow = document.getElementById("row_usf_" + usfID);
         var childs = actRow.parentNode.childNodes;
@@ -81,8 +85,8 @@ $page->addJavascript('
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
             $.get(gRootPath + "/adm_program/modules/preferences/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
-    }'
-);
+    }
+');
 
 // get module menu
 $fieldsMenu = $page->getMenu();
@@ -141,13 +145,13 @@ while($row = $statement->fetch())
 
     if($categoryId !== (int) $userField->getValue('cat_id'))
     {
-        $block_id = 'admCategory'.$userField->getValue('usf_cat_id');
+        $blockId = 'admCategory'.$userField->getValue('usf_cat_id');
 
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading'));
-        $table->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$userField->getValue('cat_name'),
-                          array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
-        $table->addTableBody('id', $block_id);
+        $table->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'),
+                          array('id' => 'group_'.$blockId, 'colspan' => '8'), 'td');
+        $table->addTableBody('id', $blockId);
 
         $categoryId = (int) $userField->getValue('usf_cat_id');
     }

@@ -89,6 +89,10 @@ $page->addJavascript('
     $("#urt_name").on("input", checkRelationTypeNames);
     $("#urt_name_inverse").on("input", checkRelationTypeNames);
 
+    /**
+     * @param {object} element
+     * @param {int}    duration
+     */
     function updateRelationType(element, duration) {
         if ($(element).val() === "unidirectional" || $(element).val() === "symmetrical") {
             $("#urt_name_inverse").prop("required", false);

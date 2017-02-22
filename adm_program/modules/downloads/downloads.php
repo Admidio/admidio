@@ -65,10 +65,15 @@ $page = new HtmlPage($headline);
 
 $page->enableModal();
 $page->addJavascript('
-    $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
+    $("body").on("hidden.bs.modal", ".modal", function() {
+        $(this).removeData("bs.modal");
+        location.reload();
+    });
     $("#menu_item_upload_files").attr("data-toggle", "modal");
     $("#menu_item_upload_files").attr("data-target", "#admidio_modal");
-    ', true);
+    ',
+    true
+);
 
 // get module menu
 $DownloadsMenu = $page->getMenu();

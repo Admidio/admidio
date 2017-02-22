@@ -25,6 +25,8 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode',   'string', array('defaultVal
 $getId     = admFuncVariableIsValid($_GET, 'id',     'int',    array('requireValue' => true));
 
 // Initialize variables
+$uploadDir               = '';
+$uploadUrl               = '';
 $headline                = '';
 $textFileUploaded        = '';
 $textUploadSuccessful    = '';
@@ -150,52 +152,53 @@ if($getMode === 'choose_files')
     $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
 
     $page->addJavascript('
-    var countErrorFiles = 0;
-    var countFiles      = 0;
+        var countErrorFiles = 0;
+        var countFiles      = 0;
 
-    $(function () {
-        "use strict";
-        $("#fileupload").fileupload({
-            url: "../../system/file_upload.php?module='.$getModule.'&mode=upload_files&id='.$getId.'",
-            sequentialUploads: true,
-            dataType: "json",
-            add: function (e, data) {
-                $("#files").html("");
-                countErrorFiles = 0;
-                countFiles = 0;
-                data.submit();
-            },
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    if (typeof file.error !== "undefined") {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
-                            + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
-                        countErrorFiles++;
+        $(function() {
+            "use strict";
+            $("#fileupload").fileupload({
+                url: "../../system/file_upload.php?module='.$getModule.'&mode=upload_files&id='.$getId.'",
+                sequentialUploads: true,
+                dataType: "json",
+                add: function(e, data) {
+                    $("#files").html("");
+                    countErrorFiles = 0;
+                    countFiles = 0;
+                    data.submit();
+                },
+                done: function(e, data) {
+                    $.each(data.result.files, function(index, file) {
+                        if (typeof file.error !== "undefined") {
+                            $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
+                                + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
+                            countErrorFiles++;
+                        } else {
+                            var message = "'.$textFileUploaded.'";
+                            var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
+                            $("<p/>").html(newMessage).appendTo("#files");
+                            countFiles++
+                        }
+                    });
+                },
+                progressall: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $("#progress .progress-bar").css(
+                        "width",
+                        progress + "%"
+                    );
+                },
+                stop: function(e, data) {
+                    if (countErrorFiles === 0 && countFiles > 0) {
+                        $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$textUploadSuccessful.'</div>").appendTo("#files");
                     } else {
-                        var message = "'.$textFileUploaded.'";
-                        var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
-                        $("<p/>").html(newMessage).appendTo("#files");
-                        countFiles++
+                        $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                     }
-                });
-            },
-            progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $("#progress .progress-bar").css(
-                    "width",
-                    progress + "%"
-                );
-            },
-            stop: function (e, data) {
-                if (countErrorFiles === 0 && countFiles > 0) {
-                    $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$textUploadSuccessful.'</div>").appendTo("#files");
-                } else {
-                    $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                 }
-            }
-        }).prop("disabled", !$.support.fileInput)
-            .parent().addClass($.support.fileInput ? undefined : "disabled");
-    });', true);
+            }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");
+        });',
+        true
+    );
 
     $page->addHtml('
         <div class="modal-header">
@@ -223,16 +226,23 @@ elseif($getMode === 'upload_files')
     // upload files to temp upload folder
     if($getModule === 'photos')
     {
-        $uploadHandler = new UploadHandlerPhoto(array('upload_dir'        => $uploadDir,
-                                                      'upload_url'        => $uploadUrl,
-                                                      'image_versions'    => array(),
-                                                      'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
-                                                      array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
+        $uploadHandler = new UploadHandlerPhoto(
+            array(
+                'upload_dir'        => $uploadDir,
+                'upload_url'        => $uploadUrl,
+                'image_versions'    => array(),
+                'accept_file_types' => '/\.(jpe?g|png)$/i'
+            ),
+            true,
+            array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))
+        );
     }
     elseif($getModule === 'downloads')
     {
-        $uploadHandler = new UploadHandlerDownload(array('upload_dir'     => $uploadDir,
-                                                         'upload_url'     => $uploadUrl,
-                                                         'image_versions' => array()));
+        $uploadHandler = new UploadHandlerDownload(array(
+            'upload_dir'     => $uploadDir,
+            'upload_url'     => $uploadUrl,
+            'image_versions' => array()
+        ));
     }
 }

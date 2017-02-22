@@ -635,7 +635,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $javascriptCode = '
                 // add new line to add new attachment to this mail
-                $("#btn_add_attachment_' . $id . '").click(function () {
+                $("#btn_add_attachment_' . $id . '").click(function() {
                     newAttachment = document.createElement("input");
                     $(newAttachment).attr("type", "file");
                     $(newAttachment).attr("name", "userfile[]");
@@ -857,7 +857,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // Remove attributes that are not set
-        $attributes = array_filter($attributes, function($attribute)
+        $attributes = array_filter($attributes, function ($attribute)
         {
             return $attribute !== '' && $attribute !== null;
         });
@@ -1610,7 +1610,7 @@ class HtmlForm extends HtmlFormBasic
                 case 'ROL':
                     // don't show system categories
                     $sqlTables = ' INNER JOIN ' . TBL_ROLES . ' ON cat_id = rol_cat_id';
-                    $sqlConditions = ' AND rol_visible = 1 ';
+                    $sqlConditions = ' AND cat_name_intern <> \'EVENTS\' ';
                     break;
                 case 'INF':
                     $sqlTables = ' INNER JOIN ' . TBL_INVENT_FIELDS . ' ON cat_id = inf_cat_id ';

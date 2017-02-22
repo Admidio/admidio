@@ -258,8 +258,8 @@ class ComponentUpdate extends Component
         while($row = $organizationStatement->fetch())
         {
             $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                        VALUES ('.$row['org_id'].', \'ANN\', \'COMMON\',   \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
-                             , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\',   \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
+                    VALUES ('.$row['org_id'].', \'ANN\', \'COMMON\',    \'SYS_COMMON\',   0, 1, 0, 1, '.$systemUserId.', \''.DATETIME_NOW.'\')
+                         , ('.$row['org_id'].', \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\',0, 0, 0, 2, '.$systemUserId.', \''.DATETIME_NOW.'\')';
             $this->db->query($sql); // TODO add more params
 
             $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.'
@@ -293,7 +293,7 @@ class ComponentUpdate extends Component
         {
             // Add new list configuration
             $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global)
-                        VALUES (\''.$row['org_id'].'\', \''.$systemUserId.'\', \''.$gL10n->get('SYS_PARTICIPANTS').'\', \''.DATETIME_NOW.'\', 1)';
+                    VALUES (\''.$row['org_id'].'\', \''.$systemUserId.'\', \''.$gL10n->get('SYS_PARTICIPANTS').'\', \''.DATETIME_NOW.'\', 1)';
             $this->db->query($sql);
 
             // Add list columns
@@ -305,11 +305,11 @@ class ComponentUpdate extends Component
             $listId = (int) $listStatement->fetchColumn();
 
             $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter)
-                        VALUES (\''.$listId.'\', 1, 1, NULL, \'ASC\', NULL)
-                             , (\''.$listId.'\', 2, 2, NULL, NULL, NULL)
-                             , (\''.$listId.'\', 3, NULL, \'mem_approved\', NULL, NULL)
-                             , (\''.$listId.'\', 4, NULL, \'mem_comment\', NULL, NULL)
-                             , (\''.$listId.'\', 5, NULL, \'mem_count_guests\', NULL, NULL)';
+                    VALUES (\''.$listId.'\', 1, 1,    NULL,                 \'ASC\', NULL)
+                         , (\''.$listId.'\', 2, 2,    NULL,                 NULL,    NULL)
+                         , (\''.$listId.'\', 3, NULL, \'mem_approved\',     NULL,    NULL)
+                         , (\''.$listId.'\', 4, NULL, \'mem_comment\',      NULL,    NULL)
+                         , (\''.$listId.'\', 5, NULL, \'mem_count_guests\', NULL,    NULL)';
             $this->db->query($sql);
 
             // Set as default configuration list
@@ -339,6 +339,59 @@ class ComponentUpdate extends Component
         {
             $role = new TableRoles($this->db, (int) $roleId);
             $role->delete(); // TODO Exception handling
+        }
+    }
+
+    /**
+     * Update the existing category confirmation of participation and make it
+     * organization depending.
+     */
+    public function updateStepEventCategory()
+    {
+        global $g_organization, $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM '.TBL_ORGANIZATIONS;
+        $organizationStatement = $this->db->query($sql);
+
+        while($row = $organizationStatement->fetch())
+        {
+            if($g_organization === $row['org_shortname'])
+            {
+                $sql = 'UPDATE '.TBL_CATEGORIES.'
+                           SET cat_name_intern = \'EVENTS\'
+                             , cat_name   = ? -- $gL10n->get(\'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION\')
+                             , cat_org_id = ? -- $row[\'org_id\']
+                         WHERE cat_org_id IS NULL
+                           AND cat_type        = \'ROL\'
+                           AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
+                $this->db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'), $row['org_id']));
+            }
+            else
+            {
+                // create organization depending category for events
+                $category = new TableCategory($this->db);
+                $category->setValue('cat_org_id', $row['org_id']);
+                $category->setValue('cat_type', 'ROL');
+                $category->setValue('cat_name', $gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'));
+                $category->setValue('cat_hidden', '1');
+                $category->setValue('cat_system', '1');
+                $category->save();
+
+                // now set name intern explicit to EVENTS
+                $category->setValue('cat_name_intern', 'EVENTS');
+                $category->save();
+
+                // all existing events of this organization must get the new category
+                $sql = 'UPDATE '.TBL_ROLES.'
+                           SET rol_cat_id = ? -- $category->getValue(\'cat_id\')
+                         WHERE rol_id IN (SELECT dat_rol_id
+                                            FROM '.TBL_DATES.'
+                                      INNER JOIN '.TBL_CATEGORIES.'
+                                              ON cat_id = dat_cat_id
+                                           WHERE dat_rol_id IS NOT NULL
+                                             AND cat_org_id = ?) -- $row[\'org_id\']';
+                $this->db->queryPrepared($sql, array($category->getValue('cat_id'), $row['org_id']));
+            }
         }
     }
 
@@ -441,10 +494,8 @@ class ComponentUpdate extends Component
             }
             else
             {
-                $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path,
-                                                     fol_locked, fol_public, fol_timestamp)
-                                             VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'' . FOLDER_DATA . '\',
-                                                     0, 1, \''.DATETIME_NOW.'\')';
+                $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
+                        VALUES ('.$row['org_id'].', \'DOWNLOAD\', \''.TableFolder::getRootFolderName().'\', \'' . FOLDER_DATA . '\', 0, 1, \''.DATETIME_NOW.'\')';
                 $this->db->query($sql); // TODO add more params
             }
         }
@@ -565,6 +616,27 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * This method set the approval states for all members of an event in the past to confirmed.
+     */
+    public function updateStepSetParticipantsApprovalStates()
+    {
+        $sql = 'UPDATE '.TBL_MEMBERS.'
+                           SET mem_approved = 2
+                         WHERE mem_approved IS NULL
+                           AND mem_begin < ? -- DATE_NOW
+                           AND mem_rol_id IN (SELECT rol_id
+                                                FROM '.TBL_ROLES.'
+                                          INNER JOIN '.TBL_CATEGORIES.'
+                                                  ON cat_id = rol_cat_id
+                                               WHERE cat_name_intern = \'EVENTS\'
+                                                 AND rol_id IN (SELECT dat_rol_id
+                                                                  FROM '.TBL_DATES.'
+                                                                 WHERE dat_rol_id = rol_id))';
+
+        $this->db->queryPrepared($sql, array(DATE_NOW));
+    }
+
+    /**
      * This method installs the default user relation types
      */
     public function updateStepInstallDefaultUserRelationTypes()
@@ -572,13 +644,13 @@ class ComponentUpdate extends Component
         global $gL10n, $gCurrentUser;
 
         $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \''.$gL10n->get('INS_PARENT').'\', \''.$gL10n->get('INS_FATHER').'\', \''.$gL10n->get('INS_MOTHER').'\', 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                     , (2, \''.$gL10n->get('INS_CHILD').'\', \''.$gL10n->get('INS_SON').'\', \''.$gL10n->get('INS_DAUGHTER').'\', 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                     , (3, \''.$gL10n->get('INS_SIBLING').'\', \''.$gL10n->get('INS_BROTHER').'\', \''.$gL10n->get('INS_SISTER').'\', 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                     , (4, \''.$gL10n->get('INS_SPOUSE').'\', \''.$gL10n->get('INS_HUSBAND').'\', \''.$gL10n->get('INS_WIFE').'\', 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                     , (5, \''.$gL10n->get('INS_COHABITANT').'\', \''.$gL10n->get('INS_COHABITANT_MALE').'\', \''.$gL10n->get('INS_COHABITANT_FEMALE').'\', 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                     , (6, \''.$gL10n->get('INS_COMPANION').'\', \''.$gL10n->get('INS_BOYFRIEND').'\', \''.$gL10n->get('INS_GIRLFRIEND').'\', 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\', \''.$gL10n->get('INS_SUPERIOR_MALE').'\', \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\', 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (4, \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (5, \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\',    8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                      , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
         $this->db->query($sql); // TODO add more params
     }

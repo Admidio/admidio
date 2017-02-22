@@ -13,14 +13,10 @@
  * Parameters:
  *
  * rol_id: ID of role, that should be edited
- * mode :  1 - show different consequences of role will be deleted
- *         2 - create or edit role
+ * mode :  2 - create or edit role
  *         3 - set role inaktive
  *         4 - delete role
  *         5 - set role active
- *         6 - ask if inactive role should be deleted
- *         7 - set role invisible
- *         8 - set role visible
  *         9 - return if role has former members ? Return: 1 und 0
  *
  *****************************************************************************/
@@ -58,38 +54,7 @@ if($getRoleId > 0)
 $_SESSION['roles_request'] = $_POST;
 $rolName = $role->getValue('rol_name');
 
-if($getMode === 1)
-{
-    // create html page object
-    $page = new HtmlPage($gL10n->get('ROL_ROLE_DELETE'));
-
-    // add back link to module menu
-    $messageMenu = $page->getMenu();
-    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-
-    $page->addHtml('
-        <div class="message">
-            <p class="lead">
-                <img src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />
-                '.$gL10n->get('ROL_INACTIV_ROLE_DESC').'<br /><br />
-                <img src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" />
-                '.$gL10n->get('ROL_HINT_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
-            </p>
-
-            <button id="btn_inactive" type="button" class="btn btn-primary"
-                onclick="self.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
-                src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$gL10n->get('ROL_INACTIV_ROLE').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btn_delete" type="button" class="btn btn-primary"
-                onclick="self.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
-                src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
-        </div>'
-    );
-
-    $page->show();
-    exit();
-}
-elseif($getMode === 2)
+if($getMode === 2)
 {
     // Rolle anlegen oder updaten
 
@@ -135,6 +100,15 @@ elseif($getMode === 2)
         $_POST['rol_mail_to_all']    = 1;
     }
 
+    if($role->getValue('cat_name_intern') === 'EVENTS')
+    {
+        $_POST['rol_start_date'] = '';
+        $_POST['rol_start_time'] = '';
+        $_POST['rol_end_date'] = '';
+        $_POST['rol_end_time'] = '';
+        $_POST['rol_max_members'] = '';
+    }
+
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
@@ -157,7 +131,8 @@ elseif($getMode === 2)
 
     foreach($checkboxes as $key => $value)
     {
-        if(!isset($_POST[$value]) || $_POST[$value] != 1)
+        // initialize the roles rights if value not set or not = 1 or its a event role
+        if(!isset($_POST[$value]) || $_POST[$value] != 1 || $role->getValue('cat_name_intern') === 'EVENTS')
         {
             $_POST[$value] = 0;
         }
@@ -250,9 +225,9 @@ elseif($getMode === 2)
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
         $role->setValue('rol_max_members', $_POST['rol_max_members']);
-        $num_free_places = $role->countVacancies();
+        $numFreePlaces = $role->countVacancies();
 
-        if($num_free_places < 0)
+        if($numFreePlaces < 0)
         {
             $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $rolName));
             // => EXIT
@@ -291,7 +266,7 @@ elseif($getMode === 2)
     }
 
     // save role dependencies in database
-    if(array_key_exists('dependent_roles', $_POST))
+    if(array_key_exists('dependent_roles', $_POST) && $role->getValue('cat_name_intern') !== 'EVENTS')
     {
         $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
 
@@ -346,74 +321,45 @@ elseif($getMode === 2)
 elseif($getMode === 3)
 {
     // Rolle zur inaktiven Rolle machen
-    $returnValue = $role->setInactive();
-
-    if($returnValue === false)
+    if($role->setInactive())
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        echo 'done';
     }
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_INACTIVE')));
-    // => EXIT
+    else
+    {
+        echo $gL10n->get('SYS_NO_RIGHTS');
+    }
+    exit();
 }
 elseif($getMode === 4)
 {
     // delete role from database
     try
     {
-        $role->delete();
+        if($role->delete())
+        {
+            echo 'done';
+        }
     }
     catch(AdmException $e)
     {
         $e->showHtml();
         // => EXIT
     }
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
-    // => EXIT
+    exit();
 }
 elseif($getMode === 5)
 {
     // Rolle wieder aktiv setzen
-    $returnValue = $role->setActive();
-
-    if($returnValue === false)
+    if($role->setActive())
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        echo 'done';
     }
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_ACTIVE')));
-    // => EXIT
-}
-elseif($getMode === 6)
-{
-    // Fragen, ob die inaktive Rolle geloescht werden soll
-    $gMessage->setForwardYesNo(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
-    $gMessage->show($gL10n->get('ROL_ROLE_DELETE_DESC', $rolName));
-    // => EXIT
-}
-elseif($getMode === 7)
-{
-    $role->setValue('rol_visible', 0);
-    $role->save();
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_INVISIBLE')));
-    // => EXIT
-}
-elseif($getMode === 8)
-{
-    $role->setValue('rol_visible', 1);
-    $role->save();
-
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $rolName, $gL10n->get('SYS_VISIBLE')));
-    // => EXIT
+    else
+    {
+        $gL10n->get('SYS_NO_RIGHTS');
+    }
+    exit();
 }
 elseif($getMode === 9)
 {

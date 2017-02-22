@@ -149,7 +149,9 @@ $page = new HtmlPage($headline);
 
 $page->addJavascriptFile('adm_program/system/js/date-functions.js');
 $page->addJavascript('
-    // Funktion blendet Zeitfelder ein/aus
+    /**
+     * Funktion blendet Zeitfelder ein/aus
+     */
     function setAllDay() {
         if ($("#dat_all_day:checked").val() !== undefined) {
             $("#date_from_time").hide();
@@ -174,7 +176,9 @@ $page->addJavascript('
         }
     }
 
-    // Funktion belegt das Datum-bis entsprechend dem Datum-Von
+    /**
+     * Funktion belegt das Datum-bis entsprechend dem Datum-Von
+     */
     function setDateTo() {
         var dateFrom = Date.parseDate($("#date_from").val(), "'.$gPreferences['system_date'].'");
         var dateTo   = Date.parseDate($("#date_to").val(), "'.$gPreferences['system_date'].'");
@@ -192,7 +196,8 @@ $page->addJavascript('
         } else {
             $("#dat_country_group").hide();
         }
-    }');
+    }
+');
 
 $page->addJavascript('
     var dateRoleID = '.$dateRoleID.';
@@ -201,24 +206,34 @@ $page->addJavascript('
     setDateParticipation();
     setLocationCountry();
 
-    $("#date_registration_possible").click(function() { setDateParticipation(); });
-    $("#dat_all_day").click(function() { setAllDay(); });
-    $("#dat_location").change(function() { setLocationCountry(); });
-    $("#date_from").change(function() { setDateTo(); });
+    $("#date_registration_possible").click(function() {
+        setDateParticipation();
+    });
+    $("#dat_all_day").click(function() {
+        setAllDay();
+    });
+    $("#dat_location").change(function() {
+        setLocationCountry();
+    });
+    $("#date_from").change(function() {
+        setDateTo();
+    });
 
     // if date participation should be removed than ask user
-    $("#btn_save").click(function (event) {
+    $("#btn_save").click(function(event) {
         event.preventDefault();
 
-        if (dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
+        if (dateRoleID > 0 && $("#date_registration_possible").is(":checked") === false) {
             var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
-            if(msg_result) {
+            if (msg_result) {
                 $("#dates_edit_form").submit();
             }
         } else {
             $("#dates_edit_form").submit();
         }
-    });', true);
+    });',
+    true
+);
 
 // add back link to module menu
 $datesMenu = $page->getMenu();
@@ -233,9 +248,9 @@ $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_h
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
 if($gPreferences['dates_show_map_link'] == true)
 {
-    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
+    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
 
-    if(strlen($date->getValue('dat_country')) === 0 && $getDateId === 0)
+    if($date->getValue('dat_country') === '' && $getDateId === 0)
     {
         $date->setValue('dat_country', $gPreferences['default_country']);
     }
@@ -243,7 +258,7 @@ if($gPreferences['dates_show_map_link'] == true)
 }
 else
 {
-    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50));
+    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 100));
 }
 
 // if room selection is activated then show a selectbox with all rooms
@@ -284,7 +299,7 @@ $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
                  INNER JOIN '.TBL_CATEGORIES.'
                          ON cat_id = rol_cat_id
                       WHERE rol_valid   = 1
-                        AND rol_visible = 1
+                        AND cat_name_intern <> \'EVENTS\'
                         AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                             OR cat_org_id IS NULL )
                    ORDER BY cat_sequence, rol_name';

@@ -133,7 +133,7 @@ elseif($getMode === 'html')
 
     echo '<script type="text/javascript">
         $(function() {
-            $("body").on("shown.bs.modal", ".modal", function () {
+            $("body").on("shown.bs.modal", ".modal", function() {
                 $("#password_form:first *:input[type!=hidden]:first").focus();
 
                 $("#admidio-password-strength-minimum").css("margin-left", "calc(" + $("#admidio-password-strength").css("width") + " / 4 * '.$passwordStrengthLevel.')");
@@ -163,13 +163,13 @@ elseif($getMode === 'html')
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
                         passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
-                        setTimeout(function () {
+                        setTimeout(function() {
                             $("#admidio_modal").modal("hide");
                         }, 2000);
                     } else {
                         passwordFormAlert.attr("class", "alert alert-danger form-alert");
                         passwordFormAlert.fadeIn();
-                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                     }
                 });
             });

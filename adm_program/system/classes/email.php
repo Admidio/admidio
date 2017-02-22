@@ -50,7 +50,7 @@
  *
  * Methode gibt die maximale Groesse der Anhaenge zurueck
  * size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
- * getMaxAttachementSize($size_unit = 'kb')
+ * getMaxAttachementSize($sizeUnit = 'kb')
  *
  * Soll die Nachricht als HTML Code interpretiert und versendet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
@@ -399,7 +399,7 @@ class Email extends PHPMailer
         // if something went wrong then throw an exception with the error message
         if($returnCode !== true)
         {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', $gPreferences['email_administrator'], $this->sendEmail());
+            throw new AdmException('SYS_EMAIL_NOT_SEND', $gPreferences['email_administrator'], $returnCode);
         }
 
         return true;

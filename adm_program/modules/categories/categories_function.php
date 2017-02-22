@@ -113,7 +113,7 @@ if($getMode === 1)
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
     if(($getType === 'USF'
     && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() === 1))
-    || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'CONFIRMATION_OF_PARTICIPATION'))
+    || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS'))
     {
         $category->setValue('cat_org_id', '0');
         $sqlSearchOrga = ' AND (  cat_org_id  = '. $orgId. '

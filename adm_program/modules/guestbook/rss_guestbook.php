@@ -31,10 +31,9 @@ if ($gPreferences['enable_rss'] != 1)
     // => EXIT
 }
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] != 1)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -54,11 +53,13 @@ $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('or
 // ab hier wird der RSS-Feed zusammengestellt
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline,
-                   $gCurrentOrganization->getValue('org_homepage'),
-                   $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA',
-                   $gCurrentOrganization->getValue('org_longname')),
-                   $gCurrentOrganization->getValue('org_longname'));
+$orgLongname = $gCurrentOrganization->getValue('org_longname');
+$rss = new RSSfeed(
+    $orgLongname . ' - ' . $getHeadline,
+    $gCurrentOrganization->getValue('org_homepage'),
+    $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $orgLongname),
+    $orgLongname
+);
 $guestbook = new TableGuestbook($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -68,15 +69,14 @@ while ($row = $statement->fetch())
     $guestbook->clear();
     $guestbook->setArray($row);
 
-    // set data for attributes of this entry
-    $title       = $guestbook->getValue('gbo_name');
-    $description = $guestbook->getValue('gbo_text');
-    $link        = ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
-    $author      = $guestbook->getValue('gbo_name');
-    $pubDate     = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
-
     // add entry to RSS feed
-    $rss->addItem($title, $description, $link, $author, $pubDate);
+    $rss->addItem(
+        $guestbook->getValue('gbo_name'),
+        $guestbook->getValue('gbo_text'),
+        ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?id=' . (int) $guestbook->getValue('gbo_id'),
+        $guestbook->getValue('gbo_name'),
+        DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create'))->format('r')
+    );
 }
 
 // jetzt nur noch den Feed generieren lassen

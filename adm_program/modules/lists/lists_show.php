@@ -27,14 +27,29 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-$getDateFrom        = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-$getDateTo          = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
+if($gCurrentUser->hasRightViewFormerRolesMembers())
+{
+    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
+    $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
+}
+else
+{
+    $getDateFrom = DATE_NOW;
+    $getDateTo   = DATE_NOW;
+}
 $getMode            = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getListId          = admFuncVariableIsValid($_GET, 'lst_id',       'int');
 $getRoleIds         = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
 $getShowMembers     = admFuncVariableIsValid($_GET, 'show_members', 'int');
 $getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',      'string'); // could be int or int[], so string is necessary
 $getFullScreen      = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
+
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
 
 // Create date objects and format dates in system format
 $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
@@ -70,6 +85,12 @@ if($objDateFrom > $objDateTo)
     // => EXIT
 }
 
+// if user should not view former roles members then disallow it
+if(!$gCurrentUser->hasRightViewFormerRolesMembers())
+{
+    $getShowMembers = 0;
+}
+
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
@@ -77,7 +98,7 @@ $showLinkMailToList = true;
 
 if ($numberRoles > 1)
 {
-    $sql = 'SELECT rol_id, rol_name
+    $sql = 'SELECT rol_id, rol_name, rol_valid
               FROM '.TBL_ROLES.'
              WHERE rol_id IN ('.replaceValuesArrWithQM($roleIds).')';
     $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
@@ -86,7 +107,9 @@ if ($numberRoles > 1)
     foreach ($rolesData as $role)
     {
         // check if user has right to view all roles
-        if (!$gCurrentUser->hasRightViewRole($role['rol_id']))
+        // only users with the right to assign roles can view inactive roles
+        if (!$gCurrentUser->hasRightViewRole($role['rol_id'])
+        || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
@@ -109,7 +132,9 @@ else
     $role = new TableRoles($gDb, $roleIds[0]);
 
     // check if user has right to view role
-    if (!$gCurrentUser->hasRightViewRole($roleIds[0]))
+    // only users with the right to assign roles can view inactive roles
+    if (!$gCurrentUser->hasRightViewRole($roleIds[0])
+    || ((int) $role->getValue('rol_valid') === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -367,8 +392,8 @@ if ($getMode !== 'csv')
         $page->setTitle($title);
         $page->setHeadline($headline);
 
-        // Only for active members of a role
-        if ($getShowMembers === 0)
+        // Only for active members of a role and if user has right to view former members
+        if ($getShowMembers === 0 && $gCurrentUser->hasRightViewFormerRolesMembers())
         {
             // create filter menu with elements for start-/enddate
             $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
@@ -385,23 +410,25 @@ if ($getMode !== 'csv')
 
         $page->addHtml('<h5>'.$htmlSubHeadline.'</h5>');
         $page->addJavascript('
-            $("#export_list_to").change(function () {
+            $("#export_list_to").change(function() {
                 if ($(this).val().length > 1) {
                     var result = $(this).val();
-                    $(this).prop("selectedIndex",0);
+                    $(this).prop("selectedIndex", 0);
                     self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?" +
                         "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
 
-            $("#menu_item_mail_to_list").click(function () {
-                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id : "'.$getListId.'", userIdList : "'.implode(',', $userIdList).'" } );
+            $("#menu_item_mail_to_list").click(function() {
+                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id: "'.$getListId.'", userIdList: "'.implode(',', $userIdList).'" });
                 return false;
             });
 
-            $("#menu_item_print_view").click(function () {
+            $("#menu_item_print_view").click(function() {
                 window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
-            });', true);
+            });',
+            true
+        );
 
         // get module menu
         $listsMenu = $page->getMenu();
@@ -630,16 +657,11 @@ foreach ($membersList as $member)
         // the Index to the row must be set to 2 directly
         $sqlColumnNumber = $columnNumber + 1;
 
+        $usfId = 0;
         if ($column->getValue('lsc_usf_id') > 0)
         {
             // check if customs field and remember
-            $b_user_field = true;
             $usfId = (int) $column->getValue('lsc_usf_id');
-        }
-        else
-        {
-            $b_user_field = false;
-            $usfId = 0;
         }
 
         if ($columnNumber === 1)
@@ -739,13 +761,17 @@ foreach ($membersList as $member)
             elseif ($column->getValue('lsc_special_field') === 'mem_approved')
             {
                 // Assign Integer to Language strings
-                if ((int) $content === 1)
+                switch ((int) $content)
                 {
-                    $content = $gL10n->get('DAT_USER_ATTEND_POSSIBLY');
-                }
-                elseif ((int) $content === 2)
-                {
-                    $content = $gL10n->get('SYS_YES');
+                    case 1:
+                        $content = $gL10n->get('DAT_USER_TENTATIVE');
+                        break;
+                    case 2:
+                        $content = $gL10n->get('DAT_USER_WILL_ATTEND');
+                        break;
+                    case 3:
+                        $content = $gL10n->get('DAT_USER_REFUSED');
+                        break;
                 }
             }
             elseif ($column->getValue('lsc_special_field') === 'mem_usr_id_change' && (int) $content)

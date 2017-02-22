@@ -53,7 +53,7 @@ if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6)
+if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -296,9 +296,9 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     $date->setVisibleRoles(array_map('intval', $_POST['date_roles']));
 
     // save event in database
-    $return_code = $date->save();
+    $returnCode = $date->save();
 
-    if($return_code === true && $gPreferences['enable_email_notification'] == 1)
+    if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
     {
         // Benachrichtigungs-Email für neue Einträge
 
@@ -400,7 +400,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             // Kategorie fuer Terminbestaetigungen einlesen
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\'';
+                     WHERE cat_name_intern = \'EVENTS\'';
             $pdoStatement = $gDb->query($sql);
             $role = new TableRoles($gDb);
 
@@ -410,7 +410,6 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
             $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? '1' : '0');
             // role members are allowed to send mail to this role
             $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? '1' : '0');
-            $role->setValue('rol_visible', '0');
             $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
             $role->setValue('rol_max_members', $_POST['dat_max_members']);
         }
@@ -419,8 +418,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
         $role->setValue('rol_description', $date->getValue('dat_headline'));
 
         // save role in database
-        $return_code2 = $role->save();
-        if($return_code < 0 || $return_code2 < 0)
+        $returnCode2 = $role->save();
+        if($returnCode < 0 || $returnCode2 < 0)
         {
             $date->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -429,8 +428,8 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
         // dat_rol_id anpassen (Referenz zwischen date und role)
         $date->setValue('dat_rol_id', $role->getValue('rol_id'));
-        $return_code = $date->save();
-        if($return_code < 0)
+        $returnCode = $date->save();
+        if($returnCode < 0)
         {
             $role->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -475,9 +474,9 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
     && !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
-        // user wants to participate -> add him to date
+        // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
@@ -520,7 +519,17 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
 {
     $member = new TableMembers($gDb);
-    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+
+    if (!$gPreferences['dates_save_all_confirmations'])
+    {
+        // Delete entry
+        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+    }
+    else
+    {
+        // Set user status to refused
+        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
+    }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));

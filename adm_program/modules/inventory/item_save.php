@@ -68,23 +68,23 @@ switch($getNewItem)
 // nun alle Profilfelder pruefen
 foreach($gInventoryFields->mInventoryFields as $field)
 {
-    $post_id = 'inf-'. $field->getValue('inf_id');
+    $postId = 'inf-'. $field->getValue('inf_id');
 
     // check and save only fields that aren't disabled
     if($gCurrentUser->editUsers() || $field->getValue('inf_disabled') == 0 || ($field->getValue('inf_disabled') == 1 && $getNewItem > 0))
     {
-        if(isset($_POST[$post_id]))
+        if(isset($_POST[$postId]))
         {
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
-            if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$post_id]) === 0)
+            if($field->getValue('inf_mandatory') == 1 && strlen($_POST[$postId]) === 0)
             {
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('inf_name')));
                 // => EXIT
             }
 
             // Wert aus Feld in das User-Klassenobjekt schreiben
-            $returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$post_id]);
+            $returnCode = $inventory->setValue($field->getValue('inf_name_intern'), $_POST[$postId]);
 
             // Ausgabe der Fehlermeldung je nach Datentyp
             if(!$returnCode)
@@ -155,7 +155,7 @@ try
         }
     }
 
-    $ret_code = $inventory->save();
+    $inventory->save();
 }
 catch(AdmException $e)
 {

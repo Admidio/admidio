@@ -22,6 +22,13 @@ $getStart      = admFuncVariableIsValid($_GET, 'start',       'int');
 $getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
 // set headline
 if($getActiveRole)
 {
@@ -30,6 +37,17 @@ if($getActiveRole)
 else
 {
     $headline = $gL10n->get('LST_INACTIVE_ROLES');
+}
+
+// only users with the right to assign roles can view inactive roles
+// within PHP 5.3 false will not be set and therefore we must add 0 as value
+if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
+{
+    $getActiveRole = 1;
+}
+else
+{
+    $getActiveRole = 0;
 }
 
 // New Modulelist object
@@ -55,16 +73,18 @@ if($gPreferences['lists_hide_overview_details'] == 0)
 }
 
 $page->addJavascript('
-    $(".panel-collapse select").change(function () {
+    $(".panel-collapse select").change(function() {
         elementId = $(this).attr("id");
-        roleId    = elementId.substr(elementId.search(/_/)+1);
+        roleId    = elementId.substr(elementId.search(/_/) + 1);
 
         if ($(this).val() === "mylist") {
             self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.(int) $getActiveRole.'";
         } else {
             self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
         }
-    });', true);
+    });',
+    true
+);
 
 // add headline and title of module
 $page->addHtml('<div id="lists_overview">');
@@ -261,7 +281,7 @@ foreach($listsResult['recordset'] as $row)
                 {
                     $html .= '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                 }
-                if($getActiveRole && $row['num_former'] > 0)
+                if($gCurrentUser->hasRightViewFormerRolesMembers() && $getActiveRole && $row['num_former'] > 0)
                 {
                     // show former members
                     if($row['num_former'] == 1)
@@ -307,8 +327,8 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$base_url = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
-$page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart, true));
+$baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.(int) $getActiveRole;
+$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart, true));
 
 $page->addHtml('</div>');
 $page->show();

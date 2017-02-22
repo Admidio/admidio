@@ -103,7 +103,7 @@ if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
-                   AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                   AND cat_name_intern <> \'EVENTS\'
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND mem_begin <= ? -- DATE_NOW
@@ -173,27 +173,27 @@ if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
-    $form_values = strStripSlashesDeep($_SESSION['message_request']);
+    $formValues = strStripSlashesDeep($_SESSION['message_request']);
     unset($_SESSION['message_request']);
 
-    if(!isset($form_values['carbon_copy']))
+    if(!isset($formValues['carbon_copy']))
     {
-        $form_values['carbon_copy'] = false;
+        $formValues['carbon_copy'] = false;
     }
-    if(!isset($form_values['delivery_confirmation']))
+    if(!isset($formValues['delivery_confirmation']))
     {
-        $form_values['delivery_confirmation'] = false;
+        $formValues['delivery_confirmation'] = false;
     }
 }
 else
 {
-    $form_values['namefrom']    = '';
-    $form_values['mailfrom']    = '';
-    $form_values['subject']     = $getSubject;
-    $form_values['msg_body']    = '';
-    $form_values['msg_to']      = '';
-    $form_values['carbon_copy'] = $getCarbonCopy;
-    $form_values['delivery_confirmation'] = $getDeliveryConfirmation;
+    $formValues['namefrom']    = '';
+    $formValues['mailfrom']    = '';
+    $formValues['subject']     = $getSubject;
+    $formValues['msg_body']    = '';
+    $formValues['msg_to']      = '';
+    $formValues['carbon_copy'] = $getCarbonCopy;
+    $formValues['delivery_confirmation'] = $getDeliveryConfirmation;
 }
 
 // create html page object
@@ -239,14 +239,14 @@ if ($getMsgType === 'PM')
 
     if($getSubject === '')
     {
-        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
     }
     else
     {
-        $form->addInput('subject', null, $form_values['subject'], array('type' => 'hidden'));
+        $form->addInput('subject', null, $formValues['subject'], array('type' => 'hidden'));
     }
 
-    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $form_values['msg_body'], 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
+    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
 
     $form->closeGroupBox();
 
@@ -318,9 +318,9 @@ elseif (!isset($messageStatement))
     {
         // no user or role was committed then show list with all roles and users
         // where the current user has the right to send email
-        $preloadData = isset($form_values['msg_to']) ? $form_values['msg_to'] : '';
+        $preloadData = isset($formValues['msg_to']) ? $formValues['msg_to'] : '';
         $sqlRoleIds = $gCurrentUser->getAllMailRoles();
-        $sqlParticipationRoles = ' AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\' ';
+        $sqlParticipationRoles = ' AND cat_name_intern <> \'EVENTS\' ';
     }
 
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
@@ -417,8 +417,8 @@ elseif (!isset($messageStatement))
             }
             $statement = $gDb->queryPrepared($sql, $queryParams);
 
-            $passive_list = array();
-            $active_list = array();
+            $passiveList = array();
+            $activeList = array();
 
             while ($row = $statement->fetch())
             {
@@ -428,18 +428,18 @@ elseif (!isset($messageStatement))
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
-                        $active_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        $activeList[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
                         $currentUserId = (int) $row['usr_id'];
                     }
                     elseif($gPreferences['mail_show_former'] == 1)
                     {
-                        $passive_list[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        $passiveList[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
                         $currentUserId  = (int) $row['usr_id'];
                     }
                 }
             }
 
-            $list = array_merge($list, $active_list, $passive_list);
+            $list = array_merge($list, $activeList, $passiveList);
         }
     }
     else
@@ -499,11 +499,11 @@ elseif (!isset($messageStatement))
                    AND usd_value IS NOT NULL';
 
         $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUser->getValue('usr_id')));
-        $possible_emails = $pdoStatement->fetchColumn();
+        $possibleEmails = $pdoStatement->fetchColumn();
 
         $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
 
-        if($possible_emails > 1)
+        if($possibleEmails > 1)
         {
             $sqlData['params'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
                                     FROM '.TBL_USERS.'
@@ -530,26 +530,26 @@ elseif (!isset($messageStatement))
     }
     else
     {
-        $form->addInput('namefrom', $gL10n->get('MAI_YOUR_NAME'), $form_values['namefrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput('namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
     if($gValidLogin)
     {
-        $form->addCheckbox('carbon_copy', $gL10n->get('MAI_SEND_COPY'), $form_values['carbon_copy']);
+        $form->addCheckbox('carbon_copy', $gL10n->get('MAI_SEND_COPY'), $formValues['carbon_copy']);
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
     if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation'] == 2) || $gPreferences['mail_delivery_confirmation'] == 1)
     {
-        $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $form_values['delivery_confirmation']);
+        $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
 
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
-    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') === '1'))
@@ -564,11 +564,11 @@ elseif (!isset($messageStatement))
     // add textfield or ckeditor to form
     if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', null, $form_values['msg_body'], array('property' => FIELD_REQUIRED));
+        $form->addEditor('msg_body', null, $formValues['msg_body'], array('property' => FIELD_REQUIRED));
     }
     else
     {
-        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), $form_values['msg_body'], 10, array('property' => FIELD_REQUIRED));
+        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10, array('property' => FIELD_REQUIRED));
     }
 
     $form->closeGroupBox();

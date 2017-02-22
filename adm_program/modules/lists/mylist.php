@@ -27,14 +27,22 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('defaultValue' => true));
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
-// within PHP 5.3 false will not be set and therefore we must add 0 as value
-if($getActiveRole)
+// check if the module is enabled and disallow access if it's disabled
+if ($gPreferences['lists_enable_module'] != 1)
 {
-    $getActiveRole  = 1;
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+    // => EXIT
+}
+
+// only users with the right to assign roles can view inactive roles
+// within PHP 5.3 false will not be set and therefore we must add 0 as value
+if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
+{
+    $getActiveRole = 1;
 }
 else
 {
-    $getActiveRole  = 0;
+    $getActiveRole = 0;
 }
 
 // set headline of the script
@@ -133,7 +141,9 @@ $javascriptCode = '
     var arrUserFields     = createProfileFieldsArray();
     var arrDefaultFields  = createColumnsArray();
 
-    // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
+    /**
+     * Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
+     */
     function addColumn() {
         '.$mySqlMaxColumnAlert.'
 
@@ -144,7 +154,7 @@ $javascriptCode = '
         newTableRow.setAttribute("id", "row" + fieldNumberShow)
         //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
         var newCellCount = newTableRow.insertCell(-1);
-        newCellCount.textContent = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
+        newCellCount.textContent = (fieldNumberShow) + ". '.$gL10n->get('LST_COLUMN').' :";
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
@@ -378,11 +388,19 @@ $javascriptCode .= '
         return defaultFields;
     }
 
+    /**
+     * @param {int}    columnNumber
+     * @param {string} columnName
+     */
     function getConditionField(columnNumber, columnName) {
         htmlFormCondition = setConditonField(columnNumber, columnName);
         $("#td_condition" + columnNumber).html(htmlFormCondition);
     }
 
+    /**
+     * @param {int}    columnNumber
+     * @param {string} columnName
+     */
     function setConditonField(fieldNumberShow, columnName) {
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
@@ -442,9 +460,15 @@ $javascriptCode .= '
     function loadList() {
         var listId = $("#sel_select_configuation").val();
         var showMembers = $("#sel_show_members").val();
+        if (showMembers === undefined) {
+            showMembers = 0;
+        }
         self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
     }
 
+    /**
+     * @param {string} mode
+     */
     function send(mode) {
         for (var i = 1; i <= fieldNumberIntern; i++) {
             if (document.getElementById("condition" + i)) {
@@ -649,32 +673,55 @@ $form->closeButtonGroup();
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_select_members', $gL10n->get('LST_SELECT_MEMBERS'));
-// show all roles where the user has the right to see them
-$sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
-                       FROM '.TBL_ROLES.'
-                 INNER JOIN '.TBL_CATEGORIES.'
-                         ON cat_id = rol_cat_id
-                      WHERE rol_valid   = '.$getActiveRole.'
-                        AND rol_visible = 1
-                        AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                            OR cat_org_id IS NULL )
-                   ORDER BY cat_sequence, rol_name';
-$sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
-$form->addSelectBoxFromSql(
-    'sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true)
-);
-$showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-$form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
-// select box showing all relation types
-$sql = 'SELECT urt_id, urt_name, urt_name
-          FROM '.TBL_USER_RELATION_TYPES.'
-      ORDER BY urt_name';
-$form->addSelectBoxFromSql(
-    'sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
-    array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
-);
+
+// show all roles where the user has the right to view them
+$sqlData = array();
+if($getActiveRole)
+{
+    $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                          WHERE rol_id IN (' . replaceValuesArrWithQM($allVisibleRoles) . ')
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = $allVisibleRoles;
+}
+else
+{
+    $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
+                           FROM '.TBL_ROLES.'
+                     INNER JOIN '.TBL_CATEGORIES.'
+                             ON cat_id = rol_cat_id
+                            AND cat_hidden = 0
+                          WHERE rol_valid  = 0
+                            AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                OR cat_org_id IS NULL )
+                       ORDER BY cat_sequence, rol_name';
+    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+}
+$form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+// if user could view former roles members than he should get a selectbox where he can choose to view them
+if($gCurrentUser->hasRightViewFormerRolesMembers())
+{
+    $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+    $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
+        array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
+}
+
+if ($gPreferences['members_enable_user_relations'] == 1)
+{
+    // select box showing all relation types
+    $sql = 'SELECT urt_id, urt_name, urt_name
+              FROM '.TBL_USER_RELATION_TYPES.'
+          ORDER BY urt_name';
+    $form->addSelectBoxFromSql(
+        'sel_relationtype_ids', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+        array('showContextDependentFirstEntry' => false, 'multiselect' => true, 'defaultValue' => isset($formValues['sel_relationtype_ids']) ? $formValues['sel_relationtype_ids'] : '')
+    );
+}
+
 $form->closeGroupBox();
 
 $form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary'));

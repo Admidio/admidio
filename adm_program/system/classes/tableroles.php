@@ -22,7 +22,7 @@
  *                          requires userObject of user for this should be checked
  * allowedToEditMembers - checks if user is allowed to edit members of this role
  *                        requires userObject of user for this should be checked
- * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
+ * countVacancies($countLeaders = false) - gibt die freien Plaetze der Rolle zurueck
  *                    dies ist interessant, wenn rol_max_members gesetzt wurde
  * hasFormerMembers() - Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
  * setInactive()    - setzt die Rolle auf inaktiv
@@ -166,7 +166,10 @@ class TableRoles extends TableAccess
                        AND mem_usr_id <> ? -- $exceptUserId
                        AND mem_leader  = 0
                        AND mem_begin  <= ? -- DATE_NOW
-                       AND mem_end     > ? -- DATE_NOW';
+                       AND mem_end     > ? -- DATE_NOW
+                       AND (mem_approved IS NULL
+                            OR mem_approved < 3)';
+
             $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $exceptUserId, DATE_NOW, DATE_NOW));
 
             $this->countMembers = (int) $pdoStatement->fetchColumn();
@@ -289,7 +292,7 @@ class TableRoles extends TableAccess
      *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
      * @return string[]|string Array with all cost or if param costPeriod is set than the full name of that cost period
      */
-    public static function getCostPeriods($costPeriod = 0)
+    public static function getCostPeriods($costPeriod = null)
     {
         global $gL10n;
 
@@ -301,7 +304,7 @@ class TableRoles extends TableAccess
             12 => $gL10n->get('ROL_MONTHLY')
         );
 
-        if ($costPeriod > 0)
+        if ($costPeriod !== null)
         {
             return $costPeriods[$costPeriod];
         }
@@ -326,7 +329,7 @@ class TableRoles extends TableAccess
             return $defaultListId;
         }
 
-        if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
+        if($this->getValue('cat_name_intern') === 'EVENTS')
         {
             // read system default list configuration for events
             return (int) $gPreferences['dates_default_list_configuration'];
@@ -497,7 +500,7 @@ class TableRoles extends TableAccess
             return false;
         }
 
-        if ($this->getValue('cat_name_intern') !== 'CONFIRMATION_OF_PARTICIPATION')
+        if ($this->getValue('cat_name_intern') !== 'EVENTS')
         {
             return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
         }

@@ -181,7 +181,7 @@ class HtmlTable extends HtmlTableBasic
         // internal datatable columns starts with 0
         foreach ($columnsSort as $columnSort)
         {
-            $this->datatablesColumnDefs[] = '{ "orderable":false, "targets":' . ($columnSort - 1) . ' }';
+            $this->datatablesColumnDefs[] = '{ "orderable": false, "targets": ' . ($columnSort - 1) . ' }';
         }
     }
 
@@ -294,7 +294,7 @@ class HtmlTable extends HtmlTableBasic
         // internal datatable columns starts with 0
         foreach ($columnsHide as $columnHide)
         {
-            $this->datatablesColumnDefs[] = '{ "visible":false, "targets":' . ($columnHide - 1) . ' }';
+            $this->datatablesColumnDefs[] = '{ "visible": false, "targets": ' . ($columnHide - 1) . ' }';
         }
     }
 
@@ -312,7 +312,7 @@ class HtmlTable extends HtmlTableBasic
         array_unshift($this->columnsOrder, '[' . $this->groupedColumn . ', "asc"]');
 
         // hide the grouped column
-        $this->datatablesColumnDefs[] = '{ "visible":false, "targets":' . $this->groupedColumn . ' }';
+        $this->datatablesColumnDefs[] = '{ "visible": false, "targets": ' . $this->groupedColumn . ' }';
     }
 
     /**
@@ -462,15 +462,15 @@ class HtmlTable extends HtmlTableBasic
         if ($this->groupedColumn >= 0)
         {
             $javascriptGroup = ',
-                "drawCallback": function (settings) {
+                "drawCallback": function(settings) {
                     var api  = this.api();
-                    var rows = api.rows( {page:\'current\'} ).nodes();
+                    var rows = api.rows({page: "current"}).nodes();
                     var last = null;
 
-                    api.column(' . $this->groupedColumn . ', {page:\'current\'} ).data().each(function (group, i) {
+                    api.column(' . $this->groupedColumn . ', {page: "current"}).data().each(function(group, i) {
                         if (last !== group) {
                             $(rows).eq(i).before(
-                                \'<tr class="admidio-group-heading"><td colspan="' . $this->columnCount . '">\'+group+\'</td></tr>\'
+                                "<tr class=\"admidio-group-heading\"><td colspan=\"' . $this->columnCount . '\">" + group + "</td></tr>"
                             );
 
                             last = group;
@@ -479,7 +479,7 @@ class HtmlTable extends HtmlTableBasic
                 }';
             $javascriptGroupFunction = '
                 // Order by the grouping
-                $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function () {
+                $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function() {
                     var currentOrder = table.order()[0];
                     if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
                         table.order([' . $this->groupedColumn . ', "desc"]).draw();

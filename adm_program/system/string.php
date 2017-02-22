@@ -178,51 +178,54 @@ function strNextLetter($letter, $reverse = false)
 /**
  * Check if a string contains only valid characters. Therefore the string is
  * compared with a hard coded list of valid characters for each datatype.
- * @param string $string              The string that should be checked.
- * @param string $checkType           The type @b email, @b file, @b noSpecialChar, @b phone or @b url that will be checked.
- *                                    Each type has a different valid character list.
+ * @param string $string    The string that should be checked.
+ * @param string $checkType The type @b noSpecialChar, @b email, @b file, @b url or @b phone that will be checked.
+ *                          Each type has a different valid character list.
  * @return bool Returns @b true if all characters of @b string match the internal character list.
  */
 function strValidCharacters($string, $checkType)
 {
-    if(trim($string) !== '')
+    if (trim($string) === '')
     {
-        switch ($checkType)
-        {
-            case 'email':
-                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.@+-]+$/';
-                break;
-            case 'file':
-                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.@$&!?() +-]+$/';
-                break;
-            case 'noSpecialChar': // eine einfache E-Mail-Adresse sollte dennoch moeglich sein (Benutzername)
-                $validRegex = '/^[\w\.@+-]+$/';
-                break;
-            case 'phone':
-                $validRegex = '/^[\d\/() +-]+$/';
-                break;
-            case 'url':
-                $validRegex = '/^[áàâåäæcccçéèeênnñóòôöõøœúùûüß\w\.\/@$&!?%=#:() +-~]+$/';
-                break;
-            default:
-                return false;
-        }
-
-        // check if string contains only valid characters
-        if(preg_match($validRegex, admStrToLower($string)))
-        {
-            switch ($checkType)
-            {
-                case 'email':
-                    return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false;
-                case 'url':
-                    return filter_var(trim($string), FILTER_VALIDATE_URL) !== false;
-                default:
-                    return true;
-            }
-        }
+        return false;
     }
-    return false;
+
+    switch ($checkType)
+    {
+        case 'noSpecialChar': // a simple e-mail address should still be possible (like username)
+            $validRegex = '/^[\w.@+-]+$/';
+            break;
+        case 'email':
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/';
+            break;
+        case 'file':
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() .@+-]+$/';
+            break;
+        case 'url':
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/';
+            break;
+        case 'phone':
+            $validRegex = '/^[\d() \/+-]+$/';
+            break;
+        default:
+            return false;
+    }
+
+    // check if string contains only valid characters
+    if (!preg_match($validRegex, admStrToLower($string)))
+    {
+        return false;
+    }
+
+    switch ($checkType)
+    {
+        case 'email':
+            return filter_var(trim($string), FILTER_VALIDATE_EMAIL) !== false;
+        case 'url':
+            return filter_var(trim($string), FILTER_VALIDATE_URL) !== false;
+        default:
+            return true;
+    }
 }
 
 /**

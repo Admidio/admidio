@@ -112,8 +112,7 @@ $db->query($sql);
 $categoryIdSocialNetworks = $db->lastInsertId();
 
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$userId.', \''. DATETIME_NOW.'\')
-             , (NULL, \'USF\', \'ADDIDIONAL_DATA\',               \'INS_ADDIDIONAL_DATA\',               0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
+        VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
 $db->query($sql);
 
 // create inventory categories
@@ -236,7 +235,7 @@ $administrator->setValue('usr_timestamp_create', DATETIME_NOW);
 $administrator->save(false); // no registered user -> UserIdCreate couldn't be filled
 
 // write all preferences from preferences.php in table adm_preferences
-require_once(__DIR__ . '/db_scripts/preferences.php');
+require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
 $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];

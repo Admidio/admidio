@@ -22,27 +22,26 @@ $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireVa
 
 $photoAlbumsArray = array(0 => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$gCurrentUser->editPhotoRight())
+if (!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
     // => EXIT
 }
 
 $headline = '';
-if($getMode === 'new')
+if ($getMode === 'new')
 {
     $headline = $gL10n->get('PHO_CREATE_ALBUM');
 }
-elseif($getMode === 'change')
+elseif ($getMode === 'change')
 {
     $headline = $gL10n->get('PHO_EDIT_ALBUM');
 }
@@ -58,14 +57,14 @@ if ($getMode === 'change')
     $photoAlbum->readDataById($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+    if ((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 }
 
-if(isset($_SESSION['photo_album_request']))
+if (isset($_SESSION['photo_album_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
@@ -90,7 +89,7 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
 
     $queryParams = array($photoAlbum->getValue('pho_id'), $gCurrentOrganization->getValue('org_id'));
     // Erfassen des auszugebenden Albums
-    if($parentId > 0)
+    if ($parentId > 0)
     {
         $sqlConditionParentId .= ' AND pho_pho_id_parent = ? -- $parentId';
         $queryParams[] = $parentId;
@@ -107,10 +106,10 @@ function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
                    '.$sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
 
-    while($adm_photo_child = $childStatement->fetch())
+    while($admPhotoChild = $childStatement->fetch())
     {
         $parentPhotoAlbum->clear();
-        $parentPhotoAlbum->setArray($adm_photo_child);
+        $parentPhotoAlbum->setArray($admPhotoChild);
 
         // add entry to array of all photo albums
         $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_id')] =
@@ -127,7 +126,7 @@ $page = new HtmlPage($headline);
 $photoAlbumMenu = $page->getMenu();
 $photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-if($getMode === 'new')
+if ($getMode === 'new')
 {
     $parentAlbumId = $getPhotoId;
 }
@@ -140,10 +139,15 @@ else
 $form = new HtmlForm('photo_album_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
 $form->addInput('pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'), array('property' => FIELD_REQUIRED, 'maxLength' => 50));
 subfolder(null, '', $photoAlbum, $getPhotoId);
-$form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property'                       => FIELD_REQUIRED,
-                                                                                                   'defaultValue'                   => $parentAlbumId,
-                                                                                                   'showContextDependentFirstEntry' => false,
-                                                                                                   'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))));
+$form->addSelectBox(
+    'pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray,
+    array(
+        'property'                       => FIELD_REQUIRED,
+        'defaultValue'                   => $parentAlbumId,
+        'showContextDependentFirstEntry' => false,
+        'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))
+    )
+);
 $form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('property' => FIELD_REQUIRED, 'type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), array('type' => 'date', 'maxLength' => 10));
 $form->addInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'), array('maxLength' => 100));

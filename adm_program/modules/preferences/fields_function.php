@@ -165,9 +165,9 @@ if($getMode === 1)
     }
 
     // Daten in Datenbank schreiben
-    $return_code = $userField->save();
+    $returnCode = $userField->save();
 
-    if($return_code < 0)
+    if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

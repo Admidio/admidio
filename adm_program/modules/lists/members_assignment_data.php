@@ -50,10 +50,10 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id',        'int', array('requireValue' => true, 'directOutput' => true));
 $getFilterRoleId   = admFuncVariableIsValid($_GET, 'filter_rol_id', 'int');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all',  'bool', array('defaultValue' => false));
-$getDraw    = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
-$getStart   = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
-$getLength  = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-$getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+$getDraw   = admFuncVariableIsValid($_GET, 'draw',   'int', array('requireValue' => true));
+$getStart  = admFuncVariableIsValid($_GET, 'start',  'int', array('requireValue' => true));
+$getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+$getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $gLogger->info('mem_show_all: ' . $getMembersShowAll);
 
@@ -163,7 +163,7 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND mem_end     > \''.DATE_NOW.'\'
                          '.$filterRoleCondition.'
                      AND rol_valid = 1
-                     AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
+                     AND cat_name_intern <> \'EVENTS\'
                      AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
 
 if($getMembersShowAll)
@@ -273,7 +273,7 @@ $rowNumber = $getStart; // count for every row
 // show rows with all organization users
 while($user = $userStatement->fetch())
 {
-    $rowNumber++;
+    ++$rowNumber;
 
     $addressText  = ' ';
     $htmlAddress  = '&nbsp;';

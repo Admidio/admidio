@@ -97,7 +97,7 @@ if($getInline)
                         } else {
                             rolesFormAlert.attr("class", "alert alert-danger form-alert");
                             rolesFormAlert.fadeIn();
-                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>"+data);
+                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
                         }
                     }
                 });
@@ -143,7 +143,7 @@ $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
 if($gCurrentUser->manageRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
+    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_leader_rights,
                      mem_rol_id, mem_usr_id, mem_leader
               FROM '.TBL_ROLES.'
         INNER JOIN '.TBL_CATEGORIES.'
@@ -154,7 +154,7 @@ if($gCurrentUser->manageRoles())
                AND mem_begin  <= ? -- DATE_NOW
                AND mem_end     > ? -- DATE_NOW
              WHERE rol_valid   = 1
-               AND rol_visible = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
@@ -163,7 +163,7 @@ if($gCurrentUser->manageRoles())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
+    $sql = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_leader_rights,
                    mgl.mem_rol_id AS mem_rol_id, mgl.mem_usr_id AS mem_usr_id, mgl.mem_leader AS mem_leader
               FROM '.TBL_MEMBERS.' AS bm
         INNER JOIN '.TBL_ROLES.'
@@ -181,7 +181,7 @@ else
                AND bm.mem_leader  = 1
                AND rol_leader_rights IN (?,?) -- ROLE_LEADER_MEMBERS_ASSIGN,ROLE_LEADER_MEMBERS_ASSIGN_EDIT
                AND rol_valid      = 1
-               AND rol_visible    = 1
+               AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
@@ -210,94 +210,91 @@ while($row = $statement->fetch())
     $leaderDisabled = '';
     $role->setArray($row);
 
-    if($role->getValue('rol_visible') == 1)
+    // if user is assigned to this role
+    // or if user is created in members.php of list module
+    if($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId))
     {
-        // if user is assigned to this role
-        // or if user is created in members.php of list module
-        if($row['mem_usr_id'] > 0 || ($getNewUser === 1 && (int) $role->getValue('rol_id') == $setRoleId))
-        {
-            $memberChecked = ' checked="checked" ';
-        }
-
-        // if role is administrator than only administrator can add new user,
-        // but don't change their own membership, because there must be at least one administrator
-        if($role->getValue('rol_administrator') == 1
-        && (!$gCurrentUser->isAdministrator()
-        || ($gCurrentUser->isAdministrator() && $getUserId === (int) $gCurrentUser->getValue('usr_id'))))
-        {
-            $memberDisabled = ' disabled="disabled" ';
-        }
-
-        // if user is flagged as leader than check the ckeckbox ;)
-        if($row['mem_leader'] > 0)
-        {
-            $leaderChecked = ' checked="checked" ';
-        }
-
-        // the leader of administrator role can only be set by a administrator
-        if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
-        {
-            $leaderDisabled = ' disabled="disabled" ';
-        }
-
-        $columnValues = array(
-            '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
-                $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
-            '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
-            $role->getValue('rol_description')
-        );
-
-        // if new category than display a category header
-        if($category !== (int) $role->getValue('cat_id'))
-        {
-            $block_id = 'admCategory'.$role->getValue('cat_id');
-
-            $table->addTableBody();
-            $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$block_id));
-            $table->addColumn();
-            $table->addAttribute('colspan', '4', 'td');
-            $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name'));
-            $table->addTableBody('id', $block_id);
-
-            $category = (int) $role->getValue('cat_id');
-        }
-
-        $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
-                           $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
-
-        // show icon that leaders have no additional rights
-        if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
-        {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
-                                 alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-                                     <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
-        }
-
-        // show icon with edit user right if leader has this right
-        if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
-        || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-        {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
-                                 alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
-        }
-
-        // show icon with assign role right if leader has this right
-        if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
-        || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-        {
-            $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
-                                 alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
-        }
-
-        // show dummy icon if leader has not all rights
-        if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-        {
-            $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
-        }
-        $columnValues[] = $leaderRights;
-
-        $table->addRowByArray($columnValues);
+        $memberChecked = ' checked="checked" ';
     }
+
+    // if role is administrator than only administrator can add new user,
+    // but don't change their own membership, because there must be at least one administrator
+    if($role->getValue('rol_administrator') == 1
+    && (!$gCurrentUser->isAdministrator()
+    || ($gCurrentUser->isAdministrator() && $getUserId === (int) $gCurrentUser->getValue('usr_id'))))
+    {
+        $memberDisabled = ' disabled="disabled" ';
+    }
+
+    // if user is flagged as leader than check the ckeckbox ;)
+    if($row['mem_leader'] > 0)
+    {
+        $leaderChecked = ' checked="checked" ';
+    }
+
+    // the leader of administrator role can only be set by a administrator
+    if($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator())
+    {
+        $leaderDisabled = ' disabled="disabled" ';
+    }
+
+    $columnValues = array(
+        '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
+            $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
+        '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
+        $role->getValue('rol_description')
+    );
+
+    // if new category than display a category header
+    if($category !== (int) $role->getValue('cat_id'))
+    {
+        $blockId = 'admCategory'.$role->getValue('cat_id');
+
+        $table->addTableBody();
+        $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$blockId));
+        $table->addColumn();
+        $table->addAttribute('colspan', '4', 'td');
+        $table->addData('<span id="caret_'.$blockId.'" class="caret"></span>'.$role->getValue('cat_name'));
+        $table->addTableBody('id', $blockId);
+
+        $category = (int) $role->getValue('cat_id');
+    }
+
+    $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
+                       $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
+
+    // show icon that leaders have no additional rights
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+    {
+        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
+                             alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
+                                 <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+    }
+
+    // show icon with edit user right if leader has this right
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
+    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    {
+        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
+                             alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+    }
+
+    // show icon with assign role right if leader has this right
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
+    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    {
+        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
+                             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+    }
+
+    // show dummy icon if leader has not all rights
+    if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    {
+        $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+    }
+    $columnValues[] = $leaderRights;
+
+    $table->addRowByArray($columnValues);
 }
 $html .= $table->show();
 

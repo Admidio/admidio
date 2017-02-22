@@ -20,10 +20,9 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireV
 
 $headline = $gL10n->get('DOW_CREATE_FOLDER');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_download_module'] != 1)
 {
-    // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
@@ -41,13 +40,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
-    $form_values = strStripSlashesDeep($_SESSION['download_request']);
+    $formValues = strStripSlashesDeep($_SESSION['download_request']);
     unset($_SESSION['download_request']);
 }
 else
 {
-    $form_values['new_folder'] = null;
-    $form_values['new_description'] = null;
+    $formValues['new_folder'] = null;
+    $formValues['new_description'] = null;
 }
 
 try
@@ -74,8 +73,8 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentF
 
 // show form
 $form = new HtmlForm('new_folder_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId, $page);
-$form->addInput('new_folder', $gL10n->get('SYS_NAME'), $form_values['new_folder'], array('maxLength' => 255, 'property' => FIELD_REQUIRED));
-$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, array('maxLength' => 4000));
+$form->addInput('new_folder', $gL10n->get('SYS_NAME'), $formValues['new_folder'], array('maxLength' => 255, 'property' => FIELD_REQUIRED));
+$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $formValues['new_description'], 4, array('maxLength' => 4000));
 $form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), array('icon' => THEME_URL.'/icons/folder_create.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page

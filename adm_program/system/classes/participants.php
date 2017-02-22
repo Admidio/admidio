@@ -84,10 +84,13 @@ class Participants
             $this->checkId($rolId);
         }
 
-        $sql = 'SELECT DISTINCT mem_usr_id, mem_leader
+        $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = ? -- $this->rolId
-                   AND mem_end   >= ? -- DATE_NOW';
+                   AND mem_end   >= ? -- DATE_NOW
+                   AND (mem_approved IS NULL
+                            OR mem_approved < 3)';
+
         $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
 
         // Write all member Id´s and leader status in an array
@@ -95,7 +98,10 @@ class Participants
 
         while ($row = $membersStatement->fetch())
         {
-            $numParticipants [] = array('member' => $row['mem_usr_id'], 'leader' => $row['mem_leader']);
+            $numParticipants[] = array(
+                'member' => (int) $row['mem_usr_id'],
+                'leader' => (bool) $row['mem_leader']
+            );
         }
 
         // count the number of leaders of the date
@@ -153,10 +159,10 @@ class Participants
     }
 
     /**
-     * Return all participants with surname,firstname and leader status as array
+     * Return all participants with surname,firstname, leader and approval status as array
      * @param int    $roleId
      * @param string $order Values ASC/DESC Default: 'ASC'
-     * @return array|false Returns all participants in an array with fieldnames ['surname'], ['firstname'], ['leader'].
+     * @return array|false Returns all participants in an array with fieldnames ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
      */
     public function getParticipantsArray($roleId = 0, $order = 'ASC')
     {
@@ -172,7 +178,7 @@ class Participants
         $this->order = $order;
 
         $sql = 'SELECT DISTINCT
-                       surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader
+                       surname.usd_value AS surname, firstname.usd_value AS firstname, mem_leader, mem_usr_id, mem_approved
                   FROM '.TBL_MEMBERS.'
              LEFT JOIN '.TBL_USER_DATA.' AS surname
                     ON surname.usd_usr_id = mem_usr_id
@@ -192,14 +198,38 @@ class Participants
         $participants = array();
         while ($row = $membersStatement->fetch())
         {
-            $participants[] = array(
+            $participants[(int) $row['mem_usr_id']] = array(
+                'usrId'     => (int) $row['mem_usr_id'],
                 'surname'   => $row['surname'],
                 'firstname' => $row['firstname'],
-                'leader'    => $row['mem_leader']
+                'leader'    => (bool) $row['mem_leader'],
+                'approved'  => (int) $row['mem_approved']
             );
         }
         $this->memberDate = $participants;
 
         return $this->memberDate;
+    }
+
+    /**
+     * Look for an user ID exists in the current participants array. If the user Id exists the check the approval state of the user. If not disagreed ( Integer 3 ) User is member of the event role
+     * @param int    $userId
+     * @return bool Returns true if userID is found and approval state is not set to disagreement (value: 3)
+     */
+    public function isMemberOfEvent($userId)
+    {
+        // Read participants of current event role
+        $eventMember = $this->getParticipantsArray($this->rolId);
+        // Search for user in array
+        if (!in_array((int) $userId, array_column($eventMember, 'usrId'), true))
+        {
+            if ($eventMember[$userId]['approved'] !== 3)
+            {
+                // Is participant of event
+                return true;
+            }
+        }
+
+        return false;
     }
 }

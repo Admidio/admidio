@@ -126,10 +126,10 @@ if(isset($_SESSION['profile_request']))
 
     foreach($gProfileFields->mProfileFields as $field)
     {
-        $field_name = 'usf-'. $field->getValue('usf_id');
-        if(isset($_SESSION['profile_request'][$field_name]))
+        $fieldName = 'usf-'. $field->getValue('usf_id');
+        if(isset($_SESSION['profile_request'][$fieldName]))
         {
-            $user->mProfileFieldsData->setValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$field_name]));
+            $user->mProfileFieldsData->setValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]));
         }
     }
 
