@@ -19,4 +19,4 @@
 !/adm_plugins/sidebar_online/
 
 # For custom configuration
-.php_cs
+/.php_cs
