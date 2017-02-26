@@ -413,7 +413,6 @@
     <string name="LST_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
     <string name="LST_NO_USER_FOUND">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</string>
     <string name="LST_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>
-    <string name="LST_NO_ROLES_REMOVED">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</string>
     <string name="LST_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
     <string name="LST_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
     <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>

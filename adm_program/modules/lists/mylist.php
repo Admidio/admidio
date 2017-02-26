@@ -679,6 +679,14 @@ $sqlData = array();
 if($getActiveRole)
 {
     $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
+
+    // check if there are roles that the current user could view
+    if(count($allVisibleRoles) === 0)
+    {
+            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+            // => EXIT
+    }
+
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
@@ -699,6 +707,13 @@ else
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+
+    $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);
+    if($inactiveRolesStatement->rowCount() === 0)
+    {
+            $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
+            // => EXIT
+    }
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
