@@ -708,6 +708,7 @@ else
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
 
+    // check if there are roles that the current user could view
     $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);
     if($inactiveRolesStatement->rowCount() === 0)
     {
