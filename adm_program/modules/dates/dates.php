@@ -228,7 +228,11 @@ else // $getViewMode = 'print'
     $page->hideThemeHtml();
     $page->hideMenu();
     $page->setPrintMode();
-    $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', $dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio')) . '</h3>');
+
+    if($getId === 0)
+    {
+        $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', $dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio')) . '</h3>');
+    }
 }
 
 if($datesTotalCount === 0)
