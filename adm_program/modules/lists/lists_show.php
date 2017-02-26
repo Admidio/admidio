@@ -26,16 +26,8 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-if($gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
-    $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date', array('defaultValue' => DATE_NOW));
-}
-else
-{
-    $getDateFrom = DATE_NOW;
-    $getDateTo   = DATE_NOW;
-}
+$getDateFrom          = admFuncVariableIsValid($_GET, 'date_from',           'date', array('defaultValue' => DATE_NOW));
+$getDateTo            = admFuncVariableIsValid($_GET, 'date_to',             'date', array('defaultValue' => DATE_NOW));
 $getMode              = admFuncVariableIsValid($_GET, 'mode',                'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
 $getListId            = admFuncVariableIsValid($_GET, 'lst_id',              'int');
 $getRoleIds           = admFuncVariableIsValid($_GET, 'rol_ids',             'string'); // could be int or int[], so string is necessary
@@ -50,25 +42,6 @@ if ($gPreferences['lists_enable_module'] != 1)
     // => EXIT
 }
 
-// Create date objects and format dates in system format
-$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
-if ($objDateFrom === false)
-{
-    // check if date_from  has system format
-    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
-}
-$dateFrom = $objDateFrom->format($gPreferences['system_date']);
-$startDateEnglishFormat = $objDateFrom->format('Y-m-d');
-
-$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
-if ($objDateTo === false)
-{
-    // check if date_from  has system format
-    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
-}
-$dateTo = $objDateTo->format($gPreferences['system_date']);
-$endDateEnglishFormat = $objDateTo->format('Y-m-d');
-
 $roleIds = array_map('intval', array_filter(explode(',', $getRoleIds), 'is_numeric'));
 $numberRoles = count($roleIds);
 
@@ -78,22 +51,11 @@ if ($numberRoles === 0)
     // => EXIT
 }
 
-if($objDateFrom > $objDateTo)
-{
-    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
-    // => EXIT
-}
-
-// if user should not view former roles members then disallow it
-if(!$gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $getShowFormerMembers = 0;
-}
-
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $showLinkMailToList = true;
+$hasRightViewFormerMembers = false;
 
 if ($numberRoles > 1)
 {
@@ -119,6 +81,11 @@ if ($numberRoles > 1)
         {
             $showLinkMailToList = false;
             // => do not show the link
+        }
+
+        if ($gCurrentUser->hasRightViewFormerRolesMembers($role['rol_id']))
+        {
+            $hasRightViewFormerMembers = true;
         }
 
         $htmlSubHeadline .= ', '.$role['rol_name'];
@@ -148,8 +115,43 @@ else
 
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
+    $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
 }
 
+// if user should not view former roles members then disallow it
+if(!$hasRightViewFormerMembers)
+{
+    $getShowFormerMembers = 0;
+    $getDateFrom = DATE_NOW;
+    $getDateTo   = DATE_NOW;
+}
+
+// Create date objects and format dates in system format
+$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
+if ($objDateFrom === false)
+{
+    // check if date_from  has system format
+    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+}
+$dateFrom = $objDateFrom->format($gPreferences['system_date']);
+$startDateEnglishFormat = $objDateFrom->format('Y-m-d');
+
+$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
+if ($objDateTo === false)
+{
+    // check if date_from  has system format
+    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+}
+$dateTo = $objDateTo->format($gPreferences['system_date']);
+$endDateEnglishFormat = $objDateTo->format('Y-m-d');
+
+if($objDateFrom > $objDateTo)
+{
+    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+    // => EXIT
+}
+
+// read names of all used relationships for later output
 $relationtypeName = '';
 $relationtypeIds = array_map('intval', array_filter(explode(',', $getRelationtypeIds), 'is_numeric'));
 if (count($relationtypeIds) > 0)
@@ -398,7 +400,7 @@ if ($getMode !== 'csv')
         $page->setHeadline($headline);
 
         // Only for active members of a role and if user has right to view former members
-        if ($gCurrentUser->hasRightViewFormerRolesMembers())
+        if ($hasRightViewFormerMembers)
         {
             // create filter menu with elements for start-/enddate
             $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
