@@ -55,7 +55,7 @@ if ($numberRoles === 0)
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $showLinkMailToList = true;
-$hasRightViewFormerMembers = false;
+$hasRightViewFormerMembers = true;
 
 if ($numberRoles > 1)
 {
@@ -83,9 +83,9 @@ if ($numberRoles > 1)
             // => do not show the link
         }
 
-        if ($gCurrentUser->hasRightViewFormerRolesMembers($role['rol_id']))
+        if (!$gCurrentUser->hasRightViewFormerRolesMembers($role['rol_id']))
         {
-            $hasRightViewFormerMembers = true;
+            $hasRightViewFormerMembers = false;
         }
 
         $htmlSubHeadline .= ', '.$role['rol_name'];
