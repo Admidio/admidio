@@ -29,8 +29,8 @@ unset($list);
 // Initialize and check the parameters
 if($gCurrentUser->hasRightViewFormerRolesMembers())
 {
-    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-    $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
+    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', array('defaultValue' => DATE_NOW));
+    $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date', array('defaultValue' => DATE_NOW));
 }
 else
 {
