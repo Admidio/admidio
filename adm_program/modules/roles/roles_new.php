@@ -206,7 +206,7 @@ $form->closeGroupBox();
 // event roles should not set rights, dates meetings and dependencies
 if($role->getValue('cat_name_intern') !== 'EVENTS')
 {
-    $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
+    $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox('rol_assign_roles', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'), (bool) $role->getValue('rol_assign_roles'),
                        array('helpTextIdLabel' => 'ROL_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'roles.png'));
     $form->addCheckbox('rol_all_lists_view', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'), (bool) $role->getValue('rol_all_lists_view'),
