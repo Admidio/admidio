@@ -30,11 +30,13 @@ if($_GET['mode'] == 2)
 }
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
-$getCopy   = admFuncVariableIsValid($_GET, 'copy',   'bool');
-$getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
+$getAdditionalGuests    = admFuncVariableIsValid($_GET, 'additonal_guests', 'int');
+$getDateId              = admFuncVariableIsValid($_GET, 'dat_id', 'int');
+$getUserComment         = admFuncVariableIsValid($_GET, 'dat_comment', 'text');
+$getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
+$getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
+$getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
 
 $originalDateId = 0;
 
@@ -519,9 +521,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
     $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
@@ -539,17 +539,14 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
         $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
 elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
 {
     $member = new TableMembers($gDb);
     $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
 elseif($getMode === 6)  // Termin im iCal-Format exportieren
@@ -572,4 +569,15 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
     echo $date->getIcal(DOMAIN);
     exit();
 }
-
+// If participation mode: Write optional parameter from user and show current status message
+if (in_array($getMode, array(3, 4, 7), true))
+{
+    $member = new TableMembers($gDb);
+    $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+    $member->setValue('mem_comment', $getUserComment);
+    $member->setValue('mem_count_guests', $getAdditionalGuests);
+    $member->save();
+    
+    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));
+}

@@ -37,7 +37,6 @@ $disableAdditionalGuests   = 'disabled';
 $disableComments           = 'disabled';
 $disableStatusAttend       = '';
 $disableStatusTentative    = '';
-$disableStatusNo           = '';
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
@@ -133,6 +132,13 @@ if($getViewMode === 'html')
             window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&id=' . $getId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
         });', true);
 
+    $page->addJavascript('
+        function submitParticipationForm(datId, mode){
+            // Set mode in hidden field and submit form
+            $("input[name=\"mode\"]").val(mode);
+            $( "#participate_form_" + datId ).submit();
+        }
+    ', false);
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if($getId > 0)
     {
@@ -533,7 +539,6 @@ else
                             case 3:
                                 $disableStatusAttend    = 'disabled';
                                 $disableStatusTentative = 'disabled';
-                                $disableStatusNo        = 'disabled';
                                 break;
                         }
                     }
@@ -581,21 +586,25 @@ else
                                             <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
                                     </div>
                                     <div class="modal-body">
-                                        <p>' .$gL10n->get('SYS_COMMENT') . ':</p>
-                                        <textarea rows="5" id="dat_user_comment" alt="dat_user_comment" class="form-control" style="min-width: 100%" placeholder="..."' . $disableComments . '></textarea>
-                                        <br/>
-                                        <label for="additonal_guests">' .$gL10n->get('LST_SEAT_AMOUNT'). ':
-                                            <input id="additonal_guests" name="additonal_guests" class="form-control"' . $disableAdditionalGuests . '>
-                                        </label>
+                                        <form id="participate_form_' . $dateId .'" action="dates_function.php">
+                                            <p>' .$gL10n->get('SYS_COMMENT') . ':</p>
+                                            <textarea rows="5" name="dat_comment" value="dat_comment" class="form-control" style="min-width: 100%" placeholder="..."' . $disableComments . '>' .$row['comment'] . '</textarea>
+                                            <br/>
+                                            <label for="additonal_guests">' .$gL10n->get('LST_SEAT_AMOUNT'). ':
+                                                <input name="additonal_guests" alt="additonal_guests" class="form-control" value="' .$row['additional_guests'] . '"' . $disableAdditionalGuests . '>
+                                            </label>
+                                            <input type="hidden" name="dat_id" value="' . $dateId .'">
+                                            <input type="hidden" name="mode" value="">
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-default" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id=' . $dateId . '"' . $disableStatusAttend . '>
+                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 3)"' . $disableStatusAttend . ' >
                                             <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
                                         </a>
-                                        <a class="btn btn-default" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id=' . $dateId . '"' . $disableStatusTentative . '>
+                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 7)"' . $disableStatusTentative . '>
                                             <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                         </a>
-                                        <a class="btn btn-default" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id=' . $dateId . '">
+                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 4)"">
                                             <img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_CANCEL') . '" title="' . $gL10n->get('DAT_CANCEL') . '"/>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                         <button type="button" class="btn pull-right" data-dismiss="modal">Close</button>
@@ -609,7 +618,6 @@ else
                 $disableComments            = 'disabled';
                 $disableStatusAttend        = '';
                 $disableStatusTentative     = '';
-                $disableStatusNo            = '';
                 $participateModalForm       = false;
                 
                 if ($participationPossible === false)
