@@ -84,7 +84,7 @@ class Participants
             $this->checkId($rolId);
         }
 
-        $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
+        $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved, mem_count_guests
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = ? -- $this->rolId
                    AND mem_end   >= ? -- DATE_NOW
@@ -99,25 +99,33 @@ class Participants
         while ($row = $membersStatement->fetch())
         {
             $numParticipants[] = array(
-                'member' => (int) $row['mem_usr_id'],
-                'leader' => (bool) $row['mem_leader']
+                'member'            => (int) $row['mem_usr_id'],
+                'leader'            => (bool) $row['mem_leader'],
+                'count_guests' => (int) $row['mem_count_guests']
             );
         }
 
-        // count the number of leaders of the date
+        // count total number of participants and leaders of the date
         $leader = 0;
+        $totalCount = 1;
         foreach ($numParticipants as $member)
         {
             if($member['leader'] != 0)
             {
+                // Only count additonal guests of leaders. Leaders are not counted for max. members
+                $totalCount = $totalCount + $member['count_guests'];
                 ++$leader;
+            }
+            else
+            {
+                $totalCount = $totalCount + $member['count_guests'] + 1;
             }
         }
         // check if class variables $count and $leader are set to default flag.
         if($this->count === -1 && $this->leader === -1)
         {
-            // Then Store the results in class variables.
-            $this->count = count($numParticipants);
+            // Then store the results in class variables.
+            $this->count = $totalCount;
             $this->leader = $leader;
         }
 
