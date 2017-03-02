@@ -168,11 +168,15 @@ $page->addJavascript('
             $("#dat_max_members_group").show("slow");
             $("#date_right_list_view_group").show("slow");
             $("#date_right_send_mail_group").show("slow");
+            $("#dat_allow_comments_group").show("slow");
+            $("#dat_additional_guests_group").show("slow");
         } else {
             $("#date_current_user_assigned_group").hide();
             $("#dat_max_members_group").hide();
             $("#date_right_list_view_group").hide();
             $("#date_right_send_mail_group").hide();
+            $("#dat_allow_comments_group").hide();
+            $("#dat_additional_guests_group").hide();
         }
     }
 

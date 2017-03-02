@@ -112,7 +112,7 @@ class Participants
         {
             if($member['leader'] != 0)
             {
-                // Only count additonal guests of leaders. Leaders are not counted for max. members
+                // Only count additonal guests of leaders. Leaders are not count for max. members
                 $totalCount = $totalCount + $member['count_guests'];
                 ++$leader;
             }
