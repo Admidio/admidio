@@ -49,7 +49,7 @@ class LanguageData
      */
     public function __construct($language = '', $languagePath = '')
     {
-        if($languagePath === '')
+        if ($languagePath === '')
         {
             $this->addLanguagePath(ADMIDIO_PATH . FOLDER_LANGUAGES);
         }
@@ -58,10 +58,10 @@ class LanguageData
             $this->addLanguagePath($languagePath);
         }
 
-        if($language === '')
+        if ($language === '')
         {
             // get browser language and set this language as default
-            $language = $this->determineBrowserLanguage($this->referenceLanguage);
+            $language = static::determineBrowserLanguage($this->referenceLanguage);
         }
 
         $this->setLanguage($language);
@@ -74,7 +74,7 @@ class LanguageData
      */
     public function addLanguagePath($path)
     {
-        if($path !== '' && !in_array($path, $this->languageFilePath, true))
+        if ($path !== '' && !in_array($path, $this->languageFilePath, true))
         {
             $this->languageFilePath[] = $path;
         }
@@ -87,38 +87,38 @@ class LanguageData
      */
     public static function determineBrowserLanguage($defaultLanguage)
     {
-        if(!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) || empty($_SERVER['HTTP_ACCEPT_LANGUAGE']))
         {
             return $defaultLanguage;
         }
 
-        $accepted = preg_split('{,\s*}', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $accepted = preg_split('/,\s*/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
         $language = $defaultLanguage;
         $quality = 0;
 
-        if(is_array($accepted) && count($accepted) > 0)
+        if (is_array($accepted) && count($accepted) > 0)
         {
-            foreach($accepted as $key => $value)
+            foreach ($accepted as $key => $value)
             {
-                if(!preg_match('{^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.[0-9]{1,3})?|1(?:\.0{1,3})?))?$}i', $value, $matches))
+                if (!preg_match('/^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/i', $value, $matches))
                 {
                     continue;
                 }
 
                 $code = explode('-', $matches[1]);
 
-                if(isset($matches[2]))
+                if (isset($matches[2]))
                 {
-                    $priority = floatval($matches[2]);
+                    $priority = (float) $matches[2];
                 }
                 else
                 {
                     $priority = 1.0;
                 }
 
-                while(count($code) > 0)
+                while (count($code) > 0)
                 {
-                    if($priority > $quality)
+                    if ($priority > $quality)
                     {
                         $language = strtolower(implode('-', $code));
                         $quality = $priority;
@@ -151,7 +151,7 @@ class LanguageData
      */
     public function getLanguage($referenceLanguage = false)
     {
-        if($referenceLanguage)
+        if ($referenceLanguage)
         {
             return $this->referenceLanguage;
         }
@@ -183,7 +183,7 @@ class LanguageData
      */
     public function setLanguage($language)
     {
-        if($language !== $this->language)
+        if ($language !== $this->language)
         {
             // initialize all parameters
             $this->textCache = array();

@@ -273,7 +273,7 @@ $rowNumber = $getStart; // count for every row
 // show rows with all organization users
 while($user = $userStatement->fetch())
 {
-    $rowNumber++;
+    ++$rowNumber;
 
     $addressText  = ' ';
     $htmlAddress  = '&nbsp;';

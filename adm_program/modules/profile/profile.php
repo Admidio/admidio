@@ -265,7 +265,7 @@ if($gCurrentUser->assignRoles())
 }
 
 // show link to create relations
-if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
+if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->editUsers())
 {
     $profileMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
         $gL10n->get('PRO_ADD_USER_RELATION'), 'user_administration.png', 'right', 'menu_item_extras');
@@ -580,7 +580,7 @@ if($gPreferences['profile_show_roles'] == 1)
 
     $page->addHtml('
     <div class="panel panel-default" id="profile_authorizations_box">
-        <div class="panel-heading">'.$gL10n->get('SYS_AUTHORIZATION').'</div>
+        <div class="panel-heading">'.$gL10n->get('SYS_PERMISSIONS').'</div>
         <div class="panel-body row" id="profile_authorizations_box_body">');
 
     if(count($rightsOrigin) > 0)
@@ -897,7 +897,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
         <div class="panel panel-default" id="profile_user_relations_box">
             <div class="panel-heading"><div class="pull-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
                 // show link to create relations
-                if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->hasRightEditProfile($user))
+                if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->editUsers())
                 {
                     $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_relations_new_entry" href="'.ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId.'"><img
                         src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('PRO_ADD_USER_RELATION').'" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'" /></a></div>');
@@ -947,7 +947,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
                             $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a><span>');
             $page->addHtml('<span class="pull-right text-right">');
 
-             if($gCurrentUser->hasRightEditProfile($otherUser))
+             if($gCurrentUser->editUsers())
              {
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                  href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=ure&amp;element_id=row_ure_'.

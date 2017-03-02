@@ -409,7 +409,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                         $hexstring = '0x';
                                         for ($i = 0; $i < $data_len; ++$i)
                                         {
-                                            $hexstring .= str_pad(dechex(ord($data{$i})), 2, '0', STR_PAD_LEFT);
+                                            $hexstring .= str_pad(dechex(ord($data[$i])), 2, '0', STR_PAD_LEFT);
                                         }
                                         $valuevalues[] = $hexstring;
                                     }

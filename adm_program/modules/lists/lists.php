@@ -137,7 +137,7 @@ if($numberOfRoles === 0)
         }
         else
         {
-            $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
+            $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
             // => EXIT
         }
     }

@@ -417,7 +417,6 @@
     <string name="LST_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
     <string name="LST_NO_USER_FOUND">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</string>
     <string name="LST_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>
-    <string name="LST_NO_ROLES_REMOVED">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</string>
     <string name="LST_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
     <string name="LST_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
     <string name="LST_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
@@ -1043,7 +1042,6 @@
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
     <string name="SYS_APPLY">Übernehmen</string>
     <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
-    <string name="SYS_AUTHORIZATION">Berechtigungen</string>
     <string name="SYS_BACK">Zurück</string>
     <string name="SYS_BACK_TO_MODULE_OVERVIEW">Zurück zur Modulübersicht</string>
     <string name="SYS_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
@@ -1269,6 +1267,7 @@
     <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
     <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
     <string name="SYS_PERIOD">Zeitraum</string>
+    <string name="SYS_PERMISSIONS">Berechtigungen</string>
     <string name="SYS_PDF">PDF</string>
     <string name="SYS_PHONE">Telefon</string>
     <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>

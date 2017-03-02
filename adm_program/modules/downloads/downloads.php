@@ -94,7 +94,7 @@ if ($currentFolder->hasUploadRight())
     if($gCurrentUser->editDownloadRight())
     {
         $DownloadsMenu->addItem('menu_item_config_folder', ADMIDIO_URL.FOLDER_MODULES.'/downloads/folder_config.php?folder_id='.$getFolderId,
-                            $gL10n->get('SYS_AUTHORIZATION'), 'lock.png');
+                            $gL10n->get('SYS_PERMISSIONS'), 'lock.png');
     }
 }
 

@@ -17,3 +17,6 @@
 !/adm_plugins/sidebar_dates/
 !/adm_plugins/sidebar_downloads/
 !/adm_plugins/sidebar_online/
+
+# For custom configuration
+/.php_cs

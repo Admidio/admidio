@@ -175,5 +175,4 @@ class ModuleMessages
 
         return (int) $statement->fetchColumn();
     }
-
 }

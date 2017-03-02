@@ -113,7 +113,7 @@ $table = new HtmlTable('roles_table', $page, true, true);
 $columnHeading = array(
     $gL10n->get('SYS_CATEGORY'),
     $listDescription,
-    $gL10n->get('SYS_AUTHORIZATION'),
+    $gL10n->get('SYS_PERMISSIONS'),
     $gL10n->get('ROL_PREF'),
     $gL10n->get('SYS_FEATURES')
 );
