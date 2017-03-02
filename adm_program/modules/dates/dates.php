@@ -33,8 +33,8 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$disableAdditionalGuests   = 'disabled';
-$disableComments           = 'disabled';
+$disableAdditionalGuests   = (int) 2;
+$disableComments           = (int) 2;
 $disableStatusAttend       = '';
 $disableStatusTentative    = '';
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
@@ -580,6 +580,14 @@ else
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId .'">'.$iconParticipationStatus.$buttonText.'
                         </div>';
+
+                    $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php', $page, array('type' => 'navbar', 'setFocus' => false));
+                    $participationForm->addCustomContent('', '<br />');
+                    $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
+                    $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'property' => $disableAdditionalGuests));
+                    $participationForm->addInput('dat_id', '', $dateId, array('property' => FIELD_HIDDEN));
+                    $participationForm->addInput('mode', '', '', array('property' => FIELD_HIDDEN));
+
                     $page->addHTML('
                         <div id="participate_modal_' . $dateId .'" class="modal fade" role="dialog">
                             <div class="modal-dialog">
@@ -589,18 +597,7 @@ else
                                             <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
                                             <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
                                     </div>
-                                    <div class="modal-body">
-                                        <form id="participate_form_' . $dateId .'" action="dates_function.php">
-                                            <p>' .$gL10n->get('SYS_COMMENT') . ':</p>
-                                            <textarea rows="5" name="dat_comment" value="dat_comment" class="form-control" style="min-width: 100%" placeholder="..."' . $disableComments . '>' .$row['comment'] . '</textarea>
-                                            <br/>
-                                            <label for="additonal_guests">' .$gL10n->get('LST_SEAT_AMOUNT'). ':
-                                                <input name="additonal_guests" alt="additonal_guests" class="form-control" value="' .$row['additional_guests'] . '"' . $disableAdditionalGuests . '>
-                                            </label>
-                                            <input type="hidden" name="dat_id" value="' . $dateId .'">
-                                            <input type="hidden" name="mode" value="">
-                                        </form>
-                                    </div>
+                                        <div class="modal-body">' . $participationForm->show(false) . '</div>
                                     <div class="modal-footer">
                                         <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 3)"' . $disableStatusAttend . ' >
                                             <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
@@ -618,8 +615,8 @@ else
                         </div>');
                 }
                 // Reset flags and parameters
-                $disableAdditionalGuests    = 'disabled';
-                $disableComments            = 'disabled';
+                $disableAdditionalGuests    = (int) 2;
+                $disableComments            = (int) 2;
                 $disableStatusAttend        = '';
                 $disableStatusTentative     = '';
                 $participateModalForm       = false;
