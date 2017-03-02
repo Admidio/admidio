@@ -331,7 +331,7 @@ else
         If ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1 )
         {
             $participateModalForm = true;
-            
+
             if ((int) $date->getValue('dat_allow_comments') === 1)
             {
                 $disableComments = '';
@@ -526,7 +526,7 @@ else
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (!in_array((int) $gCurrentUser->getValue('user_id'), array_column($participantsArray, 'usrId'), true))
+                    if (!in_array((int) $userId, array_column($participantsArray, 'usrId'), true))
                     {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
@@ -619,7 +619,7 @@ else
                 $disableStatusAttend        = '';
                 $disableStatusTentative     = '';
                 $participateModalForm       = false;
-                
+
                 if ($participationPossible === false)
                 {
                     // check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
