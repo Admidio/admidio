@@ -136,7 +136,7 @@ if($getViewMode === 'html')
         function submitParticipationForm(datId, mode){
             // Set mode in hidden field and submit form
             $("input[name=\"mode\"]").val(mode);
-            $( "#participate_form_" + datId ).submit();
+            $("#participate_form_" + datId).submit();
         }
     ', false);
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -530,7 +530,7 @@ else
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (!in_array((int) $userId, array_column($participantsArray, 'usrId'), true))
+                    if (!in_array((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'), true))
                     {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
