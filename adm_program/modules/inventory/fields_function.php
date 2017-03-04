@@ -87,7 +87,7 @@ if($getMode === 1)
                  WHERE inf_name   = ? -- $_POST[\'inf_name\']
                    AND inf_cat_id = ? -- $_POST[\'inf_cat_id\']
                    AND inf_id    <> ? -- $getInfId';
-        $statement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $_POST['inf_cat_id'], $getInfId));
+        $statement = $gDb->queryPrepared($sql, array($_POST['inf_name'], (int) $_POST['inf_cat_id'], $getInfId));
 
         if($statement->fetchColumn() > 0)
         {
