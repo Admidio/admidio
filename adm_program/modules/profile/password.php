@@ -30,7 +30,7 @@ if($getMode === 'change')
 }
 else
 {
-    $gMessage->showInModaleWindow();
+    $gMessage->showInModalWindow();
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);
