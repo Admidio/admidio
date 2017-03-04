@@ -116,7 +116,7 @@ if ($getMode === 1 || $getMode === 2)
     if($getMode === 1)
     {
         // save new id to session so that we can restore the configuration with new list name
-        $_SESSION['mylist_request']['sel_select_configuation'] = $list->getValue('lst_id');
+        $_SESSION['mylist_request']['sel_select_configuration'] = $list->getValue('lst_id');
 
         // go back to mylist configuration
         admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php?lst_id=' . $list->getValue('lst_id'));

@@ -92,7 +92,7 @@ if(isset($_SESSION['mylist_request']))
 }
 else
 {
-    $formValues['sel_select_configuation']  = $getListId;
+    $formValues['sel_select_configuration'] = $getListId;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
     $formValues['sel_roles_ids']            = $getRoleId;
     $formValues['sel_show_members']         = $getShowMembers;
@@ -458,7 +458,7 @@ $javascriptCode .= '
     }
 
     function loadList() {
-        var listId = $("#sel_select_configuation").val();
+        var listId = $("#sel_select_configuration").val();
         var showMembers = $("#sel_show_members").val();
         if (showMembers === undefined) {
             showMembers = 0;
@@ -519,7 +519,7 @@ $javascriptCode .= '
     }';
 $page->addJavascript($javascriptCode);
 $page->addJavascript('$(function() {
-    $("#sel_select_configuation").change(function() { loadList(); });
+    $("#sel_select_configuration").change(function() { loadList(); });
     $("#btn_show_list").click(function() { send("show"); });
     $("#btn_add_column").click(function() { addColumn(); });
     $("#btn_save").click(function() { send("save_as"); });
@@ -615,8 +615,8 @@ foreach($configurations as $configuration)
 
 }
 
-$form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
-    array('defaultValue' => $formValues['sel_select_configuation'], 'showContextDependentFirstEntry' => false));
+$form->addSelectBox('sel_select_configuration', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
+    array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false));
 
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isAdministrator())
