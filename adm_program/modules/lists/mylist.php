@@ -226,7 +226,7 @@ $javascriptCode = '
             var fieldName = "";
         }
 
-        htmlFormCondition = setConditonField(fieldNumberShow, fieldName);
+        htmlFormCondition = setConditionField(fieldNumberShow, fieldName);
         var newCellConditions = newTableRow.insertCell(-1);
         newCellConditions.setAttribute("id", "td_condition" + fieldNumberShow);
         newCellConditions.innerHTML = htmlFormCondition;
@@ -393,7 +393,7 @@ $javascriptCode .= '
      * @param {string} columnName
      */
     function getConditionField(columnNumber, columnName) {
-        htmlFormCondition = setConditonField(columnNumber, columnName);
+        htmlFormCondition = setConditionField(columnNumber, columnName);
         $("#td_condition" + columnNumber).html(htmlFormCondition);
     }
 
@@ -401,7 +401,7 @@ $javascriptCode .= '
      * @param {int}    columnNumber
      * @param {string} columnName
      */
-    function setConditonField(fieldNumberShow, columnName) {
+    function setConditionField(fieldNumberShow, columnName) {
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
 
