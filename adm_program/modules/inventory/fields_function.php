@@ -85,7 +85,7 @@ if($getMode === 1)
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_INVENT_FIELDS.'
                  WHERE inf_name LIKE \''.$_POST['inf_name'].'\'
-                   AND inf_cat_id  = '.$_POST['inf_cat_id'].'
+                   AND inf_cat_id  = '.(int) $_POST['inf_cat_id'].'
                    AND inf_id     <> '.$getInfId;
         $statement = $gDb->query($sql);
 

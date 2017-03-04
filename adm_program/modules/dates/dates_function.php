@@ -252,7 +252,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
                       FROM '.TBL_DATES.'
                      WHERE dat_begin  <= \''.$endDateTime->format('Y-m-d H:i:s').'\'
                        AND dat_end    >= \''.$startDateTime->format('Y-m-d H:i:s').'\'
-                       AND dat_room_id = '.$_POST['dat_room_id'].'
+                       AND dat_room_id = '.(int) $_POST['dat_room_id'].'
                        AND dat_id     <> '.$getDateId;
             $datesStatement = $gDb->query($sql);
 
@@ -316,7 +316,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
 
         $sql_cal = 'SELECT cat_name
                       FROM '.TBL_CATEGORIES.'
-                     WHERE cat_id = '.$_POST['dat_cat_id'];
+                     WHERE cat_id = '.(int) $_POST['dat_cat_id'];
         $pdoStatement = $gDb->query($sql_cal);
         $calendar = $pdoStatement->fetchColumn();
 
