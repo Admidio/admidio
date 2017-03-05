@@ -82,7 +82,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // navbar forms should send the data as GET
-        if ($optionsAll['type'] === 'navbar')
+        if (in_array($optionsAll['type'], array('navbar', 'participationForm'), true))
         {
             parent::__construct($action, $id, 'get');
         }
@@ -103,7 +103,7 @@ class HtmlForm extends HtmlFormBasic
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');
 
-        if ($this->type === 'default')
+        if ($this->type === 'default' || $this->type === 'participationForm')
         {
             $optionsAll['class'] .= ' form-horizontal form-dialog';
         }

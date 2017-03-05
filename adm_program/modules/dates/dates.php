@@ -581,7 +581,7 @@ else
                             <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId .'">'.$iconParticipationStatus.$buttonText.'
                         </div>';
 
-                    $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php', $page, array('type' => 'default', 'setFocus' => false));
+                    $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php', $page, array('type' => 'participationForm', 'setFocus' => false));
                     $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
                     $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'property' => $disableAdditionalGuests));
                     $participationForm->addInput('dat_id', '', $dateId, array('property' => FIELD_HIDDEN));
