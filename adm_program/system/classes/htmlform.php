@@ -1002,6 +1002,12 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['required'] = 'required';
         }
+        elseif ($optionsAll['property'] === FIELD_HIDDEN)
+        {
+            $attributes['hidden'] = 'hidden';
+            $attributes['class']  = 'hide';
+            $label                = '';
+        }
 
         // set specific css class for this field
         if ($optionsAll['class'] !== '')
@@ -1032,9 +1038,9 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
 
-        if ($optionsAll['maxLength'] > 0)
+        if ($optionsAll['maxLength'] > 0 && $optionsAll['property'] !== FIELD_HIDDEN)
         {
-            // if max field length is set then show a counter how many characters still available
+            // if max field length is set and field is not hidden then show a counter how many characters still available
             $this->addHtml('
                 <small class="characters-count">('
                     .$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="' . $id . '_counter" class="">255</span>').
