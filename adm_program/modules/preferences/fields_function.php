@@ -117,7 +117,7 @@ if($getMode === 1)
                  WHERE usf_name   = ? -- $_POST[\'usf_name\']
                    AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
                    AND usf_id    <> ? -- $getUsfId';
-        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], $_POST['usf_cat_id'], $getUsfId));
+        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int) $_POST['usf_cat_id'], $getUsfId));
 
         if($pdoStatement->fetchColumn() > 0)
         {
