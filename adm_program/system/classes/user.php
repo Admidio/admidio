@@ -1032,17 +1032,22 @@ class User extends TableAccess
     /**
      * Checks the necessary rights if this user could view former roles members. Therefore
      * the user must also have the right to view the role. So you must also check this right.
+     * @param int $roleId Id of the role that should be checked.
      * @return bool Return @b true if the user has the right to view former roles members
      */
-    public function hasRightViewFormerRolesMembers()
+    public function hasRightViewFormerRolesMembers($roleId)
     {
         global $gPreferences;
 
-        if($gPreferences['lists_show_former_members'] === '1' && $this->checkRolesRight('rol_assign_roles'))
+        if($gPreferences['lists_show_former_members'] === '1'
+        && ($this->checkRolesRight('rol_assign_roles')
+        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3)))))
         {
             return true;
         }
-        elseif($gPreferences['lists_show_former_members'] === '2' && $this->checkRolesRight('rol_edit_user'))
+        elseif($gPreferences['lists_show_former_members'] === '2'
+        && ($this->checkRolesRight('rol_edit_user')
+        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3)))))
         {
             return true;
         }

@@ -48,11 +48,6 @@ if($getMode === 2
     // => EXIT
 }
 
-if(!isset($_POST['sel_show_members']) || !$gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $_POST['sel_show_members'] = 0;
-}
-
 if(!isset($_POST['sel_relationtype_ids']))
 {
     $_POST['sel_relationtype_ids'] = array();
@@ -128,7 +123,7 @@ if ($getMode === 1 || $getMode === 2)
     // weiterleiten zur allgemeinen Listeseite
     admRedirect(
         ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php?lst_id=' . $listId .
-        '&mode=html&show_members=' . $_POST['sel_show_members'] . '&rol_ids=' . implode(',', array_map('intval', $_POST['sel_roles_ids'])) .
+        '&mode=html&rol_ids=' . implode(',', array_map('intval', $_POST['sel_roles_ids'])) .
         '&urt_ids=' . implode(',', $_POST['sel_relationtype_ids'])
     );
     // => EXIT

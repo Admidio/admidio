@@ -95,7 +95,6 @@ else
     $formValues['sel_select_configuration'] = $getListId;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
     $formValues['sel_roles_ids']            = $getRoleId;
-    $formValues['sel_show_members']         = $getShowMembers;
 
     // if a saved configuration was loaded then add columns to formValues array
     if($getListId > 0)
@@ -458,12 +457,8 @@ $javascriptCode .= '
     }
 
     function loadList() {
-        var listId = $("#sel_select_configuration").val();
-        var showMembers = $("#sel_show_members").val();
-        if (showMembers === undefined) {
-            showMembers = 0;
-        }
-        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
+        var listId = $("#sel_select_configuation").val();
+        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
     }
 
     /**
@@ -718,13 +713,6 @@ else
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
-// if user could view former roles members than he should get a selectbox where he can choose to view them
-if($gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-    $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
-        array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
-}
 
 if ($gPreferences['members_enable_user_relations'] == 1)
 {
