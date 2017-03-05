@@ -133,7 +133,7 @@ if($getViewMode === 'html')
         });', true);
 
     $page->addJavascript('
-        function submitParticipationForm(datId, mode){
+        function submitParticipationForm(datId, mode) {
             // Set mode in hidden field and submit form
             $("input[name=\"mode\"]").val(mode);
             $("#participate_form_" + datId).submit();
@@ -332,7 +332,7 @@ else
         $participantsArray   = array();
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
-        If ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1 )
+        if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1 )
         {
             $participateModalForm = true;
 

@@ -101,7 +101,7 @@ class Participants
             $numParticipants[] = array(
                 'member'            => (int) $row['mem_usr_id'],
                 'leader'            => (bool) $row['mem_leader'],
-                'count_guests' => (int) $row['mem_count_guests']
+                'count_guests'      => (int) $row['mem_count_guests']
             );
         }
 
