@@ -23,7 +23,7 @@
  * deleteColumn($number, $all = false)
  *                       - entfernt die entsprechende Spalte aus der Konfiguration
  * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
- * getSQL($roleIds, $memberStatus = 0)
+ * getSQL($roleIds, $showFormerMembers = 0)
  *                       - gibt das passende SQL-Statement zu der Liste zurueck
  */
 class ListConfiguration extends TableLists
@@ -173,15 +173,14 @@ class ListConfiguration extends TableLists
     /**
      * prepare SQL to list configuration
      * @param int[]  $roleIds Array with all roles, which members are shown
-     * @param int    $memberStatus 0 - Only active members of a role
+     * @param int    $showFormerMembers 0 - Only active members of a role
      *                             1 - Only former members
-     *                             2 - Active and former members of a role
      * @param string $startDate
      * @param string $endDate
      * @param int[]  $relationtypeIds
      * @return string
      */
-    public function getSQL(array $roleIds, $memberStatus = 0, $startDate = null, $endDate = null, array $relationtypeIds = array())
+    public function getSQL(array $roleIds, $showFormerMembers = 0, $startDate = null, $endDate = null, array $relationtypeIds = array())
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
 
@@ -326,7 +325,12 @@ class ListConfiguration extends TableLists
 
         // Set state of membership
         $sqlMemberStatus = '';
-        if ($memberStatus === 0)
+
+        if ($showFormerMembers)
+        {
+            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
+        }
+        else
         {
             if ($startDate === null)
             {
@@ -345,10 +349,6 @@ class ListConfiguration extends TableLists
             {
                 $sqlMemberStatus .= 'AND mem_end >= \''.$startDate.' 00:00:00\'';
             }
-        }
-        elseif ($memberStatus === 1)
-        {
-            $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
         }
 
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
