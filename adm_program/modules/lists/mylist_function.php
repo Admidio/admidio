@@ -113,20 +113,22 @@ if ($getMode === 1 || $getMode === 2)
 
     $list->save();
 
+    $listId = (int) $list->getValue('lst_id');
+
     if($getMode === 1)
     {
         // save new id to session so that we can restore the configuration with new list name
-        $_SESSION['mylist_request']['sel_select_configuation'] = $list->getValue('lst_id');
+        $_SESSION['mylist_request']['sel_select_configuration'] = $listId;
 
         // go back to mylist configuration
-        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php?lst_id=' . $list->getValue('lst_id'));
+        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php?lst_id=' . $listId);
         // => EXIT
     }
 
     // weiterleiten zur allgemeinen Listeseite
     admRedirect(
-        ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php?lst_id=' . $list->getValue('lst_id') .
-        '&mode=html&show_members=' . $_POST['sel_show_members'] . '&rol_ids=' . implode(',', $_POST['sel_roles_ids']) .
+        ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php?lst_id=' . $listId .
+        '&mode=html&show_members=' . $_POST['sel_show_members'] . '&rol_ids=' . implode(',', array_map('intval', $_POST['sel_roles_ids'])) .
         '&urt_ids=' . implode(',', $_POST['sel_relationtype_ids'])
     );
     // => EXIT

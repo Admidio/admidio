@@ -83,7 +83,13 @@ if($getMode === 2)
                    AND rol_id    <> ? -- $getRoleId
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
-        $pdoStatement = $gDb->queryPrepared($sql, array($_POST['rol_name'], $_POST['rol_cat_id'], $getRoleId, $gCurrentOrganization->getValue('org_id')));
+        $queryParams = array(
+            $_POST['rol_name'],
+            (int) $_POST['rol_cat_id'],
+            $getRoleId,
+            (int) $gCurrentOrganization->getValue('org_id')
+        );
+        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
         if($pdoStatement->fetchColumn() > 0)
         {
