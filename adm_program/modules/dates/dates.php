@@ -33,8 +33,8 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$disableAdditionalGuests   = 2;
-$disableComments           = 2;
+$disableAdditionalGuests   = 4;
+$disableComments           = 4;
 $disableStatusAttend       = '';
 $disableStatusTentative    = '';
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
@@ -614,8 +614,8 @@ else
                         </div>');
                 }
                 // Reset flags and parameters
-                $disableAdditionalGuests    = 2;
-                $disableComments            = 2;
+                $disableAdditionalGuests    = 4;
+                $disableComments            = 4;
                 $disableStatusAttend        = '';
                 $disableStatusTentative     = '';
                 $participateModalForm       = false;
