@@ -599,13 +599,13 @@ else
                                     </div>
                                         <div class="modal-body">' . $participationForm->show(false) . '</div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 3)"' . $disableStatusAttend . ' >
+                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 3)"' . $disableStatusAttend . '>
                                             <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
                                         </a>
                                         <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 7)"' . $disableStatusTentative . '>
                                             <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                         </a>
-                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 4)"">
+                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 4)">
                                             <img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_CANCEL') . '" title="' . $gL10n->get('DAT_CANCEL') . '"/>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                         <button type="button" class="btn pull-right" data-dismiss="modal">Close</button>
