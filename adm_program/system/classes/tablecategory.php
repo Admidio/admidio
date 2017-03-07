@@ -112,6 +112,7 @@ class TableCategory extends TableAccess
     private function getNewNameIntern($name, $index)
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
+
         if ($index > 1)
         {
             $newNameIntern = $newNameIntern . '_' . $index;
