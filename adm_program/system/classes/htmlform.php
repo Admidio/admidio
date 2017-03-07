@@ -85,7 +85,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // navbar forms should send the data as GET
-        if ($this->type === 'navbar')
+        if ($optionsAll['type'] === 'navbar')
         {
             $optionsAll['method'] = 'get';
         }
