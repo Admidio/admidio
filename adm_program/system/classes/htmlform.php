@@ -60,6 +60,8 @@ class HtmlForm extends HtmlFormBasic
      *                                The label is positioned above the form element.
      *                              + @b navbar   : A form that should be used in a navbar. The form content will
      *                                be send with the 'GET' method and this form should not get a default focus.
+     *                            - @b method : Method how the values of the form are submitted. 
+     *                              Possible values are @b get (default) and @b post.
      *                            - @b enableFileUpload : Set specific parameters that are necessary for file upload with a form
      *                            - @b showRequiredFields : If this is set to @b true (default) then every required field got a special
      *                              css class and also the form got a @b div that explains the required layout.
@@ -77,19 +79,18 @@ class HtmlForm extends HtmlFormBasic
             'enableFileUpload'   => false,
             'showRequiredFields' => true,
             'setFocus'           => true,
-            'class'              => ''
+            'class'              => '',
+            'method'             => 'post'
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
         // navbar forms should send the data as GET
-        if (in_array($optionsAll['type'], array('navbar', 'participationForm'), true))
+        if ($this->type === 'navbar')
         {
-            parent::__construct($action, $id, 'get');
+            $optionsAll['method'] = 'get';
         }
-        else
-        {
-            parent::__construct($action, $id, 'post');
-        }
+
+        parent::__construct($action, $id, $optionsAll['method']);
 
         $this->flagRequiredFields    = false;
         $this->flagFieldListOpen     = false;
@@ -103,7 +104,7 @@ class HtmlForm extends HtmlFormBasic
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');
 
-        if ($this->type === 'default' || $this->type === 'participationForm')
+        if ($this->type === 'default')
         {
             $optionsAll['class'] .= ' form-horizontal form-dialog';
         }
