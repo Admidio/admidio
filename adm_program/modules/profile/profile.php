@@ -580,7 +580,7 @@ if($gPreferences['profile_show_roles'] == 1)
 
     $page->addHtml('
     <div class="panel panel-default" id="profile_authorizations_box">
-        <div class="panel-heading">'.$gL10n->get('SYS_AUTHORIZATION').'</div>
+        <div class="panel-heading">'.$gL10n->get('SYS_PERMISSIONS').'</div>
         <div class="panel-body row" id="profile_authorizations_box_body">');
 
     if(count($rightsOrigin) > 0)

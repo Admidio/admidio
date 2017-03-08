@@ -432,8 +432,8 @@ abstract class HtmlElement
             // if last position set Endtag in string and remove from array
             if ($position === $totalCount)
             {
-                $this->htmlString .= '</' . $this->arrParentElements[$totalCount] . '>';
-                unset($this->arrParentElements[$totalCount]);
+                $this->htmlString .= '</' . $this->arrParentElements[$position] . '>';
+                unset($this->arrParentElements[$position]);
             }
             else
             {

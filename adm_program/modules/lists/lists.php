@@ -137,7 +137,7 @@ if($numberOfRoles === 0)
         }
         else
         {
-            $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
+            $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
             // => EXIT
         }
     }
@@ -275,13 +275,13 @@ foreach($listsResult['recordset'] as $row)
                 }
 
                 // add count of participants to role
-                $html = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=0">'.$row['num_members'].'</a>';
+                $html = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '">'.$row['num_members'].'</a>';
 
                 if($role->getValue('rol_max_members') > 0)
                 {
                     $html .= '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                 }
-                if($gCurrentUser->hasRightViewFormerRolesMembers() && $getActiveRole && $row['num_former'] > 0)
+                if($gCurrentUser->hasRightViewFormerRolesMembers($role->getValue('rol_id')) && $getActiveRole && $row['num_former'] > 0)
                 {
                     // show former members
                     if($row['num_former'] == 1)
@@ -293,7 +293,7 @@ foreach($listsResult['recordset'] as $row)
                         $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                     }
 
-                    $html .= '&nbsp;&nbsp;(<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
+                    $html .= '&nbsp;&nbsp;(<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $role->getValue('rol_id'). '&amp;show_former_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
                 }
                 $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
 

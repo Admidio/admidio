@@ -15,9 +15,8 @@
  * lst_id:          Id of the list configuration that should be shown.
  *                  If id is null then the default list of the role will be shown.
  * rol_id:          Id of the role whose members should be shown
- * show_members:    0 - (Default) show active members of role
- *                  1 - show former members of role
- *                  2 - show active and former members of role
+ * show_former_members: 0 - (Default) show members of role that are active within the selected date range
+ *                      1 - show only former members of the role
  * full_screen:     false - (Default) show sidebar, head and page bottom of html page
  *                  true  - Only show the list without any other html unnecessary elements
  ***********************************************************************************************
@@ -27,22 +26,14 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
-if($gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $getDateFrom = admFuncVariableIsValid($_GET, 'date_from',    'date',   array('defaultValue' => DATE_NOW));
-    $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',      'date',   array('defaultValue' => DATE_NOW));
-}
-else
-{
-    $getDateFrom = DATE_NOW;
-    $getDateTo   = DATE_NOW;
-}
-$getMode            = admFuncVariableIsValid($_GET, 'mode',         'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
-$getListId          = admFuncVariableIsValid($_GET, 'lst_id',       'int');
-$getRoleIds         = admFuncVariableIsValid($_GET, 'rol_ids',      'string'); // could be int or int[], so string is necessary
-$getShowMembers     = admFuncVariableIsValid($_GET, 'show_members', 'int');
-$getRelationtypeIds = admFuncVariableIsValid($_GET, 'urt_ids',      'string'); // could be int or int[], so string is necessary
-$getFullScreen      = admFuncVariableIsValid($_GET, 'full_screen',  'bool');
+$getDateFrom          = admFuncVariableIsValid($_GET, 'date_from',           'date', array('defaultValue' => DATE_NOW));
+$getDateTo            = admFuncVariableIsValid($_GET, 'date_to',             'date', array('defaultValue' => DATE_NOW));
+$getMode              = admFuncVariableIsValid($_GET, 'mode',                'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+$getListId            = admFuncVariableIsValid($_GET, 'lst_id',              'int');
+$getRoleIds           = admFuncVariableIsValid($_GET, 'rol_ids',             'string'); // could be int or int[], so string is necessary
+$getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
+$getRelationtypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'string'); // could be int or int[], so string is necessary
+$getFullScreen        = admFuncVariableIsValid($_GET, 'full_screen',         'bool');
 
 // check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['lists_enable_module'] != 1)
@@ -50,25 +41,6 @@ if ($gPreferences['lists_enable_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-
-// Create date objects and format dates in system format
-$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
-if ($objDateFrom === false)
-{
-    // check if date_from  has system format
-    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
-}
-$dateFrom = $objDateFrom->format($gPreferences['system_date']);
-$startDateEnglishFormat = $objDateFrom->format('Y-m-d');
-
-$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
-if ($objDateTo === false)
-{
-    // check if date_from  has system format
-    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
-}
-$dateTo = $objDateTo->format($gPreferences['system_date']);
-$endDateEnglishFormat = $objDateTo->format('Y-m-d');
 
 $roleIds = array_map('intval', array_filter(explode(',', $getRoleIds), 'is_numeric'));
 $numberRoles = count($roleIds);
@@ -79,22 +51,11 @@ if ($numberRoles === 0)
     // => EXIT
 }
 
-if($objDateFrom > $objDateTo)
-{
-    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
-    // => EXIT
-}
-
-// if user should not view former roles members then disallow it
-if(!$gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $getShowMembers = 0;
-}
-
 // determine all roles relevant data
 $roleName        = $gL10n->get('LST_VARIOUS_ROLES');
 $htmlSubHeadline = '';
 $showLinkMailToList = true;
+$hasRightViewFormerMembers = true;
 
 if ($numberRoles > 1)
 {
@@ -120,6 +81,11 @@ if ($numberRoles > 1)
         {
             $showLinkMailToList = false;
             // => do not show the link
+        }
+
+        if (!$gCurrentUser->hasRightViewFormerRolesMembers($role['rol_id']))
+        {
+            $hasRightViewFormerMembers = false;
         }
 
         $htmlSubHeadline .= ', '.$role['rol_name'];
@@ -149,8 +115,43 @@ else
 
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
+    $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
 }
 
+// if user should not view former roles members then disallow it
+if(!$hasRightViewFormerMembers)
+{
+    $getShowFormerMembers = 0;
+    $getDateFrom = DATE_NOW;
+    $getDateTo   = DATE_NOW;
+}
+
+// Create date objects and format dates in system format
+$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
+if ($objDateFrom === false)
+{
+    // check if date_from  has system format
+    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+}
+$dateFrom = $objDateFrom->format($gPreferences['system_date']);
+$startDateEnglishFormat = $objDateFrom->format('Y-m-d');
+
+$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
+if ($objDateTo === false)
+{
+    // check if date_from  has system format
+    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+}
+$dateTo = $objDateTo->format($gPreferences['system_date']);
+$endDateEnglishFormat = $objDateTo->format('Y-m-d');
+
+if($objDateFrom > $objDateTo)
+{
+    $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+    // => EXIT
+}
+
+// read names of all used relationships for later output
 $relationtypeName = '';
 $relationtypeIds = array_map('intval', array_filter(explode(',', $getRelationtypeIds), 'is_numeric'));
 if (count($relationtypeIds) > 0)
@@ -247,7 +248,7 @@ try
 {
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
-    $mainSql = $list->getSQL($roleIds, $getShowMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationtypeIds);
+    $mainSql = $list->getSQL($roleIds, $getShowFormerMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationtypeIds);
 }
 catch (AdmException $e)
 {
@@ -310,17 +311,23 @@ if ($getMode !== 'csv')
     $datatable = false;
     $hoverRows = false;
 
-    if ($getShowMembers === 0)
+    if ($getMode !== 'html')
     {
-        $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_MEMBERS');
-    }
-    elseif ($getShowMembers === 1)
-    {
-        $htmlSubHeadline .= ' - '.$gL10n->get('LST_FORMER_MEMBERS');
-    }
-    elseif ($getShowMembers === 2)
-    {
-        $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+        if ($getShowFormerMembers === 1)
+        {
+            $htmlSubHeadline .= ' - '.$gL10n->get('LST_FORMER_MEMBERS');
+        }
+        else
+        {
+            if ($getDateFrom === DATE_NOW && $getDateTo === DATE_NOW)
+            {
+                $htmlSubHeadline .= ' - '.$gL10n->get('LST_ACTIVE_MEMBERS');
+            }
+            else
+            {
+                $htmlSubHeadline .= ' - '.$gL10n->get('LST_MEMBERS_BETWEEN_PERIOD', $dateFrom, $dateTo);
+            }
+        }
     }
 
     if (count($relationtypeIds) > 1)
@@ -393,7 +400,7 @@ if ($getMode !== 'csv')
         $page->setHeadline($headline);
 
         // Only for active members of a role and if user has right to view former members
-        if ($getShowMembers === 0 && $gCurrentUser->hasRightViewFormerRolesMembers())
+        if ($hasRightViewFormerMembers)
         {
             // create filter menu with elements for start-/enddate
             $filterNavbar = new HtmlNavbar('menu_list_filter', null, null, 'filter');
@@ -402,7 +409,7 @@ if ($getMode !== 'csv')
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
             $form->addInput('rol_ids', '', $getRoleIds, array('property' => FIELD_HIDDEN));
-            $form->addInput('show_members', '', $getShowMembers, array('property' => FIELD_HIDDEN));
+            $form->addCheckbox('show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
             $page->addHtml($filterNavbar->show());
@@ -415,7 +422,7 @@ if ($getMode !== 'csv')
                     var result = $(this).val();
                     $(this).prop("selectedIndex", 0);
                     self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?" +
-                        "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
+                        "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_former_members='.$getShowFormerMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
                 }
             });
 
@@ -425,7 +432,7 @@ if ($getMode !== 'csv')
             });
 
             $("#menu_item_print_view").click(function() {
-                window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_members='.$getShowMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
+                window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_former_members='.$getShowFormerMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
             });',
             true
         );
@@ -437,12 +444,12 @@ if ($getMode !== 'csv')
 
         if ($getFullScreen)
         {
-            $listsMenu->addItem('menu_item_normal_picture', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=false&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
+            $listsMenu->addItem('menu_item_normal_picture', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_former_members='.$getShowFormerMembers.'&amp;full_screen=false&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
                 $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_members='.$getShowMembers.'&amp;full_screen=true&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
+            $listsMenu->addItem('menu_item_full_screen', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_former_members='.$getShowFormerMembers.'&amp;full_screen=true&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
                 $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
         }
 
@@ -666,7 +673,7 @@ foreach ($membersList as $member)
 
         if ($columnNumber === 1)
         {
-            if ($getMode === 'html' || $getMode === 'print' || $getMode === 'pdf')
+            if (in_array($getMode, array('html', 'print', 'pdf'), true))
             {
                 // add serial
                 $columnValues[] = $listRowNumber;

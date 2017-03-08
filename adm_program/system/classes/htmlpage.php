@@ -690,6 +690,12 @@ class HtmlPage
             $this->addCssFile(THEME_PATH.'/css/print.css');
         }
 
+        // add custom css file if it exists to add own css styles without edit the original admidio css
+        if(is_file(THEME_URL.'/css/custom.css'))
+        {
+            $this->addCssFile(THEME_URL.'/css/custom.css');
+        }
+
         // load content of theme files
         if($this->showThemeHtml)
         {
@@ -754,9 +760,13 @@ class HtmlPage
                 });',
                 true
             );
-            $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog"><div class="modal-content"></div></div>
-                            </div>');
+            $this->addHtml('
+                <div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content"></div>
+                    </div>
+                </div>'
+            );
         }
 
         // add javascript code to page
@@ -781,7 +791,7 @@ class HtmlPage
             <!DOCTYPE html>
             <html>
             <head>
-                <!-- (c) 2004 - 2016 The Admidio Team - https://www.admidio.org/ -->
+                <!-- (c) 2004 - 2017 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                 <meta http-equiv="X-UA-Compatible" content="IE=edge" />

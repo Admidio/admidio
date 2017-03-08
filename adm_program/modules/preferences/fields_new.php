@@ -176,7 +176,7 @@ $form->addInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_i
 $form->addInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'),
                 array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC'));
 $form->closeGroupBox();
-$form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
+$form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
 $form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), (bool) $userField->getValue('usf_hidden'),
                    array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
 $form->addCheckbox('usf_disabled', $gL10n->get('ORG_FIELD_DISABLED',

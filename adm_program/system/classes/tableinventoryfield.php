@@ -66,10 +66,12 @@ class TableInventoryField extends TableAccess
     private function getNewNameIntern($name, $index)
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
+
         if($index > 1)
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
+
         $sql = 'SELECT inf_id
                   FROM '.TBL_INVENT_FIELDS.'
                  WHERE inf_name_intern = ? -- $newNameIntern';
@@ -276,8 +278,7 @@ class TableInventoryField extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // name, category and type couldn't be edited if it's a system field
-        if(($columnName === 'inf_name' || $columnName === 'inf_cat_id' || $columnName === 'inf_type')
-        && $this->getValue('inf_system') == 1)
+        if(in_array($columnName, array('inf_name', 'inf_cat_id', 'inf_type'), true) && $this->getValue('inf_system') == 1)
         {
             return false;
         }

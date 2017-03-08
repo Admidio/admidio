@@ -805,7 +805,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a nice modern datepicker to date inputs
-        if ($optionsAll['type'] === 'date' || $optionsAll['type'] === 'datetime' || $optionsAll['type'] === 'birthday')
+        if (in_array($optionsAll['type'], array('date', 'datetime', 'birthday'), true))
         {
             if ($optionsAll['placeholder'] === '')
             {

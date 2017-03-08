@@ -16,7 +16,7 @@ require_once(__DIR__ . '/ecard_function.php');
 
 //$gMessage->showTextOnly(true);
 $gMessage->showThemeBody(false);
-$gMessage->showInModaleWindow();
+$gMessage->showInModalWindow();
 
 if(strlen($_POST['ecard_template']) === 0)
 {

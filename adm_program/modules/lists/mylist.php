@@ -92,10 +92,9 @@ if(isset($_SESSION['mylist_request']))
 }
 else
 {
-    $formValues['sel_select_configuation']  = $getListId;
+    $formValues['sel_select_configuration'] = $getListId;
     $formValues['cbx_global_configuration'] = $list->getValue('lst_global');
     $formValues['sel_roles_ids']            = $getRoleId;
-    $formValues['sel_show_members']         = $getShowMembers;
 
     // if a saved configuration was loaded then add columns to formValues array
     if($getListId > 0)
@@ -226,7 +225,7 @@ $javascriptCode = '
             var fieldName = "";
         }
 
-        htmlFormCondition = setConditonField(fieldNumberShow, fieldName);
+        htmlFormCondition = setConditionField(fieldNumberShow, fieldName);
         var newCellConditions = newTableRow.insertCell(-1);
         newCellConditions.setAttribute("id", "td_condition" + fieldNumberShow);
         newCellConditions.innerHTML = htmlFormCondition;
@@ -393,7 +392,7 @@ $javascriptCode .= '
      * @param {string} columnName
      */
     function getConditionField(columnNumber, columnName) {
-        htmlFormCondition = setConditonField(columnNumber, columnName);
+        htmlFormCondition = setConditionField(columnNumber, columnName);
         $("#td_condition" + columnNumber).html(htmlFormCondition);
     }
 
@@ -401,7 +400,7 @@ $javascriptCode .= '
      * @param {int}    columnNumber
      * @param {string} columnName
      */
-    function setConditonField(fieldNumberShow, columnName) {
+    function setConditionField(fieldNumberShow, columnName) {
         html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
 
@@ -459,11 +458,7 @@ $javascriptCode .= '
 
     function loadList() {
         var listId = $("#sel_select_configuation").val();
-        var showMembers = $("#sel_show_members").val();
-        if (showMembers === undefined) {
-            showMembers = 0;
-        }
-        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'&show_members=" + showMembers;
+        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
     }
 
     /**
@@ -519,7 +514,7 @@ $javascriptCode .= '
     }';
 $page->addJavascript($javascriptCode);
 $page->addJavascript('$(function() {
-    $("#sel_select_configuation").change(function() { loadList(); });
+    $("#sel_select_configuration").change(function() { loadList(); });
     $("#btn_show_list").click(function() { send("show"); });
     $("#btn_add_column").click(function() { addColumn(); });
     $("#btn_save").click(function() { send("save_as"); });
@@ -615,8 +610,8 @@ foreach($configurations as $configuration)
 
 }
 
-$form->addSelectBox('sel_select_configuation', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
-    array('defaultValue' => $formValues['sel_select_configuation'], 'showContextDependentFirstEntry' => false));
+$form->addSelectBox('sel_select_configuration', $gL10n->get('LST_SELECT_CONFIGURATION'), $configurationsArray,
+    array('defaultValue' => $formValues['sel_select_configuration'], 'showContextDependentFirstEntry' => false));
 
 // Administrators could upgrade a configuration to a global configuration that is visible to all users
 if($gCurrentUser->isAdministrator())
@@ -679,6 +674,14 @@ $sqlData = array();
 if($getActiveRole)
 {
     $allVisibleRoles = $gCurrentUser->getAllVisibleRoles();
+
+    // check if there are roles that the current user could view
+    if(count($allVisibleRoles) === 0)
+    {
+            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+            // => EXIT
+    }
+
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
@@ -699,16 +702,17 @@ else
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
     $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+
+    // check if there are roles that the current user could view
+    $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);
+    if($inactiveRolesStatement->rowCount() === 0)
+    {
+            $gMessage->show($gL10n->get('PRO_NO_ROLES_VISIBLE'));
+            // => EXIT
+    }
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
-// if user could view former roles members than he should get a selectbox where he can choose to view them
-if($gCurrentUser->hasRightViewFormerRolesMembers())
-{
-    $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-    $form->addSelectBox('sel_show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
-        array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_show_members'], 'showContextDependentFirstEntry' => false));
-}
 
 if ($gPreferences['members_enable_user_relations'] == 1)
 {

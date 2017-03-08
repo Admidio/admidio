@@ -158,7 +158,7 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     }
     $form->addMultilineTextInput('inf_value_list', $gL10n->get('ORG_VALUE_LIST'), $itemField->getValue('inf_value_list', 'database'), 6, array('property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
 $form->closeGroupBox();
-$form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
+$form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox('inf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), (bool) $itemField->getValue('inf_hidden'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
     $form->addCheckbox('inf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), (bool) $itemField->getValue('inf_disabled'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png'));
     $form->addCheckbox('inf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $itemField->getValue('inf_mandatory'), array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
