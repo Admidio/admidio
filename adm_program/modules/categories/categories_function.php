@@ -20,6 +20,7 @@
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
  *         INF = Categories for Inventory
+ *         MEN = Categories for Menus
  * mode  : 1 - Create or edit categories
  *         2 - Delete category
  *         4 - Change sequence for parameter cat_id

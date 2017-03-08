@@ -151,49 +151,6 @@ class HtmlPage
     }
 
     /**
-     * Add a menu by Menu-group-ID
-     * @param int $id  The id of the menu that should be shown.
-     * @return URL of the plugin to include
-     */
-    public function showMenuByID($id)
-    {
-        global $gDb, $gCurrentUser;
-        $array_ret = array();
-
-        $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_group = '.$id.'
-         ORDER BY men_order';
-        $statement = $gDb->query($sql);
-
-        if($statement->rowCount() > 0)
-        {
-            while ($row = $statement->fetchObject())
-            {
-                // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
-                $rolesDisplayRight = $displayMenu->getRolesIds();
-                $men_display = true;
-
-                if(count($rolesDisplayRight) >= 1)
-                {
-                    // check for rigth to show the menue
-                    if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-                    {
-                        $men_display = false;
-                    }
-                }
-
-                if($men_display == true)
-                {
-                    $array_ret[] = SERVER_PATH . $row->men_url;
-                }
-            }
-        }
-        return $array_ret;
-    }
-
-    /**
      * create and show Mainmenu
      * @param bool $details  indicator to set if there should be details in the menu.
      * @return HTML of the Menu
@@ -201,157 +158,175 @@ class HtmlPage
     public function showMainMenu($details = true)
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
-        $men_icon = '/icons/dummy.png';
+        $men_icon  = '/icons/dummy.png';
+        $full_menu = '';
 
         // display Menu
         $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_group < 4
-         ORDER BY men_group DESC, men_order';
-        $statement = $gDb->query($sql);
+          FROM '.TBL_CATEGORIES.'
+          where cat_type = \'MEN\'
+         ORDER BY cat_sequence';
+        $cat_statement = $gDb->query($sql);
 
-        if($statement->rowCount() > 0)
+        while ($categorie = $cat_statement->fetchObject())
         {
-            $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
-            $men_heads = array('1' => 'SYS_ADMINISTRATION', '2' => 'SYS_MODULES', '3' => 'SYS_PLUGIN');
-            $last = 0;
-            $full_menu = '';
+            // display Menu
+            $sql = 'SELECT *
+              FROM '.TBL_MENU.'
+              where men_cat_id = ? -- $categorie->cat_id
+             ORDER BY men_cat_id DESC, men_order';
+            $statement = $gDb->queryPrepared($sql, array($categorie->cat_id));
 
-            while ($row = $statement->fetchObject())
+            if($statement->rowCount() > 0)
             {
-                if($row->men_group != $last)
+                $last = '';
+
+                while ($row = $statement->fetchObject())
                 {
-                    if($last > 0)
+                    if($row->men_cat_id != $last)
                     {
-                        $full_menu .= $Menu->show($details);
+                        if($last > 0)
+                        {
+                            $full_menu .= $Menu->show($details);
+                        }
+                        $Menu = new Menu($categorie->cat_name_intern, $gL10n->get($categorie->cat_name));
+                        $last = $row->men_cat_id;
                     }
-                    $Menu = new Menu($men_groups[$row->men_group], $gL10n->get($men_heads[$row->men_group]));
-                    $last = $row->men_group;
-                }
 
-                $men_display = true;
-                $desc = '';
+                    $men_display = true;
+                    $code = false;
+                    $desc = '';
 
-                if(strlen($row->men_translate_desc) > 2)
-                {
-                    $desc = $gL10n->get($row->men_translate_desc);
-                    if($desc == '##' || $desc[0] == '#')
+                    if(strlen($row->men_translate_desc) > 2)
                     {
-                        $desc = $row->men_translate_desc;
+                        $desc = $gL10n->get($row->men_translate_desc);
+                        if($desc == '##' || $desc[0] == '#')
+                        {
+                            $desc = $row->men_translate_desc;
+                        }
                     }
-                }
 
-                // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
-                $rolesDisplay = $displayMenu->getRolesIds();
+                    // Read current roles rights of the menu
+                    $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
+                    $rolesDisplay = $displayMenu->getRolesIds();
 
-                if($row->men_need_enable == 1)
-                {
-                    if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                    if($row->men_need_enable == 1)
                     {
-                        $men_display = true;
+                        if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                        {
+                            $men_display = true;
+                        }
+                        else
+                        {
+                            $men_display = false;
+                        }
                     }
-                    else
+
+                    $men_url = $row->men_url;
+
+                    if(strlen($row->men_icon) > 2)
+                    {
+                        $men_icon = $row->men_icon;
+                    }
+
+                    $men_translate_name = $gL10n->get($row->men_translate_name);
+                    if($men_translate_name == '##' || $men_translate_name[0] == '#')
+                    {
+                        $men_translate_name = $row->men_translate_name;
+                    }
+
+                    //special case because there are differnent links if you are logged in or out for mail
+                    if($row->men_modul_name === 'mail' && $gValidLogin)
+                    {
+                        $unreadBadge = '';
+
+                        // get number of unread messages for user
+                        $message = new TableMessage($gDb);
+                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                        if($unread > 0)
+                        {
+                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                        }
+
+                        $men_url = '/adm_program/modules/messages/messages.php';
+                        $men_icon = '/icons/messages.png';
+                        $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                    }
+
+                    if(count($rolesDisplay) >= 1)
+                    {
+                        // check for rigth to show the menue
+                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                        {
+                            $men_display = false;
+                        }
+                    }
+
+                    // special check for "newreg"
+                    if($row->men_modul_name === 'newreg')
+                    {
+                        $men_display = false;
+                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                        {
+                            $men_display = true;
+                        }
+                    }
+
+                    // special check for "usrmgt"
+                    if($row->men_modul_name === 'usrmgt')
+                    {
+                        if(!$gCurrentUser->editUsers())
+                        {
+                            $men_display = false;
+                        }
+                    }
+
+                    // special check for "roladm"
+                    if($row->men_modul_name === 'roladm')
+                    {
+                        if(!$gCurrentUser->manageRoles())
+                        {
+                            $men_display = false;
+                        }
+                    }
+
+                    if($details == false && $row->men_include == true)
+                    {
+                        $code = $row->men_include;
+                    }
+                    elseif ($row->men_include == true)
                     {
                         $men_display = false;
                     }
-                }
 
-                $men_url = $row->men_url;
-
-                if(strlen($row->men_icon) > 2)
-                {
-                    $men_icon = $row->men_icon;
-                }
-
-                $men_translate_name = $gL10n->get($row->men_translate_name);
-                if($men_translate_name == '##' || $men_translate_name[0] == '#')
-                {
-                    $men_translate_name = $row->men_translate_name;
-                }
-
-                //special case because there are differnent links if you are logged in or out for mail
-                if($row->men_modul_name === 'mail' && $gValidLogin)
-                {
-                    $unreadBadge = '';
-
-                    // get number of unread messages for user
-                    $message = new TableMessage($gDb);
-                    $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                    if($unread > 0)
+                    if($men_display == true)
                     {
-                        $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                        $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc, $code);
                     }
 
-                    $men_url = '/adm_program/modules/messages/messages.php';
-                    $men_icon = '/icons/messages.png';
-                    $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                }
-
-                if(count($rolesDisplay) >= 1)
-                {
-                    // check for rigth to show the menue
-                    if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                    if($details == true)
                     {
-                        $men_display = false;
+                        //Submenu for Lists
+                        if($gValidLogin && $row->men_modul_name === 'lists')
+                        {
+                            $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
+                                                    $gL10n->get('LST_MY_LIST'));
+                            $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
+                                                    $gL10n->get('ROL_INACTIV_ROLE'));
+                        }
+
+                        //Submenu for Dates
+                        if(($gPreferences['enable_dates_module'] == 1 && $row->men_modul_name === 'dates')
+                        || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
+                        {
+                            $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
+                                                    $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
+                        }
                     }
                 }
-
-                // special check for "newreg"
-                if($row->men_modul_name === 'newreg')
-                {
-                    $men_display = false;
-                    if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
-                    {
-                        $men_display = true;
-                    }
-                }
-
-                // special check for "usrmgt"
-                if($row->men_modul_name === 'usrmgt')
-                {
-                    if(!$gCurrentUser->editUsers())
-                    {
-                        $men_display = false;
-                    }
-                }
-
-                // special check for "roladm"
-                if($row->men_modul_name === 'roladm')
-                {
-                    if(!$gCurrentUser->manageRoles())
-                    {
-                        $men_display = false;
-                    }
-                }
-
-                if($men_display == true)
-                {
-                    $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
-                }
-
-                if($details == true)
-                {
-                    //Submenu for Lists
-                    if($gValidLogin && $row->men_modul_name === 'lists')
-                    {
-                        $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
-                                                $gL10n->get('LST_MY_LIST'));
-                        $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
-                                                $gL10n->get('ROL_INACTIV_ROLE'));
-                    }
-
-                    //Submenu for Dates
-                    if(($gPreferences['enable_dates_module'] == 1 && $row->men_modul_name === 'dates')
-                    || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
-                    {
-                        $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
-                                                $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
-                    }
-                }
+                $full_menu .= $Menu->show($details);
             }
-            $full_menu .= $Menu->show($details);
         }
 
         return $full_menu;
@@ -365,113 +340,123 @@ class HtmlPage
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
 
+        // display Menu
         $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_group < 4
-         ORDER BY men_group DESC, men_order';
-        $statement = $gDb->query($sql);
+          FROM '.TBL_CATEGORIES.'
+          where cat_type = \'MEN\'
+         ORDER BY cat_sequence';
+        $cat_statement = $gDb->query($sql);
 
-        if($statement->rowCount() > 0)
+        while ($categorie = $cat_statement->fetchObject())
         {
-            $men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
-            $men_heads = array('1' => 'SYS_ADMINISTRATION', '2' => 'SYS_MODULES', '3' => 'SYS_PLUGIN');
-            $last = 0;
+            // display Menu
+            $sql = 'SELECT *
+              FROM '.TBL_MENU.'
+              where men_cat_id = ? -- $categorie->cat_id
+              and men_include = 0
+             ORDER BY men_cat_id DESC, men_order';
+            $statement = $gDb->queryPrepared($sql, array($categorie->cat_id));
 
-            while ($row = $statement->fetchObject())
+            if($statement->rowCount() > 0)
             {
-                if($row->men_group != $last)
+                $last = '';
+
+                while ($row = $statement->fetchObject())
                 {
-                    $this->menu->addItem('menu_item_'.$men_groups[$row->men_group], null, $gL10n->get($men_heads[$row->men_group]), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                    $last = $row->men_group;
-                }
-
-                $men_display = true;
-                $desc = '';
-
-                if(strlen($row->men_translate_desc) > 2)
-                {
-                    $desc = $gL10n->get($row->men_translate_desc);
-                }
-
-                // Read current roles rights of the menu
-                $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
-                $rolesDisplayRight = $displayMenu->getRolesIds();
-
-                if($row->men_need_enable == 1)
-                {
-                    if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                    if($row->men_cat_id != $last)
                     {
-                        $men_display = true;
-                    }
-                    else
-                    {
-                        $men_display = false;
-                    }
-                }
-
-                $men_url = $row->men_url;
-                $men_icon = $row->men_icon;
-                $men_translate_name = $gL10n->get($row->men_translate_name);
-
-                //special case because there are differnent links if you are logged in or out for mail
-                if($row->men_modul_name === 'mail' && $gValidLogin)
-                {
-                    $unreadBadge = '';
-
-                    // get number of unread messages for user
-                    $message = new TableMessage($gDb);
-                    $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                    if($unread > 0)
-                    {
-                        $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                        $this->menu->addItem('menu_item_'.$categorie->cat_name_intern, null, $gL10n->get($categorie->cat_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                        $last = $row->men_cat_id;
                     }
 
-                    $men_url = '/adm_program/modules/messages/messages.php';
-                    $men_icon = '/icons/messages.png';
-                    $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                }
+                    $men_display = true;
+                    $desc = '';
 
-                if(count($rolesDisplayRight) >= 1)
-                {
-                    // check for rigth to show the menue
-                    if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                    if(strlen($row->men_translate_desc) > 2)
                     {
-                        $men_display = false;
+                        $desc = $gL10n->get($row->men_translate_desc);
                     }
-                }
 
-                // special check for "newreg"
-                if($row->men_modul_name === 'newreg')
-                {
-                    $men_display = false;
-                    if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                    // Read current roles rights of the menu
+                    $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
+                    $rolesDisplayRight = $displayMenu->getRolesIds();
+
+                    if($row->men_need_enable == 1)
                     {
-                        $men_display = true;
+                        if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                        {
+                            $men_display = true;
+                        }
+                        else
+                        {
+                            $men_display = false;
+                        }
                     }
-                }
 
-                // special check for "usrmgt"
-                if($row->men_modul_name === 'usrmgt')
-                {
-                    if(!$gCurrentUser->editUsers())
+                    $men_url = $row->men_url;
+                    $men_icon = $row->men_icon;
+                    $men_translate_name = $gL10n->get($row->men_translate_name);
+
+                    //special case because there are differnent links if you are logged in or out for mail
+                    if($row->men_modul_name === 'mail' && $gValidLogin)
+                    {
+                        $unreadBadge = '';
+
+                        // get number of unread messages for user
+                        $message = new TableMessage($gDb);
+                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                        if($unread > 0)
+                        {
+                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                        }
+
+                        $men_url = '/adm_program/modules/messages/messages.php';
+                        $men_icon = '/icons/messages.png';
+                        $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                    }
+
+                    if(count($rolesDisplayRight) >= 1)
+                    {
+                        // check for rigth to show the menue
+                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                        {
+                            $men_display = false;
+                        }
+                    }
+
+                    // special check for "newreg"
+                    if($row->men_modul_name === 'newreg')
                     {
                         $men_display = false;
+                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                        {
+                            $men_display = true;
+                        }
                     }
-                }
 
-                // special check for "roladm"
-                if($row->men_modul_name === 'roladm')
-                {
-                    if(!$gCurrentUser->manageRoles())
+                    // special check for "usrmgt"
+                    if($row->men_modul_name === 'usrmgt')
                     {
-                        $men_display = false;
+                        if(!$gCurrentUser->editUsers())
+                        {
+                            $men_display = false;
+                        }
                     }
-                }
 
-                if($men_display == true)
-                {
-                    $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$men_groups[$row->men_group], 'admidio-default-menu-item');
+                    // special check for "roladm"
+                    if($row->men_modul_name === 'roladm')
+                    {
+                        if(!$gCurrentUser->manageRoles())
+                        {
+                            $men_display = false;
+                        }
+                    }
+
+                    if($men_display == true)
+                    {
+                        $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$categorie->cat_name_intern, 'admidio-default-menu-item');
+                    }
                 }
             }
         }

@@ -9,30 +9,9 @@
             <div id="right-block" class="admidio-container">
                     <?php
 
-                    // create html page object
+                    // create html page object and display Menu
                     $page = new HtmlPage();
-
-                    // adding the special menu
-                    $path_list = $page->showMenuByID(4);
-                    foreach ($path_list as $path)
-                    {
-                        if (file_exists($path))
-                        {
-                            include($path);
-                        }
-                    }
-
-                    // display Menu
                     echo $page->showMainMenu(false);
-
-                    $path_list = $page->showMenuByID(5);
-                    foreach ($path_list as $path)
-                    {
-                        if (file_exists($path))
-                        {
-                            include $path;
-                        }
-                    }
 
                     ?>
             </div><!-- closes "div#right-block" -->

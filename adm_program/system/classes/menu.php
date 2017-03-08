@@ -47,7 +47,7 @@ class Menu
      * @param string $desc
      * @return array<string,string|array>
      */
-    private function mkItem($id, $link, $text, $icon, $desc = '')
+    private function mkItem($id, $link, $text, $icon, $desc = '', $code = false)
     {
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $link) === 0)
@@ -66,6 +66,7 @@ class Menu
             'text'     => $text,
             'icon'     => $icon,
             'desc'     => $desc,
+            'code'     => $code,
             'subitems' => array()
         );
     }
@@ -77,9 +78,9 @@ class Menu
      * @param string $icon
      * @param string $desc
      */
-    public function addItem($id, $link, $text, $icon, $desc = '')
+    public function addItem($id, $link, $text, $icon, $desc = '', $code = false)
     {
-        $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
+        $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc, $code);
     }
 
     /**
@@ -138,21 +139,32 @@ class Menu
     {
         $html = '';
 
-        if ($complex)
+        if ($this->title === '#MEN_TOP#')
         {
-            $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
-            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
+            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
         }
         else
         {
-            $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
-            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
+            if ($complex)
+            {
+                $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
+                $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
+            }
+            else
+            {
+                $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
+                $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
+            }
         }
 
         // now create each menu item
         foreach($this->items as $item)
         {
-            if ($complex)
+            if ($item['code'])
+            {
+                $html .= '<li class="media">'.file_get_contents($item['link']).'</li>';
+            }
+            elseif ($complex)
             {
                 $html .= '
                     <li class="media">

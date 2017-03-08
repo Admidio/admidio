@@ -1364,5 +1364,6 @@
   <string name="SYS_WHAT_TO_DO">What to do?</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_YES">Yes</string>
-  <string name="SYS_PLUGIN">Plugins</string>
+  <!--Phrases only in Menu-->
+  <string name="MEN_PLUGIN">Plugins</string>
 </resources>

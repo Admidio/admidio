@@ -90,8 +90,7 @@ if($getMenId > 0)
     $roleViewSet = $display->getRolesIds();
 }
 
-$form->addSelectBox('men_group', 'Menu Group',  $men_groups,
-                array('property' => FIELD_REQUIRED, 'defaultValue' => $menu->getValue('men_group', 'database'), 'firstEntry' => ''));
+$form->addSelectBoxForCategories('men_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'MEN', 'EDIT_CATEGORIES', array('property' => FIELD_REQUIRED, 'defaultValue' => $menu->getValue('men_cat_id')));
 
 $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_modul_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyStandart));
 

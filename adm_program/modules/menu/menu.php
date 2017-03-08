@@ -101,7 +101,7 @@ $menuOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
           FROM '.TBL_MENU.'
-        ORDER BY men_group, men_order';
+        ORDER BY men_cat_id, men_order';
 
 $menuStatement = $gDb->query($sql);
 

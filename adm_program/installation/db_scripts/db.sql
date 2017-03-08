@@ -825,16 +825,17 @@ create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_nam
 /*==============================================================*/
 create table %PREFIX%_menu
 (
-    men_id                         integer       unsigned not null AUTO_INCREMENT,
-    men_group                      integer,
-    men_order                      integer,
-    men_standart                   boolean       not null default '0',
-    men_modul_name                 varchar(255),
-    men_url                        varchar(255),
-    men_icon                       varchar(2000),
-    men_translate_name             varchar(255),
-    men_translate_desc             varchar(255),
-    men_need_enable                boolean       not null default '0',
+    men_id                      integer       unsigned not null AUTO_INCREMENT,
+    men_cat_id                  integer,
+    men_order                   integer,
+    men_standart                boolean       not null default '0',
+    men_modul_name              varchar(255),
+    men_url                     varchar(255),
+    men_icon                    varchar(2000),
+    men_translate_name          varchar(255),
+    men_translate_desc          varchar(255),
+    men_need_enable             boolean       not null default '0',
+    men_include                 boolean       not null default '0',
     primary key (men_id)
 )
 engine = InnoDB
@@ -842,7 +843,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group);
+create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_cat_id);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */
