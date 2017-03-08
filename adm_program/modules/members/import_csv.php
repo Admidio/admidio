@@ -127,7 +127,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                             $arrListValues = $field->getValue('usf_value_list', 'text');
                             $position = 1;
 
-                            foreach($arrListValues as $key => $value)
+                            foreach($arrListValues as $value)
                             {
                                 if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) === 0)
                                 {
@@ -207,7 +207,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
             || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
                 // edit data of user, if user already exists
-                foreach($importedFields as $key => $fieldNameIntern)
+                foreach($importedFields as $fieldNameIntern)
                 {
                     if($duplicateUser->getValue($fieldNameIntern) != $user->getValue($fieldNameIntern))
                     {

@@ -178,10 +178,11 @@ if (!is_array($templates))
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
     // => EXIT
 }
-foreach($templates as $key => $templateName)
+foreach($templates as &$templateName)
 {
-    $templates[$key] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
+    $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
 }
+unset($templateName);
 $form->addSelectBox(
     'ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates,
     array('defaultValue' => $template, 'property' => FIELD_REQUIRED, 'showContextDependentFirstEntry' => false)

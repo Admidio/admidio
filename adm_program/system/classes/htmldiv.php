@@ -141,8 +141,7 @@ class HtmlDiv extends HtmlElement
      */
     public function closeParentElement($parentElement)
     {
-        // initialize position and count entries in array
-        $position = null;
+        // count entries in array
         $totalCount = count($this->arrParentElements);
 
         if ($totalCount === 0)
@@ -150,18 +149,11 @@ class HtmlDiv extends HtmlElement
             return false;
         }
 
-        if (in_array($parentElement, $this->arrParentElements, true))
-        {
-            // find position in log array
-            foreach ($this->arrParentElements as $key => $value)
-            {
-                if ($value === $parentElement)
-                {
-                    $position = $key;
-                    break;
-                }
-            }
+        // find position in log array
+        $position = array_search($parentElement, $this->arrParentElements, true);
 
+        if (is_int($position))
+        {
             // if last position set Endtag in string and remove from array
             if ($position === $totalCount)
             {
