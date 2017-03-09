@@ -74,7 +74,7 @@ class TableMenu extends TableAccess
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MENU.'
-                 WHERE men_group = \''. $this->getValue('men_group'). '\'';
+                 WHERE men_cat_id = \''. $this->getValue('men_cat_id'). '\'';
         $countMenuStatement = $this->db->query($sql);
         $row = $countMenuStatement->fetch();
 
@@ -84,7 +84,7 @@ class TableMenu extends TableAccess
             if($this->getValue('men_order') > 1)
             {
                 $sql = 'UPDATE '.TBL_MENU.' SET men_order = '.$this->getValue('men_order').'
-                         WHERE men_group = \''. $this->getValue('men_group'). '\'
+                         WHERE men_cat_id = \''. $this->getValue('men_cat_id'). '\'
                            AND men_order = '.$this->getValue('men_order').' - 1 ';
                 $this->db->query($sql);
                 $this->setValue('men_order', $this->getValue('men_order')-1);
@@ -97,7 +97,7 @@ class TableMenu extends TableAccess
             if($this->getValue('men_order') < $row['count'])
             {
                 $sql = 'UPDATE '.TBL_MENU.' SET men_order = '.$this->getValue('men_order').'
-                         WHERE men_group = \''. $this->getValue('men_group'). '\'
+                         WHERE men_cat_id = \''. $this->getValue('men_cat_id'). '\'
                            AND men_order = '.$this->getValue('men_order').' + 1 ';
                 $this->db->query($sql);
                 $this->setValue('men_order', $this->getValue('men_order')+1);
@@ -169,7 +169,7 @@ class TableMenu extends TableAccess
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MENU.'
-                     WHERE men_group = \''. $this->getValue('men_group'). '\'';
+                     WHERE men_cat_id = \''. $this->getValue('men_cat_id'). '\'';
             $countMenuStatement = $this->db->query($sql);
 
             $row = $countMenuStatement->fetch();
