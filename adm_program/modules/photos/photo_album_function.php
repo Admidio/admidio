@@ -25,11 +25,12 @@ $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireVa
 // check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
 {
+    // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+// check if current user has right to upload photos
 if (!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
@@ -46,7 +47,7 @@ if ($getMode !== 'new' && $getPhotoId > 0)
 {
     $photoAlbum->readDataById($getPhotoId);
 
-    // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
+    // check whether album belongs to the current organization
     if ((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

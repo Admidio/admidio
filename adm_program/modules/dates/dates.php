@@ -370,7 +370,7 @@ else
             // Show map link, when at least 2 words available
             // having more than 3 characters each
             $countLocationWords = 0;
-            foreach(preg_split('/[,; ]/', $dateLocation) as $key => $value)
+            foreach(preg_split('/[,; ]/', $dateLocation) as $value)
             {
                 if(strlen($value) > 3)
                 {

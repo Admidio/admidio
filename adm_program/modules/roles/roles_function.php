@@ -135,7 +135,7 @@ if($getMode === 2)
         'rol_inventory'
     );
 
-    foreach($checkboxes as $key => $value)
+    foreach($checkboxes as $value)
     {
         // initialize the roles rights if value not set or not = 1 or its a event role
         if(!isset($_POST[$value]) || $_POST[$value] != 1 || $role->getValue('cat_name_intern') === 'EVENTS')

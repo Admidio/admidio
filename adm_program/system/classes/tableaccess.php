@@ -314,7 +314,7 @@ class TableAccess
         // create sql to connect additional tables to the select statement
         if (count($this->additionalTables) > 0)
         {
-            foreach ($this->additionalTables as $key => $arrAdditionalTable)
+            foreach ($this->additionalTables as $arrAdditionalTable)
             {
                 $sqlAdditionalTables .= ', '.$arrAdditionalTable['table'];
                 $sqlWhereCondition   .= ' AND '.$arrAdditionalTable['columnNameAdditionalTable'].' = '.$arrAdditionalTable['columnNameClassTable'].' ';
