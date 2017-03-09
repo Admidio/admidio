@@ -74,7 +74,7 @@ $form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('r
                 array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');
-$form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));
+$form->addEditor('room_description', '', $room->getValue('room_description'), array('height' => '150px'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));

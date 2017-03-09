@@ -258,7 +258,7 @@ $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getVal
 $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-editor');
-$form->addEditor('ecard_message', null, $message, array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
+$form->addEditor('ecard_message', '', $message, array('property' => FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();
 $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_URL. '/icons/eye.png'));
