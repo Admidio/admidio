@@ -511,10 +511,9 @@ class ComponentUpdate extends Component
 
         // create menu categories
         $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                VALUES (NULL, \'MEN\', \'TOP\',            \'MEN_TOP\',            0, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')
-                     , (NULL, \'MEN\', \'MODULE\',         \'SYS_MODULES\',         0, 1, 2, '.$userId.', \''. DATETIME_NOW.'\')
-                     , (NULL, \'MEN\', \'ADMINISTRATION\', \'SYS_ADMINISTRATION\', 0, 1, 3, '.$userId.', \''. DATETIME_NOW.'\')
-                     , (NULL, \'MEN\', \'PLUGIN\',         \'MEN_PLUGIN\',         0, 1, 4, '.$userId.', \''. DATETIME_NOW.'\')';
+                VALUES (NULL, \'MEN\', \'MODULE\',         \'SYS_MODULES\',         0, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')
+                     , (NULL, \'MEN\', \'ADMINISTRATION\', \'SYS_ADMINISTRATION\',  0, 1, 2, '.$userId.', \''. DATETIME_NOW.'\')
+                     , (NULL, \'MEN\', \'PLUGIN\',         \'MEN_PLUGIN\',          0, 1, 3, '.$userId.', \''. DATETIME_NOW.'\')';
         $this->db->query($sql);
 
         // Menu entries for the standart installation

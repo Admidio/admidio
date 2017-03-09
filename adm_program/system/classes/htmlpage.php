@@ -194,7 +194,6 @@ class HtmlPage
                     }
 
                     $men_display = true;
-                    $code = false;
                     $desc = '';
 
                     if(strlen($row->men_translate_desc) > 2)
@@ -291,18 +290,9 @@ class HtmlPage
                         }
                     }
 
-                    if($details == false && $row->men_include == true)
-                    {
-                        $code = $row->men_include;
-                    }
-                    elseif ($row->men_include == true)
-                    {
-                        $men_display = false;
-                    }
-
                     if($men_display == true)
                     {
-                        $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc, $code);
+                        $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
                     }
 
                     if($details == true)
@@ -353,7 +343,6 @@ class HtmlPage
             $sql = 'SELECT *
               FROM '.TBL_MENU.'
               where men_cat_id = ? -- $categorie->cat_id
-              and men_include = 0
              ORDER BY men_cat_id DESC, men_order';
             $statement = $gDb->queryPrepared($sql, array($categorie->cat_id));
 

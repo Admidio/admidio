@@ -9,6 +9,8 @@
             <div id="right-block" class="admidio-container">
                     <?php
 
+                    include (SERVER_PATH ."/adm_plugins/login_form/login_form.php");
+
                     // create html page object and display Menu
                     $page = new HtmlPage();
                     echo $page->showMainMenu(false);

@@ -78,9 +78,9 @@ class Menu
      * @param string $icon
      * @param string $desc
      */
-    public function addItem($id, $link, $text, $icon, $desc = '', $code = false)
+    public function addItem($id, $link, $text, $icon, $desc = '')
     {
-        $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc, $code);
+        $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
     }
 
     /**
@@ -139,32 +139,21 @@ class Menu
     {
         $html = '';
 
-        if ($this->title === '#MEN_TOP#')
+        if ($complex)
         {
-            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
+            $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
+            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
         }
         else
         {
-            if ($complex)
-            {
-                $html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';
-                $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-media-menu">'; // or class="media-list"
-            }
-            else
-            {
-                $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
-                $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
-            }
+            $html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';
+            $html .= '<menu id="menu_'.$this->id.'" class="list-unstyled admidio-menu btn-group-vertical">';
         }
 
         // now create each menu item
         foreach($this->items as $item)
         {
-            if ($item['code'])
-            {
-                $html .= '<li class="media">'.file_get_contents($item['link']).'</li>';
-            }
-            elseif ($complex)
+            if ($complex)
             {
                 $html .= '
                     <li class="media">

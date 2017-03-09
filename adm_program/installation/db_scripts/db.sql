@@ -835,7 +835,6 @@ create table %PREFIX%_menu
     men_translate_name          varchar(255),
     men_translate_desc          varchar(255),
     men_need_enable             boolean       not null default '0',
-    men_include                 boolean       not null default '0',
     primary key (men_id)
 )
 engine = InnoDB
