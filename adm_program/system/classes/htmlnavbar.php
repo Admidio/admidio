@@ -199,7 +199,7 @@ class HtmlNavbar
     {
         $html = '<ul class="nav navbar-nav ' . $class . '">';
 
-        foreach($items as $key => $menuEntry)
+        foreach($items as $menuEntry)
         {
             if (array_key_exists('items', $menuEntry) && is_array($menuEntry['items']))
             {
@@ -218,7 +218,7 @@ class HtmlNavbar
                             </a>
                             <ul class="dropdown-menu" role="menu">';
 
-                    foreach ($menuEntry['items'] as $keyDropDown => $menuEntryDropDown)
+                    foreach ($menuEntry['items'] as $menuEntryDropDown)
                     {
                         $html .= $this->createHtmlLink($menuEntryDropDown);
                     }

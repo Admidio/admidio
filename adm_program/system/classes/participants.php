@@ -78,46 +78,39 @@ class Participants
      */
     public function getCount($rolId = 0)
     {
-        if($rolId !== 0)
+        if ($rolId !== 0)
         {
             $this->clear();
             $this->checkId($rolId);
         }
 
-        $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
-                  FROM '.TBL_MEMBERS.'
-                 WHERE mem_rol_id = ? -- $this->rolId
-                   AND mem_end   >= ? -- DATE_NOW
-                   AND (mem_approved IS NULL
-                            OR mem_approved < 3)';
-
-        $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
-
-        // Write all member Id´s and leader status in an array
-        $numParticipants = array();
-
-        while ($row = $membersStatement->fetch())
-        {
-            $numParticipants[] = array(
-                'member' => (int) $row['mem_usr_id'],
-                'leader' => (bool) $row['mem_leader']
-            );
-        }
-
-        // count the number of leaders of the date
-        $leader = 0;
-        foreach ($numParticipants as $member)
-        {
-            if($member['leader'] != 0)
-            {
-                ++$leader;
-            }
-        }
         // check if class variables $count and $leader are set to default flag.
-        if($this->count === -1 && $this->leader === -1)
+        if ($this->count === -1 || $this->leader === -1)
         {
-            // Then Store the results in class variables.
-            $this->count = count($numParticipants);
+            $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_rol_id = ? -- $this->rolId
+                       AND mem_end   >= ? -- DATE_NOW
+                       AND (mem_approved IS NULL
+                                OR mem_approved < 3)';
+            $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
+
+            // Count the total and leader members
+            $count  = 0;
+            $leader = 0;
+
+            while ($row = $membersStatement->fetch())
+            {
+                ++$count;
+
+                if ($row['mem_leader'])
+                {
+                    ++$leader;
+                }
+            }
+
+            // Then store the results in class variables.
+            $this->count  = $count;
             $this->leader = $leader;
         }
 

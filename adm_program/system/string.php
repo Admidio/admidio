@@ -50,13 +50,14 @@ function admStrToUpper($string)
  */
 function admStrStripTagsSpecial(array $srcArray)
 {
+    // "ecard_message" => ckeditor-variable
+    $specialKeys = array(
+        'ecard_message', 'ann_description', 'dat_description', 'gbc_text', 'gbo_text', 'lnk_description',
+        'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password'
+    );
+
     foreach ($srcArray as $key => $value)
     {
-        // "ecard_message" => ckeditor-variable
-        $specialKeys = array(
-            'ecard_message', 'ann_description', 'dat_description', 'gbc_text', 'gbo_text', 'lnk_description',
-            'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password'
-        );
         if (!in_array($key, $specialKeys, true))
         {
             $srcArray[$key] = strStripTags($value);

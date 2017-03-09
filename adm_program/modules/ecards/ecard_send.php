@@ -66,7 +66,7 @@ if($ecardDataToParse === null)
 $arrayRoles = array();
 $arrayUsers = array();
 
-foreach($_POST['ecard_recipients'] as $key => $value)
+foreach($_POST['ecard_recipients'] as $value)
 {
     if(strpos($value, 'groupID') !== false)
     {

@@ -153,7 +153,7 @@ if($getMode === 1)
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
     $checkboxes = array('cat_hidden', 'cat_default');
 
-    foreach($checkboxes as $key => $value)
+    foreach($checkboxes as $value)
     {
         if(!isset($_POST[$value]) || $_POST[$value] != 1)
         {

@@ -1741,7 +1741,7 @@ class HtmlForm extends HtmlFormBasic
      *                                    If set the complete text will be shown after the form element.
      * @param string[]        $parameters If you need an additional parameter for the text you can set this array.
      */
-    protected function closeControlStructure($helpTextId = null, array $parameters = array())
+    protected function closeControlStructure($helpTextId = '', array $parameters = array())
     {
         global $gL10n;
 
@@ -1752,7 +1752,7 @@ class HtmlForm extends HtmlFormBasic
             $helpTextId = array_shift($parameters);
         }
 
-        if ($helpTextId !== null)
+        if ($helpTextId !== '')
         {
             if (count($parameters) === 0)
             {

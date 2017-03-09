@@ -192,7 +192,7 @@ function readAndExecuteSQLFromFile($filename, &$database)
                 // search for translation strings with the prefix DEMO or SYS and try replace them
                 preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sql, $results);
 
-                foreach($results[0] as $key => $value)
+                foreach($results[0] as $value)
                 {
                     // if it's a string of a systemmail then html linefeeds must be replaced
                     if(strpos($value, 'SYS_SYSMAIL') === false)

@@ -415,20 +415,11 @@ abstract class HtmlElement
             return false;
         }
 
-        $position = null;
+        // find position in log array
+        $position = array_search($parentElement, $this->arrParentElements, true);
 
-        if (!$this->nesting && in_array($parentElement, $this->arrParentElements, true))
+        if (!$this->nesting && is_int($position))
         {
-            // find position in log array
-            foreach ($this->arrParentElements as $key => $value)
-            {
-                if ($value === $parentElement)
-                {
-                    $position = $key;
-                    break;
-                }
-            }
-
             // if last position set Endtag in string and remove from array
             if ($position === $totalCount)
             {

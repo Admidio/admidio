@@ -63,10 +63,7 @@ $_SESSION['user_import_mode'] = $postUserImportMode;
 if($postImportCoding === 'iso-8859-1')
 {
     // Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
-    foreach($_SESSION['file_lines'] as $key => $value)
-    {
-        $_SESSION['file_lines'][$key] = utf8_encode($value);
-    }
+    $_SESSION['file_lines'] = array_map('utf8_encode', $_SESSION['file_lines']);
 }
 
 // CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
