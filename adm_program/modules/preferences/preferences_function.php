@@ -208,7 +208,7 @@ switch($getMode)
         }
         // check every checkbox if a value was committed
         // if no value is found then set 0 because 0 will not be committed in a html checkbox element
-        foreach($checkboxes as $key => $value)
+        foreach($checkboxes as $value)
         {
             if(!isset($_POST[$value]) || $_POST[$value] != 1)
             {

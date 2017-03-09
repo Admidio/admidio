@@ -28,12 +28,12 @@ $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('vali
 
 if ($gPreferences['enable_photo_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+// check if current user has right to upload photos
 if (!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));

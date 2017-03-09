@@ -78,7 +78,7 @@ class Participants
      */
     public function getCount($rolId = 0)
     {
-        if($rolId !== 0)
+        if ($rolId !== 0)
         {
             $this->clear();
             $this->checkId($rolId);
@@ -110,7 +110,19 @@ class Participants
         $totalCount = 1;
         foreach ($numParticipants as $member)
         {
-            if($member['leader'] != 0)
+            $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_rol_id = ? -- $this->rolId
+                       AND mem_end   >= ? -- DATE_NOW
+                       AND (mem_approved IS NULL
+                                OR mem_approved < 3)';
+            $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
+
+            // Count the total and leader members
+            $count  = 0;
+            $leader = 0;
+
+            while ($row = $membersStatement->fetch())
             {
                 // Only count additonal guests of leaders. Leaders are not count for max. members
                 $totalCount = $totalCount + $member['count_guests'];

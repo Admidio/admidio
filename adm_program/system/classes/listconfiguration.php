@@ -446,7 +446,7 @@ class ListConfiguration extends TableLists
         $returnValue = parent::save($updateFingerPrint);
 
         // save columns
-        foreach($this->columns as $number => $listColumn)
+        foreach($this->columns as $listColumn)
         {
             if((int) $listColumn->getValue('lsc_lst_id') === 0)
             {

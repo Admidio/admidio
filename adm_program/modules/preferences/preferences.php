@@ -28,17 +28,8 @@ if(!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
-// read organization values into form array
-foreach($gCurrentOrganization->dbColumns as $key => $value)
-{
-    $formValues[$key] = $value;
-}
-
-// read all system preferences into form array
-foreach($gPreferences as $key => $value)
-{
-    $formValues[$key] = $value;
-}
+// read organization and all system preferences values into form array
+$formValues = array_merge($gCurrentOrganization->dbColumns, $gPreferences);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -666,10 +657,11 @@ $page->addHtml('
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
                             // => EXIT
                         }
-                        foreach($templates as $key => $templateName)
+                        foreach($templates as &$templateName)
                         {
-                            $templates[$key] = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
+                            $templateName = ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $templateName)));
                         }
+                        unset($templateName);
                         $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $formValues['ecard_template'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ECA_TEMPLATE_DESC'));
                         $form->addSubmitButton('btn_save_ecards', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
                         $page->addHtml($form->show(false));

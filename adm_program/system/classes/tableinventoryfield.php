@@ -66,10 +66,12 @@ class TableInventoryField extends TableAccess
     private function getNewNameIntern($name, $index)
     {
         $newNameIntern = strtoupper(str_replace(' ', '_', $name));
+
         if($index > 1)
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
+
         $sql = 'SELECT inf_id
                   FROM '.TBL_INVENT_FIELDS.'
                  WHERE inf_name_intern = ? -- $newNameIntern';

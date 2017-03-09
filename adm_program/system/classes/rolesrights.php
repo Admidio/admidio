@@ -57,9 +57,9 @@ class RolesRights extends TableAccess
      */
     public function addRoles(array $roleIds)
     {
-        foreach($roleIds as $roleId)
+        foreach (array_map('intval', $roleIds) as $roleId)
         {
-            if(!in_array((int) $roleId, $this->rolesIds, true))
+            if (!in_array($roleId, $this->rolesIds, true))
             {
                 $rolesRightsData = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
                 $rolesRightsData->setValue('rrd_ror_id', $this->getValue('ror_id'));
@@ -68,7 +68,7 @@ class RolesRights extends TableAccess
                 $rolesRightsData->save();
 
                 $this->rolesRightsDataObjects[$roleId] = $rolesRightsData;
-                $this->rolesIds[] = (int) $roleId;
+                $this->rolesIds[] = $roleId;
             }
         }
     }
@@ -162,9 +162,9 @@ class RolesRights extends TableAccess
      */
     public function removeRoles(array $roleIds)
     {
-        foreach($roleIds as $roleId)
+        foreach (array_map('intval', $roleIds) as $roleId)
         {
-            if(in_array((int) $roleId, $this->rolesIds, true))
+            if (in_array($roleId, $this->rolesIds, true))
             {
                 $this->rolesRightsDataObjects[$roleId]->delete();
             }
