@@ -72,7 +72,7 @@ $searchCondition = '';
 $limitCondition = '';
 $orderCondition = '';
 $orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
-$searchColumns = array(array('name', 'string'), array('usr_login_name', 'string'), array('CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' END ', 'string'), array('birthday', 'datetime'), array('timestamp', 'datetime'));
+$searchColumns = array('COALESCE(name, \' \')', 'COALESCE(usr_login_name, \' \')', 'CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ', 'COALESCE(birthday, \' \')', 'COALESCE(timestamp, \' \')');
 
 // create order statement
 if(array_key_exists('order', $_GET))
@@ -109,22 +109,14 @@ else
 // create search conditions
 if($getSearch !== '')
 {
+    $searchString = explode(' ', $getSearch);
 
-    foreach($searchColumns as $columnsArray)
+    foreach($searchString as $searchWord)
     {
-        if($searchCondition === '')
-        {
-            $searchCondition = ' WHERE ( ';
-        }
-        else
-        {
-            $searchCondition .= ' OR ';
-        }
-
-         $searchCondition .= $columnsArray[0]. ' LIKE \'%'.$getSearch.'%\' ';
+        $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
-    $searchCondition .= ') ';
+    $searchCondition = ' WHERE ' . substr($searchCondition, 4);
 }
 
 // create a subselect to check if the user is an acitve member of the current organization
