@@ -90,10 +90,22 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($_POST['usf_icon'] !== '' && !strValidCharacters($_POST['usf_icon'], 'url'))
+    if($_POST['usf_icon'] !== '' && strpos($_POST['usf_icon'], 'http') === 0 && !strValidCharacters($_POST['usf_icon'], 'url'))
     {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_ICON')));
         // => EXIT
+    }
+    elseif($_POST['usf_icon'] !== '' && strpos($_POST['usf_icon'], 'http') !== 0)
+    {
+        try
+        {
+            admStrIsValidFileName($_POST['usf_icon']);
+        }
+        catch (AdmException $e)
+        {
+            $e->showHtml();
+            // => EXIT
+        }
     }
 
     if($_POST['usf_url'] !== '' && !strValidCharacters($_POST['usf_url'], 'url'))
