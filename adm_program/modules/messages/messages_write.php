@@ -564,7 +564,7 @@ elseif (!isset($messageStatement))
     // add textfield or ckeditor to form
     if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', '', $form_values['msg_body'], array('property' => FIELD_REQUIRED));
+        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => FIELD_REQUIRED));
     }
     else
     {
