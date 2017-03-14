@@ -140,7 +140,6 @@ if($getViewMode === 'html')
             // add value 3 to mode attribute in link for participation
             $(submit_ParticipationForm).attr("action", form_action + 3);
             submit_ParticipationForm.submit();
-            event.preventDefault();
         });
 
         $("button[id^=btn_tentative_]").click(function() {
