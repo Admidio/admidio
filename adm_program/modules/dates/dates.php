@@ -130,15 +130,35 @@ if($getViewMode === 'html')
 
         $("#menu_item_print_view").click(function() {
             window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&id=' . $getId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
+        });
+
+        $("button[id^=btn_attend_]").click(function() {
+            // Select current form and action attribute
+            var submit_ParticipationForm = $(this).get(0).form;
+            var form_action = $(submit_ParticipationForm).attr("action");
+
+            // add value 3 to mode attribute in link for participation
+            $(submit_ParticipationForm).attr("action", form_action + 3);
+            submit_ParticipationForm.submit();
+            event.preventDefault();
+        });
+
+        $("button[id^=btn_tentative_]").click(function() {
+            var submit_ParticipationForm = $(this).get(0).form;
+            var form_action = $(submit_ParticipationForm).attr("action");
+
+            $(submit_ParticipationForm).attr("action", form_action + 7);
+            submit_ParticipationForm.submit();
+        });
+
+        $("button[id^=btn_refuse_]").click(function() {
+            var submit_ParticipationForm = $(this).get(0).form;
+            var form_action = $(submit_ParticipationForm).attr("action");
+
+            $(submit_ParticipationForm).attr("action", form_action + 4);
+            submit_ParticipationForm.submit();
         });', true);
 
-    $page->addJavascript('
-        function submitParticipationForm(datId, mode) {
-            // Set mode in hidden field and submit form
-            $("input[name=\"mode\"]").val(mode);
-            $("#participate_form_" + datId).submit();
-        }
-    ', false);
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if($getId > 0)
     {
@@ -578,40 +598,29 @@ else
                 {
                     $outputButtonParticipation = '
                         <div class="btn-group" role="group">
-                            <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId .'">'.$iconParticipationStatus.$buttonText.'
+                            <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId . '">' . $iconParticipationStatus . $buttonText . '
                         </div>';
 
-                    $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php', $page, array('method' => 'get', 'setFocus' => false));
+                    $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php?dat_id=' . $dateId . '&amp;mode=', $page, array('method' => 'post', 'setFocus' => false));
+                    $participationForm->addHtml('<div id="participate_modal_' . $dateId . '" class="modal fade" role="dialog">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
+                                                                <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
+                                                            </div>
+                                                            <div class="modal-body">');
                     $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
                     $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'property' => $disableAdditionalGuests));
-                    $participationForm->addInput('dat_id', '', $dateId, array('property' => FIELD_HIDDEN));
-                    $participationForm->addInput('mode', '', '', array('property' => FIELD_HIDDEN));
-
-                    $page->addHTML('
-                        <div id="participate_modal_' . $dateId .'" class="modal fade" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
-                                            <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
-                                    </div>
-                                        <div class="modal-body">' . $participationForm->show(false) . '</div>
-                                    <div class="modal-footer">
-                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 3)"' . $disableStatusAttend . '>
-                                            <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
-                                        </a>
-                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 7)"' . $disableStatusTentative . '>
-                                            <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
-                                        </a>
-                                        <a class="btn btn-default" onclick="submitParticipationForm(' . $dateId .', 4)">
-                                            <img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_CANCEL') . '" title="' . $gL10n->get('DAT_CANCEL') . '"/>' . $gL10n->get('DAT_CANCEL') . '
-                                        </a>
-                                        <button type="button" class="btn pull-right" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>');
+                    $participationForm->addHtml('</div><div class="modal-footer">');
+                    $participationForm->openButtonGroup();
+                    $participationForm->addButton('btn_attend_' . $dateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
+                    $participationForm->addButton('btn_tentative_' . $dateId, $gL10n->get('DAT_USER_TENTATIVE'), array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative));
+                    $participationForm->addButton('btn_refuse_' . $dateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
+                    $participationForm->closeButtonGroup();
+                    $participationForm->addHtml('</div></div></div></div>');
+                    $page->addHtml($participationForm->show(false));
                 }
                 // Reset flags and parameters
                 $disableAdditionalGuests    = 4;

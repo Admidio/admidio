@@ -124,13 +124,16 @@ class Participants
 
             while ($row = $membersStatement->fetch())
             {
-                // Only count additonal guests of leaders. Leaders are not count for max. members
-                $totalCount = $totalCount + $member['count_guests'];
-                ++$leader;
-            }
-            else
-            {
-                $totalCount = $totalCount + $member['count_guests'] + 1;
+                if($member['leader'] != 0)
+                {
+                    // Only count additonal guests of leaders. Leaders are not count for max. members
+                    $totalCount = $totalCount + $member['count_guests'];
+                    ++$leader;
+                }
+                else
+                {
+                    $totalCount = $totalCount + $member['count_guests'] + 1;
+                }
             }
         }
         // check if class variables $count and $leader are set to default flag.

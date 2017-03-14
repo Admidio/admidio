@@ -30,9 +30,9 @@ if($_GET['mode'] == 2)
 }
 
 // Initialize and check the parameters
-$getAdditionalGuests    = admFuncVariableIsValid($_GET, 'additonal_guests', 'int');
+$getAdditionalGuests    = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
 $getDateId              = admFuncVariableIsValid($_GET, 'dat_id', 'int');
-$getUserComment         = admFuncVariableIsValid($_GET, 'dat_comment', 'text');
+$getUserComment         = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 $getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
