@@ -158,7 +158,7 @@ $page->addHtml('
                         $form->addCheckbox('enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'], array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC'));
                         $form->addInput('logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
                             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', 'SYS_REMEMBER_ME')));
-                        $form->addCheckbox('enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'], array('helpTextIdInline' => 'ORG_SEND_PASSWORD_DESC'));
+                        $form->addCheckbox('enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'], array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', 'ORG_ACTIVATE_SYSTEM_MAILS')));
                         $form->addCheckbox('system_search_similar', $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'), (bool) $formValues['system_search_similar'], array('helpTextIdInline' => 'ORG_SEARCH_SIMILAR_NAMES_DESC'));
                         $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
                         $form->addSelectBox('system_show_create_edit', $gL10n->get('ORG_SHOW_CREATE_EDIT'), $selectBoxEntries, array('defaultValue' => $formValues['system_show_create_edit'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_SHOW_CREATE_EDIT_DESC'));

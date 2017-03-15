@@ -737,7 +737,7 @@
     <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Standard: ja)</string>
     <string name="ORG_SECONDS">Sekunden</string>
     <string name="ORG_SEND_PASSWORD">Passwort zusenden</string>
-    <string name="ORG_SEND_PASSWORD_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</string>
+    <string name="ORG_SEND_PASSWORD_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Standard: ja)</string>
     <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
     <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
     <string name="ORG_SHOW_CREATE_EDIT_DESC">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</string>

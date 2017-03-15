@@ -68,6 +68,7 @@ if (!$gCurrentUser->editUsers())
 // create order statement
 $orderCondition = '';
 $orderColumns = array('no', 'member_this_orga', 'name', 'usr_login_name', 'gender', 'birthday', 'timestamp');
+
 if(array_key_exists('order', $_GET))
 {
     foreach($_GET['order'] as $order)
@@ -103,22 +104,23 @@ else
 $searchCondition = '';
 $queryParamsSearch = array();
 $searchColumns = array(
-    array('name', 'string'),
-    array('usr_login_name', 'string'),
-    array('CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' END ', 'string'),
-    array('birthday', 'datetime'),
-    array('timestamp', 'datetime')
+    'COALESCE(name, \' \')',
+    'COALESCE(usr_login_name, \' \')',
+    'CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ',
+    'COALESCE(birthday, \' \')',
+    'COALESCE(timestamp, \' \')'
 );
+
 if($getSearch !== '' && count($searchColumns) > 0)
 {
-    $searchArray = array();
-    foreach($searchColumns as $columnsArray)
+    $searchString = explode(' ', $getSearch);
+
+    foreach($searchString as $searchWord)
     {
-        $searchArray[] = $columnsArray[0] . ' LIKE ? '; // $getSearch
-        $queryParamsSearch[] = '%' . $getSearch . '%';
+        $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
-    $searchCondition = ' WHERE ( ' . implode(' OR ', $searchArray) . ' ) ';
+    $searchCondition = ' WHERE ' . substr($searchCondition, 4);
 }
 
 // create a subselect to check if the user is an active member of the current organization
