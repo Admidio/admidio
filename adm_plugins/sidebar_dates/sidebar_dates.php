@@ -43,6 +43,11 @@ if(!isset($plg_dates_show_preview) || !is_numeric($plg_dates_show_preview))
     $plg_dates_show_preview = 0;
 }
 
+if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
+{
+    $plgShowFullDescription = 1;
+}
+
 if(!isset($plg_show_date_end) || !is_numeric($plg_show_date_end))
 {
     $plg_show_date_end = 1;
@@ -165,7 +170,11 @@ if($plgDatesResult['numResults'] > 0)
         }
 
         // show preview text
-        if($plg_dates_show_preview > 0)
+        if($plgShowFullDescription === 1)
+        {
+            echo '<div>'.$plg_date->getValue('dat_description').'</div>';
+        }
+        elseif($plg_dates_show_preview > 0)
         {
             // remove all html tags except some format tags
             $textPrev = strip_tags($plgDate->getValue('dat_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');

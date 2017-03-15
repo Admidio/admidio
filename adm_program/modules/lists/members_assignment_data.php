@@ -82,6 +82,7 @@ if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 // create order statement
 $orderCondition = '';
 $orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'address', 'leader_this_role');
+
 if(array_key_exists('order', $_GET))
 {
     foreach($_GET['order'] as $order)
@@ -117,24 +118,25 @@ else
 $searchCondition = '';
 $queryParamsSearch = array();
 $searchColumns = array(
-    array('last_name', 'string'),
-    array('first_name', 'string'),
-    array('birthday', 'datetime'),
-    array('address', 'string'),
-    array('city', 'string'),
-    array('zip_code', 'string'),
-    array('country', 'string')
+    'COALESCE(last_name, \' \')',
+    'COALESCE(first_name, \' \')',
+    'COALESCE(birthday, \' \')',
+    'COALESCE(address, \' \')',
+    'COALESCE(city, \' \')',
+    'COALESCE(zip_code, \' \')',
+    'COALESCE(country, \' \')'
 );
+
 if($getSearch !== '' && count($searchColumns) > 0)
 {
-    $searchArray = array();
-    foreach($searchColumns as $columnsArray)
+    $searchString = explode(' ', $getSearch);
+
+    foreach($searchString as $searchWord)
     {
-        $searchArray[] = $columnsArray[0] . ' LIKE ? '; // $getSearch
-        $queryParamsSearch[] = '%' . $getSearch . '%';
+        $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
-    $searchCondition = ' WHERE ( ' . implode(' OR ', $searchArray) . ' ) ';
+    $searchCondition = ' WHERE ' . substr($searchCondition, 4);
 }
 
 $filterRoleCondition = '';
