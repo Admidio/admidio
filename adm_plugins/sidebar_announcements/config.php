@@ -17,6 +17,12 @@ $plg_announcements_count = 2;
 // >0 = Anzahl Zeichen des Vorschau-Textes
 $plg_show_preview = 70;
 
+// If this option is set to true (1) than the full content of the
+// description will be shown. Also images and other html content.
+// 0 = only show text preview of description
+// 1 = show full html content of description
+$plgShowFullDescription = 0;
+
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
 $plg_link_class = '';

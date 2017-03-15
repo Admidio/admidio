@@ -22,6 +22,12 @@ $plg_show_date_end = 1;
 // >0 = Anzahl Zeichen des Vorschau-Textes
 $plg_dates_show_preview = 70;
 
+// If this option is set to true (1) than the full content of the
+// description will be shown. Also images and other html content.
+// 0 = only show text preview of description
+// 1 = show full html content of description
+$plgShowFullDescription = 0;
+
 // Maximale Anzahl von Zeichen in einem Wort,
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
 $plg_max_char_per_word = 0;

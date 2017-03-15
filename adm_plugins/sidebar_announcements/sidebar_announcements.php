@@ -42,6 +42,11 @@ if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
     $plg_max_char_per_word = 0;
 }
 
+if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
+{
+    $plgShowFullDescription = 1;
+}
+
 if(isset($plg_link_class))
 {
     $plg_link_class = strip_tags($plg_link_class);
@@ -135,7 +140,11 @@ else
         }
 
         // show preview text
-        if($plg_show_preview > 0)
+        if($plgShowFullDescription === 1)
+        {
+            echo '<div>'.$plg_announcement->getValue('ann_description').'</div>';
+        }
+        elseif($plg_show_preview > 0)
         {
             // remove all html tags except some format tags
             $textPrev = strip_tags($plg_announcement->getValue('ann_description'), '<p></p><br><br/><br /><i></i><b></b><strong></strong><em></em>');
