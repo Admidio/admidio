@@ -30,13 +30,13 @@ if($_GET['mode'] == 2)
 }
 
 // Initialize and check the parameters
-$getAdditionalGuests    = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
 $getDateId              = admFuncVariableIsValid($_GET, 'dat_id', 'int');
-$getUserComment         = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 $getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
 $getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
+$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
+$postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
 $originalDateId = 0;
 
@@ -574,7 +574,7 @@ if (in_array($getMode, array(3, 4, 7), true))
 {
     $member = new TableMembers($gDb);
     $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
-    $member->setValue('mem_comment', $getUserComment);
+    $member->setValue('mem_comment', $postUserComment);
     // If participation limit is set
     if ($date->getValue('dat_max_members') > 0)
     {
@@ -586,9 +586,9 @@ if (in_array($getMode, array(3, 4, 7), true))
         $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
         $totalMembers = $participants->getCount();
         
-        if ($totalMembers + $getAdditionalGuests <= $date->getValue('dat_max_members'))
+        if ($totalMembers + $postAdditionalGuests <= $date->getValue('dat_max_members'))
         {
-            $member->setValue('mem_count_guests', $getAdditionalGuests);
+            $member->setValue('mem_count_guests', $postAdditionalGuests);
         }
         else
         {
@@ -601,7 +601,7 @@ if (in_array($getMode, array(3, 4, 7), true))
     }
     else
     {
-        $member->setValue('mem_count_guests', $getAdditionalGuests);
+        $member->setValue('mem_count_guests', $postAdditionalGuests);
     }
 
     $member->save();
