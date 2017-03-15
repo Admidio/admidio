@@ -87,7 +87,6 @@ $searchCondition = '';
 $limitCondition = '';
 $orderCondition = '';
 $orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'address', 'leader_this_role');
-$searchColumns = array(array('last_name', 'string'), array('first_name', 'string'), array('birthday', 'datetime'), array('address', 'string'), array('city', 'string'), array('zip_code', 'string'), array('country', 'string'));
 
 if($getMembersShowAll)
 {
@@ -135,24 +134,26 @@ else
 }
 
 // create search conditions
+$searchColumns = array(
+    'COALESCE(last_name, \' \')',
+    'COALESCE(first_name, \' \')',
+    'COALESCE(birthday, \' \')',
+    'COALESCE(address, \' \')',
+    'COALESCE(city, \' \')',
+    'COALESCE(zip_code, \' \')',
+    'COALESCE(country, \' \')'
+);
+
 if($getSearch !== '')
 {
+    $searchString = explode(' ', $getSearch);
 
-    foreach($searchColumns as $columnsArray)
+    foreach($searchString as $searchWord)
     {
-        if($searchCondition === '')
-        {
-            $searchCondition = ' WHERE ( ';
-        }
-        else
-        {
-            $searchCondition .= ' OR ';
-        }
-
-         $searchCondition .= $columnsArray[0]. ' LIKE \'%'.$getSearch.'%\' ';
+        $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE \'%'.$searchWord.'%\' ';
     }
 
-    $searchCondition .= ') ';
+    $searchCondition = ' WHERE ' . substr($searchCondition, 4);
 }
 
 // create a subselect to check if the user is an acitve member of the current organization
