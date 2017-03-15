@@ -828,6 +828,7 @@ create table %PREFIX%_user_relation_types
     urt_name                    varchar(100)        not null,
     urt_name_male               varchar(100)        not null,
     urt_name_female             varchar(100)        not null,
+    urt_edit_user               boolean             not null    default '0',
     urt_id_inverse              integer unsigned                default null,
     urt_usr_id_create           integer unsigned                default null,
     urt_timestamp_create        timestamp           not null    default CURRENT_TIMESTAMP,

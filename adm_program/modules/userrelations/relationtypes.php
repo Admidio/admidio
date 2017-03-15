@@ -53,7 +53,7 @@ $columnHeading = array(
 $relationtypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));
 $relationtypesOverview->addRowHeadingByArray($columnHeading);
 
-$sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS urt_name_male_inverse, urt2.urt_name_female AS urt_name_female_inverse
+$sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS urt_name_male_inverse, urt2.urt_name_female AS urt_name_female_inverse, urt2.urt_edit_user AS urt_edit_user_inverse
           FROM '.TBL_USER_RELATION_TYPES.' AS urt1
     LEFT OUTER JOIN '.TBL_USER_RELATION_TYPES.' AS urt2
             ON urt1.urt_id_inverse = urt2.urt_id
@@ -69,6 +69,9 @@ $relationtype2 = new TableUserRelationType($gDb);
 // Get data
 while($relRow = $relationtypesStatement->fetch())
 {
+    $editUserIcon = '';
+    $editUserInverseIcon = '';
+
     $relationtype1->clear();
     $relationtype1->setArray($relRow);
     $relationtype2->clear();
@@ -79,6 +82,18 @@ while($relRow = $relationtypesStatement->fetch())
     $relRow2['urt_name_female'] = $relRow2['urt_name_female_inverse'];
     $relationtype2->setArray($relRow2);
 
+    if((bool) $relRow['urt_edit_user'])
+    {
+        $editUserIcon = ' <img class="admidio-icon-info" src="'. THEME_URL. '/icons/profile_edit.png"
+                            alt="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" title="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" />';
+    }
+
+    if((bool) $relRow['urt_edit_user_inverse'])
+    {
+        $editUserInverseIcon = ' <img class="admidio-icon-info" src="'. THEME_URL. '/icons/profile_edit.png"
+                            alt="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" title="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" />';
+    }
+
     $relationtypeAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php?urt_id='. $relationtype1->getValue('urt_id'). '"><img
                                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     $relationtypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
@@ -88,8 +103,8 @@ while($relRow = $relationtypesStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        $relationtype1->getValue('urt_name'),
-        $relationtype2->getValue('urt_name'),
+        $relationtype1->getValue('urt_name') . $editUserIcon,
+        $relationtype2->getValue('urt_name') . $editUserInverseIcon,
         $relationtypeAdministration
     );
     $relationtypesOverview->addRowByArray($columnValues, 'row_'. $relationtype1->getValue('urt_id'));
