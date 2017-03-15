@@ -74,7 +74,7 @@ class Participants
     /**
      * Count participants of the date.
      * @param int $rolId
-     * @return int Returns the result of counted participants as numeric value in current object. Leaders are not counted!
+     * @return int Returns the result of count participants as numeric value in current object. Leaders are not counted!
      */
     public function getCount($rolId = 0)
     {
@@ -107,34 +107,15 @@ class Participants
 
         // count total number of participants and leaders of the date
         $leader = 0;
-        $totalCount = 1;
+        $totalCount = 0;
         foreach ($numParticipants as $member)
         {
-            $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
-                      FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = ? -- $this->rolId
-                       AND mem_end   >= ? -- DATE_NOW
-                       AND (mem_approved IS NULL
-                                OR mem_approved < 3)';
-            $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
-
-            // Count the total and leader members
-            $count  = 0;
-            $leader = 0;
-
-            while ($row = $membersStatement->fetch())
+            if($member['leader'])
             {
-                if($member['leader'] != 0)
-                {
-                    // Only count additonal guests of leaders. Leaders are not count for max. members
-                    $totalCount = $totalCount + $member['count_guests'];
-                    ++$leader;
-                }
-                else
-                {
-                    $totalCount = $totalCount + $member['count_guests'] + 1;
-                }
+                ++$leader;
             }
+
+            $totalCount = $totalCount + $member['count_guests'] + 1;
         }
         // check if class variables $count and $leader are set to default flag.
         if($this->count === -1 && $this->leader === -1)

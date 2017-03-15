@@ -543,7 +543,7 @@ else
                 }
 
                 // Check limit of participants
-                if ($date->getValue('dat_max_members') === 1 && $participants->getCount($dateRolId) >= $date->getValue('dat_max_members'))
+                if ($date->getValue('dat_max_members') === 1 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
                     // No further members allowed
                     $participationPossible = false;

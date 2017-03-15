@@ -575,9 +575,37 @@ if (in_array($getMode, array(3, 4, 7), true))
     $member = new TableMembers($gDb);
     $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
     $member->setValue('mem_comment', $getUserComment);
-    $member->setValue('mem_count_guests', $getAdditionalGuests);
+    // If participation limit is set
+    if ($date->getValue('dat_max_members') > 0)
+    {
+        // First store possible previous guests assignment and reset value
+        $currentGuests = $member->getValue('mem_count_guests');
+        $member->setValue('mem_count_guests', NULL);
+        $member->save();
+        // Now check participants limit and save if possible
+        $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+        $totalMembers = $participants->getCount();
+        
+        if ($totalMembers + $getAdditionalGuests <= $date->getValue('dat_max_members'))
+        {
+            $member->setValue('mem_count_guests', $getAdditionalGuests);
+        }
+        else
+        {
+            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+            if ($date->getValue('dat_max_members') > 0 )
+            {
+                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+            }
+        }
+    }
+    else
+    {
+        $member->setValue('mem_count_guests', $getAdditionalGuests);
+    }
+
     $member->save();
-    
+
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));
 }
