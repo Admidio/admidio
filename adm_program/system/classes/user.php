@@ -981,8 +981,6 @@ class User extends TableAccess
      */
     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
-        global $gPreferences;
-
         if (!$user instanceof \User)
         {
             return false;
