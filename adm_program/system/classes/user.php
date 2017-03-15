@@ -37,7 +37,7 @@ class User extends TableAccess
     protected $administrator;
 
     public $mProfileFieldsData;                   ///< object with current user field structure
-    public $roles_rights = array();               ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+    protected $rolesRights = array();             ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
     protected $listViewRights  = array();         ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $listMailRights  = array();         ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $rolesMembership = array();         ///< Array with all roles who the user is assigned
@@ -47,6 +47,8 @@ class User extends TableAccess
     protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
     protected $saveChangesWithoutRights;          ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
     protected $usersEditAllowed = array();        ///< Array with all user ids where the current user is allowed to edit the profile.
+    protected $relationships = array();           ///< Array with all users to whom the current user has a relationship
+    protected $relationshipsChecked = false;      ///< Flag if relationships for this user were checked
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -108,6 +110,47 @@ class User extends TableAccess
     }
 
     /**
+     * Method reads all relationships of the user and will store them in an array. Also the
+     * relationship property if the user can edit the profile of the other user will be stored
+     * for later checks within this class.
+     * @return bool Return true if relationships could be checked.
+     */
+    private function checkRelationshipsRights()
+    {
+        global $gPreferences;
+
+        if ((int) $this->getValue('usr_id') === 0 || $gPreferences['members_enable_user_relations'] == 0)
+        {
+            return false;
+        }
+
+        if(!$this->relationshipsChecked && count($this->relationships) === 0)
+        {
+            // read all relations of the current user
+            $sql = 'SELECT *
+                      FROM '.TBL_USER_RELATIONS.'
+                INNER JOIN '.TBL_USER_RELATION_TYPES.'
+                        ON urt_id = ure_urt_id
+                     WHERE ure_usr_id1  = ? -- $this->getValue(\'usr_id\') ';
+            $queryParams = array($this->getValue('usr_id'));
+            $relationsStatement = $this->db->queryPrepared($sql, $queryParams);
+
+            while ($row = $relationsStatement->fetch())
+            {
+                $this->relationships[] = array(
+                    'relation_type' => (int)  $row['urt_id'],
+                    'user_id'       => (int)  $row['ure_usr_id2'],
+                    'edit_user'     => (bool) $row['urt_edit_user']
+                );
+            }
+
+            $this->relationshipsChecked = true;
+        }
+
+        return true;
+    }
+
+    /**
      * The method reads all roles where this user has a valid membership and checks the rights of
      * those roles. It stores all rights that the user get at last through one role in an array.
      * In addition the method checks which roles lists the user could see in an separate array.
@@ -125,7 +168,7 @@ class User extends TableAccess
             return false;
         }
 
-        if (count($this->roles_rights) === 0)
+        if (count($this->rolesRights) === 0)
         {
             $this->assignRoles = false;
             $tmpRolesRights = array(
@@ -145,7 +188,7 @@ class User extends TableAccess
                 'rol_inventory'          => false
             );
 
-            // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
+            // read all roles of the organization and join the membership if user is member of that role
             $sql = 'SELECT *
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
@@ -250,22 +293,22 @@ class User extends TableAccess
                     $this->listMailRights[$rolId] = false;
                 }
             }
-            $this->roles_rights = $tmpRolesRights;
+            $this->rolesRights = $tmpRolesRights;
 
             // ist das Recht 'alle Listen einsehen' gesetzt, dann dies auch im Array bei allen Rollen setzen
-            if ($this->roles_rights['rol_all_lists_view'])
+            if ($this->rolesRights['rol_all_lists_view'])
             {
                 $this->listViewRights = array_fill_keys(array_keys($this->listViewRights), true);
             }
 
             // ist das Recht 'allen Rollen EMails schreiben' gesetzt, dann dies auch im Array bei allen Rollen setzen
-            if ($this->roles_rights['rol_mail_to_all'])
+            if ($this->rolesRights['rol_mail_to_all'])
             {
                 $this->listMailRights = array_fill_keys(array_keys($this->listMailRights), true);
             }
         }
 
-        return $right === null || $this->roles_rights[$right];
+        return $right === null || $this->rolesRights[$right];
     }
 
     /**
@@ -504,6 +547,7 @@ class User extends TableAccess
         }
 
         $this->administrator = false;
+        $this->relationshipsChecked = false;
 
         // initialize rights arrays
         $this->usersEditAllowed = array();
@@ -937,6 +981,8 @@ class User extends TableAccess
      */
     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
+        global $gPreferences;
+
         if (!$user instanceof \User)
         {
             return false;
@@ -985,7 +1031,21 @@ class User extends TableAccess
                     if ($leaderRights > 1 && in_array($roleId, $rolesMembership, true))
                     {
                         $returnValue = true;
+                        break;
                     }
+                }
+            }
+        }
+
+        // check if user has a relationship to current user and is allowed to edit him
+        if(!$returnValue && $this->checkRelationshipsRights())
+        {
+            foreach($this->relationships as $relationshipUser)
+            {
+                if($relationshipUser['user_id'] === $userId && $relationshipUser['edit_user'])
+                {
+                    $returnValue = true;
+                    break;
                 }
             }
         }
@@ -1200,7 +1260,7 @@ class User extends TableAccess
     public function renewRoleData()
     {
         // initialize rights arrays
-        $this->roles_rights    = array();
+        $this->rolesRights     = array();
         $this->listViewRights  = array();
         $this->listMailRights  = array();
         $this->rolesMembership = array();
@@ -1292,7 +1352,7 @@ class User extends TableAccess
     public function setOrganization($organizationId)
     {
         $this->organizationId = (int) $organizationId;
-        $this->roles_rights   = array();
+        $this->rolesRights    = array();
     }
 
     /**
