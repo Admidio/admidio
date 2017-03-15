@@ -927,10 +927,8 @@
     <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
     <string name="PRO_YEARS">Jahre</string>
     <!-- Phrases only in Relationssmodule -->
-    <string name="REL_EDIT_USER_BACKWARD">Benutzerprofil der rückwärtigen Beziehung bearbeiten</string>
-    <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf der Benutzer die Profile der anderen Benutzer bearbeiten zu denen er in Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
-    <string name="REL_EDIT_USER_FORWARD">Benutzerprofil der vorwärtigen Beziehung bearbeiten</string>
-    <string name="REL_EDIT_USER_IN_RELATION">Benutzerprofil der Beziehung bearbeiten</string>
+    <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
+    <string name="REL_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung bearbeiten</string>
     <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
     <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
     <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
