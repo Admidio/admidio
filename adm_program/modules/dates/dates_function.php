@@ -575,18 +575,13 @@ if (in_array($getMode, array(3, 4, 7), true))
     $member = new TableMembers($gDb);
     $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
     $member->setValue('mem_comment', $postUserComment);
-    // If participation limit is set
+    // Now check participants limit and save guests if possible
     if ($date->getValue('dat_max_members') > 0)
     {
-        // First store possible previous guests assignment and reset value
-        $currentGuests = $member->getValue('mem_count_guests');
-        $member->setValue('mem_count_guests', NULL);
-        $member->save();
-        // Now check participants limit and save if possible
         $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
         $totalMembers = $participants->getCount();
         
-        if ($totalMembers + $postAdditionalGuests <= $date->getValue('dat_max_members'))
+        if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
         {
             $member->setValue('mem_count_guests', $postAdditionalGuests);
         }
