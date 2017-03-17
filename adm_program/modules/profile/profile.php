@@ -193,6 +193,8 @@ $page->addJavascript('
     $("#menu_item_password").attr("data-target", "#admidio_modal");
     $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
     $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
+    $("#profile_role_memberships_change").attr("data-toggle", "modal");
+    $("#profile_role_memberships_change").attr("data-target", "#admidio_modal");
 
     $("input[data-provide=\'datepicker\']").datepicker({
         language: "'.$gL10n->getLanguageIsoCode().'",
