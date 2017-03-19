@@ -74,7 +74,7 @@ class Participants
     /**
      * Count participants of the date.
      * @param int $rolId
-     * @return int Returns the result of counted participants as numeric value in current object. Leaders are not counted!
+     * @return int Returns the result of count participants as numeric value in current object. Leaders are not counted!
      */
     public function getCount($rolId = 0)
     {
@@ -84,33 +84,44 @@ class Participants
             $this->checkId($rolId);
         }
 
-        // check if class variables $count and $leader are set to default flag.
-        if ($this->count === -1 || $this->leader === -1)
+        $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved, mem_count_guests
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = ? -- $this->rolId
+                   AND mem_end   >= ? -- DATE_NOW
+                   AND (mem_approved IS NULL
+                            OR mem_approved < 3)';
+
+        $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
+
+        // Write all member Id´s and leader status in an array
+        $numParticipants = array();
+
+        while ($row = $membersStatement->fetch())
         {
-            $sql = 'SELECT DISTINCT mem_usr_id, mem_leader, mem_approved
-                      FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = ? -- $this->rolId
-                       AND mem_end   >= ? -- DATE_NOW
-                       AND (mem_approved IS NULL
-                                OR mem_approved < 3)';
-            $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
+            $numParticipants[] = array(
+                'member'            => (int) $row['mem_usr_id'],
+                'leader'            => (bool) $row['mem_leader'],
+                'count_guests'      => (int) $row['mem_count_guests']
+            );
+        }
 
-            // Count the total and leader members
-            $count  = 0;
-            $leader = 0;
-
-            while ($row = $membersStatement->fetch())
+        // count total number of participants and leaders of the date
+        $leader = 0;
+        $totalCount = 0;
+        foreach ($numParticipants as $member)
+        {
+            if($member['leader'])
             {
-                ++$count;
-
-                if ($row['mem_leader'])
-                {
-                    ++$leader;
-                }
+                ++$leader;
             }
 
+            $totalCount = $totalCount + $member['count_guests'] + 1;
+        }
+        // check if class variables $count and $leader are set to default flag.
+        if($this->count === -1 && $this->leader === -1)
+        {
             // Then store the results in class variables.
-            $this->count  = $count;
+            $this->count = $totalCount;
             $this->leader = $leader;
         }
 

@@ -30,11 +30,13 @@ if($_GET['mode'] == 2)
 }
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int');
-$getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'int');
-$getCopy   = admFuncVariableIsValid($_GET, 'copy',   'bool');
-$getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
+$getDateId              = admFuncVariableIsValid($_GET, 'dat_id', 'int');
+$getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
+$getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
+$getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
+$getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
+$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
+$postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
 $originalDateId = 0;
 
@@ -236,6 +238,14 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(!is_numeric($_POST['dat_max_members']))
     {
         $_POST['dat_max_members'] = 0;
+    }
+    if(!isset($_POST['dat_allow_comments']))
+    {
+        $_POST['dat_allow_comments'] = 0;
+    }
+    if(!isset($_POST['dat_additional_guests']))
+    {
+        $_POST['dat_additional_guests'] = 0;
     }
 
     // make html in description secure
@@ -511,9 +521,7 @@ elseif($getMode === 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
     $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
 elseif($getMode === 4)  // Benutzer vom Termin abmelden
@@ -531,17 +539,14 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
         $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
 elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
 {
     $member = new TableMembers($gDb);
     $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
-
-    $gMessage->setForwardUrl($gNavigation->getUrl());
-    $gMessage->show($gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
+    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
 elseif($getMode === 6)  // Termin im iCal-Format exportieren
@@ -563,4 +568,39 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
 
     echo $date->getIcal(DOMAIN);
     exit();
+}
+// If participation mode: Write optional parameter from user and show current status message
+if (in_array($getMode, array(3, 4, 7), true))
+{
+    $member = new TableMembers($gDb);
+    $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+    $member->setValue('mem_comment', $postUserComment);
+    // Now check participants limit and save guests if possible
+    if ($date->getValue('dat_max_members') > 0)
+    {
+        $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+        $totalMembers = $participants->getCount();
+        
+        if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
+        {
+            $member->setValue('mem_count_guests', $postAdditionalGuests);
+        }
+        else
+        {
+            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+            if ($date->getValue('dat_max_members') > 0 )
+            {
+                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+            }
+        }
+    }
+    else
+    {
+        $member->setValue('mem_count_guests', $postAdditionalGuests);
+    }
+
+    $member->save();
+
+    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));
 }
