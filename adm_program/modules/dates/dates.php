@@ -347,6 +347,7 @@ else
         $outputLinkRoom      = '';
         $outputNumberMembers = '';
         $outputNumberLeaders = '';
+        $outputDeadline      = '';
         $dateElements        = array();
         $participantsArray   = array();
 
@@ -502,6 +503,18 @@ else
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
             $participantsArray   = $participants->getParticipantsArray($dateRolId);
+
+        if($date->getValue('dat_deadline') !== null)
+        {
+            if ($date->getValue('dat_all_day') === 0)
+            {
+                 $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']. ' ' . $gPreferences['system_time']);
+            }
+            else
+            {
+                $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']);
+            }
+        }
 
             // Links for the participation only in html mode
             if($getViewMode === 'html')
@@ -726,6 +739,11 @@ else
             {
                 $dateElements[] = array($gL10n->get('SYS_ROOM'), $outputLinkRoom);
             }
+            if($outputDeadline !== '')
+            {
+                $dateElements[] = array($gL10n->get('DAT_DEADLINE'), '<strong>'.$outputDeadline.'</strong>');
+            }
+
             if($outputNumberLeaders !== '')
             {
                 $dateElements[] = array($gL10n->get('SYS_LEADERS'), '<strong>' . $outputNumberLeaders . '</strong>');
@@ -876,7 +894,14 @@ else
 
             if($getViewMode === 'html')
             {
-                $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '</a>';
+                if (strlen($date->getValue('dat_deadline') > 0))
+                {
+                    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '<br />' . $gL10n->get('DAT_DEADLINE') . ': ' . $outputDeadline . '</a>';
+                }
+                else
+                {
+                    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '</a>';
+                }
             }
             else
             {
