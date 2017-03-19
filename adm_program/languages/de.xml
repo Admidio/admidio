@@ -36,6 +36,10 @@
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
+    <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teinehmer können anonyme Gäste anmelden</string>
+    <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teinehmer können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Teilnehmerzahl abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn ein Teilnehmer weitere Besucher mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
+    <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
+    <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmer können ihre Teilnahme kommentieren. Die Kommentare können über die Teilnehmerliste eingesehen werden</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
     <string name="DAT_ATTEND_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
@@ -99,11 +103,11 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
-    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
     <string name="DAT_USER_TENTATIVE">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_USER_REFUSED">Abgesagt</string>
+    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>

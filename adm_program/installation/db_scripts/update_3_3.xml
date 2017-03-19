@@ -10,7 +10,9 @@
     <step id="80">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_visible</step>
     <step id="90">ComponentUpdate::updateStepEventCategory</step>
     <step id="100">ComponentUpdate::updateStepSetParticipantsApprovalStates</step>
-    <step id="110">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
+    <step id="110">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_allow_comments integer not null default 0</step>
+    <step id="120">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_additional_guests integer not null default 0</step>
+    <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
 
     <step>stop</step>
 </update>
