@@ -66,6 +66,9 @@ $form->addInput(
     ($relationtype1->getValue('urt_name_female') !== $relationtype1->getValue('urt_name')) ? $relationtype1->getValue('urt_name_female') : '',
     array('maxLength' => 100)
 );
+$form->addCheckbox(
+    'urt_edit_user', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'), array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
+);
 
 $options = array('defaultValue' => $relationtype1->getRelationTypeString(), 'helpTextIdLabel' => 'REL_USER_RELATION_TYPE_DESC');
 if (!$relationtype1->isNewRecord())
@@ -99,12 +102,14 @@ $page->addJavascript('
             $("#urt_name_inverse_group").hide(duration);
             $("#urt_name_male_inverse_group").hide(duration);
             $("#urt_name_female_inverse_group").hide(duration);
+            $("#urt_edit_user_inverse_group").hide(duration);
         }
         else if ($(element).val() === "asymmetrical") {
             $("#urt_name_inverse").prop("required", true);
             $("#urt_name_inverse_group").show(duration);
             $("#urt_name_male_inverse_group").show(duration);
             $("#urt_name_female_inverse_group").show(duration);
+            $("#urt_edit_user_inverse_group").show(duration);
         }
     }
     $("input[type=radio][name=relation_type]").change(function() {
@@ -128,6 +133,9 @@ $form->addInput(
     'urt_name_female_inverse', $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD').' '.$gL10n->get('SYS_FEMALE'),
     ($relationtype2->getValue('urt_name_female') !== $relationtype2->getValue('urt_name')) ? $relationtype2->getValue('urt_name_female') : '',
     array('maxLength' => 100)
+);
+$form->addCheckbox(
+    'urt_edit_user_inverse', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'), array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
