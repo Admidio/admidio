@@ -926,6 +926,7 @@ if($gPreferences['members_enable_user_relations'] == 1)
 
         while($row = $relationStatement->fetch())
         {
+            $editUserIcon = '';
             $relationtype->clear();
             $relationtype->setArray($row);
             $relation->clear();
@@ -943,10 +944,16 @@ if($gPreferences['members_enable_user_relations'] == 1)
                 $relationName = $relationtype->getValue('urt_name_female');
             }
 
+            if($gCurrentUser->hasRightEditProfile($otherUser))
+            {
+                $editUserIcon = ' <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id=' . $otherUser->getValue('usr_id') . '"><img
+                    src="'. THEME_URL. '/icons/profile_edit.png" alt="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" title="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" /></a>';
+            }
+
             $page->addHtml('<li id="row_ure_'.$relation->getValue('ure_id').'" class="list-group-item">');
             $page->addHtml('<div>');
             $page->addHtml('<span>'.$relationName.' - <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.
-                            $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a><span>');
+                            $otherUser->getValue('usr_id').'">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a>' . $editUserIcon . '<span>');
             $page->addHtml('<span class="pull-right text-right">');
 
              if($gCurrentUser->editUsers())

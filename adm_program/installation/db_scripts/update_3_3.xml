@@ -12,7 +12,11 @@
     <step id="100">ComponentUpdate::updateStepSetParticipantsApprovalStates</step>
     <step id="110">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_allow_comments integer not null default 0</step>
     <step id="120">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_additional_guests integer not null default 0</step>
+<<<<<<< HEAD
     <step id="130">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_deadline timestamp null default null AFTER dat_max_members</step>
+=======
+    <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
+>>>>>>> refs/remotes/origin/master
 
     <step>stop</step>
 </update>
