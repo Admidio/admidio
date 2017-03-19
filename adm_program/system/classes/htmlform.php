@@ -872,15 +872,22 @@ class HtmlForm extends HtmlFormBasic
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime')
         {
+            $dateValue = '';
+            $timeValue = '';
+
             // first try to split datetime to a date and a time value
             $datetime = DateTime::createFromFormat($gPreferences['system_date'] . ' ' . $gPreferences['system_time'], $value);
-            $dateValue = $datetime->format($gPreferences['system_date']);
-            $timeValue = $datetime->format($gPreferences['system_time']);
 
+            if ($datetime)
+            {
+                $dateValue = $datetime->format($gPreferences['system_date']);
+                $timeValue = $datetime->format($gPreferences['system_time']);
+            }
             // now add a date and a time field to the form
             $attributes['class'] .= ' datetime-date-control';
             $this->addSimpleInput('text', $id, $id, $dateValue, $attributes);
             $attributes['class'] .= ' datetime-time-control';
+            $attributes['placeholder'] = 'HH:MM';
             $attributes['data-provide'] = '';
             $this->addSimpleInput('text', $id . '_time', $id . '_time', $timeValue, $attributes);
         }
