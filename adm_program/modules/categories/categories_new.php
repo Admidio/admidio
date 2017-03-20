@@ -20,7 +20,6 @@
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
  *         INF = Categories for Inventory
- *         MEN = Categories for Menus
  * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
@@ -30,7 +29,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
-$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA', 'MEN')));
+$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
 // Modus und Rechte pruefen
@@ -64,11 +63,6 @@ elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
-elseif($getType === 'MEN' && !$gCurrentUser->isAdministrator())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
 
 // set module headline
 if($getTitle === '')
@@ -88,10 +82,6 @@ if($getTitle === '')
     elseif($getType === 'USF')
     {
         $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
-    }
-    elseif($getType === 'MEN')
-    {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('SYS_MENU'));
     }
     else
     {

@@ -158,24 +158,24 @@ class HtmlPage
     public function showMainMenu($details = true)
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
-        $men_icon  = '/icons/dummy.png';
+        $men_icon  = '/dummy.png';
         $full_menu = '';
 
         // display Menu
         $sql = 'SELECT *
-          FROM '.TBL_CATEGORIES.'
-          where cat_type = \'MEN\'
-         ORDER BY cat_sequence';
-        $cat_statement = $gDb->query($sql);
+          FROM '.TBL_MENU.'
+          where men_parent_id is null
+         ORDER BY men_order';
+        $main_men_statement = $gDb->query($sql);
 
-        while ($categorie = $cat_statement->fetchObject())
+        while ($main_men = $main_men_statement->fetchObject())
         {
             // display Menu
             $sql = 'SELECT *
               FROM '.TBL_MENU.'
-              where men_cat_id = ? -- $categorie->cat_id
-             ORDER BY men_cat_id DESC, men_order';
-            $statement = $gDb->queryPrepared($sql, array($categorie->cat_id));
+              where men_parent_id = ? -- $main_men->men_id
+             ORDER BY men_parent_id DESC, men_order';
+            $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
             if($statement->rowCount() > 0)
             {
@@ -183,14 +183,14 @@ class HtmlPage
 
                 while ($row = $statement->fetchObject())
                 {
-                    if($row->men_cat_id != $last)
+                    if($row->men_parent_id != $last)
                     {
                         if($last > 0)
                         {
                             $full_menu .= $Menu->show($details);
                         }
-                        $Menu = new Menu($categorie->cat_name_intern, $gL10n->get($categorie->cat_name));
-                        $last = $row->men_cat_id;
+                        $Menu = new Menu($main_men->men_modul_name, $gL10n->get($main_men->men_translate_name));
+                        $last = $row->men_parent_id;
                     }
 
                     $men_display = true;
@@ -249,7 +249,7 @@ class HtmlPage
                         }
 
                         $men_url = '/adm_program/modules/messages/messages.php';
-                        $men_icon = '/icons/messages.png';
+                        $men_icon = 'messages.png';
                         $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                     }
 
@@ -332,19 +332,19 @@ class HtmlPage
 
         // display Menu
         $sql = 'SELECT *
-          FROM '.TBL_CATEGORIES.'
-          where cat_type = \'MEN\'
-         ORDER BY cat_sequence';
-        $cat_statement = $gDb->query($sql);
+          FROM '.TBL_MENU.'
+          where men_parent_id is null
+         ORDER BY men_order';
+        $main_men_statement = $gDb->query($sql);
 
-        while ($categorie = $cat_statement->fetchObject())
+        while ($main_men = $main_men_statement->fetchObject())
         {
             // display Menu
             $sql = 'SELECT *
               FROM '.TBL_MENU.'
-              where men_cat_id = ? -- $categorie->cat_id
-             ORDER BY men_cat_id DESC, men_order';
-            $statement = $gDb->queryPrepared($sql, array($categorie->cat_id));
+              where men_parent_id = ? -- $main_men->men_id
+             ORDER BY men_parent_id DESC, men_order';
+            $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
             if($statement->rowCount() > 0)
             {
@@ -352,10 +352,10 @@ class HtmlPage
 
                 while ($row = $statement->fetchObject())
                 {
-                    if($row->men_cat_id != $last)
+                    if($row->men_parent_id != $last)
                     {
-                        $this->menu->addItem('menu_item_'.$categorie->cat_name_intern, null, $gL10n->get($categorie->cat_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                        $last = $row->men_cat_id;
+                        $this->menu->addItem('menu_item_'.$main_men->men_modul_name, null, $gL10n->get($main_men->men_translate_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                        $last = $row->men_parent_id;
                     }
 
                     $men_display = true;
@@ -444,7 +444,7 @@ class HtmlPage
 
                     if($men_display == true)
                     {
-                        $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$categorie->cat_name_intern, 'admidio-default-menu-item');
+                        $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$main_men->men_modul_name, 'admidio-default-menu-item');
                     }
                 }
             }

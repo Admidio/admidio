@@ -826,7 +826,7 @@ create unique index IDX_%PREFIX%_USR_LOGIN_NAME on %PREFIX%_users (usr_login_nam
 create table %PREFIX%_menu
 (
     men_id                      integer       unsigned not null AUTO_INCREMENT,
-    men_cat_id                  integer,
+    men_parent_id               integer,
     men_order                   integer,
     men_standart                boolean       not null default '0',
     men_modul_name              varchar(255),

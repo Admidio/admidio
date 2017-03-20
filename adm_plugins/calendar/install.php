@@ -15,6 +15,7 @@
  *
  ****************************************************************************/
 
+ // create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 
 if(!defined('PLUGIN_PATH'))
@@ -33,8 +34,7 @@ $plugin_folder = '/adm_plugins/calendar/calendar.php';
 $standart = 0;
 
 // set module headline
-$headline = $gL10n->get('SYS_MENU');
-$headline = $gL10n->get('SYS_CREATE_VAR', $headline);
+$headline = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_MENU'));
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -51,7 +51,7 @@ if($statement->rowCount() > 0)
 }
 else
 {
-    // alle aus der DB aus lesen
+    // alle aus der DB auslesen
     $sqlRoles =  'SELECT *
                     FROM '.TBL_ROLES.'
               INNER JOIN '.TBL_CATEGORIES.'
@@ -70,8 +70,7 @@ else
     // show form
     $form = new HtmlForm('menu_install_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?mode=1', $page);
 
-    $form->addInput('men_group', 'Menu Group',  'Special entry', array('property' => FIELD_DISABLED));
-    $form->addInput('men_group', null, 4, array('type' => 'hidden'));
+    $form->addSelectBoxForCategories('men_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'MEN', 'EDIT_CATEGORIES', array('property' => FIELD_REQUIRED));
 
     $form->addInput('men_translate_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 

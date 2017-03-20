@@ -54,10 +54,17 @@ class Menu
         {
             $link = ADMIDIO_URL . $link;
         }
-        // add THEME_URL to images unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $icon) === 0)
+
+        // if icon is imagefile or imageurl then show image
+        if(strpos(admStrToLower($icon), '.png') > 0 || strpos(admStrToLower($icon), '.jpg') > 0)
         {
-            $icon = THEME_URL . $icon;
+            if (preg_match('/^http(s?):\/\//', $icon) === 0)
+            {
+                if (admStrIsValidFileName($icon, true))
+                {
+                    $icon = THEME_URL . '/icons/' . $icon;
+                }
+            }
         }
 
         return array(

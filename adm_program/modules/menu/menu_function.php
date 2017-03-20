@@ -52,7 +52,7 @@ if($getMode === 1)
 
     try
     {
-        $menu->setValue('men_cat_id', $_POST['men_cat_id']);
+        $menu->setValue('men_parent_id', $_POST['men_parent_id']);
         $menu->setValue('men_modul_name', $postModuleName);
         $menu->setValue('men_url',  $_POST['men_url']);
         $menu->setValue('men_icon', $postIcon);

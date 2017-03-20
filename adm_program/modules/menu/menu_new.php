@@ -45,6 +45,52 @@ else
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
+$menuArray = array(0 => 'MAIN');
+
+/**
+ * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
+ * @param int    $parentId
+ * @param string $vorschub
+ * @param        $menu
+ */
+function subfolder($parentId, $vorschub, $menu)
+{
+    global $gDb, $gCurrentOrganization, $menuArray;
+
+    $vorschub .= '&nbsp;&nbsp;&nbsp;';
+    $sqlConditionParentId = '';
+    $parentMenu = new TableMenu($gDb);
+
+    $queryParams = array($menu->getValue('men_id'));
+    // Erfassen des auszugebenden Albums
+    if ($parentId > 0)
+    {
+        $sqlConditionParentId .= ' AND men_parent_id = ? -- $parentId';
+        $queryParams[] = $parentId;
+    }
+    else
+    {
+        $sqlConditionParentId .= ' AND men_parent_id IS NULL';
+    }
+
+    $sql = 'SELECT *
+              FROM '.TBL_MENU.'
+             WHERE men_id    <> ? -- $menu->getValue(\'men_id\')
+                   '.$sqlConditionParentId;
+    $childStatement = $gDb->queryPrepared($sql, $queryParams);
+
+    while($admPhotoChild = $childStatement->fetch())
+    {
+        $parentMenu->clear();
+        $parentMenu->setArray($admPhotoChild);
+
+        // add entry to array of all photo albums
+        $menuArray[$parentMenu->getValue('men_id')] = $vorschub.'&#151; '.$parentMenu->getValue('men_translate_name');
+
+        subfolder($parentMenu->getValue('men_id'), $vorschub, $menu);
+    }//while
+}//function
+
 // UserField-objekt anlegen
 $menu = new TableMenu($gDb);
 
@@ -90,7 +136,14 @@ if($getMenId > 0)
     $roleViewSet = $display->getRolesIds();
 }
 
-$form->addSelectBoxForCategories('men_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'MEN', 'EDIT_CATEGORIES', array('property' => FIELD_REQUIRED, 'defaultValue' => $menu->getValue('men_cat_id')));
+subfolder(null, '', $menu);
+$form->addSelectBox('men_cat_id', $gL10n->get('SYS_CATEGORY'), $menuArray, array(
+        'property'                       => FIELD_REQUIRED,
+        'defaultValue'                   => $menu->getValue('men_parent_id'),
+        'showContextDependentFirstEntry' => false,
+        'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', 'MAIN')
+    )
+);
 
 $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_modul_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyStandart));
 

@@ -13,7 +13,7 @@
     <step id="110">CREATE TABLE %PREFIX%_menu
                 (
                     men_id                         integer       unsigned not null AUTO_INCREMENT,
-                    men_cat_id                     integer,
+                    men_parent_id                  integer,
                     men_order                      integer,
                     men_standart                   boolean       not null default '0',
                     men_modul_name                 varchar(255),

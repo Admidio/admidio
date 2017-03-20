@@ -115,13 +115,6 @@ $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, c
         VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
 $db->query($sql);
 
-// create menu categories
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'MEN\', \'MODULE\',         \'SYS_MODULES\',         0, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')
-             , (NULL, \'MEN\', \'ADMINISTRATION\', \'SYS_ADMINISTRATION\',  0, 1, 2, '.$userId.', \''. DATETIME_NOW.'\')
-             , (NULL, \'MEN\', \'PLUGIN\',         \'MEN_PLUGIN\',          0, 1, 3, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
-
 // create inventory categories
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')';
@@ -192,31 +185,26 @@ $sql = 'INSERT INTO '.TBL_INVENT_FIELDS.' (inf_cat_id, inf_type, inf_name_intern
 $db->query($sql);
 
 // Menu entries for the standart installation
-$sql = 'SELECT cat_id
-          FROM '.TBL_CATEGORIES.'
-          where cat_type = \'MEN\'
-          and cat_name = \'MEN_TOP\'';
-        $cat_statement = $db->query($sql);
-
-$categoryIdMenu = $cat_statement->fetchObject();
-
-$sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_cat_id, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
-           VALUES (1, '.($categoryIdMenu->cat_id+1).', 1, 1, \'overview\', \'/adm_program/index.php\', \'/icons/home.png\', \'SYS_OVERVIEW\', \'\', 0)
-                , (2, '.($categoryIdMenu->cat_id+1).', 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'/icons/download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1)
-                , (3, '.($categoryIdMenu->cat_id+1).', 7, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'/icons/lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\', 0)
-                , (4, '.($categoryIdMenu->cat_id+1).', 8, 1, \'mylist\', \'/adm_program/modules/lists/mylist.php\', \'/icons/mylist.png\', \'LST_MY_LIST\', \'\', 0)
-                , (5, '.($categoryIdMenu->cat_id+1).', 2, 1, \'announcements\', \'/adm_program/modules/announcements/announcements.php\', \'/icons/announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\', 1)
-                , (6, '.($categoryIdMenu->cat_id+1).', 5, 1, \'photo\', \'/adm_program/modules/photos/photos.php\', \'/icons/photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\', 1)
-                , (8, '.($categoryIdMenu->cat_id+1).', 6, 1, \'guestbook\', \'/adm_program/modules/guestbook/guestbook.php\', \'/icons/guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\', 1)
-                , (9, '.($categoryIdMenu->cat_id+1).', 8, 1, \'dates\', \'/adm_program/modules/dates/dates.php\', \'/icons/dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\', 1)
-                , (10, '.($categoryIdMenu->cat_id+1).', 9, 1, \'weblinks\', \'/adm_program/modules/links/links.php\', \'/icons/weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\', 1)
-                , (11, '.($categoryIdMenu->cat_id+2).', 4, 1, \'dbback\', \'/adm_program/modules/backup/backup.php\', \'/icons/backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\', 0)
-                , (12, '.($categoryIdMenu->cat_id+2).', 5, 1, \'orgprop\', \'/adm_program/modules/preferences/preferences.php\', \'/icons/options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\', 0)
-                , (13, '.($categoryIdMenu->cat_id+1).', 4, 1, \'mail\', \'/adm_program/modules/messages/messages_write.php\', \'/icons/email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\', 0)
-                , (14, '.($categoryIdMenu->cat_id+2).', 1, 1, \'newreg\', \'/adm_program/modules/registration/registration.php\', \'/icons/new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\', 0)
-                , (15, '.($categoryIdMenu->cat_id+2).', 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'/icons/user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
-                , (16, '.($categoryIdMenu->cat_id+2).', 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'/icons/roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
-                , (17, '.($categoryIdMenu->cat_id+2).', 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'/icons/application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
+$sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_parent_id, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
+           VALUES (1, NULL, 1, 1, NULL, NULL, \'\', \'SYS_MODULES\', \'\', 0)
+                , (2, NULL, 3, 1, NULL, NULL, \'\', \'SYS_ADMINISTRATION\', \'\', 1)
+                , (3, NULL, 3, 1, NULL, NULL, \'\', \'MEN_PLUGIN\', \'\', 1)
+                , (4, 1, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\', 0)
+                , (5, 1, 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1)
+                , (6, 1, 7, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\', 0)
+                , (7, 1, 8, 1, \'mylist\', \'/adm_program/modules/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'\', 0)
+                , (8, 1, 2, 1, \'announcements\', \'/adm_program/modules/announcements/announcements.php\', \'announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\', 1)
+                , (9, 1, 5, 1, \'photo\', \'/adm_program/modules/photos/photos.php\', \'photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\', 1)
+                , (10, 1, 6, 1, \'guestbook\', \'/adm_program/modules/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\', 1)
+                , (11, 1, 8, 1, \'dates\', \'/adm_program/modules/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\', 1)
+                , (12, 1, 9, 1, \'weblinks\', \'/adm_program/modules/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\', 1)
+                , (13, 2, 4, 1, \'dbback\', \'/adm_program/modules/backup/backup.php\', \'backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\', 0)
+                , (14, 2, 5, 1, \'orgprop\', \'/adm_program/modules/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\', 0)
+                , (15, 1, 4, 1, \'mail\', \'/adm_program/modules/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\', 0)
+                , (16, 2, 1, 1, \'newreg\', \'/adm_program/modules/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\', 0)
+                , (17, 2, 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
+                , (18, 2, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
+                , (19, 2, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
 $db->query($sql);
 
 // Menu security

@@ -103,19 +103,19 @@ $menuOverview->setColumnAlignByArray(array('left', 'left', 'center', 'left', 'ri
 $menuOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
-  FROM '.TBL_CATEGORIES.'
-  where cat_type = \'MEN\'
- ORDER BY cat_sequence';
-$cat_statement = $gDb->query($sql);
+  FROM '.TBL_MENU.'
+  where men_parent_id is null
+ ORDER BY men_order';
+$main_men_statement = $gDb->query($sql);
 
-while ($categorie = $cat_statement->fetchObject())
+while ($main_men = $main_men_statement->fetchObject())
 {
 
     $sql = 'SELECT *
               FROM '.TBL_MENU.'
-              where men_cat_id = ? -- $categorie->cat_id
-             ORDER BY men_cat_id DESC, men_order';
-            $menuStatement = $gDb->queryPrepared($sql, array($categorie->cat_id));
+              where men_parent_id = ? -- $main_men->men_id
+             ORDER BY men_parent_id DESC, men_order';
+            $menuStatement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
     if($menuStatement->rowCount() > 0)
     {
@@ -126,17 +126,17 @@ while ($categorie = $cat_statement->fetchObject())
         while($menu_row = $menuStatement->fetchObject())
         {
 
-            if($menuGroup != $menu_row->men_cat_id)
+            if($menuGroup != $menu_row->men_parent_id)
             {
-                $block_id = 'admMenu_'.$menu_row->men_cat_id;
+                $block_id = 'admMenu_'.$menu_row->men_parent_id;
 
                 $menuOverview->addTableBody();
                 $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-                $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$gL10n->get($categorie->cat_name),
+                $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$gL10n->get($main_men->men_translate_name),
                                   array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
                 $menuOverview->addTableBody('id', $block_id);
 
-                $menuGroup = $menu_row->men_cat_id;
+                $menuGroup = $menu_row->men_parent_id;
             }
 
             $naming = $gL10n->get($menu_row->men_translate_name);
