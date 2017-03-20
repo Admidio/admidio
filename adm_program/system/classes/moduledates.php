@@ -174,7 +174,7 @@ class ModuleDates extends Modules
         }
 
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state, mem.mem_leader,' . $additionalFields . '
+        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state, mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additionalFields . '
                   FROM ' . TBL_DATE_ROLE . ' AS dtr
             INNER JOIN ' . TBL_DATES . ' AS dat
                     ON dat_id = dtr_dat_id

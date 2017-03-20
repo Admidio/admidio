@@ -36,6 +36,10 @@
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
+    <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teinehmer können anonyme Gäste anmelden</string>
+    <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teinehmer können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Teilnehmerzahl abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn ein Teilnehmer weitere Besucher mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
+    <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
+    <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmer können ihre Teilnahme kommentieren. Die Kommentare können über die Teilnehmerliste eingesehen werden</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
     <string name="DAT_ATTEND_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
@@ -99,11 +103,11 @@
     <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wechsel zur Kalenderverwaltung</string>
     <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Wechsel zur Raumverwaltung</string>
     <string name="DAT_VIEW_MODE">Standard-Darstellung</string>
-    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_USER_ATTEND">Ich nehme teil</string>
     <string name="DAT_USER_TENTATIVE">Unter Vorbehalt</string>
     <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_USER_REFUSED">Abgesagt</string>
+    <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
     <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
@@ -733,7 +737,7 @@
     <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Standard: ja)</string>
     <string name="ORG_SECONDS">Sekunden</string>
     <string name="ORG_SEND_PASSWORD">Passwort zusenden</string>
-    <string name="ORG_SEND_PASSWORD_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</string>
+    <string name="ORG_SEND_PASSWORD_DESC">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage per E-Mail an den Administrator stellen, damit dieser ein neues Passwort hinterlegt. Damit das Passwort zugesendet werden kann, muss zusätzlich die Einstellung #VAR1_BOLD# gesetzt sein. (Standard: ja)</string>
     <string name="ORG_SEND_NEW_PASSWORD">Neues Passwort zuschicken</string>
     <string name="ORG_SHOW_CREATE_EDIT">Ersteller und Zeitstempel anzeigen</string>
     <string name="ORG_SHOW_CREATE_EDIT_DESC">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</string>
@@ -927,6 +931,8 @@
     <string name="PRO_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
     <string name="PRO_YEARS">Jahre</string>
     <!-- Phrases only in Relationssmodule -->
+    <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
+    <string name="REL_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung bearbeiten</string>
     <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
     <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
     <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
