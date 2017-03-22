@@ -328,7 +328,7 @@ class Session extends TableAccess
         }
 
         // if AutoLogin is set then refresh the auto_login_id for security reasons
-        if ($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof \AutoLogin && $this->getValue('ses_usr_id') > 0)
         {
             $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
             $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
