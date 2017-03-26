@@ -27,11 +27,6 @@ $g_adm_db   = '%DATABASE%';    // Database
 // Example: 'https://www.admidio.org/example'
 $g_root_path = '%ROOT_PATH%';
 
-// If you use a separate proxy for communications security with SSL than you must
-// enter the proxy address here. Admidio will use it to generate the full URL.
-// Example: 'MyProxy.com'
-$gSecureProxy = '';
-
 // Short description of the organization that is running Admidio
 // This short description must correspond to your input in the installation wizard !!!
 // Example: 'ADMIDIO'

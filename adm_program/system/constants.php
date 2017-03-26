@@ -44,7 +44,6 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
-define('SECURE_PROXY', !empty($gSecureProxy)); // true | false
 define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true | false
 
 define('PORT', ((!HTTPS && (int) $_SERVER['SERVER_PORT'] === 80) || (HTTPS && (int) $_SERVER['SERVER_PORT'] === 443)) ? '' : ':' . (int) $_SERVER['SERVER_PORT']); // :1234
@@ -58,15 +57,10 @@ define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will
 define('ADMIDIO_PATH', substr(__FILE__, 0, -33)); // /var/www/subfolder
 define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
 
-// SUBFOLDERS
-define('ADMIDIO_SUB_FOLDER', str_replace('\\', '/', substr(ADMIDIO_PATH, strlen(WWW_PATH)))); // /subfolder
-
-$subfolderLength = strlen(ADMIDIO_SUB_FOLDER);
-
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    ADMIDIO_URL . substr($_SERVER['SCRIPT_NAME'], $subfolderLength)); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', ADMIDIO_URL . substr($_SERVER['REQUEST_URI'], $subfolderLength)); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
+define('FILE_URL',    ADMIDIO_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
+define('CURRENT_URL', ADMIDIO_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
@@ -152,7 +146,6 @@ define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN
 // ####################
 
 define('SERVER_PATH', ADMIDIO_PATH);
-define('ADMIDIO_SUBFOLDER', ADMIDIO_SUB_FOLDER);
 
 // Define Constants for PHP 5.3
 if (!defined('JSON_UNESCAPED_SLASHES'))
