@@ -45,13 +45,11 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
 define('SECURE_PROXY', !empty($gSecureProxy)); // true | false
-define('HTTPS', SECURE_PROXY || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')); // true | false
-define('PORT', SECURE_PROXY ? 443 : (int) $_SERVER['SERVER_PORT']); // 443 | 80
+define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true | false
 
-$port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; // :1234
-$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port; // www.example.org:1234
+define('PORT', ((!HTTPS && (int) $_SERVER['SERVER_PORT'] === 80) || (HTTPS && (int) $_SERVER['SERVER_PORT'] === 443)) ? '' : ':' . (int) $_SERVER['SERVER_PORT']); // :1234
+define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
 
-define('HOST', SECURE_PROXY ? $gSecureProxy : $host); // www.example.org:1234 | www.myproxy.com:1234
 define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 
 // PATHS
@@ -62,13 +60,11 @@ define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfo
 
 // SUBFOLDERS
 define('ADMIDIO_SUB_FOLDER', str_replace('\\', '/', substr(ADMIDIO_PATH, strlen(WWW_PATH)))); // /subfolder
-define('ADMIDIO_SUB_URL', (SECURE_PROXY ? '/' . $host : '') . ADMIDIO_SUB_FOLDER); // /subfolder | /www.example.com/subfolder
 
 $subfolderLength = strlen(ADMIDIO_SUB_FOLDER);
 
 // URLS
-define('SERVER_URL',  (HTTPS ? 'https://' : 'http://') . HOST); // https://www.example.org:1234 | https://www.myproxy.com:1234
-define('ADMIDIO_URL', SERVER_URL . ADMIDIO_SUB_URL); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
+define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
 define('FILE_URL',    ADMIDIO_URL . substr($_SERVER['SCRIPT_NAME'], $subfolderLength)); // https://www.example.org:1234/subfolder/adm_program/index.php
 define('CURRENT_URL', ADMIDIO_URL . substr($_SERVER['REQUEST_URI'], $subfolderLength)); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 

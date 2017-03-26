@@ -55,9 +55,7 @@ $constants = array(
     'HOST'               => HOST,
     'DOMAIN'             => DOMAIN,
     'ADMIDIO_SUB_FOLDER' => ADMIDIO_SUB_FOLDER,
-    'ADMIDIO_SUB_URL'    => ADMIDIO_SUB_URL,
     // URLs
-    'SERVER_URL'  => SERVER_URL,
     'ADMIDIO_URL' => ADMIDIO_URL,
     'FILE_URL'    => FILE_URL,
     'CURRENT_URL' => CURRENT_URL,

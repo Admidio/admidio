@@ -161,7 +161,6 @@ class Session extends TableAccess
         {
             // set path to only / because there are problems if path has capital letters
             $path = '/';
-            //$path = ADMIDIO_SUB_URL . '/';
         }
         if ($domain === '')
         {
@@ -490,7 +489,8 @@ class Session extends TableAccess
         // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_SUB_URL . '/';
+            // set path to only / because there are problems if path has capital letters
+            $path = '/';
         }
         if ($domain === '')
         {

@@ -25,7 +25,6 @@ $g_adm_db   = '%DATABASE%';    // Database
 
 // URL to this Admidio installation
 // Example: 'https://www.admidio.org/example'
-// Deprecated
 $g_root_path = '%ROOT_PATH%';
 
 // If you use a separate proxy for communications security with SSL than you must
