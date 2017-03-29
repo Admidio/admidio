@@ -69,42 +69,8 @@ class Session extends TableAccess
             }
         }
 
-        // if cookie PREFIX_AUTO_LOGIN_ID is set then there could be an auto login
-        // the auto login must be done here because after that the corresponding organization must be set
-        if (array_key_exists($this->cookieAutoLoginId, $_COOKIE))
-        {
-            // restore user from auto login session
-            $this->mAutoLogin = new AutoLogin($database, $_COOKIE[$this->cookieAutoLoginId]);
-
-            // valid AutoLogin found
-            if ($this->mAutoLogin->getValue('atl_id') > 0)
-            {
-                $this->mAutoLogin->setValue('atl_session_id', $session);
-                $this->mAutoLogin->save();
-
-                $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
-            }
-            else
-            {
-                // an invalid AutoLogin should made the current AutoLogin unusable
-                $this->mAutoLogin = null;
-                self::setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
-
-                // now count invalid auto login for this user and delete all auto login of this users if number of wrong logins > 3
-                $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
-                $userId = $autoLoginParts[0];
-
-                $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
-                           SET atl_number_invalid = atl_number_invalid + 1
-                         WHERE atl_usr_id = ? -- $userId';
-                $this->db->queryPrepared($sql, array($userId));
-
-                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                         WHERE atl_usr_id = ? -- $userId
-                           AND atl_number_invalid > 3 ';
-                $this->db->queryPrepared($sql, array($userId));
-            }
-        }
+        // check for a valid auto login
+        $this->refreshAutoLogin();
     }
 
     /**
@@ -193,7 +159,8 @@ class Session extends TableAccess
 
         if ($path === '')
         {
-            $path = ADMIDIO_SUB_URL . '/';
+            // set path to only / because there are problems if path has capital letters
+            $path = '/';
         }
         if ($domain === '')
         {
@@ -303,6 +270,49 @@ class Session extends TableAccess
     }
 
     /**
+     * Reload auto login data from database table adm_auto_login. if cookie PREFIX_AUTO_LOGIN_ID
+     * is set then there could be an auto login the auto login must be done here because after
+     * that the corresponding organization must be set.
+     */
+    public function refreshAutoLogin()
+    {
+        if (array_key_exists($this->cookieAutoLoginId, $_COOKIE))
+        {
+            // restore user from auto login session
+            $this->mAutoLogin = new AutoLogin($this->db, $_COOKIE[$this->cookieAutoLoginId]);
+
+            // valid AutoLogin found
+            if ($this->mAutoLogin->getValue('atl_id') > 0)
+            {
+                $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
+                $this->mAutoLogin->save();
+
+                $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
+            }
+            else
+            {
+                // an invalid AutoLogin should made the current AutoLogin unusable
+                $this->mAutoLogin = null;
+                self::setCookie($this->cookieAutoLoginId, $_COOKIE[$this->cookieAutoLoginId]);
+
+                // now count invalid auto login for this user and delete all auto login of this users if number of wrong logins > 3
+                $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
+                $userId = $autoLoginParts[0];
+
+                $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
+                           SET atl_number_invalid = atl_number_invalid + 1
+                         WHERE atl_usr_id = ? -- $userId';
+                $this->db->queryPrepared($sql, array($userId));
+
+                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                         WHERE atl_usr_id = ? -- $userId
+                           AND atl_number_invalid > 3 ';
+                $this->db->queryPrepared($sql, array($userId));
+            }
+        }
+    }
+
+    /**
      * Reload session data from database table adm_sessions. Refresh AutoLogin with
      * new auto_login_id. Check renew flag and reload organization object if necessary.
      */
@@ -329,19 +339,27 @@ class Session extends TableAccess
         }
 
         // if AutoLogin is set then refresh the auto_login_id for security reasons
-        if ($this->mAutoLogin instanceof \AutoLogin && $this->getValue('ses_usr_id') > 0)
+        if($this->getValue('ses_usr_id') > 0)
         {
-            $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
-            $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
-            $this->mAutoLogin->save();
+            if ($this->mAutoLogin instanceof \AutoLogin)
+            {
+                $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
+                $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
+                $this->mAutoLogin->save();
 
-            // save cookie for autologin
-            $currDateTime = new DateTime();
-            $oneYearDateInterval = new DateInterval('P1Y');
-            $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
-            $timestampExpired = $oneYearAfterDateTime->getTimestamp();
+                // save cookie for autologin
+                $currDateTime = new DateTime();
+                $oneYearDateInterval = new DateInterval('P1Y');
+                $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
+                $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
-            self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
+                self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
+            }
+            else
+            {
+                // check if there is a valid autologin and set this login active
+                $this->refreshAutoLogin();
+            }
         }
 
         // if flag for reload of organization is set than reload the organization data
@@ -476,7 +494,8 @@ class Session extends TableAccess
         // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_SUB_URL . '/';
+            // set path to only / because there are problems if path has capital letters
+            $path = '/';
         }
         if ($domain === '')
         {

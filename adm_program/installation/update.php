@@ -475,6 +475,18 @@ elseif ($getMode === 2)
         $gDb->query('SET foreign_key_checks = 1');
     }
 
+
+    // create ".htaccess" file for folder "adm_my_files"
+    if (!is_file(ADMIDIO_PATH . FOLDER_DATA.'/.htaccess'))
+    {
+        $protection = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+
+        if (!$protection->protectFolder())
+        {
+            $gLogger->warning('htaccess file could not be created!');
+        }
+    }
+
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';
     $gDb->query($sql);
