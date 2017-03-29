@@ -44,7 +44,7 @@ if(!isset($plg_max_char_per_word) || !is_numeric($plg_max_char_per_word))
 
 if(!isset($plgShowFullDescription) || !is_numeric($plgShowFullDescription))
 {
-    $plgShowFullDescription = 1;
+    $plgShowFullDescription = 0;
 }
 
 if(isset($plg_link_class))
