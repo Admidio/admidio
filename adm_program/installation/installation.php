@@ -607,6 +607,21 @@ elseif ($getMode === 6)  // Creating configuration file
         $port = $_SESSION['db_port'];
     }
 
+    // detect root path
+    $rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
+    if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
+    {
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        {
+            $rootPath = 'https://'. $rootPath;
+        }
+        else
+        {
+            $rootPath = 'http://'. $rootPath;
+        }
+    }
+
     // replace placeholders in configuration file structure with data of installation wizard
     $replaceArray = array(
         '%PREFIX%'       => $_SESSION['prefix'],
@@ -616,7 +631,7 @@ elseif ($getMode === 6)  // Creating configuration file
         '%USER%'         => $_SESSION['db_user'],
         '%PASSWORD%'     => $_SESSION['db_password'],
         '%DATABASE%'     => $_SESSION['db_database'],
-        '%ROOT_PATH%'    => ADMIDIO_URL,
+        '%ROOT_PATH%'    => $rootPath,
         '%ORGANIZATION%' => $_SESSION['orga_shortname'],
         '%TIMEZONE%'     => $_SESSION['orga_timezone']
     );
