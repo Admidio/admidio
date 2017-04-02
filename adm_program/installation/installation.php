@@ -29,6 +29,7 @@ if (is_file($configFile))
 else
 {
     $g_organization = '';
+    $g_root_path    = '';
 }
 
 if (!isset($_SESSION['create_config_file']))
@@ -70,7 +71,7 @@ Session::start('ADMIDIO');
 
 define('THEME_URL', 'layout');
 
-$availableSteps = array('choose_language', 'welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');
+$availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');
 
 if (empty($_GET['step']))
 {
@@ -83,7 +84,7 @@ else
 
 if (!in_array($step, $availableSteps, true))
 {
-    admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?step=choose_language');
+    admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?step=welcome');
     // => EXIT
 }
 
@@ -168,12 +169,7 @@ elseif (is_file('../../config.php'))
 
 switch ($step)
 {
-    case 'choose_language': // (Default) Choose language
-        $gLogger->info('INSTALLATION: Choose language');
-        require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/choose_language.php');
-        break;
-
-    case 'welcome': // Welcome to installation
+    case 'welcome': // (Default) Welcome to installation
         $gLogger->info('INSTALLATION: Welcome to installation');
         require_once(ADMIDIO_PATH . '/adm_program/installation/install_steps/welcome.php');
         break;

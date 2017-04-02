@@ -116,12 +116,8 @@ h3 {
     text-align: left;
 }
 
-.alert {
-    margin-top: 15px;
-}
-
 .alert-small {
-    margin-top: 5px;
+    margin-top: 25px;
     padding: 5px;
 }
 
@@ -554,5 +550,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     border-left-color: #555555;
     border-right-width: 0;
     margin-top: 1px;
+}
+
+#system_language {
+    margin-top: 7px;
 }
 
