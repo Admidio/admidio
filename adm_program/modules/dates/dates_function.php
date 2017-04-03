@@ -603,31 +603,37 @@ elseif($getMode === 6)  // export event in ical format
 // If participation mode: Write optional parameter from user and show current status message
 if (in_array($getMode, array(3, 4, 7), true))
 {
-    $member = new TableMembers($gDb);
-    $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
-    $member->setValue('mem_comment', $postUserComment);
-    // Now check participants limit and save guests if possible
-    if ($date->getValue('dat_max_members') > 0)
-    {
-        $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
-        $totalMembers = $participants->getCount();
+    // Check participation deadline and update user inputs if possible
+    $dateDeadline = $date->getValidDeadline();
 
-        if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
+    if ($dateDeadline >= DATETIME_NOW)
+    {
+        $member = new TableMembers($gDb);
+        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+        $member->setValue('mem_comment', $postUserComment);
+        // Now check participants limit and save guests if possible
+        if ($date->getValue('dat_max_members') > 0)
         {
-            $member->setValue('mem_count_guests', $postAdditionalGuests);
+            $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+            $totalMembers = $participants->getCount();
+
+            if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
+            {
+                $member->setValue('mem_count_guests', $postAdditionalGuests);
+            }
+            else
+            {
+                $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+                if ($date->getValue('dat_max_members') > 0 )
+                {
+                    $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+                }
+            }
         }
         else
         {
-            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
-            if ($date->getValue('dat_max_members') > 0 )
-            {
-                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
-            }
+            $member->setValue('mem_count_guests', $postAdditionalGuests);
         }
-    }
-    else
-    {
-        $member->setValue('mem_count_guests', $postAdditionalGuests);
     }
 
     $member->save();

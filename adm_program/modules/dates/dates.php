@@ -582,19 +582,9 @@ else
                 }
 
                 // Check participation deadline and show buttons if allowed
-                if ($date->getValue('dat_deadline') === null)
-                {
-                    $validDeadline = $date->getValue('dat_begin');
-                }
-                else
-                {
-                    $validDeadline = $date->getValue('dat_deadline');
-                }
-                // Create date object
-                $objDateDeadline = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
-                $formatDateDeadline = $objDateDeadline->format('Y-m-d H:i:s');
-                
-                if ($formatDateDeadline >= DATETIME_NOW)
+                $dateDeadline = $date->getValidDeadline();
+
+                if ($dateDeadline  >= DATETIME_NOW)
                 {
                     if (!$participateModalForm)
                     {
