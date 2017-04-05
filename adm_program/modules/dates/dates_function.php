@@ -604,9 +604,7 @@ elseif($getMode === 6)  // export event in ical format
 if (in_array($getMode, array(3, 4, 7), true))
 {
     // Check participation deadline and update user inputs if possible
-    $dateDeadline = $date->getValidDeadline();
-
-    if ($dateDeadline >= DATETIME_NOW)
+    if (!$date->deadlineExceeded())
     {
         $member = new TableMembers($gDb);
         $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));

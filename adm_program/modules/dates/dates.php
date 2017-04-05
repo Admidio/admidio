@@ -582,9 +582,7 @@ else
                 }
 
                 // Check participation deadline and show buttons if allowed
-                $dateDeadline = $date->getValidDeadline();
-
-                if ($dateDeadline  >= DATETIME_NOW)
+                if (!$date->deadlineExceeded())
                 {
                     if (!$participateModalForm)
                     {

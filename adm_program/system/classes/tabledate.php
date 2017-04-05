@@ -50,6 +50,21 @@ class TableDate extends TableAccess
     }
 
     /**
+     * Check if the deadline is in the future than return false or
+     * if the deadline is in the past than return true.
+     * @return Return true if the deadline is exceeded.
+     */
+    public function deadlineExceeded()
+    {
+        if($this->getValidDeadline() < DATETIME_NOW)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Deletes the selected record of the table and all references in other tables.
      * After that the class will be initialize.
      * @return bool @b true if no error occurred
@@ -105,6 +120,22 @@ class TableDate extends TableAccess
         }
 
         return false;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    private function escapeIcalText($text)
+    {
+        $searchReplace = array(
+            '\\'   => '\\\\',
+            ','    => '\,',
+            ';'    => '\;',
+            "\r\n" => "\n"
+        );
+
+        return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
     }
 
     /**
@@ -216,22 +247,6 @@ class TableDate extends TableAccess
     }
 
     /**
-     * @param string $text
-     * @return string
-     */
-    private function escapeIcalText($text)
-    {
-        $searchReplace = array(
-            '\\'   => '\\\\',
-            ','    => '\,',
-            ';'    => '\;',
-            "\r\n" => "\n"
-        );
-
-        return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
-    }
-
-    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
@@ -305,7 +320,7 @@ class TableDate extends TableAccess
      public function getValidDeadline()
      {
         global $gPreferences;
-        
+
         if ($this->getValue('dat_deadline') == null)
         {
             $validDeadline = $this->getValue('dat_begin');
@@ -317,7 +332,7 @@ class TableDate extends TableAccess
 
         $objDateDeadline = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
         $dateDeadline = $objDateDeadline->format('Y-m-d H:i:s');
-        
+
         return $dateDeadline;
      }
 
