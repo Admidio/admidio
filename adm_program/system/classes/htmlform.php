@@ -60,7 +60,7 @@ class HtmlForm extends HtmlFormBasic
      *                                The label is positioned above the form element.
      *                              + @b navbar   : A form that should be used in a navbar. The form content will
      *                                be send with the 'GET' method and this form should not get a default focus.
-     *                            - @b method : Method how the values of the form are submitted. 
+     *                            - @b method : Method how the values of the form are submitted.
      *                              Possible values are @b get (default) and @b post.
      *                            - @b enableFileUpload : Set specific parameters that are necessary for file upload with a form
      *                            - @b showRequiredFields : If this is set to @b true (default) then every required field got a special

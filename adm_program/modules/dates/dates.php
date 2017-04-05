@@ -353,7 +353,7 @@ else
         $participantsArray   = array();
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
-        if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1 )
+        if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
         {
             $participateModalForm = true;
 

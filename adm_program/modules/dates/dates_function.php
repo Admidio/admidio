@@ -245,7 +245,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // First check the current participants to prevent invalid reduction of the limit
         $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
         $totalMembers = $participants->getCount();
-        
+
         if ($_POST['dat_max_members'] < $totalMembers)
         {
             // minimum value must fit to current number of participants
@@ -634,7 +634,7 @@ if (in_array($getMode, array(3, 4, 7), true))
             else
             {
                 $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
-                if ($date->getValue('dat_max_members') > 0 )
+                if ($date->getValue('dat_max_members') > 0)
                 {
                     $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
                 }

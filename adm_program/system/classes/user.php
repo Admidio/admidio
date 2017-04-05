@@ -138,8 +138,8 @@ class User extends TableAccess
             while ($row = $relationsStatement->fetch())
             {
                 $this->relationships[] = array(
-                    'relation_type' => (int)  $row['urt_id'],
-                    'user_id'       => (int)  $row['ure_usr_id2'],
+                    'relation_type' => (int) $row['urt_id'],
+                    'user_id'       => (int) $row['ure_usr_id2'],
                     'edit_user'     => (bool) $row['urt_edit_user']
                 );
             }

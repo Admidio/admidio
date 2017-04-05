@@ -317,8 +317,8 @@ class TableDate extends TableAccess
      * This function reads the deadline for participation. If no deadline is set as default the the startdate of the event will be set.
      * return string $dateDeadline Returns a string with formated date and time
      */
-     public function getValidDeadline()
-     {
+    public function getValidDeadline()
+    {
         global $gPreferences;
 
         if ($this->getValue('dat_deadline') == null)
@@ -334,7 +334,7 @@ class TableDate extends TableAccess
         $dateDeadline = $objDateDeadline->format('Y-m-d H:i:s');
 
         return $dateDeadline;
-     }
+    }
 
     /**
      * die Methode gibt ein Array mit den fuer den Termin sichtbaren Rollen-IDs zurueck
