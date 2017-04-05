@@ -167,6 +167,7 @@ create table %PREFIX%_dates
     dat_description             text,
     dat_location                varchar(100),
     dat_country                 varchar(100),
+    dat_deadline                timestamp           null        default null,
     dat_headline                varchar(100)        not null,
     dat_max_members             integer             not null    default 0,
     dat_usr_id_create           integer unsigned,

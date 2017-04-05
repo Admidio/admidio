@@ -10,13 +10,13 @@
  * Parameters:
  *
  * dat_id     - ID of the event that should be edited
- * mode   : 1 - Neuen Termin anlegen
- *          2 - Termin loeschen
- *          3 - zum Termin anmelden
- *          4 - vom Termin abmelden
- *          5 - Termin aendern
- *          6 - Termin im iCal-Format exportieren
- *          7 - am Termin unter Vorbehalt anmelden
+ * mode   : 1 - Create a new event
+ *          2 - Delete the event
+ *          3 - User attends to the event
+ *          4 - User cancel the event
+ *          5 - Edit an existing event
+ *          6 - Export event in ical format
+ *          7 - User may participate in the event
  * rol_id : vorselektierte Rolle der Rollenauswahlbox
  * copy   : true - The event of the dat_id will be copied and the base for this new event
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
@@ -82,7 +82,7 @@ if($getDateId > 0)
     }
 }
 
-if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
+if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing event
 {
     $_SESSION['dates_request'] = $_POST;
 
@@ -124,8 +124,9 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(isset($_POST['dat_all_day']))
     {
         $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
-        $_POST['date_from_time'] = $midnightDateTime->format($gPreferences['system_time']);
-        $_POST['date_to_time']   = $midnightDateTime->format($gPreferences['system_time']);
+        $_POST['date_from_time']        = $midnightDateTime->format($gPreferences['system_time']);
+        $_POST['date_to_time']          = $midnightDateTime->format($gPreferences['system_time']);
+        $_POST['date_deadline_time']    = $midnightDateTime->format($gPreferences['system_time']);
         $date->setValue('dat_all_day', 1);
     }
     else
@@ -246,6 +247,36 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     if(!isset($_POST['dat_additional_guests']))
     {
         $_POST['dat_additional_guests'] = 0;
+    }
+
+    if($_POST['date_registration_possible'] == 1)
+   {
+        if(strlen($_POST['date_deadline_time']) === 0)
+        {
+            $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+            $_POST['date_deadline_time'] = $midnightDateTime->format($gPreferences['system_time']);
+        }
+
+        $deadlineDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
+        if(!$deadlineDateTime)
+        {
+            $deadlineDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_deadline']);
+        }
+
+        if(!$deadlineDateTime || $deadlineDateTime > $startDateTime)
+        {
+            $date->setValue('dat_deadline', null);
+        }
+        else
+        {
+            $date->setValue('dat_deadline', $deadlineDateTime->format('Y-m-d H:i:s'));
+        }
+
+        // now write date and time with database format to date object
+    }
+    else
+    {
+        $date->setValue('dat_deadline', null);
     }
 
     // make html in description secure
@@ -505,7 +536,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     admRedirect($gNavigation->getUrl());
     // => EXIT
 }
-elseif($getMode === 2)  // Termin loeschen
+elseif($getMode === 2)  // Delete the event
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if((int) $date->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
@@ -517,14 +548,14 @@ elseif($getMode === 2)  // Termin loeschen
         echo 'done';
     }
 }
-elseif($getMode === 3)  // Benutzer zum Termin anmelden
+elseif($getMode === 3)  // User attends to the event
 {
     $member = new TableMembers($gDb);
     $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
     $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
-elseif($getMode === 4)  // Benutzer vom Termin abmelden
+elseif($getMode === 4)  // User cancel the event
 {
     $member = new TableMembers($gDb);
 
@@ -542,14 +573,14 @@ elseif($getMode === 4)  // Benutzer vom Termin abmelden
     $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
-elseif($getMode === 7)  // Benutzer zum Termin unter Vorbehalt anmelden
+elseif($getMode === 7)  // User may participate in the event
 {
     $member = new TableMembers($gDb);
     $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
     $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
-elseif($getMode === 6)  // Termin im iCal-Format exportieren
+elseif($getMode === 6)  // export event in ical format
 {
     $filename = $date->getValue('dat_headline');
 
@@ -572,31 +603,35 @@ elseif($getMode === 6)  // Termin im iCal-Format exportieren
 // If participation mode: Write optional parameter from user and show current status message
 if (in_array($getMode, array(3, 4, 7), true))
 {
-    $member = new TableMembers($gDb);
-    $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
-    $member->setValue('mem_comment', $postUserComment);
-    // Now check participants limit and save guests if possible
-    if ($date->getValue('dat_max_members') > 0)
+    // Check participation deadline and update user inputs if possible
+    if (!$date->deadlineExceeded())
     {
-        $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
-        $totalMembers = $participants->getCount();
-        
-        if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
+        $member = new TableMembers($gDb);
+        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+        $member->setValue('mem_comment', $postUserComment);
+        // Now check participants limit and save guests if possible
+        if ($date->getValue('dat_max_members') > 0)
         {
-            $member->setValue('mem_count_guests', $postAdditionalGuests);
+            $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+            $totalMembers = $participants->getCount();
+
+            if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
+            {
+                $member->setValue('mem_count_guests', $postAdditionalGuests);
+            }
+            else
+            {
+                $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+                if ($date->getValue('dat_max_members') > 0 )
+                {
+                    $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+                }
+            }
         }
         else
         {
-            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
-            if ($date->getValue('dat_max_members') > 0 )
-            {
-                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
-            }
+            $member->setValue('mem_count_guests', $postAdditionalGuests);
         }
-    }
-    else
-    {
-        $member->setValue('mem_count_guests', $postAdditionalGuests);
     }
 
     $member->save();

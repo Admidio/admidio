@@ -72,6 +72,13 @@ if($getMode === 'assign')
     {
         $membership = false;
         $leadership = false;
+        $memberApproved = null;
+
+        // if its an event the user must attend to the event
+        if($role->getValue('cat_name_intern') === 'EVENTS')
+        {
+            $memberApproved = 2;
+        }
 
         if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId] === 'true')
         {
@@ -92,7 +99,7 @@ if($getMode === 'assign')
         // Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
         if($leadership || (!$leadership && $membership && ($role->getValue('rol_max_members') > $memCount || (int) $role->getValue('rol_max_members') === 0)))
         {
-            $member->startMembership((int) $role->getValue('rol_id'), $getUserId, $leadership);
+            $member->startMembership((int) $role->getValue('rol_id'), $getUserId, $leadership, $memberApproved);
 
             // find the parent roles and assign user to parent roles
             $dependencies = RoleDependency::getParentRoles($gDb, $role->getValue('rol_id'));
@@ -100,7 +107,7 @@ if($getMode === 'assign')
 
             foreach($dependencies as $tmpRole)
             {
-                $member->startMembership($tmpRole, $getUserId);
+                $member->startMembership($tmpRole, $getUserId, null, $memberApproved);
             }
             echo 'success';
         }

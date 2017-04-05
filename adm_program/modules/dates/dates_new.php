@@ -170,6 +170,7 @@ $page->addJavascript('
             $("#date_right_send_mail_group").show("slow");
             $("#dat_allow_comments_group").show("slow");
             $("#dat_additional_guests_group").show("slow");
+            $("#date_deadline_group").show("slow");
         } else {
             $("#date_current_user_assigned_group").hide();
             $("#dat_max_members_group").hide();
@@ -177,6 +178,7 @@ $page->addJavascript('
             $("#date_right_send_mail_group").hide();
             $("#dat_allow_comments_group").hide();
             $("#dat_additional_guests_group").hide();
+            $("#date_deadline_group").hide("slow");
         }
     }
 
@@ -331,6 +333,7 @@ $form->addCheckbox('dat_allow_comments', $gL10n->get('DAT_ALLOW_USER_COMMENTS'),
 $form->addCheckbox('dat_additional_guests', $gL10n->get('DAT_ALLOW_ADDITIONAL_GUESTS'), (bool) $date->getValue('dat_additional_guests'), array('helpTextIdLabel' => 'DAT_ALLOW_ADDITIONAL_GUESTS_DESC'));
 $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
                 array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
+$form->addInput('date_deadline', $gL10n->get('DAT_DEADLINE'), $date->getValue('dat_deadline', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC'));
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_this_list_view'));
 $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), (bool) $role->getValue('rol_mail_this_role'));
 $form->closeGroupBox();
