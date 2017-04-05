@@ -331,9 +331,8 @@ class TableDate extends TableAccess
         }
 
         $objDateDeadline = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
-        $dateDeadline = $objDateDeadline->format('Y-m-d H:i:s');
 
-        return $dateDeadline;
+        return $objDateDeadline->format('Y-m-d H:i:s');
     }
 
     /**
