@@ -628,7 +628,7 @@ else
                                                                 </div>
                                                                 <div class="modal-body">');
                         $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
-                        $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'property' => $disableAdditionalGuests));
+                        $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
                         $participationForm->addHtml('</div><div class="modal-footer">');
                         $participationForm->openButtonGroup();
                         $participationForm->addButton('btn_attend_' . $dateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
