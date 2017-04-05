@@ -240,6 +240,18 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         $_POST['dat_max_members'] = 0;
     }
+    else
+    {
+        // First check the current participants to prevent invalid reduction of the limit
+        $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+        $totalMembers = $participants->getCount();
+        
+        if ($_POST['dat_max_members'] < $totalMembers)
+        {
+            // minimum value must fit to current number of participants
+            $_POST['dat_max_members'] = $totalMembers;
+        }
+    }
     if(!isset($_POST['dat_allow_comments']))
     {
         $_POST['dat_allow_comments'] = 0;
