@@ -40,7 +40,7 @@ function admFuncAutoload($className)
     }
 
     $logErrorMessage = 'Class-File for Class "' . $className . '" could not be found and included!';
-    if ($gLogger instanceof \Monolog\Logger)
+    if ($gLogger instanceof \Psr\Log\LoggerInterface)
     {
         $gLogger->critical($logErrorMessage);
     }
