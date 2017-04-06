@@ -18,5 +18,8 @@
 !/adm_plugins/sidebar_downloads/
 !/adm_plugins/sidebar_online/
 
+# Phar Files
+/*.phar
+
 # For custom configuration
 /.php_cs
