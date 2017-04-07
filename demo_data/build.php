@@ -29,11 +29,7 @@ else
     exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
-require_once(__DIR__ . '/../adm_program/system/init_globals.php');
-require_once(__DIR__ . '/../adm_program/system/constants.php');
-require_once(__DIR__ . '/../adm_program/system/function.php');
-require_once(__DIR__ . '/../adm_program/system/string.php');
-require_once(__DIR__ . '/../adm_program/system/logging.php');
+require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
 
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
