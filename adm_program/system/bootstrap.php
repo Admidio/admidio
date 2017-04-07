@@ -5,19 +5,6 @@ $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_prog
 require_once($rootPath . '/adm_program/system/init_globals.php');
 require_once($rootPath . '/adm_program/system/constants.php');
 
-// check PHP version and show notice if version is too low
-if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
-{
-    exit('<div style="color: #cc0000;">Error: Your PHP version ' . PHP_VERSION . ' does not fulfill
-        the minimum requirements for this Admidio version. You need at least PHP ' . MIN_PHP_VERSION . ' or higher.</div>');
-}
-
-// includes WITHOUT database connections
-require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
-require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
-
 // ERROR REPORTING
 // http://www.phptherightway.com/#error_reporting
 // https://secure.php.net/manual/en/errorfunc.configuration.php
@@ -35,6 +22,19 @@ else
     ini_set('display_errors', '0');
     ini_set('display_startup_errors', '0');
 }
+
+// check PHP version and show notice if version is too low
+if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
+{
+    exit('<div style="color: #cc0000;">Error: Your PHP version ' . PHP_VERSION . ' does not fulfill
+        the minimum requirements for this Admidio version. You need at least PHP ' . MIN_PHP_VERSION . ' or higher.</div>');
+}
+
+// includes WITHOUT database connections
+require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
+require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
 
 // LOGGING
 require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
