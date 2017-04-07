@@ -44,7 +44,7 @@ require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/global_request_params.php');
 
 // Force permanent HTTPS redirect
-if (isset($gForceHTTPS) && $gForceHTTPS && !HTTPS)
+if ($gForceHTTPS && !HTTPS)
 {
     $url = str_replace('http://', 'https://', CURRENT_URL);
 
