@@ -10,6 +10,7 @@
  */
 
 // Load autoloading file
+// Deprecated: Backwards compatibility
 require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
 
 /**
