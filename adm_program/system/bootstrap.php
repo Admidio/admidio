@@ -1,4 +1,13 @@
 <?php
+/**
+ ***********************************************************************************************
+ * Bootstrap non DB things
+ *
+ * @copyright 2004-2017 The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
 
 // embed config and constants file
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
