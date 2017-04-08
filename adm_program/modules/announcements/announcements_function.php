@@ -75,7 +75,7 @@ if($getMode === 1)
     $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
 
     // POST Variablen in das Ankuendigungs-Objekt schreiben
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'ann_') === 0)
         {

@@ -64,7 +64,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
 
     // POST Variablen in das Ankuendigungs-Objekt schreiben
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'lnk_') === 0)
         {

@@ -218,7 +218,7 @@ switch($getMode)
 
         // then update the database with the new values
 
-        foreach($_POST as $key => $value)
+        foreach($_POST as $key => $value) // TODO possible security issue
         {
             // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
             if($key !== 'save')

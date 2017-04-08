@@ -139,7 +139,7 @@ if ($getMode === 1 || $getMode === 3)
     $_POST['gbo_text'] = admFuncVariableIsValid($_POST, 'gbo_text', 'html');
 
     // POST Variablen in das Gaestebuchobjekt schreiben
-    foreach ($_POST as $key => $value)
+    foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (strpos($key, 'gbo_') === 0)
         {
@@ -332,7 +332,7 @@ elseif ($getMode === 4 || $getMode === 8)
     $_POST['gbc_text'] = admFuncVariableIsValid($_POST, 'gbc_text', 'html');
 
     // POST Variablen in das Gaestebuchkommentarobjekt schreiben
-    foreach ($_POST as $key => $value)
+    foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (strpos($key, 'gbc_') === 0)
         {

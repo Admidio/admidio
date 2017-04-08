@@ -341,7 +341,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     }
 
     // write all POST parameters into the date object
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'dat_') === 0)
         {

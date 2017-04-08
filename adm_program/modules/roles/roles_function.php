@@ -241,7 +241,7 @@ if($getMode === 2)
     }
 
     // POST Variablen in das Role-Objekt schreiben
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'rol_') === 0)
         {

@@ -48,7 +48,7 @@ if($getNewUser > 0)
 {
     // detect number of selected roles
     $roleCount = 0;
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(preg_match('/^(role-)\d+$/i', $key))
         {
