@@ -109,15 +109,25 @@ else
     }
     else
     {
-        // If no forward url has been set, then refer to the start page after login
-        if(!array_key_exists('login_forward_url', $_SESSION))
+        // remove login page from navigation stack
+        if(strpos($navigation->getUrl(), '/login.php') > 0)
         {
-            $_SESSION['login_forward_url'] = $gHomepage;
+            $gNavigation->deleteLastUrl();
         }
 
-        // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
-        // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        admRedirect(ADMIDIO_URL . '/adm_program/system/cookie_check.php');
+        // If no forward url has been set, then refer to the start page after login
+        if(array_key_exists('login_forward_url', $_SESSION))
+        {
+            $forwardUrl = $_SESSION['login_forward_url'];
+        }
+        else
+        {
+            $forwardUrl = $gHomepage;
+        }
+
+        unset($_SESSION['login_forward_url']);
+
+        admRedirect($fowardUrl);
         // => EXIT
     }
 }

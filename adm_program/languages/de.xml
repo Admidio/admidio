@@ -1081,7 +1081,6 @@
     <string name="SYS_CONTENT">Inhalt</string>
     <string name="SYS_CONTRIBUTION">Beitrag</string>
     <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
-    <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
     <string name="SYS_COPY">Kopieren</string>
     <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
     <string name="SYS_COUNTRY">Land</string>

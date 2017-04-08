@@ -104,11 +104,21 @@ $gL10n = new Language();
 // Session handling
 if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization'))
 {
-    // read session object from PHP session
-    $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->setDatabase($gDb);
-    // reload session data and if necessary the organization object
-    $gCurrentSession->refreshSession();
+    try
+    {
+         // read session object from PHP session
+        $gCurrentSession = $_SESSION['gCurrentSession'];
+        $gCurrentSession->setDatabase($gDb);
+
+        // reload session data and if necessary the organization object
+        $gCurrentSession->refreshSession();
+    }
+    catch(AdmException $e)
+    {
+        $e->showText();
+        // => EXIT
+    }
+
     // read system component
     $gSystemComponent =& $gCurrentSession->getObject('gSystemComponent');
     // read language data from session and assign them to the language object

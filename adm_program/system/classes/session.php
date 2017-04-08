@@ -34,7 +34,7 @@ class Session extends TableAccess
 {
     protected $mObjectArray = array();  ///< Array with all objects of this session object.
     protected $mAutoLogin;              ///< Object of table auto login that will handle an auto login
-    protected $mCookiePrefix;           ///< The prefix that is used for the cookies and identify a cookie for this organization
+    protected $cookieSessionId;
     protected $cookieAutoLoginId;
 
     /**
@@ -50,7 +50,7 @@ class Session extends TableAccess
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
-        $this->mCookiePrefix = $cookiePrefix; // Deprecated
+        $this->cookieSessionId   = $cookiePrefix . '_ID';
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
         if (is_int($session))
@@ -341,6 +341,13 @@ class Session extends TableAccess
         // if AutoLogin is set then refresh the auto_login_id for security reasons
         if($this->getValue('ses_usr_id') > 0)
         {
+            // check if browser can set cookies and throw error if not
+            if (array_key_exists($this->cookieSessionId, $_COOKIE))
+            {
+                throw new AdmException('Login error!<br /><br />Your browser does not accept cookies!<br /><br />For successful login, please, configure your browser to accept cookies from '. DOMAIN. '.');
+                // => EXIT
+            }
+
             if ($this->mAutoLogin instanceof \AutoLogin)
             {
                 $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
