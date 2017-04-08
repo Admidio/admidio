@@ -315,6 +315,7 @@ class Session extends TableAccess
     /**
      * Reload session data from database table adm_sessions. Refresh AutoLogin with
      * new auto_login_id. Check renew flag and reload organization object if necessary.
+     * @throws AdmException
      */
     public function refreshSession()
     {
@@ -339,12 +340,12 @@ class Session extends TableAccess
         }
 
         // if AutoLogin is set then refresh the auto_login_id for security reasons
-        if($this->getValue('ses_usr_id') > 0)
+        if ($this->getValue('ses_usr_id') > 0)
         {
             // check if browser can set cookies and throw error if not
             if (array_key_exists($this->cookieSessionId, $_COOKIE))
             {
-                throw new AdmException('Login error!<br /><br />Your browser does not accept cookies!<br /><br />For successful login, please, configure your browser to accept cookies from '. DOMAIN. '.');
+                throw new AdmException('Login error!<br /><br />Your browser does not accept cookies!<br /><br />For successful login, please, configure your browser to accept cookies from ' . DOMAIN . '.');
                 // => EXIT
             }
 
