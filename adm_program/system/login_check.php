@@ -109,24 +109,15 @@ else
     }
     else
     {
-        // show successful login message
-        $loginMessage = 'SYS_LOGIN_SUCCESSFUL';
-
-        // bei einer Beta-Version noch einen Hinweis ausgeben !
-        if(ADMIDIO_VERSION_BETA > 0 && !$gDebug)
-        {
-            $loginMessage = 'SYS_BETA_VERSION';
-        }
-
-        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf die Startseite verweisen
+        // If no forward url has been set, then refer to the start page after login
         if(!array_key_exists('login_forward_url', $_SESSION))
         {
-            $_SESSION['login_forward_url'] = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
+            $_SESSION['login_forward_url'] = $gHomepage;
         }
 
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
         // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        admRedirect(ADMIDIO_URL . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage);
+        admRedirect(ADMIDIO_URL . '/adm_program/system/cookie_check.php');
         // => EXIT
     }
 }

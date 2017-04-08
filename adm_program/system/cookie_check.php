@@ -7,15 +7,9 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * Parameters:
- *
- * message_code : ID of the message from language-XML-file, that is shown after login
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/common.php');
-
-// Initialize and check the parameters
-$getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', array('requireValue' => true));
 
 // check if cookie is set
 if(!isset($_COOKIE[$gCookiePraefix . '_ID']))
@@ -30,22 +24,15 @@ else
     // remove login page of URL stack
     $gNavigation->deleteLastUrl();
 
-    $showTime = 2000;
-    if($getMessageCode !== 'SYS_LOGIN_SUCCESSFUL')
-    {
-        // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
-        $showTime = 0;
-    }
-
-    // pruefen ob eine Weiterleitungsseite gesetzt wurde, anonsten auf die Startseite verweisen
+    // If no forward url has been set, then refer to the start page after login
     if(!isset($_SESSION['login_forward_url']) || $_SESSION['login_forward_url'] === '')
     {
         $_SESSION['login_forward_url'] = $gHomepage;
     }
 
-    $gMessage->setForwardUrl($_SESSION['login_forward_url'], $showTime);
+    $fowardUrl = $_SESSION['login_forward_url'];
     unset($_SESSION['login_forward_url']);
 
-    $gMessage->show($gL10n->get($getMessageCode));
+    admRedirect($fowardUrl);
     // => EXIT
 }
