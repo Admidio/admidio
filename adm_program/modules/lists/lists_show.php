@@ -850,15 +850,15 @@ $filename = '';
 // Settings for export file
 if ($getMode === 'csv' || $getMode === 'pdf')
 {
+    $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
+
     // file name in the current directory...
     if (strlen($list->getValue('lst_name')) > 0)
     {
-        $filename = $gCurrentOrganization->getValue('org_shortname').'-'.str_replace('.', '', $roleName).'-'.str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
+        $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
     }
-    else
-    {
-        $filename = $gCurrentOrganization->getValue('org_shortname').'-'.str_replace('.', '', $roleName).'.'.$getMode;
-    }
+
+    $filename .= '.' . $getMode;
 
     // for IE the filename must have special chars in hexadecimal
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
