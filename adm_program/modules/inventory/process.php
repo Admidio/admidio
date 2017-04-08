@@ -44,8 +44,7 @@ switch($postFunction)
         $sql = 'SELECT MAX(msg_part_id) AS max_id
                   FROM '.TBL_MESSAGES.'
                  WHERE msg_converation_id = 0';
-
-        $pdoStatement = $gDb->query($sql);
+        $pdoStatement = $gDb->queryPrepared($sql);
         $msgId = (int) $pdoStatement->fetchColumn();
 
         if($msgId + 25 < $postLines)
@@ -61,13 +60,13 @@ switch($postFunction)
                      WHERE msg_type = \'CHAT\'
                        AND msg_converation_id = 0
                        AND msg_part_id <= 50';
-            $gDb->query($sql);
+            $gDb->queryPrepared($sql);
 
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_part_id = msg_part_id - 50
                      WHERE msg_type = \'CHAT\'
                        AND msg_converation_id = 0';
-            $gDb->query($sql);
+            $gDb->queryPrepared($sql);
 
             $postLines -= 50;
             $msgId -= 50;
@@ -111,21 +110,21 @@ switch($postFunction)
             fwrite(fopen('chat.txt', 'ab'), '<span>'. $postNickname . '</span>' . $postMessage = str_replace("\n", ' ', $postMessage) . "\n");
         }
         $sql = 'SELECT MAX(msg_part_id) AS max_id
-                  FROM '. TBL_MESSAGES.'
+                  FROM '.TBL_MESSAGES.'
                  WHERE msg_converation_id = 0';
-        $pdoStatement = $gDb->query($sql);
-        $msgId = $pdoStatement->fetchColumn() + 1;
+        $pdoStatement = $gDb->queryPrepared($sql);
+        $msgId = (int) $pdoStatement->fetchColumn() + 1;
 
         $sql = 'INSERT INTO '.TBL_MESSAGES.' (msg_type, msg_converation_id, msg_part_id, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_message, msg_timestamp, msg_read)
-                     VALUES (\'CHAT\', \'0\', \''.$msgId.'\', \''.$postNickname.'\', \'\', \'\', \''.$postMessage.'\', CURRENT_TIMESTAMP, \'0\')';
-        $gDb->query($sql); // TODO add more params
+                     VALUES (\'CHAT\', \'0\', ?, ?, \'\', \'\', ?, CURRENT_TIMESTAMP, \'0\') -- $msgId, $postNickname, $postMessage';
+        $gDb->queryPrepared($sql, array($msgId, $postNickname, $postMessage));
         break;
 
     case 'delete':
         $sql = 'DELETE FROM '.TBL_MESSAGES.'
                  WHERE msg_type = \'CHAT\'
                    AND msg_converation_id = 0';
-        $gDb->query($sql);
+        $gDb->queryPrepared($sql);
         break;
 }
 

@@ -578,62 +578,81 @@ class User extends TableAccess
 
         $sqlQueries = array();
 
-        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
+                            SET ann_usr_id_create = NULL
                           WHERE ann_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_ANNOUNCEMENTS.'
+                            SET ann_usr_id_change = NULL
                           WHERE ann_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.'
+                            SET dat_usr_id_create = NULL
                           WHERE dat_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_DATES.' SET dat_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_DATES.'
+                            SET dat_usr_id_change = NULL
                           WHERE dat_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.' SET fol_usr_id = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.'
+                            SET fol_usr_id = NULL
                           WHERE fol_usr_id = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_FILES.' SET fil_usr_id = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_FILES.'
+                            SET fil_usr_id = NULL
                           WHERE fil_usr_id = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.'
+                            SET gbo_usr_id_create = NULL
                           WHERE gbo_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_GUESTBOOK.'
+                            SET gbo_usr_id_change = NULL
                           WHERE gbo_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
+                            SET lnk_usr_id_create = NULL
                           WHERE lnk_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_LINKS.' SET lnk_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
+                            SET lnk_usr_id_change = NULL
                           WHERE lnk_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_LISTS.' SET lst_usr_id = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_LISTS.'
+                            SET lst_usr_id = NULL
                           WHERE lst_global = 1
                             AND lst_usr_id = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.'
+                            SET pho_usr_id_create = NULL
                           WHERE pho_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.' SET pho_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_PHOTOS.'
+                            SET pho_usr_id_change = NULL
                           WHERE pho_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+                            SET rol_usr_id_create = NULL
                           WHERE rol_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ROLES.' SET rol_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_ROLES.'
+                            SET rol_usr_id_change = NULL
                           WHERE rol_usr_id_change = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_ROLE_DEPENDENCIES.' SET rld_usr_id = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
+                            SET rld_usr_id = NULL
                           WHERE rld_usr_id = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_USER_LOG.' SET usl_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_USER_LOG.'
+                            SET usl_usr_id_create = NULL
                           WHERE usl_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_USERS.' SET usr_usr_id_create = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_USERS.'
+                            SET usr_usr_id_create = NULL
                           WHERE usr_usr_id_create = '.$usrId;
 
-        $sqlQueries[] = 'UPDATE '.TBL_USERS.' SET usr_usr_id_change = NULL
+        $sqlQueries[] = 'UPDATE '.TBL_USERS.'
+                            SET usr_usr_id_change = NULL
                           WHERE usr_usr_id_change = '.$usrId;
 
         $sqlQueries[] = 'DELETE FROM '.TBL_LIST_COLUMNS.'

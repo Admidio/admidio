@@ -68,7 +68,7 @@ catch (AdmException $e)
 
 // now check if a valid installation exists.
 $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-$pdoStatement = $gDb->query($sql, false);
+$pdoStatement = $gDb->queryPrepared($sql, array(), false);
 
 if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 {
@@ -137,7 +137,8 @@ $installedDbBetaVersion = '';
 $maxUpdateStep          = 0;
 $currentUpdateStep      = 0;
 
-if (!$gDb->query('SELECT 1 FROM ' . TBL_COMPONENTS, false))
+$sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
+if (!$gDb->queryPrepared($sql, array(), false))
 {
     // in Admidio version 2 the database version was stored in preferences table
     if (isset($gPreferences['db_version']))
@@ -351,7 +352,7 @@ elseif ($getMode === 2)
     $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['cost']);
 
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-    $orgaStatement = $gDb->query($sql);
+    $orgaStatement = $gDb->queryPrepared($sql);
 
     while($orgId = $orgaStatement->fetchColumn())
     {
@@ -363,7 +364,7 @@ elseif ($getMode === 2)
     if ($gDbType === 'mysql')
     {
         // disable foreign key checks for mysql, so tables can easily deleted
-        $gDb->query('SET foreign_key_checks = 0');
+        $gDb->queryPrepared('SET foreign_key_checks = 0');
     }
 
     // in version 2 we had an other update mechanism which will be handled here
@@ -460,7 +461,7 @@ elseif ($getMode === 2)
     if ($gDbType === 'mysql')
     {
         // activate foreign key checks, so database is consistent
-        $gDb->query('SET foreign_key_checks = 1');
+        $gDb->queryPrepared('SET foreign_key_checks = 1');
     }
 
 
@@ -477,7 +478,7 @@ elseif ($getMode === 2)
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';
-    $gDb->query($sql);
+    $gDb->queryPrepared($sql);
 
     // create an installation unique cookie prefix and remove special characters
     $gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;

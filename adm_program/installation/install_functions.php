@@ -124,7 +124,7 @@ function querySqlFile($db, $sqlFileName)
             // replace prefix with installation specific table prefix
             $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
             // now execute update sql
-            $db->query($sql);
+            $db->query($sql); // TODO add more params
         }
     }
 
@@ -141,8 +141,9 @@ function disableSoundexSearchIfPgsql($db)
     if ($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
         // soundex is not a default function in PostgreSQL
-        $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'0\'
+        $sql = 'UPDATE ' . TBL_PREFERENCES . '
+                   SET prf_value = \'0\'
                  WHERE prf_name = \'system_search_similar\'';
-        $db->query($sql);
+        $db->queryPrepared($sql);
     }
 }

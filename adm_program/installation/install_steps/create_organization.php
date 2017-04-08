@@ -155,8 +155,8 @@ if (isset($_POST['db_host']))
         }
 
         // now check if a valid installation exists.
-        $sql = 'SELECT org_id FROM '.$_SESSION['prefix'].'_organizations';
-        $pdoStatement = $db->query($sql, false);
+        $sql = 'SELECT org_id FROM ' . $_SESSION['prefix'] . '_organizations';
+        $pdoStatement = $db->queryPrepared($sql, array(), false);
 
         if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)
         {

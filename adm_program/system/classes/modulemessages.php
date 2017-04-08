@@ -171,7 +171,7 @@ class ModuleMessages
         $sql = 'SELECT msg_id
                   FROM ' . TBL_MESSAGES . '
                  WHERE msg_type = \'CHAT\'';
-        $statement = $gDb->query($sql);
+        $statement = $gDb->queryPrepared($sql);
 
         return (int) $statement->fetchColumn();
     }

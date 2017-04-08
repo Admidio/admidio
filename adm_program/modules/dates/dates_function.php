@@ -454,7 +454,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_name_intern = \'EVENTS\'';
-            $pdoStatement = $gDb->query($sql);
+            $pdoStatement = $gDb->queryPrepared($sql);
             $role = new TableRoles($gDb);
 
             // these are the default settings for a date role

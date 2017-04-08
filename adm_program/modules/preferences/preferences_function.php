@@ -66,8 +66,8 @@ switch($getMode)
                     if(!isset($_POST['enable_auto_login']) && $gPreferences['enable_auto_login'] == 1)
                     {
                         // if auto login was deactivated than delete all saved logins
-                        $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
-                        $gDb->query($sql);
+                        $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
+                        $gDb->queryPrepared($sql);
                         $gPreferences[$key] = $value;
                     }
                     break;
@@ -237,8 +237,8 @@ switch($getMode)
                 elseif($key === 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
                 {
                     // if deactivate auto login than delete all saved logins
-                    $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
-                    $gDb->query($sql);
+                    $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
+                    $gDb->queryPrepared($sql);
                     $gPreferences[$key] = $value;
                 }
                 else
@@ -357,9 +357,10 @@ switch($getMode)
         // if installation of second organization than show organization select at login
         if($gCurrentOrganization->countAllRecords() === 2)
         {
-            $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = 1
+            $sql = 'UPDATE '.TBL_PREFERENCES.'
+                       SET prf_value = 1
                      WHERE prf_name = \'system_organization_select\'';
-            $gDb->query($sql);
+            $gDb->queryPrepared($sql);
         }
 
         $gDb->endTransaction();
