@@ -9,10 +9,6 @@
  ***********************************************************************************************
  */
 
-// Load autoloading file
-// Deprecated: Backwards compatibility
-require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
-
 /**
  * Function checks if the user is a member of the role.
  * If @b userId is not set than this will be checked for the current user
