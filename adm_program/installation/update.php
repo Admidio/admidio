@@ -438,7 +438,7 @@ elseif ($getMode === 2)
         }
     }
 
-    disableSoundexSearchIfPgsql($gDb);
+    disableSoundexSearchIfPgSql($gDb);
 
     // since version 3 we do the update with xml files and a new class model
     if ($versionMain >= 3)

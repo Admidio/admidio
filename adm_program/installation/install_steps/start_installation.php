@@ -191,7 +191,7 @@ $params = array(
 );
 $db->queryPrepared($sql, $params);
 
-disableSoundexSearchIfPgsql($db);
+disableSoundexSearchIfPgSql($db);
 
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);

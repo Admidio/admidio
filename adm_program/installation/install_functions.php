@@ -134,7 +134,7 @@ function querySqlFile($db, $sqlFileName)
 /**
  * @param \Database $db
  */
-function disableSoundexSearchIfPgsql($db)
+function disableSoundexSearchIfPgSql($db)
 {
     global $gDbType;
 

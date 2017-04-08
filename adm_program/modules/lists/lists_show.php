@@ -32,7 +32,7 @@ $getMode              = admFuncVariableIsValid($_GET, 'mode',                'st
 $getListId            = admFuncVariableIsValid($_GET, 'lst_id',              'int');
 $getRoleIds           = admFuncVariableIsValid($_GET, 'rol_ids',             'string'); // could be int or int[], so string is necessary
 $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
-$getRelationtypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'string'); // could be int or int[], so string is necessary
+$getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'string'); // could be int or int[], so string is necessary
 $getFullScreen        = admFuncVariableIsValid($_GET, 'full_screen',         'bool');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -152,19 +152,19 @@ if($objDateFrom > $objDateTo)
 }
 
 // read names of all used relationships for later output
-$relationtypeName = '';
-$relationtypeIds = array_map('intval', array_filter(explode(',', $getRelationtypeIds), 'is_numeric'));
-if (count($relationtypeIds) > 0)
+$relationTypeName = '';
+$relationTypeIds = array_map('intval', array_filter(explode(',', $getRelationTypeIds), 'is_numeric'));
+if (count($relationTypeIds) > 0)
 {
     $sql = 'SELECT urt_id, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-             WHERE urt_id IN ('.replaceValuesArrWithQM($relationtypeIds).')
+             WHERE urt_id IN ('.replaceValuesArrWithQM($relationTypeIds).')
           ORDER BY urt_name';
-    $relationtypesStatement = $gDb->queryPrepared($sql, $relationtypeIds);
+    $relationTypesStatement = $gDb->queryPrepared($sql, $relationTypeIds);
 
-    while($relationtype = $relationtypesStatement->fetch())
+    while($relationType = $relationTypesStatement->fetch())
     {
-        $relationtypeName .= (empty($relationtypeName) ? '' : ', ').$relationtype['urt_name'];
+        $relationTypeName .= (empty($relationTypeName) ? '' : ', ').$relationType['urt_name'];
     }
 }
 
@@ -248,7 +248,7 @@ try
 {
     // create list configuration object and create a sql statement out of it
     $list = new ListConfiguration($gDb, $getListId);
-    $mainSql = $list->getSQL($roleIds, $getShowFormerMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationtypeIds);
+    $mainSql = $list->getSQL($roleIds, $getShowFormerMembers, $startDateEnglishFormat, $endDateEnglishFormat, $relationTypeIds);
 }
 catch (AdmException $e)
 {
@@ -291,11 +291,11 @@ else
     $headline = $roleName;
 }
 
-if (count($relationtypeIds) === 1)
+if (count($relationTypeIds) === 1)
 {
-    $headline .= ' - '.$relationtypeName;
+    $headline .= ' - '.$relationTypeName;
 }
-elseif (count($relationtypeIds) > 1)
+elseif (count($relationTypeIds) > 1)
 {
     $headline .= ' - '.$gL10n->get('LST_VARIOUS_USER_RELATION_TYPES');
 }
@@ -330,9 +330,9 @@ if ($getMode !== 'csv')
         }
     }
 
-    if (count($relationtypeIds) > 1)
+    if (count($relationTypeIds) > 1)
     {
-        $htmlSubHeadline .= ' - '.$relationtypeName;
+        $htmlSubHeadline .= ' - '.$relationTypeName;
     }
 
     if ($getMode === 'print')
