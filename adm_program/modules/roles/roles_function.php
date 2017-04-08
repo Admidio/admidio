@@ -230,7 +230,7 @@ if($getMode === 2)
     if($getRoleId > 0 && (int) $_POST['rol_max_members'] !== (int) $role->getValue('rol_max_members'))
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
-        $role->setValue('rol_max_members', $_POST['rol_max_members']);
+        $role->setValue('rol_max_members', (int) $_POST['rol_max_members']);
         $numFreePlaces = $role->countVacancies();
 
         if($numFreePlaces < 0)
