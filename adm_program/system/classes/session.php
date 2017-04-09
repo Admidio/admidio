@@ -34,7 +34,6 @@ class Session extends TableAccess
 {
     protected $mObjectArray = array();  ///< Array with all objects of this session object.
     protected $mAutoLogin;              ///< Object of table auto login that will handle an auto login
-    protected $cookieSessionId;
     protected $cookieAutoLoginId;
 
     /**
@@ -50,7 +49,6 @@ class Session extends TableAccess
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
-        $this->cookieSessionId   = $cookiePrefix . '_ID';
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
         if (is_int($session))
