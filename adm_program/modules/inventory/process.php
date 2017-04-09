@@ -102,12 +102,12 @@ switch($postFunction)
     case 'send':
         if($postMessage !== "\n")
         {
-            $regexUrl = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
+            $regexUrl = '/(http|ftp)s?\:\/\/[a-zA-Z\d\-\.]+\.[a-zA-Z]{2,6}(\/\S*)?/';
             if(preg_match($regexUrl, $postMessage, $url))
             {
                 $postMessage = preg_replace($regexUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
             }
-            fwrite(fopen('chat.txt', 'ab'), '<span>'. $postNickname . '</span>' . $postMessage = str_replace("\n", ' ', $postMessage) . "\n");
+            fwrite(fopen('chat.txt', 'ab'), '<span>'. $postNickname . '</span>' . str_replace("\n", ' ', $postMessage) . "\n");
         }
         $sql = 'SELECT MAX(msg_part_id) AS max_id
                   FROM '.TBL_MESSAGES.'

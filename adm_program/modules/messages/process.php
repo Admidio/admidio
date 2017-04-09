@@ -109,7 +109,7 @@ switch($postFunction)
     case 'send':
         if($postMessage !== "\n")
         {
-            $regexUrl = '/^(http|ftp)s?\:\/\/[\da-zA-Z\-\.]+\.[a-zA-Z]{2,6}(\/\S*)?/';
+            $regexUrl = '/(http|ftp)s?\:\/\/[a-zA-Z\d\-\.]+\.[a-zA-Z]{2,6}(\/\S*)?/';
             if(preg_match($regexUrl, $postMessage, $url))
             {
                 $postMessage = preg_replace($regexUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
