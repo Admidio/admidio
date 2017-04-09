@@ -35,7 +35,7 @@ if($gDbType !== 'mysql')
 
 // set db in non-strict mode so that table names and field names get a single quote
 // in ANSI mode they get double quote and than some dbs got errors during import
-$gDb->query('SET SQL_MODE = \'\'');
+$gDb->queryPrepared('SET SQL_MODE = \'\'');
 
 // Some Defines
 define('ADMIN_EMAIL', $gPreferences['email_administrator']); // eg: admin@example.com

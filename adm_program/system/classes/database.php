@@ -33,7 +33,7 @@
  * Now you can use the new object @b $gDb to send a query to the database
  * @code
  * // send sql to database and assign the returned PDOStatement
- * $organizationsStatement = $gDb->query('SELECT org_shortname, org_longname FROM adm_organizations');
+ * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
  *
  * // now fetch all rows of the returned PDOStatement within one array
  * $organizationsList = $organizationsStatement->fetchAll();
@@ -211,12 +211,12 @@ class Database
             case 'mysql':
                 // MySQL charset UTF-8 is set in DSN-string
                 // set ANSI mode, that SQL could be more compatible with other DBs
-                $this->query('SET SQL_MODE = \'ANSI\'');
+                $this->queryPrepared('SET SQL_MODE = \'ANSI\'');
                 // if the server has limited the joins, it can be canceled with this statement
-                $this->query('SET SQL_BIG_SELECTS = 1');
+                $this->queryPrepared('SET SQL_BIG_SELECTS = 1');
                 break;
             case 'pgsql':
-                $this->query('SET NAMES UNICODE');
+                $this->queryPrepared('SET NAMES UNICODE');
                 break;
         }
     }
@@ -264,7 +264,7 @@ class Database
      */
     public function getVersion()
     {
-        $versionStatement = $this->query('SELECT version()');
+        $versionStatement = $this->queryPrepared('SELECT version()');
         $version = $versionStatement->fetchColumn();
 
         if ($this->dbEngine === 'pgsql')
@@ -438,7 +438,7 @@ class Database
     {
         if ($this->dbEngine === 'pgsql')
         {
-            $lastValStatement = $this->query('SELECT lastval()');
+            $lastValStatement = $this->queryPrepared('SELECT lastval()');
             return $lastValStatement->fetchColumn();
         }
 
@@ -651,7 +651,7 @@ class Database
         if ($this->dbEngine === 'mysql')
         {
             $sql = 'SHOW COLUMNS FROM ' . $table;
-            $columnsStatement = $this->query($sql);
+            $columnsStatement = $this->query($sql); // TODO add more params
             $columnsList      = $columnsStatement->fetchAll();
 
             foreach ($columnsList as $properties)

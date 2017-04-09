@@ -325,7 +325,7 @@ class Session extends TableAccess
     public function renewOrganizationObject()
     {
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 2';
-        $this->db->query($sql);
+        $this->db->queryPrepared($sql);
     }
 
     /**

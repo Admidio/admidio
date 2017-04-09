@@ -83,11 +83,11 @@ if ($gPreferences['enable_download_module'] == 1)
               FROM '.TBL_FILES.'
         INNER JOIN '.TBL_FOLDERS.'
                 ON fol_id = fil_fol_id
-             WHERE fol_org_id = '.$gCurrentOrganization->getValue('org_id').'
+             WHERE fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    '.$sqlCondition.'
           ORDER BY fil_timestamp DESC';
 
-    $filesStatement = $gDb->query($sql);
+    $filesStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 
     if($filesStatement->rowCount() > 0)
     {

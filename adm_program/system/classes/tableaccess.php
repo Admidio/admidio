@@ -165,7 +165,7 @@ class TableAccess
     public function countAllRecords()
     {
         $sql = 'SELECT COUNT(*) AS count FROM '.$this->tableName;
-        $countStatement = $this->db->query($sql);
+        $countStatement = $this->db->queryPrepared($sql);
 
         return (int) $countStatement->fetchColumn();
     }
@@ -551,8 +551,8 @@ class TableAccess
      *                          more connected tables than you should add the fields of these tables, too.
      * @par Examples
      * @code // read all announcements with their categories
-     * $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
-     * $announcementsStatement = $gDb->query($sql);
+     * $sql = 'SELECT * FROM ' . TBL_ANNOUNCEMENTS . ' INNER JOIN ' . TBL_CATEGORIES . ' ON ann_cat_id = cat_id';
+     * $announcementsStatement = $gDb->queryPrepared($sql);
      * $announcement = new TableAnnouncements($gDb);
      *
      * while ($row = $announcementsStatement->fetch())

@@ -14,52 +14,10 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
     exit('This page may not be called directly!');
 }
 
-// embed config and constants file
+// load config and init bootstrapping
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_my_files/config.php');
-require_once($rootPath . '/adm_program/system/init_globals.php');
-require_once($rootPath . '/adm_program/system/constants.php');
-
-// includes WITHOUT database connections
-require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
-
-// ERROR REPORTING
-// http://www.phptherightway.com/#error_reporting
-// https://secure.php.net/manual/en/errorfunc.configuration.php
-// error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
-ini_set('error_reporting', '-1');
-ini_set('log_errors', '1');
-
-if ($gDebug)
-{
-    ini_set('display_errors', '1');
-    ini_set('display_startup_errors', '1');
-}
-else
-{
-    ini_set('display_errors', '0');
-    ini_set('display_startup_errors', '0');
-}
-
-// LOGGING
-require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
-
-// Force permanent HTTPS redirect
-if (isset($gForceHTTPS) && $gForceHTTPS && !HTTPS)
-{
-    $url = str_replace('http://', 'https://', CURRENT_URL);
-
-    $gLogger->notice('REDIRECT: Redirecting permanent to HTTPS!', array('url' => $url, 'statusCode' => 301));
-
-    header('Location: ' . $url, true, 301);
-    exit();
-}
-
-// Remove HTML & PHP-Code and escape all quotes from all request parameters
-// If debug is on and change is made, log it
-require_once(ADMIDIO_PATH . '/adm_program/system/global_request_params.php');
+require_once($rootPath . '/adm_program/system/bootstrap.php');
 
 // global parameters
 $gValidLogin = false;
