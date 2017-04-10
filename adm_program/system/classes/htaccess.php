@@ -38,12 +38,12 @@ class Htaccess
     }
 
     /**
-     * Schuetzt den uebergebenen Ordner
+     * Protect the passed folder
      * @return bool Returns true if protection is enabled
      */
     public function protectFolder()
     {
-        if (is_dir($this->folderPath) && !is_file($this->folderPath.'/.htaccess') && is_writable($this->folderPath.'/.htaccess'))
+        if (is_dir($this->folderPath) && !is_file($this->folderPath.'/.htaccess'))
         {
             $file = fopen($this->folderPath.'/.htaccess', 'w+b');
 

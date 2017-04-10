@@ -1,6 +1,6 @@
 <?php
 
-// PHP-CS-Fixer v2.1
+// PHP-CS-Fixer v2.2
 
 $rules = array(
 //    '@PSR1'           => false, // [@PSR1]
@@ -25,11 +25,15 @@ $rules = array(
     'declare_equal_normalize'                     => true,  // [@Symfony]
 //    'declare_strict_types'                      => false, // [@] TODO: PHP >= 7.0 => true
     'dir_constant'                                => true,  // [@]
+//    'doctrine_annotation_braces'                => false, // [@]
+//    'doctrine_annotation_indentation'           => false, // [@]
+//    'doctrine_annotation_spaces'                => false, // [@]
     'elseif'                                      => true,  // [@PSR2, @Symfony]
     'encoding'                                    => true,  // [@PSR1, @PSR2, @Symfony]
     'ereg_to_preg'                                => true,  // [@]
     'full_opening_tag'                            => true,  // [@PSR1, @PSR2, @Symfony]
     'function_declaration'                        => true,  // [@PSR2, @Symfony]
+    'function_to_constant'                        => true,  // [@Symfony]
     'function_typehint_space'                     => true,  // [@Symfony]
 //    'general_phpdoc_annotation_remove'          => false, // [@]
     'hash_to_slash_comment'                       => true,  // [@Symfony]
@@ -37,6 +41,7 @@ $rules = array(
     'heredoc_to_nowdoc'                           => true,  // [@Symfony]
 //    'include'                                   => false, // [@Symfony]
     'indentation_type'                            => true,  // [@PSR2, @Symfony]
+//    'is_null'                                   => false, // [@Symfony]
     'line_ending'                                 => true,  // [@PSR2, @Symfony]
     'linebreak_after_opening_tag'                 => true,  // [@]
     'lowercase_cast'                              => true,  // [@Symfony]
@@ -47,6 +52,7 @@ $rules = array(
 //    'method_separation'                         => false, // [@Symfony]
     'modernize_types_casting'                     => true,  // [@]
     'native_function_casing'                      => true,  // [@Symfony]
+//    'native_function_invocation'                => false, // [@]
     'new_with_braces'                             => true,  // [@Symfony]
     'no_alias_functions'                          => true,  // [@Symfony]
     'no_blank_lines_after_class_opening'          => true,  // [@Symfony]
@@ -80,6 +86,7 @@ $rules = array(
     'no_useless_return'                           => true,  // [@]
     'no_whitespace_before_comma_in_array'         => true,  // [@Symfony]
     'no_whitespace_in_blank_line'                 => true,  // [@Symfony]
+    'non_printable_character'                     => true,  // [@Symfony]
     'normalize_index_brace'                       => true,  // [@Symfony]
 //    'not_operator_with_space'                   => false, // [@]
 //    'not_operator_with_successor_space'         => false, // [@]
@@ -99,7 +106,9 @@ $rules = array(
     'phpdoc_no_alias_tag'                         => true,  // [@Symfony]
 //    'phpdoc_no_empty_return'                    => false, // [@Symfony]
     'phpdoc_no_package'                           => true,  // [@Symfony]
+    'phpdoc_no_useless_inheritdoc'                => true,  // [@Symfony]
     'phpdoc_order'                                => true,  // [@]
+    'phpdoc_return_self_reference'                => true,  // [@Symfony]
     'phpdoc_scalar'                               => true,  // [@Symfony]
 //    'phpdoc_separation'                         => false, // [@Symfony]
     'phpdoc_single_line_var_spacing'              => true,  // [@Symfony]
@@ -133,6 +142,7 @@ $rules = array(
     'switch_case_semicolon_to_colon'              => true,  // [@PSR2, @Symfony]
     'switch_case_space'                           => true,  // [@PSR2, @Symfony]
     'ternary_operator_spaces'                     => true,  // [@Symfony]
+//    'ternary_to_null_coalescing'                => false, // [@PHP70Migration, @PHP71Migration]
 //    'trailing_comma_in_multiline_array'         => false, // [@Symfony]
     'trim_array_spaces'                           => true,  // [@Symfony]
 //    'unary_operator_spaces'                     => false, // [@Symfony]

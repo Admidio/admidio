@@ -247,7 +247,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
 }
 
 // show link to view profile field change history
-if($gPreferences['profile_log_edit_fields'] == 1)
+if($gPreferences['profile_log_edit_fields'] == 1 && $gCurrentUser->hasRightEditProfile($user))
 {
     $profileMenu->addItem('menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php?usr_id='. $userId,
                         $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');

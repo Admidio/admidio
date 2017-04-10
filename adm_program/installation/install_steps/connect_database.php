@@ -13,6 +13,23 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php')
     exit('This page may not be called directly!');
 }
 
+// check if a language string was committed
+if (!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
+{
+    showNotice(
+        $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
+        'installation.php?step=choose_language',
+        $gL10n->get('SYS_BACK'),
+        'layout/back.png'
+    );
+    // => EXIT
+}
+else
+{
+    $_SESSION['language'] = $_POST['system_language'];
+    $gL10n->setLanguage($_SESSION['language']);
+}
+
 // initialize form data
 if (isset($_SESSION['db_host']))
 {

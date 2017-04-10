@@ -334,6 +334,7 @@ else
         $dateHeadline = $date->getValue('dat_headline');
 
         // initialize all output elements
+        $attentionDeadline  = '';
         $outputEndDate      = '';
         $outputButtonIcal   = '';
         $outputButtonEdit   = '';
@@ -347,11 +348,12 @@ else
         $outputLinkRoom      = '';
         $outputNumberMembers = '';
         $outputNumberLeaders = '';
+        $outputDeadline      = '';
         $dateElements        = array();
         $participantsArray   = array();
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
-        if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1 )
+        if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
         {
             $participateModalForm = true;
 
@@ -503,6 +505,18 @@ else
             $outputNumberLeaders = $participants->getNumLeaders();
             $participantsArray   = $participants->getParticipantsArray($dateRolId);
 
+        if($date->getValue('dat_deadline') !== null)
+        {
+            if ($date->getValue('dat_all_day') === 0)
+            {
+                 $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']. ' ' . $gPreferences['system_time']);
+            }
+            else
+            {
+                $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']);
+            }
+        }
+
             // Links for the participation only in html mode
             if($getViewMode === 'html')
             {
@@ -567,70 +581,84 @@ else
                     }
                 }
 
-                if (!$participateModalForm)
+                // Check participation deadline and show buttons if allowed
+                if (!$date->deadlineExceeded())
                 {
-                    $outputButtonParticipation = '
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id=' . $dateId . '"' . $disableStatusAttend . '>
-                                        <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id=' . $dateId . '"' . $disableStatusTentative . '>
-                                        <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id=' . $dateId . '">
-                                        <img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_CANCEL') . '" title="' . $gL10n->get('DAT_CANCEL') . '"/>' . $gL10n->get('DAT_CANCEL') . '
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>';
+                    if (!$participateModalForm)
+                    {
+                        $outputButtonParticipation = '
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=3&amp;dat_id=' . $dateId . '"' . $disableStatusAttend . '>
+                                            <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=7&amp;dat_id=' . $dateId . '"' . $disableStatusTentative . '>
+                                            <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?mode=4&amp;dat_id=' . $dateId . '">
+                                            <img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_CANCEL') . '" title="' . $gL10n->get('DAT_CANCEL') . '"/>' . $gL10n->get('DAT_CANCEL') . '
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>';
+                    }
+                    else
+                    {
+                        $outputButtonParticipation = '
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId . '">' . $iconParticipationStatus . $buttonText . '
+                            </div>';
+
+                        $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php?dat_id=' . $dateId . '&amp;mode=', $page, array('method' => 'post', 'setFocus' => false));
+                        $participationForm->addHtml('<div id="participate_modal_' . $dateId . '" class="modal fade" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
+                                                                    <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
+                                                                </div>
+                                                                <div class="modal-body">');
+                        $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
+                        $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
+                        $participationForm->addHtml('</div><div class="modal-footer">');
+                        $participationForm->openButtonGroup();
+                        $participationForm->addButton('btn_attend_' . $dateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
+                        $participationForm->addButton('btn_tentative_' . $dateId, $gL10n->get('DAT_USER_TENTATIVE'), array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative));
+                        $participationForm->addButton('btn_refuse_' . $dateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
+                        $participationForm->closeButtonGroup();
+                        $participationForm->addHtml('</div></div></div></div>');
+                        $page->addHtml($participationForm->show(false));
+                    }
+                    // Reset flags and parameters
+                    $disableAdditionalGuests    = 4;
+                    $disableComments            = 4;
+                    $disableStatusAttend        = '';
+                    $disableStatusTentative     = '';
+                    $participateModalForm       = false;
                 }
                 else
                 {
-                    $outputButtonParticipation = '
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId . '">' . $iconParticipationStatus . $buttonText . '
-                        </div>';
-
-                    $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php?dat_id=' . $dateId . '&amp;mode=', $page, array('method' => 'post', 'setFocus' => false));
-                    $participationForm->addHtml('<div id="participate_modal_' . $dateId . '" class="modal fade" role="dialog">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
-                                                                <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
-                                                            </div>
-                                                            <div class="modal-body">');
-                    $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
-                    $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'property' => $disableAdditionalGuests));
-                    $participationForm->addHtml('</div><div class="modal-footer">');
-                    $participationForm->openButtonGroup();
-                    $participationForm->addButton('btn_attend_' . $dateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
-                    $participationForm->addButton('btn_tentative_' . $dateId, $gL10n->get('DAT_USER_TENTATIVE'), array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative));
-                    $participationForm->addButton('btn_refuse_' . $dateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
-                    $participationForm->closeButtonGroup();
-                    $participationForm->addHtml('</div></div></div></div>');
-                    $page->addHtml($participationForm->show(false));
+                    // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
+                    if ($participants->isMemberOfEvent($gCurrentUser->getValue('usr_id')))
+                    {
+                        $attentionDeadline =    '<div class="alert alert-warning" role="alert">
+                                                    <strong>' .$gL10n->get('DAT_DEADLINE') . '! </strong>' . $gL10n->get('DAT_DEADLINE_ATTENTION') . '
+                                                </div>';
+                    }
                 }
-                // Reset flags and parameters
-                $disableAdditionalGuests    = 4;
-                $disableComments            = 4;
-                $disableStatusAttend        = '';
-                $disableStatusTentative     = '';
-                $participateModalForm       = false;
 
                 if ($participationPossible === false)
                 {
-                    // check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
+                    // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
                     if (!$participants->isMemberOfEvent((int) $gCurrentUser->getValue('usr_id')))
                     {
                         $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
@@ -726,6 +754,11 @@ else
             {
                 $dateElements[] = array($gL10n->get('SYS_ROOM'), $outputLinkRoom);
             }
+            if($outputDeadline !== '')
+            {
+                $dateElements[] = array($gL10n->get('DAT_DEADLINE'), '<strong>'.$outputDeadline.'</strong>');
+            }
+
             if($outputNumberLeaders !== '')
             {
                 $dateElements[] = array($gL10n->get('SYS_LEADERS'), '<strong>' . $outputNumberLeaders . '</strong>');
@@ -793,7 +826,7 @@ else
                     </div>
                     <div class="panel-body">
                         ' . $htmlDateElements . '<br />
-                        <p>' . $date->getValue('dat_description') . '</p>');
+                        <p>' . $date->getValue('dat_description') . '</p>' .$attentionDeadline);
 
             if($outputButtonParticipation !== '' || $outputButtonParticipants !== ''
             || $outputButtonParticipantsEmail !== '' || $outputButtonParticipantsAssign !== '')
@@ -876,7 +909,14 @@ else
 
             if($getViewMode === 'html')
             {
-                $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '</a>';
+                if (strlen($date->getValue('dat_deadline') > 0))
+                {
+                    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '<br />' . $gL10n->get('DAT_DEADLINE') . ': ' . $outputDeadline . '</a>';
+                }
+                else
+                {
+                    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '</a>';
+                }
             }
             else
             {

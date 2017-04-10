@@ -61,7 +61,7 @@ $sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS 
             OR urt1.urt_id_inverse IS NULL
       ORDER BY urt1.urt_name, urt2.urt_name';
 
-$relationtypesStatement = $gDb->query($sql);
+$relationtypesStatement = $gDb->queryPrepared($sql);
 
 $relationtype1 = new TableUserRelationType($gDb);
 $relationtype2 = new TableUserRelationType($gDb);

@@ -41,20 +41,8 @@ else
 }
 
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
-require_once($rootPath . '/adm_program/system/init_globals.php');
-require_once($rootPath . '/adm_program/system/constants.php');
-
-// check PHP version and show notice if version is too low
-if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
-{
-    exit('<div style="color: #cc0000;">Error: Your PHP version ' . PHP_VERSION . ' does not fulfill
-        the minimum requirements for this Admidio version. You need at least PHP ' . MIN_PHP_VERSION . ' or higher.</div>');
-}
-
+require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // Initialize and check the parameters
 
@@ -80,7 +68,7 @@ catch (AdmException $e)
 
 // now check if a valid installation exists.
 $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-$pdoStatement = $gDb->query($sql, false);
+$pdoStatement = $gDb->queryPrepared($sql, array(), false);
 
 if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 {
@@ -149,7 +137,8 @@ $installedDbBetaVersion = '';
 $maxUpdateStep          = 0;
 $currentUpdateStep      = 0;
 
-if (!$gDb->query('SELECT 1 FROM ' . TBL_COMPONENTS, false))
+$sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
+if (!$gDb->queryPrepared($sql, array(), false))
 {
     // in Admidio version 2 the database version was stored in preferences table
     if (isset($gPreferences['db_version']))
@@ -363,7 +352,7 @@ elseif ($getMode === 2)
     $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['cost']);
 
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-    $orgaStatement = $gDb->query($sql);
+    $orgaStatement = $gDb->queryPrepared($sql);
 
     while($orgId = $orgaStatement->fetchColumn())
     {
@@ -375,7 +364,7 @@ elseif ($getMode === 2)
     if ($gDbType === 'mysql')
     {
         // disable foreign key checks for mysql, so tables can easily deleted
-        $gDb->query('SET foreign_key_checks = 0');
+        $gDb->queryPrepared('SET foreign_key_checks = 0');
     }
 
     // in version 2 we had an other update mechanism which will be handled here
@@ -449,7 +438,7 @@ elseif ($getMode === 2)
         }
     }
 
-    disableSoundexSearchIfPgsql($gDb);
+    disableSoundexSearchIfPgSql($gDb);
 
     // since version 3 we do the update with xml files and a new class model
     if ($versionMain >= 3)
@@ -472,12 +461,24 @@ elseif ($getMode === 2)
     if ($gDbType === 'mysql')
     {
         // activate foreign key checks, so database is consistent
-        $gDb->query('SET foreign_key_checks = 1');
+        $gDb->queryPrepared('SET foreign_key_checks = 1');
+    }
+
+
+    // create ".htaccess" file for folder "adm_my_files"
+    if (!is_file(ADMIDIO_PATH . FOLDER_DATA.'/.htaccess'))
+    {
+        $protection = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+
+        if (!$protection->protectFolder())
+        {
+            $gLogger->warning('htaccess file could not be created!');
+        }
     }
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';
-    $gDb->query($sql);
+    $gDb->queryPrepared($sql);
 
     // create an installation unique cookie prefix and remove special characters
     $gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;

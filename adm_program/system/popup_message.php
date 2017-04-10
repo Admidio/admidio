@@ -25,11 +25,15 @@ $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
 $getName        = admFuncVariableIsValid($_GET, 'name',          'string');
 
+if ($getType !== 'bac') {
+    $getDatabaseId = (int) $getDatabaseId;
+}
+if ($getType !== 'cat') {
+    $getDatabaseId2 = (int) $getDatabaseId2;
+}
+
 // initialize local variables
-$icon = 'error_big.png';
 $text = 'SYS_DELETE_ENTRY';
-$textVariable     = $getName;
-$textVariable2    = '';
 $callbackFunction = '';
 
 // URL zusammensetzen
@@ -159,8 +163,8 @@ echo '
     <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
 </div>
 <div class="modal-body row">
-    <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_URL.'/icons/'.$icon.'" alt="Icon" /></div>
-    <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
+    <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_URL.'/icons/error_big.png" alt="Icon" /></div>
+    <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $getName, '').'</div>
 </div>
 <div class="modal-footer">
     <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">

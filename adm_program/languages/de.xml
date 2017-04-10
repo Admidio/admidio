@@ -51,6 +51,9 @@
     <string name="DAT_DATE">Termin</string>
     <string name="DAT_DATES">Termine</string>
     <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
+    <string name="DAT_DEADLINE">Anmeldeschluss</string>
+    <string name="DAT_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen ereicht wurde, oder der Termin in der Vergangenheit liegt. Bitte wende dich an die Leiter des Termins, oder einen Administrator!</string>
+    <string name="DAT_DEADLINE_DESC">Teilnehmer können sich bis zu diesem Datum am Termin anmelden. Leiter und Benutzer mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmer zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldschluss angenommnen.</string>
     <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
     <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
@@ -223,7 +226,6 @@
     <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Administrators ein.</string>
     <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
     <string name="INS_BOARD">Vorstand</string>
-    <string name="INS_CHOOSE_LANGUAGE">Wähle bitte eine Sprache aus</string>
     <string name="INS_CONFERENCE_ROOM">Besprechnungsraum</string>
     <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</string>
     <string name="INS_CONTINUE_INSTALLATION">Installation fortsetzen</string>
@@ -283,6 +285,7 @@
     <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</string>
     <string name="INS_PASSWORDS_NOT_EQUAL">Das Passwort stimmt nicht mit der Wiederholung überein.</string>
     <string name="INS_PHONE_LIST">Telefonliste</string>
+    <string name="INS_PLEASE_CHOOSE_LANGUAGE">Wähle bitte eine Sprache aus</string>
     <string name="INS_SET_ORGANIZATION">Organisation festlegen</string>
     <string name="INS_SET_UP_ORGANIZATION">Organisation einrichten</string>
     <string name="INS_SETUP_WAS_SUCCESSFUL">Die Einrichtung war erfolgreich</string>
@@ -304,7 +307,7 @@
     <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
     <string name="INS_WARNING_SAFE_MODE">Auf deinem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</string>
     <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
-    <string name="INS_WELCOME_TEXT">Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen soll.</string>
+    <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator anmelden kannst. Bei Fragen oder Problemen kannst du dich gerne an #VAR1#unser Supportforum#VAR2# wenden.</string>
     <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu deiner Datenbank ist.</string>
     <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# setzt mindestens die PHP-Version #VAR2# voraus. Du solltest versuchen PHP zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu dieser PHP-Version ist.</string>

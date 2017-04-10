@@ -52,8 +52,8 @@ class TableMessage extends TableAccess
      */
     public function countMessageConversations()
     {
-        $sql = 'SELECT COUNT(*) AS count FROM '. TBL_MESSAGES;
-        $countStatement = $this->db->query($sql);
+        $sql = 'SELECT COUNT(*) AS count FROM ' . TBL_MESSAGES;
+        $countStatement = $this->db->queryPrepared($sql);
 
         return (int) $countStatement->fetchColumn();
     }

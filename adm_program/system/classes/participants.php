@@ -225,12 +225,15 @@ class Participants
         // Read participants of current event role
         $eventMember = $this->getParticipantsArray($this->rolId);
         // Search for user in array
-        if (!in_array((int) $userId, array_column($eventMember, 'usrId'), true))
+        foreach($eventMember as $participant)
         {
-            if ($eventMember[$userId]['approved'] !== 3)
+            if ($participant['usrId'] === (int) $userId)
             {
-                // Is participant of event
-                return true;
+                // is member of the event
+                if ($participant['usrId']['approved'] !== 3)
+                {
+                    return true;
+                }
             }
         }
 

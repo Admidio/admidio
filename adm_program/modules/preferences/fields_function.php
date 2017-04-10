@@ -162,7 +162,7 @@ if($getMode === 1)
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value)
     {
-        if(strpos($key, 'usf_') === 0)
+        if(strpos($key, 'usf_') === 0) // TODO possible security issue
         {
             if(!$userField->setValue($key, $value))
             {

@@ -29,11 +29,7 @@ else
     exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
-require_once(__DIR__ . '/../adm_program/system/init_globals.php');
-require_once(__DIR__ . '/../adm_program/system/constants.php');
-require_once(__DIR__ . '/../adm_program/system/function.php');
-require_once(__DIR__ . '/../adm_program/system/string.php');
-require_once(__DIR__ . '/../adm_program/system/logging.php');
+require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
 
 // import of demo data must be enabled in config.php
 if(!isset($gImportDemoData) || $gImportDemoData != 1)
@@ -158,7 +154,7 @@ catch(AdmException $e)
 if($gDbType === 'mysql')
 {
     // disable foreign key checks for mysql, so tables can easily deleted
-    $db->query('SET foreign_key_checks = 0');
+    $db->queryPrepared('SET foreign_key_checks = 0');
 }
 
 /**
@@ -211,7 +207,7 @@ function readAndExecuteSQLFromFile($filename, &$database)
                 }
             }
 
-            $database->query($sql);
+            $database->query($sql); // TODO add more params
         }
     }
 }
@@ -226,13 +222,15 @@ include_once(__DIR__ . '/data_edit.php');
 // in postgresql all sequences must get a new start value because our inserts have given ids
 if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
 {
-    $sql = 'SELECT relname FROM pg_class WHERE relkind = \'S\'';
-    $sqlStatement = $db->query($sql);
+    $sql = 'SELECT relname
+              FROM pg_class
+             WHERE relkind = \'S\'';
+    $sqlStatement = $db->queryPrepared($sql);
 
     while($relname = $sqlStatement->fetchColumn())
     {
-        $sql = 'SELECT setval(\''.$relname.'\', 1000000)';
-        $db->query($sql);
+        $sql = 'SELECT setval(\'' . $relname . '\', 1000000)';
+        $db->queryPrepared($sql);
     }
 }
 
@@ -245,20 +243,21 @@ $db->queryPrepared($sql, array($getLanguage));
 if($gDbType === 'mysql')
 {
     // activate foreign key checks, so database is consistent
-    $db->query('SET foreign_key_checks = 1');
+    $db->queryPrepared('SET foreign_key_checks = 1');
 }
 
 echo 'Installation successful !<br />';
 
 // read installed database version
-if(!$db->query('SELECT 1 FROM '.TBL_COMPONENTS, false))
+$sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
+if(!$db->queryPrepared($sql, array(), false))
 {
     // in Admidio version 2 the database version was stored in preferences table
     $sql = 'SELECT prf_value
-              FROM '.$g_tbl_praefix.'_preferences
+              FROM ' . $g_tbl_praefix . '_preferences
              WHERE prf_name   = \'db_version\'
                AND prf_org_id = 1';
-    $pdoStatement = $db->query($sql);
+    $pdoStatement = $db->queryPrepared($sql);
     $databaseVersion = $pdoStatement->fetchColumn();
 }
 else

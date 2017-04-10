@@ -156,7 +156,7 @@ if($getMode === 1)
     }
 
     // POST Variablen in das UserField-Objekt schreiben
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'cat_') === 0)
         {

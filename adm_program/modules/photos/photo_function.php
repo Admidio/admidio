@@ -48,7 +48,7 @@ if (!$gCurrentUser->editPhotoRight())
 function deleteThumbnail(&$photoAlbum, $picNr)
 {
     // Ordnerpfad zusammensetzen
-    $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
+    $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
 
     // Thumbnail loeschen
     if (is_file($photoPath))

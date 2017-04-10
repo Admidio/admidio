@@ -55,8 +55,13 @@ if ($getMode !== 'new' && $getPhotoId > 0)
     }
 }
 
+$phoId = (int) $photoAlbum->getValue('pho_id');
+
 // Speicherort mit dem Pfad aus der Datenbank
-$albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+$albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $phoId;
+
+$phoBegin = $_POST['pho_begin'];
+$phoEnd   = $_POST['pho_end'];
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if ($getMode === 'new' || $getMode === 'change')
@@ -76,9 +81,9 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 
     // Beginn
-    if (strlen($_POST['pho_begin']) > 0)
+    if (strlen($phoBegin) > 0)
     {
-        $startDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['pho_begin']);
+        $startDate = DateTime::createFromFormat($gPreferences['system_date'], $phoBegin);
         if ($startDate === false)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
@@ -86,7 +91,7 @@ if ($getMode === 'new' || $getMode === 'change')
         }
         else
         {
-            $_POST['pho_begin'] = $startDate->format('Y-m-d');
+            $phoBegin = $startDate->format('Y-m-d');
         }
     }
     else
@@ -96,9 +101,9 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 
     // Ende
-    if (strlen($_POST['pho_end']) > 0)
+    if (strlen($phoEnd) > 0)
     {
-        $endDate = DateTime::createFromFormat($gPreferences['system_date'], $_POST['pho_end']);
+        $endDate = DateTime::createFromFormat($gPreferences['system_date'], $phoEnd);
         if ($endDate === false)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
@@ -106,16 +111,16 @@ if ($getMode === 'new' || $getMode === 'change')
         }
         else
         {
-            $_POST['pho_end'] = $endDate->format('Y-m-d');
+            $phoEnd = $endDate->format('Y-m-d');
         }
     }
     else
     {
-        $_POST['pho_end'] = $_POST['pho_begin'];
+        $phoEnd = $phoBegin;
     }
 
     // Anfang muss vor oder gleich Ende sein
-    if (strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
+    if (strlen($phoEnd) > 0 && $phoEnd < $phoBegin)
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         // => EXIT
@@ -128,7 +133,7 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 
     // POST Variablen in das Role-Objekt schreiben
-    foreach ($_POST as $key => $value)
+    foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (strpos($key, 'pho_') === 0)
         {
@@ -168,14 +173,14 @@ if ($getMode === 'new' || $getMode === 'change')
             }
         }
 
-        $getPhotoId = $photoAlbum->getValue('pho_id');
+        $getPhotoId = $phoId;
     }
     else
     {
         // if begin date changed than the folder must also be changed
-        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $getPhotoId)
+        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $phoBegin . '_' . $getPhotoId)
         {
-            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $photoAlbum->getValue('pho_id');
+            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $phoBegin . '_' . $phoId;
 
             // das komplette Album in den neuen Ordner kopieren
             $albumFolder = new Folder($albumPath);
