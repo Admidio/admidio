@@ -126,7 +126,7 @@ class AdmException extends Exception
         global $gMessage;
 
         // display database error to user
-        if($gMessage instanceof \Message)
+        if ($gMessage instanceof \Message)
         {
             $gMessage->show($this->getText());
             // => EXIT
@@ -143,7 +143,7 @@ class AdmException extends Exception
      */
     public function showText()
     {
-        if(!headers_sent())
+        if (!headers_sent())
         {
             header('Content-type: text/html; charset=utf-8');
         }

@@ -173,21 +173,20 @@ class Language
     {
         $countries = $this->languageData->getCountriesArray();
 
-        if(count($countries) > 0)
+        if (count($countries) > 0)
         {
             return $countries;
         }
 
-        // set path to language file of countries
-        $countriesFilesPath = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_';
-
-        if(is_file($countriesFilesPath.$this->languageData->getLanguage().'.xml'))
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage()     . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage(true) . '.xml';
+        if (is_file($langFile))
         {
-            $file = $countriesFilesPath.$this->languageData->getLanguage().'.xml';
+            $file = $langFile;
         }
-        elseif(is_file($countriesFilesPath.$this->languageData->getLanguage(true).'.xml'))
+        elseif (is_file($langFileRef))
         {
-            $file = $countriesFilesPath.$this->languageData->getLanguage(true).'.xml';
+            $file = $langFileRef;
         }
         else
         {
@@ -197,7 +196,7 @@ class Language
         // read all countries from xml file
         $countriesXml = new SimpleXMLElement($file, null, true);
 
-        foreach($countriesXml->children() as $stringNode)
+        foreach ($countriesXml->children() as $stringNode)
         {
             $attributes = $stringNode->attributes();
             $countries[(string) $attributes->name] = (string) $stringNode;
