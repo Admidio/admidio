@@ -454,6 +454,17 @@ $page->addHtml('
                         }
                         $form->addStaticControl('safe_mode', $gL10n->get('SYS_SAFE_MODE'), $html);
 
+                        try
+                        {
+                            PasswordHashing::genRandomInt(0, 1, true);
+                            $html = '<span class="text-success"><strong>' . $gL10n->get('SYS_SECURE') . '</strong></span>';
+                        }
+                        catch (AdmException $e)
+                        {
+                            $html = '<span class="text-danger"><strong>' . $gL10n->get('SYS_PRNG_INSECURE') . '</strong><br />' . $e->getText() . '</span>';
+                        }
+                        $form->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
+
                         if(ini_get('post_max_size') !== '')
                         {
                             $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), ini_get('post_max_size'));
