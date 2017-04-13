@@ -58,6 +58,7 @@ class AdmException extends Exception
         }
         else
         {
+            // Deprecated
             $paramCount = func_num_args();
             $paramArray = func_get_args();
 
@@ -106,6 +107,7 @@ class AdmException extends Exception
         }
         else
         {
+            // Deprecated
             $this->params = array();
 
             $paramCount = func_num_args();

@@ -146,6 +146,7 @@ class Language
         }
         else
         {
+            // Deprecated
             $paramsCount = func_num_args();
             $paramsArray = func_get_args();
         }
