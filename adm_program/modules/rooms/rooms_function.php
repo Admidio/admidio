@@ -53,7 +53,7 @@ if ($getMode === 1)
     $_POST['room_description'] = admFuncVariableIsValid($_POST, 'room_description', 'html');
 
     // POST Variablen in das Termin-Objekt schreiben
-    foreach ($_POST as $key => $value)
+    foreach ($_POST as $key => $value) // TODO possible security issue
     {
         if (strpos($key, 'room_') === 0)
         {

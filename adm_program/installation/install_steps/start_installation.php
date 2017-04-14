@@ -98,34 +98,34 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com
              , (\'MODULE\', \'SYS_REGISTRATION\',        \'REGISTRATION\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'ROL_ROLE_ADMINISTRATION\', \'ROLES\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'ROO_ROOM_MANAGEMENT\',     \'ROOMS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
-$db->query($sql);
+$db->query($sql); // TODO add more params
 
 // create organization independent categories
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+        VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, ?, ?) -- $userId, DATETIME_NOW';
+$db->queryPrepared($sql, array($userId, DATETIME_NOW));
 $categoryIdMasterData = $db->lastInsertId();
 
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+        VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, ?, ?) -- $userId, DATETIME_NOW';
+$db->queryPrepared($sql, array($userId, DATETIME_NOW));
 $categoryIdSocialNetworks = $db->lastInsertId();
 
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+        VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, ?, ?) -- $userId, DATETIME_NOW';
+$db->queryPrepared($sql, array($userId, DATETIME_NOW));
 
 // create inventory categories
 $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+        VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, ?, ?) -- $userId, DATETIME_NOW';
+$db->queryPrepared($sql, array($userId, DATETIME_NOW));
 $categoryIdMasterInventory = $db->lastInsertId();
 
 // create roles rights
 $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
         VALUES (\'folder_view\',   \'adm_folders\')
              , (\'folder_upload\', \'adm_folders\')';
-$db->query($sql);
+$db->queryPrepared($sql);
 
 // create profile fields of category master data
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
@@ -143,7 +143,7 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, 
 female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$userId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, 1, 0, 1, 12, '.$userId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, 0, 0, 0, 13, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+$db->query($sql); // TODO add more params
 
 // create profile fields of category social networks
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
@@ -155,7 +155,7 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, 
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'TWITTER\',               \'INS_TWITTER\',     \''.$gL10n->get('INS_TWITTER_DESC').'\',     \'twitter.png\',     \'https://twitter.com/#user_content#\',           0, 6, '.$userId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'XING\',                  \'INS_XING\',        \''.$gL10n->get('INS_XING_DESC').'\',        \'xing.png\',        \'https://www.xing.com/profile/#user_content#\',  0, 7, '.$userId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'YAHOO_MESSENGER\',       \'INS_YAHOO_MESSENGER\', NULL,                                    \'yahoo.png\',       NULL,                                             0, 8, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+$db->query($sql); // TODO add more params
 
 // create user relation types
 $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
@@ -167,24 +167,31 @@ $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male
              , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$userId.', \''. DATETIME_NOW.'\')
              , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\', null, '.$userId.', \''. DATETIME_NOW.'\')
              , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+$db->query($sql); // TODO add more params
 
-$sql = 'UPDATE '.TBL_USER_RELATION_TYPES.' SET urt_id_inverse = 2
+$sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
+           SET urt_id_inverse = 2
          WHERE urt_id = 1';
-$db->query($sql);
+$db->queryPrepared($sql);
 
-$sql = 'UPDATE '.TBL_USER_RELATION_TYPES.' SET urt_id_inverse = 8
+$sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
+           SET urt_id_inverse = 8
          WHERE urt_id = 7';
-$db->query($sql);
+$db->queryPrepared($sql);
 
 // Inventoryfelder anlegen
 $sql = 'INSERT INTO '.TBL_INVENT_FIELDS.' (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
-        VALUES ('.$categoryIdMasterInventory.', \'TEXT\',   \'ITEM_NAME\', \'SYS_ITEMNAME\', NULL, 1, 1, 1, 1, '.$userId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterInventory.', \'NUMBER\', \'ROOM_ID\',   \'SYS_ROOM\',     NULL, 1, 1, 1, 2, '.$userId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterInventory.', \'NUMBER\', \'PRICE\',     \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, '.$userId.', \''. DATETIME_NOW.'\')';
-$db->query($sql);
+        VALUES (?, \'TEXT\',   \'ITEM_NAME\', \'SYS_ITEMNAME\', NULL, 1, 1, 1, 1, ?, ?) -- $categoryIdMasterInventory, $userId, DATETIME_NOW
+             , (?, \'NUMBER\', \'ROOM_ID\',   \'SYS_ROOM\',     NULL, 1, 1, 1, 2, ?, ?) -- $categoryIdMasterInventory, $userId, DATETIME_NOW
+             , (?, \'NUMBER\', \'PRICE\',     \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, ?, ?) -- $categoryIdMasterInventory, $userId, DATETIME_NOW';
+$params = array(
+    $categoryIdMasterInventory, $userId, DATETIME_NOW,
+    $categoryIdMasterInventory, $userId, DATETIME_NOW,
+    $categoryIdMasterInventory, $userId, DATETIME_NOW
+);
+$db->queryPrepared($sql, $params);
 
-disableSoundexSearchIfPgsql($db);
+disableSoundexSearchIfPgSql($db);
 
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
@@ -218,8 +225,14 @@ $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'))
 
 // create default room for room module in database
 $sql = 'INSERT INTO '.TBL_ROOMS.' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-        VALUES (\''.$gL10n->get('INS_CONFERENCE_ROOM').'\', \''.$gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\', 15, '.$userId.', \''.DATETIME_NOW.'\')';
-$db->query($sql);
+        VALUES (?, ?, 15, ?, ?) -- $gL10n->get(\'INS_CONFERENCE_ROOM\'), $gL10n->get(\'INS_DESCRIPTION_CONFERENCE_ROOM\'), $userId, DATETIME_NOW';
+$params = array(
+    $gL10n->get('INS_CONFERENCE_ROOM'),
+    $gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM'),
+    $userId,
+    DATETIME_NOW
+);
+$db->queryPrepared($sql, $params);
 
 // first create a user object "current user" with administrator rights
 // because administrator is allowed to edit firstname and lastname

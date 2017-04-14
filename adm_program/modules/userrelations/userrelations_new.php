@@ -46,7 +46,7 @@ if($user->isNewRecord())
 }
 
 $sql = 'SELECT COUNT(urt_id) AS count FROM '.TBL_USER_RELATION_TYPES;
-$relationsStatement = $gDb->query($sql);
+$relationsStatement = $gDb->queryPrepared($sql);
 
 if((int) $relationsStatement->fetchColumn() === 0)
 {

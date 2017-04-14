@@ -43,3 +43,8 @@ if(!isset($gTimezone))
 {
     $gTimezone = 'Europe/Berlin';
 }
+
+// set Force permanent HTTPS redirect
+if (!isset($gForceHTTPS)) {
+    $gForceHTTPS = false;
+}

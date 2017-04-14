@@ -118,7 +118,7 @@ if($getMode === 1)
     $_POST['inf_description'] = admFuncVariableIsValid($_POST, 'inf_description', 'html');
 
     // POST Variablen in das itemField-Objekt schreiben
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'inf_') === 0)
         {

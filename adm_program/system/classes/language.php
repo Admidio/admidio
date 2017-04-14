@@ -105,7 +105,8 @@ class Language
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
-     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param string   $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param string[] $params Optional parameter for language string of translation id
      *
      * param  string $param1,$param2... The function accepts an undefined number of values which will be used
      *                                  to replace the placeholder in the text.
@@ -120,30 +121,41 @@ class Language
      * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Administrator');
      * @endcode
      */
-    public function get($textId)
+    public function get($textId, $params = array())
     {
-        if(!$this->languageData instanceof \LanguageData)
+        if (!$this->languageData instanceof \LanguageData)
         {
-            return 'Error: '.$this->languageData.' is not an object!';
+            return 'Error: ' . $this->languageData . ' is not an object!';
         }
 
         $text = $this->getTextFromTextId($textId);
 
         // no text found then write #undefined text#
-        if($text === '')
+        if ($text === '')
         {
-            return '#'.$textId.'#';
+            return '#' . $textId . '#';
         }
 
         // replace placeholder with value of parameters
-        $paramCount = func_num_args();
-        $paramArray = func_get_args();
 
-        for($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
+        if (is_array($params))
+        {
+            array_unshift($params, null);
+            $paramsCount = count($params);
+            $paramsArray = $params;
+        }
+        else
+        {
+            // Deprecated
+            $paramsCount = func_num_args();
+            $paramsArray = func_get_args();
+        }
+
+        for ($paramNumber = 1; $paramNumber < $paramsCount; ++$paramNumber)
         {
             $replaceArray = array(
-                '#VAR'.$paramNumber.'#'      => $paramArray[$paramNumber],
-                '#VAR'.$paramNumber.'_BOLD#' => '<strong>'.$paramArray[$paramNumber].'</strong>'
+                '#VAR' . $paramNumber . '#'      => $paramsArray[$paramNumber],
+                '#VAR' . $paramNumber . '_BOLD#' => '<strong>' . $paramsArray[$paramNumber] . '</strong>'
             );
             $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
         }
@@ -162,21 +174,20 @@ class Language
     {
         $countries = $this->languageData->getCountriesArray();
 
-        if(count($countries) > 0)
+        if (count($countries) > 0)
         {
             return $countries;
         }
 
-        // set path to language file of countries
-        $countriesFilesPath = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_';
-
-        if(is_file($countriesFilesPath.$this->languageData->getLanguage().'.xml'))
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage()     . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage(true) . '.xml';
+        if (is_file($langFile))
         {
-            $file = $countriesFilesPath.$this->languageData->getLanguage().'.xml';
+            $file = $langFile;
         }
-        elseif(is_file($countriesFilesPath.$this->languageData->getLanguage(true).'.xml'))
+        elseif (is_file($langFileRef))
         {
-            $file = $countriesFilesPath.$this->languageData->getLanguage(true).'.xml';
+            $file = $langFileRef;
         }
         else
         {
@@ -186,7 +197,7 @@ class Language
         // read all countries from xml file
         $countriesXml = new SimpleXMLElement($file, null, true);
 
-        foreach($countriesXml->children() as $stringNode)
+        foreach ($countriesXml->children() as $stringNode)
         {
             $attributes = $stringNode->attributes();
             $countries[(string) $attributes->name] = (string) $stringNode;

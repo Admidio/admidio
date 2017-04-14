@@ -21,6 +21,7 @@ $getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor',        'string',
 $getCKEditorFuncNum = admFuncVariableIsValid($_GET, 'CKEditorFuncNum', 'string', array('directOutput' => true, 'requireValue' => true));
 $getlangCode        = admFuncVariableIsValid($_GET, 'langCode',        'string', array('directOutput' => true));
 
+$htmlUrl = '';
 $message = '';
 
 try

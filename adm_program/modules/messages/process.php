@@ -109,7 +109,7 @@ switch($postFunction)
     case 'send':
         if($postMessage !== "\n")
         {
-            $regexUrl = '/^(http|ftp)s?\:\/\/[\da-zA-Z\-\.]+\.[a-zA-Z]{2,6}(\/\S*)?/';
+            $regexUrl = '/(http|ftp)s?\:\/\/[a-zA-Z\d\-\.]+\.[a-zA-Z]{2,6}(\/\S*)?/';
             if(preg_match($regexUrl, $postMessage, $url))
             {
                 $postMessage = preg_replace($regexUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
@@ -119,17 +119,17 @@ switch($postFunction)
         if($msgId === 0)
         {
             $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                    VALUES (\'CHAT\', \'DUMMY\', \'1\', \''.$msgId.'\', CURRENT_TIMESTAMP, \'0\')';
-            $gDb->query($sql); // TODO add more params
+                    VALUES (\'CHAT\', \'DUMMY\', \'1\', ?, CURRENT_TIMESTAMP, \'0\') -- $msgId';
+            $gDb->queryPrepared($sql, array($msgId));
             $msgId = $moduleMessages->msgGetChatId();
         }
 
         ++$msgId;
 
         $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-                VALUES (\''.$msgId.'\', \''.$msgId.'\', \''.$gCurrentUser->getValue('usr_id').'\', \''.$postMessage.'\', CURRENT_TIMESTAMP)';
+                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $msgId, $msgId, $gCurrentUser->getValue(\'usr_id\'), $postMessage';
+        $gDb->queryPrepared($sql, array($msgId, $msgId, (int) $gCurrentUser->getValue('usr_id'), $postMessage));
 
-        $gDb->query($sql); // TODO add more params
         $log['state'] = $msgId;
         break;
 

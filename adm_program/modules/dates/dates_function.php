@@ -262,7 +262,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     }
 
     if($_POST['date_registration_possible'] == 1)
-   {
+    {
         if(strlen($_POST['date_deadline_time']) === 0)
         {
             $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
@@ -300,7 +300,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     if($gPreferences['dates_show_rooms'] == 1)
     {
-        if($_POST['dat_room_id'] > 0)
+        $datRoomId = (int) $_POST['dat_room_id'];
+
+        if($datRoomId > 0)
         {
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_DATES.'
@@ -311,7 +313,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $queryParams = array(
                 $endDateTime->format('Y-m-d H:i:s'),
                 $startDateTime->format('Y-m-d H:i:s'),
-                (int) $_POST['dat_room_id'],
+                $datRoomId,
                 $getDateId
             );
             $datesStatement = $gDb->queryPrepared($sql, $queryParams);
@@ -322,14 +324,16 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
                 // => EXIT
             }
 
-            $date->setValue('dat_room_id', $_POST['dat_room_id']);
+            $date->setValue('dat_room_id', $datRoomId);
             $room = new TableRooms($gDb);
-            $room->readDataById($_POST['dat_room_id']);
+            $room->readDataById($datRoomId);
             $number = (int) $room->getValue('room_capacity') + (int) $room->getValue('room_overhang');
             $date->setValue('dat_max_members', $number);
-            if($_POST['dat_max_members'] < $number && $_POST['dat_max_members'] > 0)
+            $datMaxMembers = (int) $_POST['dat_max_members'];
+
+            if ($datMaxMembers > 0 && $datMaxMembers < $number)
             {
-                $date->setValue('dat_max_members', $_POST['dat_max_members']);
+                $date->setValue('dat_max_members', $datMaxMembers);
             }
             // Raumname für Benachrichtigung
             $raum = $room->getValue('room_name');
@@ -337,7 +341,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     }
 
     // write all POST parameters into the date object
-    foreach($_POST as $key => $value)
+    foreach($_POST as $key => $value) // TODO possible security issue
     {
         if(strpos($key, 'dat_') === 0)
         {
@@ -454,7 +458,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $sql = 'SELECT cat_id
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_name_intern = \'EVENTS\'';
-            $pdoStatement = $gDb->query($sql);
+            $pdoStatement = $gDb->queryPrepared($sql);
             $role = new TableRoles($gDb);
 
             // these are the default settings for a date role
@@ -464,7 +468,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             // role members are allowed to send mail to this role
             $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? '1' : '0');
             $role->setValue('rol_leader_rights', ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participations
-            $role->setValue('rol_max_members', $_POST['dat_max_members']);
+            $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
         }
 
         $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id'));

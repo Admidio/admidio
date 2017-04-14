@@ -118,7 +118,8 @@ class AutoLogin extends TableAccess
         // reset all counted wrong auto login ids from this user to prevent
         // a deadlock if user has auto login an several devices and they were
         // set invalid for security reasons
-        $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = 0
+        $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
+                   SET atl_number_invalid = 0
                  WHERE atl_usr_id = ? -- $this->getValue(\'atl_usr_id\')';
         $this->db->queryPrepared($sql, array($this->getValue('atl_usr_id')));
     }

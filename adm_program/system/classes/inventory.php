@@ -118,7 +118,7 @@ class Inventory extends TableInventory
     {
         if(strpos($columnName, 'inv_') === 0)
         {
-            $file = ADMIDIO_PATH . FOLDER_DATA . '/invent_profile_photos/' . $this->getValue('inv_id') . '.jpg';
+            $file = ADMIDIO_PATH . FOLDER_DATA . '/invent_profile_photos/' . (int) $this->getValue('inv_id') . '.jpg';
             if($columnName === 'inv_photo' && is_file($file))
             {
                 return file_get_contents($file);

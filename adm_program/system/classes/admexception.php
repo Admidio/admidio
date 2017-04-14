@@ -36,35 +36,39 @@
  */
 class AdmException extends Exception
 {
-    protected $param1;
-    protected $param2;
-    protected $param3;
-    protected $param4;
+    protected $params = array();
 
     /**
      * Constructor that will @b rollback an open database translation
-     * @param string $message Translation @b id that should be shown when exception is catched
-     * @param string $param1  Optional parameter for language string of translation id
-     * @param string $param2  Another optional parameter for language string of translation id
-     * @param string $param3  Another optional parameter for language string of translation id
-     * @param string $param4  Another optional parameter for language string of translation id
+     * @param string   $message Translation @b id that should be shown when exception is catched
+     * @param string[] $params  Optional parameter for language string of translation id
      */
-    public function __construct($message, $param1 = '', $param2 = '', $param3 = '', $param4 = '')
+    public function __construct($message, $params = array())
     {
         global $gLogger, $gDb;
 
-        $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => array($param1, $param2, $param3, $param4)));
-
-        if($gDb instanceof \Database)
+        if ($gDb instanceof \Database)
         {
             $gDb->endTransaction();
         }
 
-        // save param in class parameters
-        $this->param1 = $param1;
-        $this->param2 = $param2;
-        $this->param3 = $param3;
-        $this->param4 = $param4;
+        if (is_array($params))
+        {
+            $this->params = $params;
+        }
+        else
+        {
+            // Deprecated
+            $paramCount = func_num_args();
+            $paramArray = func_get_args();
+
+            for ($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
+            {
+                $this->params[] = $paramArray[$paramNumber];
+            }
+        }
+
+        $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => $this->params));
 
         // sicherstellen, dass alles korrekt zugewiesen wird
         parent::__construct($message, 0);
@@ -79,9 +83,9 @@ class AdmException extends Exception
         global $gL10n;
 
         // if text is a translation-id then translate it
-        if(strpos($this->message, '_') === 3)
+        if (strpos($this->message, '_') === 3)
         {
-            return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
+            return $gL10n->get($this->message, $this->params);
         }
 
         return $this->message;
@@ -90,21 +94,30 @@ class AdmException extends Exception
     /**
      * Set a new Admidio message id with their parameters. This method should be used
      * if during the exception processing a new better message should be set.
-     * @param string $message Translation @b id that should be shown when exception is catched
-     * @param string $param1  Optional parameter for language string of translation id
-     * @param string $param2  Another optional parameter for language string of translation id
-     * @param string $param3  Another optional parameter for language string of translation id
-     * @param string $param4  Another optional parameter for language string of translation id
+     * @param string   $message Translation @b id that should be shown when exception is catched
+     * @param string[] $params  Optional parameter for language string of translation id
      */
-    public function setNewMessage($message, $param1 = '', $param2 = '', $param3 = '', $param4 = '')
+    public function setNewMessage($message, $params = array())
     {
         $this->message = $message;
 
-        // save param in class parameters
-        $this->param1 = $param1;
-        $this->param2 = $param2;
-        $this->param3 = $param3;
-        $this->param4 = $param4;
+        if (is_array($params))
+        {
+            $this->params = $params;
+        }
+        else
+        {
+            // Deprecated
+            $this->params = array();
+
+            $paramCount = func_num_args();
+            $paramArray = func_get_args();
+
+            for ($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
+            {
+                $this->params[] = $paramArray[$paramNumber];
+            }
+        }
     }
 
     /**
@@ -115,7 +128,7 @@ class AdmException extends Exception
         global $gMessage;
 
         // display database error to user
-        if($gMessage instanceof \Message)
+        if ($gMessage instanceof \Message)
         {
             $gMessage->show($this->getText());
             // => EXIT
@@ -132,7 +145,7 @@ class AdmException extends Exception
      */
     public function showText()
     {
-        if(!headers_sent())
+        if (!headers_sent())
         {
             header('Content-type: text/html; charset=utf-8');
         }

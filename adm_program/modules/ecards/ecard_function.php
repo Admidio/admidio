@@ -140,7 +140,7 @@ class FunctionClass
         // Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
         $pregRepArray['/<%theme_root_path%>/']            = THEME_URL;
         // Hier wird der Sender Name, Email und Id ersetzt
-        $pregRepArray['/<%ecard_sender_id%>/']            = $gCurrentUser->getValue('usr_id');
+        $pregRepArray['/<%ecard_sender_id%>/']            = (int) $gCurrentUser->getValue('usr_id');
         $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
         $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
         // Hier wird der Empfaenger Name und Email ersetzt

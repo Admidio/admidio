@@ -51,20 +51,8 @@ if (!isset($g_tbl_praefix))
 }
 
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
-require_once($rootPath . '/adm_program/system/init_globals.php');
-require_once($rootPath . '/adm_program/system/constants.php');
-
-// check PHP version and show notice if version is too low
-if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
-{
-    exit('<div style="color: #cc0000;">Error: Your PHP version '.PHP_VERSION.' does not fulfill
-        the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
-}
-
+require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // Initialize and check the parameters
 Session::start('ADMIDIO');
@@ -129,7 +117,7 @@ if (is_file($pathConfigFile))
 
     // now check if a valid installation exists.
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
-    $pdoStatement = $db->query($sql, false);
+    $pdoStatement = $db->queryPrepared($sql, array(), false);
 
     // Check the query for results in case installation is runnnig at this time and the config file is already created but database is not installed so far
     if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)
