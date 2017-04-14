@@ -33,8 +33,6 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$disableAdditionalGuests   = 4;
-$disableComments           = 4;
 $disableStatusAttend       = '';
 $disableStatusTentative    = '';
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
@@ -356,15 +354,6 @@ else
         if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
         {
             $participateModalForm = true;
-
-            if ((int) $date->getValue('dat_allow_comments') === 1)
-            {
-                $disableComments = '';
-            }
-            if ((int) $date->getValue('dat_additional_guests') === 1)
-            {
-                $disableAdditionalGuests = '';
-            }
         }
 
         // set end date of event
@@ -614,33 +603,10 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId . '">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.'/adm_program/system/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
-
-                        $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php?dat_id=' . $dateId . '&amp;mode=', $page, array('method' => 'post', 'setFocus' => false));
-                        $participationForm->addHtml('<div id="participate_modal_' . $dateId . '" class="modal fade" role="dialog">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                    <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
-                                                                    <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
-                                                                </div>
-                                                                <div class="modal-body">');
-                        $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
-                        $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
-                        $participationForm->addHtml('</div><div class="modal-footer">');
-                        $participationForm->openButtonGroup();
-                        $participationForm->addButton('btn_attend_' . $dateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
-                        $participationForm->addButton('btn_tentative_' . $dateId, $gL10n->get('DAT_USER_TENTATIVE'), array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative));
-                        $participationForm->addButton('btn_refuse_' . $dateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
-                        $participationForm->closeButtonGroup();
-                        $participationForm->addHtml('</div></div></div></div>');
-                        $page->addHtml($participationForm->show(false));
                     }
                     // Reset flags and parameters
-                    $disableAdditionalGuests    = 4;
-                    $disableComments            = 4;
                     $disableStatusAttend        = '';
                     $disableStatusTentative     = '';
                     $participateModalForm       = false;
