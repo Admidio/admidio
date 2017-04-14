@@ -11,8 +11,6 @@
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/password_compat/password.php');
 // provide forward compatibility with the random_* functions that ship with PHP 7.0
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php');
-// old phpass password hashing lib for backward compatibility
-require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/passwordhash.php');
 
 /**
  * @class PasswordHashing
