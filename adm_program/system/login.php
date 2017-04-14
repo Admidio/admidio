@@ -12,7 +12,7 @@ require_once(__DIR__ . '/common.php');
 
 $headline = $gL10n->get('SYS_LOGIN');
 
-// remember url (will be removed in cookie_check)
+// remember url (will be removed in login_check)
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // read id of administrator role
