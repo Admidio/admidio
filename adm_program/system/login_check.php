@@ -109,24 +109,32 @@ else
     }
     else
     {
-        // show successful login message
-        $loginMessage = 'SYS_LOGIN_SUCCESSFUL';
-
-        // bei einer Beta-Version noch einen Hinweis ausgeben !
-        if(ADMIDIO_VERSION_BETA > 0 && !$gDebug)
+        // check if browser can set cookies and throw error if not
+        if (!array_key_exists($gCookiePraefix.'_PHP_SESSION_ID', $_COOKIE))
         {
-            $loginMessage = 'SYS_BETA_VERSION';
+            $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', DOMAIN));
+            // => EXIT
         }
 
-        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf die Startseite verweisen
-        if(!array_key_exists('login_forward_url', $_SESSION))
+        // remove login page from navigation stack
+        if(strpos($gNavigation->getUrl(), '/login.php') > 0)
         {
-            $_SESSION['login_forward_url'] = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
+            $gNavigation->deleteLastUrl();
         }
 
-        // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
-        // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        admRedirect(ADMIDIO_URL . '/adm_program/system/cookie_check.php?message_code=' . $loginMessage);
+        // If no forward url has been set, then refer to the start page after login
+        if(array_key_exists('login_forward_url', $_SESSION))
+        {
+            $forwardUrl = $_SESSION['login_forward_url'];
+        }
+        else
+        {
+            $forwardUrl = $gHomepage;
+        }
+
+        unset($_SESSION['login_forward_url']);
+
+        admRedirect($forwardUrl);
         // => EXIT
     }
 }

@@ -1050,7 +1050,6 @@
     <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
     <string name="SYS_BACK">Zurück</string>
     <string name="SYS_BACK_TO_MODULE_OVERVIEW">Zurück zur Modulübersicht</string>
-    <string name="SYS_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
     <string name="SYS_BIRTHDAY">Geburtstag</string>
     <string name="SYS_CAPTCHA">Captcha</string>
     <string name="SYS_CAPTCHA_CALC">Ergebnis der Rechnung</string>
@@ -1206,7 +1205,6 @@
     <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Anmeldedaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
     <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Benutzername und/oder das Passwort ist falsch.</string>
     <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
-    <string name="SYS_LOGIN_SUCCESSFUL">Du hast dich erfolgreich angemeldet.</string>
     <string name="SYS_LOGOUT">Abmelden</string>
     <string name="SYS_LOGOUT_SUCCESSFUL">Du wurdest erfolgreich abgemeldet.</string>
     <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</string>
