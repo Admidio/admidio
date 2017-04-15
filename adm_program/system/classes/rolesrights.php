@@ -59,7 +59,7 @@ class RolesRights extends TableAccess
     {
         foreach (array_map('intval', $roleIds) as $roleId)
         {
-            if (!in_array($roleId, $this->rolesIds, true))
+            if (!in_array($roleId, $this->rolesIds, true) && $roleId > 0)
             {
                 $rolesRightsData = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
                 $rolesRightsData->setValue('rrd_ror_id', $this->getValue('ror_id'));
@@ -71,17 +71,6 @@ class RolesRights extends TableAccess
                 $this->rolesIds[] = $roleId;
             }
         }
-    }
-
-    /**
-     * Check if one of the assigned roles is also a role of the current object.
-     * Method will return true if at least one role was found.
-     * @param int[] $assignedRoles Array with all assigned roles of the user whose rights should be checked
-     * @return bool Return @b true if at least one role of the assigned roles exists at the current object.
-     */
-    public function hasRight(array $assignedRoles)
-    {
-        return count($assignedRoles) > 0 && count(array_intersect($this->rolesIds, $assignedRoles)) > 0;
     }
 
     /**
@@ -127,6 +116,17 @@ class RolesRights extends TableAccess
     }
 
     /**
+     * Check if one of the assigned roles is also a role of the current object.
+     * Method will return true if at least one role was found.
+     * @param int[] $assignedRoles Array with all assigned roles of the user whose rights should be checked
+     * @return bool Return @b true if at least one role of the assigned roles exists at the current object.
+     */
+    public function hasRight(array $assignedRoles)
+    {
+        return count($assignedRoles) > 0 && count(array_intersect($this->rolesIds, $assignedRoles)) > 0;
+    }
+
+    /**
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
@@ -168,6 +168,32 @@ class RolesRights extends TableAccess
             {
                 $this->rolesRightsDataObjects[$roleId]->delete();
             }
+        }
+    }
+
+    /**
+     * Save all roles of the array to the current roles rights object.
+     * The method will only save the changes to an existing object. Therefore
+     * it will check which roles already exists and which roles must be removed.
+     * @param int[] $roleIds Array with all role ids that should be saved.
+     */
+    public function saveRoles(array $roleIds)
+    {
+        // if array is empty or only contain the role id = 0 then delete all roles rights
+        if(count($roleIds) === 0 || (count($roleIds) === 1 && $roleIds[0] === '0'))
+        {
+            $this->delete();
+        }
+        // save new roles rights to the database
+        else
+        {
+            // get new roles and removed roles
+            $addRoles = array_diff($roleIds, $this->getRolesIds());
+            $removeRoles = array_diff($this->getRolesIds(), $roleIds);
+
+            // now save changes to database
+            $this->addRoles($addRoles);
+            $this->removeRoles($removeRoles);
         }
     }
 }

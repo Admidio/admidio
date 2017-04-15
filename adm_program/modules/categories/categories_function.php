@@ -122,13 +122,13 @@ if($getMode === 1)
     || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS'))
     {
         $category->setValue('cat_org_id', '0');
-        $sqlSearchOrga = ' AND (  cat_org_id  = '. $orgId. '
+        $sqlSearchOrga = ' AND (  cat_org_id  = ? -- $orgId
                                OR cat_org_id IS NULL )';
     }
     else
     {
         $category->setValue('cat_org_id', $orgId);
-        $sqlSearchOrga = ' AND cat_org_id  = '. $orgId;
+        $sqlSearchOrga = ' AND cat_org_id  = ? -- $orgId';
     }
 
     if($category->getValue('cat_name') !== $_POST['cat_name'])
@@ -151,14 +151,7 @@ if($getMode === 1)
 
     // Read current view roles rights of the category
     $rightCategoryView = new RolesRights($gDb, 'category_view', $getCatId);
-    $rolesCategoryView = $rightCategoryView->getRolesIds();
-
-    // get new roles and removed roles
-    $addViewRoles = array_diff($_POST['adm_categories_view_right'], $rolesCategoryView);
-    $removeViewRoles = array_diff($rolesCategoryView, $_POST['adm_categories_view_right']);
-
-    $rightCategoryView->addRoles($addViewRoles);
-    $rightCategoryView->removeRoles($removeViewRoles);
+    $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
 
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
