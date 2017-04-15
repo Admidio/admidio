@@ -25,16 +25,24 @@ $disableStatusAttend        = '';
 $disableStatusTentative     = '';
 $editUserStatus             = false;
 
+// Get the date object
+$date = new TableDate($gDb, $getDateId);
+
+// Read participants
+if($getDateId > 0)
+{
+    $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+    $participantsArray   = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
+}
+
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
 if ($gCurrentUser->getValue('usr_id') !== $getUserId)
 {
-    if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($getDateId))
+    if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
         $editUserStatus = true;
     }
 }
-// Get the date object
-$date = new TableDate($gDb, $getDateId);
 
 // If extended options for participation are allowed then show in form
 if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
@@ -49,9 +57,61 @@ if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('
     }
 }
 
-// Output form
+// For users activate possible disable options
+if (!$editUserStatus)
+{
+    // Check current user. If user is member of the event role then get his current approval status and set the options
+    if (!in_array((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'), true))
+    {
+        switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
+        {
+            case 1:
+                $disableStatusTentative = 'disabled';
+                break;
+            case 2:
+                $disableStatusAttend    = 'disabled';
+                break;
+            case 3:
+                $disableStatusAttend    = 'disabled';
+                $disableStatusTentative = 'disabled';
+                break;
+        }
+    }
+}
+
+// Write header with charset utf8
 header('Content-type: text/html; charset=utf-8');
 
+// Add javascript
+echo'<script>
+        $("button[id^=btn_attend_]").click(function() {
+                    // Select current form and action attribute
+                    var submit_ParticipationForm = $(this).get(0).form;
+                    var form_action = $(submit_ParticipationForm).attr("action");
+
+                    // add value 3 to mode attribute in link for participation
+                    $(submit_ParticipationForm).attr("action", form_action + 3);
+                    submit_ParticipationForm.submit();
+                });
+
+                $("button[id^=btn_tentative_]").click(function() {
+                    var submit_ParticipationForm = $(this).get(0).form;
+                    var form_action = $(submit_ParticipationForm).attr("action");
+
+                    $(submit_ParticipationForm).attr("action", form_action + 7);
+                    submit_ParticipationForm.submit();
+                });
+
+                $("button[id^=btn_refuse_]").click(function() {
+                    var submit_ParticipationForm = $(this).get(0).form;
+                    var form_action = $(submit_ParticipationForm).attr("action");
+
+                    $(submit_ParticipationForm).attr("action", form_action + 4);
+                    submit_ParticipationForm.submit();
+                });
+</script>';
+
+// Define form
 $participationForm = new HtmlForm('participate_form_'. $getDateId, 'dates_function.php?dat_id=' . $getDateId. '&amp;mode=', null, array('type' => 'default', 'method' => 'post', 'setFocus' => false));
 $participationForm->addHtml('<div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -67,4 +127,5 @@ $participationForm->addButton('btn_tentative_' . $getDateId, $gL10n->get('DAT_US
 $participationForm->addButton('btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');
+// Outut form
 $participationForm->show(true);

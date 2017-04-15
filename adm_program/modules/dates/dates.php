@@ -128,32 +128,6 @@ if($getViewMode === 'html')
 
         $("#menu_item_print_view").click(function() {
             window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&id=' . $getId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
-        });
-
-        $("button[id^=btn_attend_]").click(function() {
-            // Select current form and action attribute
-            var submit_ParticipationForm = $(this).get(0).form;
-            var form_action = $(submit_ParticipationForm).attr("action");
-
-            // add value 3 to mode attribute in link for participation
-            $(submit_ParticipationForm).attr("action", form_action + 3);
-            submit_ParticipationForm.submit();
-        });
-
-        $("button[id^=btn_tentative_]").click(function() {
-            var submit_ParticipationForm = $(this).get(0).form;
-            var form_action = $(submit_ParticipationForm).attr("action");
-
-            $(submit_ParticipationForm).attr("action", form_action + 7);
-            submit_ParticipationForm.submit();
-        });
-
-        $("button[id^=btn_refuse_]").click(function() {
-            var submit_ParticipationForm = $(this).get(0).form;
-            var form_action = $(submit_ParticipationForm).attr("action");
-
-            $(submit_ParticipationForm).attr("action", form_action + 4);
-            submit_ParticipationForm.submit();
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -494,17 +468,17 @@ else
             $outputNumberLeaders = $participants->getNumLeaders();
             $participantsArray   = $participants->getParticipantsArray($dateRolId);
 
-        if($date->getValue('dat_deadline') !== null)
-        {
-            if ($date->getValue('dat_all_day') === 0)
+            if($date->getValue('dat_deadline') !== null)
             {
-                 $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']. ' ' . $gPreferences['system_time']);
+                if ($date->getValue('dat_all_day') === 0)
+                {
+                     $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']. ' ' . $gPreferences['system_time']);
+                }
+                else
+                {
+                    $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']);
+                }
             }
-            else
-            {
-                $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']);
-            }
-        }
 
             // Links for the participation only in html mode
             if($getViewMode === 'html')
