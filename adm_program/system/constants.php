@@ -49,7 +49,15 @@ define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
 $port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; // :1234
 
-define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
+{
+    // if ssl proxy is used than this proxy is the host and the cookie must be set for this
+    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port); // ssl.example.org    
+}
+else
+{
+    define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+}
 define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 
 // PATHS
