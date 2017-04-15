@@ -149,10 +149,6 @@ if($getMode === 1)
         }
     }
 
-    // Read current view roles rights of the category
-    $rightCategoryView = new RolesRights($gDb, 'category_view', $getCatId);
-    $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
-
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
     $checkboxes = array('cat_hidden', 'cat_default');
@@ -174,7 +170,9 @@ if($getMode === 1)
         }
     }
 
-    // Daten in Datenbank schreiben
+    $gDb->startTransaction();
+
+    // write category into database
     $returnCode = $category->save();
 
     if($returnCode < 0)
@@ -182,6 +180,10 @@ if($getMode === 1)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
+
+    // save changed roles rights of the category
+    $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+    $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
@@ -205,6 +207,8 @@ if($getMode === 1)
         $sequenceCategory->setValue('cat_sequence', $sequence);
         $sequenceCategory->save();
     }
+
+    $gDb->endTransaction();
 
     $gNavigation->deleteLastUrl();
     unset($_SESSION['categories_request']);
