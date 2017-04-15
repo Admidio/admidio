@@ -67,8 +67,7 @@ catch(AdmException $e)
     // => EXIT
 }
 
-// wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-// alle aus der DB aus lesen
+// if parent folder has access for all roles then read all roles from database
 $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                    FROM '.TBL_ROLES.'
              INNER JOIN '.TBL_CATEGORIES.'
@@ -85,7 +84,6 @@ $sqlDataView = array(
 
 $firstEntryViewRoles = '';
 
-$firstEntryViewRoles = '';
 if (count($rolesViewRightParentFolder) === 0)
 {
     $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);

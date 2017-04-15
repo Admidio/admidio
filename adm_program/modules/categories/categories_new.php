@@ -154,7 +154,49 @@ if($category->getValue('cat_system') == 1)
 }
 
 $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
-                array('maxLength' => 100, 'property' => $fieldPropertyCatName));
+    array(
+        'maxLength' => 100,
+        'property' => $fieldPropertyCatName
+    )
+);
+
+if($getType === 'ANN')
+{
+    // if parent folder has access for all roles then read all roles from database
+    $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
+                       FROM '.TBL_ROLES.'
+                 INNER JOIN '.TBL_CATEGORIES.'
+                         ON cat_id = rol_cat_id
+                      WHERE rol_valid  = 1
+                        AND rol_system = 0
+                        AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   ORDER BY cat_sequence, rol_name';
+    $sqlDataView = array(
+        'query'  => $sqlViewRoles,
+        'params' => array($gCurrentOrganization->getValue('org_id'))
+    );
+
+    // get assigned roles of this folder
+    $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+    $roleViewSet = $categoryViewRolesObject->getRolesIds();
+
+    // if no roles are assigned then set "all users" as default
+    if(count($roleViewSet) === 0)
+    {
+        $roleViewSet[] = 0;
+    }
+
+    // show selectbox with all assigned roles
+    $form->addSelectBoxFromSql(
+        'adm_categories_view_right', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlDataView,
+        array(
+            'property'     => FIELD_REQUIRED,
+            'defaultValue' => $roleViewSet,
+            'multiselect'  => true,
+            'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null)
+        )
+    );
+}
 
 if($getType === 'USF')
 {

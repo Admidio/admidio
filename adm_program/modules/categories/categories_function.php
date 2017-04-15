@@ -109,6 +109,12 @@ if($getMode === 1)
         // => EXIT
     }
 
+    if($getType === 'ANN' && !isset($_POST['adm_categories_view_right']))
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        // => EXIT
+    }
+
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
     if(($getType === 'USF'
@@ -142,6 +148,17 @@ if($getMode === 1)
             // => EXIT
         }
     }
+
+    // Read current view roles rights of the category
+    $rightCategoryView = new RolesRights($gDb, 'category_view', $getCatId);
+    $rolesCategoryView = $rightCategoryView->getRolesIds();
+
+    // get new roles and removed roles
+    $addViewRoles = array_diff($_POST['adm_categories_view_right'], $rolesCategoryView);
+    $removeViewRoles = array_diff($rolesCategoryView, $_POST['adm_categories_view_right']);
+
+    $rightCategoryView->addRoles($addViewRoles);
+    $rightCategoryView->removeRoles($removeViewRoles);
 
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
