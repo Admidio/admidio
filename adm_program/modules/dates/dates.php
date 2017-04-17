@@ -520,13 +520,13 @@ else
                 }
 
                 // Check limit of participants
-                if ($date->getValue('dat_max_members') === 1 && $outputNumberMembers >= $date->getValue('dat_max_members'))
+                if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
                     // No further members allowed
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (!in_array((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'), true))
+                    if (!in_array((int) $gCurrentUser->getValue('usr_id'), $participantsArray, true))
                     {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
