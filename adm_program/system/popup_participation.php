@@ -57,27 +57,8 @@ if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('
     }
 }
 
-// For users activate possible disable options
-if (!$editUserStatus)
-{
-    // Check current user. If user is member of the event role then get his current approval status and set the options
-    if (!in_array((int) $gCurrentUser->getValue('usr_id'), $participantsArray, true))
-    {
-        switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
-        {
-            case 1:
-                $disableStatusTentative = 'disabled';
-                break;
-            case 2:
-                $disableStatusAttend    = 'disabled';
-                break;
-            case 3:
-                $disableStatusAttend    = 'disabled';
-                $disableStatusTentative = 'disabled';
-                break;
-        }
-    }
-}
+$member = new TableMembers($gDb);
+$member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
 
 // Write header with charset utf8
 header('Content-type: text/html; charset=utf-8');
@@ -118,8 +99,8 @@ $participationForm->addHtml('<div class="modal-header">
                                     <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
                                     <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
                             </div><div class="modal-body">');
-$participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $date->getValue('comment'), 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
-$participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $date->getValue('additional_guests'), array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
+$participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $member->getValue('mem_comment'), 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
+$participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $member->getValue('mem_count_guests'), array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
 $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
 $participationForm->addButton('btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
