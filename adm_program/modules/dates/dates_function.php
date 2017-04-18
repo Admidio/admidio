@@ -35,6 +35,7 @@ $getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('
 $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
 $getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
+$getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
 $postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
@@ -533,7 +534,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true, 2);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $getUserId, true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
@@ -541,7 +542,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // user does't want to participate as leader -> remove his participation as leader from the event,
         // dont remove the participation itself!
         $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+        $member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_leader', 0);
         $member->save();
     }
@@ -567,7 +568,7 @@ elseif($getMode === 2)  // Delete the event
 elseif($getMode === 3)  // User attends to the event
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
     $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
@@ -578,12 +579,12 @@ elseif($getMode === 4)  // User cancel the event
     if (!$gPreferences['dates_save_all_confirmations'])
     {
         // Delete entry
-        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
+        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
     }
     else
     {
         // Set user status to refused
-        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
+        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
     }
 
     $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
@@ -592,7 +593,7 @@ elseif($getMode === 4)  // User cancel the event
 elseif($getMode === 7)  // User may participate in the event
 {
     $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
+    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
     $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
     // => EXIT
 }
@@ -623,7 +624,7 @@ if (in_array($getMode, array(3, 4, 7), true))
     if (!$date->deadlineExceeded())
     {
         $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_comment', $postUserComment);
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)

@@ -389,6 +389,7 @@ if ($getMode !== 'csv')
 
         // create html page object
         $page = new HtmlPage();
+        $page->enableModal();
 
         if ($getFullScreen)
         {
@@ -575,7 +576,19 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
             $columnValues[] = $columnHeader;
         }
     }
-}  // End-For
+} // End-For
+
+// If its an event and user has right to edit user states add additional column for edit link
+if ($getMode === 'html')
+{
+    if ($role->getValue('cat_name_intern') === 'EVENTS')
+    {
+        if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))
+        {
+            $columnValues[] .= '&nbsp;';
+        }
+    }
+}
 
 if ($getMode === 'csv')
 {
@@ -827,6 +840,26 @@ foreach ($membersList as $member)
                         }
                     }
                 }
+            }
+        }
+    }
+    if ($getMode === 'html')
+    {
+        // if its an event and user has right to edit user status
+        if($role->getValue('cat_name_intern') === 'EVENTS')
+        {
+            // Get the matching event
+            $sql = 'SELECT dat_id
+                        FROM '.TBL_DATES.'
+                        WHERE dat_rol_id = ? -- $roleIds[0]';
+            $datesStatement = $gDb->queryPrepared($sql, $roleIds);
+            $dateId      = $datesStatement->fetchColumn();
+    
+            if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))
+            {
+                $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.ADMIDIO_URL.'/adm_program/system/popup_participation.php?dat_id=' . $dateId . '&amp;usr_id=' .$member['usr_id'] . '">
+                            <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
             }
         }
     }
