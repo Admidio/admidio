@@ -159,8 +159,7 @@ class Session extends TableAccess
 
         if ($path === '')
         {
-            // set path to only / because there are problems if path has capital letters
-            $path = '/';
+            $path = ADMIDIO_SUB_FOLDER;
         }
         if ($domain === '')
         {

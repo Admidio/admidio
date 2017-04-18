@@ -52,13 +52,14 @@ $port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; 
 if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
 {
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
-    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port); // ssl.example.org    
+    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port); // ssl.example.org
 }
 else
 {
     define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
 }
 define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
+define('ADMIDIO_SUB_FOLDER', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
