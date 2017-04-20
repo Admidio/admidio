@@ -28,20 +28,20 @@ $editUserStatus             = false;
 // Get the date object
 $date = new TableDate($gDb, $getDateId);
 
-// Read participants
-if($getDateId > 0)
-{
-    $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
-    $participantsArray   = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
-}
-
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
 if ($gCurrentUser->getValue('usr_id') !== $getUserId)
 {
-    if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
+    if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
-        $editUserStatus = true;
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
+}
+
+// Read participants
+if ($getDateId > 0)
+{
+    $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+    $participantsArray   = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
 }
 
 // If extended options for participation are allowed then show in form

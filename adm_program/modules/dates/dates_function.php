@@ -565,38 +565,7 @@ elseif($getMode === 2)  // Delete the event
         echo 'done';
     }
 }
-elseif($getMode === 3)  // User attends to the event
-{
-    $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
-    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-    // => EXIT
-}
-elseif($getMode === 4)  // User cancel the event
-{
-    $member = new TableMembers($gDb);
 
-    if (!$gPreferences['dates_save_all_confirmations'])
-    {
-        // Delete entry
-        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
-    }
-    else
-    {
-        // Set user status to refused
-        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
-    }
-
-    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-    // => EXIT
-}
-elseif($getMode === 7)  // User may participate in the event
-{
-    $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
-    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-    // => EXIT
-}
 elseif($getMode === 6)  // export event in ical format
 {
     $filename = $date->getValue('dat_headline');
@@ -617,13 +586,44 @@ elseif($getMode === 6)  // export event in ical format
     echo $date->getIcal(DOMAIN);
     exit();
 }
-// If participation mode: Write optional parameter from user and show current status message
+// If participation mode: Set status and write optional parameter from user and show current status message
 if (in_array($getMode, array(3, 4, 7), true))
 {
+    $member = new TableMembers($gDb);
+    
+    switch ($getMode)  // User attends to the event
+    {
+        case 3:  // User attends to the event
+            $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
+            $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+            // => EXIT
+            break;
+            
+        case 4:  // User cancel the event
+            if (!$gPreferences['dates_save_all_confirmations'])
+            {
+                // Delete entry
+                $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
+            }
+            else
+            {
+                // Set user status to refused
+                $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
+            }
+
+            $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+            // => EXIT
+            break;
+            
+        case 7:  // User may participate in the event
+            $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
+            $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+            // => EXIT
+            break;
+    }
     // Check participation deadline and update user inputs if possible
     if (!$date->deadlineExceeded())
     {
-        $member = new TableMembers($gDb);
         $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_comment', $postUserComment);
         // Now check participants limit and save guests if possible
