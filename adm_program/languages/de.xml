@@ -42,11 +42,11 @@
     <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmer können ihre Teilnahme kommentieren. Die Kommentare können über die Teilnehmerliste eingesehen werden</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
     <string name="DAT_ATTEND">Teilnehmen</string>
-    <string name="DAT_ATTEND_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
-    <string name="DAT_ATTEND_POSSIBLY">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
+    <string name="DAT_ATTEND_DATE">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# zugesagt.</string>
+    <string name="DAT_ATTEND_POSSIBLY">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
     <string name="DAT_CALENDAR">Kalender</string>
     <string name="DAT_CANCEL">Absagen</string>
-    <string name="DAT_CANCEL_DATE">Du hast deine Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
+    <string name="DAT_CANCEL_DATE">Du hast die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
     <string name="DAT_CURRENT_DATES_OF_ORGA">Aktuelle Termine der Organisation #VAR1#</string>
     <string name="DAT_DATE">Termin</string>
     <string name="DAT_DATES">Termine</string>
