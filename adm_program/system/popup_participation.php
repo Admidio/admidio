@@ -33,7 +33,7 @@ if ($gCurrentUser->getValue('usr_id') !== $getUserId)
 {
     if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
