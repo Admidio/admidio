@@ -59,7 +59,7 @@ else
     define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
 }
 define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
-define('ADMIDIO_SUB_FOLDER', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
+define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
