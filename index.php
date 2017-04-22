@@ -10,7 +10,13 @@
  */
 if(is_file('adm_my_files/config.php'))
 {
-    require_once('adm_program/system/common.php');
+    // include all files separatly because we could not inlcude common.php at this point
+    // to be backward compatible with older versions
+    require_once('adm_my_files/config.php');
+    require_once('adm_program/system/init_globals.php');
+    require_once('adm_program/system/constants.php');
+    require_once('adm_program/system/function.php');
+    require_once('adm_program/system/logging.php');
 
     // connect to database
     try
@@ -30,6 +36,8 @@ if(is_file('adm_my_files/config.php'))
         admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
         // => EXIT
     }
+
+    require_once('adm_program/system/common.php');
 
     if(isset($gHomepage))
     {
