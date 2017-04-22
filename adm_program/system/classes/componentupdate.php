@@ -266,7 +266,10 @@ class ComponentUpdate extends Component
             $this->db->query($sql);
 
             $sql = 'UPDATE '. TBL_ANNOUNCEMENTS. ' SET ann_cat_id =
-                           (SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_type = \'ANN\' AND cat_name_intern = \'COMMON\')
+                           (SELECT cat_id FROM '.TBL_CATEGORIES.'
+                             WHERE cat_type = \'ANN\'
+                               AND cat_name_intern = \'COMMON\'
+                               AND cat_org_id = '.$row['org_id'].')
                      WHERE ann_org_id = '.$row['org_id'];
             $this->db->query($sql);
         }
