@@ -216,7 +216,7 @@ class Database
                 $this->query('SET SQL_BIG_SELECTS = 1');
                 break;
             case 'pgsql':
-                $this->query('SET NAMES UNICODE');
+                $this->query('SET NAMES \'UTF8\'');
                 break;
         }
     }
