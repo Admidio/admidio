@@ -118,6 +118,7 @@
     <step id="480" database="pgsql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
     <step id="500">ComponentUpdate::updateStepRewriteFolderRights</step>
+    <step id="510" database="pgsql">UPDATE %PREFIX%_user_fields SET usf_value_list = E'male.png|SYS_MALE\nfemale.png|SYS_FEMALE' WHERE usf_name_intern = 'GENDER'</step>
 
     <step>stop</step>
 </update>
