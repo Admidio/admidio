@@ -236,7 +236,6 @@ class Participants
                 }
             }
         }
-
         return false;
     }
 }

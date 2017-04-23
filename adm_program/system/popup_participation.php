@@ -29,7 +29,7 @@ $editUserStatus             = false;
 $date = new TableDate($gDb, $getDateId);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
-if ($gCurrentUser->getValue('usr_id') !== $getUserId)
+if ($gCurrentUser->getValue('usr_id') === $getUserId)
 {
     if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {

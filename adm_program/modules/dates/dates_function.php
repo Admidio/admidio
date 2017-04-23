@@ -39,7 +39,8 @@ $getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('
 $postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
-$originalDateId = 0;
+$participationPossible  = true;
+$originalDateId         = 0;
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -401,11 +402,11 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
         if(strlen($_POST['dat_max_members']) > 0)
         {
-            $teilnehmer = $_POST['dat_max_members'];
+            $participants = $_POST['dat_max_members'];
         }
         else
         {
-            $teilnehmer = 'n/a';
+            $participants = 'n/a';
         }
 
         try
@@ -415,7 +416,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             if($getMode === 1)
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
@@ -423,7 +424,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             else
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
@@ -590,37 +591,7 @@ elseif($getMode === 6)  // export event in ical format
 if (in_array($getMode, array(3, 4, 7), true))
 {
     $member = new TableMembers($gDb);
-    
-    switch ($getMode)  // User attends to the event
-    {
-        case 3:  // User attends to the event
-            $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
-            $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-            // => EXIT
-            break;
-            
-        case 4:  // User cancel the event
-            if (!$gPreferences['dates_save_all_confirmations'])
-            {
-                // Delete entry
-                $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
-            }
-            else
-            {
-                // Set user status to refused
-                $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
-            }
 
-            $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-            // => EXIT
-            break;
-            
-        case 7:  // User may participate in the event
-            $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
-            $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-            // => EXIT
-            break;
-    }
     // Check participation deadline and update user inputs if possible
     if (!$date->deadlineExceeded())
     {
@@ -636,18 +607,61 @@ if (in_array($getMode, array(3, 4, 7), true))
             {
                 $member->setValue('mem_count_guests', $postAdditionalGuests);
             }
-            else
+
+            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+
+            if ($date->getValue('dat_max_members') == $totalMembers
+                && $participants->isMemberOfEvent($getUserId))
             {
-                $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
-                if ($date->getValue('dat_max_members') > 0)
-                {
-                    $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
-                }
+                $participationPossible = false; // Participation Limit exeeded and user refused
             }
+
+            if ($date->getValue('dat_max_members') > 0)
+            {
+                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+            }
+
         }
         else
         {
             $member->setValue('mem_count_guests', $postAdditionalGuests);
+        }
+
+        switch ($getMode)
+        {
+            case 3:  // User attends to the event
+                if ($participationPossible)
+                {
+                    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
+                    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                    // => EXIT
+                }
+                break;
+
+            case 4:  // User cancel the event
+                if (!$gPreferences['dates_save_all_confirmations'])
+                {
+                    // Delete entry
+                    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
+                }
+                else
+                {
+                    // Set user status to refused
+                    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
+                }
+
+                $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                // => EXIT
+                break;
+
+            case 7:  // User may participate in the event
+                if ($participationPossible)
+                {
+                    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
+                    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                    // => EXIT
+                }
+                break;
         }
     }
 
