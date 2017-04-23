@@ -119,6 +119,7 @@
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
     <step id="500">ComponentUpdate::updateStepRewriteFolderRights</step>
     <step id="510" database="pgsql">UPDATE %PREFIX%_user_fields SET usf_value_list = E'male.png|SYS_MALE\nfemale.png|SYS_FEMALE' WHERE usf_name_intern = 'GENDER'</step>
+    <step id="520">UPDATE %PREFIX%_roles SET rol_administrator = 1 WHERE rol_name = 'Administrator'</step>
 
     <step>stop</step>
 </update>
