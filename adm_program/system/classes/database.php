@@ -487,7 +487,7 @@ class Database
                 $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
                 if ($posAutoIncrement > 0)
                 {
-                    $posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
+                    $posInteger = strrpos(substr(strtolower($sql), 0, $posAutoIncrement), 'integer');
                     $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
                 }
             }
