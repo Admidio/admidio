@@ -457,7 +457,7 @@ $javascriptCode .= '
     }
 
     function loadList() {
-        var listId = $("#sel_select_configuation").val();
+        var listId = $("#sel_select_configuration").val();
         self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
     }
 
