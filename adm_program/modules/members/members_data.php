@@ -106,9 +106,9 @@ $queryParamsSearch = array();
 $searchColumns = array(
     'COALESCE(name, \' \')',
     'COALESCE(usr_login_name, \' \')',
-    'CASE WHEN gender = 1 THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = 2 THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ',
-    'COALESCE(birthday, \' \')',
-    'COALESCE(timestamp, \' \')'
+    'CASE WHEN gender = \'1\' THEN \''.$gL10n->get('SYS_MALE').'\' WHEN gender = \'2\' THEN \''.$gL10n->get('SYS_FEMALE').'\' ELSE \' \' END ',
+    'COALESCE(birthday, \'1900-02-01\')',
+    'COALESCE(timestamp, \'1900-02-01\')'
 );
 
 if($getSearch !== '' && count($searchColumns) > 0)
@@ -244,6 +244,7 @@ $orgName   = $gCurrentOrganization->getValue('org_longname');
 $rowNumber = $getStart; // count for every row
 
 $jsonArray['data'] = array();
+
 while($row = $mglStatement->fetch())
 {
     ++$rowNumber;
