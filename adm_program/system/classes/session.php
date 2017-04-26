@@ -336,28 +336,18 @@ class Session extends TableAccess
             exit('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
-        // if AutoLogin is set then refresh the auto_login_id for security reasons
-        if($this->getValue('ses_usr_id') > 0)
+        // session in database could be deleted if user was some time inactive and another user
+        // clears the table. Therefore we must reset the user id
+        if ($this->mAutoLogin instanceof \AutoLogin)
         {
-            if ($this->mAutoLogin instanceof \AutoLogin)
+            if((int) $this->getValue('ses_usr_id') === 0)
             {
-                $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
-                $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
-                $this->mAutoLogin->save();
-
-                // save cookie for autologin
-                $currDateTime = new DateTime();
-                $oneYearDateInterval = new DateInterval('P1Y');
-                $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
-                $timestampExpired = $oneYearAfterDateTime->getTimestamp();
-
-                self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'), $timestampExpired);
+                $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
             }
-            else
-            {
-                // check if there is a valid autologin and set this login active
-                $this->refreshAutoLogin();
-            }
+        }
+        elseif(array_key_exists($this->cookieAutoLoginId, $_COOKIE))
+        {
+            $this->refreshAutoLogin();
         }
 
         // if flag for reload of organization is set than reload the organization data
