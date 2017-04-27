@@ -627,6 +627,8 @@ if (in_array($getMode, array(3, 4, 7), true))
             $member->setValue('mem_count_guests', $postAdditionalGuests);
         }
 
+        $member->save();
+
         switch ($getMode)
         {
             case 3:  // User attends to the event
@@ -664,8 +666,6 @@ if (in_array($getMode, array(3, 4, 7), true))
                 break;
         }
     }
-
-    $member->save();
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));
