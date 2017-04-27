@@ -577,7 +577,7 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.'/adm_program/system/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.'/adm_program/modules/dates/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
                     // Reset flags and parameters

@@ -11,8 +11,8 @@
  * $getUserId - ID of the User whose participation detail shall be set or changed
  ***********************************************************************************************
  */
-require_once(__DIR__ . '/common.php');
-require(__DIR__ . '/login_valid.php');
+require_once(__DIR__ . '/../../system/common.php');
+require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int');
