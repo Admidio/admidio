@@ -10,7 +10,7 @@
  */
 if(is_file('adm_my_files/config.php'))
 {
-    // include all files separatly because we could not inlcude common.php at this point
+    // include all files separately because we could not include common.php at this point
     // to be backward compatible with older versions
     require_once('adm_my_files/config.php');
     require_once('adm_program/system/init_globals.php');
