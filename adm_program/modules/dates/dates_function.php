@@ -596,7 +596,7 @@ if (in_array($getMode, array(3, 4, 7), true))
     if (!$date->deadlineExceeded())
     {
         $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
-        $member->setValue('mem_comment', $postUserComment);
+        $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)
         {
@@ -607,11 +607,15 @@ if (in_array($getMode, array(3, 4, 7), true))
             {
                 $member->setValue('mem_count_guests', $postAdditionalGuests);
             }
+            else
+            {
+                $participationPossible = false;
+            }
 
             $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
 
-            if ($date->getValue('dat_max_members') == $totalMembers
-                && $participants->isMemberOfEvent($getUserId))
+            if ($date->getValue('dat_max_members') === (int) $totalMembers
+                && !$participants->isMemberOfEvent($getUserId))
             {
                 $participationPossible = false; // Participation Limit exeeded and user refused
             }
@@ -629,41 +633,44 @@ if (in_array($getMode, array(3, 4, 7), true))
 
         $member->save();
 
-        switch ($getMode)
+        if ($participationPossible)
         {
-            case 3:  // User attends to the event
-                if ($participationPossible)
-                {
-                    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
-                    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+            switch ($getMode)
+            {
+                case 3:  // User attends to the event
+                    if ($participationPossible)
+                    {
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
+                        $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                        // => EXIT
+                    }
+                    break;
+
+                case 4:  // User cancel the event
+                    if (!$gPreferences['dates_save_all_confirmations'])
+                    {
+                        // Delete entry
+                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
+                    }
+                    else
+                    {
+                        // Set user status to refused
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
+                    }
+
+                    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
                     // => EXIT
-                }
-                break;
+                    break;
 
-            case 4:  // User cancel the event
-                if (!$gPreferences['dates_save_all_confirmations'])
-                {
-                    // Delete entry
-                    $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
-                }
-                else
-                {
-                    // Set user status to refused
-                    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
-                }
-
-                $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-                // => EXIT
-                break;
-
-            case 7:  // User may participate in the event
-                if ($participationPossible)
-                {
-                    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
-                    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-                    // => EXIT
-                }
-                break;
+                case 7:  // User may participate in the event
+                    if ($participationPossible)
+                    {
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
+                        $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                        // => EXIT
+                    }
+                    break;
+            }
         }
     }
 
