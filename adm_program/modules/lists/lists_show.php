@@ -402,7 +402,12 @@ if ($getMode !== 'csv')
 
         // create html page object
         $page = new HtmlPage();
-        $page->enableModal();
+
+        // enable modal window for users with permission to edit user states if list configuration is a participation list of events
+        if ($editUserStatus)
+        {
+            $page->enableModal();
+        }
 
         if ($getFullScreen)
         {
