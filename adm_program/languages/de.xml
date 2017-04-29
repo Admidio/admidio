@@ -52,8 +52,8 @@
     <string name="DAT_DATES">Termine</string>
     <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
     <string name="DAT_DEADLINE">Anmeldeschluss</string>
-    <string name="DAT_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen ereicht wurde, oder der Termin in der Vergangenheit liegt. Bitte wende dich an die Leiter des Termins, oder einen Administrator!</string>
-    <string name="DAT_DEADLINE_DESC">Teilnehmer können sich bis zu diesem Datum am Termin anmelden. Leiter und Benutzer mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmer zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldschluss angenommnen.</string>
+    <string name="DAT_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wende dich an die Leiter des Termins oder einen Administrator!</string>
+    <string name="DAT_DEADLINE_DESC">Teilnehmer können sich bis zu diesem Datum am Termin anmelden. Leiter und Benutzer mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmer zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldeschluss angenommen.</string>
     <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
     <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
@@ -1169,6 +1169,8 @@
     <string name="SYS_FRIDAY">Freitag</string>
     <string name="SYS_FULL_SCREEN">Vollbild</string>
     <string name="SYS_GENDER">Geschlecht</string>
+    <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
+    <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
     <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
     <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
     <string name="SYS_HEADLINE">Überschrift</string>
@@ -1291,6 +1293,9 @@
     <string name="SYS_PREVIEW">Vorschau</string>
     <string name="SYS_PREVIOUS">Voriges</string>
     <string name="SYS_PREVIOUS_VALUE">Vorheriger Wert</string>
+    <string name="SYS_PRNG">Pseudo-Zufallszahlen Generator</string>
+    <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
+    <string name="SYS_PRNG_SECURE">Sicher</string>
     <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
     <string name="SYS_PROGRESSBAR">Ladebalken</string>
     <string name="SYS_PROPERTIES">Eigenschaften</string>

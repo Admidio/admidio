@@ -432,6 +432,11 @@ class User extends TableAccess
         {
             $sqlAdministrator = ', rol_webmaster AS administrator';
         }
+        // set administrator to false for version <= 2.3
+        else
+        {
+            $sqlAdministrator = ', 0 AS administrator';
+        }
 
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT DISTINCT mem_usr_id'.$sqlAdministrator.'

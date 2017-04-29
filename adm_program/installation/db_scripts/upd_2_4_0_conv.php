@@ -98,7 +98,7 @@ $gDb->query($sql);
 $emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
 
 // create new system user
-$systemUser = new TableAccess($db, TBL_USERS, 'usr');
+$systemUser = new TableAccess($gDb, TBL_USERS, 'usr');
 $systemUser->setValue('usr_login_name', $gL10n->get('SYS_SYSTEM'));
 $systemUser->setValue('usr_valid', '0');
 $systemUser->setValue('usr_timestamp_create', DATETIME_NOW);

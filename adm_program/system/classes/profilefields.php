@@ -569,23 +569,23 @@ class ProfileFields
                     break;
                 case 'NUMBER':
                     // A number must be numeric
-                    if (!is_numeric($fieldValue) && !$this->noValueCheck)
+                    if (!$this->noValueCheck && !is_numeric($fieldValue))
                     {
                         return false;
                     }
 
                     // numbers don't have leading zero
-                    $fieldValue = ltrim($fieldValue, '0');
+                    $fieldValue = preg_replace('/^0*(\d+)$/', '${1}', $fieldValue);
                     break;
                 case 'DECIMAL':
-                    // A number must be numeric
-                    if (!$this->noValueCheck && !is_numeric(strtr($fieldValue, ',.', '00')))
+                    // A decimal must be numeric
+                    if (!$this->noValueCheck && !is_numeric(str_replace(',', '.', $fieldValue)))
                     {
                         return false;
                     }
 
-                    // numbers don't have leading zero
-                    $fieldValue = ltrim($fieldValue, '0');
+                    // decimals don't have leading zero
+                    $fieldValue = preg_replace('/^0*(\d+([,.]\d*)?)$/', '${1}', $fieldValue);
                     break;
                 case 'PHONE':
                     // check phone number for valid characters

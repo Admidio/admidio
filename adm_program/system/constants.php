@@ -45,11 +45,20 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
 define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true | false
+define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
-define('PORT', ((!HTTPS && (int) $_SERVER['SERVER_PORT'] === 80) || (HTTPS && (int) $_SERVER['SERVER_PORT'] === 443)) ? '' : ':' . (int) $_SERVER['SERVER_PORT']); // :1234
-define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
-
+$port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; // :1234
+if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
+{
+    // if ssl proxy is used than this proxy is the host and the cookie must be set for this
+    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port); // ssl.example.org:1234
+}
+else
+{
+    define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+}
 define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
+define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0

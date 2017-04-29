@@ -276,9 +276,10 @@ class ComponentUpdate extends Component
                        SET ann_cat_id = (SELECT cat_id
                                            FROM '.TBL_CATEGORIES.'
                                           WHERE cat_type = \'ANN\'
-                                            AND cat_name_intern = \'COMMON\')
+                                            AND cat_name_intern = \'COMMON\'
+                                            AND cat_org_id = ? ) -- $row[org_id]
                      WHERE ann_org_id = ? -- $rowId';
-            $this->db->queryPrepared($sql, array($rowId));
+            $this->db->queryPrepared($sql, array($rowId, $row['org_id']));
         }
     }
 

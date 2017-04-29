@@ -184,11 +184,13 @@ class PasswordHashing
 
     /**
      * Generate a cryptographically strong random integer
-     * @param int $min The min of the range (inclusive)
-     * @param int $max The max of the range (inclusive)
+     * @param int  $min                     The min of the range (inclusive)
+     * @param int  $max                     The max of the range (inclusive)
+     * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
+     * @throws AdmException
      * @return int Returns a cryptographically strong random integer
      */
-    public static function genRandomInt($min, $max)
+    public static function genRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
     {
         global $gLogger;
 
@@ -198,15 +200,27 @@ class PasswordHashing
         }
         catch (Error $e)
         {
-            // as a fallback we should use the rand method
+            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
+
+            if ($exceptionOnInsecurePRNG)
+            {
+                throw new AdmException('SYS_GEN_RANDOM_ERROR', $e->getCode(), $e->getMessage());
+            }
+
+            // as a fallback we use the mt_rand method
             $int = mt_rand($min, $max);
-            $gLogger->warning('SECURITY: Could not generate secure random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
         }
         catch (Exception $e)
         {
-            // as a fallback we should use the rand method
+            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
+
+            if ($exceptionOnInsecurePRNG)
+            {
+                throw new AdmException('SYS_GEN_RANDOM_EXCEPTION', $e->getCode(), $e->getMessage());
+            }
+
+            // as a fallback we use the mt_rand method
             $int = mt_rand($min, $max);
-            $gLogger->warning('SECURITY: Could not generate secure random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
         }
 
         return $int;
