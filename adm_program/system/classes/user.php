@@ -786,6 +786,34 @@ class User extends TableAccess
     }
 
     /**
+     * Creates an array with all categories of one type where the user has the right to view them
+     * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @return int[] Array with categories ids where user has the right to view them
+     */
+    public function getAllVisibleCategories($categoryType)
+    {
+        $sql = 'SELECT cat_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = ? -- $categoryType
+                   AND ( cat_org_id IS NULL
+                       OR cat_org_id = ? ) -- $this->organizationId
+                   AND ( NOT EXISTS (SELECT 1
+                                       FROM ' . TBL_ROLES_RIGHTS . '
+                                      INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . ' ON rrd_ror_id = ror_id
+                                      WHERE ror_name_intern = \'category_view\' 
+                                        AND rrd_object_id = cat_id )
+                        OR EXISTS (SELECT 1 
+                                     FROM adm_roles_rights
+                                    INNER JOIN adm_roles_rights_data ON rrd_ror_id = ror_id
+                                    WHERE ror_name_intern = \'category_view\' 
+                                      AND rrd_object_id = cat_id
+                                      AND rrd_rol_id IN (?) ) -- $this->getAllVisibleRoles()
+                        )';
+        $queryParams = array($categoryType, $this->organizationId, implode(',', $this->getAllVisibleRoles()));
+        $defaultRolesStatement = $this->db->queryPrepared($sql, $queryParams);
+    }
+
+    /**
      * Creates an array with all roles where the user has the right to view them
      * @return int[] Array with role ids where user has the right to view them
      */
