@@ -87,17 +87,19 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gDb;
+        global $gCurrentOrganization, $gCurrentUser, $gDb;
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = ann_cat_id
-                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE cat_id IN (?) -- $gCurrentUser->getAllVisibleCategories(\'ANN\')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getSqlConditions();
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $queryParams  = array(implode(',', $gCurrentUser->getAllVisibleCategories('ANN')), $gCurrentOrganization->getValue('org_id')); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
         return (int) $pdoStatement->fetchColumn();
     }
@@ -110,7 +112,7 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb;
+        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gProfileFields, $gDb;
 
         if ($gPreferences['system_show_create_edit'] == 1)
         {
@@ -151,7 +153,8 @@ class ModuleAnnouncements extends Modules
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
                        '.$additionalTables.'
-                 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                 WHERE cat_id IN ('.implode(',', $gCurrentUser->getAllVisibleCategories('ANN')).')
+                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getSqlConditions().'
@@ -167,7 +170,7 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $announcementsStatement = $gDb->query($sql); // TODO add more params
+        $announcementsStatement = $gDb->query($sql);  // TODO add more params, Test if all announcements are shown!!!
 
         // array for results
         return array(
