@@ -15,6 +15,7 @@ if (is_file('adm_my_files/config.php'))
     require_once(__DIR__ . '/adm_my_files/config.php');
     require_once(__DIR__ . '/adm_program/system/init_globals.php');
     require_once(__DIR__ . '/adm_program/system/constants.php');
+    require_once(__DIR__ . '/adm_program/system/autoload.php');
     require_once(__DIR__ . '/adm_program/system/function.php');
     require_once(__DIR__ . '/adm_program/system/logging.php');
 
