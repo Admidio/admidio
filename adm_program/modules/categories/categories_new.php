@@ -160,7 +160,8 @@ $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_na
     )
 );
 
-if($getType === 'ANN')
+// roles have their own preferences for visibility, so only allow this for other types
+if(!in_array($getType, array('USF', 'DAT', 'ROL')))
 {
     // if parent folder has access for all roles then read all roles from database
     $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
@@ -219,7 +220,7 @@ if($getType === 'USF')
 }
 else
 {
-    if($getType !== 'ANN')
+    if($getType === 'DAT')
     {
         $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText), (bool) $category->getValue('cat_hidden'),
                            array('icon' => 'user_key.png'));

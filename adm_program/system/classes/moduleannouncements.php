@@ -82,29 +82,6 @@
 class ModuleAnnouncements extends Modules
 {
     /**
-     * Get number of available announcements
-     * @Return int Returns the total count and push it in the array
-     */
-    public function getDataSetCount()
-    {
-        global $gCurrentOrganization, $gCurrentUser, $gDb;
-
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_ANNOUNCEMENTS.'
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = ann_cat_id
-                 WHERE cat_id IN (?) -- $gCurrentUser->getAllVisibleCategories(\'ANN\')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR (   ann_global = 1
-                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$this->getSqlConditions();
-        $queryParams  = array(implode(',', $gCurrentUser->getAllVisibleCategories('ANN')), $gCurrentOrganization->getValue('org_id')); // TODO add more params
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
-
-        return (int) $pdoStatement->fetchColumn();
-    }
-
-    /**
      * Get all records and push it to the array
      * @param int $startElement
      * @param int $limit
@@ -154,7 +131,7 @@ class ModuleAnnouncements extends Modules
                     ON cat_id = ann_cat_id
                        '.$additionalTables.'
                  WHERE cat_id IN ('.implode(',', $gCurrentUser->getAllVisibleCategories('ANN')).')
-                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getSqlConditions().'
@@ -170,7 +147,7 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $announcementsStatement = $gDb->query($sql);  // TODO add more params, Test if all announcements are shown!!!
+        $announcementsStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         // array for results
         return array(
@@ -180,6 +157,28 @@ class ModuleAnnouncements extends Modules
             'totalCount' => $this->getDataSetCount(),
             'parameter'  => $this->getParameters()
         );
+    }
+
+    /**
+     * Get number of available announcements
+     * @Return int Returns the total count and push it in the array
+     */
+    public function getDataSetCount()
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gDb;
+
+        $sql = 'SELECT COUNT(*) AS count
+                  FROM '.TBL_ANNOUNCEMENTS.'
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = ann_cat_id
+                 WHERE cat_id IN (' . implode(',', $gCurrentUser->getAllVisibleCategories('ANN')) . ')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR (   ann_global = 1
+                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
+                       '.$this->getSqlConditions();
+        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+
+        return (int) $pdoStatement->fetchColumn();
     }
 
     /**

@@ -36,8 +36,20 @@ if (!$gCurrentUser->editWeblinksRight())
     // => EXIT
 }
 
-// Weblinkobjekt anlegen
-$link = new TableWeblink($gDb, $getLinkId);
+// create weblink object
+$link = new TableWeblink($gDb);
+
+if($getLinkId > 0)
+{
+    $link->readDataById($getLinkId);
+
+    // check if the current user could edit this weblink
+    if(!$link->editable())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+}
 
 if(isset($_SESSION['links_request']))
 {

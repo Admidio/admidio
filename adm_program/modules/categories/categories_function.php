@@ -109,7 +109,7 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($getType === 'ANN' && !isset($_POST['adm_categories_view_right']))
+    if(!in_array($getType, array('USF', 'DAT', 'ROL')) && !isset($_POST['adm_categories_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
         // => EXIT
@@ -181,9 +181,12 @@ if($getMode === 1)
         // => EXIT
     }
 
-    // save changed roles rights of the category
-    $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
-    $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+    if(!in_array($getType, array('USF', 'DAT', 'ROL')))
+    {
+        // save changed roles rights of the category
+        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+    }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden

@@ -122,7 +122,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gDb, $gValidLogin;
+        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gDb, $gValidLogin;
 
         // Parameter
         if($limit === null)
@@ -150,7 +150,7 @@ class ModuleWeblinks extends Modules
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_type   = \'LNK\'
+                 WHERE cat_id IN ('.implode(',', $gCurrentUser->getAllVisibleCategories('LNK')).')  -- $gCurrentUser->getAllVisibleCategories(\'LNK\')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
@@ -181,13 +181,13 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gDb;
+        global $gCurrentOrganization, $gCurrentUser, $gDb;
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_type   = \'LNK\'
+                 WHERE cat_id IN (' . implode(',', $gCurrentUser->getAllVisibleCategories('LNK')) . ')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions;
         $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params

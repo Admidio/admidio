@@ -144,7 +144,7 @@ else
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
                     {
-                        if($announcement->editRight())
+                        if($announcement->editable())
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?ann_id='. $annId. '&amp;copy=1&amp;headline='.$getHeadline.'"><img
