@@ -36,25 +36,31 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
-     * prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
-     * @return bool
+     * This method checks if the current user is allowed to edit this announcement. Therefore
+     * the announcement must be visible to the user and must be of the current organization.
+     * Only global announcements could be edited by the parent organization.
+     * @return bool Return true if the current user is allowed to edit this announcement
      */
     public function editRight()
     {
-        global $gCurrentOrganization;
+        global $gCurrentOrganization, $gCurrentUser;
 
-        $orgId = (int) $this->getValue('cat_org_id');
-
-        // Ankuendigung der eigenen Orga darf bearbeitet werden
-        if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
+        // check if the current user could view the category of the announcement
+        if(in_array($gCurrentUser->getAllVisibleCategories('ANN'), $this->getValue('cat_id')))
         {
-            return true;
-        }
+            $orgId = (int) $this->getValue('cat_org_id');
 
-        // Ankuendigung von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        if ($gCurrentOrganization->isChildOrganization($orgId) && $this->getValue('ann_global'))
-        {
-            return true;
+            // only edit announcements of the current organization
+            if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
+            {
+                return true;
+            }
+
+            // Global announcments could be edited by the parent organization
+            if ($gCurrentOrganization->isChildOrganization($orgId) && $this->getValue('ann_global'))
+            {
+                return true;
+            }
         }
 
         return false;
