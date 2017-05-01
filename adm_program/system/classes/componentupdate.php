@@ -660,4 +660,37 @@ class ComponentUpdate extends Component
                      , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$userId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql); // TODO add more params
     }
+
+    /**
+     * This method add all roles to the role right category_view if the role had set the flag cat_hidden = 1
+     */
+    public function updateStepVisibleCategories()
+    {
+        $sql = 'SELECT cat_id, cat_org_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type IN (\'ANN\')
+                   AND cat_hidden = 1 ';
+        $categoryStatement = $this->db->queryPrepared($sql);
+
+        while($row = $categoryStatement->fetch())
+        {
+            $roles = array();
+            $sql = 'SELECT rol_id
+                      FROM ' . TBL_ROLES . '
+                     INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                           AND cat_org_id = ? -- $row[org_id]
+                           AND cat_name_intern <> \'EVENTS\'
+                     WHERE rol_valid = 1 ';
+            $rolesStatement = $this->db->queryPrepared($sql, array($row['cat_org_id']));
+
+            while($rowRole = $rolesStatement->fetch())
+            {
+                $roles[] = $rowRole['rol_id'];
+            }
+
+            // save roles to role right
+            $rightCategoryView = new RolesRights($this->db, 'category_view', $row['cat_id']);
+            $rightCategoryView->saveRoles($roles);
+        }
+    }
 }

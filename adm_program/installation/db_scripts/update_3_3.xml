@@ -15,6 +15,7 @@
     <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
     <step id="140">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_deadline timestamp null default null AFTER dat_max_members</step>
     <step id="150">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table) VALUES ('category_view', 'adm_categories')</step>
+    <step id="160">ComponentUpdate::updateStepVisibleCategories</step>
 
     <step>stop</step>
 </update>
