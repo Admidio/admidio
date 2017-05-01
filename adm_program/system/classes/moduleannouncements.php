@@ -130,7 +130,7 @@ class ModuleAnnouncements extends Modules
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
                        '.$additionalTables.'
-                 WHERE cat_id IN ('.implode(',', $gCurrentUser->getAllVisibleCategories('ANN')).')
+                 WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('ANN'), array(0))).')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
@@ -171,7 +171,7 @@ class ModuleAnnouncements extends Modules
                   FROM '.TBL_ANNOUNCEMENTS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = ann_cat_id
-                 WHERE cat_id IN (' . implode(',', $gCurrentUser->getAllVisibleCategories('ANN')) . ')
+                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories('ANN'), array(0))) . ')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))

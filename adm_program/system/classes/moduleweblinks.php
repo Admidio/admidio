@@ -150,7 +150,7 @@ class ModuleWeblinks extends Modules
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_id IN ('.implode(',', $gCurrentUser->getAllVisibleCategories('LNK')).')  -- $gCurrentUser->getAllVisibleCategories(\'LNK\')
+                 WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('LNK'), array(0))).')  -- $gCurrentUser->getAllVisibleCategories(\'LNK\')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
@@ -187,7 +187,7 @@ class ModuleWeblinks extends Modules
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_id IN (' . implode(',', $gCurrentUser->getAllVisibleCategories('LNK')) . ')
+                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories('LNK'), array(0))) . ')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions;
         $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
