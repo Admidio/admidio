@@ -1095,6 +1095,9 @@
     <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
     <string name="SYS_CSV">CSV</string>
     <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
+    <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Daten dieser Kategorie auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
+    <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
+    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
     <string name="SYS_DATABASE">Datenbank</string>
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
@@ -1104,7 +1107,6 @@
     <string name="SYS_DATE">Datum</string>
     <string name="SYS_DATE_END_BEFORE_BEGIN">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</string>
     <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# bis #VAR2#</string>
-    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
     <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld #VAR1_BOLD# eingegeben.\n\nDas Datum muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
     <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
     <string name="SYS_DATE_TO">bis</string>

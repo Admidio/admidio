@@ -183,7 +183,6 @@ foreach($gProfileFields->mProfileFields as $field)
     && ($getUserId === (int) $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {
         // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
-        // Leiter duerfen dies nicht !!!
         $showField = true;
     }
 

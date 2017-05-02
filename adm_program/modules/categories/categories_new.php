@@ -139,6 +139,23 @@ if(isset($_SESSION['categories_request']))
 // create html page object
 $page = new HtmlPage($headline);
 
+if($getType === 'USF')
+{
+    $page->addJavascript('
+        function setVisibilityRoles() {
+            if ($("#show_in_several_organizations").is(":checked")) {
+                $("#adm_categories_view_right_group").hide();
+            } else {
+                $("#adm_categories_view_right_group").show("slow");
+            }
+        }
+
+        setVisibilityRoles();
+        $("#show_in_several_organizations").click(function() { setVisibilityRoles(); });',
+        true
+    );
+}
+
 // add back link to module menu
 $categoryCreateMenu = $page->getMenu();
 $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
@@ -160,8 +177,10 @@ $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_na
     )
 );
 
-// roles have their own preferences for visibility, so only allow this for other types
-if(!in_array($getType, array('USF', 'DAT', 'ROL')))
+// Roles have their own preferences for visibility, so only allow this for other types.
+// Until now we do not support visibility for categories that belong to several organizations,
+// roles could be assigned if only 1 organization exists.
+if(!in_array($getType, array('DAT', 'ROL')) && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
 {
     // if parent folder has access for all roles then read all roles from database
     $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
@@ -214,8 +233,8 @@ if($getType === 'USF')
             $checked = true;
         }
 
-        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $checked,
-                           array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
+        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
+                           array('helpTextIdLabel' => array('SYS_DATA_CATEGORY_GLOBAL', $organizations)));
     }
 }
 else

@@ -401,4 +401,23 @@ class TableUserField extends TableAccess
 
         return parent::setValue($columnName, $newValue, $checkValue);
     }
+
+    /**
+     * This method checks if the current user is allowed to view this profile field. Therefore
+     * the visibility of the category is checked. This method will not check the context if
+     * the user is allowed to view the field because he has the right to edit the profile.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function visible()
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the profile field
+        if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF')))
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

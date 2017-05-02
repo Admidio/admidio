@@ -327,7 +327,7 @@ class ProfileFields
      * format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
      * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
      * format = 'database' : returns the value that is stored in database with no format applied
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field whose value should be read
      * @param string $format          Returns the field value in a special format @b text, @b html, @b database
      *                                or datetime (detailed description in method description)
      * @return string|int|bool Returns the value for the column.
@@ -464,7 +464,7 @@ class ProfileFields
         if ($userId > 0)
         {
             // remember the user
-            $this->mUserId = $userId;
+            $this->mUserId = (int) $userId;
 
             // read all user data of user
             $sql = 'SELECT *
@@ -513,14 +513,14 @@ class ProfileFields
         }
 
         $this->columnsValueChanged = false;
-        $this->mUserId = $userId;
+        $this->mUserId = (int) $userId;
 
         $this->mDb->endTransaction();
     }
 
     /**
      * set value for column usd_value of field
-     * @param string $fieldNameIntern
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
      * @param mixed  $fieldValue
      * @return bool
      */
@@ -627,4 +627,27 @@ class ProfileFields
 
         return false;
     }
+
+
+    /**
+     * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
+     * within the context of the user in this object.
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function visible($fieldNameIntern)
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the profile field
+        // check if the profile field is only visible for users that could edit this
+        if(($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+        && ($gCurrentUser->hasRightEditProfile($this->mUserId) || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 }
