@@ -52,7 +52,7 @@ $port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; 
 if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
 {
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
-    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port); // ssl.example.org
+    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
 }
 else
 {
@@ -69,8 +69,8 @@ define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfo
 
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    ADMIDIO_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', ADMIDIO_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
+define('FILE_URL',    (HTTPS ? 'https://' : 'http://') . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
+define('CURRENT_URL', (HTTPS ? 'https://' : 'http://') . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
