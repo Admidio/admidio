@@ -70,7 +70,7 @@ define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfo
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
 define('FILE_URL',    ADMIDIO_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', (HTTPS ? 'https://' : 'http://') . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
+define('CURRENT_URL', ADMIDIO_URL . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
