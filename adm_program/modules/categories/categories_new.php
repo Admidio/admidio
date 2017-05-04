@@ -64,7 +64,7 @@ elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
     // => EXIT
 }
 
-// set module headline
+// set module headline and other strings
 if($getTitle === '')
 {
     if($getType === 'ROL')
@@ -138,9 +138,11 @@ if(isset($_SESSION['categories_request']))
 
 // create html page object
 $page = new HtmlPage($headline);
+$roleViewDescription = '';
 
 if($getType === 'USF')
 {
+    $roleViewDescription = 'CAT_PROFILE_FIELDS_VISIBILITY';
     $page->addJavascript('
         function setVisibilityRoles() {
             if ($("#show_in_several_organizations").is(":checked")) {
@@ -213,7 +215,8 @@ if(!in_array($getType, array('DAT', 'ROL')) && ((bool) $category->getValue('cat_
             'property'     => FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect'  => true,
-            'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null)
+            'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null),
+            'helpTextIdInline' => $roleViewDescription
         )
     );
 }

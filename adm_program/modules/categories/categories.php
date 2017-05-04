@@ -178,9 +178,10 @@ $columnHeading = array(
     '&nbsp;',
     $htmlIconLoginUser,
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />',
+    $gL10n->get('DAT_VISIBLE_TO'),
     '&nbsp;'
 );
-$categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $categoriesOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
@@ -246,6 +247,29 @@ while($catRow = $categoryStatement->fetch())
         $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />';
     }
 
+    $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+    $arrRolesIds = $rightCategoryView->getRolesIds();
+
+    if(count($arrRolesIds) > 0)
+    {
+        $arrRolesNames = array();
+        $sql = 'SELECT rol_name
+                  FROM '.TBL_ROLES.'
+                 WHERE rol_id IN ('.implode(',', $arrRolesIds).') ';
+        $rolesStatement = $gDb->queryPrepared($sql);
+
+        while($rowRole = $rolesStatement->fetch())
+        {
+            $arrRolesNames[] = $rowRole['rol_name'];
+        }
+
+        $htmlRolesNames = implode(', ', $arrRolesNames);
+    }
+    else
+    {
+        $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+    }
+
     $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
                                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     if($category->getValue('cat_system') == 1)
@@ -266,6 +290,7 @@ while($catRow = $categoryStatement->fetch())
         $htmlMoveRow,
         $htmlHideCategory,
         $htmlDefaultCategory,
+        $htmlRolesNames,
         $categoryAdministration
     );
     $categoriesOverview->addRowByArray($columnValues, 'row_'. $category->getValue('cat_id'));
