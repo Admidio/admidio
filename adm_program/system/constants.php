@@ -53,10 +53,12 @@ if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
 {
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
     define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
+    define('DOMAIN', strstr($_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . ':', ':', true)); // ssl.example.org
 }
 else
 {
     define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+    define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 }
 define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
