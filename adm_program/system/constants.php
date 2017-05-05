@@ -44,10 +44,11 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
-define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true | false
+define('SCHEME', parse_url($g_root_path, PHP_URL_SCHEME)); // get SCHEME out of $g_root_path because server doesn't have this info if ssl proxy is used
+define('HTTPS', (SCHEME === 'https') ? true : false); // true | false
 define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
-$port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; // :1234
+$port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
 
 if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
 {
@@ -60,7 +61,6 @@ else
     define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
     define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 }
-define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
 define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
@@ -71,8 +71,8 @@ define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfo
 
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    (HTTPS ? 'https://' : 'http://') . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', (HTTPS ? 'https://' : 'http://') . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
+define('FILE_URL',    SCHEME . '://' . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
+define('CURRENT_URL', SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
