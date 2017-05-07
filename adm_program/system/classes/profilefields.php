@@ -634,12 +634,12 @@ class ProfileFields
      * within the context of the user in this object. If no context is set than we only check if the
      * current user has the right to view the category of the profile field.
      * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
-     * @param bool   $hasRightEditProfile Set to @b true if the current user has the right to edit the profile
+     * @param bool   $allowedToEditProfile Set to @b true if the current user has the right to edit the profile
      *                                    in which context the right should be checked. This param must not be
      *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
      */
-    public function visible($fieldNameIntern, $hasRightEditProfile = false)
+    public function visible($fieldNameIntern, $allowedToEditProfile = false)
     {
         global $gCurrentUser;
 
@@ -649,7 +649,7 @@ class ProfileFields
             // if it's the own profile than we check if user could edit his profile and if so he could view all fields
             // check if the profile field is only visible for users that could edit this
             if(($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
-            && ($hasRightEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0))
+            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0))
             {
                 return true;
             }

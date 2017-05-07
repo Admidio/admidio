@@ -13,24 +13,6 @@
  * @class User
  * Diese Klasse dient dazu ein Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * deleteUserFieldData()    - delete all user data of profile fields;
- *                            user record will not be deleted
- * getListViewRights()  - Liefert ein Array mit allen Rollen und der
- *                        Berechtigung, ob der User die Liste einsehen darf
- *                      - aehnlich getProperty, allerdings suche ueber usf_id
- * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
- * setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = '')
- *                      - set a role membership for the current user
- *                        if memberships to this user and role exists within the period than merge them to one new membership
- * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
- *                        Users einsehen darf
- * viewRole             - Ueberprueft ob der User eine uebergebene Rolle(Liste)
- *                        einsehen darf
- * isAdministrator()        - gibt true/false zurueck, falls der User Mitglied der
- *                        Rolle "Webmaster" ist
  */
 class User extends TableAccess
 {
@@ -72,6 +54,20 @@ class User extends TableAccess
         $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
+    }
+
+    /**
+     * Checks if the current user is allowed to view a profile field of the user of the parameter.
+     * It will check if the current user could view the profile field category. Within the own profile
+     * you can view profile fields of hidden categories. We will also check if the current user
+     * could edit the @b $user profile so the current user could also view hidden fields.
+     * @param \User $user User object of the user that should be checked if the current user can view his profile field.
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field of @b $user.
+     */
+    public function allowedViewProfileField(User $user, $fieldNameIntern)
+    {
+        return $this->mProfileFieldsData->visible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
 
     /**
@@ -905,49 +901,26 @@ class User extends TableAccess
     }
 
     /**
-     * @param bool   $allowedToEditProfile
-     * @param string $field
-     * @param bool   $notEmpty
-     * @return bool
-     */
-    private function isAllowedToEditVCardUserField($allowedToEditProfile, $field, $notEmpty = false)
-    {
-        if ($notEmpty && $this->getValue($field) === '')
-        {
-            return false;
-        }
-
-        if ($allowedToEditProfile)
-        {
-            return true;
-        }
-
-        return (int) $this->mProfileFieldsData->getProperty($field, 'usf_hidden') === 0;
-    }
-
-    /**
      * Creates a vcard with all data of this user object @n
      * (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
-     * @param bool $allowedToEditProfile If set to @b true than logged in user is allowed to edit profiles
-     *                                   so he can see more data in the vcard
      * @return string Returns the vcard as a string
      */
-    public function getVCard($allowedToEditProfile = false)
+    public function getVCard()
     {
-        global $gPreferences;
+        global $gPreferences, $gCurrentUser;
 
         $vCard = array(
             'BEGIN:VCARD',
             'VERSION:2.1'
         );
 
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'FIRST_NAME'))
+        if ($gCurrentUser->allowedViewProfileField($this, 'FIRST_NAME'))
         {
             $vCard[] = 'N;CHARSET=ISO-8859-1:' .
                 utf8_decode($this->getValue('LAST_NAME',  'database')) . ';' .
                 utf8_decode($this->getValue('FIRST_NAME', 'database')) . ';;;';
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'LAST_NAME'))
+        if ($gCurrentUser->allowedViewProfileField($this, 'LAST_NAME'))
         {
             $vCard[] = 'FN;CHARSET=ISO-8859-1:' .
                 utf8_decode($this->getValue('FIRST_NAME')) . ' ' .
@@ -957,22 +930,22 @@ class User extends TableAccess
         {
             $vCard[] = 'NICKNAME;CHARSET=ISO-8859-1:' . utf8_decode($this->getValue('usr_login_name'));
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'PHONE', true))
+        if ($gCurrentUser->allowedViewProfileField($this, 'PHONE'))
         {
             $vCard[] = 'TEL;HOME;VOICE:' . $this->getValue('PHONE');
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'MOBILE', true))
+        if ($gCurrentUser->allowedViewProfileField($this, 'MOBILE'))
         {
             $vCard[] = 'TEL;CELL;VOICE:' . $this->getValue('MOBILE');
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'FAX', true))
+        if ($gCurrentUser->allowedViewProfileField($this, 'FAX'))
         {
             $vCard[] = 'TEL;HOME;FAX:' . $this->getValue('FAX');
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'STREET')
-        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'CITY')
-        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'POSTCODE')
-        &&  $this->isAllowedToEditVCardUserField($allowedToEditProfile, 'COUNTRY'))
+        if ($gCurrentUser->allowedViewProfileField($this, 'STREET')
+        &&  $gCurrentUser->allowedViewProfileField($this, 'CITY')
+        &&  $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
+        &&  $gCurrentUser->allowedViewProfileField($this, 'COUNTRY'))
         {
             $vCard[] = 'ADR;CHARSET=ISO-8859-1;HOME:;;' .
                 utf8_decode($this->getValue('STREET',  'database')) . ';' .
@@ -980,15 +953,15 @@ class User extends TableAccess
                 utf8_decode($this->getValue('POSTCODE', 'database')) . ';' .
                 utf8_decode($this->getValue('COUNTRY',  'database'));
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'WEBSITE', true))
+        if ($gCurrentUser->allowedViewProfileField($this, 'WEBSITE'))
         {
             $vCard[] = 'URL;HOME:' . $this->getValue('WEBSITE');
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'BIRTHDAY', true))
+        if ($gCurrentUser->allowedViewProfileField($this, 'BIRTHDAY'))
         {
             $vCard[] = 'BDAY:' . $this->getValue('BIRTHDAY', 'Ymd');
         }
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'EMAIL', true))
+        if ($gCurrentUser->allowedViewProfileField($this, 'EMAIL'))
         {
             $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
         }
@@ -1009,7 +982,7 @@ class User extends TableAccess
             $vCard[] = 'PHOTO;ENCODING=BASE64;TYPE=JPEG:' . base64_encode($this->getValue('usr_photo'));
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->isAllowedToEditVCardUserField($allowedToEditProfile, 'GENDER') && $this->getValue('GENDER') > 0)
+        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && $this->getValue('GENDER') > 0)
         {
             if ((int) $this->getValue('GENDER') === 1)
             {
@@ -1243,20 +1216,6 @@ class User extends TableAccess
         }
 
         return false;
-    }
-
-    /**
-     * Checks if the current user is allowed to view a profile field of the user of the parameter.
-     * It will check if the current user could view the profile field category. Within the own profile
-     * you can view profile fields of hidden categories. We will also check if the current user
-     * could edit the @b $user profile so the current user could also view hidden fields.
-     * @param \User $user User object of the user that should be checked if the current user can view his profile field.
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
-     * @return bool Return true if the current user is allowed to view this profile field of @b $user.
-     */
-    public function hasRightViewProfileField(User $user, $fieldNameIntern)
-    {
-        return $this->mProfileFieldsData->visible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
 
     /**

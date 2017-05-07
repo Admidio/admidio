@@ -60,7 +60,7 @@ if($getMode === 1)
     header('Pragma: public');
 
     // create vcard and check if user is allowed to edit profile, so he can see more data
-    echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
+    echo $user->getVCard();
 }
 elseif($getMode === 2)
 {
@@ -235,7 +235,7 @@ elseif ($getMode === 8)
             // create user object
             $user = new User($gDb, $gProfileFields, (int) $memberUserId);
             // create vcard and check if user is allowed to edit profile, so he can see more data
-            echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
+            echo $user->getVCard();
         }
     }
 }
