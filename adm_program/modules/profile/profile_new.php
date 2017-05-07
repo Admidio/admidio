@@ -158,7 +158,7 @@ $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL1
 $form = new HtmlForm('edit_profile_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser, $page);
 
 // *******************************************************************************
-// Loop over all categories and profile fields except the category 'master data'
+// Loop over all categories and profile fields
 // *******************************************************************************
 
 $category = '';
@@ -167,22 +167,20 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     $showField = false;
 
-    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    // E-Mail ist Ausnahme und muss immer angezeigt werden
+    // within a fast registration only show mandatory fields and always show the email because without email Admidio couldn't be used
     if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
     && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
     {
         $showField = true;
     }
+    // within a complete registration show all profile fields
     elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
     {
-        // bei der vollstaendigen Registrierung alle Felder anzeigen
         $showField = true;
     }
-    elseif($getNewUser !== 2
-    && ($getUserId === (int) $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
+    // only allow to edit viewable fields, check for edit profile was done before
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
     {
-        // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
         $showField = true;
     }
 

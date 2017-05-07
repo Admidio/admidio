@@ -128,15 +128,34 @@ if($getNewUser === 2)
     }
 }
 
-// nun alle Profilfelder pruefen
+// now check all profile fields
 foreach($gProfileFields->mProfileFields as $field)
 {
-    $postId = 'usf-'. $field->getValue('usf_id');
+    $postId    = 'usf-'. $field->getValue('usf_id');
+    $showField = false;
+
+    // within a fast registration only show mandatory fields and always show the email because without email Admidio couldn't be used
+    if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
+    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
+    {
+        $showField = true;
+    }
+    // within a complete registration show all profile fields
+    elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
+    {
+        $showField = true;
+    }
+    // only allow to edit viewable fields, check for edit profile was done before
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
+    {
+        $showField = true;
+    }
 
     // check and save only fields that aren't disabled
-    if ($field->getValue('usf_disabled') == 0
-    || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
-    || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
+    if ($showField
+    && ($field->getValue('usf_disabled') == 0
+       || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
+       || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0)))
     {
         if(isset($_POST[$postId]))
         {
