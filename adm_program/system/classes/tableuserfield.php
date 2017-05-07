@@ -21,6 +21,7 @@
 class TableUserField extends TableAccess
 {
     protected $mViewUserField;                 ///< Flag if the current user could view this user
+    protected $mViewUserFieldUserId;           ///< Flag with the user id of which user the view property was saved
 
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.
@@ -44,6 +45,7 @@ class TableUserField extends TableAccess
         parent::clear();
 
         $this->mViewUserField = null;
+        $this->mViewUserFieldUserId = null;
     }
 
     /**
@@ -424,7 +426,7 @@ class TableUserField extends TableAccess
     {
         global $gCurrentUser;
 
-        if($this->mViewUserField === null)
+        if($this->mViewUserField === null || $this->mViewUserFieldUserId !== (int) $gCurrentUser->getValue('usr_id'))
         {
             // check if the current user could view the category of the profile field
             if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF')))
@@ -435,6 +437,8 @@ class TableUserField extends TableAccess
             {
                 $this->mViewUserField = false;
             }
+
+            $this->mViewUserFieldUserId = (int) $gCurrentUser->getValue('usr_id');
         }
 
         return $this->mViewUserField;
