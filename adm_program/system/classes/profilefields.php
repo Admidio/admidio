@@ -42,15 +42,6 @@ class ProfileFields
     }
 
     /**
-     * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(&$database)
-    {
-        $this->mDb =& $database;
-    }
-
-    /**
      * Called on serialization of this object. The database object could not
      * be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
@@ -519,6 +510,15 @@ class ProfileFields
     }
 
     /**
+     * Set the database object for communication with the database of this class.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$database)
+    {
+        $this->mDb =& $database;
+    }
+
+    /**
      * set value for column usd_value of field
      * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
      * @param mixed  $fieldValue
@@ -631,20 +631,34 @@ class ProfileFields
 
     /**
      * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
-     * within the context of the user in this object.
+     * within the context of the user in this object. If no context is set than we only check if the
+     * current user has the right to view the category of the profile field.
      * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
+     * @param bool   $hasRightEditProfile Set to @b true if the current user has the right to edit the profile
+     *                                    in which context the right should be checked. This param must not be
+     *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
      */
-    public function visible($fieldNameIntern)
+    public function visible($fieldNameIntern, $hasRightEditProfile = false)
     {
         global $gCurrentUser;
 
-        // check if the current user could view the category of the profile field
-        // check if the profile field is only visible for users that could edit this
-        if(($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
-        && ($gCurrentUser->hasRightEditProfile($this->mUserId) || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0))
+        if($this->mUserId > 0)
         {
-            return true;
+            // check if the current user could view the category of the profile field
+            // if it's the own profile than we check if user could edit his profile and if so he could view all fields
+            // check if the profile field is only visible for users that could edit this
+            if(($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+            && ($hasRightEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // if no user is set within this object than only return if the current user has the right
+            // to view that profile field without the context of a special user.
+            return $this->mProfileFields[$fieldNameIntern]->visible();
         }
 
         return false;

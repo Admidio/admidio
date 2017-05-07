@@ -20,6 +20,8 @@
  */
 class TableUserField extends TableAccess
 {
+    protected $mViewUserField;                 ///< Flag if the current user could view this user
+
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.
      * If the id is set than the specific user field will be loaded.
@@ -32,6 +34,16 @@ class TableUserField extends TableAccess
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
 
         parent::__construct($database, TBL_USER_FIELDS, 'usf', $usfId);
+    }
+
+    /**
+     * Additional to the parent method visible roles array and flag will be initialized.
+     */
+    public function clear()
+    {
+        parent::clear();
+
+        $this->mViewUserField = null;
     }
 
     /**
@@ -412,12 +424,19 @@ class TableUserField extends TableAccess
     {
         global $gCurrentUser;
 
-        // check if the current user could view the category of the profile field
-        if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF')))
+        if($this->mViewUserField === null)
         {
-            return true;
+            // check if the current user could view the category of the profile field
+            if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF')))
+            {
+                $this->mViewUserField = true;
+            }
+            else
+            {
+                $this->mViewUserField = false;
+            }
         }
 
-        return false;
+        return $this->mViewUserField;
     }
 }

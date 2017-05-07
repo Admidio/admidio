@@ -1246,6 +1246,20 @@ class User extends TableAccess
     }
 
     /**
+     * Checks if the current user is allowed to view a profile field of the user of the parameter.
+     * It will check if the current user could view the profile field category. Within the own profile
+     * you can view profile fields of hidden categories. We will also check if the current user
+     * could edit the @b $user profile so the current user could also view hidden fields.
+     * @param \User $user User object of the user that should be checked if the current user can view his profile field.
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field of @b $user.
+     */
+    public function hasRightViewProfileField(User $user, $fieldNameIntern)
+    {
+        return $this->mProfileFieldsData->visible($fieldNameIntern, $this->hasRightEditProfile($user));
+    }
+
+    /**
      * Check if the user of this object has the right to view the role that is set in the parameter.
      * @param int $roleId The id of the role that should be checked.
      * @return bool Return @b true if the user has the right to view the role otherwise @b false.

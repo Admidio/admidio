@@ -40,7 +40,7 @@ function getFieldCode($fieldNameIntern, User $user)
 {
     global $gPreferences, $gCurrentUser, $gProfileFields, $gL10n;
 
-    if(!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
+    if(!$gCurrentUser->hasRightViewProfileField($user, $fieldNameIntern))
     {
         return false;
     }
@@ -334,7 +334,7 @@ $page->addHtml('
             foreach($gProfileFields->mProfileFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
-                if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $gProfileFields->visible($field->getValue('usf_name_intern')))
+                if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $gCurrentUser->hasRightViewProfileField($user, $field->getValue('usf_name_intern')))
                 {
                     switch($field->getValue('usf_name_intern'))
                     {
@@ -363,27 +363,27 @@ $page->addHtml('
                                     ',%20'. urlencode($gCurrentUser->getValue('COUNTRY')).
                                     '&amp;daddr=';
 
-                                if(strlen($user->getValue('STREET')) > 0 && $gProfileFields->visible('STREET'))
+                                if(strlen($user->getValue('STREET')) > 0 && $gCurrentUser->hasRightViewProfileField($user, 'STREET'))
                                 {
                                     $address  .= $user->getValue('STREET'). '<br />';
                                     $mapUrl   .= urlencode($user->getValue('STREET'));
                                     $routeUrl .= urlencode($user->getValue('STREET'));
                                 }
 
-                                if(strlen($user->getValue('POSTCODE')) > 0 && $gProfileFields->visible('POSTCODE'))
+                                if(strlen($user->getValue('POSTCODE')) > 0 && $gCurrentUser->hasRightViewProfileField($user, 'POSTCODE'))
                                 {
                                     $address  .= $user->getValue('POSTCODE');
                                     $mapUrl   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $routeUrl .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
                                     // City and postcode should be shown in one line
-                                    if(strlen($user->getValue('CITY')) === 0 && !$gProfileFields->visible('CITY'))
+                                    if(strlen($user->getValue('CITY')) === 0 && !$gCurrentUser->hasRightViewProfileField($user, 'CITY'))
                                     {
                                         $address .= '<br />';
                                     }
                                 }
 
-                                if(strlen($user->getValue('CITY')) > 0 && $gProfileFields->visible('CITY'))
+                                if(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->hasRightViewProfileField($user, 'CITY'))
                                 {
                                     // City and postcode should be shown in one line
                                     $address  .= ' '. $user->getValue('CITY'). '<br />';
@@ -391,7 +391,7 @@ $page->addHtml('
                                     $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
 
-                                if(strlen($user->getValue('COUNTRY')) > 0 && $gProfileFields->visible('COUNTRY'))
+                                if(strlen($user->getValue('COUNTRY')) > 0 && $gCurrentUser->hasRightViewProfileField($user, 'COUNTRY'))
                                 {
                                     $country   = $user->getValue('COUNTRY');
                                     $address  .= $country. '<br />';
@@ -473,7 +473,7 @@ foreach($gProfileFields->mProfileFields as $field)
 
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-    if($field->getValue('cat_name_intern') !== 'MASTER_DATA' && $gProfileFields->visible($fieldNameIntern))
+    if($field->getValue('cat_name_intern') !== 'MASTER_DATA' && $gCurrentUser->hasRightViewProfileField($user, $fieldNameIntern))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category !== $field->getValue('cat_name')
