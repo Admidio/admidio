@@ -405,7 +405,7 @@ elseif (!isset($messageStatement))
                     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
                     $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
                 ),
-                $arrAllVisibleRoles,
+                $listVisibleRoleArray,
                 array(
                     DATE_NOW,
                     $gCurrentUser->getValue('usr_id')
