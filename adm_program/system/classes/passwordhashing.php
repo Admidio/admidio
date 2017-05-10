@@ -28,6 +28,7 @@ require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php'
  * genRandomInt()       generate a cryptographically strong random int
  * passwordInfo()       provides infos about the given password (length, number, lowerCase, upperCase, symbol)
  * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
+ * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
 class PasswordHashing
@@ -264,19 +265,6 @@ class PasswordHashing
     }
 
     /**
-     * Calculates the strength of a given password from 0-4.
-     * @param string   $password The password to check
-     * @param string[] $userData An array of strings for dictionary attacks
-     * @return int Returns the score of the password
-     */
-    public static function passwordStrength($password, array $userData = array())
-    {
-        $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
-        $strength = $zxcvbn->passwordStrength($password, $userData);
-        return $strength['score'];
-    }
-
-    /**
      * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
      * @param string $hash The hash you want the get infos about
      * @return array|string Returns an array or string with infos about the given hash
@@ -295,12 +283,25 @@ class PasswordHashing
         {
             return 'PRIVATE/PORTABLE_HASH';
         }
-        elseif (strlen($hash) === 32)
+        elseif (strlen($hash) === 32 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
         {
             return 'MD5';
         }
 
         return 'UNKNOWN';
+    }
+
+    /**
+     * Calculates the strength of a given password from 0-4.
+     * @param string   $password The password to check
+     * @param string[] $userData An array of strings for dictionary attacks
+     * @return int Returns the score of the password
+     */
+    public static function passwordStrength($password, array $userData = array())
+    {
+        $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
+        $strength = $zxcvbn->passwordStrength($password, $userData);
+        return $strength['score'];
     }
 
     /**
