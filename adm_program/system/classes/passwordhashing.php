@@ -50,7 +50,7 @@ class PasswordHashing
                 $options['cost'] = 100000;
             }
 
-            $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+            $salt = self::genRandomPassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
             return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
         }
         elseif ($algorithm === 'BCRYPT')
