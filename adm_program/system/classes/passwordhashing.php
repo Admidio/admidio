@@ -184,44 +184,51 @@ class PasswordHashing
     }
 
     /**
+     * Generate an insecure random integer
+     * @param int             $min                     The min of the range (inclusive)
+     * @param int             $max                     The max of the range (inclusive)
+     * @param bool            $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
+     * @param Error|Exception $exception               The thrown Error or Exception object.
+     * @param string          $exceptionMessage        The Admidio Exception-Message.
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @return int Returns an insecure random integer
+     */
+    private static function genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $exception, $exceptionMessage)
+    {
+        global $gLogger;
+
+        $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $exception->getCode(), 'message' => $exception->getMessage()));
+
+        if ($exceptionOnInsecurePRNG)
+        {
+            throw new AdmException($exceptionMessage, $exception->getCode(), $exception->getMessage());
+        }
+
+        // as a fallback we use the mt_rand method
+        return mt_rand($min, $max);
+    }
+
+    /**
      * Generate a cryptographically strong random integer
      * @param int  $min                     The min of the range (inclusive)
      * @param int  $max                     The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @throws AdmException
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @return int Returns a cryptographically strong random integer
      */
     public static function genRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
     {
-        global $gLogger;
-
         try
         {
             $int = random_int($min, $max);
         }
         catch (Error $e)
         {
-            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
-
-            if ($exceptionOnInsecurePRNG)
-            {
-                throw new AdmException('SYS_GEN_RANDOM_ERROR', $e->getCode(), $e->getMessage());
-            }
-
-            // as a fallback we use the mt_rand method
-            $int = mt_rand($min, $max);
+            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
         }
         catch (Exception $e)
         {
-            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
-
-            if ($exceptionOnInsecurePRNG)
-            {
-                throw new AdmException('SYS_GEN_RANDOM_EXCEPTION', $e->getCode(), $e->getMessage());
-            }
-
-            // as a fallback we use the mt_rand method
-            $int = mt_rand($min, $max);
+            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
         return $int;
