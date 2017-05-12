@@ -463,14 +463,7 @@ abstract class HtmlElement
         $attributes = array();
         foreach ($elementAttributes as $key => $value)
         {
-            if ($key === $value)
-            {
-                $attributes[] = $key;
-            }
-            else
-            {
-                $attributes[] = $key . '="' . $value . '"';
-            }
+            $attributes[] = $key . '="' . $value . '"';
         }
 
         return ' ' . implode(' ', $attributes);
