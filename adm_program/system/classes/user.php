@@ -67,7 +67,7 @@ class User extends TableAccess
      */
     public function allowedViewProfileField(User $user, $fieldNameIntern)
     {
-        return $this->mProfileFieldsData->visible($fieldNameIntern, $this->hasRightEditProfile($user));
+        return $user->mProfileFieldsData->visible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
 
     /**
@@ -805,9 +805,9 @@ class User extends TableAccess
                                     INNER JOIN adm_roles_rights_data ON rrd_ror_id = ror_id
                                     WHERE ror_name_intern = \'category_view\'
                                       AND rrd_object_id = cat_id
-                                      AND rrd_rol_id IN (?) ) -- $this->getAllVisibleRoles()
+                                      AND rrd_rol_id IN ('.implode(',', array_merge($this->getRoleMemberships(), array(0))).') )
                         )';
-        $queryParams = array($categoryType, $this->organizationId, implode(',', $this->getAllVisibleRoles()));
+        $queryParams = array($categoryType, $this->organizationId);
         $visibleCategoriesStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($visibleCategoriesStatement->rowCount() > 0)
