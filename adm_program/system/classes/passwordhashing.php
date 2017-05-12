@@ -12,6 +12,13 @@ require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/password_compat/password.php'
 // provide forward compatibility with the random_* functions that ship with PHP 7.0
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php');
 
+define('HASH_COST_BCRYPT_DEFAULT', 12);
+define('HASH_COST_BCRYPT_MIN', 10);
+define('HASH_COST_BCRYPT_MAX', 31);
+define('HASH_COST_SHA512_DEFAULT', 100000);
+define('HASH_COST_SHA512_MIN', 10000);
+define('HASH_COST_SHA512_MAX', 999999999);
+
 /**
  * @class PasswordHashing
  *
@@ -47,7 +54,11 @@ class PasswordHashing
         {
             if (!array_key_exists('cost', $options))
             {
-                $options['cost'] = 100000;
+                $options['cost'] = HASH_COST_SHA512_DEFAULT;
+            }
+            if ($options['cost'] < HASH_COST_SHA512_MIN)
+            {
+                $options['cost'] = HASH_COST_SHA512_MIN;
             }
 
             $salt = self::genRandomPassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
@@ -64,12 +75,12 @@ class PasswordHashing
 
         if (!array_key_exists('cost', $options))
         {
-            $options['cost'] = 12;
+            $options['cost'] = HASH_COST_BCRYPT_DEFAULT;
         }
         // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
-        if ($options['cost'] < 10)
+        if ($options['cost'] < HASH_COST_BCRYPT_MIN)
         {
-            $options['cost'] = 10;
+            $options['cost'] = HASH_COST_BCRYPT_MIN;
         }
 
         return password_hash($password, $algorithmPhpConstant, $options);
@@ -128,6 +139,15 @@ class PasswordHashing
     {
         if ($algorithm === 'SHA512')
         {
+            if (!array_key_exists('cost', $options))
+            {
+                $options['cost'] = HASH_COST_SHA512_DEFAULT;
+            }
+            if ($options['cost'] < HASH_COST_SHA512_MIN)
+            {
+                $options['cost'] = HASH_COST_SHA512_MIN;
+            }
+
             $hashParts = explode('$', $hash);
             $cost = (int) substr($hashParts[2], 7);
 
@@ -140,6 +160,16 @@ class PasswordHashing
         else
         {
             $algorithmPhpConstant = PASSWORD_DEFAULT;
+        }
+
+        if (!array_key_exists('cost', $options))
+        {
+            $options['cost'] = HASH_COST_BCRYPT_DEFAULT;
+        }
+        // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
+        if ($options['cost'] < HASH_COST_BCRYPT_MIN)
+        {
+            $options['cost'] = HASH_COST_BCRYPT_MIN;
         }
 
         return password_needs_rehash($hash, $algorithmPhpConstant, $options);
@@ -319,7 +349,7 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => 10))
+    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => HASH_COST_BCRYPT_MIN))
     {
         global $gLogger;
 
@@ -329,7 +359,7 @@ class PasswordHashing
 
         if ($algorithm === 'SHA512')
         {
-            $maxCost = 999999999;
+            $maxCost = HASH_COST_SHA512_MAX;
             $costIncrement = 50000;
             if ($cost < 1000)
             {
@@ -338,7 +368,7 @@ class PasswordHashing
         }
         else
         {
-            $maxCost = 31;
+            $maxCost = HASH_COST_BCRYPT_MAX;
             $costIncrement = 1;
             if ($cost < 4)
             {
