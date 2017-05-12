@@ -94,11 +94,12 @@ class PasswordHashing
      */
     public static function verify($password, $hash)
     {
-        if (strlen($hash) === 60 && strpos($hash, '$2y$') === 0)
+        $hashLength = strlen($hash);
+        if ($hashLength === 60 && strpos($hash, '$2y$') === 0)
         {
             return password_verify($password, $hash);
         }
-        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
+        elseif ($hashLength >= 110 && strpos($hash, '$6$') === 0)
         {
             $passwordHash = crypt($password, $hash);
 
@@ -114,12 +115,13 @@ class PasswordHashing
 
             return $status === 0;
         }
-        elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
+        elseif ($hashLength === 34 && strpos($hash, '$P$') === 0)
         {
             $passwordHasher = new PasswordHash(9, true);
             return $passwordHasher->CheckPassword($password, $hash);
         }
-        elseif (strlen($hash) === 32)
+        // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
+        elseif ($hashLength === 32 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
         {
             return md5($password) === $hash;
         }
@@ -137,7 +139,8 @@ class PasswordHashing
      */
     public static function needsRehash($hash, $algorithm = 'DEFAULT', array $options = array())
     {
-        if ($algorithm === 'SHA512')
+        $hashLength = strlen($hash);
+        if ($algorithm === 'SHA512' && $hashLength >= 110 && strpos($hash, '$6$') === 0)
         {
             if (!array_key_exists('cost', $options))
             {
@@ -151,15 +154,19 @@ class PasswordHashing
             $hashParts = explode('$', $hash);
             $cost = (int) substr($hashParts[2], 7);
 
-            return strlen($hash) < 110 || strpos($hash, '$6$') !== 0 || $cost !== $options['cost'];
+            return $cost !== $options['cost'];
         }
-        elseif ($algorithm === 'BCRYPT')
+        elseif ($algorithm === 'BCRYPT' && $hashLength === 60 && strpos($hash, '$2y$') === 0)
         {
             $algorithmPhpConstant = PASSWORD_BCRYPT;
         }
-        else
+        elseif ($algorithm === 'DEFAULT')
         {
             $algorithmPhpConstant = PASSWORD_DEFAULT;
+        }
+        else
+        {
+            return true; // TODO
         }
 
         if (!array_key_exists('cost', $options))
@@ -308,19 +315,21 @@ class PasswordHashing
      */
     public static function hashInfo($hash)
     {
-        if (strlen($hash) === 60 && strpos($hash, '$2y$') === 0)
+        $hashLength = strlen($hash);
+        if ($hashLength === 60 && strpos($hash, '$2y$') === 0)
         {
             return password_get_info($hash);
         }
-        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
+        elseif ($hashLength >= 110 && strpos($hash, '$6$') === 0)
         {
             return 'SHA512';
         }
-        elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
+        elseif ($hashLength === 34 && strpos($hash, '$P$') === 0)
         {
             return 'PRIVATE/PORTABLE_HASH';
         }
-        elseif (strlen($hash) === 32 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
+        // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
+        elseif ($hashLength === 32 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
         {
             return 'MD5';
         }
