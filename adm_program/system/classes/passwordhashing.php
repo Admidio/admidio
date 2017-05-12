@@ -28,6 +28,7 @@ require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php'
  * genRandomInt()       generate a cryptographically strong random int
  * passwordInfo()       provides infos about the given password (length, number, lowerCase, upperCase, symbol)
  * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
+ * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
 class PasswordHashing
@@ -49,7 +50,7 @@ class PasswordHashing
                 $options['cost'] = 100000;
             }
 
-            $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+            $salt = self::genRandomPassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
             return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
         }
         elseif ($algorithm === 'BCRYPT')
@@ -183,44 +184,51 @@ class PasswordHashing
     }
 
     /**
+     * Generate an insecure random integer
+     * @param int             $min                     The min of the range (inclusive)
+     * @param int             $max                     The max of the range (inclusive)
+     * @param bool            $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
+     * @param Error|Exception $exception               The thrown Error or Exception object.
+     * @param string          $exceptionMessage        The Admidio Exception-Message.
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @return int Returns an insecure random integer
+     */
+    private static function genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $exception, $exceptionMessage)
+    {
+        global $gLogger;
+
+        $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $exception->getCode(), 'message' => $exception->getMessage()));
+
+        if ($exceptionOnInsecurePRNG)
+        {
+            throw new AdmException($exceptionMessage, $exception->getCode(), $exception->getMessage());
+        }
+
+        // as a fallback we use the mt_rand method
+        return mt_rand($min, $max);
+    }
+
+    /**
      * Generate a cryptographically strong random integer
      * @param int  $min                     The min of the range (inclusive)
      * @param int  $max                     The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @throws AdmException
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @return int Returns a cryptographically strong random integer
      */
     public static function genRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
     {
-        global $gLogger;
-
         try
         {
             $int = random_int($min, $max);
         }
         catch (Error $e)
         {
-            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
-
-            if ($exceptionOnInsecurePRNG)
-            {
-                throw new AdmException('SYS_GEN_RANDOM_ERROR', $e->getCode(), $e->getMessage());
-            }
-
-            // as a fallback we use the mt_rand method
-            $int = mt_rand($min, $max);
+            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
         }
         catch (Exception $e)
         {
-            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
-
-            if ($exceptionOnInsecurePRNG)
-            {
-                throw new AdmException('SYS_GEN_RANDOM_EXCEPTION', $e->getCode(), $e->getMessage());
-            }
-
-            // as a fallback we use the mt_rand method
-            $int = mt_rand($min, $max);
+            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
         return $int;
@@ -264,19 +272,6 @@ class PasswordHashing
     }
 
     /**
-     * Calculates the strength of a given password from 0-4.
-     * @param string   $password The password to check
-     * @param string[] $userData An array of strings for dictionary attacks
-     * @return int Returns the score of the password
-     */
-    public static function passwordStrength($password, array $userData = array())
-    {
-        $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
-        $strength = $zxcvbn->passwordStrength($password, $userData);
-        return $strength['score'];
-    }
-
-    /**
      * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
      * @param string $hash The hash you want the get infos about
      * @return array|string Returns an array or string with infos about the given hash
@@ -295,12 +290,25 @@ class PasswordHashing
         {
             return 'PRIVATE/PORTABLE_HASH';
         }
-        elseif (strlen($hash) === 32)
+        elseif (strlen($hash) === 32 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
         {
             return 'MD5';
         }
 
         return 'UNKNOWN';
+    }
+
+    /**
+     * Calculates the strength of a given password from 0-4.
+     * @param string   $password The password to check
+     * @param string[] $userData An array of strings for dictionary attacks
+     * @return int Returns the score of the password
+     */
+    public static function passwordStrength($password, array $userData = array())
+    {
+        $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
+        $strength = $zxcvbn->passwordStrength($password, $userData);
+        return $strength['score'];
     }
 
     /**

@@ -218,6 +218,7 @@ class Inventory extends TableInventory
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value or the internal unique profile field name
      * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      * @par Examples
      * @code
@@ -227,9 +228,9 @@ class Inventory extends TableInventory
      * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org');
      * @endcode
      */
-    public function setValue($columnName, $newValue)
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentUser, $gPreferences;
+        global $gCurrentUser;
 
         $returnCode    = true;
         $oldFieldValue = $this->mInventoryFieldsData->getValue($columnName, 'database');
@@ -256,7 +257,7 @@ class Inventory extends TableInventory
         else
         {
             // users data from adm_users table
-            $returnCode = parent::setValue($columnName, $newValue);
+            $returnCode = parent::setValue($columnName, $newValue, $checkValue);
         }
 
         return $returnCode;
