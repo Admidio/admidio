@@ -48,13 +48,6 @@ define('SCHEME', parse_url($g_root_path, PHP_URL_SCHEME)); // get SCHEME out of 
 define('HTTPS', (SCHEME === 'https') ? true : false); // true | false
 define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
-<<<<<<< HEAD
-$port = ((!HTTPS && PORT === 80) || (HTTPS && PORT === 443)) ? '' : ':' . PORT; // :1234
-if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
-{
-    // if ssl proxy is used than this proxy is the host and the cookie must be set for this
-    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port); // ssl.example.org:1234
-=======
 $port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
 
 if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
@@ -62,7 +55,6 @@ if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
     define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
     define('DOMAIN', strstr($_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . ':', ':', true)); // ssl.example.org
->>>>>>> v3.2
 }
 else
 {
