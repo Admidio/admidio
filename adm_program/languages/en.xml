@@ -1261,6 +1261,8 @@
   <string name="SYS_PREVIEW">Preview</string>
   <string name="SYS_PREVIOUS">Previous</string>
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
+  <string name="SYS_PRNG">Pseudo-random number generator</string>
+  <string name="SYS_PRNG_INSECURE">Admidio/PHP can not generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROGRESSBAR">Progress bar</string>
   <string name="SYS_PROPERTIES">Properties</string>
@@ -1291,6 +1293,7 @@
   <string name="SYS_SAVE">Save</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
   <string name="SYS_SECONDS">Seconds</string>
+  <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SEND">Send</string>
