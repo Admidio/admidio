@@ -108,32 +108,47 @@ else
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// UserField-objekt anlegen
+// create category object
 $category = new TableCategory($gDb);
-
-if($getCatId > 0)
-{
-    $category->readDataById($getCatId);
-
-    // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-    if($category->getValue('cat_org_id') > 0
-    && (int) $category->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-}
 
 if(isset($_SESSION['categories_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // By wrong input, the user returned to this form now write the previously entered contents into the object
+
     $category->setArray($_SESSION['categories_request']);
+
+    // get the selected roles for visibility
+    $roleViewSet = $_SESSION['categories_request']['adm_categories_view_right'];
+
     if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
         $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
     unset($_SESSION['categories_request']);
+}
+else
+{
+    if($getCatId > 0)
+    {
+        $category->readDataById($getCatId);
+
+        // get assigned roles of this category
+        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $roleViewSet = $categoryViewRolesObject->getRolesIds();
+
+        // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
+        if($category->getValue('cat_org_id') > 0
+        && (int) $category->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+    }
+    else
+    {
+        // a new category will be visible for all users per default
+        $roleViewSet = array(0);
+    }
 }
 
 // create html page object
@@ -198,10 +213,6 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         'query'  => $sqlViewRoles,
         'params' => array($gCurrentOrganization->getValue('org_id'))
     );
-
-    // get assigned roles of this category
-    $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
-    $roleViewSet = $categoryViewRolesObject->getRolesIds();
 
     // if no roles are assigned then set "all users" as default
     if(count($roleViewSet) === 0)

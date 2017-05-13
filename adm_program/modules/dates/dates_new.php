@@ -65,8 +65,7 @@ $date = new TableDate($gDb);
 
 if(isset($_SESSION['dates_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // By wrong input, the user returned to this form now write the previously entered contents into the object
 
     // first set date and time field to a datetime and add this to date class
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
@@ -93,8 +92,23 @@ if(isset($_SESSION['dates_request']))
 }
 else
 {
-    // read all roles that could see this event
-    if($getDateId === 0)
+    if($getDateId > 0)
+    {
+        // read data from database
+        $date->readDataById($getDateId);
+
+        // get assigned roles of this event
+        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $roleViewSet = $eventParticipationRolesObject->getRolesIds();
+
+        // check if the current user could edit this event
+        if(!$date->editable())
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+    }
+    else
     {
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
         $now = new DateTime();
@@ -107,21 +121,6 @@ else
 
         // a new event will be visible for all users per default
         $roleViewSet = array(0);
-    }
-    else
-    {
-        $date->readDataById($getDateId);
-
-        // get assigned roles of this event
-        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
-        $roleViewSet = $eventParticipationRolesObject->getRolesIds();
-
-        // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-        if(!$date->editable())
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
     }
 
     // check if a registration to this event is possible
