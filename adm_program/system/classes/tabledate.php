@@ -13,11 +13,6 @@
  * @class TableDate
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
- * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
  */
 class TableDate extends TableAccess
 {
@@ -98,25 +93,31 @@ class TableDate extends TableAccess
     }
 
     /**
-     * prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
-     * @return bool
+     * This method checks if the current user is allowed to edit this event. Therefore
+     * the event must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage events.
+     * Global events could be only edited by the parent organization.
+     * @return bool Return true if the current user is allowed to edit this event
      */
-    public function editRight()
+    public function editable()
     {
-        global $gCurrentOrganization;
+        global $gCurrentOrganization, $gCurrentUser;
 
-        $catOrgId = (int) $this->getValue('cat_org_id');
-
-        // Termine der eigenen Orga darf bearbeitet werden
-        if ($catOrgId === (int) $gCurrentOrganization->getValue('org_id'))
+        if($this->visible() && $gCurrentUser->editDates())
         {
-            return true;
-        }
+            $orgId = (int) $this->getValue('cat_org_id');
 
-        // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        if ($this->getValue('dat_global') && $gCurrentOrganization->isChildOrganization($catOrgId))
-        {
-            return true;
+            // only edit events of the current organization
+            if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
+            {
+                return true;
+            }
+
+            // Global events could be edited by the parent organization
+            if ($gCurrentOrganization->isChildOrganization($orgId) && $this->getValue('dat_global'))
+            {
+                return true;
+            }
         }
 
         return false;
@@ -452,5 +453,23 @@ class TableDate extends TableAccess
         }
 
         $this->visibleRoles = $arrVisibleRoleIds;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view this event. Therefore
+     * the visibility of the category is checked.
+     * @return bool Return true if the current user is allowed to view this event
+     */
+    public function visible()
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the event
+        if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT')))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -349,7 +349,7 @@ else
             // change and delete is only for users with additional rights
             if ($gCurrentUser->editDates())
             {
-                if($date->editRight())
+                if($date->editable())
                 {
                     $outputButtonCopy = '
                         <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id=' . $dateId . '&amp;copy=1&amp;headline=' . $getHeadline . '">

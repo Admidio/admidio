@@ -172,10 +172,9 @@ class ModuleDates extends Modules
         }
 
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state, mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additionalFields . '
-                  FROM ' . TBL_DATE_ROLE . ' AS dtr
-            INNER JOIN ' . TBL_DATES . ' AS dat
-                    ON dat_id = dtr_dat_id
+        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state,
+                       mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additionalFields . '
+                  FROM ' . TBL_DATES . ' AS dat
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
                        ' . $this->sqlAdditionalTablesGet('data') . '
@@ -184,7 +183,8 @@ class ModuleDates extends Modules
                    AND mem.mem_usr_id = ' . $gCurrentUser->getValue('usr_id') . '
                    AND mem.mem_begin <= \'' . DATE_NOW . '\'
                    AND mem.mem_end    > \'' . DATE_NOW . '\'
-                 WHERE (  cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
+                 WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('DAT'), array(0))).')
+                   AND (  cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
                        OR  (   dat_global = 1
                            AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                            )
@@ -252,18 +252,19 @@ class ModuleDates extends Modules
      */
     public function getDataSetCount()
     {
+        global $gCurrentUser;
+
         if ($this->id === 0)
         {
             global $gDb, $gCurrentOrganization;
 
             $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
-                      FROM ' . TBL_DATE_ROLE . '
-                INNER JOIN ' . TBL_DATES . '
-                        ON dat_id = dtr_dat_id
+                      FROM ' . TBL_DATES . '
                 INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = dat_cat_id
                            ' . $this->sqlAdditionalTablesGet('count') . '
-                     WHERE ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                     WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('DAT'), array(0))).')
+                       AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            OR  (   dat_global = 1
                                AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                                )
@@ -444,7 +445,7 @@ class ModuleDates extends Modules
                 $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
             }
         }
-
+/* TODO later
         $usrId = (int) $gCurrentUser->getValue('usr_id');
         // add conditions for role permission
         if ($usrId > 0)
@@ -478,7 +479,7 @@ class ModuleDates extends Modules
         {
             $sqlConditions .= ' AND dtr_rol_id IS NULL ';
         }
-
+*/
         return $sqlConditions;
     }
 

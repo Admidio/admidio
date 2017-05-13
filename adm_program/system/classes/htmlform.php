@@ -1641,7 +1641,7 @@ class HtmlForm extends HtmlFormBasic
         $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
-                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories('ANN'), array(0))) . ')
+                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories($categoryType), array(0))) . ')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_type = ? -- $categoryType
