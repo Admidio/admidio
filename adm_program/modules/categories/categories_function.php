@@ -109,7 +109,7 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if(!in_array($getType, array('USF', 'DAT', 'ROL')) && !isset($_POST['adm_categories_view_right']))
+    if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1) && !isset($_POST['adm_categories_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
         // => EXIT
@@ -151,7 +151,7 @@ if($getMode === 1)
 
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
-    $checkboxes = array('cat_hidden', 'cat_default');
+    $checkboxes = array('cat_default');
 
     foreach($checkboxes as $value)
     {
@@ -183,7 +183,7 @@ if($getMode === 1)
 
     // roles have their own preferences for visibility, so only allow this for other types
     // until now we do not support visibility for categories that belong to several organizations
-    if(!in_array($getType, array('DAT', 'ROL'))
+    if($getType !== 'ROL'
     && ($category->getValue('cat_org_id') > 0 || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
     {
         // save changed roles rights of the category

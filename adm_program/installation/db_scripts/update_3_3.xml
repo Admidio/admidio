@@ -16,6 +16,7 @@
     <step id="140">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_deadline timestamp null default null AFTER dat_max_members</step>
     <step id="150">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table) VALUES ('category_view', 'adm_categories')</step>
     <step id="160">ComponentUpdate::updateStepVisibleCategories</step>
+    <step id="170">ALTER TABLE %PREFIX%_categories DROP COLUMN cat_hidden</step>
 
     <step>stop</step>
 </update>

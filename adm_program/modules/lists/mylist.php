@@ -696,7 +696,7 @@ else
                            FROM '.TBL_ROLES.'
                      INNER JOIN '.TBL_CATEGORIES.'
                              ON cat_id = rol_cat_id
-                            AND cat_hidden = 0
+                            AND cat_name_intern <> \'EVENTS\'
                           WHERE rol_valid  = 0
                             AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                 OR cat_org_id IS NULL )

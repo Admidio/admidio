@@ -187,15 +187,7 @@ class ModuleAnnouncements extends Modules
      */
     private function getSqlConditions()
     {
-        global $gValidLogin, $gCurrentUser;
-
         $sqlConditions = '';
-
-        // if user isn't logged in, then don't show hidden categories
-        if (!$gValidLogin)
-        {
-            $sqlConditions .= ' AND cat_hidden = 0 ';
-        }
 
         $id = $this->getParameter('id');
         // In case ID was permitted and user has rights

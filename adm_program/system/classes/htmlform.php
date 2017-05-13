@@ -1589,7 +1589,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBoxForCategories($id, $label, Database $database, $categoryType, $selectBoxModus, array $options = array())
     {
-        global $gCurrentOrganization, $gValidLogin, $gL10n;
+        global $gCurrentOrganization, $gCurrentUser, $gL10n;
 
         // create array with all options
         $optionsDefault = array(
@@ -1637,16 +1637,12 @@ class HtmlForm extends HtmlFormBasic
             $sqlConditions .= ' AND cat_system = 0 ';
         }
 
-        if (!$gValidLogin)
-        {
-            $sqlConditions .= ' AND cat_hidden = 0 ';
-        }
-
         // the sql statement which returns all found categories
         $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
-                 WHERE (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories('ANN'), array(0))) . ')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_type = ? -- $categoryType
                        ' . $sqlConditions . '

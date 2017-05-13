@@ -153,12 +153,6 @@ $page->addJavascript('
     }
 ');
 
-$htmlIconLoginUser = '&nbsp;';
-if($getType !== 'USF')
-{
-    $htmlIconLoginUser = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" />';
-}
-
 // get module menu
 $categoriesMenu = $page->getMenu();
 
@@ -176,7 +170,6 @@ $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    $htmlIconLoginUser,
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />',
     $gL10n->get('DAT_VISIBLE_TO'),
     '&nbsp;'
@@ -235,12 +228,6 @@ while($catRow = $categoryStatement->fetch())
                                 src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" /></a>';
     }
 
-    $htmlHideCategory = '&nbsp;';
-    if($category->getValue('cat_hidden') == 1)
-    {
-        $htmlHideCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" />';
-    }
-
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
@@ -288,7 +275,6 @@ while($catRow = $categoryStatement->fetch())
     $columnValues = array(
         '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
-        $htmlHideCategory,
         $htmlDefaultCategory,
         $htmlRolesNames,
         $categoryAdministration

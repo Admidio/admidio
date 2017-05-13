@@ -668,7 +668,7 @@ class ComponentUpdate extends Component
     {
         $sql = 'SELECT cat_id, cat_org_id
                   FROM ' . TBL_CATEGORIES . '
-                 WHERE cat_type IN (\'ANN\', \'LNK\', \'USF\')
+                 WHERE cat_type IN (\'ANN\', \'DAT\', \'LNK\', \'USF\')
                    AND cat_org_id IS NOT NULL
                    AND cat_hidden = 1 ';
         $categoryStatement = $this->db->queryPrepared($sql);

@@ -99,7 +99,6 @@ create table %PREFIX%_categories
     cat_type                    varchar(10)         not null,
     cat_name_intern             varchar(110)        not null,
     cat_name                    varchar(100)        not null,
-    cat_hidden                  boolean             not null    default '0',
     cat_system                  boolean             not null    default '0',
     cat_default                 boolean             not null    default '0',
     cat_sequence                smallint            not null,

@@ -33,8 +33,6 @@
  *                     [cat_name_intern] => COMMON
  *                     [4] => Allgemein
  *                     [cat_name] => Allgemein
- *                     [5] => 0
- *                     [cat_hidden] => 0
  *                     [6] => 0
  *                     [cat_system] => 0
  *                     [7] => 0
@@ -417,15 +415,9 @@ class ModuleDates extends Modules
      */
     private function getSqlConditions()
     {
-        global $gValidLogin, $gCurrentUser;
+        global $gCurrentUser;
 
         $sqlConditions = '';
-
-        // if user isn't logged in, then don't show hidden categories
-        if (!$gValidLogin)
-        {
-            $sqlConditions .= ' AND cat_hidden = 0 ';
-        }
 
         $id = $this->getParameter('id');
         // In case ID was permitted and user has rights

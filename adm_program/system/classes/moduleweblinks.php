@@ -33,8 +33,6 @@
  *                     [cat_name_intern] => COMMON
  *                     [4] => Allgemein
  *                     [cat_name] => Allgemein
- *                     [5] => 0
- *                     [cat_hidden] => 0
  *                     [6] => 0
  *                     [cat_system] => 0
  *                     [7] => 0
@@ -122,7 +120,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gDb, $gValidLogin;
+        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gDb;
 
         // Parameter
         if($limit === null)
@@ -138,11 +136,6 @@ class ModuleWeblinks extends Modules
         if($this->getParameter('cat_id') > 0)
         {
             $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
-        }
-        if(!$gValidLogin)
-        {
-            // if user isn't logged in, then don't show hidden categories
-            $this->getConditions .= ' AND cat_hidden = 0 ';
         }
 
         // Weblinks aus der DB fischen...

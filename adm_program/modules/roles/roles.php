@@ -146,14 +146,6 @@ while($row = $rolStatement->fetch())
     // Add data to role object
     $role->setArray($row);
 
-    $categoryName = $role->getValue('cat_name');
-
-    if($role->getValue('cat_hidden') == 1)
-    {
-        $categoryName .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/user_key.png"
-                             alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" />';
-    }
-
     if($role->getValue('rol_assign_roles') == 1)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/roles.png"
@@ -308,7 +300,7 @@ while($row = $rolStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        array('value' => $categoryName, 'order' => $role->getValue('cat_sequence')),
+        array('value' => $role->getValue('cat_name'), 'order' => $role->getValue('cat_sequence')),
         '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php?rol_id='.$rolId.'" title="'.$role->getValue('rol_description').'">'.$rolName.'</a>',
         $assignRoles,
         $listView,
