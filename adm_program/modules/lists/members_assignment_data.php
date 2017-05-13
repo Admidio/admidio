@@ -81,7 +81,7 @@ if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 
 // create order statement
 $orderCondition = '';
-$orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'address', 'leader_this_role');
+$orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'street', 'leader_this_role');
 
 if(array_key_exists('order', $_GET))
 {
@@ -121,7 +121,7 @@ $searchColumns = array(
     'COALESCE(last_name, \' \')',
     'COALESCE(first_name, \' \')',
     'COALESCE(birthday, \' \')',
-    'COALESCE(address, \' \')',
+    'COALESCE(street, \' \')',
     'COALESCE(city, \' \')',
     'COALESCE(zip_code, \' \')',
     'COALESCE(country, \' \')'
@@ -201,7 +201,7 @@ $jsonArray['recordsTotal'] = (int) $countTotalStatement->fetchColumn();
 
  // SQL-Statement zusammensetzen
 $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name,
-                   birthday.usd_value AS birthday, city.usd_value AS city, address.usd_value AS address,
+                   birthday.usd_value AS birthday, city.usd_value AS city, street.usd_value AS street,
                    zip_code.usd_value AS zip_code, country.usd_value AS country, mem_usr_id AS member_this_role,
                    mem_leader AS leader_this_role, '.$memberOfThisOrganizationSelect.' AS member_this_orga
               FROM '.TBL_USERS.'
@@ -217,9 +217,9 @@ $mainSql = 'SELECT DISTINCT usr_id, last_name.usd_value AS last_name, first_name
          LEFT JOIN '.TBL_USER_DATA.' AS city
                 ON city.usd_usr_id = usr_id
                AND city.usd_usf_id = ? -- $gProfileFields->getProperty(\'CITY\', \'usf_id\')
-         LEFT JOIN '.TBL_USER_DATA.' AS address
-                ON address.usd_usr_id = usr_id
-               AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS street
+                ON street.usd_usr_id = usr_id
+               AND street.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
          LEFT JOIN '.TBL_USER_DATA.' AS zip_code
                 ON zip_code.usd_usr_id = usr_id
                AND zip_code.usd_usf_id = ? -- $gProfileFields->getProperty(\'POSTCODE\', \'usf_id\')
@@ -262,7 +262,7 @@ if($getSearch === '')
 }
 else
 {
-    $sql = 'SELECT usr_id, last_name, first_name, birthday, city, address, zip_code, country, member_this_role, leader_this_role, member_this_orga
+    $sql = 'SELECT usr_id, last_name, first_name, birthday, city, street, zip_code, country, member_this_role, leader_this_role, member_this_orga
               FROM ('.$mainSql.') AS members
                '.$searchCondition
                 .$orderCondition
@@ -276,33 +276,8 @@ $rowNumber = $getStart; // count for every row
 while($user = $userStatement->fetch())
 {
     ++$rowNumber;
-
-    $addressText  = ' ';
-    $htmlAddress  = '&nbsp;';
-    $htmlBirthday = '&nbsp;';
-
-    if($user['member_this_orga'] > 0)
-    {
-        $memberOfThisOrganization = '1';
-    }
-    else
-    {
-        $memberOfThisOrganization = '0';
-    }
-
-    // create string with user address
-    if(strlen($user['country']) > 0)
-    {
-        $addressText .= $gL10n->getCountryByCode($user['country']);
-    }
-    if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
-    {
-        $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
-    }
-    if(strlen($user['address']) > 0)
-    {
-        $addressText .= ' - '. $user['address'];
-    }
+    $arrContent  = array();
+    $addressText = '';
 
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
     if($user['member_this_orga'] > 0)
@@ -315,48 +290,84 @@ while($user = $userStatement->fetch())
         $icon = 'no_profile.png';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
     }
+    $arrContent[] = '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />';
 
-    // Haekchen setzen ob jemand Mitglied ist oder nicht
+    // set flag if user is member of the current organization or not
     if($user['member_this_role'])
     {
-        $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
     }
     else
     {
-        $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
+        $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
     }
 
-    if(strlen($addressText) > 1)
+    if($gProfileFields->visible('LAST_NAME', $gCurrentUser->editUsers()))
     {
-        $htmlAddress = '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+        $arrContent[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>';
     }
 
-    // Haekchen setzen ob jemand Leiter ist oder nicht
+    if($gProfileFields->visible('FIRST_NAME', $gCurrentUser->editUsers()))
+    {
+        $arrContent[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>';
+    }
+
+    // create string with user address
+    if(strlen($user['country']) > 0 && $gProfileFields->visible('COUNTRY', $gCurrentUser->editUsers()))
+    {
+        $addressText .= $gL10n->getCountryByCode($user['country']);
+    }
+    if((strlen($user['zip_code']) > 0 && $gProfileFields->visible('POSTCODE', $gCurrentUser->editUsers()))
+    || (strlen($user['city']) > 0 && $gProfileFields->visible('CITY', $gCurrentUser->editUsers())))
+    {
+        $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
+    }
+    if(strlen($user['street']) > 0 && $gProfileFields->visible('STREET', $gCurrentUser->editUsers()))
+    {
+        $addressText .= ' - '. $user['street'];
+    }
+
+    if($gProfileFields->visible('COUNTRY', $gCurrentUser->editUsers())
+    || $gProfileFields->visible('POSTCODE', $gCurrentUser->editUsers())
+    || $gProfileFields->visible('CITY', $gCurrentUser->editUsers())
+    || $gProfileFields->visible('STREET', $gCurrentUser->editUsers()))
+    {
+        if(strlen($addressText) > 0)
+        {
+            $arrContent[] = '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+        }
+        else
+        {
+            $arrContent[] = '&nbsp;';
+        }
+    }
+
+    if($gProfileFields->visible('BIRTHDAY', $gCurrentUser->editUsers()))
+    {
+        // show birthday if it's known
+        if(strlen($user['birthday']) > 0)
+        {
+            $birthdayDate = DateTime::createFromFormat('Y-m-d', $user['birthday']);
+            $arrContent[] = $birthdayDate->format($gPreferences['system_date']);
+        }
+        else
+        {
+            $arrContent[] = '&nbsp;';
+        }
+    }
+
+    // set flag if user is a leader of the current role or not
     if($user['leader_this_role'])
     {
-        $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
+        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
     }
     else
     {
-        $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
-    }
-
-    // Geburtstag nur ausgeben wenn bekannt
-    if(strlen($user['birthday']) > 0)
-    {
-        $birthdayDate = DateTime::createFromFormat('Y-m-d', $user['birthday']);
-        $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
+        $arrContent[] = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
     }
 
     // create array with all column values and add it to the json array
-    $jsonArray['data'][] = array(
-        '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-        $htmlMemberStatus,
-        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>',
-        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>',
-        $htmlAddress,
-        $htmlBirthday,
-        $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
+    $jsonArray['data'][] = $arrContent;
 }
 
 // set count of filtered records
