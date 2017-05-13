@@ -184,13 +184,14 @@ $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_na
 // roles could be assigned if only 1 organization exists.
 if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
 {
-    // if parent folder has access for all roles then read all roles from database
+    // read all roles of the current organization
     $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                        FROM '.TBL_ROLES.'
                  INNER JOIN '.TBL_CATEGORIES.'
                          ON cat_id = rol_cat_id
                       WHERE rol_valid  = 1
                         AND rol_system = 0
+                        AND cat_name_intern <> \'EVENTS\'
                         AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    ORDER BY cat_sequence, rol_name';
     $sqlDataView = array(
@@ -198,7 +199,7 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         'params' => array($gCurrentOrganization->getValue('org_id'))
     );
 
-    // get assigned roles of this folder
+    // get assigned roles of this category
     $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
     $roleViewSet = $categoryViewRolesObject->getRolesIds();
 
@@ -210,7 +211,7 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
 
     // show selectbox with all assigned roles
     $form->addSelectBoxFromSql(
-        'adm_categories_view_right', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlDataView,
+        'adm_categories_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
         array(
             'property'     => FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,

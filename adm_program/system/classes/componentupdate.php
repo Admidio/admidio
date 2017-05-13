@@ -418,6 +418,27 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * This method migrate the data of the table adm_date_role to the table adm_roles_rights_data.
+     */
+    public function updateStepMigrateDatesRightsToFolderRights()
+    {
+        global $g_tbl_praefix, $g_organization, $gCurrentUser;
+
+        // migrate adm_folder_roles to adm_roles_rights
+        $sql = 'SELECT ror_id
+                  FROM '.TBL_ROLES_RIGHTS.'
+                 WHERE ror_name_intern = \'event_participation\'';
+        $rolesRightsStatement = $this->db->queryPrepared($sql);
+        $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
+
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, '. $gCurrentUser->getValue('usr_id') .', \''. DATETIME_NOW .'\'
+                  FROM '.$g_tbl_praefix.'_date_role
+                 WHERE dtr_rol_id IS NOT NULL';
+        $this->db->queryPrepared($sql);
+    }
+
+    /**
      * This method migrate the data of the table adm_folder_roles to the
      * new table adm_roles_rights_data.
      */
@@ -432,8 +453,8 @@ class ComponentUpdate extends Component
         $rolesRightsStatement = $this->db->queryPrepared($sql);
         $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, '. $gCurrentUser->getValue('usr_id') .', \''. DATETIME_NOW .'\'
                   FROM '.$g_tbl_praefix.'_folder_roles ';
         $this->db->queryPrepared($sql);
 

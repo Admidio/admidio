@@ -97,7 +97,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Uitgebreid</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Zichtbaarheid</string>
-  <string name="DAT_VISIBLE_TO">Zichtbaar voor</string>
+  <string name="SYS_VISIBLE_FOR">Zichtbaar voor</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Voeg toe in database</string>
   <string name="DOW_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>

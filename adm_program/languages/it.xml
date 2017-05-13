@@ -89,7 +89,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Dettagliato</string>
   <string name="DAT_VIEW_MODE_COMPACT">Sintetico</string>
   <string name="DAT_VISIBILITY">Visibilità</string>
-  <string name="DAT_VISIBLE_TO">Visibile per</string>
+  <string name="SYS_VISIBLE_FOR">Visibile per</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Aggiungi al database</string>
   <string name="DOW_ADDITIONAL_FILES">L\'elenco intende fornire una vista d\'insieme sui file e le cartelle non importate già nel database. Aggiungile qui. I diritti per l\'accesso saranno copiati dalla cartella selezionata.</string>

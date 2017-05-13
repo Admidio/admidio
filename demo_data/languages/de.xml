@@ -9,11 +9,10 @@
     <string name="DEMO_ANN_NEW_JERSEYS_CONTENT">Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.</string>
     <string name="DEMO_ANN_AEROBICS_COURSE">Aerobik-Kurs</string>
     <string name="DEMO_ANN_AEROBICS_COURSE_CONTENT">Während der Schulferien bieten wir einen [i]Aerobic-Kurs[/i] für alle interessierten Mitglieder an.\n\nAnmeldungen werden auf der [b]Homepage[/b] oder in der [b]Geschäftsstelle[/b] entgegen genommen.</string>
-    <string name="DEMO_DAT_YOUTH_TRAINING">Training Jugend 1</string>
-    <string name="DEMO_DAT_YOUTH_TRAINING_LOCATION">Sportplatz Norwich</string>
-    <string name="DEMO_DAT_YOUTH_TRAINING_CONTENT">Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\n\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!</string>
     <string name="DEMO_DAT_BARBECUE">Grillfest</string>
     <string name="DEMO_DAT_BARBECUE_CONTENT">Heute findet unser Grillfest statt. Neben knackigen Würstchen, Koteletts und Bauchspeck gibt es auch noch verschiedene Salate.</string>
+    <string name="DEMO_DAT_BOARD_MEETING">Vorstandssitzung</string>
+    <string name="DEMO_DAT_CLUBHOUSE">Vereinsheim</string>
     <string name="DEMO_DAT_TRAINER_COURSE">Trainerlehrgang</string>
     <string name="DEMO_DAT_TRAINER_COURSE_LOCATION">Jugendherberge Lyon</string>
     <string name="DEMO_DAT_TRAINER_COURSE_CONTENT">Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)</string>
@@ -26,6 +25,9 @@
     <string name="DEMO_DAT_YOGA">Yoga für Anfänger</string>
     <string name="DEMO_DAT_YOGA_LOCATION">Madrid Zentrum</string>
     <string name="DEMO_DAT_YOGA_CONTENT">In diesem Kurs werden die Grundlagen für Yoga vermittelt.\n\nEine Anmeldung zu diesem Kurs ist erforderlich.</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING">Training Jugend 1</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING_LOCATION">Sportplatz Norwich</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING_CONTENT">Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\n\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!</string>
     <string name="DEMO_GBO_WEBMASTER_WELCOME">Willkommen im Gästebuch des Demo-Bereichs. \n\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\n\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.</string>
     <string name="DEMO_GBO_GUEST_ENTRY1">Dann werde ich mir das Programm mal anschauen.</string>
     <string name="DEMO_GBO_WEBMASTER_COMMENT1">Weitere Infos zu dem Programm gibt es in der [a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]Dokumentation[/a].\n\nBei Fragen und Anregungen schau einfach mal in unserem [a href="https://forum.admidio.org"]Forum[/a] vorbei.</string>

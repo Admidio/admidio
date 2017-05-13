@@ -171,7 +171,7 @@ $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />',
-    $gL10n->get('DAT_VISIBLE_TO'),
+    $gL10n->get('SYS_VISIBLE_FOR'),
     '&nbsp;'
 );
 $categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));

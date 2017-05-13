@@ -136,10 +136,10 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $date->setValue('dat_all_day', 0);
     }
 
-    if(!isset($_POST['date_roles']) || array_count_values($_POST['date_roles']) == 0)
+    if(!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)
     {
-        $_SESSION['dates_request']['date_roles'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        $_SESSION['dates_request']['adm_event_participation_right'] = '';
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PARTICIPANTS')));
         // => EXIT
     }
 
@@ -351,8 +351,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // now save array with all roles that should see this event to date object
-    $date->setVisibleRoles(array_map('intval', $_POST['date_roles']));
+    // save changed roles rights of the category
+    $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+    $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
 
     // save event in database
     $returnCode = $date->save();
@@ -593,10 +594,11 @@ if (in_array($getMode, array(3, 4, 7), true))
     $member = new TableMembers($gDb);
 
     // Check participation deadline and update user inputs if possible
-    if (!$date->deadlineExceeded())
+    if ($date->allowedToParticipate() && !$date->deadlineExceeded())
     {
         $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
+
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)
         {

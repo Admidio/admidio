@@ -210,12 +210,11 @@ if($plg_ter_aktiv)
     }
 
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
-              FROM '.TBL_DATE_ROLE.'
-        INNER JOIN '.TBL_DATES.'
-                ON dat_id = dtr_dat_id
+              FROM '.TBL_DATES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
-             WHERE dat_begin <= ? -- $dateMonthEnd
+             WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('DAT'), array(0))).')
+               AND dat_begin <= ? -- $dateMonthEnd
                AND dat_end   >= ? -- $dateMonthStart
                    '.$sqlLogin.'
                    '.$sqlSyntax.'

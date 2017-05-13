@@ -97,7 +97,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detaljeret</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Synlighed</string>
-  <string name="DAT_VISIBLE_TO">Synlig for</string>
+  <string name="SYS_VISIBLE_FOR">Synlig for</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Tilføj til database</string>
   <string name="DOW_ADDITIONAL_FILES">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</string>

@@ -384,7 +384,7 @@ elseif ($getMode === 7)
 {
     if(!isset($_POST['adm_roles_view_right']))
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_VISIBLE_FOR')));
         // => EXIT
     }
     if(!isset($_POST['adm_roles_upload_right']))

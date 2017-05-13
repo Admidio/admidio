@@ -15,21 +15,6 @@
  * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden.
  * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
  * ausgelesen. Geschrieben werden aber nur die Rollendaten
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * allowedToAssignMembers - checks if user is allowed to assign members to this role
- *                          requires userObject of user for this should be checked
- * allowedToEditMembers - checks if user is allowed to edit members of this role
- *                        requires userObject of user for this should be checked
- * countVacancies($countLeaders = false) - gibt die freien Plaetze der Rolle zurueck
- *                    dies ist interessant, wenn rol_max_members gesetzt wurde
- * hasFormerMembers() - Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
- * setInactive()    - setzt die Rolle auf inaktiv
- * setActive()      - setzt die Rolle wieder auf aktiv
- * viewRole()       - diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter
- *                    und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
- *                    sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
  */
 class TableRoles extends TableAccess
 {
@@ -264,10 +249,6 @@ class TableRoles extends TableAccess
                  WHERE dat_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
-        $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                 WHERE dtr_rol_id = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId));
-
         $sql = 'DELETE FROM '.TBL_ROLES_RIGHTS_DATA.'
                  WHERE rrd_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
@@ -486,12 +467,12 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter
-     * und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
-     * sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
-     * @return bool
+     * This method checks if the current user is allowed to view this role. Therefore
+     * the view properties of the role will be checked. If it's an event role than
+     * we also check if the user is a member of the roles that could participate to the event.
+     * @return bool Return true if the current user is allowed to view this role
      */
-    public function viewRole()
+    public function visible()
     {
         global $gCurrentUser, $gValidLogin;
 
@@ -510,19 +491,18 @@ class TableRoles extends TableAccess
             return false;
         }
 
-        // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
-        $sql = 'SELECT dtr_rol_id
-                  FROM '.TBL_DATE_ROLE.'
-            INNER JOIN '.TBL_DATES.'
-                    ON dat_id = dtr_dat_id
-                 WHERE dat_rol_id = ? -- $this->getValue(\'rol_id\')
-                   AND (  dtr_rol_id IS NULL
-                       OR EXISTS (SELECT 1
-                                    FROM '.TBL_MEMBERS.'
-                                   WHERE mem_rol_id = dtr_rol_id
-                                     AND mem_usr_id = ?)) -- $gCurrentUser->getValue(\'usr_id\')';
-        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $gCurrentUser->getValue('usr_id')));
+        // check if user is member of a role who could view the event
+        $sql = 'SELECT dat_id
+                  FROM '.TBL_DATES.'
+                 WHERE dat_rol_id = ? -- $this->getValue(\'rol_id\') ';
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id')));
+        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $pdoStatement->fetchColumn());
 
-        return $pdoStatement->rowCount() > 0;
+        if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

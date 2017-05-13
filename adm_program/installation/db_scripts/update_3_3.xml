@@ -14,9 +14,14 @@
     <step id="120">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_additional_guests integer not null default 0</step>
     <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
     <step id="140">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_deadline timestamp null default null AFTER dat_max_members</step>
-    <step id="150">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table) VALUES ('category_view', 'adm_categories')</step>
+    <step id="150">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                   VALUES ('category_view', 'adm_categories'),
+                          ('event_participation', 'adm_dates')
+    </step>
     <step id="160">ComponentUpdate::updateStepVisibleCategories</step>
     <step id="170">ALTER TABLE %PREFIX%_categories DROP COLUMN cat_hidden</step>
+    <step id="180">ComponentUpdate::updateStepMigrateDatesRightsToFolderRights</step>
+    <step id="190">DROP TABLE %PREFIX%_date_role</step>
 
     <step>stop</step>
 </update>

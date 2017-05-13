@@ -16,9 +16,6 @@
  */
 class TableDate extends TableAccess
 {
-    protected $visibleRoles = array();
-    protected $changeVisibleRoles;
-
     /**
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific date will be loaded.
@@ -34,14 +31,26 @@ class TableDate extends TableAccess
     }
 
     /**
-     * Additional to the parent method visible roles array and flag will be initialized.
+     * Check if the current user is allowed to participate to this event.
+     * Therefore we check if the user is member of a role that is assigned to
+     * the right event_participation.
+     * @return Return true if the current user is allowed to participate to the event.
      */
-    public function clear()
+    public function allowedToParticipate()
     {
-        parent::clear();
+        global $gCurrentUser;
 
-        $this->visibleRoles = array();
-        $this->changeVisibleRoles = false;
+        if($this->getValue('dat_rol_id') > 0)
+        {
+            $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $this->getValue('dat_id'));
+
+            if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -71,9 +80,9 @@ class TableDate extends TableAccess
 
         $this->db->startTransaction();
 
-        $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                 WHERE dtr_dat_id = ? -- $datId';
-        $this->db->queryPrepared($sql, array($datId));
+        // delete all roles assignments that could participate to the event
+        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $datId);
+        $eventParticipationRoles->delete();
 
         // if date has participants then the role with their memberships must be deleted
         if ($datRoleId > 0)
@@ -87,6 +96,7 @@ class TableDate extends TableAccess
             $dateRole->delete(); // TODO Exception handling
         }
 
+        // now delete event
         parent::delete();
 
         return $this->db->endTransaction();
@@ -337,84 +347,6 @@ class TableDate extends TableAccess
     }
 
     /**
-     * die Methode gibt ein Array mit den fuer den Termin sichtbaren Rollen-IDs zurueck
-     * @return array
-     */
-    public function getVisibleRoles()
-    {
-        if (count($this->visibleRoles) === 0)
-        {
-            // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
-            $sql = 'SELECT dtr_rol_id AS roleId
-                      FROM '.TBL_DATE_ROLE.'
-                     WHERE dtr_dat_id = ? -- $this->getValue(\'dat_id\')';
-            $dateRolesStatement = $this->db->queryPrepared($sql, array($this->getValue('dat_id')));
-
-            while ($row = $dateRolesStatement->fetch()) // Do not simplify to fetchColumn() -> This row could be null
-            {
-                if ($row['roleId'] === null)
-                {
-                    $this->visibleRoles[] = 0;
-                }
-                else
-                {
-                    $this->visibleRoles[] = (int) $row['roleId'];
-                }
-            }
-        }
-
-        return $this->visibleRoles;
-    }
-
-    /**
-     * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
-     * a new record or if only an update is necessary. The update statement will only update the changed columns.
-     * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * Saves also all roles that could see this date.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                if table has columns like @b usr_id_create or @b usr_id_changed
-     * @return bool
-     */
-    public function save($updateFingerPrint = true)
-    {
-        $this->db->startTransaction();
-
-        $returnValue = parent::save($updateFingerPrint);
-
-        if ($this->changeVisibleRoles)
-        {
-            // Sichbarkeit der Rollen wegschreiben
-            if (!$this->new_record)
-            {
-                // erst einmal alle bisherigen Rollenzuordnungen loeschen, damit alles neu aufgebaut werden kann
-                $sql = 'DELETE FROM '.TBL_DATE_ROLE.'
-                         WHERE dtr_dat_id = ? -- $this->getValue(\'dat_id\')';
-                $this->db->queryPrepared($sql, array($this->getValue('dat_id')));
-            }
-
-            // nun alle Rollenzuordnungen wegschreiben
-            $dateRole = new TableAccess($this->db, TBL_DATE_ROLE, 'dtr');
-
-            foreach ($this->visibleRoles as $roleId)
-            {
-                if ($roleId > 0)
-                {
-                    $dateRole->setValue('dtr_rol_id', $roleId);
-                }
-
-                $dateRole->setValue('dtr_dat_id', $this->getValue('dat_id'));
-                $dateRole->save();
-                $dateRole->clear();
-            }
-        }
-
-        $this->changeVisibleRoles = false;
-        $this->db->endTransaction();
-
-        return $returnValue;
-    }
-
-    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
@@ -439,20 +371,6 @@ class TableDate extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
-    }
-
-    /**
-     * die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs
-     * @param int[] $arrVisibleRoleIds
-     */
-    public function setVisibleRoles(array $arrVisibleRoleIds)
-    {
-        if (count(array_diff($arrVisibleRoleIds, $this->visibleRoles)) > 0)
-        {
-            $this->changeVisibleRoles = true;
-        }
-
-        $this->visibleRoles = $arrVisibleRoleIds;
     }
 
     /**

@@ -111,7 +111,7 @@ if($getMode === 1)
 
     if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1) && !isset($_POST['adm_categories_view_right']))
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_VISIBLE_FOR')));
         // => EXIT
     }
 

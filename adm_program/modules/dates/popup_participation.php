@@ -15,7 +15,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int');
+$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int', array('requireValue' => true));
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
 
 // Initialize local variables
@@ -29,7 +29,14 @@ $editUserStatus             = false;
 $date = new TableDate($gDb, $getDateId);
 
 // Get the fingerprint of calling user. If is not the user itself check the requesting user whether it has the permission to edit the states
-if ($gCurrentUser->getValue('usr_id') === $getUserId)
+if ((int) $gCurrentUser->getValue('usr_id') === $getUserId)
+{
+    if(!$date->allowedToParticipate())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
+}
+else
 {
     if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
     {
@@ -38,11 +45,8 @@ if ($gCurrentUser->getValue('usr_id') === $getUserId)
 }
 
 // Read participants
-if ($getDateId > 0)
-{
-    $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
-    $participantsArray   = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
-}
+$participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+$participantsArray   = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
 
 // If extended options for participation are allowed then show in form
 if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)

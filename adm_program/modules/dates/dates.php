@@ -460,8 +460,8 @@ else
             }
         }
 
-        // count participants of the date
-        if($dateRolId > 0)
+        // if current user is allowed to participate then show buttons for participation
+        if($date->allowedToParticipate())
         {
             $participants = new Participants($gDb, $dateRolId);
             $outputNumberMembers = $participants->getCount();
