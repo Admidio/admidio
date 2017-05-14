@@ -347,32 +347,43 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => HASH_COST_BCRYPT_MIN))
+    public static function costBenchmark($maxTime = 0.35, $password = 'password', $algorithm = 'DEFAULT', array $options = array())
     {
         global $gLogger;
 
-        $time = 0;
-        $results = array();
         $cost = $options['cost'];
 
         if ($algorithm === 'SHA512')
         {
             $maxCost = HASH_COST_SHA512_MAX;
             $costIncrement = 50000;
-            if ($cost < 1000)
+
+            if (!is_int($cost))
             {
-                $cost = 1000;
+                $cost = HASH_COST_SHA512_DEFAULT;
+            }
+            if ($cost < HASH_COST_SHA512_MIN)
+            {
+                $cost = HASH_COST_SHA512_MIN;
             }
         }
         else
         {
             $maxCost = HASH_COST_BCRYPT_MAX;
             $costIncrement = 1;
-            if ($cost < 4)
+
+            if (!is_int($cost))
             {
-                $cost = 4;
+                $cost = HASH_COST_BCRYPT_DEFAULT;
+            }
+            if ($cost < HASH_COST_BCRYPT_MIN)
+            {
+                $cost = HASH_COST_BCRYPT_MIN;
             }
         }
+
+        $time = 0;
+        $results = array();
 
         // loop through the cost value until the needed hashing time reaches the maximum set time
         while ($time <= $maxTime && $cost <= $maxCost)
