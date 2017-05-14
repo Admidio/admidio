@@ -89,8 +89,20 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     $_SESSION['dates_request'] = $_POST;
 
     // ------------------------------------------------
-    // pruefen ob alle notwendigen Felder gefuellt sind
+    // check if all necessary fields are filled
     // ------------------------------------------------
+
+    if(!isset($_POST['date_registration_possible']))
+    {
+        $_POST['date_registration_possible'] = 0;
+    }
+    if($_POST['date_registration_possible'] == 1
+    && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0))
+    {
+        $_SESSION['dates_request']['adm_event_participation_right'] = '';
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PARTICIPANTS')));
+        // => EXIT
+    }
 
     if(strlen($_POST['dat_headline']) === 0)
     {
@@ -134,13 +146,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     else
     {
         $date->setValue('dat_all_day', 0);
-    }
-
-    if(!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0)
-    {
-        $_SESSION['dates_request']['adm_event_participation_right'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PARTICIPANTS')));
-        // => EXIT
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
@@ -228,10 +233,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     if(!isset($_POST['dat_all_day']))
     {
         $_POST['dat_all_day'] = 0;
-    }
-    if(!isset($_POST['date_registration_possible']))
-    {
-        $_POST['date_registration_possible'] = 0;
     }
     if(!isset($_POST['dat_room_id']))
     {
@@ -351,9 +352,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // save changed roles rights of the category
-    $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
-    $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
+    if(isset($_POST['adm_event_participation_right']))
+    {
+        // save changed roles rights of the category
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);        
+    }
 
     // save event in database
     $returnCode = $date->save();

@@ -40,6 +40,7 @@ if(!$gCurrentUser->editDates())
 // lokale Variablen der Uebergabevariablen initialisieren
 $dateRegistrationPossible = false;
 $dateCurrentUserAssigned  = false;
+$roleViewSet              = array();
 
 // set headline of the script
 if($getCopy)
@@ -74,7 +75,10 @@ if(isset($_SESSION['dates_request']))
     $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility
-    $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
+    if(isset($_SESSION['dates_request']['adm_event_participation_right']))
+    {
+        $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];        
+    }
 
     // check if a registration to this event is possible
     if(array_key_exists('date_registration_possible', $_SESSION['dates_request']))
@@ -118,9 +122,6 @@ else
         $endDate   = $now->add($twoHourOffset)->format('Y-m-d H:00:00');
         $date->setValue('dat_begin', $beginDate);
         $date->setValue('dat_end',   $endDate);
-
-        // a new event will be visible for all users per default
-        $roleViewSet = array(0);
     }
 
     // check if a registration to this event is possible
@@ -328,20 +329,13 @@ $sqlDataView = array(
     'params' => array($gCurrentOrganization->getValue('org_id'))
 );
 
-// if no roles are assigned then set "all users" as default
-if(count($roleViewSet) === 0)
-{
-    $roleViewSet[] = 0;
-}
-
 // show selectbox with all assigned roles
 $form->addSelectBoxFromSql(
     'adm_event_participation_right', $gL10n->get('SYS_PARTICIPANTS'), $gDb, $sqlDataView,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,
-        'multiselect'  => true,
-        'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null)
+        'multiselect'  => true
     )
 );
 $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
