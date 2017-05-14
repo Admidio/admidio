@@ -41,6 +41,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 }
 
 // includes WITHOUT database connections
+require_once(ADMIDIO_PATH . '/adm_program/system/polyfill.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
