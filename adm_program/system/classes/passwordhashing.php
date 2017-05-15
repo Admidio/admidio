@@ -7,10 +7,17 @@
  ***********************************************************************************************
  */
 
-// provide forward compatibility with the password_* functions that ship with PHP 5.5
-require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/password_compat/password.php');
-// provide forward compatibility with the random_* functions that ship with PHP 7.0
-require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php');
+define('HASH_COST_BCRYPT_DEFAULT', 12);
+define('HASH_COST_BCRYPT_MIN', 10);
+define('HASH_COST_BCRYPT_MAX', 31);
+define('HASH_COST_SHA512_DEFAULT', 100000);
+define('HASH_COST_SHA512_MIN', 10000);
+define('HASH_COST_SHA512_MAX', 999999999);
+
+define('HASH_LENGTH_BCRYPT', 60);
+define('HASH_LENGTH_SHA512', 110);
+define('HASH_LENGTH_PORTABLE', 34);
+define('HASH_LENGTH_MD5', 32);
 
 /**
  * @class PasswordHashing
@@ -28,6 +35,7 @@ require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/random_compat/lib/random.php'
  * genRandomInt()       generate a cryptographically strong random int
  * passwordInfo()       provides infos about the given password (length, number, lowerCase, upperCase, symbol)
  * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
+ * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
 class PasswordHashing
@@ -46,10 +54,14 @@ class PasswordHashing
         {
             if (!array_key_exists('cost', $options))
             {
-                $options['cost'] = 100000;
+                $options['cost'] = HASH_COST_SHA512_DEFAULT;
+            }
+            if ($options['cost'] < HASH_COST_SHA512_MIN)
+            {
+                $options['cost'] = HASH_COST_SHA512_MIN;
             }
 
-            $salt = self::genRandomPassword(8, './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+            $salt = self::genRandomPassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
             return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
         }
         elseif ($algorithm === 'BCRYPT')
@@ -63,12 +75,12 @@ class PasswordHashing
 
         if (!array_key_exists('cost', $options))
         {
-            $options['cost'] = 12;
+            $options['cost'] = HASH_COST_BCRYPT_DEFAULT;
         }
         // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
-        if ($options['cost'] < 10)
+        if ($options['cost'] < HASH_COST_BCRYPT_MIN)
         {
-            $options['cost'] = 10;
+            $options['cost'] = HASH_COST_BCRYPT_MIN;
         }
 
         return password_hash($password, $algorithmPhpConstant, $options);
@@ -82,32 +94,23 @@ class PasswordHashing
      */
     public static function verify($password, $hash)
     {
-        if (strlen($hash) === 60 && strpos($hash, '$2y$') === 0)
+        $hashLength = strlen($hash);
+        if ($hashLength === HASH_LENGTH_BCRYPT && strpos($hash, '$2y$') === 0)
         {
             return password_verify($password, $hash);
         }
-        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
+        elseif ($hashLength >= HASH_LENGTH_SHA512 && strpos($hash, '$6$') === 0)
         {
             $passwordHash = crypt($password, $hash);
-
-            if (function_exists('hash_equals'))
-            {
-                return hash_equals($passwordHash, $hash);
-            }
-
-            $status = 0;
-            for ($i = 0, $iMax = strlen($passwordHash); $i < $iMax; ++$i) {
-                $status |= (ord($passwordHash[$i]) ^ ord($hash[$i]));
-            }
-
-            return $status === 0;
+            return hash_equals($passwordHash, $hash);
         }
-        elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
+        elseif ($hashLength === HASH_LENGTH_PORTABLE && strpos($hash, '$P$') === 0)
         {
             $passwordHasher = new PasswordHash(9, true);
             return $passwordHasher->CheckPassword($password, $hash);
         }
-        elseif (strlen($hash) === 32)
+        // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
+        elseif ($hashLength === HASH_LENGTH_MD5 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
         {
             return md5($password) === $hash;
         }
@@ -125,20 +128,44 @@ class PasswordHashing
      */
     public static function needsRehash($hash, $algorithm = 'DEFAULT', array $options = array())
     {
-        if ($algorithm === 'SHA512')
+        $hashLength = strlen($hash);
+        if ($algorithm === 'SHA512' && $hashLength >= HASH_LENGTH_SHA512 && strpos($hash, '$6$') === 0)
         {
+            if (!array_key_exists('cost', $options))
+            {
+                $options['cost'] = HASH_COST_SHA512_DEFAULT;
+            }
+            if ($options['cost'] < HASH_COST_SHA512_MIN)
+            {
+                $options['cost'] = HASH_COST_SHA512_MIN;
+            }
+
             $hashParts = explode('$', $hash);
             $cost = (int) substr($hashParts[2], 7);
 
-            return strlen($hash) < 110 || strpos($hash, '$6$') !== 0 || $cost !== $options['cost'];
+            return $cost !== $options['cost'];
         }
-        elseif ($algorithm === 'BCRYPT')
+        elseif ($algorithm === 'BCRYPT' && $hashLength === HASH_LENGTH_BCRYPT && strpos($hash, '$2y$') === 0)
         {
             $algorithmPhpConstant = PASSWORD_BCRYPT;
         }
-        else
+        elseif ($algorithm === 'DEFAULT')
         {
             $algorithmPhpConstant = PASSWORD_DEFAULT;
+        }
+        else
+        {
+            return true; // TODO
+        }
+
+        if (!array_key_exists('cost', $options))
+        {
+            $options['cost'] = HASH_COST_BCRYPT_DEFAULT;
+        }
+        // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
+        if ($options['cost'] < HASH_COST_BCRYPT_MIN)
+        {
+            $options['cost'] = HASH_COST_BCRYPT_MIN;
         }
 
         return password_needs_rehash($hash, $algorithmPhpConstant, $options);
@@ -183,44 +210,51 @@ class PasswordHashing
     }
 
     /**
+     * Generate an insecure random integer
+     * @param int             $min                     The min of the range (inclusive)
+     * @param int             $max                     The max of the range (inclusive)
+     * @param bool            $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
+     * @param Error|Exception $exception               The thrown Error or Exception object.
+     * @param string          $exceptionMessage        The Admidio Exception-Message.
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
+     * @return int Returns an insecure random integer
+     */
+    private static function genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $exception, $exceptionMessage)
+    {
+        global $gLogger;
+
+        $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $exception->getCode(), 'message' => $exception->getMessage()));
+
+        if ($exceptionOnInsecurePRNG)
+        {
+            throw new AdmException($exceptionMessage, $exception->getCode(), $exception->getMessage());
+        }
+
+        // as a fallback we use the mt_rand method
+        return mt_rand($min, $max);
+    }
+
+    /**
      * Generate a cryptographically strong random integer
      * @param int  $min                     The min of the range (inclusive)
      * @param int  $max                     The max of the range (inclusive)
      * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @throws AdmException
+     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
      * @return int Returns a cryptographically strong random integer
      */
     public static function genRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
     {
-        global $gLogger;
-
         try
         {
             $int = random_int($min, $max);
         }
         catch (Error $e)
         {
-            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
-
-            if ($exceptionOnInsecurePRNG)
-            {
-                throw new AdmException('SYS_GEN_RANDOM_ERROR', $e->getCode(), $e->getMessage());
-            }
-
-            // as a fallback we use the mt_rand method
-            $int = mt_rand($min, $max);
+            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
         }
         catch (Exception $e)
         {
-            $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $e->getCode(), 'message' => $e->getMessage()));
-
-            if ($exceptionOnInsecurePRNG)
-            {
-                throw new AdmException('SYS_GEN_RANDOM_EXCEPTION', $e->getCode(), $e->getMessage());
-            }
-
-            // as a fallback we use the mt_rand method
-            $int = mt_rand($min, $max);
+            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
         }
 
         return $int;
@@ -264,6 +298,35 @@ class PasswordHashing
     }
 
     /**
+     * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
+     * @param string $hash The hash you want the get infos about
+     * @return array|string Returns an array or string with infos about the given hash
+     */
+    public static function hashInfo($hash)
+    {
+        $hashLength = strlen($hash);
+        if ($hashLength === HASH_LENGTH_BCRYPT && strpos($hash, '$2y$') === 0)
+        {
+            return password_get_info($hash);
+        }
+        elseif ($hashLength >= HASH_LENGTH_SHA512 && strpos($hash, '$6$') === 0)
+        {
+            return 'SHA512';
+        }
+        elseif ($hashLength === HASH_LENGTH_PORTABLE && strpos($hash, '$P$') === 0)
+        {
+            return 'PRIVATE/PORTABLE_HASH';
+        }
+        // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
+        elseif ($hashLength === HASH_LENGTH_MD5 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
+        {
+            return 'MD5';
+        }
+
+        return 'UNKNOWN';
+    }
+
+    /**
      * Calculates the strength of a given password from 0-4.
      * @param string   $password The password to check
      * @param string[] $userData An array of strings for dictionary attacks
@@ -277,33 +340,6 @@ class PasswordHashing
     }
 
     /**
-     * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
-     * @param string $hash The hash you want the get infos about
-     * @return array|string Returns an array or string with infos about the given hash
-     */
-    public static function hashInfo($hash)
-    {
-        if (strlen($hash) === 60 && strpos($hash, '$2y$') === 0)
-        {
-            return password_get_info($hash);
-        }
-        elseif (strlen($hash) >= 110 && strpos($hash, '$6$') === 0)
-        {
-            return 'SHA512';
-        }
-        elseif (strlen($hash) === 34 && strpos($hash, '$P$') === 0)
-        {
-            return 'PRIVATE/PORTABLE_HASH';
-        }
-        elseif (strlen($hash) === 32)
-        {
-            return 'MD5';
-        }
-
-        return 'UNKNOWN';
-    }
-
-    /**
      * Run a benchmark to get the best fitting cost value. The cost value can vary from 4 to 31.
      * @param float  $maxTime   The maximum time the hashing process should take in seconds
      * @param string $password  The password to test
@@ -311,32 +347,43 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.5, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => 10))
+    public static function costBenchmark($maxTime = 0.35, $password = 'password', $algorithm = 'DEFAULT', array $options = array())
     {
         global $gLogger;
 
-        $time = 0;
-        $results = array();
         $cost = $options['cost'];
 
         if ($algorithm === 'SHA512')
         {
-            $maxCost = 999999999;
+            $maxCost = HASH_COST_SHA512_MAX;
             $costIncrement = 50000;
-            if ($cost < 1000)
+
+            if (!is_int($cost))
             {
-                $cost = 1000;
+                $cost = HASH_COST_SHA512_DEFAULT;
+            }
+            if ($cost < HASH_COST_SHA512_MIN)
+            {
+                $cost = HASH_COST_SHA512_MIN;
             }
         }
         else
         {
-            $maxCost = 31;
+            $maxCost = HASH_COST_BCRYPT_MAX;
             $costIncrement = 1;
-            if ($cost < 4)
+
+            if (!is_int($cost))
             {
-                $cost = 4;
+                $cost = HASH_COST_BCRYPT_DEFAULT;
+            }
+            if ($cost < HASH_COST_BCRYPT_MIN)
+            {
+                $cost = HASH_COST_BCRYPT_MIN;
             }
         }
+
+        $time = 0;
+        $results = array();
 
         // loop through the cost value until the needed hashing time reaches the maximum set time
         while ($time <= $maxTime && $cost <= $maxCost)

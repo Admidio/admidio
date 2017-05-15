@@ -1297,7 +1297,6 @@
     <string name="SYS_PREVIOUS_VALUE">Vorheriger Wert</string>
     <string name="SYS_PRNG">Pseudo-Zufallszahlen Generator</string>
     <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
-    <string name="SYS_PRNG_SECURE">Sicher</string>
     <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
     <string name="SYS_PROGRESSBAR">Ladebalken</string>
     <string name="SYS_PROPERTIES">Eigenschaften</string>
@@ -1328,6 +1327,7 @@
     <string name="SYS_SAVE">Speichern</string>
     <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
     <string name="SYS_SECONDS">Sekunden</string>
+    <string name="SYS_SECURE">Sicher</string>
     <string name="SYS_SECURITY_ERROR">Sicherheits Fehler</string>
     <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
     <string name="SYS_SEND">Abschicken</string>

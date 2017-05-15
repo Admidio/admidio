@@ -11,6 +11,7 @@
 
 // embed config and constants file
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
+// TODO: In future require config.php here
 require_once($rootPath . '/adm_program/system/init_globals.php');
 require_once($rootPath . '/adm_program/system/constants.php');
 
@@ -40,6 +41,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 }
 
 // includes WITHOUT database connections
+require_once(ADMIDIO_PATH . '/adm_program/system/polyfill.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
