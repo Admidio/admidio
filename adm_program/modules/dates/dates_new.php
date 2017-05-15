@@ -333,7 +333,6 @@ $sqlDataView = array(
 $form->addSelectBoxFromSql(
     'adm_event_participation_right', $gL10n->get('SYS_PARTICIPANTS'), $gDb, $sqlDataView,
     array(
-        'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,
         'multiselect'  => true
     )
