@@ -49,7 +49,8 @@ class AdmException extends Exception
 
         if ($gDb instanceof \Database)
         {
-            $gDb->endTransaction();
+            // if there is an open transaction we should perform a rollback
+            $gDb->rollback();
         }
 
         if (is_array($params))
