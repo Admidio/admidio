@@ -352,6 +352,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
+    $gDb->startTransaction();
+
     if(isset($_POST['adm_event_participation_right']))
     {
         // save changed roles rights of the category
@@ -485,7 +487,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $returnCode2 = $role->save();
         if($returnCode < 0 || $returnCode2 < 0)
         {
-            $date->delete();
+            $gDb->rollback();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -495,7 +497,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $returnCode = $date->save();
         if($returnCode < 0)
         {
-            $role->delete();
+            $gDb->rollback();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -552,6 +554,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $member->setValue('mem_leader', 0);
         $member->save();
     }
+
+    $gDb->endTransaction();
 
     unset($_SESSION['dates_request']);
     $gNavigation->deleteLastUrl();
