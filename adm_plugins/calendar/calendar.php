@@ -178,12 +178,12 @@ if($plg_ter_aktiv)
     else
     {
         // show only calendars of the parameter $plg_kal_cat
-        $sqlSyntax = ' AND ';
+        $sqlSyntax = ' AND cat_name IN (';
         foreach($plg_kal_cat as $calendar)
         {
-            $sqlSyntax .= 'cat_name = \''.$calendar.'\' OR ';
+            $sqlSyntax .= '\''.$calendar.'\', ';
         }
-        $sqlSyntax = substr($sqlSyntax, 0, -4). ' ';
+        $sqlSyntax = substr($sqlSyntax, 0, -2). ') ';
     }
 
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
