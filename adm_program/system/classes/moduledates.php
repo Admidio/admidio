@@ -445,41 +445,34 @@ class ModuleDates extends Modules
                 $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
             }
         }
-/* TODO later
-        $usrId = (int) $gCurrentUser->getValue('usr_id');
+
         // add conditions for role permission
-        if ($usrId > 0)
+        if ($gCurrentUser->getValue('usr_id') > 0)
         {
-            $subSelect = '(SELECT mem_rol_id
-                             FROM ' . TBL_MEMBERS . ' AS mem2
-                            WHERE mem2.mem_usr_id = ' . $usrId . '
-                              AND mem2.mem_begin <= dat_begin
-                              AND mem2.mem_end   >= dat_end)';
             switch ($this->getParameter('show'))
             {
-                case 'all':
-                    $sqlConditions .= '
-                        AND (  dtr_rol_id IS NULL
-                            OR dtr_rol_id IN ' . $subSelect . ' ) ';
-                    break;
                 case 'maybe_participate':
                     $sqlConditions .= '
                         AND dat_rol_id IS NOT NULL
-                        AND (  dtr_rol_id IS NULL
-                            OR dtr_rol_id IN ' . $subSelect . ' ) ';
+                        AND EXISTS (SELECT 1 FROM '. TBL_ROLES_RIGHTS .'
+                                     INNER JOIN '. TBL_ROLES_RIGHTS_DATA .' ON rrd_ror_id = ror_id
+                                     WHERE ror_name_intern = \'event_participation\'
+                                       AND rrd_object_id = dat_id
+                                       AND rrd_rol_id IN ('.implode(',', $gCurrentUser->getRoleMemberships()).')) ';
                     break;
+
                 case 'only_participate':
                     $sqlConditions .= '
                         AND dat_rol_id IS NOT NULL
-                        AND dat_rol_id IN ' . $subSelect;
+                        AND dat_rol_id IN (SELECT mem_rol_id
+                                             FROM ' . TBL_MEMBERS . ' AS mem2
+                                            WHERE mem2.mem_usr_id = ' . $gCurrentUser->getValue('usr_id') . '
+                                              AND mem2.mem_begin <= dat_begin
+                                              AND mem2.mem_end   >= dat_end) ';
                     break;
             }
         }
-        else
-        {
-            $sqlConditions .= ' AND dtr_rol_id IS NULL ';
-        }
-*/
+
         return $sqlConditions;
     }
 
