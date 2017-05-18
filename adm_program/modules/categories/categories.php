@@ -239,18 +239,7 @@ while($catRow = $categoryStatement->fetch())
 
     if(count($arrRolesIds) > 0)
     {
-        $arrRolesNames = array();
-        $sql = 'SELECT rol_name
-                  FROM '.TBL_ROLES.'
-                 WHERE rol_id IN ('.implode(',', $arrRolesIds).') ';
-        $rolesStatement = $gDb->queryPrepared($sql);
-
-        while($rowRole = $rolesStatement->fetch())
-        {
-            $arrRolesNames[] = $rowRole['rol_name'];
-        }
-
-        $htmlRolesNames = implode(', ', $arrRolesNames);
+        $htmlRolesNames = implode(', ', $rightCategoryView->getRolesNames());
     }
     else
     {

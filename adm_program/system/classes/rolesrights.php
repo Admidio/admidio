@@ -116,6 +116,31 @@ class RolesRights extends TableAccess
     }
 
     /**
+     * Get all names of the roles that where assigned to the current roles right and the selected object.
+     * @return string[] Returns an array with all roles names
+     */
+    public function getRolesNames()
+    {
+        $arrRolesNames = array();
+
+        if(count($this->rolesIds) > 0)
+        {
+            $arrRolesNames = array();
+            $sql = 'SELECT rol_name
+                      FROM '.TBL_ROLES.'
+                     WHERE rol_id IN ('.implode(',', $this->rolesIds).') ';
+            $rolesStatement = $this->db->queryPrepared($sql);
+
+            while($rowRole = $rolesStatement->fetch())
+            {
+                $arrRolesNames[] = $rowRole['rol_name'];
+            }
+        }
+
+        return $arrRolesNames;
+    }
+
+    /**
      * Check if one of the assigned roles is also a role of the current object.
      * Method will return true if at least one role was found.
      * @param int[] $assignedRoles Array with all assigned roles of the user whose rights should be checked

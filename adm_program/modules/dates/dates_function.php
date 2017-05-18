@@ -294,6 +294,18 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $date->setValue('dat_deadline', null);
     }
 
+    if(isset($_POST['adm_event_participation_right']))
+    {
+        // save changed roles rights of the category
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
+
+        if(count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
+        {
+            $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
+            // => EXIT
+        }
+    }
+
     // make html in description secure
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
 
@@ -354,15 +366,16 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     $gDb->startTransaction();
 
-    if(isset($_POST['adm_event_participation_right']))
-    {
-        // save changed roles rights of the category
-        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
-        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);        
-    }
-
     // save event in database
     $returnCode = $date->save();
+
+    if(isset($_POST['adm_event_participation_right']))
+    {
+
+        // save changed roles rights of the category
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
+    }
 
     if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
     {
