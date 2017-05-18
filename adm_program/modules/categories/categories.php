@@ -174,7 +174,7 @@ $columnHeading = array(
     $gL10n->get('SYS_VISIBLE_FOR'),
     '&nbsp;'
 );
-$categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
+$categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 $categoriesOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
