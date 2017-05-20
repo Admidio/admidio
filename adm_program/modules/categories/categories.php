@@ -166,12 +166,21 @@ $categoriesMenu->addItem('admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 
+if($getType === 'ROL')
+{
+    $visibleHeadline = '';
+}
+else
+{
+    $visibleHeadline = $gL10n->get('SYS_VISIBLE_FOR');
+}
+
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />',
-    $gL10n->get('SYS_VISIBLE_FOR'),
+    $visibleHeadline,
     '&nbsp;'
 );
 $categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
@@ -234,16 +243,23 @@ while($catRow = $categoryStatement->fetch())
         $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />';
     }
 
-    $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
-    $arrRolesIds = $rightCategoryView->getRolesIds();
-
-    if(count($arrRolesIds) > 0)
+    if($getType === 'ROL')
     {
-        $htmlRolesNames = implode(', ', $rightCategoryView->getRolesNames());
+        $htmlRolesNames = '';
     }
     else
     {
-        $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $arrRolesIds = $rightCategoryView->getRolesIds();
+    
+        if(count($arrRolesIds) > 0)
+        {
+            $htmlRolesNames = implode(', ', $rightCategoryView->getRolesNames());
+        }
+        else
+        {
+            $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        }
     }
 
     $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
