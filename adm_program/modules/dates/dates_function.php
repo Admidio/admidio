@@ -299,7 +299,10 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
 
-        if(count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
+        // if roles for visibility are assigned to the category than check if the assigned roles of event particiaption
+        // are within the visibility roles set otherwise show error
+        if(count($rightCategoryView->getRolesIds()) > 0
+        && count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
         {
             $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
             // => EXIT
