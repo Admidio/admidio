@@ -191,19 +191,20 @@ if($getViewMode === 'html')
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
 
+        if($gCurrentUser->editDates())
+        {
+            // if no calendar selectbox is shown, then show link to edit calendars
+            $datesMenu->addItem('admMenuItemCategories',
+                                FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
+                                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras');
+        }
+
         if($gCurrentUser->isAdministrator())
         {
             // show link to system preferences of weblinks
             $datesMenu->addItem('admMenuItemPreferencesLinks',
                                 ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=events',
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
-        }
-        elseif($gCurrentUser->editDates())
-        {
-            // if no calendar selectbox is shown, then show link to edit calendars
-            $datesMenu->addItem('admMenuItemCategories',
-                                FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
-                                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras');
         }
     }
 

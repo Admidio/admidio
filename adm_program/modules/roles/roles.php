@@ -94,7 +94,7 @@ $rolesMenu->addItem('menu_item_new_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/rol
                     $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 // define link to maintain categories
 $rolesMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=ROL',
-                    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
+                    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
 // define link to show inactive roles
 $rolesMenu->addItem('menu_item_inactive_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?inactive='.$activeRolesFlag,
                     $activeRolesLinkDescription, $activeRolesImage);
