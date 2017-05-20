@@ -3,34 +3,34 @@
   <!--Phrases only in Announcementmodule-->
   <string name="ANN_ANNOUNCEMENT">Anúncio</string>
   <string name="ANN_ANNOUNCEMENTS">Anúncios</string>
-  <string name="ANN_ANNOUNCEMENTS_DESC">Exibir ou editar anúncios, notícias e outras informações</string>
-  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Um novo anúncio foi criado</string>
-  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Um novo anúncio em #VAR1# foi criado\n\nTítulo: #VAR2#\nCriado por: #VAR3#\nCriado em: #VAR4#</string>
+  <string name="ANN_ANNOUNCEMENTS_DESC">Os anúncios, notícias e informação podem ser publicados e vistos aqui.</string>
+  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Foi criado um novo anúncio</string>
+  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Foi criado um novo anúncio em #VAR1#\n\nTítulo: #VAR2#\nCriado por: #VAR3#\nCriado em: #VAR4#</string>
   <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Últimos anúncios da organização #VAR1#</string>
   <!--Phrases only in Backupmodule-->
-  <string name="BAC_BACK_TO_BACKUP_PAGE">Voltar à página de cópia de segurança</string>
+  <string name="BAC_BACK_TO_BACKUP_PAGE">Voltar à página de Cópias de Segurança</string>
   <string name="BAC_BACKUP_COMPLETED">Cópia de segurança criada em #VAR1#</string>
   <string name="BAC_BACKUP_FILE">Ficheiro de cópia de segurança</string>
   <string name="BAC_BACKUP_FROM">Cópia de segurança criada em #VAR1# às #VAR2#</string>
-  <string name="BAC_CREATION_DATE">Criado em</string>
-  <string name="BAC_DATABASE_BACKUP">Backup da base de dados</string>
-  <string name="BAC_DATABASE_BACKUP_DESC">Criar e transferir a cópia de segurança das tabelas da base de dados do Admidio</string>
+  <string name="BAC_CREATION_DATE">Criada em</string>
+  <string name="BAC_DATABASE_BACKUP">Cópia de Segurança da Base de Dados</string>
+  <string name="BAC_DATABASE_BACKUP_DESC">As cópias de segurança da base de dados das tabelas do Admidio podem ser criadas e transferidas.</string>
   <string name="BAC_DAYS_VAR">#VAR1# dias</string>
-  <string name="BAC_FILE_NAME_INVALID">O ficheiro selecionado contém caracteres inválidos.\n\nApenas letras, tremas, dígitos de 0-9 e caracteres especiais $!?._+-()&amp; são permitidos.</string>
+  <string name="BAC_FILE_NAME_INVALID">O ficheiro selecionado contém carateres inválidos.\n\nSão permitidos apenas letras, tremas, dígitos de 0-9 e carateres especiais $!?._+-()&amp;.</string>
   <string name="BAC_HOURS_VAR">#VAR1# horas</string>
   <string name="BAC_MINUTES_VAR">#VAR1# minutos</string>
-  <string name="BAC_NO_BACKUP_FILE_EXISTS">Nenhum ficheiro de cópia de segurança encontrado!</string>
-  <string name="BAC_ONLY_MYSQL">O módulo de cópia de segurança só pode ser usado em combinação com uma base de dados do MySQL.</string>
-  <string name="BAC_OVERALL_PROGRESS">Progresso</string>
-  <string name="BAC_START_BACKUP">Criar cópia de segurança</string>
+  <string name="BAC_NO_BACKUP_FILE_EXISTS">Não existe nenhum ficheiro de cópias de segurança!</string>
+  <string name="BAC_ONLY_MYSQL">O módulo de cópias de segurança só pode ser utilizado numa base de dados do MySQL.</string>
+  <string name="BAC_OVERALL_PROGRESS">Progresso Geral</string>
+  <string name="BAC_START_BACKUP">Iniciar cópia de segurança</string>
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# segundos</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_CATEGORY_EXIST">Nome de categoria já existe na organização selecionada.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Se ativada, as informações desta categoria aparecerão e poderão ser editadas na exibição de perfil das seguintes organizações:\n\n#VAR1_BOLD#\n\n Por favor, desative se as informações devem ser exibidas apenas na tua organização.</string>
-  <string name="CAT_DEFAULT_VAR">Padrão #VAR1#</string>
-  <string name="CAT_DELETE_CATEGORY">Remover a categoria #VAR1_BOLD# ?</string>
-  <string name="CAT_DONT_DELETE_CATEGORY">Não foi possível remover a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
+  <string name="CAT_CATEGORY_EXIST">Já existe uma categoria com esse nome nesta organização.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Se esta opção estiver ativada, os campos de perfil nesta categoria e também no perfil das seguintes organizações podem ser editados:\n\n#VAR1_BOLD#\n\n Pretende apenas os dados na sua organização, então esta opção deverá ser desativada.</string>
+  <string name="CAT_DEFAULT_VAR">Predefinição #VAR1#</string>
+  <string name="CAT_DELETE_CATEGORY">Deseja eliminar a categoria #VAR1_BOLD#?</string>
+  <string name="CAT_DONT_DELETE_CATEGORY">Não foi possível eliminar a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
   <string name="CAT_MOVE_DOWN">Mover #VAR1# para baixo</string>
   <string name="CAT_MOVE_UP">Mover #VAR1# para cima</string>
   <!--Phrases only in Datesmodule-->
@@ -38,22 +38,22 @@
   <string name="DAT_ALL_DAY">Tempo integral</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Adicionar participantes</string>
   <string name="DAT_ATTEND">Participar</string>
-  <string name="DAT_ATTEND_DATE">A tua participação foi confirmada em #VAR1_BOLD# na #VAR2#.</string>
   <string name="DAT_CALENDAR">Calendário</string>
   <string name="DAT_CANCEL">Cancelar</string>
-  <string name="DAT_CANCEL_DATE">A tua participação em #VAR1_BOLD# na #VAR2# foi cancelada.</string>
-  <string name="DAT_CURRENT_DATES_OF_ORGA">Eventos atuais das organizações #VAR1#</string>
+  <string name="DAT_CURRENT_DATES_OF_ORGA">Eventos atuais da organização #VAR1#</string>
   <string name="DAT_DATE">Evento</string>
   <string name="DAT_DATES">Eventos</string>
-  <string name="DAT_DATES_DESC">Estás apto a criar e editar eventos aqui. Usuários podem inscrever-se nestes eventos.</string>
-  <string name="DAT_EDIT_CALENDAR_DESC">Podes criar e editar calendários aqui.</string>
+  <string name="DAT_DATES_DESC">Os eventos podem ser criados e editados aqui. Os utilizadores podem inscrever-se nestes eventos.</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Configuração predefinida da Lista de Participantes</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Uma das configurações predefinidas pode ser definida aqui como predefinição para a lista de participantes dos eventos desta organização. Os eventos dos participantes serão exibidos com esta configuração.</string>
+  <string name="DAT_EDIT_CALENDAR_DESC">Aqui, pode criar e editar os seus calendários.</string>
   <string name="DAT_EDIT_ROOMS">Editar salas</string>
-  <string name="DAT_EDIT_ROOMS_DESC">Podes criar e editar salas para eventos aqui.</string>
-  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Um evento foi alterado</string>
+  <string name="DAT_EDIT_ROOMS_DESC">Aqui, pode criar e editar as salas para os eventos.</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Foi alterado um evento</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Um evento em #VAR1# foi alterado.\n\nTítulo: #VAR2#\nData: #VAR3#\nCalendário: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Local: #VAR1#\nSala: #VAR2#\nParticipantes: #VAR3#\nModificado por: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Modificado em: #VAR1#</string>
-  <string name="DAT_EMAIL_NOTIFICATION_TITLE">Um novo evento foi criado</string>
+  <string name="DAT_EMAIL_NOTIFICATION_TITLE">Foi criado um novo evento</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Um novo evento em #VAR1# foi criado.\n\nTítulo: #VAR2#\nData: #VAR3#\nCalendário: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Local: #VAR1#\nSala: #VAR2#\nParticipantes: #VAR3#\Criado por: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Criado em: #VAR1#</string>
@@ -139,7 +139,6 @@
   <string name="DOW_NEW_FILE_NAME">Novo nome de ficheiro</string>
   <string name="DOW_NEW_NAME">Novo nome</string>
   <string name="DOW_PREVIOUS_NAME">Nome anterior</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Aqui, podes definir quem vê o diretório #VAR1_BOLD# e ficheiros transferidos/carregados. Subdiretórios herdam as permissões do diretório-pai, e permissões existentes de subdiretórios serão sobrescritos. É permitido apenas utilizar cargos com acesso ao diretório pai. Usuários com o cargo #VAR2_BOLD# sempre terão todas as permissões.</string>
   <string name="DOW_SELECT_FILES">Selecionar ficheiros</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Definir permissões de diretório</string>
   <string name="DOW_UNMANAGED_FILES">Ficheiros não-gerenciados</string>
@@ -206,7 +205,6 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Uma atualização da base de dados só pode ser feita por um administrador. Por favor, insira adiante as credenciais de um administrador.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Mensageiro Instantâneo</string>
   <string name="INS_BOARD">Quadro de associações</string>
-  <string name="INS_CHOOSE_LANGUAGE">Selecionar idioma</string>
   <string name="INS_CONFERENCE_ROOM">Sala de conferências</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">O ficheiro #VAR1_BOLD# não pôde ser encontrado no diretório principal do Admidio!\n\nPor favor transfira o ficheiro para o teu computador novamente e copie-o para o diretório mencionado.</string>
   <string name="INS_CONTINUE_INSTALLATION">Continuar instalação</string>
@@ -214,10 +212,16 @@
   <string name="INS_CREATE_ADMINISTRATOR">A criar administrador</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">A criar arquivo de configuração</string>
   <string name="INS_DATA_FULLY_ENTERED">Toda a informação necessária para a instalação do Admidio já foi inserida.\n\nAgora a base de dados tem de ser criada e preenchida com teus dados.</string>
+  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Atualização da base de dados não é necessária</string>
+  <string name="INS_DATABASE_FILE_NOT_FOUND">O ficheiro #VAR1_BOLD# não pôde ser encontrado no diretório #VAR2_BOLD#.</string>
+  <string name="INS_DATABASE_IS_UP_TO_DATE">A base de dados do Admidio está atualizada</string>
+  <string name="INS_DATABASE_IS_UPDATED">A atualizar base de dados</string>
+  <string name="INS_DATABASE_LOGIN">Inserindo as informações da base de dados</string>
   <string name="INS_DATABASE_LOGIN_DESC">Forneça aqui as informações de acesso para tua base de dados. O prefixo de tabela pode ser personalizado se necessário. Personalização é necessária se múltiplas instalações do Admidio estão a usar a mesma base de dados.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">A versão da tua base de dados é #VAR1#.\n\nÉ necessário atualizar para a versão #VAR2#</string>
-  <string name="INS_DATABASE_SYSTEM">Sistema da base de dados</string>
   <string name="INS_DATABASE_PORT_INFO">Se deixado em branco, será utilizada a porta padrão do banco de dados (MySQL: 3306, PostgreSQL: 5432). Se usa algum serviço de hospedagem web ou outra porta específica, insira-a aqui.</string>
+  <string name="INS_DATABASE_SYSTEM">Sistema da base de dados</string>
+  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Criando base de dados</string>
   <string name="INS_DELETE_CONFIG_FILE">O diretório principal do Admidio #VAR1_BOLD# contém um ficheiro config.php. Ele já foi movido para o diretório adm_my_files. Por favor, exclua o ficheiro do diretório principal.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Transferir o ficheiro de configuração para o teu computador</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">O ficheiro de configuração #VAR1_BOLD# não pôde ser guardado no diretório #VAR2_BOLD#.Por favor, modifique as permissões de escrita para o diretório (mude o atributo do ficheiro via FTP para 0777 ou drwxrwxrwx respetivamente) ou transfira o ficheiro de configurações e copie-o para o diretório do Admidio #VAR3_BOLD# utilizando um programa de FTP.\n\Após o ficheiro ter sido movido a instalação pode ser continuada.</string>
@@ -225,12 +229,6 @@
   <string name="INS_DATA_OF_ADMINISTRATOR">Detalhes do administrador</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Entre com o nome, e-mail e credenciais de acesso do administrador. Inicie a sessão com o mesmo nome de usuário após a instalação.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Dados da organização</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Atualização da base de dados não é necessária</string>
-  <string name="INS_DATABASE_FILE_NOT_FOUND">O ficheiro #VAR1_BOLD# não pôde ser encontrado no diretório #VAR2_BOLD#.</string>
-  <string name="INS_DATABASE_IS_UPDATED">A atualizar base de dados</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">A base de dados do Admidio está atualizada</string>
-  <string name="INS_DATABASE_LOGIN">Inserindo as informações da base de dados</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Criando base de dados</string>
   <string name="INS_DESCRIPTION_BOARD">Quadro administrativo de associação </string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Encontros podem ter lugar aqui. Uma sala precisa ser reservada antes. Beamer tem uso livre.</string>
   <string name="INS_DESCRIPTION_MEMBER">Todos os membros da organização </string>
@@ -255,7 +253,6 @@
   <string name="INS_LANGUAGE_NOT_CHOOSEN">Nenhum idioma selecionado.</string>
   <string name="INS_MEMBERSHIP">Filiação</string>
   <string name="INS_MESSENGER">Mensageiro</string>
-  <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Nem todas as informações de acesso à base de dados do MySQL foram fornecidas!</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Não foi possível encontrar a instalação atual. Se estás a usar Admidio 1.x atualize-o para Admidio 2.x primeiro, e então atualize a versão para #VAR1#. Se estás a usar Admidio 2.x ou superior por favor verifique a consistência da tua base de dados.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">A organização #VAR1_BOLD# já existe. Por favor, escolha um nome diferente.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">O nome de organização fornecido não está completo!</string>
@@ -282,7 +279,6 @@
   <string name="INS_WARNING_BETA_VERSION">Esta é uma versão beta (de teste) do Admidio.\n\nDevido à instabilidade, o uso pode apresentar falhas e perda de dados. Por favor, utilize apenas como um ambiente de teste!</string>
   <string name="INS_WARNING_SAFE_MODE">Modo de Guardamento está ativo no servidor. Isto pode causar problemas futuros ao usar algumas funções.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Bem-vindo à instalação do Admidio</string>
-  <string name="INS_WELCOME_TEXT">Nas páginas seguintes será pedido que insiras algumas informações no intuito de criar um novo sistema do Admidio. É necessário inserir as informações de acesso à base de dados da tua instalação do Admidio.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requer o MySQL versão #VAR2# ou superior. Por favor, atualize tua base de dados do MySQL ou utilize uma #VAR3# versão mais antiga do Admidio #VAR4# para garantir compatibilidade.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# requer o PHP versão #VAR2# ou superior. Por favor, atualize o PHP ou utilize uma #VAR3# versão mais antiga do Admidio #VAR4# para garantir compatibilidade.</string>
@@ -356,12 +352,10 @@
   <string name="LST_CREATE_NEW_CONFIGURATION">A criar nova configuração</string>
   <string name="LST_CREATE_OWN_LIST">Criar uma lista própria</string>
   <string name="LST_DEFAULT_CONFIGURATION">Configuração padrão</string>
-  <string name="LST_DEFAULT_CONFIGURATION_DESC">Uma das configurações predefinidas aqui pode ser definida como padrão para as listas desta organização. Listas de filiação dos cargos que não possuem uma configuração de lista predefinida estão também exibidas nesta configuração.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Nenhum conjunto de configurações de lista padrão foi definido pelo administrador!\n\nContate o administrador do sistema para obter ajuda.</string>
   <string name="LST_DELETE_CONFIGURATION">Remover configuração</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail para os membros</string>
   <string name="LST_EMAIL_TO_LIST">Lista de e-mails</string>
-  <string name="LST_EMPTY_EXAMPLE_DESC">Encontrar todos os usuários com o campo de endereço vazio</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">A configuração de lista #VAR1_BOLD# é a configuração padrão para as listas desta organização e não podem ser removidas. Selecione uma configuração diferente para a configuração padrão no módulo de configurações e então tente remover esta configuração.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
   <string name="LST_EXCLUDE_EXAMPLE_DESC">Encontrar todos os usuários que não se chamam Stefan</string>
@@ -380,7 +374,6 @@
   <string name="LST_LIST_VIEW">Visão geral das listas</string>
   <string name="LST_MAX">do máximo. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Atribuição de membro</string>
-  <string name="LST_MEMBER_STATUS">Estado do membro</string>
   <string name="LST_MEMBERS_PER_PAGE">Membros exibidos por página</string>
   <string name="LST_MEMBERS_PER_PAGE_DESC">Número de membros listados na visão de HTML. Mais membros podem ser listados utilizando a função de paginação. Este valor não afetará a pré-visualização de impressão nem a função de exportar. (Padrão: 25)</string>
   <string name="LST_MEMBERSHIP_END">Fim da filiação</string>
@@ -393,11 +386,9 @@
   <string name="LST_NO_MORE_COLUMN">Por razões técnicas, não é possível adicionar mais colunas.</string>
   <string name="LST_NO_USER_FOUND">Nenhum membro atendendo aos critérios abaixo foi encontrado.</string>
   <string name="LST_NO_ROLE_GIVEN">Nenhum cargo foi especificado</string>
-  <string name="LST_NO_ROLES_REMOVED">Nenhum cargo foi removido ainda.\n\nCargos removidos serão exibidos aqui apenas após terem sido removidos no painel de administração de cargos.</string>
   <string name="LST_NO_RIGHTS_VIEW_LIST">Não tens permissão para exibir uma lista de cargos definidos.</string>
   <string name="LST_NOT_VALID_DATE_FORMAT">Por favor, use uma data válida como condição para o campo #VAR1_BOLD#.</string>
   <string name="LST_NOT_NUMERIC">Por favor, use um número válido como condição para o campo #VAR1_BOLD#.</string>
-  <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Encontrar todos os usuários com o campo de endereço preenchido</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Número de cargos por página</string>
   <string name="LST_PRESET_CONFIGURATION">Configuração padrão</string>
   <string name="LST_PRESET_CONFIGURATION_DESC">Como administrador, és capaz de definir as configurações padrão para todos os usuários. Configure linhas e colunas e guarde-as ao renomear o conjunto de configurações.</string>
@@ -479,7 +470,7 @@
   <string name="MAI_SENDER_EMAIL">E-mail do remetente</string>
   <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Alguns provedores não permitem informações de envio sem identificação. Por isso, é necessário que informes um e-mail para servir como remetente padrão para o módulo de e-mail (exemplo: outbox@#VAR1#).\nSe este campo ficar em branco, o e-mail registrado do usuário que enviar será usado para as informações de envio. (padrão: vazio)</string>
   <string name="MAI_SENDER_NAME">Nome do remetente</string>
-  <string name="MAI_SENDER_NAME_DESC">Nome do remetente de acordo com o endereço de e-mail utilizado. Este campo deve ser preenchido apenas se um endereço de e-mail de remetente é também mantido. (padrão: vazio)</string>
+  <string name="MAI_SENDER_NAME_DESC">Nome do remetente do endereço de e-mail. Este campo deve ser apenas preenchido, se também for mantido um endereço de e-mail do remetente. (Predefinição: vazio)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(O remetente não pôde ser identificado. Confira as credenciais.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">Quando esta opção está ativa, usuários em sessão receberão uma imagem com um código CAPTCHA ou um cálculo simples. É necessário preencher o código ou o resultado do cálculo para enviar o e-mail. O CAPTCHA é parte de uma solução anti-spam no Admidio. (padrão: sim)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -683,7 +674,7 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Ao mudar a visualização todas as alteração não guardadas serão perdidas.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Notificar o administrador sobre novos registros</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Número de entradas por página</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Defina o número de itens a serem exibidos numa página. A paginação acontece quando o número de itens excede o valor definido. As funções de visualizar impressão e exportar não são afetadas. Se o valor é 0, todos os itens serão listados e a paginação é desativada. (padrão: #VAR1#)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">O número de entradas exibidos numa página. Não existem mais entradas, por isso, pode movimentar-se entre elas. Se o valor está definido para 0, todas as entradas numa página e a função de paginação estão desativados. (Predefinição: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para usuários em sessão</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gerencie preferências gerais da organização ou preferências de módulo</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">A organização #VAR1_BOLD# foi adicionada com sucesso. Ela está agora elegível ao iniciar a sessão.\n\nSe tens uma página inicial separada para esta organização, por favor, adicione-a ao arquivo config.php da página separada.</string>
@@ -706,7 +697,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Durante o registo e atribuição de registos, o Admidio buscará por nomes e sobrenomes similares a fim de evitar entradas duplicadas. Desativar esta opção implicará na busca apenas por nomes idênticos. (padrão: sim)</string>
   <string name="ORG_SECONDS">segundos</string>
   <string name="ORG_SEND_PASSWORD">Enviar palavra-passe</string>
-  <string name="ORG_SEND_PASSWORD_DESC">O envio de palavras passe esquecidas e regeneradas podem ser requeridas pelos usuários, que serão enviadas para o e-mail. Se desativada, os usuários poderão solicitar este requerimento somente ao administrador. (padrão: sim)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Enviar nova palavra-passe</string>
   <string name="ORG_SHOW_CREATE_EDIT">Exibir criador e marca temporal da criação</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Um campo é normalmente visível para todos os usuários. Se esta função não estiver selecionada, os dados só poderão ser vistos por usuários que possuem permissão para editar todos os usuários. Em seu próprio perfil, o usuário pode ver e editar os dados.</string>
@@ -748,7 +738,6 @@
   <string name="UPD_NEW_BOTH">Uma nova versão estável e uma beta estão disponíveis!</string>
   <string name="UPD_NO_NEW">Estás a usar a versão #VAR1# do Admidio!</string>
   <string name="UPD_STABLE_VERSION">Disponível</string>
-  <string name="UPD_TITLE">Verificar atualizações</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Álbum</string>
   <string name="PHO_ALBUM_DELETE">Remover álbum</string>
@@ -923,11 +912,8 @@
   <string name="ROL_DEPENDENT">Dependente</string>
   <string name="ROL_EDIT_ROLE">Editar cargo</string>
   <string name="ROL_ENABLE_ROLE">Ativar cargo</string>
-  <string name="ROL_HINT_DELETE_ROLE">Se selecionares #VAR1_BOLD#, o cargo e a atribuição de membros para ele serão completamente removidos da base de dados. Não será mais possível ver os dados deste cargo.</string>
   <string name="ROL_INACTIV_ROLE">Cargo inativo</string>
-  <string name="ROL_INACTIV_ROLE_DESC">Podes desativar este cargo. Assim, as informações de filiação serão preservadas e mais tarde será impossível saber quem foi um membro do cargo atual. Entretanto, este cargo não mais aparecerá nos ecrãs de visão geral.</string>
   <string name="ROL_INACTIV_ROLES">Desativar cargos</string>
-  <string name="ROL_INVISIBLE_ROLES">Cargos invisíveis</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">O líder deste cargo não tem nenhuma permissão especial. Elas serão destacadas apenas nas visualizações de lista.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">O líder deste cargo pode editar dados de perfis de todos os membros do cargo.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">O líder deste cargo pode adicionar novos membros ou remover membros existentes.</string>
@@ -965,12 +951,10 @@
   <string name="ROL_ROLE_ADMINISTRATION">Administração de cargo</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Cargos baseados em certos grupos, cursos e departamentos podem ser gerenciados aqui. As permissões de cargo podem ser definidas aqui também.</string>
   <string name="ROL_ROLE_DELETE">A remover cargo</string>
-  <string name="ROL_ROLE_DELETE_DESC">Remover cargo #VAR1# ?\n\nTodas as filiações serão removidas também.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Um membro de um cargo dependente se tornará automaticamente membro de #VAR1#!\n\nQuando esta dependência é definida, todos os membros do cargo dependente se tornarão membros de #VAR1#. Quando uma dependência é removida, as filiações permanecerão intactas!</string>
   <string name="ROL_ROLE_MEMBERSHIPS">Filiações de cargo</string>
   <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Alterar filiações de cargo</string>
   <string name="ROL_ROLE_NAME_EXISTS">Já existe um cargo com este nome nesta categoria.</string>
-  <string name="ROL_ROLE_SET_MODE">O cargo #VAR1_BOLD# foi alterado para #VAR2_BOLD#.</string>
   <string name="ROL_SAVE_ROLES">Guardar estas configurações pode ocasionar na perda das dependências definidas para este cargo.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Exibir filiações de cargo</string>
   <string name="ROL_SEMIYEARLY">Semestralmente</string>
@@ -978,8 +962,6 @@
   <string name="ROL_SEND_MAIL_MEMBERS">Usuários em sessão podem enviar e-mails para o cargo atual.</string>
   <string name="ROL_SEND_MAIL_ROLE">Os membros deste cargo podem enviar e-mails somente para o cargo atual.</string>
   <string name="ROL_SEND_MAILS">Enviar e-mails</string>
-  <string name="ROL_SET_ROLE_INVISIBLE">Tornar cargo invisível</string>
-  <string name="ROL_SET_ROLE_VISIBLE">Tornar cargo visível</string>
   <string name="ROL_SHOW_MEMBERS">Exibir membros</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Lista padrão de todo o sistema</string>
   <string name="ROL_UNIQUELY">Uma única vez</string>
@@ -987,7 +969,6 @@
   <string name="ROL_VALID_TO" description="Date valid to">Válido até</string>
   <string name="ROL_VIEW_LIST_MEMBERS">Usuários em sessão podem ver as listas de filiação para o cargo atual.</string>
   <string name="ROL_VIEW_LIST_ROLE">Membros do cargo atual podem ver apenas a lista de filiação.</string>
-  <string name="ROL_VISIBLE_ROLES">Cargos visíveis</string>
   <string name="ROL_WEEKDAY">Dia da semana</string>
   <string name="ROL_WITHOUT_LEADER">Sem líder</string>
   <!--Phrases only in Roommodule-->
@@ -999,7 +980,6 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Cancelar</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Não.</string>
-  <string name="SYS_ACTIVE">Ativo</string>
   <string name="SYS_ACTIVATED">Ativado</string>
   <string name="SYS_ADD_RECIPIENTS">Adicionar destinatário</string>
   <string name="SYS_ADDRESS">Endereço</string>
@@ -1013,10 +993,8 @@
   <string name="SYS_ALSO_VISITORS">Visitantes também</string>
   <string name="SYS_APPLY">Aplicar</string>
   <string name="SYS_ASSIGN_MEMBERS">Membros atribuídos</string>
-  <string name="SYS_AUTHORIZATION">Autorização</string>
   <string name="SYS_BACK">Voltar</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Voltar para a visão geral do módulo</string>
-  <string name="SYS_BETA_VERSION">Esta é uma versão beta (de teste) do Admiido.\n\nDevido à instabilidade, o uso pode apresentar falhas e perda de dados. Por favor, utilize apenas como um ambiente de teste!</string>
   <string name="SYS_BIRTHDAY">Data de nascimento</string>
   <string name="SYS_CAPTCHA">CAPTCHA</string>
   <string name="SYS_CAPTCHA_CALC">Resultado</string>
@@ -1044,7 +1022,6 @@
   <string name="SYS_CONDITION">Requisitos</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirmar palavra passe</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirmar valor</string>
-  <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Confirmar participação</string>
   <string name="SYS_CONTACT_DETAILS">Informações de contato</string>
   <string name="SYS_CONTENT">Conteúdo</string>
   <string name="SYS_CONTRIBUTION">Contribuição</string>
@@ -1137,8 +1114,6 @@
   <string name="SYS_FRIDAY">Sexta-feira</string>
   <string name="SYS_FULL_SCREEN">Tela inteira</string>
   <string name="SYS_GENDER">Gênero</string>
-  <string name="SYS_GEN_RANDOM_ERROR">Ocorreu um erro inesperado ao gerar uma cadeia aleatória.</string>
-  <string name="SYS_GEN_RANDOM_FAIL">O programa não pode criar uma cadeia aleatória.</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">O programa espera uma cadeia com pelo menos 2 caracteres diferentes.</string>
   <string name="SYS_HEADER_ALREADY_SENT">Cabeçalho HTTP já enviado!</string>
   <string name="SYS_HEADLINE">Título</string>
@@ -1148,12 +1123,10 @@
   <string name="SYS_ICAL_DISABLED">O iCal foi desativado pelo administrador do sistema.</string>
   <string name="SYS_ICON">Ícone</string>
   <string name="SYS_IMPORTANT">Importante</string>
-  <string name="SYS_INACTIVE">Inativo</string>
   <string name="SYS_INFORMATIONS">Informações</string>
   <string name="SYS_INTERNAL_NAME">Nome interno</string>
   <string name="SYS_INTERNAL_NAME_DESC">O nome interno é usado como um identificador específico de um campo. Em termos de usabilidade do programa, entretanto, isto é irrelevante. Durante o desenvolvimento do software, este nome precisa ser decidido a fim de permitir o uso do método getValue. O nome interno será preenchido automaticamente durante a criação de um campo.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Visualização de página inválida</string>
-  <string name="SYS_INVISIBLE">Invisível</string>
   <string name="SYS_IO_ERROR">Erro de E/S</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Nome do item</string>
@@ -1176,7 +1149,6 @@
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Tuas credenciais estão corretas mas tu não és um membro ativo desta organização #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">O nome de usuário e/ou palavra passe está incorreto.</string>
   <string name="SYS_LOGIN_PROBLEMS">Problemas de início de sessão</string>
-  <string name="SYS_LOGIN_SUCCESSFUL">A sessão foi iniciada com sucesso.</string>
   <string name="SYS_LOGOUT">Encerrar sessão</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">A sessão foi encerrada com sucesso.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Tua sessão já foi iniciada, portanto já deves ter a palavra passe correta!</string>
@@ -1301,7 +1273,6 @@
   <string name="SYS_SENDER">Remetente</string>
   <string name="SYS_SERVER">Servidor</string>
   <string name="SYS_SERVER_NO_UPLOAD">O servidor está configurado para proibir envio de ficheiros.</string>
-  <string name="SYS_SET_BY">Definido por</string>
   <string name="SYS_SETTINGS">Preferências</string>
   <string name="SYS_SHOW_CALENDAR">Exibir calendário</string>
   <string name="SYS_SHOW_PROFILE">Exibir perfil</string>

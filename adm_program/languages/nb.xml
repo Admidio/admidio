@@ -48,7 +48,6 @@
   <string name="INS_ADDIDIONAL_DATA">Tilleggsinformasjon</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
-  <string name="INS_CHOOSE_LANGUAGE">Velg språk</string>
   <string name="INS_CONFERENCE_ROOM">Konferanserom</string>
   <string name="INS_CONTINUE_INSTALLATION">Fortsett installesjon</string>
   <string name="INS_COURSES">Kurs</string>
@@ -64,6 +63,8 @@
   <string name="INS_UPDATE_DATABASE">Oppdater database</string>
   <string name="INS_UPDATE_NOT_POSSIBLE">Oppdatering av databasen er ikke mulig for øyeblikket!</string>
   <string name="INS_UPDATE_VERSION">Oppdater til versjon #VAR1#</string>
+  <string name="INS_WINDOWS_LIVE">Windows Live</string>
+  <string name="INS_XING">Xing</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
   <string name="INS_BOYFRIEND">Venn</string>
   <string name="INS_BROTHER">Bror</string>
@@ -114,7 +115,32 @@
   <string name="MAI_ADD_ATTACHEMENT">Legg ved fil</string>
   <string name="MAI_ATTACHEMENT">Vedlegg</string>
   <string name="MAI_HIDDEN">Skjult</string>
+  <string name="MAI_SMTP_HOST">SMTP Vert</string>
+  <string name="MAI_SMTP_HOST_DESC">Adresse til SMTP-server.</string>
+  <string name="MAI_SMTP_PASSWORD">SMTP-passord</string>
+  <string name="MAI_SMTP_PASSWORD_DESC">Passord brukt til SMTP autentisering</string>
+  <string name="MAI_SMTP_PORT">SMTP port</string>
+  <string name="MAI_SMTP_SECURE">SMTP kryptering</string>
+  <string name="MAI_SMTP_SECURE_NO">ingen</string>
+  <string name="MAI_SMTP_SECURE_SSL">SSL</string>
+  <string name="MAI_SMTP_SECURE_TLS">TLS</string>
+  <string name="MAI_SMTP_USER">SMTP brukernavn</string>
+  <string name="MAI_YOUR_EMAIL">Din epost</string>
+  <string name="MAI_YOUR_NAME">Ditt navn</string>
   <!--Phrases only in Membersadministration-->
+  <string name="MEM_ASSIGN_FIELDS">Tildel felter</string>
+  <string name="MEM_ASSIGN_ROLE">Tildel rolle</string>
+  <string name="MEM_ASSIGN_ROLES">Tildel roller</string>
+  <string name="MEM_CREATE_USER">Opprett bruker</string>
+  <string name="MEM_CODING">Koding</string>
+  <string name="MEM_CHANGE_HISTORY">Endringshistorikk</string>
+  <string name="MEM_CHOOSE_FILE">Velg fil</string>
+  <string name="MEM_DUPLICATE">Klon</string>
+  <string name="MEM_EDIT_USER">Endre bruker</string>
+  <string name="MEM_EXISTING_USERS">Eksisterende bruker</string>
+  <string name="MEM_FORMAT">Format</string>
+  <string name="MEM_IMPORT">Import</string>
+  <string name="MEM_IMPORT_USERS">Brukerimport</string>
   <string name="MEM_REMOVE_USER">Fjern bruker</string>
   <string name="MEM_REPLACE">Erstatt</string>
   <string name="MEM_SHOW_ALL_USERS">Vi alle brukere</string>
@@ -155,7 +181,6 @@
   <string name="UPD_BETA_VERSION">Tilgjengelig Beta</string>
   <string name="UPD_CURRENT_VERSION">Installert</string>
   <string name="UPD_STABLE_VERSION">Tilgjengelig</string>
-  <string name="UPD_TITLE">Oppdateringskontroll</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Slett album</string>
@@ -196,7 +221,6 @@
   <string name="SYS_CONDITION">Betingelser</string>
   <string name="SYS_CONFIRM_PASSWORD">Bekreft passord</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bekreft verdi</string>
-  <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Bekreft deltagelse</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktinformasjon</string>
   <string name="SYS_CONTENT">Innhold</string>
   <string name="SYS_CONTRIBUTION">Bidrag</string>
@@ -261,11 +285,9 @@
   <string name="SYS_HIDE">Skjul</string>
   <string name="SYS_HOMEPAGE">Hjemmeside</string>
   <string name="SYS_ICON">Ikon</string>
-  <string name="SYS_INACTIVE">Inaktiv</string>
   <string name="SYS_INFORMATIONS">informasjon</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ugyldig sidevisning</string>
-  <string name="SYS_INVISIBLE">Usynlig</string>
   <string name="SYS_IO_ERROR">I/O-feil</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_LANGUAGE">Språk</string>
@@ -367,7 +389,6 @@
   <string name="SYS_SENDER">Avsender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Serverinnstillingene tillater ikke filopplastninger</string>
-  <string name="SYS_SET_BY">Satt av</string>
   <string name="SYS_SETTINGS">Preferanser</string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_PROFILE">Vis profil</string>

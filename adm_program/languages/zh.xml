@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Phrases only in Announcementmodule-->
+  <string name="ANN_ANNOUNCEMENT">公告</string>
+  <string name="ANN_ANNOUNCEMENTS">公告</string>
+  <string name="ANN_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
+  <string name="ANN_EMAIL_NOTIFICATION_TITLE">已创建新公告</string>
+  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">在#VAR1#创建了新公告\n\n标题: #VAR2#\n创建者: #VAR3#\n创建于: #VAR4#</string>
+  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">组织最新公告 #VAR1#</string>
+  <!--Phrases only in Backupmodule-->
+  <string name="BAC_BACK_TO_BACKUP_PAGE">返回备份页面</string>
+  <string name="BAC_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
+  <string name="BAC_BACKUP_FILE">备份文件</string>
+  <string name="BAC_BACKUP_FROM">在 #VAR1# 上创建备份于 #VAR2#</string>
+  <string name="BAC_CREATION_DATE">创建于</string>
+  <string name="BAC_DATABASE_BACKUP">数据库备份</string>
+  <string name="BAC_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
+  <string name="BAC_DAYS_VAR">#VAR1# 天</string>
+  <string name="BAC_FILE_NAME_INVALID">所选文件名包含无效字符。\n\n只允许输入字母字符，0-9的数字和特殊字符 $!?._+-()&amp;.</string>
+  <string name="BAC_HOURS_VAR">#VAR1# 小时</string>
+  <string name="BAC_MINUTES_VAR">#VAR1# 分钟</string>
+  <string name="BAC_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
+  <string name="BAC_ONLY_MYSQL">备份模块只能与MySQL数据库结合使用。</string>
+  <string name="BAC_OVERALL_PROGRESS">进度</string>
+  <string name="BAC_START_BACKUP">开始备份</string>
+  <string name="BAC_SUM">总共</string>
+  <string name="BAC_SECONDS_VAR">#VAR1# 秒</string>
+  <!--Phrases only in Category-Administration-->
+  <string name="CAT_CATEGORY_EXIST">类别名称已存在于所选机构中。</string>
+  <string name="CAT_CATEGORY_GLOBAL">如果激活该选项, 将显示此类别的配置文件字段并且可以在以下机构的配置文件视图中编辑:\n\n#VAR1_BOLD#\n\n 如果只在您的类别显示，请取消此选项。</string>
+  <string name="CAT_DEFAULT_VAR">标准 #VAR1#</string>
+  <string name="CAT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
+  <string name="CAT_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
+  <string name="CAT_MOVE_DOWN">下移 #VAR1#</string>
+  <string name="CAT_MOVE_UP">上移 #VAR1#</string>
+  <!--Phrases only in Datesmodule-->
+  <string name="DAT_ADD_DATE_TO_CALENDAR">将活动添加到日程表</string>
+  <string name="DAT_ALL_DAY">全职</string>
+  <string name="DAT_ASSIGN_PARTICIPANTS">添加参与者</string>
+  <string name="DAT_ATTEND">参与</string>
+  <string name="DAT_CALENDAR">日程表</string>
+  <string name="DAT_CANCEL">取消</string>
+  <string name="DAT_CURRENT_DATES_OF_ORGA">组织的当前活动 #VAR1#</string>
+  <string name="DAT_DATE">项目</string>
+  <string name="DAT_DATES">项目</string>
+  <string name="DAT_DATES_DESC">您可以在此处创建和编辑项目。用户可以申请参与该项目。</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION">参与者列表中的标准配置</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">这里的预设的配置可用于本机构的参与者在事件列表中的默认配置。只有被任命的参与者显示有这个配置。</string>
+  <string name="DAT_EDIT_CALENDAR_DESC">你可以在这里创建和编辑日程表。</string>
+  <string name="DAT_EDIT_ROOMS">编辑房间</string>
+  <string name="DAT_EDIT_ROOMS_DESC">在这里您可以为项目创建和编辑房间。</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">项目已更改</string>
+  <string name="DAT_EMAIL_NOTIFICATION_TITLE">创建了一个新项目</string>
+  <string name="DAT_ENABLE_ICAL">启用iCal功能</string>
+  <string name="DAT_ENABLE_ICAL_DESC">如果启用iCal，则可以下载给定时间段内的个别事件或所有事件。此外，用户将能够通过使用自己的日历客户端软件订阅事件。(默认值：yes)</string>
+  <string name="DAT_EXPORT_ICAL">导出(iCal)</string>
+  <string name="DAT_HIGHLIGHT_DATE">高亮显示日期</string>
+  <string name="DAT_ICAL_DAYS_FUTURE">未来的iCal天数</string>
+  <string name="DAT_ICAL_DAYS_FUTURE_DESC">此值定义将来应有多少天包括在iCal下载或订阅中。(默认值：365)</string>
+  <string name="DAT_ICAL_DAYS_PAST">过去的iCal天数</string>
+  <string name="DAT_ICAL_DAYS_PAST_DESC">此值定义了过去多少天应包括在iCal下载或订阅中。(默认值：30)</string>
+  <string name="DAT_LOCATION">位置</string>
+  <string name="DAT_LOCATION_LINK">如果提供了足够多关于位置的信息(街道，城市，位置)，Google地图就能计算到达该位置的路线。</string>
+  <string name="DAT_LOGIN_POSSIBLE">你想激活注册项目的功能吗？\nIf项目被删除，所有注册的参与者也将被删除。\n如果你要阻止接下来的注册，请减少允许参与者的数量。</string>
+  <string name="DAT_MAINTAIN_CATEGORIES_DESC">在这里，您可以创建和编辑类别。</string>
+  <string name="DAT_MANAGE_CALENDARS">管理日程表</string>
+  <string name="DAT_MAX_MEMBERS">减少此项目的参与者人数。字段留空为不限制参与者。</string>
+  <string name="DAT_PARTICIPANTS_LIMIT">参与人数有限</string>
+  <string name="DAT_PARTICIPATE_AT_DATE">作为组织者加入项目</string>
+  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">您将是项目组织者，可以添加/删除其他参与者或将其命名为其他组织者。</string>
+  <string name="DAT_REGISTRATION_NOT_POSSIBLE">已关闭注册。</string>
+  <string name="DAT_REGISTRATION_POSSIBLE">启用此项目的注册。</string>
+  <string name="DAT_REMOVE_APPLICATION">您要移除这个项目吗？所有参与者将被删除。</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">参与者可以查看参与者列表</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">参与者可以向所有参与者发送电子邮件</string>
+  <string name="DAT_ROOM_INFORMATIONS">房间信息</string>
+  <string name="DAT_ROOM_OVERHANG">在存在任何其他可用空间（例如附加座位，站立室）的情况下，可以在此定义附加空间的数量。</string>
+  <string name="DAT_ROOM_RESERVED">所选房间目前已在使用。</string>
+  <string name="DAT_ROOM_SELECTABLE">房间可用</string>
+  <string name="DAT_ROOM_SELECTABLE_DESC">酒店提供可用客房的选择箱。选择房间并为所选房间创建活动。（标准答案：否）</string>
+  <string name="DAT_SAVE_ALL_CONFIRMATIONS">取消保存</string>
+  <string name="DAT_SHOW_MAP_LINK">显示地图的链接</string>
+  <string name="DAT_SHOW_MAP_LINK_DESC">如果设置了位置，Google地图会显示来自自己的位置和路线。（默认值：是）</string>
+  <string name="DAT_SHOW_ON_MAP">显示地图</string>
+  <string name="DAT_SHOW_PARTICIPANTS">显示参与者</string>
+  <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">切换到日程表管理</string>
+  <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">切换到房间管理</string>
+  <string name="DAT_VIEW_MODE">默认视图</string>
+  <string name="DAT_USER_ATTEND">我参加</string>
+  <string name="DAT_USER_TENTATIVE">有条件</string>
+  <string name="DAT_USER_INVITED">邀请</string>
+  <string name="DAT_USER_REFUSED">折扣</string>
+  <string name="DAT_USER_WILL_ATTEND">参与</string>
+  <string name="DAT_VIEW_MODE_DETAIL">详细信息</string>
+  <string name="DAT_VIEW_MODE_COMPACT">紧凑</string>
+  <string name="DAT_VISIBILITY">可见度</string>
+  <string name="DAT_VISIBLE_TO">可见</string>
+  <!--Phrases only in Downloadsmodule-->
+  <string name="DOW_ADD_TO_DATABASE">添加到数据库</string>
+  <string name="DOW_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>
+  <string name="DOW_COUNTER">计数器</string>
+  <string name="DOW_CREATE_FOLDER">创建文件夹</string>
+  <string name="DOW_DOWNLOADS">下载</string>
+  <string name="DOW_DOWNLOADS_DESC">可以提供不同的数据文件和文件类型以供下载。此下载可以分类在具有不同访问权限级别的文件夹中。</string>
+  <string name="DOW_EDIT_FILE">编辑文件</string>
+  <string name="DOW_EDIT_FOLDER">编辑文件夹</string>
+  <string name="DOW_EMAIL_NOTIFICATION_TITLE">上传了一个新文件</string>
+  <string name="DOW_ENABLE_DOWNLOAD_MODULE">激活下载模块</string>
+  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">可以在这里停用下载模块。停用后，它不再显示为概述中的模块。(默认值：是)</string>
+  <string name="DOW_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
+  <string name="DOW_FILE_NAME_RULES">文件名应表示文件内容。文件名影响列表的顺序。例如，包含程序的文件夹中的文件名应以日期(yyyy-mm-tt)开头。</string>
+  <string name="DOW_FILE_NOT_EXISTS">该文件在服务器上不再可用，应该从数据库中删除。</string>
+  <string name="DOW_FILE_TO_LARGE">上次的文件超过所规定的大小（最大文件大小: #VAR1# MB）。</string>
+  <string name="DOW_FILE_TYPE">文件类型</string>
+  <string name="DOW_FILE_UPLOADED">文件 #VAR1_BOLD# 已上传。</string>
+  <string name="DOW_FILES_UPLOAD_SUCCESSFUL">所有的文件已成功上传。\n\n可关闭对话框。</string>
+  <string name="DOW_FILES_UPLOAD_NOT_SUCCESSFUL">并非所有文件都已成功上传。</string>
+  <string name="DOW_FILES_UPLOAD_DESC">请选择要上传的文件夹 #VAR1_BOLD# 里的所有文件</string>
+  <string name="DOW_FOLDER_NO_FILES">文件夹内不包含任何文件。</string>
+  <string name="DOW_FOLDER_NO_RIGHTS">所选文件夹不被允许显示。</string>
+  <string name="DOW_FOLDER_NOT_EXISTS">文件夹不存在于服务器上，应该从数据库中删除。</string>
+  <string name="DOW_MAXIMUM_FILE_SIZE">最大文件大小</string>
+  <string name="DOW_NEW_FILE_NAME">新的文件名</string>
+  <string name="DOW_NEW_NAME">新的名字</string>
+  <string name="DOW_PREVIOUS_NAME">曾用名</string>
+  <string name="DOW_SELECT_FILES">选择文件</string>
+  <string name="DOW_SET_FOLDER_PERMISSIONS">设置文件夹权限</string>
+  <string name="DOW_UNMANAGED_FILES">非托管文件</string>
+  <string name="DOW_UPLOAD_FILES">上传文件</string>
+  <!--Phrases only in Ecardsmodule-->
+  <string name="ECA_A_ECARD_FROM">贺卡发送自：</string>
+  <string name="ECA_ACTIVATE_GREETING_CARDS">激活贺卡模块</string>
+  <string name="ECA_GREETING_CARD">贺卡</string>
+  <string name="ECA_GREETING_CARDS">贺卡</string>
+  <string name="ECA_GREETING_CARD_EDIT">编辑贺卡</string>
+  <string name="ECA_LAYOUT">布局</string>
+  <string name="ECA_MAX_PHOTO_SIZE_DESC">这个值定义贺卡中图像的最大大小(标准：400 x 250像素)。</string>
+  <string name="ECA_NEW_MESSAGE_RECEIVED">收到新消息</string>
+  <string name="ECA_NOT_SUCCESSFULLY_SEND">您的贺卡无法发送！</string>
+  <string name="ECA_RECIPIENT_EMAIL">E-mail 收件人</string>
+  <string name="ECA_RECIPIENT_NAME">收件人姓名</string>
+  <string name="ECA_SUCCESSFULLY_SEND">您的贺卡已发送。</string>
+  <string name="ECA_TEMPLATE">模板</string>
+  <string name="ECA_VIEW_PICTURE_FULL_SIZED">显示原图</string>
+  <!--Phrases only in Guestbookmodule-->
+  <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
+  <!--Phrases only in Installation-->
+  <!--Phrases only in Inventorymodule-->
+  <!--Phrases only in Linkmodule-->
+  <string name="LNK_SAME_WINDOW">相同的窗口</string>
+  <string name="LNK_WEBLINKS">网页链接</string>
+  <string name="LNK_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
+  <!--Phrases only in Listsmodule-->
+  <string name="LST_A_TO_Z">A到Z</string>
+  <string name="LST_DEFAULT_CONFIGURATION">默认配置</string>
+  <string name="LST_DELETE_CONFIGURATION">删除配置</string>
+  <string name="LST_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
+  <string name="LST_EMAIL_TO_LIST">向列表发送电子邮件</string>
+  <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
+  <string name="LST_EXCLUDE_EXAMPLE_DESC">查找所有不叫Steve的用户</string>
+  <string name="LST_EXPORT_TO">导出到</string>
+  <string name="LST_FORMER_MEMBERS">前 </string>
+  <string name="LST_GENERAL_LISTS">一般列表</string>
+  <!--Phrases only in Mailmodule-->
+  <!--Phrases only in Membersadministration-->
+  <string name="MEM_CREATE_USER">创建用户</string>
+  <string name="MEM_CODING">编码</string>
+  <string name="MEM_CHANGE_HISTORY">更改历史</string>
+  <string name="MEM_CHANGE_HISTORY_OF">#VAR1# 的更改历史</string>
+  <string name="MEM_CHOOSE_FILE">选择文件</string>
+  <string name="MEM_COMPLEMENT">补充</string>
+  <string name="MEM_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
+  <string name="MEM_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
+  <string name="MEM_DUPLICATE">重复</string>
+  <string name="MEM_EDIT_USER">编辑用户</string>
+  <string name="MEM_ENABLE_USER_RELATIONS">保持和显示关系</string>
+  <string name="MEM_ENABLE_USER_RELATIONS_DESC">如果设置为有效的，则可以保持和显示用户之间的关系。(默认值：是)</string>
+  <string name="MEM_EXISTING_USERS">现有用户</string>
+  <string name="MEM_FILE_COLUMN">文件列</string>
+  <string name="MEM_FIRST_LINE_COLUMN_NAME">第一行包含列的名称</string>
+  <string name="MEM_FORMAT">格式</string>
+  <string name="MEM_IDENTIFY_USERS">现有用户的通过姓氏和名字进行识别。</string>
+  <string name="MEM_IMPORT">导入</string>
+  <string name="MEM_IMPORT_USERS">导入用户</string>
+  <string name="MEM_INPUT_FIRSTNAME_LASTNAME">请提供新用户的姓和名字。如果已存在有相同或相似名称的同一用户，将执行数据库检查。</string>
+  <string name="MEM_MAKE_FORMER">用户可以更改为形式成员，将保留包括成员角色资格的所有用户信息，以供以后使用。</string>
+  <string name="MEM_NO_CHANGES">没有记录被更改。</string>
+  <string name="MEM_NOT_EDIT">不要编辑</string>
+  <string name="MEM_PROFILE_FIELD">配置文件字段</string>
+  <string name="MEM_REMOVE_USER">删除用户</string>
+  <string name="MEM_REPLACE">替换</string>
+  <string name="MEM_SEND_USERNAME_PASSWORD">发送电子邮件（使用用户名和密码）。</string>
+  <!--Phrases only in Messagemodule-->
+  <!--Phrases only in New-User-Registration-->
+  <!--Phrases only in Organizationadministration-->
+  <string name="ORG_FIELD_EXIST">在这个类别中已经有相同字段。</string>
+  <!--Phrases only in Updatecheck-->
+  <!--Phrases only in Photomodule-->
+  <!--Phrases only in Profilemodule-->
+  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">您可以创建和编辑能在类别中合并的个人资料字段。</string>
+  <!--Phrases only in Relationssmodule-->
+  <!--Phrases only in Rolesmodule-->
+  <string name="ROL_ROLE_NAME_EXISTS">在这个类别中已经有相同角色。</string>
+  <!--Phrases only in Roommodule-->
+  <!--System-Phrases for use in every module-->
+  <string name="SYS_CATEGORIES">类别</string>
+  <string name="SYS_CATEGORIES_VAR">#VAR1# - 类别</string>
+  <string name="SYS_CATEGORY"> 类别</string>
+  <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
+  <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
+  <string name="SYS_MAINTAIN_CATEGORIES">管理类别</string>
+  <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">切换到类别管理</string>
+  <string name="SYS_SYSTEM">系统</string>
+  <string name="SYS_SYSTEM_MAILS">系统通知</string>
+  <string name="SYS_TEXT">文本</string>
+  <string name="SYS_THURSDAY">星期四</string>
+  <string name="SYS_TIME">时间</string>
+  <string name="SYS_TIME_FROM">时间从</string>
+  <string name="SYS_TIME_INVALID">时间字段错误 #VAR1_BOLD#.\n\n时间格式的值必须以如下方式表示： #VAR2_BOLD#.</string>
+  <string name="SYS_TIME_TO">时间到</string>
+  <string name="SYS_TITLE">标题</string>
+  <string name="SYS_TO" description="E-Mail"> To</string>
+  <string name="SYS_TUESDAY">星期二</string>
+  <string name="SYS_TYPE">类型</string>
+  <string name="SYS_UNKNOWN">未经确认的</string>
+  <string name="SYS_UNLIMITED">无限</string>
+  <string name="SYS_UNLOCK">被释放</string>
+  <string name="SYS_UPDATE">更新</string>
+  <string name="SYS_UPLOAD_MAX_FILESIZE">最大文件上传大小</string>
+  <string name="SYS_UPLOAD_NAME_ERROR">文件名不能命名为\"Submit\"。</string>
+  <string name="SYS_USER">用户</string>
+  <string name="SYS_USER_ID_NOT_FOUND">找不到此ID对应的用户！</string>
+  <string name="SYS_USER_RELATION">关系</string>
+  <string name="SYS_USER_RELATIONS">关系</string>
+  <string name="SYS_USER_RELATION_TYPE">关系类型</string>
+  <string name="SYS_USER_RELATION_TYPES">关系类型</string>
+  <string name="SYS_USERNAME">用户名</string>
+  <string name="SYS_USERNAME_OR_EMAIL">用户名或电子邮件</string>
+  <string name="SYS_USERS_FOUND">查找用户</string>
+  <string name="SYS_UTF8">UTF-8</string>
+  <string name="SYS_VERSION">Version</string>
+  <string name="SYS_VIEW">视图</string>
+  <string name="SYS_VISIBLE">可见</string>
+  <string name="SYS_VISIBLE_TO_USERS">#VAR1# 仅对登录用户可见。</string>
+  <string name="SYS_VISITORS"> 访客</string>
+  <string name="SYS_WANT_REGISTER">我想要注册！</string>
+  <string name="SYS_WARNING">警告</string>
+  <string name="SYS_WEBMASTER">网站管理员</string>
+  <string name="SYS_WEBSITE"> 网站</string>
+  <string name="SYS_WEDNESDAY">星期三</string>
+  <string name="SYS_WHAT_TO_DO">该怎么办？</string>
+  <string name="SYS_WIDTH">宽度</string>
+  <string name="SYS_YES">是</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">本月</string>
+  <string name="PLG_CALENDAR_MONTH">一月，二月，三月，四月，五月，六月，七月，八月，九月，十月，十一月，十二月</string>
+  <string name="PLG_CALENDAR_MORE">(... 更多)</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Mo</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Tu</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">We</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Th</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Fr</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Sa</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">几天</string>
+</resources>
