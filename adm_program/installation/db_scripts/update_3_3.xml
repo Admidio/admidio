@@ -14,6 +14,8 @@
     <step id="120">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_additional_guests integer not null default 0</step>
     <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
     <step id="140">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_deadline timestamp null default null AFTER dat_max_members</step>
-
+    <step id="150">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_registration boolean not null default '0'</step>
+    <step id="160">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE usf_name_intern IN ('FIRST_NAME', 'LAST_NAME', 'EMAIL') AND EXISTS (SELECT 1 FROM %PREFIX%_preferences WHERE prf_name = 'registration_mode' AND prf_value = '1' AND prf_org_id = 1)</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE EXISTS (SELECT 1 FROM %PREFIX%_preferences WHERE prf_name = 'registration_mode' AND prf_value = '2' AND prf_org_id = 1)</step>
     <step>stop</step>
 </update>

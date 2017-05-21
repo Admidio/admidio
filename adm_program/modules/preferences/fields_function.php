@@ -114,11 +114,18 @@ if($getMode === 1)
         // => EXIT
     }
 
-    // Nachname und Vorname sollen immer Pflichtfeld bleiben
+    // lastname and firstname must always be mandatory fields and visible in registration dialog
     if($userField->getValue('usf_name_intern') === 'LAST_NAME'
     || $userField->getValue('usf_name_intern') === 'FIRST_NAME')
     {
         $_POST['usf_mandatory'] = 1;
+        $_POST['usf_registration'] = 1;
+    }
+
+    // email must always be visible in registration dialog
+    if($userField->getValue('usf_name_intern') === 'EMAIL')
+    {
+        $_POST['usf_registration'] = 1;
     }
 
     if(isset($_POST['usf_name']) && $userField->getValue('usf_name') !== $_POST['usf_name'])
@@ -154,6 +161,10 @@ if($getMode === 1)
     if(!isset($_POST['usf_mandatory']))
     {
         $_POST['usf_mandatory'] = 0;
+    }
+    if(!isset($_POST['usf_registration']))
+    {
+        $_POST['usf_registration'] = 0;
     }
 
     // make html in description secure
