@@ -34,7 +34,7 @@ class TableDate extends TableAccess
      * Check if the current user is allowed to participate to this event.
      * Therefore we check if the user is member of a role that is assigned to
      * the right event_participation.
-     * @return Return true if the current user is allowed to participate to the event.
+     * @return bool Return true if the current user is allowed to participate to the event.
      */
     public function allowedToParticipate()
     {
@@ -56,16 +56,11 @@ class TableDate extends TableAccess
     /**
      * Check if the deadline is in the future than return false or
      * if the deadline is in the past than return true.
-     * @return Return true if the deadline is exceeded.
+     * @return bool Return true if the deadline is exceeded.
      */
     public function deadlineExceeded()
     {
-        if($this->getValidDeadline() < DATETIME_NOW)
-        {
-            return true;
-        }
-
-        return false;
+        return $this->getValidDeadline() < DATETIME_NOW;
     }
 
     /**
@@ -115,16 +110,16 @@ class TableDate extends TableAccess
 
         if($this->visible() && $gCurrentUser->editDates())
         {
-            $orgId = (int) $this->getValue('cat_org_id');
+            $catOrgId = (int) $this->getValue('cat_org_id');
 
             // only edit events of the current organization
-            if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
+            if ((int) $gCurrentOrganization->getValue('org_id') === $catOrgId)
             {
                 return true;
             }
 
             // Global events could be edited by the parent organization
-            if ($gCurrentOrganization->isChildOrganization($orgId) && $this->getValue('dat_global'))
+            if ($gCurrentOrganization->isChildOrganization($catOrgId) && $this->getValue('dat_global'))
             {
                 return true;
             }
@@ -383,11 +378,6 @@ class TableDate extends TableAccess
         global $gCurrentUser;
 
         // check if the current user could view the category of the event
-        if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT')))
-        {
-            return true;
-        }
-
-        return false;
+        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('DAT'), true);
     }
 }

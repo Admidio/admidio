@@ -646,13 +646,8 @@ class ProfileFields
         // check if the current user could view the category of the profile field
         // if it's the own profile than we check if user could edit his profile and if so he could view all fields
         // check if the profile field is only visible for users that could edit this
-        if(($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
-        && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0))
-        {
-            return true;
-        }
-
-        return false;
+        return ($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
 
 }

@@ -136,11 +136,6 @@ class TableAnnouncement extends TableAccess
         global $gCurrentUser;
 
         // check if the current user could view the category of the announcement
-        if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('ANN')))
-        {
-            return true;
-        }
-
-        return false;
+        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('ANN'), true);
     }
 }

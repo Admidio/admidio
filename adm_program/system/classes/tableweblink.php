@@ -41,12 +41,7 @@ class TableWeblink extends TableAccess
     {
         global $gCurrentUser;
 
-        if($this->visible() && $gCurrentUser->editWeblinksRight())
-        {
-            return true;
-        }
-
-        return false;
+        return $this->visible() && $gCurrentUser->editWeblinksRight();
     }
 
     /**
@@ -129,11 +124,6 @@ class TableWeblink extends TableAccess
         global $gCurrentUser;
 
         // check if the current user could view the category of the announcement
-        if(in_array($this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('LNK')))
-        {
-            return true;
-        }
-
-        return false;
+        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('LNK'), true);
     }
 }

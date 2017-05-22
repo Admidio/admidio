@@ -500,11 +500,6 @@ class TableRoles extends TableAccess
         $pdoStatement = $this->db->queryPrepared($sql, array($rolId));
         $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $pdoStatement->fetchColumn());
 
-        if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)
-        {
-            return true;
-        }
-
-        return false;
+        return count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0;
     }
 }
