@@ -6,7 +6,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 define('HASH_COST_BCRYPT_DEFAULT', 12);
 define('HASH_COST_BCRYPT_MIN', 10);
 define('HASH_COST_BCRYPT_MAX', 31);
