@@ -147,7 +147,7 @@ elseif($getMode === 3)
 {
     // User aus der Datenbank loeschen
 
-        // only administrators are allowed to do this
+    // only administrators are allowed to do this
     if(!$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

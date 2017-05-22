@@ -77,7 +77,7 @@ if(isset($_SESSION['dates_request']))
     // get the selected roles for visibility
     if(isset($_SESSION['dates_request']['adm_event_participation_right']))
     {
-        $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];        
+        $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
     }
 
     // check if a registration to this event is possible
