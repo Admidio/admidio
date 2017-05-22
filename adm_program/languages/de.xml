@@ -130,7 +130,7 @@
     <string name="DOW_EMAIL_NOTIFICATION_TITLE">Eine neue Datei wurde hochgeladen</string>
     <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Datei bei #VAR1# hochgeladen.\n\nDatei: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="DOW_ENABLE_DOWNLOAD_MODULE">Downloadmodul aktivieren</string>
-    <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)</string>
+    <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Das Downloadmodul kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
     <string name="DOW_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</string>
     <string name="DOW_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
     <string name="DOW_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
@@ -168,7 +168,7 @@
     <!-- Phrases only in Ecardsmodule -->
     <string name="ECA_A_ECARD_FROM">Eine Grußkarte von</string>
     <string name="ECA_ACTIVATE_GREETING_CARDS">Grußkarten aktivieren</string>
-    <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</string>
+    <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">Das Grußkartenmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Standard: ja)</string>
     <string name="ECA_GREETING_CARD">Grußkarte</string>
     <string name="ECA_GREETING_CARDS">Grußkarten</string>
     <string name="ECA_GREETING_CARD_EDIT">Grußkarte bearbeiten</string>
@@ -388,7 +388,7 @@
     <string name="LST_EMAIL_TO_LIST">E-Mail an Liste</string>
     <string name="LST_EMPTY_EXAMPLE_DESC">Sucht alle Benutzer, die das Feld Straße nicht gefüllt haben</string>
     <string name="LST_ENABLE_LISTS_MODULE">Listenmodul aktivieren</string>
-    <string name="LST_ENABLE_LISTS_MODULE_DESC">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</string>
+    <string name="LST_ENABLE_LISTS_MODULE_DESC">Die Anzeige der Listen und die Konfiguration von eigenen Listen kann über diese Einstellung aktiviert oder deaktiviert werden. Dieses Modul steht generell nur angemeldeten Benutzern zur Verfügung. (Standard: ja)</string>
     <string name="LST_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist die Standardkonfiguration für Listen in dieser Organisation und kann nicht gelöscht werden. Wähle in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuche danach diese Konfiguration zu löschen.</string>
     <string name="LST_EXCLUDE_EXAMPLE">Stefan</string>
     <string name="LST_EXCLUDE_EXAMPLE_DESC">Sucht alle Benutzer, die nicht Stefan heißen</string>
@@ -470,13 +470,13 @@
     <string name="LST_Z_TO_A">Z bis A</string>
     <!-- Phrases only in Mailmodule -->
     <string name="MAI_ACTIVATE_EMAIL_MODULE">Mailmodul aktivieren</string>
-    <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)</string>
+    <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">Das E-Mailmodul kann über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)</string>
     <string name="MAI_ADD_ATTACHEMENT">Anhang hinzufügen</string>
     <string name="MAI_ATTACHEMENT">Anhang</string>
     <string name="MAI_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
     <string name="MAI_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard: 1MB)</string>
     <string name="MAI_ATTACHMENT_TO_LARGE">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
-    <string name="MAI_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
+    <string name="MAI_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_CARBON_COPY">Kopie</string>
     <string name="MAI_CHARACTER_ENCODING">Zeichenkodierung</string>
     <string name="MAI_CHARACTER_ENCODING_DESC">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</string>
@@ -515,7 +515,7 @@
     <string name="MAI_SENDER_NAME">Name des Absenders</string>
     <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten E-Mailadresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender E-Mailadresse gepflegt ist. (Standard: leer)</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
-    <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
+    <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_SMTP">SMTP</string>
     <string name="MAI_SMTP_AUTH">SMTP Authentifizierung</string>
     <string name="MAI_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Benutzername und Passwort ausgefüllt werden.  (Standard: Ja)</string>
@@ -593,9 +593,9 @@
     <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
     <!-- Phrases only in Messagemodule -->
     <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
-    <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</string>
+    <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Das Chat-Modul kann über diese Einstellung aktiviert oder deaktiviert werden. Das Modul lädt alle 3 Sekunden dynamisch Daten aus der Datenbank. Es werden maximal 99 Einträge gespeichert. Bei 100 Meldungen werden die ersten 50 Einträge wieder gelöscht. (Standard: Deaktiviert)</string>
     <string name="MSG_ACTIVATE_PM_MODULE">Private Nachrichten aktivieren</string>
-    <string name="MSG_ACTIVATE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Aktiviert)</string>
+    <string name="MSG_ACTIVATE_PM_MODULE_DESC">Private Nachrichten können über diese Einstellung aktiviert oder deaktiviert werden. (Standard: Aktiviert)</string>
     <string name="MSG_ACTIVE_FORMER_SHORT">Aktive und ehemalige</string>
     <string name="MSG_CHAT">Chat</string>
     <string name="MSG_DELETE_DESC">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
@@ -641,7 +641,6 @@
     <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
     <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
     <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</string>
-    <string name="ORG_ADVANCED_REGISTRATION">Erweiterte Registrierung</string>
     <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatischer Logout nach</string>
     <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer #VAR1_BOLD# ausgewählt hat. (Standard: 20 Minuten)</string>
     <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
@@ -683,9 +682,10 @@
     <string name="ORG_EMAIL_ALERTS">E-Mail-Benachrichtigung</string>
     <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</string>
     <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
+    <string name="ORG_ENABLE_REGISTRATION_MODULE">Registrierung aktivieren</string>
+    <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
     <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
     <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
-    <string name="ORG_FAST_REGISTRATION">Schnelle Registrierung</string>
     <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
     <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht #VAR1_BOLD# editierbar</string>
     <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
@@ -737,7 +737,6 @@
     <string name="ORG_REFUSE_REGISTRATION">Benachrichtigung bei einer Ablehnung der Registrierung</string>
     <string name="ORG_REGIONAL_SETTINGS">Regionaleinstellungen</string>
     <string name="ORG_REGISTERED_USERS">Angemeldete Benutzer</string>
-    <string name="ORG_REGISTRATION_MODE">Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)</string>
     <string name="ORG_SEARCH_SIMILAR_NAMES">Ähnliche Namen finden</string>
     <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Standard: ja)</string>
     <string name="ORG_SECONDS">Sekunden</string>
