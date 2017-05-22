@@ -420,7 +420,7 @@ class ModuleDates extends Modules
 
         $sqlConditions = '';
 
-        $id = $this->getParameter('id');
+        $id = (int) $this->getParameter('id');
         // In case ID was permitted and user has rights
         if ($id > 0)
         {
@@ -438,24 +438,28 @@ class ModuleDates extends Modules
             $sqlConditions .= ' AND dat_begin <= \'' . $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59\'
                                 AND dat_end   >  \'' . $this->getParameter('dateStartFormatEnglish') . ' 00:00:00\' ';
 
+            $catId = (int) $this->getParameter('cat_id');
             // show all events from category
-            if ($this->getParameter('cat_id') > 0)
+            if ($catId > 0)
             {
                 // show all events from category
-                $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
+                $sqlConditions .= ' AND cat_id = ' . $catId;
             }
         }
 
+        $usrId = (int) $gCurrentUser->getValue('usr_id');
         // add conditions for role permission
-        if ($gCurrentUser->getValue('usr_id') > 0)
+        if ($usrId > 0)
         {
             switch ($this->getParameter('show'))
             {
                 case 'maybe_participate':
                     $sqlConditions .= '
                         AND dat_rol_id IS NOT NULL
-                        AND EXISTS (SELECT 1 FROM '. TBL_ROLES_RIGHTS .'
-                                     INNER JOIN '. TBL_ROLES_RIGHTS_DATA .' ON rrd_ror_id = ror_id
+                        AND EXISTS (SELECT 1
+                                      FROM '. TBL_ROLES_RIGHTS .'
+                                INNER JOIN '. TBL_ROLES_RIGHTS_DATA .'
+                                        ON rrd_ror_id = ror_id
                                      WHERE ror_name_intern = \'event_participation\'
                                        AND rrd_object_id = dat_id
                                        AND rrd_rol_id IN ('.implode(',', $gCurrentUser->getRoleMemberships()).')) ';
@@ -466,7 +470,7 @@ class ModuleDates extends Modules
                         AND dat_rol_id IS NOT NULL
                         AND dat_rol_id IN (SELECT mem_rol_id
                                              FROM ' . TBL_MEMBERS . ' AS mem2
-                                            WHERE mem2.mem_usr_id = ' . $gCurrentUser->getValue('usr_id') . '
+                                            WHERE mem2.mem_usr_id = ' . $usrId . '
                                               AND mem2.mem_begin <= dat_begin
                                               AND mem2.mem_end   >= dat_end) ';
                     break;

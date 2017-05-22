@@ -123,15 +123,14 @@ class RolesRights extends TableAccess
     {
         $arrRolesNames = array();
 
-        if(count($this->rolesIds) > 0)
+        if (count($this->rolesIds) > 0)
         {
-            $arrRolesNames = array();
             $sql = 'SELECT rol_name
                       FROM '.TBL_ROLES.'
-                     WHERE rol_id IN ('.implode(',', $this->rolesIds).') ';
-            $rolesStatement = $this->db->queryPrepared($sql);
+                     WHERE rol_id IN ('.replaceValuesArrWithQM($this->rolesIds).') ';
+            $rolesStatement = $this->db->queryPrepared($sql, $this->rolesIds);
 
-            while($rowRole = $rolesStatement->fetch())
+            while ($rowRole = $rolesStatement->fetch())
             {
                 $arrRolesNames[] = $rowRole['rol_name'];
             }

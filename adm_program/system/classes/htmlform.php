@@ -1637,17 +1637,26 @@ class HtmlForm extends HtmlFormBasic
             $sqlConditions .= ' AND cat_system = 0 ';
         }
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
+
         // the sql statement which returns all found categories
         $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
-                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories($categoryType), array(0))) . ')
+                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_type = ? -- $categoryType
                        ' . $sqlConditions . '
               ORDER BY cat_sequence ASC';
-        $pdoStatement = $database->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $categoryType));
+        $queryParams = array_merge(
+            $catIdParams,
+            array(
+                (int) $gCurrentOrganization->getValue('org_id'),
+                $categoryType
+            )
+        );
+        $pdoStatement = $database->queryPrepared($sql, $queryParams);
         $countCategories = $pdoStatement->rowCount();
 
         // if no or only one category exist and in filter modus, than don't show category

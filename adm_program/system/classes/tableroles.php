@@ -455,7 +455,7 @@ class TableRoles extends TableAccess
                      WHERE rol_default_registration = 1
                        AND rol_id    <> ? -- $this->getValue(\'rol_id\')
                        AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-            $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $gCurrentOrganization->getValue('org_id')));
+            $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), (int) $gCurrentOrganization->getValue('org_id')));
 
             if ((int) $pdoStatement->fetchColumn() === 0)
             {
@@ -481,9 +481,11 @@ class TableRoles extends TableAccess
             return false;
         }
 
+        $rolId = (int) $this->getValue('rol_id');
+
         if ($this->getValue('cat_name_intern') !== 'EVENTS')
         {
-            return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
+            return $gCurrentUser->hasRightViewRole($rolId);
         }
 
         if ((int) $this->getValue('rol_this_list_view') === 0)
@@ -494,8 +496,8 @@ class TableRoles extends TableAccess
         // check if user is member of a role who could view the event
         $sql = 'SELECT dat_id
                   FROM '.TBL_DATES.'
-                 WHERE dat_rol_id = ? -- $this->getValue(\'rol_id\') ';
-        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id')));
+                 WHERE dat_rol_id = ? -- $rolId';
+        $pdoStatement = $this->db->queryPrepared($sql, array($rolId));
         $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $pdoStatement->fetchColumn());
 
         if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)

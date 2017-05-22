@@ -138,12 +138,14 @@ class ModuleWeblinks extends Modules
             $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
         }
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
+
         // Weblinks aus der DB fischen...
         $sql = 'SELECT *
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('LNK'), array(0))).')  -- $gCurrentUser->getAllVisibleCategories(\'LNK\')
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
@@ -156,7 +158,11 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $weblinksStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $queryParams = array_merge(
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        ); // TODO add more params
+        $weblinksStatement = $gDb->queryPrepared($sql, $queryParams);
 
         // array for results
         return array(
@@ -176,14 +182,20 @@ class ModuleWeblinks extends Modules
     {
         global $gCurrentOrganization, $gCurrentUser, $gDb;
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
+
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories('LNK'), array(0))) . ')
+                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions;
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $queryParams = array_merge(
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        ); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
         return (int) $pdoStatement->fetchColumn();
     }

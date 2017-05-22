@@ -326,7 +326,7 @@ $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                ORDER BY cat_sequence, rol_name';
 $sqlDataView = array(
     'query'  => $sqlViewRoles,
-    'params' => array($gCurrentOrganization->getValue('org_id'))
+    'params' => array((int) $gCurrentOrganization->getValue('org_id'))
 );
 
 // show selectbox with all assigned roles

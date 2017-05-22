@@ -169,6 +169,9 @@ if(isset($page) && $page instanceof \HtmlPage)
 // query of all events
 if($plg_ter_aktiv)
 {
+    $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+    $queryParams = array_merge($catIdParams, array($dateMonthEnd, $dateMonthStart));
+
     // check if special calendars should be shown
     if(in_array('all', $plg_kal_cat, true))
     {
@@ -178,25 +181,20 @@ if($plg_ter_aktiv)
     else
     {
         // show only calendars of the parameter $plg_kal_cat
-        $sqlSyntax = ' AND cat_name IN (';
-        foreach($plg_kal_cat as $calendar)
-        {
-            $sqlSyntax .= '\''.$calendar.'\', ';
-        }
-        $sqlSyntax = substr($sqlSyntax, 0, -2). ') ';
+        $sqlSyntax = ' AND cat_name IN (' . replaceValuesArrWithQM($plg_kal_cat) . ')';
+        $queryParams = array_merge($queryParams, $plg_kal_cat);
     }
 
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
               FROM '.TBL_DATES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
-             WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('DAT'), array(0))).')
+             WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                AND dat_begin <= ? -- $dateMonthEnd
                AND dat_end   >= ? -- $dateMonthStart
-                   '.$sqlLogin.'
                    '.$sqlSyntax.'
           ORDER BY dat_begin ASC';
-    $datesStatement = $gDb->queryPrepared($sql, array($dateMonthEnd, $dateMonthStart));
+    $datesStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while($row = $datesStatement->fetch())
     {

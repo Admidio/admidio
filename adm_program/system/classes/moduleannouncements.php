@@ -124,13 +124,15 @@ class ModuleAnnouncements extends Modules
                        ON cha_username.usr_id = ann_usr_id_change ';
         }
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
+
         // read announcements from database
         $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
                   FROM '.TBL_ANNOUNCEMENTS.' AS ann
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
                        '.$additionalTables.'
-                 WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('ANN'), array(0))).')
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
@@ -147,7 +149,11 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $announcementsStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $queryParams = array_merge(
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        ); // TODO add more params
+        $announcementsStatement = $gDb->queryPrepared($sql, $queryParams);
 
         // array for results
         return array(
@@ -167,16 +173,23 @@ class ModuleAnnouncements extends Modules
     {
         global $gCurrentOrganization, $gCurrentUser, $gDb;
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
+
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = ann_cat_id
-                 WHERE cat_id IN (' . implode(',', array_merge($gCurrentUser->getAllVisibleCategories('ANN'), array(0))) . ')
+                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getSqlConditions();
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+
+        $queryParams = array_merge(
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        ); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
         return (int) $pdoStatement->fetchColumn();
     }

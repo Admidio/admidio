@@ -790,6 +790,8 @@ class User extends TableAccess
     {
         $arrVisibleCategories = array();
 
+        $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+
         $sql = 'SELECT cat_id
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
@@ -797,17 +799,25 @@ class User extends TableAccess
                        OR cat_org_id = ? ) -- $this->organizationId
                    AND ( NOT EXISTS (SELECT 1
                                        FROM ' . TBL_ROLES_RIGHTS . '
-                                      INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . ' ON rrd_ror_id = ror_id
+                                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                         ON rrd_ror_id = ror_id
                                       WHERE ror_name_intern = \'category_view\'
-                                        AND rrd_object_id = cat_id )
+                                        AND rrd_object_id   = cat_id )
                         OR EXISTS (SELECT 1
                                      FROM adm_roles_rights
-                                    INNER JOIN adm_roles_rights_data ON rrd_ror_id = ror_id
+                               INNER JOIN adm_roles_rights_data
+                                       ON rrd_ror_id = ror_id
                                     WHERE ror_name_intern = \'category_view\'
-                                      AND rrd_object_id = cat_id
-                                      AND rrd_rol_id IN ('.implode(',', array_merge($this->getRoleMemberships(), array(0))).') )
+                                      AND rrd_object_id   = cat_id
+                                      AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
                         )';
-        $queryParams = array($categoryType, $this->organizationId);
+        $queryParams = array_merge(
+            array(
+                $categoryType,
+                $this->organizationId
+            ),
+            $rolIdParams
+        );
         $visibleCategoriesStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($visibleCategoriesStatement->rowCount() > 0)

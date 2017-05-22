@@ -432,10 +432,10 @@ class ComponentUpdate extends Component
         $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, '. $gCurrentUser->getValue('usr_id') .', \''. DATETIME_NOW .'\'
+                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
                   FROM '.$g_tbl_praefix.'_date_role
                  WHERE dtr_rol_id IS NOT NULL';
-        $this->db->queryPrepared($sql);
+        $this->db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
     }
 
     /**
@@ -444,7 +444,7 @@ class ComponentUpdate extends Component
      */
     public function updateStepMigrateToFolderRights()
     {
-        global $g_tbl_praefix, $g_organization;
+        global $g_tbl_praefix, $g_organization, $gCurrentUser;
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
@@ -454,9 +454,9 @@ class ComponentUpdate extends Component
         $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, '. $gCurrentUser->getValue('usr_id') .', \''. DATETIME_NOW .'\'
+                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
                   FROM '.$g_tbl_praefix.'_folder_roles ';
-        $this->db->queryPrepared($sql);
+        $this->db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
 
         // add new right folder_update to adm_roles_rights
         $sql = 'SELECT fol_id
@@ -699,19 +699,20 @@ class ComponentUpdate extends Component
             $roles = array();
             $sql = 'SELECT rol_id
                       FROM ' . TBL_ROLES . '
-                     INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-                           AND cat_org_id = ? -- $row[org_id]
-                           AND cat_name_intern <> \'EVENTS\'
-                     WHERE rol_valid = 1 ';
-            $rolesStatement = $this->db->queryPrepared($sql, array($row['cat_org_id']));
+                INNER JOIN ' . TBL_CATEGORIES . '
+                        ON cat_id = rol_cat_id
+                     WHERE rol_valid  = 1
+                       AND cat_name_intern <> \'EVENTS\'
+                       AND cat_org_id = ? -- $row[\'cat_org_id\']';
+            $rolesStatement = $this->db->queryPrepared($sql, array((int) $row['cat_org_id']));
 
             while($rowRole = $rolesStatement->fetch())
             {
-                $roles[] = $rowRole['rol_id'];
+                $roles[] = (int) $rowRole['rol_id'];
             }
 
             // save roles to role right
-            $rightCategoryView = new RolesRights($this->db, 'category_view', $row['cat_id']);
+            $rightCategoryView = new RolesRights($this->db, 'category_view', (int) $row['cat_id']);
             $rightCategoryView->saveRoles($roles);
         }
     }
