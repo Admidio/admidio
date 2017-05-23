@@ -109,7 +109,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_mode'] == 0)
+        if($gPreferences['registration_enable_module'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -167,18 +167,12 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     $showField = false;
 
-    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    // E-Mail ist Ausnahme und muss immer angezeigt werden
-    if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
-    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
+    // at registration check if the field is enabled for registration
+    if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
     {
         $showField = true;
     }
-    elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
-    {
-        // bei der vollstaendigen Registrierung alle Felder anzeigen
-        $showField = true;
-    }
+    // check if user has right to edit this user
     elseif($getNewUser !== 2
     && ($getUserId === (int) $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {

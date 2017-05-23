@@ -80,7 +80,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_mode'] == 0)
+        if($gPreferences['registration_enable_module'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -140,6 +140,15 @@ foreach($gProfileFields->mProfileFields as $field)
     {
         if(isset($_POST[$postId]))
         {
+            // at registration check if the field is enabled for registration
+            if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
+            {
+                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+                // => EXIT
+            }
+
+            // TODO check if current user is allowed to view the category of that fields
+
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
             if((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)
