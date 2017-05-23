@@ -197,7 +197,8 @@ $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_na
 // Roles have their own preferences for visibility, so only allow this for other types.
 // Until now we do not support visibility for categories that belong to several organizations,
 // roles could be assigned if only 1 organization exists.
-if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
+if($getType !== 'ROL' 
+&& ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
 {
     // read all roles of the current organization
     $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name

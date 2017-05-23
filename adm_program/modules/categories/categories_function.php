@@ -109,7 +109,9 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1) && !isset($_POST['adm_categories_view_right']))
+    if($getType !== 'ROL' 
+    && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1) 
+    && !isset($_POST['adm_categories_view_right']))
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_VISIBLE_FOR')));
         // => EXIT
@@ -184,7 +186,8 @@ if($getMode === 1)
     // roles have their own preferences for visibility, so only allow this for other types
     // until now we do not support visibility for categories that belong to several organizations
     if($getType !== 'ROL'
-    && ($category->getValue('cat_org_id') > 0 || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
+    && ($category->getValue('cat_org_id') > 0 
+    || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
     {
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
