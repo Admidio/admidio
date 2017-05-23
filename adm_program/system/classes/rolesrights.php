@@ -211,6 +211,8 @@ class RolesRights extends TableAccess
         // save new roles rights to the database
         else
         {
+            $roleIds = array_map('intval', $roleIds);
+
             // get new roles and removed roles
             $addRoles = array_diff($roleIds, $this->getRolesIds());
             $removeRoles = array_diff($this->getRolesIds(), $roleIds);
