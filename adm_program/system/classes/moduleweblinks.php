@@ -129,13 +129,15 @@ class ModuleWeblinks extends Modules
         }
 
         // Bedingungen
-        if($this->getParameter('id') > 0)
+        $id = (int) $this->getParameter('id');
+        if($id > 0)
         {
-            $this->getConditions = ' AND lnk_id = '. $this->getParameter('id');
+            $this->getConditions = ' AND lnk_id = '. $id;
         }
-        if($this->getParameter('cat_id') > 0)
+        $catId = (int) $this->getParameter('cat_id');
+        if($catId > 0)
         {
-            $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
+            $this->getConditions = ' AND cat_id = '. $catId;
         }
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
@@ -209,10 +211,11 @@ class ModuleWeblinks extends Modules
     {
         global $gDb;
 
+        $catId = (int) $this->getParameter('cat_id');
         // set headline with category name
-        if($this->getParameter('cat_id') > 0)
+        if($catId > 0)
         {
-            $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
+            $category  = new TableCategory($gDb, $catId);
             $headline .= ' - '. $category->getValue('cat_name');
         }
         return $headline;

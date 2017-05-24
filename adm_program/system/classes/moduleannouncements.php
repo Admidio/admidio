@@ -91,6 +91,9 @@ class ModuleAnnouncements extends Modules
     {
         global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gProfileFields, $gDb;
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
+        $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));
+
         if ($gPreferences['system_show_create_edit'] == 1)
         {
             // show firstname and lastname of create and last change user
@@ -100,16 +103,25 @@ class ModuleAnnouncements extends Modules
             $additionalTables = '
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
                        ON cre_surname.usd_usr_id = ann_usr_id_create
-                      AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                      AND cre_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
                        ON cre_firstname.usd_usr_id = ann_usr_id_create
-                      AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+                      AND cre_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                 LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
                        ON cha_surname.usd_usr_id = ann_usr_id_change
-                      AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                      AND cha_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
                 LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
                        ON cha_firstname.usd_usr_id = ann_usr_id_change
-                      AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+                      AND cha_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')';
+            $queryParams = array_merge(
+                array(
+                    (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+                    (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+                    (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+                    (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+                ),
+                $queryParams
+            );
         }
         else
         {
@@ -123,8 +135,6 @@ class ModuleAnnouncements extends Modules
                 LEFT JOIN '.TBL_USERS.' AS cha_username
                        ON cha_username.usr_id = ann_usr_id_change ';
         }
-
-        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
         // read announcements from database
         $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
@@ -149,11 +159,7 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $announcementsStatement = $gDb->queryPrepared($sql, $queryParams);
+        $announcementsStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
         // array for results
         return array(
@@ -202,26 +208,28 @@ class ModuleAnnouncements extends Modules
     {
         $sqlConditions = '';
 
-        $id = $this->getParameter('id');
+        $id = (int) $this->getParameter('id');
         // In case ID was permitted and user has rights
         if ($id > 0)
         {
-            $sqlConditions .= ' AND ann_id = ' . $this->getParameter('id');
+            $sqlConditions .= ' AND ann_id = ' . $id;
         }
         // ...otherwise get all additional announcements for a group
         else
         {
+            $catId = (int) $this->getParameter('cat_id');
             // show all events from category
-            if ($this->getParameter('cat_id') > 0)
+            if ($catId > 0)
             {
                 // show all events from category
-                $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
+                $sqlConditions .= ' AND cat_id = ' . $catId;
             }
 
             // Search announcements to date
             if ($this->getParameter('dateStartFormatEnglish'))
             {
-                $sqlConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
+                $sqlConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\'
+                                                               AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
             }
         }
 

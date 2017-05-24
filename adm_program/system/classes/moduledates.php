@@ -171,6 +171,8 @@ class ModuleDates extends Modules
                                   cha_username.usr_login_name AS change_name ';
         }
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+
         // read dates from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state,
                        mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additionalFields . '
@@ -180,11 +182,11 @@ class ModuleDates extends Modules
                        ' . $this->sqlAdditionalTablesGet('data') . '
              LEFT JOIN ' . TBL_MEMBERS . ' AS mem
                     ON mem.mem_rol_id = dat_rol_id
-                   AND mem.mem_usr_id = ' . $gCurrentUser->getValue('usr_id') . '
-                   AND mem.mem_begin <= \'' . DATE_NOW . '\'
-                   AND mem.mem_end    > \'' . DATE_NOW . '\'
-                 WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('DAT'), array(0))).')
-                   AND (  cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
+                   AND mem.mem_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                   AND mem.mem_begin <= ? -- DATE_NOW
+                   AND mem.mem_end    > ? -- DATE_NOW
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR  (   dat_global = 1
                            AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                            )
@@ -202,7 +204,16 @@ class ModuleDates extends Modules
             $sql .= ' OFFSET ' . $startElement;
         }
 
-        $datesStatement = $gDb->query($sql); // TODO add more params
+        $queryParams = array_merge(
+            array(
+                (int) $gCurrentUser->getValue('usr_id'),
+                DATE_NOW,
+                DATE_NOW
+            ),
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        );
+        $datesStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
         // array for results
         return array(
@@ -252,31 +263,32 @@ class ModuleDates extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentUser;
+        global $gDb, $gCurrentOrganization, $gCurrentUser;
 
-        if ($this->id === 0)
+        if ($this->id > 0)
         {
-            global $gDb, $gCurrentOrganization;
-
-            $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
-                      FROM ' . TBL_DATES . '
-                INNER JOIN ' . TBL_CATEGORIES . '
-                        ON cat_id = dat_cat_id
-                           ' . $this->sqlAdditionalTablesGet('count') . '
-                     WHERE cat_id IN ('.implode(',', array_merge($gCurrentUser->getAllVisibleCategories('DAT'), array(0))).')
-                       AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                           OR  (   dat_global = 1
-                               AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
-                               )
-                           )'
-                           . $this->getSqlConditions();
-
-            $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
-
-            return (int) $statement->fetchColumn();
+            return 1;
         }
 
-        return 1;
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+
+        $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
+                  FROM ' . TBL_DATES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = dat_cat_id
+                       ' . $this->sqlAdditionalTablesGet('count') . '
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                   AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR  (   dat_global = 1
+                           AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
+                           )
+                       )'
+                       . $this->getSqlConditions();
+
+        $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));
+        $statement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
+
+        return (int) $statement->fetchColumn();
     }
 
     /**
@@ -375,36 +387,39 @@ class ModuleDates extends Modules
     {
         global $gPreferences, $gProfileFields;
 
-        $additionalTables = '';
-
-        if ($type === 'data')
+        if ($type !== 'data')
         {
-            if ($gPreferences['system_show_create_edit'] == 1)
-            {
-                // Tables for showing firstname and lastname of create and last change user
-                $additionalTables = '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
-                           ON cre_surname.usd_usr_id = dat_usr_id_create
-                          AND cre_surname.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
-                           ON cre_firstname.usd_usr_id = dat_usr_id_create
-                          AND cre_firstname.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cha_surname
-                           ON cha_surname.usd_usr_id = dat_usr_id_change
-                          AND cha_surname.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cha_firstname
-                           ON cha_firstname.usd_usr_id = dat_usr_id_change
-                          AND cha_firstname.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
-            }
-            else
-            {
-                // Tables for showing username of create and last change user
-                $additionalTables = '
-                    LEFT JOIN '. TBL_USERS .' AS cre_username
-                           ON cre_username.usr_id = dat_usr_id_create
-                    LEFT JOIN '. TBL_USERS .' AS cha_username
-                           ON cha_username.usr_id = dat_usr_id_change ';
-            }
+            return '';
+        }
+
+        if ($gPreferences['system_show_create_edit'] == 1)
+        {
+            $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
+            $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+
+            // Tables for showing firstname and lastname of create and last change user
+            $additionalTables = '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
+                       ON cre_surname.usd_usr_id = dat_usr_id_create
+                      AND cre_surname.usd_usf_id = ' . $lastNameUsfId . '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
+                       ON cre_firstname.usd_usr_id = dat_usr_id_create
+                      AND cre_firstname.usd_usf_id = ' . $firstNameUsfId . '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cha_surname
+                       ON cha_surname.usd_usr_id = dat_usr_id_change
+                      AND cha_surname.usd_usf_id = ' . $lastNameUsfId . '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cha_firstname
+                       ON cha_firstname.usd_usr_id = dat_usr_id_change
+                      AND cha_firstname.usd_usf_id = ' . $firstNameUsfId;
+        }
+        else
+        {
+            // Tables for showing username of create and last change user
+            $additionalTables = '
+                LEFT JOIN '. TBL_USERS .' AS cre_username
+                       ON cre_username.usr_id = dat_usr_id_create
+                LEFT JOIN '. TBL_USERS .' AS cha_username
+                       ON cha_username.usr_id = dat_usr_id_change ';
         }
 
         return $additionalTables;
