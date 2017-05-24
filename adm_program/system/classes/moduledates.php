@@ -453,13 +453,13 @@ class ModuleDates extends Modules
             }
         }
 
-        $usrId = (int) $gCurrentUser->getValue('usr_id');
+        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
         // add conditions for role permission
-        if ($usrId > 0)
+        if ($currUsrId > 0)
         {
             $subSelect = '(SELECT mem_rol_id
                              FROM ' . TBL_MEMBERS . ' AS mem2
-                            WHERE mem2.mem_usr_id = ' . $usrId . '
+                            WHERE mem2.mem_usr_id = ' . $currUsrId . '
                               AND mem2.mem_begin <= dat_begin
                               AND mem2.mem_end   >= dat_end)';
             switch ($this->getParameter('show'))

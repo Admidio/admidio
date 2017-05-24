@@ -34,13 +34,13 @@ else
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);
-$currUserId = (int) $gCurrentUser->getValue('usr_id');
+$currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // only the own password could be individual set.
 // Administrator could only send a generated password or set a password if no password was set before
 if((int) $gCurrentUser->getValue('usr_id') !== $getUserId
 && (!isMember($getUserId)
-|| (!$gCurrentUser->isAdministrator() && $currUserId !== $getUserId)
+|| (!$gCurrentUser->isAdministrator() && $currUsrId !== $getUserId)
 || ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gPreferences['enable_system_mails'] == 1)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -49,7 +49,7 @@ if((int) $gCurrentUser->getValue('usr_id') !== $getUserId
 
 if($getMode === 'change')
 {
-    if($gCurrentUser->isAdministrator() && $currUserId !== $getUserId)
+    if($gCurrentUser->isAdministrator() && $currUsrId !== $getUserId)
     {
         $oldPassword = '';
     }
@@ -76,14 +76,14 @@ if($getMode === 'change')
                     // check if old password is correct.
                     // Administrator could change password of other users without this verification.
                     if (PasswordHashing::verify($oldPassword, $user->getValue('usr_password'))
-                    || ($gCurrentUser->isAdministrator() && $currUserId !== $getUserId))
+                    || ($gCurrentUser->isAdministrator() && $currUsrId !== $getUserId))
                     {
                         $user->saveChangesWithoutRights();
                         $user->setPassword($newPassword);
                         $user->save();
 
                         // if password of current user changed, then update value in current session
-                        if ($currUserId === (int) $user->getValue('usr_id'))
+                        if ($currUsrId === (int) $user->getValue('usr_id'))
                         {
                             $gCurrentUser->setPassword($newPassword);
                         }
@@ -183,7 +183,7 @@ elseif($getMode === 'html')
     <div class="modal-body">';
         // show form
         $form = new HtmlForm('password_form', ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
-        if($currUserId === $getUserId)
+        if($currUsrId === $getUserId)
         {
             // to change own password user must enter the valid old password for verification
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH

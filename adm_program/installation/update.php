@@ -79,9 +79,9 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 
 // create an organization object of the current organization
 $gCurrentOrganization = new Organization($gDb, $g_organization);
-$organizationId = (int) $gCurrentOrganization->getValue('org_id');
+$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
-if ($organizationId === 0)
+if ($currOrgId === 0)
 {
     // Organisation wurde nicht gefunden
     exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
@@ -90,7 +90,7 @@ if ($organizationId === 0)
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
 $gPreferences = $gCurrentOrganization->getPreferences();
 
-$gProfileFields = new ProfileFields($gDb, $organizationId);
+$gProfileFields = new ProfileFields($gDb, $currOrgId);
 
 // create language and language data object to handle translations
 if (!isset($gPreferences['system_language']))
