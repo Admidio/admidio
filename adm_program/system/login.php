@@ -64,7 +64,7 @@ if($gPreferences['enable_auto_login'] == 1)
 $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => THEME_URL.'/icons/key.png'));
 $page->addHtml($form->show(false));
 
-if($gPreferences['registration_mode'] > 0)
+if($gPreferences['registration_enable_module'] == 1)
 {
     $page->addHtml('
         <div id="login_registration_link">

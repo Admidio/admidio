@@ -11,7 +11,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if module is active
-if($gPreferences['registration_mode'] == 0)
+if($gPreferences['registration_enable_module'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

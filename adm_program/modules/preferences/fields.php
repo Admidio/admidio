@@ -123,6 +123,7 @@ $columnHeading = array(
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
     '<img class="admidio-icon-info" data-html="true" src="'.THEME_URL.'/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />',
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_REQUIRED').'" title="'.$gL10n->get('ORG_FIELD_REQUIRED').'" />',
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/new_registrations.png" alt="'.$gL10n->get('ORG_FIELD_REGISTRATION').'" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'" />',
     $gL10n->get('ORG_DATATYPE'),
     '&nbsp;'
 );
@@ -199,6 +200,15 @@ while($row = $statement->fetch())
         $mandatory = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/asterisk_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
     }
 
+    if($userField->getValue('usf_registration') == 1)
+    {
+        $registration = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/new_registrations.png" alt="'.$gL10n->get('ORG_FIELD_REGISTRATION').'" title="'.$gL10n->get('ORG_FIELD_REGISTRATION').'" />';
+    }
+    else
+    {
+        $registration = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/new_registrations_gray.png" alt="'.$gL10n->get('ORG_FIELD_NOT_REGISTRATION').'" title="'.$gL10n->get('ORG_FIELD_NOT_REGISTRATION').'" />';
+    }
+
     $userFieldText = array('CHECKBOX'     => $gL10n->get('SYS_CHECKBOX'),
                            'DATE'         => $gL10n->get('SYS_DATE'),
                            'DROPDOWN'     => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
@@ -237,6 +247,7 @@ while($row = $statement->fetch())
         $hidden,
         $disable,
         $mandatory,
+        $registration,
         $userFieldText[$userField->getValue('usf_type')],
         $usfSystem
     );

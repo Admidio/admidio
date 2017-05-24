@@ -66,6 +66,7 @@ else
 {
     // default values for a new field
     $userField->setValue('usf_hidden', 1);
+    $userField->setValue('usf_registration', 1);
 }
 
 if(isset($_SESSION['fields_request']))
@@ -192,6 +193,16 @@ else
 {
     $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
                        array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
+}
+if($userField->getValue('usf_name_intern') === 'LAST_NAME' || $userField->getValue('usf_name_intern') === 'FIRST_NAME' || $userField->getValue('usf_name_intern') === 'EMAIL')
+{
+    $form->addCheckbox('usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
+                       array('property' => FIELD_DISABLED, 'icon' => 'new_registrations.png'));
+}
+else
+{
+    $form->addCheckbox('usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
+                       array('icon' => 'new_registrations.png'));
 }
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-panel-editor');

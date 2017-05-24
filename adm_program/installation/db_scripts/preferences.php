@@ -36,7 +36,7 @@ $defaultOrgPreferences = array(
     'system_hashing_cost'            => '10',
 
     // Registration
-    'registration_mode'              => '1',
+    'registration_enable_module'     => '1',
     'enable_registration_captcha'    => '1',
     'enable_registration_admin_mail' => '1',
 

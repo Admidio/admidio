@@ -14,6 +14,11 @@
     <step id="120">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_additional_guests integer not null default 0</step>
     <step id="130">ALTER TABLE %PREFIX%_user_relation_types ADD COLUMN urt_edit_user boolean not null default '0'</step>
     <step id="140">ALTER TABLE %PREFIX%_dates ADD COLUMN dat_deadline timestamp null default null AFTER dat_max_members</step>
-
+    <step id="150">ALTER TABLE %PREFIX%_user_fields ADD COLUMN usf_registration boolean not null default '0'</step>
+    <step id="160">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE (usf_name_intern IN ('FIRST_NAME', 'LAST_NAME', 'EMAIL') OR usf_mandatory = 1) AND EXISTS (SELECT 1 FROM %PREFIX%_preferences WHERE prf_name = 'registration_mode' AND prf_value = '1' AND prf_org_id = 1)</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE EXISTS (SELECT 1 FROM %PREFIX%_preferences WHERE prf_name = 'registration_mode' AND prf_value = '2' AND prf_org_id = 1)</step>
+    <step id="180" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'registration_mode' AND pr2.prf_value = '0' AND pr1.prf_org_id = pr2.prf_org_id SET pr1.prf_value = '0' WHERE pr1.prf_name = 'registration_enable_module'</step>
+    <step id="190" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'registration_mode' AND pr1.prf_name = 'registration_enable_module' AND pr1.prf_org_id = pr2.prf_org_id</step>
+    <step id="200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_mode'</step>
     <step>stop</step>
 </update>
