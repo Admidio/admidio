@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <languagelist>
     <language>
+        <isocode>zh</isocode>
+        <name>Chinese - 中文</name>
+    </language>
+    <language>
         <isocode>da</isocode>
-        <name>Dansk</name>
+        <name>Danish - Dansk</name>
     </language>
     <language>
-        <isocode>de</isocode>
-        <name>Deutsch (du)</name>
-    </language>
-    <language>
-        <isocode>de_sie</isocode>
-        <name>Deutsch (Sie)</name>
+        <isocode>nl</isocode>
+        <name>Dutch - Nederlands</name>
     </language>
     <language>
         <isocode>en</isocode>
@@ -18,22 +18,30 @@
     </language>
     <language>
         <isocode>fr</isocode>
-        <name>Français</name>
+        <name>French - Français</name>
+    </language>
+    <language>
+        <isocode>de</isocode>
+        <name>German - Deutsch (du)</name>
+    </language>
+    <language>
+        <isocode>de_sie</isocode>
+        <name>German - Deutsch (Sie)</name>
     </language>
     <language>
         <isocode>it</isocode>
-        <name>Italiano</name>
-    </language>
-    <language>
-        <isocode>nl</isocode>
-        <name>Nederlands</name>
+        <name>Italian - Italiano</name>
     </language>
     <language>
         <isocode>nb</isocode>
-        <name>Norwegian Bokmål</name>
+        <name>Norwegian Bokmål - Norsk Bokmål</name>
     </language>
     <language>
         <isocode>pt</isocode>
-        <name>Português</name>
+        <name>Portuguese - Português</name>
+    </language>
+    <language>
+        <isocode>sw</isocode>
+        <name>Swahili - Kiswahili</name>
     </language>
 </languagelist>

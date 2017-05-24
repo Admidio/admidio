@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_CALENDAR_CURRENT_MONTH">Mês atual</string>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Mês Atual</string>
   <string name="PLG_CALENDAR_MONTH">Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro</string>
   <string name="PLG_CALENDAR_MORE">(... mais)</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Seg</string>

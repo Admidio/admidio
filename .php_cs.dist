@@ -23,7 +23,7 @@ $rules = array(
     'combine_consecutive_unsets'                  => true,  // [@]
 //    'concat_space'                              => false, // [@Symfony]
     'declare_equal_normalize'                     => true,  // [@Symfony]
-//    'declare_strict_types'                      => false, // [@] TODO: PHP >= 7.0 => true
+//    'declare_strict_types'                      => false, // [@PHP70Migration] TODO: PHP >= 7.0 => true
     'dir_constant'                                => true,  // [@]
 //    'doctrine_annotation_braces'                => false, // [@]
 //    'doctrine_annotation_indentation'           => false, // [@]

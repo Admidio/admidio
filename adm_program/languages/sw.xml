@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Phrases only in Announcementmodule-->
+  <string name="ANN_ANNOUNCEMENT">Tangazo</string>
+  <string name="ANN_ANNOUNCEMENTS">Matangazo</string>
+  <string name="ANN_ANNOUNCEMENTS_DESC">Onesha au hariri matangazo, habari na taarifa nyingne.</string>
+  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Tangazo jipya limetengenezwa</string>
+  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Tangazo jipya limetengenezwa #VAR1#  limetengenezwa\n\nTitle: #VAR2#\n Na: #VAR3#\nLimetengenezwa: #VAR4#</string>
+  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Matangazo ya karibuni kutoka kwenye shirika #VAR1#</string>
+  <!--Phrases only in Backupmodule-->
+  <string name="BAC_BACK_TO_BACKUP_PAGE">Rudi kwenye ukurasa wa chelezo</string>
+  <string name="BAC_BACKUP_COMPLETED">Chelezo imetengenezwa #VAR1#</string>
+  <string name="BAC_BACKUP_FILE">Faili la chelezo</string>
+  <string name="BAC_BACKUP_FROM">Chelezo imetengenezwa #VAR1# kwenye #VAR2#</string>
+  <string name="BAC_CREATION_DATE">Imetengenezwa</string>
+  <string name="BAC_DATABASE_BACKUP">Chelezo ya hazinadata</string>
+  <string name="BAC_DATABASE_BACKUP_DESC">Tengeneza na pakua chelezo za hazinadata za Majedwali ya Admidio.</string>
+  <string name="BAC_DAYS_VAR">Siku #VAR1#</string>
+  <string name="BAC_HOURS_VAR">Saa #VAR1#</string>
+  <string name="BAC_MINUTES_VAR">Dakika #VAR1#</string>
+  <string name="BAC_NO_BACKUP_FILE_EXISTS">Hakuna faili la Chelezo lililopatikana!</string>
+  <string name="BAC_ONLY_MYSQL">Moduli ya chelezo inaweza kutumiwa tu pamoja na hazinadata ya MySQL.</string>
+  <string name="BAC_OVERALL_PROGRESS">Maendeleo</string>
+  <string name="BAC_START_BACKUP">Anza mchakato wa chelezo</string>
+  <string name="BAC_SUM">Jumla</string>
+  <string name="BAC_SECONDS_VAR">Sekunde #VAR1#</string>
+  <!--Phrases only in Category-Administration-->
+  <string name="CAT_CATEGORY_EXIST">Jina la kategoria tayari lipo kwenye shirika lililochaguliwa.</string>
+  <string name="CAT_DEFAULT_VAR">Kiwango #VAR1#</string>
+  <string name="CAT_DELETE_CATEGORY">Je kweli unataka kufuta kategoria #VAR1_BOLD#?</string>
+  <string name="CAT_DONT_DELETE_CATEGORY">Haiwezekani kufuta kategoria #VAR1_BOLD# kwa sababu ya vitu #VAR2# vinavyotegemeana.</string>
+  <string name="CAT_MOVE_DOWN">Sogeza chini #VAR1#</string>
+  <string name="CAT_MOVE_UP">Sogeza juu #VAR1#</string>
+  <!--Phrases only in Datesmodule-->
+  <string name="DAT_ADD_DATE_TO_CALENDAR">Ongeza tukio kwenye kalenda</string>
+  <string name="DAT_ALL_DAY">Muda kamili</string>
+  <string name="DAT_ASSIGN_PARTICIPANTS">Ongeza washiriki</string>
+  <string name="DAT_ATTEND">Shiriki</string>
+  <string name="DAT_CALENDAR">Kalenda</string>
+  <string name="DAT_CANCEL">Sitisha</string>
+  <string name="DAT_CURRENT_DATES_OF_ORGA">Matukio ya sasa/karibuni ya mashirika #VAR1#</string>
+  <string name="DAT_DATE">Tukio</string>
+  <string name="DAT_DATES">Matukio</string>
+  <string name="DAT_DATES_DESC">Unaweza kutengeneza na kuhariri matukio hapa. Watumiaji wanaweza kujisajili kwa matukio haya.</string>
+  <string name="DAT_EDIT_CALENDAR_DESC">Hapa unaweza kutengeneza na kuhariri kalenda.</string>
+  <string name="DAT_EDIT_ROOMS">Hariri vyumba</string>
+  <string name="DAT_EDIT_ROOMS_DESC">Hapa unaweza kutengeneza na kuhariri vyumba kwa ajili ya matukio.</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Tukio limebadilishwa</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Tukio kwenye #VAR1# limebadilishwa.\n\nKichwa: #VAR2#\nTarehe: #VAR3#\nKalenda: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Eneo: #VAR1#\nChumba: #VAR2#\nWashiriki: #VAR3#\nLimebadilishwa na: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Limebadilishwa: #VAR1#</string>
+  <string name="DAT_EMAIL_NOTIFICATION_TITLE">Tukio jipya limetengenezwa</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Tukio jipya limetengenezwa #VAR1#.\n\nKichwa: #VAR2#\nTarehe: #VAR3#\nKalenda: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Eneo: #VAR1#\nChumba: #VAR2#\nWashiriki: #VAR3#\nLimetengenezwa na: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Limetengenezwa: #VAR1#</string>
+  <string name="DAT_ENABLE_ICAL">Wezesha kazi ya iCal</string>
+  <string name="DAT_EXPORT_ICAL">Eksipoti (iCal)</string>
+  <string name="DAT_HIGHLIGHT_DATE">Tarehe ya kuonyesha</string>
+  <string name="DAT_ICAL_DAYS_FUTURE">Idada ya siku za iCal kwenye siku za usoni</string>
+  <string name="DAT_ICAL_DAYS_PAST">Idadi ya siku za iCal katika siku za nyuma</string>
+  <string name="DAT_LOCATION">Eneo</string>
+  <string name="DAT_MAINTAIN_CATEGORIES_DESC">Hapa unaweza kutengeneza na kuhariri kategoria.</string>
+  <string name="DAT_MANAGE_CALENDARS">Tawala kalenda</string>
+  <string name="DAT_MAX_MEMBERS">Punguza idadi ya washiriki katika tukio hili. Tafadhali acha kisanduku wazi kwa idadi ya washiriki isiyo na kikomo.</string>
+  <string name="DAT_PARTICIPATE_AT_DATE">Jiunge kwenye tukio kama mratibu</string>
+  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Utakuwa mratibu wa tukio na utaruhusiwa kuongeza/kupunguza washiriki zaidi au kuwafanya kuwa waratibu wa ziada.</string>
+  <string name="DAT_PERIOD_FROM_TO">Kipindi cha muda kuanzia #VAR1# hadi #VAR2# </string>
+  <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Iliyopita #VAR1#</string>
+  <string name="DAT_REGISTRATION_NOT_POSSIBLE">Usajili umefungwa.</string>
+  <string name="DAT_REGISTRATION_POSSIBLE">Wezesha usajili kwa ajili ya tukio hili.</string>
+  <string name="DAT_REMOVE_APPLICATION">Je ungependa kuondoa tukio hili? Washiriki wote wataondolewa.</string>
+  <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Washiriki wanaweza kuona orodha ya washiriki</string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Washiriki wanaweza kutuma barua pepe kwa washiriki wote</string>
+  <string name="DAT_ROOM_INFORMATIONS">Taarifa za chumba</string>
+  <string name="DAT_ROOM_OVERHANG">Iwapo kuna nafasi yoyote ya ziada (Mf. nafasi za ziada za kukaa, chumba cha kusimama), idadi ya nafasi za ziada zinaweza kubainishwa hapa.</string>
+  <string name="DAT_ROOM_RESERVED">Chumba kilichochaguliwa kinatumika kwa sasa.</string>
+  <string name="DAT_ROOM_SELECTABLE">Chumba kipo</string>
+  <string name="DAT_ROOM_SELECTABLE_DESC">Kisanduku cha uchaguzi kwa vyumba vilivyopo kipo. Chagua chumba na tengeneza tukio kwa chumba kilichochaguliwa. (jibu la kiwangogezi: hapana)</string>
+  <string name="DAT_SHOW_MAP_LINK">Onesha kiunganishi kwenye ramani</string>
+  <string name="DAT_SHOW_MAP_LINK_DESC">Kama eneo limewekwa, Ramani za Google zinatumiwa kuonyesha eneo na njia kutoka eneo binafsi. (chaguo-msingi: ndiyo)</string>
+  <string name="DAT_SHOW_ON_MAP">Onesha ramani</string>
+  <string name="DAT_SHOW_PARTICIPANTS">Onesha washiriki</string>
+  <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Hamia kwenye usimamizi wa kalenda</string>
+  <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Fungua usimamizi wa chumba</string>
+  <string name="DAT_VIEW_MODE">Mwonekano-msingi</string>
+  <!--Phrases only in Downloadsmodule-->
+  <string name="DOW_CREATE_FOLDER">Tengeneza folda</string>
+  <string name="DOW_CREATE_FOLDER_DESC">Folda jipya litatengenezwa kwenye folda #VAR1_BOLD#.</string>
+  <string name="DOW_DOWNLOADS">Vipakuliwa</string>
+  <string name="DOW_EDIT_FILE">Hariri faili</string>
+  <string name="DOW_EDIT_FOLDER">Hariri folda</string>
+  <string name="DOW_EMAIL_NOTIFICATION_TITLE">Faili jipya limepakiwa</string>
+  <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Faili jipya limepakiwa kwenye#VAR1#\n\nFaili: #VAR2#\nLimepakiwa na: #VAR3#\nLimepakiwa: #VAR4# </string>
+  <string name="DOW_ENABLE_DOWNLOAD_MODULE">Inawezesha moduli ya kupakua</string>
+  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Moduli ya kupakua inaweza kuzimwa hapa. Baada ya kuzimwa haitatokeza tena kama moduli kwenye muonekano wa jumla. (chaguo-msingi: ndiyo)</string>
+  <string name="DOW_FILE_EXIST">Faili #VAR1# tayari lipo!\n\nTafadhali chagua jina tofauti la faili.</string>
+  <string name="DOW_FILE_EXTENSION_INVALID">Aina ya faili hairuhusiwi kwenye seva hii.</string>
+  <!--Phrases only in Ecardsmodule-->
+  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in Installation-->
+  <!--Phrases only in Inventorymodule-->
+  <!--Phrases only in Linkmodule-->
+  <!--Phrases only in Listsmodule-->
+  <!--Phrases only in Mailmodule-->
+  <!--Phrases only in Membersadministration-->
+  <!--Phrases only in Messagemodule-->
+  <!--Phrases only in New-User-Registration-->
+  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in Updatecheck-->
+  <!--Phrases only in Photomodule-->
+  <!--Phrases only in Profilemodule-->
+  <!--Phrases only in Relationssmodule-->
+  <!--Phrases only in Rolesmodule-->
+  <!--Phrases only in Roommodule-->
+  <!--System-Phrases for use in every module-->
+</resources>

@@ -6,7 +6,6 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-
 define('HASH_COST_BCRYPT_DEFAULT', 12);
 define('HASH_COST_BCRYPT_MIN', 10);
 define('HASH_COST_BCRYPT_MAX', 31);
@@ -347,7 +346,7 @@ class PasswordHashing
      * @param array  $options   The options to test
      * @return array Returns an array with the maximum tested cost with the required time
      */
-    public static function costBenchmark($maxTime = 0.35, $password = 'password', $algorithm = 'DEFAULT', array $options = array())
+    public static function costBenchmark($maxTime = 0.35, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => null))
     {
         global $gLogger;
 

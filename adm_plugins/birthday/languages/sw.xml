@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# atakuwa na umri wa #VAR3# ndani ya siku #VAR2#, kwenye #VAR4#</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Siku za Kuzaliwa</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Bw. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Idadi ya watumiaji wenye kumbukumbu ya siku ya kuzaliwa leo: #VAR1#</string>
+  <string name="PLG_BIRTHDAY_NO_USER">Hakuna mtumiaji mwenye kumbukumbu ya siku ya kuzaliwa leo.</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">Mtumiaji mmoja ana kumbukumbu ya siku ya kuzaliwa leo!</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# amekuwa na umriwa wa #VAR3# siku #VAR2# kabla, kwenye #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# atakuwa leo #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# atakuwa kesho na miaka #VAR3#, kwenye #VAR4#</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Bi. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# amekuwa na umri wa miaka #VAR3# jana kwenye #VAR4#</string>
+</resources>

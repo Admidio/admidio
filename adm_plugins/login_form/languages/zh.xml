@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_ACTIVE_SINCE">活跃至今</string>
+  <string name="PLG_LOGIN_HONORARY_MEMBER">荣誉会员</string>
+  <string name="PLG_LOGIN_LAST_LOGIN">上次登录</string>
+  <string name="PLG_LOGIN_NEW_ONLINE_MEMBER">新的在线会员</string>
+  <string name="PLG_LOGIN_NUMBER_OF_LOGINS">登录次数</string>
+  <string name="PLG_LOGIN_ONLINE_MEMBER">在线会员</string>
+  <string name="PLG_LOGIN_SENIOR_ONLINE_MEMBER">高级在线会员</string>
+</resources>

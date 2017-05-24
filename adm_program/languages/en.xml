@@ -36,16 +36,26 @@
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
+  <string name="DAT_ALLOW_USER_COMMENTS">Allow comments within participation</string>
+  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Participants can comment on their participation. The comments can be viewed via the participant list</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Add participants</string>
   <string name="DAT_ATTEND">Participate</string>
-  <string name="DAT_ATTEND_DATE">You confirmed your participation at #VAR1_BOLD# on #VAR2#.</string>
+  <string name="DAT_ATTEND_DATE">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
+  <string name="DAT_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#. </string>
   <string name="DAT_CALENDAR">Calendar</string>
   <string name="DAT_CANCEL">Cancel</string>
-  <string name="DAT_CANCEL_DATE">You canceled your participation at #VAR1_BOLD# on #VAR2#.</string>
+  <string name="DAT_CANCEL_DATE">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Current events of organizations #VAR1#</string>
   <string name="DAT_DATE">Event</string>
   <string name="DAT_DATES">Events</string>
   <string name="DAT_DATES_DESC">You are able to create and edit events here. Users can register for this events.</string>
+  <string name="DAT_DEADLINE">Deadline</string>
+  <string name="DAT_DEADLINE_ATTENTION">Your registration can not be changed because the given end date for registrations has been reached or the date is in the past. Please contact a leader of the event or an administrator!</string>
+  <string name="DAT_DEADLINE_DESC">Participants can register up to this date on the event. Leaders and users with permission to edit events can still assign participants. If no date value is specified, then the start date of the event is assumed as default value.</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Default configuration of participants list</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">One of the configurations given here can be set as standard configuration for the participant list on events of this organization. Participants of events are viewed with this configuration.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Here you can create and edit calendars.</string>
   <string name="DAT_EDIT_ROOMS">Edit rooms</string>
   <string name="DAT_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
@@ -59,6 +69,7 @@
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Created at: #VAR1#</string>
   <string name="DAT_ENABLE_ICAL">Enable iCal function</string>
   <string name="DAT_ENABLE_ICAL_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
+  <string name="DAT_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is the default configuration for participants lists in this organization and can not be deleted. In the module settings, select a different configuration for the default configuration and then try to delete this configuration.</string>
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
@@ -86,6 +97,8 @@
   <string name="DAT_ROOM_RESERVED">Selected room is already in use at this time.</string>
   <string name="DAT_ROOM_SELECTABLE">Room is available</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</string>
+  <string name="DAT_SAVE_ALL_CONFIRMATIONS">Save cancellations to events</string>
+  <string name="DAT_SAVE_ALL_CONFIRMATIONS_DESC">Cancellation of participants to events can be saved. The cancellations are then also displayed in the participant list. If this option is deactivated, cancellations are not saved and can not be viewed in the participant list. This option is valid from the time of the setting and can not be applied retrospectively! (Default: Yes)</string>
   <string name="DAT_SHOW_MAP_LINK">Display link to map</string>
   <string name="DAT_SHOW_MAP_LINK_DESC">If location is set, Google Maps is used to display location and route from own location. (default: yes)</string>
   <string name="DAT_SHOW_ON_MAP">Show map</string>
@@ -93,6 +106,11 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Switch to calendar management</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Open room administration</string>
   <string name="DAT_VIEW_MODE">Default view</string>
+  <string name="DAT_USER_ATTEND">I take part</string>
+  <string name="DAT_USER_TENTATIVE">I may take part</string>
+  <string name="DAT_USER_INVITED">Invited</string>
+  <string name="DAT_USER_REFUSED">Participation canceled</string>
+  <string name="DAT_USER_WILL_ATTEND">Takes part</string>
   <string name="DAT_VIEW_MODE_DESC">Display type for events. With mode #VAR1_BOLD# all event details will be displayed within a box. With mode #VAR2_BOLD# the most important event details will be displayed in a compact list. (Default: Detailed)</string>
   <string name="DAT_VIEW_MODE_DETAIL">Detailed</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
@@ -101,6 +119,7 @@
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Add to database</string>
   <string name="DOW_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
+  <string name="DOW_ADMINISTRATORS_DESC">These roles are administrators of the download module and have access to all folders and files. You can upload, download and configure access rights. A role can be set as administrator by assigning the permission #VAR1_BOLD#.</string>
   <string name="DOW_COUNTER">Counter</string>
   <string name="DOW_CREATE_FOLDER">Create folder</string>
   <string name="DOW_CREATE_FOLDER_DESC">A new folder will be created in folder #VAR1_BOLD#.</string>
@@ -138,8 +157,9 @@
   <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3MB)</string>
   <string name="DOW_NEW_FILE_NAME">New file name</string>
   <string name="DOW_NEW_NAME">New name</string>
+  <string name="DOW_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="DOW_PREVIOUS_NAME">Previous name</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can define who can view the folder #VAR1_BOLD# and download/upload files. Subfolders will inherit the permissions. Already existing permissions of subfolders will be overridden. You can only use roles with access to the parent folders. User with role right #VAR2_BOLD# always have full rights to the folder.</string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
   <string name="DOW_SELECT_FILES">Select files</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="DOW_UNMANAGED_FILES">Unmanaged files</string>
@@ -206,7 +226,6 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">An update can only be performed by an administrator. Please define the administrator credentials.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Association\'s board</string>
-  <string name="INS_CHOOSE_LANGUAGE">Choose language</string>
   <string name="INS_CONFERENCE_ROOM">Conference room</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">File #VAR1_BOLD# can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</string>
   <string name="INS_CONTINUE_INSTALLATION">Continue installation</string>
@@ -214,10 +233,21 @@
   <string name="INS_CREATE_ADMINISTRATOR">Create an administrator</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Creating configuration file</string>
   <string name="INS_DATA_FULLY_ENTERED">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</string>
+  <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">The database parameters have not been entered completely!</string>
+  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is not required</string>
+  <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
+  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
+  <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
+  <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Your database version is #VAR1#.\n\nUpdate to version #VAR2# is required</string>
-  <string name="INS_DATABASE_SYSTEM">Database system</string>
+  <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
   <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhost need a special port, you can type it here. </string>
+  <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
+  <string name="INS_DATABASE_SYSTEM">Database system</string>
+  <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
+  <string name="INS_DATABASE_USER_INVALID">The database user contains invalid characters!</string>
+  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurationen file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
@@ -225,12 +255,6 @@
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Enter the administrator\'s name, e-mail and access information. Log in with the administrator’s credentials after installation.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Data of the organization</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is not required</string>
-  <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
-  <string name="INS_DATABASE_LOGIN">Database access</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DESCRIPTION_BOARD">Administrative board of association</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</string>
   <string name="INS_DESCRIPTION_MEMBER">All organization members</string>
@@ -243,6 +267,7 @@
   <string name="INS_GOOGLE_PLUS">Google+</string>
   <string name="INS_GOOGLE_PLUS_DESC">Would you like to set a link to your Google+ profile? In order to do this, you will need your profile Google+ profile number. Log in to your Google+ account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Google+ profile directly.</string>
   <string name="INS_GROUPS">Groups</string>
+  <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
   <string name="INS_ICQ">ICQ</string>
   <string name="INS_ICQ_DESC">Enter your ICQ number here. If your status can be shown on the web (enabled in Skype), it will be displayed in your profile.</string>
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
@@ -255,12 +280,12 @@
   <string name="INS_LANGUAGE_NOT_CHOOSEN">No language has been selected.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_MESSENGER">Messenger</string>
-  <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Not all MySQL database access information has been provided!</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Could not find the current installation. If you\'ve used Admidio 1.x update to Admidio 2.x first. Afterwards you can update the version to #VAR1#. If you are already using Admidio 2.x or higher please check the consistency of your database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Provided organization name is not complete!</string>
   <string name="INS_PASSWORDS_NOT_EQUAL">The password does not match with the repetition.</string>
   <string name="INS_PHONE_LIST">Phone list</string>
+  <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
   <string name="INS_SET_ORGANIZATION">Define organization</string>
   <string name="INS_SET_UP_ORGANIZATION">Setting up organization</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Set up successful</string>
@@ -282,7 +307,7 @@
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
   <string name="INS_WARNING_SAFE_MODE">Save Mode on server is active. This can cause later problems when using certain functions.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
-  <string name="INS_WELCOME_TEXT">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</string>
+  <string name="INS_WELCOME_TEXT">This wizard will help you to set up Admidio. All necessary data is needed now, so that the system can be set up completely and you can log on as an administrator. If you have any questions or problems, feel free to contact us at #VAR1# our support forum #VAR2#.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# requires at least PHP version #VAR2#. Please try to update your PHP version or oder use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
@@ -356,12 +381,14 @@
   <string name="LST_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
   <string name="LST_CREATE_OWN_LIST">Create own list</string>
   <string name="LST_DEFAULT_CONFIGURATION">Default configuration</string>
-  <string name="LST_DEFAULT_CONFIGURATION_DESC">One of the predefined configurations here can be set to the default configuration for lists of this organization. Membership lists of roles not having a predefined  list configuration, are also displayed in this configuration.</string>
+  <string name="LST_DEFAULT_CONFIGURATION_DESC">One of the configurations given here can be set as the default configuration for lists of this organization. Member lists of roles not having a list configuration are displayed with this configuration.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
   <string name="LST_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="LST_EMAIL_TO_LIST">E-mail to list</string>
-  <string name="LST_EMPTY_EXAMPLE_DESC">Find all users with an empty address field</string>
+  <string name="LST_EMPTY_EXAMPLE_DESC">Finds all users who have not filled the Road field</string>
+  <string name="LST_ENABLE_LISTS_MODULE">Enable list module</string>
+  <string name="LST_ENABLE_LISTS_MODULE_DESC">The greeting card module can be completely deactivated or activated by this setting. If the server does not support mail delivery, the module should be deactivated. This module is generally available only to logged-in users. (Default: yes)</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">The list configuration #VAR1_BOLD# is the default configuration for lists in this organization and can not be deleted. Choose a different configuration to the standard configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
   <string name="LST_EXCLUDE_EXAMPLE_DESC">Find all users who are not named Steve</string>
@@ -380,7 +407,7 @@
   <string name="LST_LIST_VIEW">List overview</string>
   <string name="LST_MAX">of maximum. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Member assignment</string>
-  <string name="LST_MEMBER_STATUS">Member status</string>
+  <string name="LST_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="LST_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="LST_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="LST_MEMBERSHIP_END">End of membership</string>
@@ -393,12 +420,13 @@
   <string name="LST_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
   <string name="LST_NO_USER_FOUND">No member of your criteria could be found.</string>
   <string name="LST_NO_ROLE_GIVEN">No role has been specified.</string>
-  <string name="LST_NO_ROLES_REMOVED">No role has been deleted yet.\n\nDeleted roles will be displayed here only after roles have been deleted in role administration panel.</string>
   <string name="LST_NO_RIGHTS_VIEW_LIST">You are not permitted to display a list of defined roles.</string>
   <string name="LST_NOT_VALID_DATE_FORMAT">Please use a valid date as condition for field #VAR1_BOLD#.</string>
   <string name="LST_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
-  <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Find all users with a filled address field</string>
+  <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Finds all users who have filled the Road field</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Number of roles per page</string>
+  <string name="LST_PARTICIPATION_INFORMATION">Participant information</string>
+  <string name="LST_PARTICIPATION_STATUS">Participant Status</string>
   <string name="LST_PRESET_CONFIGURATION">Default configuration</string>
   <string name="LST_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="LST_PRINT_PREVIEW">Print preview</string>
@@ -422,13 +450,19 @@
   <string name="LST_SEARCH_TELEFON_DESC">Searching for users with phone number including 241 and ending with 54</string>
   <string name="LST_SEARCH_YES_NO_FIELD">yes/no field</string>
   <string name="LST_SEARCH_YES_NO_FIELD_DESC">Searching for flagged (check marked) users</string>
+  <string name="LST_SEAT_AMOUNT">Additional Seats</string>
   <string name="LST_SELECT_CONFIGURATION">Select configuration</string>
   <string name="LST_SELECT_MEMBERS">Select members</string>
+  <string name="LST_SHOW_FORMER_MEMBERS">Show former members</string>
+  <string name="LST_SHOW_FORMER_MEMBERS_DESC">This setting can be used to determine who can view former roles. The user must, however, also have the right to view the role himself. Leaders of a role may also view former members of their role, if they have permission to be set here. (Default: #VAR1#)</string>
+  <string name="LST_SHOW_FORMER_MEMBERS_ONLY">Only show former members</string>
+  <string name="LST_SHOW_FORMER_MEMBERS_RIGHT">User with permission #VAR1_BOLD#</string>
   <string name="LST_SHOW_LIST">Display list</string>
   <string name="LST_SHOW_LISTS">Display lists</string>
   <string name="LST_YOUR_CONFIGURATION">Your configuration</string>
   <string name="LST_YOUR_LAST_CONFIGURATION">Your last configuration</string>
   <string name="LST_YOUR_LISTS">Own lists</string>
+  <string name="LST_USER_CHANGED">Changed by</string>
   <string name="LST_USER_PHOTO">User picture</string>
   <string name="LST_VARIOUS_ROLES">Various roles</string>
   <string name="LST_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
@@ -657,7 +691,7 @@
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
   <string name="ORG_FIELD_DOWN">Move profile field down</string>
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
-  <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role authorization)</string>
+  <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role rights)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
   <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</string>
@@ -706,7 +740,7 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</string>
   <string name="ORG_SECONDS">seconds</string>
   <string name="ORG_SEND_PASSWORD">Send password</string>
-  <string name="ORG_SEND_PASSWORD_DESC">Forgotten and regenerated password can be requested by the users to be sent automatically to the own e-mail address. In case of deactivation, users are able to make this request to the administrator only. . (default: yes)</string>
+  <string name="ORG_SEND_PASSWORD_DESC">If the user has forgotten his/her password, he/she can automatically send a newly generated password. If this option is disabled, the user can only send a request to the administrator by e-mail, so that he can create a new password. For the password to be sent, the setting #VAR1_BOLD# must also be set. (Default: yes)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">A field is normally visible to all users. If this function is not selected, the data can only be seen by users who have the right to edit all users. In own profile, the user can see and edit the data.</string>
@@ -748,7 +782,6 @@
   <string name="UPD_NEW_BOTH">A new stable version and a new beta version are available!</string>
   <string name="UPD_NO_NEW">You are using a current #VAR1#version of Admidio!</string>
   <string name="UPD_STABLE_VERSION">Available</string>
-  <string name="UPD_TITLE">Update check</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Delete album</string>
@@ -767,6 +800,7 @@
   <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Save photo</string>
   <string name="PHO_DOWNLOAD_ENABLED">Activate download</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
+  <string name="PHP_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
   <string name="PHO_EDIT_ALBUM">Edit album</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">A new photo album was created</string>
   <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">A new photo album at #VAR1# was created.\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
@@ -826,6 +860,7 @@
   <string name="PRO_ACCEPT_NEW_PICTURE">Confirm new profile picture</string>
   <string name="PRO_ADD_USER">Add user</string>
   <string name="PRO_ADD_USER_RELATION">Create relationship</string>
+  <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
   <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
@@ -860,6 +895,7 @@
   <string name="PRO_NEW_PASSWORD">New password</string>
   <string name="PRO_NEW_PICTURE">New profile picture</string>
   <string name="PRO_NO_DEFAULT_ROLE">The role management contains no default role for new users. Please contact an administrator who can edit this setting.</string>
+  <string name="PRO_NO_PERMISSIONS_ASSIGNED">No permissions have been assigned.</string>
   <string name="PRO_NO_ROLES_VISIBLE">No roles were found. Possibly you do not have the rights to see certain roles.</string>
   <string name="PRO_PASSWORD_CHANGED">Password has been successfully changed.</string>
   <string name="PRO_PASSWORD_DESCRIPTION">Password must have at least 8 characters including numbers, letters and special characters.\n\nThe strength of your selected password will be displayed in color using a bar. The minimum required strength is indicated by the arrow in the bar.</string>
@@ -898,6 +934,8 @@
   <string name="PRO_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="PRO_YEARS">Years</string>
   <!--Phrases only in Relationssmodule-->
+  <string name="REL_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
+  <string name="REL_EDIT_USER_IN_RELATION">Edit user profile of this relationship</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">No relationship types exists. Relationship types can be created in the user management.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrical</string>
   <string name="REL_USER_RELATION_TYPE_BACKWARD">Backward</string>
@@ -921,13 +959,13 @@
   <string name="ROL_DEFAULT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="ROL_DEPENDENCIES">Dependencies</string>
   <string name="ROL_DEPENDENT">Dependent</string>
+  <string name="ROL_DISABLE_ROLE">Turn off the role</string>
+  <string name="ROL_DISABLE_ROLE_DESC">If you select #VAR1_BOLD#, the role and all member mappings will be permanently removed from the database, and can not been seen anymore.</string>
   <string name="ROL_EDIT_ROLE">Edit role</string>
   <string name="ROL_ENABLE_ROLE">Activate role</string>
-  <string name="ROL_HINT_DELETE_ROLE">If you select #VAR1_BOLD# the role and the assignment of members to it will definitely be deleted in the database. It will not be possible to show data of this role anymore.</string>
+  <string name="ROL_ENABLE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selctable in all lists.\n\nDo you want to re-activate the roles?</string>
   <string name="ROL_INACTIV_ROLE">Inactive role</string>
-  <string name="ROL_INACTIV_ROLE_DESC">You are able to deactivate the role. This way, membership information will be preserved and later it will be still possible to check who was a member of the current role. However this role will not appear anymore in general overviews.</string>
   <string name="ROL_INACTIV_ROLES">Inactive roles</string>
-  <string name="ROL_INVISIBLE_ROLES">Invisible roles</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Head of this role have no special rights. They will be highlighted in list views only.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Head of this role can edit profile data of all role members.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Head of this role can add new role members or remove existing members.</string>
@@ -965,12 +1003,12 @@
   <string name="ROL_ROLE_ADMINISTRATION">Role administration</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</string>
   <string name="ROL_ROLE_DELETE">Deleting role</string>
-  <string name="ROL_ROLE_DELETE_DESC">Would you like to delete role #VAR1# ?\n\nAll memberships are going to be deleted as well.</string>
+  <string name="ROL_ROLE_DELETE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\All memberships will also be removed.</string>
   <string name="ROL_ROLE_DEPENDENCIES">A member of a dependent role will become automatically a member of #VAR1#!\n\nWhen this dependency is set all existing members of the dependent role will become a member of #VAR1#. When a dependency is going to be deleted, memberships will remain the same!</string>
   <string name="ROL_ROLE_MEMBERSHIPS">Role memberships</string>
   <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Change role memberships</string>
   <string name="ROL_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
-  <string name="ROL_ROLE_SET_MODE">Role #VAR1_BOLD# has been changed to #VAR2_BOLD#.</string>
+  <string name="ROL_ROLES_CONFIRMATION_OF_PARTICIPATION">Roles - Confirmation of attendance</string>
   <string name="ROL_SAVE_ROLES">Saving this settings might cause loosing of role configured dependencies.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Display role memberships</string>
   <string name="ROL_SEMIYEARLY">Twice a year</string>
@@ -978,8 +1016,6 @@
   <string name="ROL_SEND_MAIL_MEMBERS">Logged in users are allowed to send e-mails to current role.</string>
   <string name="ROL_SEND_MAIL_ROLE">Role members of this role only are allowed to send e-mails to current role.</string>
   <string name="ROL_SEND_MAILS">Send e-mails</string>
-  <string name="ROL_SET_ROLE_INVISIBLE">Make role invisible</string>
-  <string name="ROL_SET_ROLE_VISIBLE">Make role visible</string>
   <string name="ROL_SHOW_MEMBERS">Show members</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">System-wide default list</string>
   <string name="ROL_UNIQUELY">Uniquely</string>
@@ -987,7 +1023,6 @@
   <string name="ROL_VALID_TO" description="Date valid to">Valid until</string>
   <string name="ROL_VIEW_LIST_MEMBERS">Logged in users are able to display membership lists of the current role.</string>
   <string name="ROL_VIEW_LIST_ROLE">Members of the current role only are allowed to display the membership list.</string>
-  <string name="ROL_VISIBLE_ROLES">Visible roles</string>
   <string name="ROL_WEEKDAY">Weekday</string>
   <string name="ROL_WITHOUT_LEADER">No leader</string>
   <!--Phrases only in Roommodule-->
@@ -999,7 +1034,6 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Cancel</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
-  <string name="SYS_ACTIVE">Active</string>
   <string name="SYS_ACTIVATED">Active</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
   <string name="SYS_ADDRESS">Address</string>
@@ -1008,15 +1042,14 @@
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
+  <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ASSIGN_MEMBERS">Assigning members</string>
-  <string name="SYS_AUTHORIZATION">Authorization</string>
   <string name="SYS_BACK">Back</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
-  <string name="SYS_BETA_VERSION">You are using a BETA version of Admidio.\n\nStability issues and data loss might occur. Please use this version for testing purposes only!</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Result of the calculation</string>
@@ -1044,7 +1077,6 @@
   <string name="SYS_CONDITION">Requirement</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
-  <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Confirm participation</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
   <string name="SYS_CONTENT">Content</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
@@ -1105,6 +1137,7 @@
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
+  <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
   <string name="SYS_EXAMPLE">Example</string>
   <string name="SYS_EXAMPLES">Examples</string>
   <string name="SYS_FADE_IN">Fade in</string>
@@ -1136,23 +1169,22 @@
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FULL_SCREEN">Full screen</string>
   <string name="SYS_GENDER">Gender</string>
-  <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occured while generating a random string.</string>
-  <string name="SYS_GEN_RANDOM_FAIL">The program cannot generate a random string.</string>
+  <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
+  <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HELP">Help</string>
   <string name="SYS_HIDE">Hide</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
+  <string name="SYS_HOST">Host</string>
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Important</string>
-  <string name="SYS_INACTIVE">Inactive</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is being used as a specific identifier of a field. In terms of the program usage, however, it is irrelevant. During software development this name has to be taken in order to be able to use the getValue method. The internal name will be filled in automatically during creation of a field.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
-  <string name="SYS_INVISIBLE">Invisible</string>
   <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Item name</string>
@@ -1175,7 +1207,6 @@
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login credentials were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
-  <string name="SYS_LOGIN_SUCCESSFUL">Signing in was successful.</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">You already signed in. Therefore you must already have the correct password!</string>
@@ -1242,6 +1273,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please type in, your user name or e-mail address used for registration in the system. The new password will be sent immediately to the registred e-mail address.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PERIOD">Time period</string>
+  <string name="SYS_PERMISSIONS">Permissions</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PHONE">Phone</string>
   <string name="SYS_PHONE_INVALID_CHAR">The phone number in the field #VAR1_BOLD# has invalid characters.\n\nAllowed are only numbers 0-9 and the special characters +-/ ().</string>
@@ -1293,7 +1325,6 @@
   <string name="SYS_SAVE">Save</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
   <string name="SYS_SECONDS">Seconds</string>
-  <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SEND">Send</string>
@@ -1303,7 +1334,6 @@
   <string name="SYS_SENDER">Sender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
-  <string name="SYS_SET_BY">Set by</string>
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_PROFILE">Show profile</string>
@@ -1317,6 +1347,7 @@
   <string name="SYS_STATUS_CODE_INVALID">Invalid Status Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
   <string name="SYS_STOP">Stop</string>
+  <string name="SYS_STREET">Street</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nGreetings,\nThe administrators</string>
