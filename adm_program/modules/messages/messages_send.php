@@ -91,7 +91,7 @@ if ($getMsgType === 'EMAIL' && (bool) $gPreferences['enable_mail_module'] === fa
 }
 
 $sendResult = false;
-$userId = (int) $gCurrentUser->getValue('usr_id');
+$currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // if message is EMAIL then check the parameters
 if ($getMsgType === 'EMAIL')
@@ -126,7 +126,7 @@ if ($getMsgType === 'EMAIL')
 }
 
 // if user is logged in then show sender name and email
-if ($userId > 0)
+if ($currUsrId > 0)
 {
     $postName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
     if (!strValidCharacters($postFrom, 'email'))
@@ -149,7 +149,7 @@ else
 }
 
 // if no User is set, he is not able to ask for delivery confirmation
-if (!($userId > 0 && (int) $gPreferences['mail_delivery_confirmation'] === 2)
+if (!($currUsrId > 0 && (int) $gPreferences['mail_delivery_confirmation'] === 2)
 &&  (int) $gPreferences['mail_delivery_confirmation'] !== 1)
 {
     $postDeliveryConfirmation = false;
@@ -260,8 +260,8 @@ if ($getMsgType === 'EMAIL')
                 if ($gValidLogin)
                 {
                     $sql .= '
-                        AND usr_id <> ? -- $userId';
-                    $queryParams[] = $userId;
+                        AND usr_id <> ? -- $currUsrId';
+                    $queryParams[] = $currUsrId;
                 }
                 $statement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -509,7 +509,7 @@ else
         $pmId = 1;
 
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', \''.$userId.'\', \''.$postTo[0].'\', CURRENT_TIMESTAMP, \'1\')';
+                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', \''.$currUsrId.'\', \''.$postTo[0].'\', CURRENT_TIMESTAMP, \'1\')';
 
         $gDb->query($sql); // TODO add more params
         $getMsgId = $gDb->lastInsertId();
@@ -519,14 +519,14 @@ else
         $pmId = $message->countMessageParts() + 1;
 
         $sql = 'UPDATE '. TBL_MESSAGES. '
-                   SET msg_read = \'1\', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = \''.$userId.'\', msg_usr_id_receiver = \''.$postTo[0].'\'
+                   SET msg_read = \'1\', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = \''.$currUsrId.'\', msg_usr_id_receiver = \''.$postTo[0].'\'
                  WHERE msg_id = '.$getMsgId;
 
         $gDb->query($sql); // TODO add more params
     }
 
     $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (\''.$getMsgId.'\', \''.$pmId.'\', \''.$userId.'\', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
+            VALUES (\''.$getMsgId.'\', \''.$pmId.'\', \''.$currUsrId.'\', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
     if ($gDb->query($sql)) // TODO add more params
     {
@@ -541,13 +541,13 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
     if ($getMsgType === 'EMAIL' && $gValidLogin)
     {
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$userId.', \''.$receiverString.'\', CURRENT_TIMESTAMP, 0)';
+                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$currUsrId.', \''.$receiverString.'\', CURRENT_TIMESTAMP, 0)';
 
         $gDb->query($sql); // TODO add more params
         $getMsgId = $gDb->lastInsertId();
 
         $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-                VALUES ('.$getMsgId.', 1, '.$userId.', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
+                VALUES ('.$getMsgId.', 1, '.$currUsrId.', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
         $gDb->query($sql); // TODO add more params
     }

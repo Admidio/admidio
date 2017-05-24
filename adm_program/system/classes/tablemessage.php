@@ -148,21 +148,21 @@ class TableMessage extends TableAccess
         }
         else
         {
-            $usrId = (int) $gCurrentUser->getValue('usr_id');
+            $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
             $other = (int) $this->getValue('msg_usr_id_sender');
-            if ($other === $usrId)
+            if ($other === $currUsrId)
             {
                 $other = (int) $this->getValue('msg_usr_id_receiver');
             }
 
             $sql = 'UPDATE '.TBL_MESSAGES.'
                        SET msg_read = 2,
-                           msg_usr_id_sender   = ?, -- $usrId
+                           msg_usr_id_sender   = ?, -- $currUsrId
                            msg_usr_id_receiver = ?, -- $other
                            msg_timestamp = CURRENT_TIMESTAMP
                      WHERE msg_id = ? -- $msgId';
-            $this->db->queryPrepared($sql, array($usrId, $other, $msgId));
+            $this->db->queryPrepared($sql, array($currUsrId, $other, $msgId));
         }
 
         $this->db->endTransaction();

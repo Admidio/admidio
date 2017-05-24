@@ -73,11 +73,11 @@ function getFieldCode($fieldNameIntern, User $user)
 
 unset($_SESSION['profile_request']);
 
-$userId     = (int) $user->getValue('usr_id');
-$currUserId = (int) $gCurrentUser->getValue('usr_id');
+$userId    = (int) $user->getValue('usr_id');
+$currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // set headline
-if($userId === $currUserId)
+if($userId === $currUsrId)
 {
     $headline = $gL10n->get('PRO_MY_PROFILE');
 }
@@ -223,7 +223,7 @@ if($gCurrentUser->hasRightEditProfile($user))
 }
 
 // Password of own user could be changed
-if($userId === $currUserId)
+if($userId === $currUsrId)
 {
     $profileMenu->addItem('menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
                         $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
@@ -310,7 +310,7 @@ $page->addHtml('
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
-                if ($userId !== $currUserId && $gPreferences['enable_pm_module'] == 1)
+                if ($userId !== $currUsrId && $gPreferences['enable_pm_module'] == 1)
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
                         '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
@@ -409,7 +409,7 @@ $page->addHtml('
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
-                                    if($userId !== $currUserId)
+                                    if($userId !== $currUsrId)
                                     {
                                         $htmlAddress .= ' - <a href="'.$routeUrl.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
