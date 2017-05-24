@@ -134,14 +134,8 @@ foreach($gProfileFields->mProfileFields as $field)
     $postId    = 'usf-'. $field->getValue('usf_id');
     $showField = false;
 
-    // within a fast registration only show mandatory fields and always show the email because without email Admidio couldn't be used
-    if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
-    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
-    {
-        $showField = true;
-    }
-    // within a complete registration show all profile fields
-    elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
+    // at registration check if the field is enabled for registration
+    if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
     {
         $showField = true;
     }
@@ -159,15 +153,6 @@ foreach($gProfileFields->mProfileFields as $field)
     {
         if(isset($_POST[$postId]))
         {
-            // at registration check if the field is enabled for registration
-            if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
-            {
-                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-                // => EXIT
-            }
-
-            // TODO check if current user is allowed to view the category of that fields
-
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
             if((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)
