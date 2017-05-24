@@ -260,15 +260,11 @@ class ComponentUpdate extends Component
             $rowId = (int) $row['org_id'];
 
             $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                    VALUES (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',   0, 1, 0, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW
-                         , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\',0, 0, 0, 2, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+                    VALUES (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW
+                         , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 0, 2, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
             $params = array(
-                $rowId,
-                $systemUserId,
-                DATETIME_NOW,
-                $rowId,
-                $systemUserId,
-                DATETIME_NOW
+                $rowId, $systemUserId, DATETIME_NOW,
+                $rowId, $systemUserId, DATETIME_NOW
             );
             $this->db->queryPrepared($sql, $params);
 
@@ -277,9 +273,9 @@ class ComponentUpdate extends Component
                                            FROM '.TBL_CATEGORIES.'
                                           WHERE cat_type = \'ANN\'
                                             AND cat_name_intern = \'COMMON\'
-                                            AND cat_org_id = ? ) -- $row[org_id]
+                                            AND cat_org_id = ? ) -- $rowId
                      WHERE ann_org_id = ? -- $rowId';
-            $this->db->queryPrepared($sql, array($rowId, $row['org_id']));
+            $this->db->queryPrepared($sql, array($rowId, $rowId));
         }
     }
 
