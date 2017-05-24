@@ -75,7 +75,7 @@ if(isset($_SESSION['dates_request']))
     $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility
-    if(isset($_SESSION['dates_request']['adm_event_participation_right']))
+    if(isset($_SESSION['dates_request']['adm_event_participation_right']) && $_SESSION['dates_request']['adm_event_participation_right'] !== '')
     {
         $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
     }
