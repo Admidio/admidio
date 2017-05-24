@@ -100,7 +100,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0))
     {
         $_SESSION['dates_request']['adm_event_participation_right'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PARTICIPANTS')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR')));
         // => EXIT
     }
 

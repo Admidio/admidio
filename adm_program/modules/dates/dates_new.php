@@ -331,7 +331,7 @@ $sqlDataView = array(
 
 // show selectbox with all assigned roles
 $form->addSelectBoxFromSql(
-    'adm_event_participation_right', $gL10n->get('SYS_PARTICIPANTS'), $gDb, $sqlDataView,
+    'adm_event_participation_right', $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'), $gDb, $sqlDataView,
     array(
         'defaultValue' => $roleViewSet,
         'multiselect'  => true

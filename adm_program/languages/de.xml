@@ -88,6 +88,7 @@
     <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
     <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
     <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
+    <string name="DAT_REGISTRATION_POSSIBLE_FOR">Anmeldung möglich für</string>
     <string name="DAT_REGISTRATION_NOT_POSSIBLE">Keine Anmeldung mehr möglich.</string>
     <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
     <string name="DAT_REMOVE_APPLICATION">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
