@@ -306,7 +306,7 @@ elseif (!isset($messageStatement))
     {
         // usr_id was committed then write email to this user
         $preloadData = $getUserId;
-        $sqlUserIds  = ' AND usr_id = '.$getUserId;
+        $sqlUserIds  = ' AND usr_id = ? -- $getUserId';
     }
     elseif ($getRoleId > 0)
     {
