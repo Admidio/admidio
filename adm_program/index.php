@@ -44,7 +44,7 @@ else
     $mainMenu->addItem('adm_menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php',
                        $gL10n->get('SYS_LOGIN'), 'key.png');
 
-    if($gPreferences['registration_mode'] > 0)
+    if($gPreferences['registration_enable_module'] == 1)
     {
         // show registration link
         $mainMenu->addItem('adm_menu_item_registration',
@@ -141,7 +141,7 @@ if($gCurrentUser->isAdministrator() || $gCurrentUser->manageRoles()
 {
     $adminMenu = new Menu('index_administration', $gL10n->get('SYS_ADMINISTRATION'));
 
-    if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+    if($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
     {
         $adminMenu->addItem('newreg', FOLDER_MODULES . '/registration/registration.php',
                             $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations_big.png',

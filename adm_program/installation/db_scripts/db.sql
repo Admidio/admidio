@@ -725,6 +725,7 @@ create table %PREFIX%_user_fields
     usf_disabled                boolean             not null    default '0',
     usf_hidden                  boolean             not null    default '0',
     usf_mandatory               boolean             not null    default '0',
+    usf_registration            boolean             not null    default '0',
     usf_sequence                smallint            not null,
     usf_usr_id_create           integer unsigned,
     usf_timestamp_create        timestamp           not null    default CURRENT_TIMESTAMP,

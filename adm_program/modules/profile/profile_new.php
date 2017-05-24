@@ -109,7 +109,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_mode'] == 0)
+        if($gPreferences['registration_enable_module'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -167,14 +167,8 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     $showField = false;
 
-    // within a fast registration only show mandatory fields and always show the email because without email Admidio couldn't be used
-    if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
-    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
-    {
-        $showField = true;
-    }
-    // within a complete registration show all profile fields
-    elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
+    // at registration check if the field is enabled for registration
+    if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
     {
         $showField = true;
     }

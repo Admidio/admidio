@@ -96,7 +96,7 @@
                     {
                         $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
-                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                        if($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
                         {
                             $adminMenu->addItem('newreg', FOLDER_MODULES . '/registration/registration.php',
                                                 $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations.png');
