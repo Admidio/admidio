@@ -683,7 +683,7 @@
     <string name="ORG_EMAIL_ALERTS_DESC">Mitglieder aller Rollen mit der Berechtigung #VAR1_BOLD# erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</string>
     <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
     <string name="ORG_ENABLE_REGISTRATION_MODULE">Registrierung aktivieren</string>
-    <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. (Standard: ja)</string>
+    <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. Welche Profilfelder bei der Registrierung angezeigt werden, kann in den Profilfeld-Einstellungen je Feld konfiguriert werden. (Standard: ja)</string>
     <string name="ORG_ENABLE_RSS_FEEDS">Web-Feeds aktivieren</string>
     <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kann Web-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</string>
     <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
