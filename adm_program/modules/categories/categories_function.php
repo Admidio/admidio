@@ -115,14 +115,14 @@ if($getMode === 1)
     && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() === 1))
     || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS'))
     {
-        $category->setValue('cat_org_id', '0');
-        $sqlSearchOrga = ' AND (  cat_org_id  = '. $currOrgId. '
+        $category->setValue('cat_org_id', 0);
+        $sqlSearchOrga = ' AND (  cat_org_id = ? -- $currOrgId
                                OR cat_org_id IS NULL )';
     }
     else
     {
         $category->setValue('cat_org_id', $currOrgId);
-        $sqlSearchOrga = ' AND cat_org_id  = '. $currOrgId;
+        $sqlSearchOrga = ' AND cat_org_id = ? -- $currOrgId';
     }
 
     if($category->getValue('cat_name') !== $_POST['cat_name'])
