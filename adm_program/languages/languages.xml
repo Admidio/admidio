@@ -41,6 +41,10 @@
         <name>Portuguese - Português</name>
     </language>
     <language>
+        <isocode>es</isocode>
+        <name>Spanish - Español</name>
+    </language>
+    <language>
         <isocode>sw</isocode>
         <name>Swahili - Kiswahili</name>
     </language>
