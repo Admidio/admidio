@@ -109,8 +109,6 @@
  *                          [cat_name_intern] => COMMON
  *                          [42] => Allgemein
  *                          [cat_name] => Allgemein
- *                          [43] => 0
- *                          [cat_hidden] => 0
  *                          [44] => 0
  *                          [cat_system] => 0
  *                          [45] => 0
@@ -252,7 +250,7 @@ class ModuleLists extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gValidLogin, $gDb;
+        global $gCurrentOrganization, $gPreferences, $gDb;
 
         // Parameter
         if($limit === null)
@@ -263,12 +261,6 @@ class ModuleLists extends Modules
 
         // assemble conditions
         $sqlConditions = $this->getCategorySql().$this->getVisibleRolesSql();
-
-        // provoke empty result for not logged in users
-        if(!$gValidLogin)
-        {
-            $sqlConditions .= ' AND cat_hidden = 0 ';
-        }
 
         $sql = 'SELECT rol.*, cat.*,
                        (SELECT COUNT(*) AS count
@@ -321,15 +313,10 @@ class ModuleLists extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gValidLogin, $gDb;
+        global $gCurrentOrganization, $gDb;
 
         // assemble conditions
         $sqlConditions = $this->getCategorySql() . $this->getVisibleRolesSql();
-        // provoke empty result for not logged in users
-        if(!$gValidLogin)
-        {
-            $sqlConditions = ' AND cat_hidden = 0 ';
-        }
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ROLES.' AS rol

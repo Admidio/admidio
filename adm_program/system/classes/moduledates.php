@@ -33,8 +33,6 @@
  *                     [cat_name_intern] => COMMON
  *                     [4] => Allgemein
  *                     [cat_name] => Allgemein
- *                     [5] => 0
- *                     [cat_hidden] => 0
  *                     [6] => 0
  *                     [cat_system] => 0
  *                     [7] => 0
@@ -173,20 +171,22 @@ class ModuleDates extends Modules
                                   cha_username.usr_login_name AS change_name ';
         }
 
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state, mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additionalFields . '
-                  FROM ' . TBL_DATE_ROLE . ' AS dtr
-            INNER JOIN ' . TBL_DATES . ' AS dat
-                    ON dat_id = dtr_dat_id
+        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state,
+                       mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additionalFields . '
+                  FROM ' . TBL_DATES . ' AS dat
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
                        ' . $this->sqlAdditionalTablesGet('data') . '
              LEFT JOIN ' . TBL_MEMBERS . ' AS mem
                     ON mem.mem_rol_id = dat_rol_id
-                   AND mem.mem_usr_id = ' . $gCurrentUser->getValue('usr_id') . '
-                   AND mem.mem_begin <= \'' . DATE_NOW . '\'
-                   AND mem.mem_end    > \'' . DATE_NOW . '\'
-                 WHERE (  cat_org_id = ' . $gCurrentOrganization->getValue('org_id') . '
+                   AND mem.mem_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                   AND mem.mem_begin <= ? -- DATE_NOW
+                   AND mem.mem_end    > ? -- DATE_NOW
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR  (   dat_global = 1
                            AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
                            )
@@ -204,7 +204,16 @@ class ModuleDates extends Modules
             $sql .= ' OFFSET ' . $startElement;
         }
 
-        $datesStatement = $gDb->query($sql); // TODO add more params
+        $queryParams = array_merge(
+            array(
+                (int) $gCurrentUser->getValue('usr_id'),
+                DATE_NOW,
+                DATE_NOW
+            ),
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        );
+        $datesStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
         // array for results
         return array(
@@ -254,30 +263,32 @@ class ModuleDates extends Modules
      */
     public function getDataSetCount()
     {
-        if ($this->id === 0)
+        global $gDb, $gCurrentOrganization, $gCurrentUser;
+
+        if ($this->id > 0)
         {
-            global $gDb, $gCurrentOrganization;
-
-            $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
-                      FROM ' . TBL_DATE_ROLE . '
-                INNER JOIN ' . TBL_DATES . '
-                        ON dat_id = dtr_dat_id
-                INNER JOIN ' . TBL_CATEGORIES . '
-                        ON cat_id = dat_cat_id
-                           ' . $this->sqlAdditionalTablesGet('count') . '
-                     WHERE ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                           OR  (   dat_global = 1
-                               AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
-                               )
-                           )'
-                           . $this->getSqlConditions();
-
-            $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
-
-            return (int) $statement->fetchColumn();
+            return 1;
         }
 
-        return 1;
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+
+        $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
+                  FROM ' . TBL_DATES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = dat_cat_id
+                       ' . $this->sqlAdditionalTablesGet('count') . '
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                   AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR  (   dat_global = 1
+                           AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
+                           )
+                       )'
+                       . $this->getSqlConditions();
+
+        $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));
+        $statement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
+
+        return (int) $statement->fetchColumn();
     }
 
     /**
@@ -376,36 +387,39 @@ class ModuleDates extends Modules
     {
         global $gPreferences, $gProfileFields;
 
-        $additionalTables = '';
-
-        if ($type === 'data')
+        if ($type !== 'data')
         {
-            if ($gPreferences['system_show_create_edit'] == 1)
-            {
-                // Tables for showing firstname and lastname of create and last change user
-                $additionalTables = '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
-                           ON cre_surname.usd_usr_id = dat_usr_id_create
-                          AND cre_surname.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
-                           ON cre_firstname.usd_usr_id = dat_usr_id_create
-                          AND cre_firstname.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cha_surname
-                           ON cha_surname.usd_usr_id = dat_usr_id_change
-                          AND cha_surname.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                    LEFT JOIN ' . TBL_USER_DATA . ' AS cha_firstname
-                           ON cha_firstname.usd_usr_id = dat_usr_id_change
-                          AND cha_firstname.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
-            }
-            else
-            {
-                // Tables for showing username of create and last change user
-                $additionalTables = '
-                    LEFT JOIN '. TBL_USERS .' AS cre_username
-                           ON cre_username.usr_id = dat_usr_id_create
-                    LEFT JOIN '. TBL_USERS .' AS cha_username
-                           ON cha_username.usr_id = dat_usr_id_change ';
-            }
+            return '';
+        }
+
+        if ($gPreferences['system_show_create_edit'] == 1)
+        {
+            $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
+            $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+
+            // Tables for showing firstname and lastname of create and last change user
+            $additionalTables = '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cre_surname
+                       ON cre_surname.usd_usr_id = dat_usr_id_create
+                      AND cre_surname.usd_usf_id = ' . $lastNameUsfId . '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cre_firstname
+                       ON cre_firstname.usd_usr_id = dat_usr_id_create
+                      AND cre_firstname.usd_usf_id = ' . $firstNameUsfId . '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cha_surname
+                       ON cha_surname.usd_usr_id = dat_usr_id_change
+                      AND cha_surname.usd_usf_id = ' . $lastNameUsfId . '
+                LEFT JOIN ' . TBL_USER_DATA . ' AS cha_firstname
+                       ON cha_firstname.usd_usr_id = dat_usr_id_change
+                      AND cha_firstname.usd_usf_id = ' . $firstNameUsfId;
+        }
+        else
+        {
+            // Tables for showing username of create and last change user
+            $additionalTables = '
+                LEFT JOIN '. TBL_USERS .' AS cre_username
+                       ON cre_username.usr_id = dat_usr_id_create
+                LEFT JOIN '. TBL_USERS .' AS cha_username
+                       ON cha_username.usr_id = dat_usr_id_change ';
         }
 
         return $additionalTables;
@@ -417,17 +431,11 @@ class ModuleDates extends Modules
      */
     private function getSqlConditions()
     {
-        global $gValidLogin, $gCurrentUser;
+        global $gCurrentUser;
 
         $sqlConditions = '';
 
-        // if user isn't logged in, then don't show hidden categories
-        if (!$gValidLogin)
-        {
-            $sqlConditions .= ' AND cat_hidden = 0 ';
-        }
-
-        $id = $this->getParameter('id');
+        $id = (int) $this->getParameter('id');
         // In case ID was permitted and user has rights
         if ($id > 0)
         {
@@ -445,11 +453,12 @@ class ModuleDates extends Modules
             $sqlConditions .= ' AND dat_begin <= \'' . $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59\'
                                 AND dat_end   >  \'' . $this->getParameter('dateStartFormatEnglish') . ' 00:00:00\' ';
 
+            $catId = (int) $this->getParameter('cat_id');
             // show all events from category
-            if ($this->getParameter('cat_id') > 0)
+            if ($catId > 0)
             {
                 // show all events from category
-                $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
+                $sqlConditions .= ' AND cat_id = ' . $catId;
             }
         }
 
@@ -457,34 +466,30 @@ class ModuleDates extends Modules
         // add conditions for role permission
         if ($currUsrId > 0)
         {
-            $subSelect = '(SELECT mem_rol_id
-                             FROM ' . TBL_MEMBERS . ' AS mem2
-                            WHERE mem2.mem_usr_id = ' . $currUsrId . '
-                              AND mem2.mem_begin <= dat_begin
-                              AND mem2.mem_end   >= dat_end)';
             switch ($this->getParameter('show'))
             {
-                case 'all':
-                    $sqlConditions .= '
-                        AND (  dtr_rol_id IS NULL
-                            OR dtr_rol_id IN ' . $subSelect . ' ) ';
-                    break;
                 case 'maybe_participate':
                     $sqlConditions .= '
                         AND dat_rol_id IS NOT NULL
-                        AND (  dtr_rol_id IS NULL
-                            OR dtr_rol_id IN ' . $subSelect . ' ) ';
+                        AND EXISTS (SELECT 1
+                                      FROM '. TBL_ROLES_RIGHTS .'
+                                INNER JOIN '. TBL_ROLES_RIGHTS_DATA .'
+                                        ON rrd_ror_id = ror_id
+                                     WHERE ror_name_intern = \'event_participation\'
+                                       AND rrd_object_id = dat_id
+                                       AND rrd_rol_id IN ('.implode(',', $gCurrentUser->getRoleMemberships()).')) ';
                     break;
+
                 case 'only_participate':
                     $sqlConditions .= '
                         AND dat_rol_id IS NOT NULL
-                        AND dat_rol_id IN ' . $subSelect;
+                        AND dat_rol_id IN (SELECT mem_rol_id
+                                             FROM ' . TBL_MEMBERS . ' AS mem2
+                                            WHERE mem2.mem_usr_id = ' . $currUsrId . '
+                                              AND mem2.mem_begin <= dat_begin
+                                              AND mem2.mem_end   >= dat_end) ';
                     break;
             }
-        }
-        else
-        {
-            $sqlConditions .= ' AND dtr_rol_id IS NULL ';
         }
 
         return $sqlConditions;

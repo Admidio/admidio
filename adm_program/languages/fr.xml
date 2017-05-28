@@ -69,7 +69,7 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Ouvrir la gestion des agendas</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Ouvrir l\'administration de la salle</string>
   <string name="DAT_VIEW_MODE">Affichage par défaut</string>
-  <string name="DAT_VISIBLE_TO">Visible pour</string>
+  <string name="SYS_VISIBLE_FOR">Visible pour</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
   <string name="DOW_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas importé dans la base de données. Ajoutez-les ici. Les droits d\'accès seront copiés du dossier sélectionné.</string>

@@ -94,6 +94,11 @@ class TableCategory extends TableAccess
             throw new AdmException('CAT_DONT_DELETE_CATEGORY', $this->getValue('cat_name'), $this->getNumberElements());
         }
 
+        // delete all roles assignments that have the right to view this category
+        $categoryViewRoles = new RolesRights($this->db, 'category_view', $this->getValue('cat_id'));
+        $categoryViewRoles->delete();
+
+        // now delete category
         $return = parent::delete();
 
         $this->db->endTransaction();

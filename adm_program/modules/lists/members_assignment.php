@@ -279,16 +279,38 @@ else
         '<img class="admidio-icon-info"
             src="'. THEME_URL. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
             title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
-        $gL10n->get('SYS_MEMBER'),
-        $gL10n->get('SYS_LASTNAME'),
-        $gL10n->get('SYS_FIRSTNAME'),
-        '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/map.png"
-            alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
-        $gL10n->get('SYS_BIRTHDAY'),
-        $htmlLeaderColumn);
+        $gL10n->get('SYS_MEMBER'));
+    $columnAlignment = array('left', 'left');
+
+    if($gProfileFields->visible('LAST_NAME', $gCurrentUser->editUsers()))
+    {
+        $columnHeading[] = $gL10n->get('SYS_LASTNAME');
+        $columnAlignment[] = 'left';
+    }
+    if($gProfileFields->visible('FIRST_NAME', $gCurrentUser->editUsers()))
+    {
+        $columnHeading[] = $gL10n->get('SYS_FIRSTNAME');
+        $columnAlignment[] = 'left';
+    }
+    if($gProfileFields->visible('STREET', $gCurrentUser->editUsers())
+    || $gProfileFields->visible('POSTCODE', $gCurrentUser->editUsers())
+    || $gProfileFields->visible('CITY', $gCurrentUser->editUsers())
+    || $gProfileFields->visible('COUNTRY', $gCurrentUser->editUsers()))
+    {
+        $columnHeading[] = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/map.png"
+                                alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />';
+        $columnAlignment[] = 'left';
+    }
+    if($gProfileFields->visible('BIRTHDAY', $gCurrentUser->editUsers()))
+    {
+        $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
+        $columnAlignment[] = 'left';
+    }
+    $columnHeading[] = $htmlLeaderColumn;
+    $columnAlignment[] = 'left';
 
     $table->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment_data.php?rol_id='.$getRoleId.'&filter_rol_id='.$getFilterRoleId.'&mem_show_all='.$getMembersShowAll);
-    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left'));
+    $table->setColumnAlignByArray($columnAlignment);
     $table->addRowHeadingByArray($columnHeading);
 
     $page->addHtml($table->show());

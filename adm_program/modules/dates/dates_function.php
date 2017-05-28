@@ -77,7 +77,7 @@ if($getDateId > 0)
     $date->readDataById($getDateId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if(!$date->editRight())
+    if(!$date->editable())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -89,8 +89,20 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     $_SESSION['dates_request'] = $_POST;
 
     // ------------------------------------------------
-    // pruefen ob alle notwendigen Felder gefuellt sind
+    // check if all necessary fields are filled
     // ------------------------------------------------
+
+    if(!isset($_POST['date_registration_possible']))
+    {
+        $_POST['date_registration_possible'] = 0;
+    }
+    if($_POST['date_registration_possible'] == 1
+    && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0))
+    {
+        $_SESSION['dates_request']['adm_event_participation_right'] = '';
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR')));
+        // => EXIT
+    }
 
     if(strlen($_POST['dat_headline']) === 0)
     {
@@ -134,13 +146,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     else
     {
         $date->setValue('dat_all_day', 0);
-    }
-
-    if(!isset($_POST['date_roles']) || array_count_values($_POST['date_roles']) == 0)
-    {
-        $_SESSION['dates_request']['date_roles'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
-        // => EXIT
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
@@ -229,10 +234,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         $_POST['dat_all_day'] = 0;
     }
-    if(!isset($_POST['date_registration_possible']))
-    {
-        $_POST['date_registration_possible'] = 0;
-    }
     if(!isset($_POST['dat_room_id']))
     {
         $_POST['dat_room_id'] = 0;
@@ -293,6 +294,21 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $date->setValue('dat_deadline', null);
     }
 
+    if(isset($_POST['adm_event_participation_right']))
+    {
+        // save changed roles rights of the category
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
+
+        // if roles for visibility are assigned to the category than check if the assigned roles of event particiaption
+        // are within the visibility roles set otherwise show error
+        if(count($rightCategoryView->getRolesIds()) > 0
+        && count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
+        {
+            $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
+            // => EXIT
+        }
+    }
+
     // make html in description secure
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
 
@@ -351,11 +367,18 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // now save array with all roles that should see this event to date object
-    $date->setVisibleRoles(array_map('intval', $_POST['date_roles']));
+    $gDb->startTransaction();
 
     // save event in database
     $returnCode = $date->save();
+
+    if(isset($_POST['adm_event_participation_right']))
+    {
+
+        // save changed roles rights of the category
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
+    }
 
     if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
     {
@@ -480,7 +503,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $returnCode2 = $role->save();
         if($returnCode < 0 || $returnCode2 < 0)
         {
-            $date->delete();
+            $gDb->rollback();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -490,7 +513,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $returnCode = $date->save();
         if($returnCode < 0)
         {
-            $role->delete();
+            $gDb->rollback();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -548,6 +571,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $member->save();
     }
 
+    $gDb->endTransaction();
+
     unset($_SESSION['dates_request']);
     $gNavigation->deleteLastUrl();
 
@@ -593,10 +618,11 @@ if (in_array($getMode, array(3, 4, 7), true))
     $member = new TableMembers($gDb);
 
     // Check participation deadline and update user inputs if possible
-    if (!$date->deadlineExceeded())
+    if ($date->allowedToParticipate() && !$date->deadlineExceeded())
     {
         $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
+
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)
         {

@@ -83,17 +83,18 @@ if($weblinks->getId() === 0)
                             $gL10n->get('LNK_CREATE_LINK'), 'add.png');
     }
 
+    if($gCurrentUser->editWeblinksRight())
+    {
+        // show link to maintain categories
+        $LinksMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=LNK&title='. $getHeadline,
+                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+    }
+
     if($gCurrentUser->isAdministrator())
     {
         // show link to system preferences of weblinks
         $LinksMenu->addItem('menu_items_links_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=links',
                             $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
-    }
-    elseif($gCurrentUser->editWeblinksRight())
-    {
-        // show link to maintain categories
-        $LinksMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=LNK&title='. $getHeadline,
-                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
     }
 
     $page->addJavascript('

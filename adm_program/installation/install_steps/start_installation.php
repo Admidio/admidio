@@ -101,23 +101,23 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com
 $db->query($sql); // TODO add more params
 
 // create organization independent categories
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
+$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdMasterData = $db->lastInsertId();
 
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, ?, ?) -- $currUsrId, DATETIME_NOW';
+$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 2, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdSocialNetworks = $db->lastInsertId();
 
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, ?, ?) -- $currUsrId, DATETIME_NOW';
+$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 3, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 
 // create inventory categories
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
+$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+        VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdMasterInventory = $db->lastInsertId();
 

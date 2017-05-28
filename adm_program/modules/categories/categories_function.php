@@ -109,6 +109,14 @@ if($getMode === 1)
         // => EXIT
     }
 
+    if($getType !== 'ROL'
+    && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
+    && !isset($_POST['adm_categories_view_right']))
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_VISIBLE_FOR')));
+        // => EXIT
+    }
+
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
     if(($getType === 'USF'
@@ -145,7 +153,7 @@ if($getMode === 1)
 
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
-    $checkboxes = array('cat_hidden', 'cat_default');
+    $checkboxes = array('cat_default');
 
     foreach($checkboxes as $value)
     {
@@ -164,13 +172,32 @@ if($getMode === 1)
         }
     }
 
-    // Daten in Datenbank schreiben
+    $gDb->startTransaction();
+
+    // write category into database
     $returnCode = $category->save();
 
     if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
+    }
+
+    // roles have their own preferences for visibility, so only allow this for other types
+    // until now we do not support visibility for categories that belong to several organizations
+    if($getType !== 'ROL'
+    && ($category->getValue('cat_org_id') > 0
+    || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
+    {
+        // save changed roles rights of the category
+        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+    }
+    else
+    {
+        // delete existing roles rights of the category
+        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $rightCategoryView->delete();
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
@@ -195,6 +222,8 @@ if($getMode === 1)
         $sequenceCategory->setValue('cat_sequence', $sequence);
         $sequenceCategory->save();
     }
+
+    $gDb->endTransaction();
 
     $gNavigation->deleteLastUrl();
     unset($_SESSION['categories_request']);

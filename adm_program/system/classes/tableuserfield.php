@@ -20,6 +20,9 @@
  */
 class TableUserField extends TableAccess
 {
+    protected $mViewUserField;                 ///< Flag if the current user could view this user
+    protected $mViewUserFieldUserId;           ///< Flag with the user id of which user the view property was saved
+
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.
      * If the id is set than the specific user field will be loaded.
@@ -32,6 +35,17 @@ class TableUserField extends TableAccess
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
 
         parent::__construct($database, TBL_USER_FIELDS, 'usf', $usfId);
+    }
+
+    /**
+     * Additional to the parent method visible roles array and flag will be initialized.
+     */
+    public function clear()
+    {
+        parent::clear();
+
+        $this->mViewUserField = null;
+        $this->mViewUserFieldUserId = null;
     }
 
     /**
@@ -400,5 +414,33 @@ class TableUserField extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * This method checks if the current user is allowed to view this profile field. Therefore
+     * the visibility of the category is checked. This method will not check the context if
+     * the user is allowed to view the field because he has the right to edit the profile.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function visible()
+    {
+        global $gCurrentUser;
+
+        if($this->mViewUserField === null || $this->mViewUserFieldUserId !== (int) $gCurrentUser->getValue('usr_id'))
+        {
+            // check if the current user could view the category of the profile field
+            if(in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true))
+            {
+                $this->mViewUserField = true;
+            }
+            else
+            {
+                $this->mViewUserField = false;
+            }
+
+            $this->mViewUserFieldUserId = (int) $gCurrentUser->getValue('usr_id');
+        }
+
+        return $this->mViewUserField;
     }
 }

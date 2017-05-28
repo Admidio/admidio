@@ -153,12 +153,6 @@ $page->addJavascript('
     }
 ');
 
-$htmlIconLoginUser = '&nbsp;';
-if($getType !== 'USF')
-{
-    $htmlIconLoginUser = '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" />';
-}
-
 // get module menu
 $categoriesMenu = $page->getMenu();
 
@@ -172,12 +166,21 @@ $categoriesMenu->addItem('admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 
+if($getType === 'ROL')
+{
+    $visibleHeadline = '';
+}
+else
+{
+    $visibleHeadline = $gL10n->get('SYS_VISIBLE_FOR');
+}
+
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    $htmlIconLoginUser,
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />',
+    $visibleHeadline,
     '&nbsp;'
 );
 $categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
@@ -234,16 +237,29 @@ while($catRow = $categoryStatement->fetch())
                                 src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" /></a>';
     }
 
-    $htmlHideCategory = '&nbsp;';
-    if($category->getValue('cat_hidden') == 1)
-    {
-        $htmlHideCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $addButtonText).'" />';
-    }
-
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
         $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />';
+    }
+
+    if($getType === 'ROL')
+    {
+        $htmlRolesNames = '';
+    }
+    else
+    {
+        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $arrRolesIds = $rightCategoryView->getRolesIds();
+    
+        if(count($arrRolesIds) > 0)
+        {
+            $htmlRolesNames = implode(', ', $rightCategoryView->getRolesNames());
+        }
+        else
+        {
+            $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+        }
     }
 
     $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
@@ -264,8 +280,8 @@ while($catRow = $categoryStatement->fetch())
     $columnValues = array(
         '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
-        $htmlHideCategory,
         $htmlDefaultCategory,
+        $htmlRolesNames,
         $categoryAdministration
     );
     $categoriesOverview->addRowByArray($columnValues, 'row_'. $category->getValue('cat_id'));

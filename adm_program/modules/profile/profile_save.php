@@ -128,27 +128,31 @@ if($getNewUser === 2)
     }
 }
 
-// nun alle Profilfelder pruefen
+// now check all profile fields
 foreach($gProfileFields->mProfileFields as $field)
 {
-    $postId = 'usf-'. $field->getValue('usf_id');
+    $postId    = 'usf-'. $field->getValue('usf_id');
+    $showField = false;
+
+    // at registration check if the field is enabled for registration
+    if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
+    {
+        $showField = true;
+    }
+    // only allow to edit viewable fields, check for edit profile was done before
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
+    {
+        $showField = true;
+    }
 
     // check and save only fields that aren't disabled
-    if ($field->getValue('usf_disabled') == 0
-    || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
-    || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
+    if ($showField
+    && ($field->getValue('usf_disabled') == 0
+       || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
+       || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0)))
     {
         if(isset($_POST[$postId]))
         {
-            // at registration check if the field is enabled for registration
-            if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
-            {
-                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-                // => EXIT
-            }
-
-            // TODO check if current user is allowed to view the category of that fields
-
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Registrierung immer !!!
             if((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)

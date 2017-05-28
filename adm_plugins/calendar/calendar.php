@@ -169,58 +169,32 @@ if(isset($page) && $page instanceof \HtmlPage)
 // query of all events
 if($plg_ter_aktiv)
 {
-    // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-    $plgOrganizations = '';
-    $plgArrOrgas = $gCurrentOrganization->getOrganizationsInRelationship(true, true);
+    $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+    $queryParams = array_merge($catIdParams, array($dateMonthEnd, $dateMonthStart));
 
-    foreach($plgArrOrgas as $key => $value)
-    {
-        $plgOrganizations .= $key. ', ';
-    }
-    $plgOrganizations .= $gCurrentOrganization->getValue('org_id');
-
-    // Ermitteln, welche Kalender angezeigt werden sollen
+    // check if special calendars should be shown
     if(in_array('all', $plg_kal_cat, true))
     {
-        // alle Kalender anzeigen
+        // show all calendars
         $sqlSyntax = '';
     }
     else
     {
-        // nur bestimmte Kalender anzeigen
-        $sqlSyntax = ' AND cat_type = \'DAT\' AND ( ';
-        for($i = 0, $iMax = count($plg_kal_cat); $i < $iMax; ++$i)
-        {
-            $sqlSyntax .= 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
-        }
-        $sqlSyntax = substr($sqlSyntax, 0, -4). ') ';
-    }
-
-    // search for all events in database within the given month
-    if($gCurrentUser->getValue('usr_id') > 0)
-    {
-        $sqlLogin = 'AND (  dtr_rol_id IS NULL
-                         OR dtr_rol_id IN (SELECT mem_rol_id
-                                             FROM '.TBL_MEMBERS.'
-                                            WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
-    }
-    else
-    {
-        $sqlLogin = 'AND dtr_rol_id IS NULL';
+        // show only calendars of the parameter $plg_kal_cat
+        $sqlSyntax = ' AND cat_name IN (' . replaceValuesArrWithQM($plg_kal_cat) . ')';
+        $queryParams = array_merge($queryParams, $plg_kal_cat);
     }
 
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_end, dat_all_day, dat_location, dat_headline
-              FROM '.TBL_DATE_ROLE.'
-        INNER JOIN '.TBL_DATES.'
-                ON dat_id = dtr_dat_id
+              FROM '.TBL_DATES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
-             WHERE dat_begin <= ? -- $dateMonthEnd
+             WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+               AND dat_begin <= ? -- $dateMonthEnd
                AND dat_end   >= ? -- $dateMonthStart
-                   '.$sqlLogin.'
                    '.$sqlSyntax.'
           ORDER BY dat_begin ASC';
-    $datesStatement = $gDb->queryPrepared($sql, array($dateMonthEnd, $dateMonthStart));
+    $datesStatement = $gDb->queryPrepared($sql, $queryParams);
 
     while($row = $datesStatement->fetch())
     {

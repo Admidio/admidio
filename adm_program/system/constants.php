@@ -104,7 +104,6 @@ define('TBL_ANNOUNCEMENTS',       $g_tbl_praefix . '_announcements');
 define('TBL_AUTO_LOGIN',          $g_tbl_praefix . '_auto_login');
 define('TBL_CATEGORIES',          $g_tbl_praefix . '_categories');
 define('TBL_COMPONENTS',          $g_tbl_praefix . '_components');
-define('TBL_DATE_ROLE',           $g_tbl_praefix . '_date_role');
 define('TBL_DATES',               $g_tbl_praefix . '_dates');
 define('TBL_FILES',               $g_tbl_praefix . '_files');
 define('TBL_FOLDERS',             $g_tbl_praefix . '_folders');

@@ -38,8 +38,8 @@ if($gPreferences['enable_weblinks_module'] == 2)
 $weblink = new TableWeblink($gDb, $getLinkId);
 $lnkUrl = $weblink->getValue('lnk_url');
 
-// Wenn kein Link gefunden wurde Fehler ausgeben
-if(strlen($lnkUrl) === 0 || (!$gValidLogin && $weblink->getValue('cat_hidden') == 1))
+// if no link is set or the weblink is not visible to the user show error
+if(strlen($lnkUrl) === 0 || !$weblink->visible())
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT

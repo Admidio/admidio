@@ -105,7 +105,7 @@ $sql = 'UPDATE '.TBL_CATEGORIES.' SET cat_name_intern = UPPER(cat_name) WHERE ca
 $gDb->query($sql);
 
 // Defaulteintraege fuer alle existierenden Termine bei der Rollenzuordnung
-$sql = 'INSERT INTO '.TBL_DATE_ROLE.' (dtr_dat_id, dtr_rol_id)
+$sql = 'INSERT INTO ' . $g_tbl_praefix . '_date_role (dtr_dat_id, dtr_rol_id)
         SELECT dat_id, NULL FROM '.TBL_DATES;
 $gDb->query($sql);
 

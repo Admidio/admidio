@@ -33,6 +33,7 @@
     <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
     <string name="CAT_MOVE_DOWN">#VAR1# nach unten verschieben</string>
     <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
+    <string name="CAT_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
@@ -87,11 +88,13 @@
     <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
     <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
     <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
+    <string name="DAT_REGISTRATION_POSSIBLE_FOR">Anmeldung möglich für</string>
     <string name="DAT_REGISTRATION_NOT_POSSIBLE">Keine Anmeldung mehr möglich.</string>
     <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
     <string name="DAT_REMOVE_APPLICATION">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
     <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmer können die Teilnehmerliste einsehen</string>
     <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden</string>
+    <string name="DAT_ROLES_DIFFERENT">Du hast bei den Teilnehmern Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Termine zu sehen. Bitte wähle bei den Teilnehmern eine der folgenden Rollen: #VAR1_BOLD#.</string>
     <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
     <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
@@ -115,7 +118,6 @@
     <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
     <string name="DAT_VISIBILITY">Sichtbarkeit</string>
-    <string name="DAT_VISIBLE_TO">Sichtbar für</string>
     <!-- Phrases only in Downloadsmodule -->
     <string name="DOW_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
     <string name="DOW_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
@@ -1096,6 +1098,9 @@
     <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
     <string name="SYS_CSV">CSV</string>
     <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
+    <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Daten dieser Kategorie auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
+    <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
+    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
     <string name="SYS_DATABASE">Datenbank</string>
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
@@ -1105,7 +1110,6 @@
     <string name="SYS_DATE">Datum</string>
     <string name="SYS_DATE_END_BEFORE_BEGIN">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</string>
     <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# bis #VAR2#</string>
-    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
     <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld #VAR1_BOLD# eingegeben.\n\nDas Datum muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
     <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
     <string name="SYS_DATE_TO">bis</string>
@@ -1390,6 +1394,7 @@
     <string name="SYS_VERSION">Version</string>
     <string name="SYS_VIEW">Ansicht</string>
     <string name="SYS_VISIBLE">Sichtbar</string>
+    <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
     <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für eingeloggte Benutzer sichtbar</string>
     <string name="SYS_VISITORS">Besucher</string>
     <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>

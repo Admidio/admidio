@@ -97,7 +97,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detalhado</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compacto</string>
   <string name="DAT_VISIBILITY">Visibilidade</string>
-  <string name="DAT_VISIBLE_TO">Visível para</string>
+  <string name="SYS_VISIBLE_FOR">Visível para</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Adicionar à base de dados</string>
   <string name="DOW_ADDITIONAL_FILES">Esta lista tem a intenção de oferecer uma visão geral dos ficheiros e pastas ainda não importados para a base de dados. Eles podem adicionados à base. Permissões de acesso serão copiadas da pasta selecionada.</string>
