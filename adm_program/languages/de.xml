@@ -37,8 +37,8 @@
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
-    <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teinehmer können anonyme Gäste anmelden</string>
-    <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teinehmer können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Teilnehmerzahl abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn ein Teilnehmer weitere Besucher mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
+    <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Teilnehmer können anonyme Gäste anmelden</string>
+    <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmer können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Teilnehmerzahl abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn ein Teilnehmer weitere Besucher mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
     <string name="DAT_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
     <string name="DAT_ALLOW_USER_COMMENTS_DESC">Teilnehmer können ihre Teilnahme kommentieren. Die Kommentare können über die Teilnehmerliste eingesehen werden</string>
     <string name="DAT_ASSIGN_PARTICIPANTS">Teilnehmer zuordnen</string>
@@ -85,7 +85,7 @@
     <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
     <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
     <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
-    <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
+    <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhältst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
     <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
     <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
     <string name="DAT_REGISTRATION_POSSIBLE_FOR">Anmeldung möglich für</string>
@@ -96,7 +96,7 @@
     <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden</string>
     <string name="DAT_ROLES_DIFFERENT">Du hast bei den Teilnehmern Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Termine zu sehen. Bitte wähle bei den Teilnehmern eine der folgenden Rollen: #VAR1_BOLD#.</string>
     <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
-    <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
+    <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
     <string name="DAT_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
     <string name="DAT_ROOM_SELECTABLE">Raum auswählbar</string>
     <string name="DAT_ROOM_SELECTABLE_DESC">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</string>
@@ -114,8 +114,8 @@
     <string name="DAT_USER_INVITED">Eingeladen</string>
     <string name="DAT_USER_REFUSED">Abgesagt</string>
     <string name="DAT_USER_WILL_ATTEND">Nimmt teil</string>
-    <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</string>
-    <string name="DAT_VIEW_MODE_DETAIL">Detailiert</string>
+    <string name="DAT_VIEW_MODE_DESC">Anzeigeart der Termine. Im Modus #VAR1_BOLD# werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus #VAR2_BOLD# werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailliert)</string>
+    <string name="DAT_VIEW_MODE_DETAIL">Detailliert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
     <string name="DAT_VISIBILITY">Sichtbarkeit</string>
     <!-- Phrases only in Downloadsmodule -->
@@ -180,7 +180,7 @@
     <string name="ECA_NOT_SUCCESSFULLY_SEND">Deine Grußkarte wurde leider nicht erfolgreich versendet!</string>
     <string name="ECA_RECIPIENT_EMAIL">Empfänger E-Mail</string>
     <string name="ECA_RECIPIENT_NAME">Empfänger Name</string>
-    <string name="ECA_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</string>
+    <string name="ECA_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. (Standard: 250 Pixel)</string>
     <string name="ECA_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</string>
     <string name="ECA_TEMPLATE">Template</string>
     <string name="ECA_TEMPLATE_DESC">Hier wird das Standard Template festgelegt. (Standard: Postcard)</string>
@@ -188,10 +188,10 @@
     <string name="ECA_TEMPLATE_FOLDER_OPEN">Template Ordner konnte nicht geöffnet/gelesen werden.</string>
     <!-- Phrases only in Guestbookmodule -->
     <string name="GBO_BACK_TO_GUESTBOOK">Zurück zum Gästebuch</string>
-    <string name="GBO_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
+    <string name="GBO_CAPTCHA_DESC">Für nicht angemeldete Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="GBO_COMMENT_BY">Kommentar von #VAR1#</string>
     <string name="GBO_COMMENTS4ALL">Anonyme Kommentare erlauben</string>
-    <string name="GBO_COMMENTS4ALL_DESC">Nicht eingeloggte Benutzer können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Standard: nein)</string>
+    <string name="GBO_COMMENTS4ALL_DESC">Nicht angemeldete Benutzer können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Standard: nein)</string>
     <string name="GBO_CREATE_COMMENT">Kommentar anlegen</string>
     <string name="GBO_CREATE_ENTRY">Eintrag anlegen</string>
     <string name="GBO_CREATE_VAR_ENTRY">#VAR1#-Eintrag anlegen</string>
@@ -204,7 +204,7 @@
     <string name="GBO_ENTRY_QUEUED">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</string>
     <string name="GBO_FLOODING_PROTECTION">Dein letzter Eintrag im Gästebuch liegt weniger als #VAR1# Sekunden zurück.</string>
     <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
-    <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</string>
+    <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</string>
     <string name="GBO_GUESTBOOK">Gästebuch</string>
     <string name="GBO_GUESTBOOK_DESC">Besucher und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
     <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
@@ -228,7 +228,7 @@
     <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Administrators ein.</string>
     <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
     <string name="INS_BOARD">Vorstand</string>
-    <string name="INS_CONFERENCE_ROOM">Besprechnungsraum</string>
+    <string name="INS_CONFERENCE_ROOM">Besprechungsraum</string>
     <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</string>
     <string name="INS_CONTINUE_INSTALLATION">Installation fortsetzen</string>
     <string name="INS_COURSES">Kurse</string>
@@ -269,7 +269,7 @@
     <string name="INS_GOOGLE_PLUS">Google+</string>
     <string name="INS_GOOGLE_PLUS_DESC">Willst du dein Google+ Profil hier verlinken? Dazu benötigst du momentan noch die etwas kryptische Profilnummer von Google+. Melde dich bei Google+ an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Google+ Profil aufrufen.</string>
     <string name="INS_GROUPS">Gruppen</string>
-    <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Gib einen gültigen Hostenamen oder IP-Adresse ein.</string>
+    <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Gib einen gültigen Hostnamen oder IP-Adresse ein.</string>
     <string name="INS_ICQ">ICQ</string>
     <string name="INS_ICQ_DESC">Gib hier deine ICQ-Nummer ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</string>
     <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
@@ -332,8 +332,8 @@
     <string name="INS_SUBORDINATE">Untergebene/-r</string>
     <string name="INS_SUBORDINATE_MALE">Untergebener</string>
     <string name="INS_SUBORDINATE_FEMALE">Untergebene</string>
-    <string name="INS_SUPERIOR">Vorgesetze/-r</string>
-    <string name="INS_SUPERIOR_MALE">Vorgesetzer</string>
+    <string name="INS_SUPERIOR">Vorgesetzte/-r</string>
+    <string name="INS_SUPERIOR_MALE">Vorgesetzter</string>
     <string name="INS_SUPERIOR_FEMALE">Vorgesetzte</string>
     <string name="INS_SIBLING">Geschwister</string>
     <string name="INS_SISTER">Schwester</string>
@@ -451,7 +451,7 @@
     <string name="LST_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
     <string name="LST_SEARCH_TELEFON_DESC">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</string>
     <string name="LST_SEARCH_YES_NO_FIELD">Ja/Nein Feld</string>
-    <string name="LST_SEARCH_YES_NO_FIELD_DESC">Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</string>
+    <string name="LST_SEARCH_YES_NO_FIELD_DESC">Sucht alle Benutzer bei denen ein Häkchen gesetzt wurde</string>
     <string name="LST_SEAT_AMOUNT">Zusätzliche Plätze</string>
     <string name="LST_SELECT_CONFIGURATION">Konfiguration auswählen</string>
     <string name="LST_SELECT_MEMBERS">Mitglieder auswählen</string>
@@ -476,9 +476,9 @@
     <string name="MAI_ADD_ATTACHEMENT">Anhang hinzufügen</string>
     <string name="MAI_ATTACHEMENT">Anhang</string>
     <string name="MAI_ATTACHMENT_SIZE">Maximale Dateigröße für Anhänge</string>
-    <string name="MAI_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard: 1MB)</string>
+    <string name="MAI_ATTACHMENT_SIZE_DESC">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im E-Mailmodul möglich. (Standard: 1MB)</string>
     <string name="MAI_ATTACHMENT_TO_LARGE">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</string>
-    <string name="MAI_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
+    <string name="MAI_CAPTCHA_DESC">Für nicht angemeldeten Benutzer wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_CARBON_COPY">Kopie</string>
     <string name="MAI_CHARACTER_ENCODING">Zeichenkodierung</string>
     <string name="MAI_CHARACTER_ENCODING_DESC">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</string>
@@ -510,14 +510,14 @@
     <string name="MAI_SEND_EMAIL">E-Mail senden</string>
     <string name="MAI_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</string>
     <string name="MAI_SEND_METHOD">Versenden über</string>
-    <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
+    <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
     <string name="MAI_SENDER">Absender</string>
     <string name="MAI_SENDER_EMAIL">Absender E-Mailadresse</string>
-    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
+    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
     <string name="MAI_SENDER_NAME">Name des Absenders</string>
     <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten E-Mailadresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender E-Mailadresse gepflegt ist. (Standard: leer)</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
-    <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
+    <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_SMTP">SMTP</string>
     <string name="MAI_SMTP_AUTH">SMTP Authentifizierung</string>
     <string name="MAI_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Benutzername und Passwort ausgefüllt werden.  (Standard: Ja)</string>
@@ -582,7 +582,7 @@
     <string name="MEM_REMOVE_USER_DESC">Wenn du #VAR1_BOLD# auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</string>
     <string name="MEM_REPLACE">Ersetzen</string>
     <string name="MEM_ROLE_SELECT_RIGHT">Du hast keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wähle eine andere Rolle aus.</string>
-    <string name="MEM_SEND_NEW_LOGIN">Möchtest du #VAR1_BOLD# eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</string>
+    <string name="MEM_SEND_NEW_LOGIN">Möchtest du #VAR1_BOLD# eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort mailen?</string>
     <string name="MEM_SEND_USERNAME_PASSWORD">E-Mail mit Benutzernamen und neuem Passwort zuschicken</string>
     <string name="MEM_SHOW_ALL_USERS">Alle Benutzer anzeigen</string>
     <string name="MEM_SHOW_USERS_DESC">Ist die Einstellung nicht gesetzt werden nur die aktiven Mitglieder dieser Organisation angezeigt. ist die Einstellung aktiviert werden alle Benutzer der Datenbank angezeigt.</string>
@@ -618,19 +618,19 @@
     <string name="PMS_WAS_NOT_SENT_TO">Fehler - Nachricht wurde nicht gesendet an:</string>
     <!-- Phrases only in New-User-Registration -->
     <string name="NWU_ASSIGN_LOGIN">Zugangsdaten zuordnen</string>
-    <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Die Logindaten wurden erfolgreich zugeordnet.</string>
-    <string name="NWU_ASSIGN_LOGIN_EMAIL">Die Logindaten wurden erfolgreich zugeordnet und der Benutzer ist darüber per E-Mail benachrichtigt worden.</string>
+    <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Die Anmeldedaten wurden erfolgreich zugeordnet.</string>
+    <string name="NWU_ASSIGN_LOGIN_EMAIL">Die Anmeldedaten wurden erfolgreich zugeordnet und der Benutzer ist darüber per E-Mail benachrichtigt worden.</string>
     <string name="NWU_ASSIGN_MEMBERSHIP">Mitgliedschaft zuweisen</string>
-    <string name="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</string>
+    <string name="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN">Mitgliedschaft und Anmeldedaten diesem Benutzer zuordnen</string>
     <string name="NWU_ASSIGN_REGISTRATION">Registrierung zuordnen</string>
     <string name="NWU_DELETE_REGISTRATION">Registrierung löschen</string>
     <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
     <string name="NWU_NEW_REGISTRATIONS">Neue Registrierungen</string>
-    <string name="NWU_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Logindaten.</string>
-    <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Logindaten.</string>
+    <string name="NWU_NO_MEMBERSHIP">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Anmeldedaten.</string>
+    <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Anmeldedaten.</string>
     <string name="NWU_NO_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
     <string name="NWU_REGISTERED_ON">Registriert am #VAR1#</string>
-    <string name="NWU_REMINDER_SEND_LOGIN">Möchtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken?</string>
+    <string name="NWU_REMINDER_SEND_LOGIN">Möchtest du ihm seinen Anmeldenamen mit Passwort als Erinnerung zuschicken?</string>
     <string name="NWU_SEND_LOGIN">Zugangsdaten zuschicken</string>
     <string name="NWU_USER_NO_VALID_LOGIN">Dieser Benutzer besitzt noch kein Login.\nMöchtest du ihm die Daten dieser Registrierung zuordnen?</string>
     <string name="NWU_USER_VALID_LOGIN">Dieser Benutzer besitzt schon ein gültiges Login.</string>
@@ -664,7 +664,7 @@
     <string name="ORG_CAPTCHA_SIGNATURE">Captcha Untertitel</string>
     <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
     <string name="ORG_CAPTCHA_SIGNS">Zulässige Zeichen</string>
-    <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenen Captcha-Zeichen angegeben werden. Zeichen, welche leicht verwechselt werden können, wie z.B. l oder I sollten dabei vermieden werden.</string>
+    <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenden Captcha-Zeichen angegeben werden. Zeichen, welche leicht verwechselt werden können, wie z.B. l oder I sollten dabei vermieden werden.</string>
     <string name="ORG_CAPTCHA_TYPE">Captcha Art</string>
     <string name="ORG_CAPTCHA_TYPE_CALC">Rechenaufgabe</string>
     <string name="ORG_CAPTCHA_TYPE_PIC">Zufällige Zeichen</string>
@@ -708,7 +708,7 @@
     <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
     <string name="ORG_INVALID_THEME">Es wurde kein gültiges Theme ausgewählt.</string>
     <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Farbe Javascript-Editor</string>
-    <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Hier wird die Hintergrundfarbe des Javascripteditors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</string>
+    <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Hier wird die Hintergrundfarbe des Javascript-Editors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Javascript-Editor benutzen</string>
     <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Ein umfangreicher Javascript-Editor wird an vielen Stellen im Programm genutzt, damit der Benutzer z.B. Ankündigungen, Terminbeschreibungen oder ähnliches komfortabler eingeben kann. Wird der Editor deaktiviert, so wird ein einfaches mehrzeiliges Textfeld dargestellt.</string>
     <string name="ORG_LAST_UPDATE_STEP">Letzter Update-Schritt</string>
@@ -766,15 +766,15 @@
     <string name="ORG_VALUE_LIST">Werteliste</string>
     <string name="ORG_VALUE_LIST_DESC">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
     <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
-    <string name="ORG_VARIABLE_EMAIL">E-Mail des Benutzers aus dem jeweiligen Mailkontext</string>
+    <string name="ORG_VARIABLE_EMAIL">E-Mail des Benutzers aus dem jeweiligen E-Mailkontext</string>
     <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Systememailadresse der Organisation</string>
-    <string name="ORG_VARIABLE_FIRST_NAME">Vorname des Benutzers aus dem jeweiligen Mailkontext</string>
-    <string name="ORG_VARIABLE_LAST_NAME">Nachname des Benutzers aus dem jeweiligen Mailkontext</string>
+    <string name="ORG_VARIABLE_FIRST_NAME">Vorname des Benutzers aus dem jeweiligen E-Mailkontext</string>
+    <string name="ORG_VARIABLE_LAST_NAME">Nachname des Benutzers aus dem jeweiligen E-Mailkontext</string>
     <string name="ORG_VARIABLE_NAME_ORGANIZATION">Name der Organisation</string>
     <string name="ORG_VARIABLE_NEW_PASSWORD">Neues Passwort des Benutzers</string>
     <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Kurzbezeichnung der Organisation</string>
     <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
-    <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen Mailkontext</string>
+    <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen E-Mailkontext</string>
     <!-- Phrases only in Updatecheck -->
     <string name="UPD_ADMIDIO">Zur Admidio-Updateseite wechseln</string>
     <string name="UPD_BETA_VERSION">Verfügbare Beta</string>
@@ -802,7 +802,7 @@
     <string name="PHO_DOWNLOAD_PHOTOS">Fotos herunterladen</string>
     <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto speichern</string>
     <string name="PHO_DOWNLOAD_ENABLED">Download aktivieren</string>
-    <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
+    <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-Datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
     <string name="PHP_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
     <string name="PHO_EDIT_ALBUM">Album Bearbeiten</string>
     <string name="PHO_EMAIL_NOTIFICATION_TITLE">Ein neues Fotoalbum wurde angelegt</string>
@@ -811,7 +811,7 @@
     <string name="PHO_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
     <string name="PHO_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
     <string name="PHO_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
-    <string name="PHO_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</string>
+    <string name="PHO_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Bei einem Modalen-Fenster oder Popup-Fenster wird das Fenster automatisch in der Größe an das Foto angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</string>
     <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Max. Bildanzeigegröße (Höhe)</string>
     <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Max. Bildanzeigegröße (Breite)</string>
     <string name="PHO_MODAL_WINDOW">Modales Fenster</string>
@@ -819,7 +819,7 @@
     <string name="PHO_NO_ALBUM_CONTENT">Dieses Album enthält leider noch keine Fotos.</string>
     <string name="PHO_NO_FILES_OR_TO_LARGE">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von #VAR1#B. übersteigen!</string>
     <string name="PHO_NO_FILES_SELECTED">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</string>
-    <string name="PHO_NO_RIGHTS">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</string>
+    <string name="PHO_NO_RIGHTS">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur angemeldete Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</string>
     <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
     <string name="PHO_PARENT_ALBUM">Elternalbum</string>
     <string name="PHO_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wähle dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Willst du das Album auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
@@ -848,13 +848,13 @@
     <string name="PHO_SAVE_ORIGINALS_DESC">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</string>
     <string name="PHO_SCALE_AT_UPLOAD">Skalierung beim Hochladen</string>
     <string name="PHO_SCALE_AT_UPLOAD_DESC">Beim Hochladen werden alle Fotos neu skaliert. Der eingegebene Pixelwert ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch- oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640 Pixel)</string>
-    <string name="PHO_SCALE_THUMBNAILS">Skalierung Thumbnails</string>
-    <string name="PHO_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander. Ggf. weniger Thumbnailspalten einstellen. (Standard: 160Pixel)</string>
+    <string name="PHO_SCALE_THUMBNAILS">Skalierung Vorschaubild</string>
+    <string name="PHO_SCALE_THUMBNAILS_DESC">Hier kann festgelegt werden auf welchen Wert die längere Bildseite des Vorschaubildes skaliert werden soll. Vorsicht: Werden die Vorschaubilder zu breit, passen weniger nebeneinander. Ggf. weniger Vorschaubildspalten einstellen. (Standard: 160Pixel)</string>
     <string name="PHO_SELECT_FOTOS">Fotos auswählen</string>
     <string name="PHO_SHOW_CAPTION">Bildtext einblenden</string>
     <string name="PHO_SHOW_CAPTION_DESC">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; #VAR1#)</string>
     <string name="PHO_SHOWN_ON_READY" >Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</string>
-    <string name="PHO_THUMBNAILS_PER_PAGE">Thumbnails pro Seite</string>
+    <string name="PHO_THUMBNAILS_PER_PAGE">Vorschaubilder pro Seite</string>
     <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Standard: 16)</string>
     <string name="PHO_UPLOAD_MORE">Weitere Fotos hochladen</string>
     <string name="PHO_UPLOAD_PHOTOS">Fotos hochladen</string>
@@ -997,7 +997,7 @@
     <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Benutzerdaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
     <string name="ROL_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
     <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
-    <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
+    <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das E-Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
     <string name="ROL_RIGHT_MAIL_TO_ALL">E-Mails an alle Rollen schreiben</string>
     <string name="ROL_RIGHT_PHOTO">Fotos hochladen und bearbeiten</string>
     <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
@@ -1006,7 +1006,7 @@
     <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
     <string name="ROL_ROLE_DELETE">Rolle löschen</string>
-    <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</string>
+    <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgültig entfernt.</string>
     <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
     <string name="ROL_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
     <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
@@ -1016,7 +1016,7 @@
     <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
     <string name="ROL_SEMIYEARLY">Halbjährlich</string>
     <string name="ROL_SEND_MAIL_GUESTS">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</string>
-    <string name="ROL_SEND_MAIL_MEMBERS">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
+    <string name="ROL_SEND_MAIL_MEMBERS">Angemeldete Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
     <string name="ROL_SEND_MAIL_ROLE">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</string>
     <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
     <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
@@ -1331,7 +1331,7 @@
     <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
     <string name="SYS_SECONDS">Sekunden</string>
     <string name="SYS_SECURE">Sicher</string>
-    <string name="SYS_SECURITY_ERROR">Sicherheits Fehler</string>
+    <string name="SYS_SECURITY_ERROR">Sicherheitsfehler</string>
     <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
     <string name="SYS_SEND">Abschicken</string>
     <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
@@ -1350,14 +1350,14 @@
     <string name="SYS_SIZE">Größe</string>
     <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
     <string name="SYS_START" description="Start of a date">Beginn</string>
-    <string name="SYS_STATUS_CODE_INVALID">Ungülter Status-Code!</string>
+    <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
     <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
     <string name="SYS_STOP">Stop</string>
     <string name="SYS_STREET">Straße</string>
     <string name="SYS_SUNDAY">Sonntag</string>
     <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
     <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Dein angefordertes Passwort\n#content# Hallo #user_first_name#,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
-    <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Logindaten für #organization_homepage#\n#content# Hallo #user_first_name#,\n\ndu erhälst deine Logindaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
+    <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Anmeldedaten für #organization_homepage#\n#content# Hallo #user_first_name#,\n\ndu erhältst deine Anmeldedaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDie Administratoren</string>
     <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDie Administratoren</string>
     <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an #administrator_email# .\n\nViele Grüße\nDie Administratoren</string>
     <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
@@ -1395,7 +1395,7 @@
     <string name="SYS_VIEW">Ansicht</string>
     <string name="SYS_VISIBLE">Sichtbar</string>
     <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
-    <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für eingeloggte Benutzer sichtbar</string>
+    <string name="SYS_VISIBLE_TO_USERS">#VAR1# nur für angemeldete Benutzer sichtbar</string>
     <string name="SYS_VISITORS">Besucher</string>
     <string name="SYS_WANT_REGISTER">Ich möchte mich registrieren!</string>
     <string name="SYS_WARNING">Warnung</string>
