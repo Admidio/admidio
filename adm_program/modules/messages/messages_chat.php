@@ -37,13 +37,8 @@ $page->addCssFile(THEME_URL.'/css/chat.css');
 $page->addJavascriptFile('adm_program/modules/messages/chat.js');
 
 $page->addJavascript('
-    // Initialize Chat
-    var chat = new Chat();
-
-    $(function() {
-        chat.init("#sendie", "#chat-area");
-    });
-');
+    var chat = new Chat("#sendie", "#chat-area");
+', true);
 
 // add back link to module menu
 $messagesChatMenu = $page->getMenu();
