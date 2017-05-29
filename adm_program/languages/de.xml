@@ -510,12 +510,12 @@
     <string name="MAI_SEND_EMAIL">E-Mail senden</string>
     <string name="MAI_SEND_MAIL_TO_ROLE">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben oder an die ausgewählten Empfänger.\n\nWenn du eingeloggt bist stehen dir weitere Rollen und Empfänger zur Verfügung, an die du E-Mails schreiben kannst.</string>
     <string name="MAI_SEND_METHOD">Versenden über</string>
-    <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
+    <string name="MAI_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</string>
     <string name="MAI_SENDER">Absender</string>
-    <string name="MAI_SENDER_EMAIL">Absender E-Mailadresse</string>
-    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
+    <string name="MAI_SENDER_EMAIL">Absender E-Mail-Adresse</string>
+    <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</string>
     <string name="MAI_SENDER_NAME">Name des Absenders</string>
-    <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten E-Mailadresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender E-Mailadresse gepflegt ist. (Standard: leer)</string>
+    <string name="MAI_SENDER_NAME_DESC">Name des Absenders zur verwendeten E-Mail-Adresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender E-Mail-Adresse gepflegt ist. (Standard: leer)</string>
     <string name="MAI_SENDER_NOT_LOGGED_IN">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</string>
     <string name="MAI_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</string>
     <string name="MAI_SMTP">SMTP</string>
@@ -630,7 +630,7 @@
     <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Dieser Benutzer ist noch kein Mitglied der Organisation #VAR1# und besitzt auch keine Anmeldedaten.</string>
     <string name="NWU_NO_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
     <string name="NWU_REGISTERED_ON">Registriert am #VAR1#</string>
-    <string name="NWU_REMINDER_SEND_LOGIN">Möchtest du ihm seinen Anmeldenamen mit Passwort als Erinnerung zuschicken?</string>
+    <string name="NWU_REMINDER_SEND_LOGIN">Möchtest du dem Benutzer seinen Anmeldenamen mit Passwort als Erinnerung zuschicken?</string>
     <string name="NWU_SEND_LOGIN">Zugangsdaten zuschicken</string>
     <string name="NWU_USER_NO_VALID_LOGIN">Dieser Benutzer besitzt noch kein Login.\nMöchtest du ihm die Daten dieser Registrierung zuordnen?</string>
     <string name="NWU_USER_VALID_LOGIN">Dieser Benutzer besitzt schon ein gültiges Login.</string>
@@ -752,10 +752,10 @@
     <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
     <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</string>
     <string name="ORG_SYSTEM_INFORMATIONS">Systeminformationen</string>
-    <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mailadresse</string>
+    <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mail-Adresse</string>
     <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung.</string>
     <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-    <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse #VAR1# versendet. (Standard: nein)</string>
+    <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Standard: nein)</string>
     <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
     <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
     <string name="ORG_TIME_FORMAT">Zeitformat</string>
@@ -766,7 +766,7 @@
     <string name="ORG_VALUE_LIST">Werteliste</string>
     <string name="ORG_VALUE_LIST_DESC">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: https://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</string>
     <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
-    <string name="ORG_VARIABLE_EMAIL">E-Mail des Benutzers aus dem jeweiligen E-Mailkontext</string>
+    <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse des Benutzers aus dem jeweiligen E-Mailkontext</string>
     <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Systememailadresse der Organisation</string>
     <string name="ORG_VARIABLE_FIRST_NAME">Vorname des Benutzers aus dem jeweiligen E-Mailkontext</string>
     <string name="ORG_VARIABLE_LAST_NAME">Nachname des Benutzers aus dem jeweiligen E-Mailkontext</string>
