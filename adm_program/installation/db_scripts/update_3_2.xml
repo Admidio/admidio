@@ -100,10 +100,10 @@
         references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="340">ComponentUpdate::updateStepInstallDefaultUserRelationTypes</step>
     <step id="350" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sender_into_to' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_recipients_with_roles'</step>
-    <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sender_into_to' AND pr1.prf_name = 'mail_recipients_with_roles'</step>
+    <step id="360" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sender_into_to' AND pr1.prf_name = 'mail_recipients_with_roles'</step>
     <step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sender_into_to'</step>
     <step id="380" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'lists_default_configuation' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'lists_default_configuration'</step>
-    <step id="390" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET pr1.prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'lists_default_configuation' AND pr1.prf_name = 'lists_default_configuration'</step>
+    <step id="390" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'lists_default_configuation' AND pr1.prf_name = 'lists_default_configuration'</step>
     <step id="400">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'lists_default_configuation'</step>
     <step id="410">ALTER TABLE %PREFIX%_announcements ADD COLUMN ann_cat_id integer unsigned</step>
     <step id="420">ComponentUpdate::updateStepAddAnnouncementsCategories</step>
@@ -116,5 +116,7 @@
     <step id="480" database="pgsql">ALTER TABLE %PREFIX%_announcements DROP CONSTRAINT %PREFIX%_FK_ANN_ORG</step>
     <step id="490">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_org_id</step>
     <step id="500">ComponentUpdate::updateStepRewriteFolderRights</step>
+    <step id="510" database="pgsql">UPDATE %PREFIX%_user_fields SET usf_value_list = E'male.png|SYS_MALE\nfemale.png|SYS_FEMALE' WHERE usf_name_intern = 'GENDER'</step>
+    <step id="520">UPDATE %PREFIX%_roles SET rol_administrator = 1 WHERE rol_name = 'Administrator'</step>
     <step>stop</step>
 </update>

@@ -34,10 +34,8 @@
   <string name="DAT_ALL_DAY">Journée complète</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Ajouter un participant</string>
   <string name="DAT_ATTEND">Participer</string>
-  <string name="DAT_ATTEND_DATE">Vous avez confirmé votre participation à #VAR1_BOLD# le #VAR2#.</string>
   <string name="DAT_CALENDAR">Agenda</string>
   <string name="DAT_CANCEL">Annuler</string>
-  <string name="DAT_CANCEL_DATE">Vous avez annulé votre participation à #VAR1_BOLD# le #VAR2#.</string>
   <string name="DAT_DATE">Événement</string>
   <string name="DAT_DATES">Événements</string>
   <string name="DAT_DATES_DESC">Ici, vous pouvez créer et éditer des événements. Les utilisateurs peuvent s\'enregistrer pour cet événement.</string>
@@ -71,7 +69,7 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Ouvrir la gestion des agendas</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Ouvrir l\'administration de la salle</string>
   <string name="DAT_VIEW_MODE">Affichage par défaut</string>
-  <string name="DAT_VISIBLE_TO">Visible pour</string>
+  <string name="SYS_VISIBLE_FOR">Visible pour</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
   <string name="DOW_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas importé dans la base de données. Ajoutez-les ici. Les droits d\'accès seront copiés du dossier sélectionné.</string>
@@ -161,21 +159,20 @@
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Les informations de l\'administrateur sont incomplètes!</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Tableau administratif</string>
-  <string name="INS_CHOOSE_LANGUAGE">Choisissez votre langue</string>
   <string name="INS_CONFERENCE_ROOM">Salle de conférence</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# ne peut être trouvé dans le dossier principal du bottin!\n\nVeuillez télécharger le fichier de nouveau et le copier dans le dossier mentionné.</string>
   <string name="INS_COURSES">Parcours</string>
   <string name="INS_CREATE_ADMINISTRATOR">Création d\'un administrateur</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Création du ficher de configuration</string>
+  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Aucune mise à jour nécessaire pour la base de données</string>
+  <string name="INS_DATABASE_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# n\'a pu être trouvé dans le dossier #VAR2_BOLD#.</string>
+  <string name="INS_DATABASE_IS_UP_TO_DATE">La base de données du bottin est à jour!</string>
+  <string name="INS_DATABASE_IS_UPDATED">Mise à jour de la base de données en cours...</string>
+  <string name="INS_DATABASE_LOGIN">Saisie des informations de la base de données</string>
+  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Création de la base de données</string>
   <string name="INS_DATA_DO_NOT_MATCH">Les données de #VAR1_BOLD# ne se compile pas avec les informations fournies dans l\'assistant d\'installation.\n\nVérifier le fichier config.php et toutes les autres informations.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Détails de l\'administrateur</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Fournissez ici le nom de l\'administrateur, e-mail et accès à l\'information. Connectez-vous ensuite avec l\'utilisateur après l\'installation.</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Aucune mise à jour nécessaire pour la base de données</string>
-  <string name="INS_DATABASE_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# n\'a pu être trouvé dans le dossier #VAR2_BOLD#.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Mise à jour de la base de données en cours...</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">La base de données du bottin est à jour!</string>
-  <string name="INS_DATABASE_LOGIN">Saisie des informations de la base de données</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Création de la base de données</string>
   <string name="INS_DESCRIPTION_BOARD">Tableau administratif des associations</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Les rencontres peuvent prendre place ici. La salle doit d\'abord être réservé avant la rencontre.</string>
   <string name="INS_DESCRIPTION_MEMBER">Tous les membres de l\'organisation</string>
@@ -193,7 +190,6 @@
   <string name="INS_LANGUAGE_NOT_CHOOSEN">Aucun language n\'a sélectionné.</string>
   <string name="INS_MEMBERSHIP">Adhésion</string>
   <string name="INS_MESSENGER">Messenger</string>
-  <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Les informations des bases de données n\'ont pas tous été fournient !</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Le nom de l\'organisation n\'est pas complété !</string>
   <string name="INS_PASSWORDS_NOT_EQUAL">Les mots de passe entrés non sont pas identique.</string>
   <string name="INS_PHONE_LIST">Liste des téléphones</string>
@@ -213,7 +209,6 @@
   <string name="INS_WARNING_BETA_VERSION">Ceci est un version beta d\'Admidio.\n\nL\'utilisation peut contenir des erreurs et même planter.</string>
   <string name="INS_WARNING_SAFE_MODE">Le mode veille du serveur est maintenant actif. Cette fonction pourrait entrainer des problèmes futur avec certaines fonctionnalités du programme.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Bienvenue dans l\'installation d\'Admidio</string>
-  <string name="INS_WELCOME_TEXT">Dans les prochaines pages, vous aurez à entrer des informations nécessaires à la création du système Admidio. Vous aurez à spécifier les informations de la bases de donnée de votre installation d\'Admidio.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
   <!--Phrases only in Inventorymodule-->
   <!--Phrases only in Linkmodule-->
@@ -275,7 +270,6 @@
   <string name="LST_NEW_DEFAULT_CONFIGURATION">La configuration sera défini comme configuration par défaut</string>
   <string name="LST_NO_MORE_COLUMN">Pour des raisons techniques, il est impossible d\'ajouter des colonnes supplémentaires.</string>
   <string name="LST_NO_USER_FOUND">Aucun membre de votre critère n\'a pu être trouvé.</string>
-  <string name="LST_NO_ROLES_REMOVED">Aucun rôle n\'a été supprimé encore. \n\nLes rôles supprimés seront affichés ici seulement après que les rôles aient été supprimés dans le panneau d\'administration.</string>
   <string name="LST_NO_RIGHTS_VIEW_LIST">Vous n\'êtes pas autorisé à afficher la liste des rôles.</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Nombre de rôle par page</string>
   <string name="LST_PRESET_CONFIGURATION">Configuration par défaut</string>
@@ -440,7 +434,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">À l\'inscriptions et l\'attribution Admidio est à la recherche des noms de famille et prénoms similaires afin d\'éviter les doubles entrées. Désactivation des résultats de recherche pour les noms identiques uniquement. (Par défaut: oui)</string>
   <string name="ORG_SECONDS">Secondes</string>
   <string name="ORG_SEND_PASSWORD">Envoyer le mot de passe</string>
-  <string name="ORG_SEND_PASSWORD_DESC">Le mot de passe oublié régénéré peut être demandée par les utilisateurs à être envoyés automatiquement à la même adresse e-mail. En cas de désactivation, les utilisateurs sont en mesure de faire cette demande à l\'administrateur uniquement. (Par défaut: oui)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Envoyer le nouveau mot de passe</string>
   <string name="ORG_SYSTEM_INFORMATIONS">Informations système</string>
   <string name="ORG_TIME_FORMAT">Format du temps</string>
@@ -463,7 +456,6 @@
   <string name="UPD_NEW_BETA">Une nouvelle version beta est disponible!</string>
   <string name="UPD_NEW_BOTH">Une nouvelle version stable et une nouvelle version bêta sont disponibles!</string>
   <string name="UPD_NO_NEW">Vous utilisez une version actuelle #VAR1# des Admidio!</string>
-  <string name="UPD_TITLE">Vérifier pour une mise à jour</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Supprimer l\'album</string>
@@ -578,9 +570,7 @@
   <string name="ROL_EDIT_ROLE">Modifier le rôle</string>
   <string name="ROL_ENABLE_ROLE">Activer le rôle</string>
   <string name="ROL_INACTIV_ROLE">Rôle inactifs</string>
-  <string name="ROL_INACTIV_ROLE_DESC">Vous êtes capable de désactiver la fonction. De cette façon, les informations d\'adhésion seront préservés et, plus tard, il sera toujours possible de vérifier qui a été membre du rôle actuel. Cependant ce rôle n\'apparaîtra plus dans les aperçus généraux.</string>
   <string name="ROL_INACTIV_ROLES">Rôles inactifs</string>
-  <string name="ROL_INVISIBLE_ROLES">Rôles invisible</string>
   <string name="ROL_LINK_MEMBERSHIP_DEL">Aimeriez-vous revenir #VAR1_BOLD# aux rôles actuels?</string>
   <string name="ROL_MEETINGS">Rencontres</string>
   <string name="ROL_MEMBERSHIP_DEL">Aimeriez-vous mettre fin à l\'adhésion en #VAR1_BOLD#?</string>
@@ -607,12 +597,10 @@
   <string name="ROL_ROLE_ADMINISTRATION">Administration de rôle</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Les rôles basée sur certains groupes, les cours et les départements peuvent être gérés ici. Autorisations de rôle peut être défini ici, aussi.</string>
   <string name="ROL_ROLE_DELETE">Suppression de rôle</string>
-  <string name="ROL_ROLE_DELETE_DESC">Voulez-vous supprimer #VAR1# ? \n\nToutes les adhésions vont être supprimés.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Un membre d\'un rôle deviendra automatiquement membre de #VAR1#! \n  Lorsque cette dépendance est fixé tous les membres existants du rôle à charge devenir membre de #VAR1#. Lorsque la dépendance va être supprimé, les adhésions resteront les mêmes!</string>
   <string name="ROL_ROLE_MEMBERSHIPS">Rôle d\'adhésion</string>
   <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Changement du rôle d\'adhésion</string>
   <string name="ROL_ROLE_NAME_EXISTS">Un rôle avec le même nom existe déjà dans cette catégorie.</string>
-  <string name="ROL_ROLE_SET_MODE">Le rôle #VAR1_BOLD# a été changé pour #VAR2_BOLD#.</string>
   <string name="ROL_SAVE_ROLES">Sauvegarder ce paramètre peut causer des pertes au niveau des dépendances du rôle configuré.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Afficher le rôle d\'adhésion</string>
   <string name="ROL_SEMIYEARLY">bi-annuel</string>
@@ -620,15 +608,12 @@
   <string name="ROL_SEND_MAIL_MEMBERS">Les utilisateurs connectés sont autorisés à envoyer des courriels sur le rôle actuel.</string>
   <string name="ROL_SEND_MAIL_ROLE">Les membres de ce rôle ne sont pas autorisés à envoyer des courriels sur le rôle actuel.</string>
   <string name="ROL_SEND_MAILS">Envoyer des courriels</string>
-  <string name="ROL_SET_ROLE_INVISIBLE">Rendre rôle invisible</string>
-  <string name="ROL_SET_ROLE_VISIBLE">Rendre rôle visible</string>
   <string name="ROL_SHOW_MEMBERS">Voir les membres</string>
   <string name="ROL_UNIQUELY">Uniquement</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Valable à partir du</string>
   <string name="ROL_VALID_TO" description="Date valid to">Valable jusqu\'au</string>
   <string name="ROL_VIEW_LIST_MEMBERS">Les utilisateurs connectés sont en mesure d\'afficher les listes des membres de son rôle actuel.</string>
   <string name="ROL_VIEW_LIST_ROLE">Les membres du rôle actuel ne sont autorisés à afficher la liste des membres.</string>
-  <string name="ROL_VISIBLE_ROLES">Rôles visibles</string>
   <string name="ROL_WEEKDAY">Jours de la semaine</string>
   <string name="ROL_WITHOUT_LEADER">Aucun leader</string>
   <!--Phrases only in Roommodule-->
@@ -640,7 +625,6 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Annuler</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
-  <string name="SYS_ACTIVE">Actif</string>
   <string name="SYS_ACTIVATED">Activé</string>
   <string name="SYS_ADD_RECIPIENTS">Ajouter un destinataire</string>
   <string name="SYS_ADDRESS">Adresse</string>
@@ -652,10 +636,8 @@
   <string name="SYS_ALL">Tous</string>
   <string name="SYS_ALSO_VISITORS">Également aux visiteurs</string>
   <string name="SYS_ASSIGN_MEMBERS">Assignation des membres</string>
-  <string name="SYS_AUTHORIZATION">Autorisation</string>
   <string name="SYS_BACK">Retour</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Retour à l\'aperçu du module</string>
-  <string name="SYS_BETA_VERSION">Vous utilisez une version BETA de Admidio. \n\nIl pourrait y avoir des problème de stabilité et des perte de données peut se produire. S\'il vous plaît utiliser cette version à des fins de test uniquement!</string>
   <string name="SYS_BIRTHDAY">Anniversaire</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Résultat du calcul</string>
@@ -675,7 +657,6 @@
   <string name="SYS_COMMON">Général</string>
   <string name="SYS_CONDITION">Exigence</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirmer le mot de passe</string>
-  <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Confirmer la participation</string>
   <string name="SYS_CONTENT">Contenu</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Période de contribution</string>
@@ -739,9 +720,7 @@
   <string name="SYS_HELP">Aide</string>
   <string name="SYS_HIDE">Cacher</string>
   <string name="SYS_HOMEPAGE">Accueil</string>
-  <string name="SYS_INACTIVE">Inactifs</string>
   <string name="SYS_INVALID_PAGE_VIEW">Afficher la page invalide</string>
-  <string name="SYS_INVISIBLE">Invisible</string>
   <string name="SYS_IO_ERROR">I / O d\'erreur</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_LANGUAGE">Langue</string>
@@ -757,7 +736,6 @@
   <string name="SYS_LOGIN">Connexion</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Votre compte n\'a pas encore été activé. \n\nVous serez informé dès que l\'accès sera possible.</string>
   <string name="SYS_LOGIN_PROBLEMS">Problèmes de connection</string>
-  <string name="SYS_LOGIN_SUCCESSFUL">Authentification réussi !</string>
   <string name="SYS_LOGOUT">Déconnexion</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Vous êtes maintenant déconnecté !</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Vous êtes déjà authentifié !</string>
@@ -848,7 +826,6 @@
   <string name="SYS_SENDER">Expéditeur</string>
   <string name="SYS_SERVER">serveur</string>
   <string name="SYS_SERVER_NO_UPLOAD">Les paramètres serveurs ne permettent pas le téléchargement de fichiers.</string>
-  <string name="SYS_SET_BY">Défini par</string>
   <string name="SYS_SETTINGS">Préférences</string>
   <string name="SYS_SHOW_CALENDAR">Affichage du calendrier</string>
   <string name="SYS_SHOW_PROFILE"> Afficher le profil</string>

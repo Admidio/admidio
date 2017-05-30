@@ -35,10 +35,12 @@ $getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('
 $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
 $getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
+$getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
 $postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
-$originalDateId = 0;
+$participationPossible  = true;
+$originalDateId         = 0;
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -75,7 +77,7 @@ if($getDateId > 0)
     $date->readDataById($getDateId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if(!$date->editRight())
+    if(!$date->editable())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -87,8 +89,20 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     $_SESSION['dates_request'] = $_POST;
 
     // ------------------------------------------------
-    // pruefen ob alle notwendigen Felder gefuellt sind
+    // check if all necessary fields are filled
     // ------------------------------------------------
+
+    if(!isset($_POST['date_registration_possible']))
+    {
+        $_POST['date_registration_possible'] = 0;
+    }
+    if($_POST['date_registration_possible'] == 1
+    && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0))
+    {
+        $_SESSION['dates_request']['adm_event_participation_right'] = '';
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR')));
+        // => EXIT
+    }
 
     if(strlen($_POST['dat_headline']) === 0)
     {
@@ -132,13 +146,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     else
     {
         $date->setValue('dat_all_day', 0);
-    }
-
-    if(!isset($_POST['date_roles']) || array_count_values($_POST['date_roles']) == 0)
-    {
-        $_SESSION['dates_request']['date_roles'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
-        // => EXIT
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
@@ -227,10 +234,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         $_POST['dat_all_day'] = 0;
     }
-    if(!isset($_POST['date_registration_possible']))
-    {
-        $_POST['date_registration_possible'] = 0;
-    }
     if(!isset($_POST['dat_room_id']))
     {
         $_POST['dat_room_id'] = 0;
@@ -291,6 +294,21 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $date->setValue('dat_deadline', null);
     }
 
+    if(isset($_POST['adm_event_participation_right']))
+    {
+        // save changed roles rights of the category
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
+
+        // if roles for visibility are assigned to the category than check if the assigned roles of event particiaption
+        // are within the visibility roles set otherwise show error
+        if(count($rightCategoryView->getRolesIds()) > 0
+        && count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
+        {
+            $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
+            // => EXIT
+        }
+    }
+
     // make html in description secure
     $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
 
@@ -349,11 +367,18 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // now save array with all roles that should see this event to date object
-    $date->setVisibleRoles(array_map('intval', $_POST['date_roles']));
+    $gDb->startTransaction();
 
     // save event in database
     $returnCode = $date->save();
+
+    if(isset($_POST['adm_event_participation_right']))
+    {
+
+        // save changed roles rights of the category
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
+    }
 
     if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
     {
@@ -400,11 +425,11 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
         if(strlen($_POST['dat_max_members']) > 0)
         {
-            $teilnehmer = $_POST['dat_max_members'];
+            $participants = $_POST['dat_max_members'];
         }
         else
         {
-            $teilnehmer = 'n/a';
+            $participants = 'n/a';
         }
 
         try
@@ -414,7 +439,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             if($getMode === 1)
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
@@ -422,7 +447,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             else
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
@@ -478,7 +503,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $returnCode2 = $role->save();
         if($returnCode < 0 || $returnCode2 < 0)
         {
-            $date->delete();
+            $gDb->rollback();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -488,7 +513,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $returnCode = $date->save();
         if($returnCode < 0)
         {
-            $role->delete();
+            $gDb->rollback();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT
         }
@@ -533,7 +558,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
-        $member->startMembership((int) $role->getValue('rol_id'), (int) $gCurrentUser->getValue('usr_id'), true, 2);
+        $member->startMembership((int) $role->getValue('rol_id'), (int) $getUserId, true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
     && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
@@ -541,10 +566,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // user does't want to participate as leader -> remove his participation as leader from the event,
         // dont remove the participation itself!
         $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+        $member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_leader', 0);
         $member->save();
     }
+
+    $gDb->endTransaction();
 
     unset($_SESSION['dates_request']);
     $gNavigation->deleteLastUrl();
@@ -564,38 +591,7 @@ elseif($getMode === 2)  // Delete the event
         echo 'done';
     }
 }
-elseif($getMode === 3)  // User attends to the event
-{
-    $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 2);
-    $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-    // => EXIT
-}
-elseif($getMode === 4)  // User cancel the event
-{
-    $member = new TableMembers($gDb);
 
-    if (!$gPreferences['dates_save_all_confirmations'])
-    {
-        // Delete entry
-        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'));
-    }
-    else
-    {
-        // Set user status to refused
-        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 3);
-    }
-
-    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-    // => EXIT
-}
-elseif($getMode === 7)  // User may participate in the event
-{
-    $member = new TableMembers($gDb);
-    $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $gCurrentUser->getValue('usr_id'), null, 1);
-    $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
-    // => EXIT
-}
 elseif($getMode === 6)  // export event in ical format
 {
     $filename = $date->getValue('dat_headline');
@@ -616,15 +612,17 @@ elseif($getMode === 6)  // export event in ical format
     echo $date->getIcal(DOMAIN);
     exit();
 }
-// If participation mode: Write optional parameter from user and show current status message
+// If participation mode: Set status and write optional parameter from user and show current status message
 if (in_array($getMode, array(3, 4, 7), true))
 {
+    $member = new TableMembers($gDb);
+
     // Check participation deadline and update user inputs if possible
-    if (!$date->deadlineExceeded())
+    if ($date->allowedToParticipate() && !$date->deadlineExceeded())
     {
-        $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
-        $member->setValue('mem_comment', $postUserComment);
+        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
+        $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
+
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)
         {
@@ -637,20 +635,70 @@ if (in_array($getMode, array(3, 4, 7), true))
             }
             else
             {
-                $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
-                if ($date->getValue('dat_max_members') > 0)
-                {
-                    $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
-                }
+                $participationPossible = false;
             }
+
+            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+
+            if ($date->getValue('dat_max_members') === (int) $totalMembers
+                && !$participants->isMemberOfEvent($getUserId))
+            {
+                $participationPossible = false; // Participation Limit exeeded and user refused
+            }
+
+            if ($date->getValue('dat_max_members') > 0)
+            {
+                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+            }
+
         }
         else
         {
             $member->setValue('mem_count_guests', $postAdditionalGuests);
         }
-    }
 
-    $member->save();
+        $member->save();
+
+        if ($participationPossible)
+        {
+            switch ($getMode)
+            {
+                case 3:  // User attends to the event
+                    if ($participationPossible)
+                    {
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 2);
+                        $outputMessage = $gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                        // => EXIT
+                    }
+                    break;
+
+                case 4:  // User cancel the event
+                    if (!$gPreferences['dates_save_all_confirmations'])
+                    {
+                        // Delete entry
+                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
+                    }
+                    else
+                    {
+                        // Set user status to refused
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
+                    }
+
+                    $outputMessage = $gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                    // => EXIT
+                    break;
+
+                case 7:  // User may participate in the event
+                    if ($participationPossible)
+                    {
+                        $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 1);
+                        $outputMessage = $gL10n->get('DAT_ATTEND_POSSIBLY', $date->getValue('dat_headline'), $date->getValue('dat_begin'));
+                        // => EXIT
+                    }
+                    break;
+            }
+        }
+    }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));

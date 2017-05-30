@@ -266,8 +266,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('registration_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=registration', $page, array('class' => 'form-preferences'));
-                        $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
-                        $form->addSelectBox('registration_mode', $gL10n->get('SYS_REGISTRATION'), $selectBoxEntries, array('defaultValue' => $formValues['registration_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_REGISTRATION_MODE'));
+                        $form->addCheckbox('registration_enable_module', $gL10n->get('ORG_ENABLE_REGISTRATION_MODULE'), (bool) $formValues['registration_enable_module'], array('helpTextIdInline' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC'));
                         $form->addCheckbox('enable_registration_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_registration_captcha'], array('helpTextIdInline' => 'ORG_CAPTCHA_REGISTRATION'));
                         $form->addCheckbox('enable_registration_admin_mail', $gL10n->get('ORG_EMAIL_ALERTS'), (bool) $formValues['enable_registration_admin_mail'], array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', 'ROL_RIGHT_APPROVE_USERS')));
                         $form->addSubmitButton('btn_save_registration', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
@@ -454,6 +453,17 @@ $page->addHtml('
                             $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
                         }
                         $form->addStaticControl('safe_mode', $gL10n->get('SYS_SAFE_MODE'), $html);
+
+                        try
+                        {
+                            PasswordHashing::genRandomInt(0, 1, true);
+                            $html = '<span class="text-success"><strong>' . $gL10n->get('SYS_SECURE') . '</strong></span>';
+                        }
+                        catch (AdmException $e)
+                        {
+                            $html = '<span class="text-danger"><strong>' . $gL10n->get('SYS_PRNG_INSECURE') . '</strong><br />' . $e->getText() . '</span>';
+                        }
+                        $form->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
 
                         if(ini_get('post_max_size') !== '')
                         {

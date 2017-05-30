@@ -80,7 +80,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_mode'] == 0)
+        if($gPreferences['registration_enable_module'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -128,15 +128,28 @@ if($getNewUser === 2)
     }
 }
 
-// nun alle Profilfelder pruefen
+// now check all profile fields
 foreach($gProfileFields->mProfileFields as $field)
 {
-    $postId = 'usf-'. $field->getValue('usf_id');
+    $postId    = 'usf-'. $field->getValue('usf_id');
+    $showField = false;
+
+    // at registration check if the field is enabled for registration
+    if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
+    {
+        $showField = true;
+    }
+    // only allow to edit viewable fields, check for edit profile was done before
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
+    {
+        $showField = true;
+    }
 
     // check and save only fields that aren't disabled
-    if ($field->getValue('usf_disabled') == 0
-    || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
-    || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
+    if ($showField
+    && ($field->getValue('usf_disabled') == 0
+       || ($field->getValue('usf_disabled') == 1 && $gCurrentUser->hasRightEditProfile($user, false))
+       || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0)))
     {
         if(isset($_POST[$postId]))
         {

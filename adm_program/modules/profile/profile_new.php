@@ -109,7 +109,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_mode'] == 0)
+        if($gPreferences['registration_enable_module'] == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -158,7 +158,7 @@ $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL1
 $form = new HtmlForm('edit_profile_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser, $page);
 
 // *******************************************************************************
-// Loop over all categories and profile fields except the category 'master data'
+// Loop over all categories and profile fields
 // *******************************************************************************
 
 $category = '';
@@ -167,23 +167,14 @@ foreach($gProfileFields->mProfileFields as $field)
 {
     $showField = false;
 
-    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-    // E-Mail ist Ausnahme und muss immer angezeigt werden
-    if($getNewUser === 2 && $gPreferences['registration_mode'] == 1
-    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') === 'EMAIL'))
+    // at registration check if the field is enabled for registration
+    if($getNewUser === 2 && $field->getValue('usf_registration') == 1)
     {
         $showField = true;
     }
-    elseif($getNewUser === 2 && $gPreferences['registration_mode'] == 2)
+    // only allow to edit viewable fields, check for edit profile was done before
+    elseif($getNewUser !== 2 && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
     {
-        // bei der vollstaendigen Registrierung alle Felder anzeigen
-        $showField = true;
-    }
-    elseif($getNewUser !== 2
-    && ($getUserId === (int) $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
-    {
-        // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
-        // Leiter duerfen dies nicht !!!
         $showField = true;
     }
 

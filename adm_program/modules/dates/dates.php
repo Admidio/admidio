@@ -33,8 +33,6 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$disableAdditionalGuests   = 4;
-$disableComments           = 4;
 $disableStatusAttend       = '';
 $disableStatusTentative    = '';
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
@@ -130,32 +128,6 @@ if($getViewMode === 'html')
 
         $("#menu_item_print_view").click(function() {
             window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&id=' . $getId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
-        });
-
-        $("button[id^=btn_attend_]").click(function() {
-            // Select current form and action attribute
-            var submit_ParticipationForm = $(this).get(0).form;
-            var form_action = $(submit_ParticipationForm).attr("action");
-
-            // add value 3 to mode attribute in link for participation
-            $(submit_ParticipationForm).attr("action", form_action + 3);
-            submit_ParticipationForm.submit();
-        });
-
-        $("button[id^=btn_tentative_]").click(function() {
-            var submit_ParticipationForm = $(this).get(0).form;
-            var form_action = $(submit_ParticipationForm).attr("action");
-
-            $(submit_ParticipationForm).attr("action", form_action + 7);
-            submit_ParticipationForm.submit();
-        });
-
-        $("button[id^=btn_refuse_]").click(function() {
-            var submit_ParticipationForm = $(this).get(0).form;
-            var form_action = $(submit_ParticipationForm).attr("action");
-
-            $(submit_ParticipationForm).attr("action", form_action + 4);
-            submit_ParticipationForm.submit();
         });', true);
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
@@ -219,19 +191,20 @@ if($getViewMode === 'html')
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
 
+        if($gCurrentUser->editDates())
+        {
+            // if no calendar selectbox is shown, then show link to edit calendars
+            $datesMenu->addItem('admMenuItemCategories',
+                                FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
+                                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras');
+        }
+
         if($gCurrentUser->isAdministrator())
         {
             // show link to system preferences of weblinks
             $datesMenu->addItem('admMenuItemPreferencesLinks',
                                 ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=events',
                                 $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
-        }
-        elseif($gCurrentUser->editDates())
-        {
-            // if no calendar selectbox is shown, then show link to edit calendars
-            $datesMenu->addItem('admMenuItemCategories',
-                                FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
-                                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras');
         }
     }
 
@@ -356,15 +329,6 @@ else
         if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
         {
             $participateModalForm = true;
-
-            if ((int) $date->getValue('dat_allow_comments') === 1)
-            {
-                $disableComments = '';
-            }
-            if ((int) $date->getValue('dat_additional_guests') === 1)
-            {
-                $disableAdditionalGuests = '';
-            }
         }
 
         // set end date of event
@@ -386,7 +350,7 @@ else
             // change and delete is only for users with additional rights
             if ($gCurrentUser->editDates())
             {
-                if($date->editRight())
+                if($date->editable())
                 {
                     $outputButtonCopy = '
                         <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id=' . $dateId . '&amp;copy=1&amp;headline=' . $getHeadline . '">
@@ -497,25 +461,25 @@ else
             }
         }
 
-        // count participants of the date
-        if($dateRolId > 0)
+        // if current user is allowed to participate then show buttons for participation
+        if($date->allowedToParticipate())
         {
             $participants = new Participants($gDb, $dateRolId);
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
             $participantsArray   = $participants->getParticipantsArray($dateRolId);
 
-        if($date->getValue('dat_deadline') !== null)
-        {
-            if ($date->getValue('dat_all_day') === 0)
+            if($date->getValue('dat_deadline') !== null)
             {
-                 $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']. ' ' . $gPreferences['system_time']);
+                if ($date->getValue('dat_all_day') === 0)
+                {
+                     $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']. ' ' . $gPreferences['system_time']);
+                }
+                else
+                {
+                    $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']);
+                }
             }
-            else
-            {
-                $outputDeadline = $date->getValue('dat_deadline', $gPreferences['system_date']);
-            }
-        }
 
             // Links for the participation only in html mode
             if($getViewMode === 'html')
@@ -557,13 +521,13 @@ else
                 }
 
                 // Check limit of participants
-                if ($date->getValue('dat_max_members') === 1 && $outputNumberMembers >= $date->getValue('dat_max_members'))
+                if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
                     // No further members allowed
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (!in_array((int) $gCurrentUser->getValue('usr_id'), array_column($participantsArray, 'usrId'), true))
+                    if (in_array((int) $gCurrentUser->getValue('usr_id'), $participantsArray, true))
                     {
                         switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
                         {
@@ -614,33 +578,10 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default" data-toggle="modal" data-target="#participate_modal_' . $dateId . '">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.'/adm_program/modules/dates/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
-
-                        $participationForm = new HtmlForm('participate_form_'. $dateId, 'dates_function.php?dat_id=' . $dateId . '&amp;mode=', $page, array('method' => 'post', 'setFocus' => false));
-                        $participationForm->addHtml('<div id="participate_modal_' . $dateId . '" class="modal fade" role="dialog">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                    <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
-                                                                    <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
-                                                                </div>
-                                                                <div class="modal-body">');
-                        $participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $row['comment'], 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
-                        $participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $row['additional_guests'], array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
-                        $participationForm->addHtml('</div><div class="modal-footer">');
-                        $participationForm->openButtonGroup();
-                        $participationForm->addButton('btn_attend_' . $dateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
-                        $participationForm->addButton('btn_tentative_' . $dateId, $gL10n->get('DAT_USER_TENTATIVE'), array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative));
-                        $participationForm->addButton('btn_refuse_' . $dateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
-                        $participationForm->closeButtonGroup();
-                        $participationForm->addHtml('</div></div></div></div>');
-                        $page->addHtml($participationForm->show(false));
                     }
                     // Reset flags and parameters
-                    $disableAdditionalGuests    = 4;
-                    $disableComments            = 4;
                     $disableStatusAttend        = '';
                     $disableStatusTentative     = '';
                     $participateModalForm       = false;
@@ -659,7 +600,7 @@ else
                 if ($participationPossible === false)
                 {
                     // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                    if (!$participants->isMemberOfEvent((int) $gCurrentUser->getValue('usr_id')))
+                    if (!$participants->isMemberOfEvent((int) $gCurrentUser->getValue('usr_id')) && $date->getValue('dat_max_members') > 0)
                     {
                         $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                         $iconParticipationStatus = '';

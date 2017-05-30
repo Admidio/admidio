@@ -37,10 +37,8 @@
   <string name="DAT_ALL_DAY">Tempo totale</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Aggiungi partecipanti</string>
   <string name="DAT_ATTEND">Participare</string>
-  <string name="DAT_ATTEND_DATE">Hai confermato la tua pertecipazione a #VAR1_BOLD# il #VAR2#.</string>
   <string name="DAT_CALENDAR">Calendario</string>
   <string name="DAT_CANCEL">Annulla</string>
-  <string name="DAT_CANCEL_DATE">Hai annullato la tua partecipazione a #VAR1_BOLD# il #VAR2#.</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Appuntamenti correnti dell\'organizzazione #VAR1#</string>
   <string name="DAT_DATE">Evento</string>
   <string name="DAT_DATES">Eventi</string>
@@ -89,7 +87,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Dettagliato</string>
   <string name="DAT_VIEW_MODE_COMPACT">Sintetico</string>
   <string name="DAT_VISIBILITY">Visibilità</string>
-  <string name="DAT_VISIBLE_TO">Visibile per</string>
+  <string name="SYS_VISIBLE_FOR">Visibile per</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Aggiungi al database</string>
   <string name="DOW_ADDITIONAL_FILES">L\'elenco intende fornire una vista d\'insieme sui file e le cartelle non importate già nel database. Aggiungile qui. I diritti per l\'accesso saranno copiati dalla cartella selezionata.</string>
@@ -147,7 +145,6 @@
   <string name="ECA_SCALE_THUMBNAILS_DESC">Qui puoi definire la misura del lato lungo a cui sarà scalata la miniatura delle immagini (Predefinita: 250px).</string>
   <string name="ECA_SUCCESSFULLY_SEND">La tua cartolina è stata inviata.</string>
   <string name="ECA_TEMPLATE">Modello</string>
-  <string name="ECA_TEMPLATE_DESC">Definisci il modello standard. (predefinito: Postcard) </string>
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Mostra l\'immagine a misura piena</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Indietro al libro degli ospiti</string>
@@ -189,31 +186,29 @@
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Le informazioni sull\'Amministratore sono incomplete!</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Consiglio dell\'associazione</string>
-  <string name="INS_CHOOSE_LANGUAGE">Scegli lingua</string>
   <string name="INS_CONFERENCE_ROOM">Sala conferenze</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Il file #VAR1_BOLD# non può essere trovato nella directory principale di Admidio!\n\nPer favore scarica il file di nuovo e copialo nella directory menzionata.</string>
   <string name="INS_CONTINUE_INSTALLATION">Continua l\'installazione</string>
   <string name="INS_COURSES">Corsi</string>
   <string name="INS_CREATE_ADMINISTRATOR">Crea amministratore</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Crea  file di configurazione</string>
+  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">L\'aggiornamento del dtaabase non è richiesto</string>
+  <string name="INS_DATABASE_FILE_NOT_FOUND">Il file #VAR1_BOLD# non può essere trovato nella cartella #VAR2_BOLD#.</string>
+  <string name="INS_DATABASE_IS_UP_TO_DATE">Il database di Admidio è aggiornato</string>
+  <string name="INS_DATABASE_IS_UPDATED">Aggiornamento database</string>
+  <string name="INS_DATABASE_LOGIN">Inserisci le informazioni del database</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">La versione del tuo database è #VAR1#.\n\nAggiorna alla versione richiesta #VAR2#</string>
   <string name="INS_DATABASE_SYSTEM">Sistema database</string>
+  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Crea database</string>
   <string name="INS_DELETE_CONFIG_FILE">La directory principale di Admidio #VAR1_BOLD# contiene un file config.php. Esso è stato già spostato nella cartella adm_my_files. Per favore cancella il file nella cdirectory principale.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Scarica il file di configurazione</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Il file di configurazione #VAR1_BOLD# non può essere salvato nella cartella #VAR2_BOLD#. Per favore assegna l\'accesso in scrittura alla cartella (cambia gli attributi del file via FTP rispettivamente a 0777 o drwxrwxrwx) o scarica il file di configurazione e copialo nella directory di Admidio #VAR3_BOLD# usando un programma FTP.\n\nDopo che il file è stato inserito in questa posizione puoi continuare con l\'installazione.</string>
   <string name="INS_DATA_DO_NOT_MATCH">I dati di #VAR1_BOLD# non sono conformi alle informazioni fornite durante l\'installazione.\n\nVerifica il file config.php e tutte le altre informazioni.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Dettagli dell\'Amministratore</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Fornisci qui il nome dell\'amministratore, l\'email e le informazioni per l\'accesso. Accedi con lo stesso utente dopo l\'installazione.</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">L\'aggiornamento del dtaabase non è richiesto</string>
-  <string name="INS_DATABASE_FILE_NOT_FOUND">Il file #VAR1_BOLD# non può essere trovato nella cartella #VAR2_BOLD#.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Aggiornamento database</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Il database di Admidio è aggiornato</string>
-  <string name="INS_DATABASE_LOGIN">Inserisci le informazioni del database</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Crea database</string>
   <string name="INS_DESCRIPTION_BOARD">Consiglio di amministrazione dell\'associazione</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Le riunioni possono svolgersi qui. La stanza deve prima essere prenotata. L\'uso è libero.</string>
   <string name="INS_DESCRIPTION_MEMBER">Tutti i membri dell\'organizzazione</string>
-  <string name="INS_DESCRIPTION_WEBMASTER">Gruppo degli amministratori del sistema</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Inserisci le informazioni di accesso al database</string>
   <string name="INS_ERROR_OPEN_FILE">Il file #VAR1_BOLD# non può essere aperto.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -234,7 +229,6 @@
   <string name="INS_LANGUAGE_NOT_CHOOSEN">Nessuna lingua è stata selezionata.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_MESSENGER">Messenger</string>
-  <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Non tutte le informazioni di accesso al database MySQL sono state fornite!</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Non è stato possibile trovare l\'installazione corrente. Se hai usato Admidio 1.x aggiorna prima a Admidio 2.x. Solo successivamente puoi aggiornare l\'installazione alla versione #VAR1#. Se stai già usando Admidio 2.x o una versione superiore per favore verifica la correttezza del tuo database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Un\'organizzazione chiamata #VAR1_BOLD# esiste già. Si prega di scegliere un altro nome.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Il nome dell\'organizzazione fornito non è cpmpleto!</string>
@@ -260,11 +254,7 @@
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Processo di aggiornamento avvenuto con successo</string>
   <string name="INS_WARNING_BETA_VERSION">Questa è una versione beta di Admidio.\n\nIl suo uso può creare rischi a causa di possibile instabilità e perdita di dati. Per favore usalo solo come ambiente di test!</string>
   <string name="INS_WARNING_SAFE_MODE">Save Mode è attivo sul server. Questo può causare più tardi problemi quando usi certe funzioni.</string>
-  <string name="INS_WEBMASTER_LOGIN">Login di amministrazione</string>
-  <string name="INS_WEBMASTER_LOGIN_DESC">Solo un amministratore può aggiornare il database. Per favore inserisci le credenziali di login dell\'amministratore.</string>
-  <string name="INS_WEBMASTER_LOGIN_FAILED">Non è stato possibile trovare un utente con queste credenziali di login e un ruolo di amministratore.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Benvenuto nell\'installazioen di Admidio</string>
-  <string name="INS_WELCOME_TEXT">Nelle pagine seguenti sarai invitato a fornire alcune informazioni necessarie in relazione alla creazione di un nuovo sistema Admidio. Dovrai specificare le informazioni di accesso al database della tua installazione di Admidio con precisione.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# richiede l\'ultima versione MySQL #VAR2#. Per favore prova ad aggiornare il tuo database MySQL o usa una versione più vecchia di Admidio #VAR3# #VAR4# in modo da essere sicuro della compatibilità.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# richiede l\'ultima versione di PHP #VAR2#. Per favore prova ad aggiornare la tua versione di PHP o usa una versione più vecchia di Admidio #VAR3# #VAR4# in modo da essere sicuro della compatibilità.</string>
   <string name="INS_XING">Xing</string>
@@ -313,7 +303,6 @@
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Nessuna impostazione della configurazione dell\'elenco predefinito è stata definita dall\'amministratore!\n\nContatta l\'amministratore del sietma per avere aiuto.</string>
   <string name="LST_DELETE_CONFIGURATION">Cancella la configurazione</string>
   <string name="LST_EMAIL_TO_MEMBERS">Email ai membri</string>
-  <string name="LST_EMPTY_EXAMPLE_DESC">Trova tutti gli utenti con un campo dell\'indirizzo vuoto</string>
   <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
   <string name="LST_EXCLUDE_EXAMPLE_DESC">Trova tutti gli utenti che non si chiamano Steve</string>
   <string name="LST_EXPORT_TO">Esporta per</string>
@@ -331,26 +320,21 @@
   <string name="LST_LIST_VIEW">Panoramica dell\'elenco</string>
   <string name="LST_MAX">del massimo. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Assegnazione membro</string>
-  <string name="LST_MEMBER_STATUS">Stato del membro</string>
   <string name="LST_MEMBERS_PER_PAGE">Membri visualizzati per pagina</string>
   <string name="LST_MEMBERS_PER_PAGE_DESC">Numero dei membri elencati nella vista HTML. Più membri possono essere elencati usando la funzione impaginazione. Questo valore non influirà sull\'anteprima di stampa e sulle funzionalità di esportazione (Predefinito: 25).</string>
   <string name="LST_MEMBERSHIP_END">Fine della membership</string>
   <string name="LST_MEMBERSHIP_START">Inizio della membership</string>
   <string name="LST_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="LST_MUST_HAVE_WEBMASTER">Il tipo di ruolo \'webmaster\' deve avere almeno un membro assegnato!</string>
   <string name="LST_MY_LIST">Proprio elenco</string>
   <string name="LST_MYLIST_CONDITION_DESC">Definisci i requisiti di tutti i campi usati nella tua nuova configurazione degli elenchi. I requisiti del ruolo selezionato saranno saranno limitati proprio dalle tue proprie esigenze.</string>
   <string name="LST_NEW_DEFAULT_CONFIGURATION">La configurazione sarà stata definita come configurazione predefinita</string>
   <string name="LST_NO_MORE_COLUMN">Per ragioni tecniche, non saranno aggiunte più colonne.</string>
   <string name="LST_NO_USER_FOUND">Nessun membro in base ai tuoi criteri è potuto essere trovato.</string>
-  <string name="LST_NO_ROLES_REMOVED">Nessun ruolo è stato ancora cancellato.\n\nI ruoli cancellati saranno visualizzati qui solo dopo che i ruoli sono stati cancellati nel pannello di amministrazione dei ruoli.</string>
   <string name="LST_NO_RIGHTS_VIEW_LIST">Non ti è permesso visualizzare l\'elenco dei ruoli definiti.</string>
   <string name="LST_NOT_VALID_DATE_FORMAT">Per favore usa una data valida come condizione per il campo #VAR1_BOLD#.</string>
   <string name="LST_NOT_NUMERIC">Per favore usa un numero valido come condizione per il campo #VAR1_BOLD#.</string>
-  <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Trova tutti gli utenti con un campo dell\'indirizzo compilato</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Numero di ruoli per pagina</string>
   <string name="LST_PRESET_CONFIGURATION">Configurazione predefinita</string>
-  <string name="LST_PRESET_CONFIGURATION_DESC">Come webmaster puoi definire la configurazione predefinita per tutti gli utenti. Configura le righe e le colonne e salvale assegnando un nome all\'impostazione della configurazione.</string>
   <string name="LST_PRINT_PREVIEW">Stampa anteprima</string>
   <string name="LST_ROLE_INFORMATION">Informazioni sul ruolo</string>
   <string name="LST_ROLE_MEMBERSHIP_TO">a</string>
@@ -414,12 +398,7 @@
   <string name="MAI_SEND_EMAIL">Invia email</string>
   <string name="MAI_SEND_METHOD">Invia tramite</string>
   <string name="MAI_SEND_METHOD_DESC">La funzione mail di PHP è limitata da alcuni Provider e a volte è portatrice di sospetto spam. Pertanto si raccomanda di inviare le email tramite un server SMTP. Le impostazioni SMTP possono essere configurate qui sotto. (Default: PHP mail ())</string>
-  <string name="MAI_SENDER_EMAIL">Email del mittente</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Alcuni provider non ammettono mittente con informazioni non definite.  E\' necessario per favore fornire un indirizzo email come mittente predefinito dell\'email ad uso del modulo email (es. outbox@#VAR1#).\nSe il campo rimane vuoto, l\'indirizzo email registrato del mittente apparirà come informazione sul mittente. (predefinito: vuoto)</string>
-  <string name="MAI_SENDER_INTO_TO">Mittente come ricevente</string>
-  <string name="MAI_SENDER_INTO_TO_DESC">Se un\'email viene inviata ad un ruolo tutti gli indirizzi dei destinatari verranno inseriti nel campo Ccn. Il campo TO conterrà quindi \"Destinatari non divulgati\". Se questo dà errore è possibile utilizzare questa opzione per inserire gli indirizzi dei destinatari nel campo TO. Gli altri indirizzi rimarranno nel campo Ccn. (Predefinito: Disattivato)</string>
   <string name="MAI_SENDER_NAME">Nome del mittente</string>
-  <string name="MAI_SENDER_NAME_DESC">Nome del mittente dell\'indirizzo email usato.</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Il mittente è stato disconnesso. Inoltre le  informazioni del mittente potrebbero non essere corrette.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">Per gli utenti disconnessi un testo alfanumerico apparirà quando il modulo captcha è attivato. Il testo fornito dovrà essere inserito nell\'apposito campo. Questo preverrà l\'abuso del modulo da parte degli spammer. (predefinito: sì)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -529,10 +508,8 @@
   <string name="NWU_USER_VALID_LOGIN">L\'utente possiede già le informazioni valide per l\'accesso.</string>
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ACCESS_TO_MODULE">Modulo per l\'accesso</string>
-  <string name="ORG_ACCESS_TO_MODULE_DESC">Il modulo può essere disabilitato o abilitato solo per gli utenti registrati. Se il modulo è accessibile solo agli utenbti registrati, esso sarà nascosto per gli utenti non registrati e gli RSS-Feed saranno completamente disabilitati per entrambi i grupoi di utenti. (predefinito: attivo)</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS">Abilita le notifiche di sistema</string>
   <string name="ORG_ACTIVATE_SYSTEM_MAILS_DESC">Qui puoi disabilitare le notifiche di sistema di Admidio. Esse possono essere inviate, ad esempio, se si registra un nuovo utente. Le conferme della registrazione saranno anch\'esse inviate come notifiche di sistema. In generale, questa funzionalità non sarà disabilitata salvo se il server non supporta l\'invio di e-mail. Il modulo e-mail è attivato. (Predefinito: Sì)</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">Una nuova organizzazione sarà aggiunta al database includento i dati master. L\'utente corrente sarà annunciato come amministratore e potrà gestire i dati. L\'utente che accederà al sistema dovrà selezionare l\'organizzazione desiderata.</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variabili aggiuntive</string>
   <string name="ORG_ADMIDIO_THEME">Tema Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Seleziona il lay-out per Admidio. Tutti i temi salvati nella cartella adm_themes sono mostrati. (predefinito: modern)</string>
@@ -540,25 +517,12 @@
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto disconnessione dopo</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Imposta il tempo dopo il quale il sistema automaticamente disconnette un utente inattivo. Un utente è inattivo quando nessuna pagina è caricata per un certo tempo. Queta configurazione è ignorata quando l\'utente selezionato è #VAR1_BOLD#. (predefinito: 20 minuti)</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Colore dello sfondo</string>
-  <string name="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT">Seleziona il colore dello sfondo (in codice hex) per il codice captcha. (predefinito: #FFEFC4)</string>
-  <string name="ORG_CAPTCHA_FONT">Seleziona il tipo di font per il codice captcha. (predefinito: font Theme)</string>
-  <string name="ORG_CAPTCHA_FONT_SIZE">Seleziona la grandezza della font per il codice captcha. (predefinita: 20)</string>
-  <string name="ORG_CAPTCHA_HEIGHT">Altezza captcha</string>
-  <string name="ORG_CAPTCHA_HEIGHT_DESC">Altezza dell\'immagine del captcha. In questo modo i caratteri dell\'immagine del captcha possono essere allungati o ristretti. (Predefinito: 60)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Anteprima captcha</string>
-  <string name="ORG_CAPTCHA_PREVIEW_TEXT">Visualizza l\'anteprima captcha. Per favore nota che solo i valori salvati sono considerati!</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Dopo l\'attivazione un\'immagine con un codice captcha o un semplice calcolo sarà visualizzato ai nuovi utenti. E\' necessario inserire il codice corretto o il risultato per salvare la voce modificata ora. Il captcha è parte del sistema anti-spam di Admidio. (predefinito: sì)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Firma del captcha</string>
-  <string name="ORG_CAPTCHA_SIGNATURE_FONT_SIZE">Seleziona la grandezza della font  per la firma del captcha. (predefinita: 13)</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Inserisci la tua firma preferita per il captcha. Sarà usato il tipo di font prefdefinito del tema corrente.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Caratteri accettati</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Inserisci i caratteri accettati per il captcha.</string>
   <string name="ORG_CAPTCHA_TYPE">Tipo di captcha</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Calcolo</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Immagine</string>
-  <string name="ORG_CAPTCHA_TYPE_TEXT">Seleziona il tipo di captcha. Scegli tra la visualizzazione del captcha come immagine o come semplice calcolo sotto forma di testo. (predefinito: immagine)</string>
-  <string name="ORG_CAPTCHA_WIDTH">Larghezza captcha</string>
-  <string name="ORG_CAPTCHA_WIDTH_DESC">Larghezza dell\'immagine del captcha. In questo modo i caratteri dell\'immagine del captcha possono essere allungati o ristretti. (Predefinito: 250)</string>
   <string name="ORG_CONFIRM_REGISTRATION">Conferma della registrazione dopo la conferma manuale.</string>
   <string name="ORG_CREATE_ITEM_FIELD">Crea campo della voce</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Crea campo del profilo</string>
@@ -572,8 +536,6 @@
   <string name="ORG_EMAIL_ALERTS">Allerta via email</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Tutti i membri di tutti i ruoli con i permessi #VAR1_BOLD# ricevono un\'email nel caso della registrazione di un nuovo utente. (predefinito: sì)</string>
   <string name="ORG_ENABLE_CAPTCHA">Attivazione captcha</string>
-  <string name="ORG_ENABLE_RSS_FEEDS">Attivazione RSS-Feed</string>
-  <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio consente di avere il servizio RSS-Feed per i singoli moduli (annunci, appuntamenti, libro degli ospiti, galleria fotografica e collegamenti) sulla pagina di panoramica di ogni modulo. La sottoscrizione è possibile dal browser o dal feed reader. (predefinito: sì)</string>
   <string name="ORG_FAST_REGISTRATION">Registrazione veloce</string>
   <string name="ORG_FIELD_DESCRIPTION">Definisci campi aggiuntivi illimitati. I campi saranno visualizzati e possono essere modificati nel profilo dell\'utente. Questi campi saranno disponibili anche in un proprio elenco.</string>
   <string name="ORG_FIELD_DISABLED">Il campo è modificabile solo per l\'utente con il permesso #VAR1_BOLD#</string>
@@ -602,9 +564,7 @@
   <string name="ORG_NEW_PASSWORD_ACTIVATION_LINK">Nuova password e collegamento per l\'attivazione.</string>
   <string name="ORG_NO_FIELD_CREATED">Nessun campo specifico dell\'organizzazione è stato ancora creato!</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Cambiando la vista tutte le modifiche non salvate andranno perse.</string>
-  <string name="ORG_NOTIFY_WEBMASTER">Informare l\'amministratore di nuove registrazioni</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Numero di voci per pagina</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definizione del numero di elementi visualizzati in una pagina. L\'impaginazione viene fornita se il numero di elementi supera il valore definito. Anteprima di stampa e funzionalità di esportazione non sono interessati. Se il valore è 0, tutti gli articoli saranno elencati e l\'impaginazione è disattivata. (predefinito: 10)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Solo per gli utenti registrati</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gestisci le preferenze organizzative generali o le preferenze del modulo qui.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">L\'organizzazione #VAR1_BOLD# è stata aggiunta con successo. Essa è ora selezionabile quando viene effettuato l\'accesso.\n\nSe hai previsto una home page diversa per questa organizzazione per favore aggiungila come home page separata nel file config.php.</string>
@@ -620,7 +580,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Al momento della registrazione e dell\'assegnazione delle registrazioni Admidio ricerca cognomi e nomi simili al fine di evitare doppie registrazioni. Disatttivando saranno cercati solo i nomi identici. (dpredefinito: sì)</string>
   <string name="ORG_SECONDS">secondi</string>
   <string name="ORG_SEND_PASSWORD">Invia password</string>
-  <string name="ORG_SEND_PASSWORD_DESC">La dimenticanza e la rigenerazione della password possono essere richieste dagli utenti al fine di essere inviate automaticamente al proprio indirizzo di posta elettronica. Riguardo alla disattivazione, gli utenti possono fare questa richiesta solo all\'amministratore. . (predefinita: sì)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Invia nuova password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Mostra il creatore e la data di creazione</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Un campo è normalmente visibile a tutti gli utenti. Se questa funzione non è selezionata, i dati possono essere visti solo dagli utenti che hanno i permessi per modificare tutti gli utenti. Per il proprio profilo ogni utente può vedere e modificare i dati.</string>
@@ -637,7 +596,6 @@
   <string name="ORG_TIME_FORMAT_DESC">Il ormato rispetta la funzione PHP #VAR1#. (predefinito: H:i)</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Elenco dei valori</string>
-  <string name="ORG_VALUE_LIST_DESC">Definisci gli elementi del menù drop-down o i box di opzione qui. Prevedi un elemento drop-down o un pulsante di opzione per linea.\n\nInvece del testo, la posizione selezionata nell\'elenco sarà inserita nel profilo. Se il testo nella linea cambierà, tutti gli utenti assegnati potranno vedere il nuovo testo nel loro profilo. Se un elemento del menù è spostato su un\'altra linea, un\'altra voce può essere mostrata nel \'s del profilo dell\'utente.\n\nIn caso di pulsante di opzione, può essere mostrata anche un\'icona invece dell\'elemento di testo. A tal fine, il nome di un\'icona deve essere previsto nella cartella del tema (es. ok.png) o un URL esterno di un file immagine (es. https://www.example.com/example.jpg). Usando una scorciatoia, può essere usato un tipo di strumento addizionale del set di icone (es. female.png|female)</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Collegamento per l\'attivazione  della nuova password</string>
   <string name="ORG_VARIABLE_EMAIL">Indirizzo email dell\'utente</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Indirizzo email di sistema dell\'organizzazione</string>
@@ -658,7 +616,6 @@
   <string name="UPD_NEW_BOTH">Una nuova versione stabile e una nuova versione beta sono disponibili!</string>
   <string name="UPD_NO_NEW">Stai usando la versione corrente #VAR1# di Admidio!</string>
   <string name="UPD_STABLE_VERSION">Disponibile</string>
-  <string name="UPD_TITLE">Verifica aggiornamenti</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Cancella album</string>
@@ -762,10 +719,8 @@
   <string name="PRO_MY_PROFILE">Il mio profilo</string>
   <string name="PRO_NEW_PASSWORD">Nuova password</string>
   <string name="PRO_NEW_PICTURE">Nuova immagine del profilo</string>
-  <string name="PRO_NO_DEFAULT_ROLE">La gestione del ruolo non contiene un ruolo predefinito per i nuovi utenti. Per favore contatta il webmaster che può modificare questa impostazione.</string>
   <string name="PRO_NO_ROLES_VISIBLE">Nessun ruolo è stato trovato. Probabilmente non hai i diritti per vedere alcuni ruoli.</string>
   <string name="PRO_PASSWORD_CHANGED">La password è stata cambiata con successo.</string>
-  <string name="PRO_PASSWORD_DESCRIPTION">La password deve avere almeno 8 caratteri tra numeri, lettere e caratteri speciali.\n\nPer motivi di sicurezza, la password viene salvata crittografata. Più tardi non si vede più.</string>
   <string name="PRO_PASSWORD_LENGTH">La password deve contenere almeno 8 caratteri.</string>
   <string name="PRO_PASSWORD_OLD_WRONG">La vecchia password non è corretta.</string>
   <string name="PRO_PASSWORDS_NOT_EQUAL">La password originale e quella ridigitata sono diverse.</string>
@@ -799,6 +754,7 @@
   <string name="PRO_VIEW_ROLES_OTHER_ORGAS">Solo i ruoli di altre organizzazioni che sono visibili a tutti gli utenti registrati sono visualizzati. Se tu sei un membro di questa organizzazione, ti saranno visualizzati i ruoli che puoi vedere nell\'ambito dell\'organizzazione.</string>
   <string name="PRO_WANT_DELETE_PHOTO">Vuoi eliminare la foto selezionata?</string>
   <string name="PRO_YEARS">Anni</string>
+  <!--Phrases only in Relationssmodule-->
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Ruoi attivi</string>
   <string name="ROL_ALL_GUESTS">Tutti gli ospiti del sito</string>
@@ -817,9 +773,7 @@
   <string name="ROL_EDIT_ROLE">Modifica ruolo</string>
   <string name="ROL_ENABLE_ROLE">Attiva ruolo</string>
   <string name="ROL_INACTIV_ROLE">Disattiva ruolo</string>
-  <string name="ROL_INACTIV_ROLE_DESC">Puoi disattivare il ruolo. In questo modo, le informazioni sulla membership saranno conservata e sarà ancora possibile in futuro verificare che costui era un membro del ruolo attuale. Tuttavia questo ruolo non apparirà più nella panoramica generale.</string>
   <string name="ROL_INACTIV_ROLES">Ruoli inattivi</string>
-  <string name="ROL_INVISIBLE_ROLES">Ruoli invisibili</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Il responsabile di questo ruolo non ha diritti speciali. Essi saranno evidenziati solo nelle visualizzazioni dell\'elenco.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Il responsabile di questo ruolo può modificare i dati del profilo di tutti i membri del ruolo.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Il responsabile di questo ruolo può aggiungere nuovi membri per il ruolo o eliminare membri esistenti.</string>
@@ -842,9 +796,7 @@
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organizza e assegna i ruoli</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Gli utenti del ruolo attuale sono autorizzati a gestire e a creare i ruoli e ad assegnare gli utenti ai ruoli.</string>
   <string name="ROL_RIGHT_DATES">Crea e modifica gli eventi</string>
-  <string name="ROL_RIGHT_DOWNLOAD">Carica e modifica gli scaricamenti</string>
   <string name="ROL_RIGHT_EDIT_USER">Modifica il profilo di tutti gli utenti</string>
-  <string name="ROL_RIGHT_EDIT_USER_DESC">I ruoli con questa opzione attivata possono amministrare tutte le informazioni utente (ad eccezione delle password) degli altri membri.\nInoltre sono in grado di accedere al pannello di amministrazione degli utenti al fine di creare nuovi utenti o cancellare i vecchi utenti.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Modifica ed elimina le voci sul libro degli ospiti</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Crea i commenti delle voci sul libro degli ospiti</string>
   <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Definisci chi dovrebbe essere in grado di inviare messaggi a questo ruolo utilizzando il modulo email. I permessi del ruolo #VAR1_BOLD# sono la configurazione padre del livello dei permessi corrente.</string>
@@ -856,12 +808,10 @@
   <string name="ROL_ROLE_ADMINISTRATION">Amministrazione del ruolo</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">I ruoli basati su determinati gruppi, i corsi e i dipartimenti possono essere gestiti qui. I permessi del ruolo possono essere definiti anche qui.</string>
   <string name="ROL_ROLE_DELETE">Eliminazione del ruolo</string>
-  <string name="ROL_ROLE_DELETE_DESC">Vuoi cancellare il ruolo #VAR1# ?\n\nTutte le membership stanno per essere cancellate di conseguenza.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Un membro di un ruolo dipendente diventa automaticamente un membro di #VAR1#!\n\nQuando questa dipendenza è impostata tutti i membri esistenti del ruolo dipendente diventeranno membri di #VAR1#. Quando una dipendenza sta per essere cancellato, le membership rimarranno le stesse!</string>
   <string name="ROL_ROLE_MEMBERSHIPS">Membership del ruolo</string>
   <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Cambia le membership del ruolo</string>
   <string name="ROL_ROLE_NAME_EXISTS">Un ruolo con lo stesso nome esiste già in questa categoria.</string>
-  <string name="ROL_ROLE_SET_MODE">Il ruolo #VAR1_BOLD# è stato cambiato a #VAR2_BOLD#.</string>
   <string name="ROL_SAVE_ROLES">Salvando queste impostazioni si può causare la perdita delle dipendenze configurate per il ruolo.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Visualizza le membership del ruolo</string>
   <string name="ROL_SEMIYEARLY">Due volte l\'anno</string>
@@ -869,8 +819,6 @@
   <string name="ROL_SEND_MAIL_MEMBERS">Gli utenti registrati possono inviare email al ruolo corrente.</string>
   <string name="ROL_SEND_MAIL_ROLE">Solo i membri di questo ruolo sono autorizzati a inviare email al ruolo corrente.</string>
   <string name="ROL_SEND_MAILS">Invia email</string>
-  <string name="ROL_SET_ROLE_INVISIBLE">Rendi invisibile il ruolo</string>
-  <string name="ROL_SET_ROLE_VISIBLE">Rendi visibile il ruolo</string>
   <string name="ROL_SHOW_MEMBERS">Mostra membri</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Elenco predefinito di sistema</string>
   <string name="ROL_UNIQUELY">Univocamente</string>
@@ -878,7 +826,6 @@
   <string name="ROL_VALID_TO" description="Date valid to">Valido fino al</string>
   <string name="ROL_VIEW_LIST_MEMBERS">Gli utenti registrati sono in grado di visualizzare gli elenchi dei membri del ruolo corrente.</string>
   <string name="ROL_VIEW_LIST_ROLE">Solo i membri del ruolo corrente sono autorizzati a visualizzare l\'elenco dei membri.</string>
-  <string name="ROL_VISIBLE_ROLES">Ruoli visibili</string>
   <string name="ROL_WEEKDAY">Settimanalmente</string>
   <string name="ROL_WITHOUT_LEADER">Nessun leader</string>
   <!--Phrases only in Roommodule-->
@@ -890,7 +837,6 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Annulla</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
-  <string name="SYS_ACTIVE">Attivo</string>
   <string name="SYS_ACTIVATED">Attivo</string>
   <string name="SYS_ADD_RECIPIENTS">Aggiungi destinatario</string>
   <string name="SYS_ADDRESS">Infìdirizzo</string>
@@ -903,20 +849,12 @@
   <string name="SYS_ALSO_VISITORS">anche i visitatori</string>
   <string name="SYS_APPLY">Applica</string>
   <string name="SYS_ASSIGN_MEMBERS">Assegnazione membri</string>
-  <string name="SYS_AUTHORIZATION">Autorizzazioni</string>
   <string name="SYS_BACK">Indietro</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Ritorna alla pagina principale del modulo</string>
-  <string name="SYS_BETA_VERSION">Si sta utilizzando una versione beta di Admidio.\n\nPotrebbero verificarsi problemi di stabilità e perdita di dati. Si prega di utilizzare questa versione a solo scopo di test!</string>
   <string name="SYS_BIRTHDAY">Compleanno</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Risultato del calcolo</string>
-  <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Il risultato del calcolo non è corretto.</string>
   <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Il calcolo è parte del captcha. Il captcha serve per prevenire lo SPAM. Il calcolo viene utilizzato per rilevare se si è un utente o uno script (o uno spambot) che compila il modulo.\nSi prega di inserire il risultato del calcolo nel modulo.</string>
-  <string name="SYS_CAPTCHA_CALC_PART1">Si prega di calcolare</string>
-  <string name="SYS_CAPTCHA_CALC_PART2">e aggiungi</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_THIRD">un terzo di</string>
-  <string name="SYS_CAPTCHA_CALC_PART3_HALF">la metà di</string>
-  <string name="SYS_CAPTCHA_CALC_PART4">.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Il codice di autenticazione non è valido.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Codice di autenticazione</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Il codice di autenticazione è parte del captcha. Il captcha viene utilizzato per il rilevamento dello spam. L\'immagine viene utilizzata per rilevare se un utente o uno script (o uno spambot) ha riempito il modulo.\nNSi prega di inserire il risultato del codice di autenticazione nel modulo.</string>
@@ -937,7 +875,6 @@
   <string name="SYS_CONDITION">Requisito</string>
   <string name="SYS_CONFIRM_PASSWORD">Conferma password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Conferma valore</string>
-  <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Conferma partecipazione</string>
   <string name="SYS_CONTACT_DETAILS">Informazioni di contatto</string>
   <string name="SYS_CONTENT">Contenuto</string>
   <string name="SYS_CONTRIBUTION">Contributo</string>
@@ -1014,12 +951,9 @@
   <string name="SYS_FROM">da #VAR1#</string>
   <string name="SYS_FROM_TO">da #VAR1# a #VAR2#</string>
   <string name="SYS_FOLDER">Cartella</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">La cartella #VAR1_BOLD# non può essere creata.\n\nPer favore chiedi al #VAR2#webmaster#VAR3# per avere aiuto a controllare i permessi di scrittura della cartella padre.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">La cartella #VAR1_BOLD# non può essere creato a causa dei permessi di scrittura.\n\nPer favore chiedi al #VAR2#eebmaster#VAR3# per un aiuto al fine di verificare i permessi di scrittura (usando l\'FTP cambiare gli atgtribuiti dei file in 0777 o drwxrwxrwx).</string>
   <string name="SYS_FORMER">Precedente</string>
   <string name="SYS_FORMER_PL">Precedente</string>
   <string name="SYS_FONT">Font</string>
-  <string name="SYS_FONT_SIZE">Font-size</string>
   <string name="SYS_FORGOT_MY_PASSWORD">Ho dimenticato la password!</string>
   <string name="SYS_FRIDAY">Venerdì</string>
   <string name="SYS_FULL_SCREEN">Schermo intero</string>
@@ -1028,14 +962,11 @@
   <string name="SYS_HELP">Aiuto</string>
   <string name="SYS_HIDE">Nascondi</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
-  <string name="SYS_ICAL_DISABLED">iCal è stata visualizzata dall\'amministratore del sistema.</string>
   <string name="SYS_ICON">Icona</string>
-  <string name="SYS_INACTIVE">Inattivo</string>
   <string name="SYS_INFORMATIONS">informazioni</string>
   <string name="SYS_INTERNAL_NAME">Nome interno</string>
   <string name="SYS_INTERNAL_NAME_DESC">Il nome interno è usato come uno specifico identificatore di un campo. Ai fini dell\'uso del programma, comunque, esso è irrilevante. Durante lo sviluppo del software questo nome è stato usato al fine di poter usare il metodo getValue. Il nome interno sarà acquisito in automatico durante la creazione di un campo.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Visualizzazione della pagina non valida</string>
-  <string name="SYS_INVISIBLE">Invisibile</string>
   <string name="SYS_IO_ERROR">Errore di I/O</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Nome dell\'elemento</string>
@@ -1054,7 +985,6 @@
   <string name="SYS_LOGIN">Accedi</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Il tuo account non è stato ancora attivato.\n\nTi informeremo appena è possibile l\'accesso.</string>
   <string name="SYS_LOGIN_PROBLEMS">Problemi di accesso</string>
-  <string name="SYS_LOGIN_SUCCESSFUL">L\'accesso è riuscito.</string>
   <string name="SYS_LOGOUT">Esci</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Uscita avvenuta con successo.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Sei già registrato. Dunque devi già avere la pssword corretta!</string>
@@ -1077,7 +1007,6 @@
   <string name="SYS_MESSAGES">Messaggi</string>
   <string name="SYS_MINUTES">Minuti</string>
   <string name="SYS_MOBILE">Cellulare</string>
-  <string name="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" translation="edited">A questo modulo si può accedere solo dall\'homepage dell\'organizzazione scelta in fase di accesso al sistema (% VAR1%).</string>
   <string name="SYS_MODULE_DISABLED">Questo modulo è disabilitato.</string>
   <string name="SYS_MODULE_PREFERENCES">Impostazioni del modulo</string>
   <string name="SYS_MODULES">Moduli</string>
@@ -1155,8 +1084,6 @@
   <string name="SYS_ROLE_MAX_MEMBERS">Il salvataggio non è possibile. Il numero massimo dei membri del ruolo #VAR1_BOLD# supera il limite predefinito.</string>
   <string name="SYS_ROLES">Ruoli</string>
   <string name="SYS_ROOM">Stanza</string>
-  <string name="SYS_RSS_DISABLED">Funzione RSS disabilitata dall\'amministratore di sistema.</string>
-  <string name="SYS_RSS_FEED_FOR_VAR">RSS-Feed per #VAR1#</string>
   <string name="SYS_SAFE_MODE">Safe Mode</string>
   <string name="SYS_SAFE_MODE_PROBLEM">Potrebbe causare problemi con il caricamento dei file</string>
   <string name="SYS_SATURDAY">Sabato</string>
@@ -1172,7 +1099,6 @@
   <string name="SYS_SENDER">Mittente</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Le impostazioni del server non consentono il caricamento di file.</string>
-  <string name="SYS_SET_BY">Impostato da</string>
   <string name="SYS_SETTINGS">Preferenze</string>
   <string name="SYS_SHOW_CALENDAR">Visualizza calendartio</string>
   <string name="SYS_SHOW_PROFILE">Mostra profilo</string>
@@ -1187,11 +1113,6 @@
   <string name="SYS_STOP">Ferma</string>
   <string name="SYS_SUNDAY">Domenica</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Passa all\'amministrazione delle categorie</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# La tua richiesta di password per il sito #organization_short_name# \n#content# Ciao #user_first_name#,\n\nhai richiesto una nuova password!\n\nI tuoi dati per l\'accesso sono:\nNome utente: #user_login_name#\nPassword: #variable1#\n\nPer attivare la tua password, per favore segui questo link:\n\n#variable2#\n\nLa password è stata generata automaticamente,\npertanto potresti accedere a #organization_homepage# per cambiarli in \"Mio profilo\".\n\nSaluti,\nIl Webmaster</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# La tua richiesta di password per #organization_homepage# \n#content# Ciao #user_first_name#,\n\ni tuoi nuovi dati per l\'accesso al sito #organization_long_name# :\nNome utente: #user_login_name#\nPassword: #variable1#\n\nLa password è stata generata automaticamente,\npertanto potresti accedere a #organization_homepage# per cambiarli in \"Mio profilo\".\n\nSaluti,\nIl Webmaster</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in fase di registrazione a #organization_long_name# rifiutato.\n#content#Ciao #user_first_name# la tua richiesta di accesso a #organization_homepage# è stata rifiutata.\n\nLe registrazioni sono state accettate in generale dai nostri utenti. Se tu sei un membro e la tua registrazione è stata rifiutata, è possibile che sia stato perché tu non sei stato identificato come membro.\nPer chiarire la ragione del rifiuto per favore contatta il webmaster #webmaster_email# da #organization_homepage#.\n\nSaluti,\nIl Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registrazione sul sito #organization_long_name# approvata\n#content# Ciao #user_first_name#,\n\nla tua registrazione su #organization_homepage# è stata approvata.\n\nOra puoi accedere con il tuo nome utente: #user_login_name#\nand your password.\n\nSe hai domande, per favore non esitare a contattare il webmaster via email a #webmaster_email# .\n\nSaluti,\nIl Webmaster</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_WEBMASTER">#subject# Nuova registrazione sul sito #organization_long_name#\n#content# Un nuovo utente si è registrato su #organization_homepage#.\n\nCognome: #user_last_name#\nNome:  #user_first_name#\nEmail:   #user_email#\n\n\nQuesto messaggio è stato generato automaticamente.</string>
   <string name="SYS_SYSTEM">Sistema</string>
   <string name="SYS_SYSTEM_MAILS">Notifiche di sistema</string>
   <string name="SYS_TEXT">Testo</string>
@@ -1223,8 +1144,6 @@
   <string name="SYS_WANT_REGISTER">Vorrei iscrivermi!</string>
   <string name="SYS_WARNING">Attenzione</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
-  <string name="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update">La versione del database #VAR1# è inferiore a quella richiesta da Admidio #VAR2#.\n\nPer favore esegui l\'aggiornamento del database #VAR3# alla versione #VAR4#.</string>
-  <string name="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download">La versione del database #VAR1# è maggiore a quella richiesta da Admidio #VAR2#.\n\nPer favore esegui l\'aggiornamento del database #VAR3# alla versione #VAR4#.</string>
   <string name="SYS_WEBSITE">Sito web</string>
   <string name="SYS_WEDNESDAY">Mercoledì</string>
   <string name="SYS_WHAT_TO_DO">Cosa fare?</string>

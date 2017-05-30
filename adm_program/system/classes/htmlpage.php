@@ -317,6 +317,11 @@ class HtmlPage
                 }
                 $full_menu .= $Menu->show($details);
             }
+
+            $this->menu->addItem(
+                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $badge,
+                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
+            );
         }
 
         return $full_menu;
@@ -453,19 +458,28 @@ class HtmlPage
         if($gValidLogin)
         {
             // show link to own profile
-            $this->menu->addItem('menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'), 'profile.png', 'right', 'navbar', 'admidio-default-menu-item');
+            $this->menu->addItem(
+                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
+                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
             // show logout link
-            $this->menu->addItem('menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'), 'door_in.png', 'right', 'navbar', 'admidio-default-menu-item');
+            $this->menu->addItem(
+                'menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
+                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
         }
         else
         {
-            if($gPreferences['registration_mode'] > 0)
-            {
-                // show registration link
-                $this->menu->addItem('menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item');
-            }
+            // show registration link
+            $this->menu->addItem(
+                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
+                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
             // show login link
-            $this->menu->addItem('menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'), 'key.png', 'right', 'navbar', 'admidio-default-menu-item');
+            $this->menu->addItem(
+                'menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
+                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
         }
     }
 

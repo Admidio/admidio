@@ -1,17 +1,23 @@
 ﻿{
-    "sProcessing":   "A processar...",
-    "sLengthMenu":   "Mostrar _MENU_ registos",
-    "sZeroRecords":  "Não foram encontrados resultados",
-    "sInfo":         "Mostrando de _START_ até _END_ de _TOTAL_ registos",
-    "sInfoEmpty":    "Mostrando de 0 até 0 de 0 registos",
-    "sInfoFiltered": "(filtrado de _MAX_ registos no total)",
-    "sInfoPostFix":  "",
-    "sSearch":       "Procurar:",
-    "sUrl":          "",
+    "sProcessing": "Bezig...",
+    "sLengthMenu": "_MENU_ resultaten weergeven",
+    "sZeroRecords": "Geen resultaten gevonden",
+    "sInfo": "_START_ tot _END_ van _TOTAL_ resultaten",
+    "sInfoEmpty": "Geen resultaten om weer te geven",
+    "sInfoFiltered": " (gefilterd uit _MAX_ resultaten)",
+    "sInfoPostFix": "",
+    "sSearch": "Zoeken:",
+    "sEmptyTable": "Geen resultaten aanwezig in de tabel",
+    "sInfoThousands": ".",
+    "sLoadingRecords": "Een moment geduld aub - bezig met laden...",
     "oPaginate": {
-        "sFirst":    "Primeiro",
-        "sPrevious": "Anterior",
-        "sNext":     "Seguinte",
-        "sLast":     "Último"
+        "sFirst": "Eerste",
+        "sLast": "Laatste",
+        "sNext": "Volgende",
+        "sPrevious": "Vorige"
+    },
+    "oAria": {
+        "sSortAscending":  ": activeer om kolom oplopend te sorteren",
+        "sSortDescending": ": activeer om kolom aflopend te sorteren"
     }
 }

@@ -33,8 +33,6 @@
  *                     [cat_name_intern] => COMMON
  *                     [4] => Allgemein
  *                     [cat_name] => Allgemein
- *                     [5] => 0
- *                     [cat_hidden] => 0
  *                     [6] => 0
  *                     [cat_system] => 0
  *                     [7] => 0
@@ -122,7 +120,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gDb, $gValidLogin;
+        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gDb;
 
         // Parameter
         if($limit === null)
@@ -131,26 +129,25 @@ class ModuleWeblinks extends Modules
         }
 
         // Bedingungen
-        if($this->getParameter('id') > 0)
+        $id = (int) $this->getParameter('id');
+        if($id > 0)
         {
-            $this->getConditions = ' AND lnk_id = '. $this->getParameter('id');
+            $this->getConditions = ' AND lnk_id = '. $id;
         }
-        if($this->getParameter('cat_id') > 0)
+        $catId = (int) $this->getParameter('cat_id');
+        if($catId > 0)
         {
-            $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
+            $this->getConditions = ' AND cat_id = '. $catId;
         }
-        if(!$gValidLogin)
-        {
-            // if user isn't logged in, then don't show hidden categories
-            $this->getConditions .= ' AND cat_hidden = 0 ';
-        }
+
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
 
         // Weblinks aus der DB fischen...
         $sql = 'SELECT *
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_type   = \'LNK\'
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
@@ -163,7 +160,11 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $weblinksStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $queryParams = array_merge(
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        ); // TODO add more params
+        $weblinksStatement = $gDb->queryPrepared($sql, $queryParams);
 
         // array for results
         return array(
@@ -181,16 +182,22 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gDb;
+        global $gCurrentOrganization, $gCurrentUser, $gDb;
+
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_type   = \'LNK\'
+                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions;
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $queryParams = array_merge(
+            $catIdParams,
+            array((int) $gCurrentOrganization->getValue('org_id'))
+        ); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
         return (int) $pdoStatement->fetchColumn();
     }
@@ -204,10 +211,11 @@ class ModuleWeblinks extends Modules
     {
         global $gDb;
 
+        $catId = (int) $this->getParameter('cat_id');
         // set headline with category name
-        if($this->getParameter('cat_id') > 0)
+        if($catId > 0)
         {
-            $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
+            $category  = new TableCategory($gDb, $catId);
             $headline .= ' - '. $category->getValue('cat_name');
         }
         return $headline;

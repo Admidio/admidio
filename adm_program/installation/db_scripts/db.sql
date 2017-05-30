@@ -12,7 +12,6 @@
 drop table if exists %PREFIX%_announcements cascade;
 drop table if exists %PREFIX%_auto_login cascade;
 drop table if exists %PREFIX%_components cascade;
-drop table if exists %PREFIX%_date_role cascade;
 drop table if exists %PREFIX%_dates cascade;
 drop table if exists %PREFIX%_files cascade;
 drop table if exists %PREFIX%_folders cascade;
@@ -100,7 +99,6 @@ create table %PREFIX%_categories
     cat_type                    varchar(10)         not null,
     cat_name_intern             varchar(110)        not null,
     cat_name                    varchar(100)        not null,
-    cat_hidden                  boolean             not null    default '0',
     cat_system                  boolean             not null    default '0',
     cat_default                 boolean             not null    default '0',
     cat_sequence                smallint            not null,
@@ -135,21 +133,6 @@ engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
 
-
-/*==============================================================*/
-/* Table: adm_date_role                                         */
-/*==============================================================*/
-
-create table %PREFIX%_date_role
-(
-    dtr_id                      integer unsigned    not null    AUTO_INCREMENT,
-    dtr_dat_id                  integer unsigned    not null,
-    dtr_rol_id                  integer unsigned,
-    primary key (dtr_id)
-)
-engine = InnoDB
-default character set = utf8
-collate = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_dates                                             */
@@ -743,6 +726,7 @@ create table %PREFIX%_user_fields
     usf_disabled                boolean             not null    default '0',
     usf_hidden                  boolean             not null    default '0',
     usf_mandatory               boolean             not null    default '0',
+    usf_registration            boolean             not null    default '0',
     usf_sequence                smallint            not null,
     usf_usr_id_create           integer unsigned,
     usf_timestamp_create        timestamp           not null    default CURRENT_TIMESTAMP,
@@ -913,11 +897,6 @@ alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreig
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
-
-alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_DAT foreign key (dtr_dat_id)
-      references %PREFIX%_dates (dat_id) on delete restrict on update restrict;
-alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_ROL foreign key (dtr_rol_id)
-      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
 
 alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_CAT foreign key (dat_cat_id)
       references %PREFIX%_categories (cat_id) on delete restrict on update restrict;

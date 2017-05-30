@@ -65,8 +65,8 @@ if($getAnnId > 0)
         $getAnnId = 0;
     }
 
-    // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if(!$announcement->editRight())
+    // check if the current user could edit this announcement
+    if(!$announcement->editable())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

@@ -212,7 +212,7 @@ else
     echo '<div class="btn-group-vertical" role="group">';
 
     // show links for registration and help
-    if($plg_show_register_link && $gPreferences['registration_mode'])
+    if($plg_show_register_link && $gPreferences['registration_enable_module'] == 1)
     {
         if($plg_show_icons)
         {

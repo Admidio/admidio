@@ -40,6 +40,7 @@ if(!$gCurrentUser->editDates())
 // lokale Variablen der Uebergabevariablen initialisieren
 $dateRegistrationPossible = false;
 $dateCurrentUserAssigned  = false;
+$roleViewSet              = array();
 
 // set headline of the script
 if($getCopy)
@@ -65,8 +66,7 @@ $date = new TableDate($gDb);
 
 if(isset($_SESSION['dates_request']))
 {
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // By wrong input, the user returned to this form now write the previously entered contents into the object
 
     // first set date and time field to a datetime and add this to date class
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
@@ -75,7 +75,10 @@ if(isset($_SESSION['dates_request']))
     $date->setArray($_SESSION['dates_request']);
 
     // get the selected roles for visibility
-    $dateRoles = $_SESSION['dates_request']['date_roles'];
+    if(isset($_SESSION['dates_request']['adm_event_participation_right']) && $_SESSION['dates_request']['adm_event_participation_right'] !== '')
+    {
+        $roleViewSet = $_SESSION['dates_request']['adm_event_participation_right'];
+    }
 
     // check if a registration to this event is possible
     if(array_key_exists('date_registration_possible', $_SESSION['dates_request']))
@@ -93,8 +96,23 @@ if(isset($_SESSION['dates_request']))
 }
 else
 {
-    // read all roles that could see this event
-    if($getDateId === 0)
+    if($getDateId > 0)
+    {
+        // read data from database
+        $date->readDataById($getDateId);
+
+        // get assigned roles of this event
+        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $roleViewSet = $eventParticipationRolesObject->getRolesIds();
+
+        // check if the current user could edit this event
+        if(!$date->editable())
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+    }
+    else
     {
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
         $now = new DateTime();
@@ -104,24 +122,6 @@ else
         $endDate   = $now->add($twoHourOffset)->format('Y-m-d H:00:00');
         $date->setValue('dat_begin', $beginDate);
         $date->setValue('dat_end',   $endDate);
-
-        // a new event will be visible for all users per default
-        $date->setVisibleRoles(array(0));
-        $dateRoles = array(0);
-    }
-    else
-    {
-        $date->readDataById($getDateId);
-
-        // get the saved roles for visibility
-        $dateRoles = $date->getVisibleRoles();
-
-        // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-        if(!$date->editRight())
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
     }
 
     // check if a registration to this event is possible
@@ -164,6 +164,7 @@ $page->addJavascript('
 
     function setDateParticipation() {
         if ($("#date_registration_possible:checked").val() !== undefined) {
+            $("#adm_event_participation_right_group").show("slow");
             $("#date_current_user_assigned_group").show("slow");
             $("#dat_max_members_group").show("slow");
             $("#date_right_list_view_group").show("slow");
@@ -172,6 +173,7 @@ $page->addJavascript('
             $("#dat_additional_guests_group").show("slow");
             $("#date_deadline_group").show("slow");
         } else {
+            $("#adm_event_participation_right_group").hide();
             $("#date_current_user_assigned_group").hide();
             $("#dat_max_members_group").hide();
             $("#date_right_list_view_group").hide();
@@ -298,24 +300,6 @@ $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
-// add a multiselectbox to the form where the user can choose all roles that should see this event
-// first read all relevant roles from database and create an array with them
-$sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
-                       FROM '.TBL_ROLES.'
-                 INNER JOIN '.TBL_CATEGORIES.'
-                         ON cat_id = rol_cat_id
-                      WHERE rol_valid   = 1
-                        AND cat_name_intern <> \'EVENTS\'
-                        AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                            OR cat_org_id IS NULL )
-                   ORDER BY cat_sequence, rol_name';
-$sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
-$firstEntry = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
-$form->addSelectBoxFromSql(
-    'date_roles', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlData,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $dateRoles, 'multiselect' => true, 'firstEntry' => $firstEntry)
-);
-
 $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $date->getValue('dat_highlight'));
 
 // if current organization has a parent organization or is child organizations then show option to set this announcement to global
@@ -328,6 +312,31 @@ if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganiza
     $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), (bool) $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
 }
 $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
+
+// add a multiselectbox to the form where the user can choose all roles whose members could participate to this event
+// read all roles of the current organization
+$sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
+                   FROM '.TBL_ROLES.'
+             INNER JOIN '.TBL_CATEGORIES.'
+                     ON cat_id = rol_cat_id
+                  WHERE rol_valid  = 1
+                    AND rol_system = 0
+                    AND cat_name_intern <> \'EVENTS\'
+                    AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               ORDER BY cat_sequence, rol_name';
+$sqlDataView = array(
+    'query'  => $sqlViewRoles,
+    'params' => array((int) $gCurrentOrganization->getValue('org_id'))
+);
+
+// show selectbox with all assigned roles
+$form->addSelectBoxFromSql(
+    'adm_event_participation_right', $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'), $gDb, $sqlDataView,
+    array(
+        'defaultValue' => $roleViewSet,
+        'multiselect'  => true
+    )
+);
 $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
 $form->addCheckbox('dat_allow_comments', $gL10n->get('DAT_ALLOW_USER_COMMENTS'), (bool) $date->getValue('dat_allow_comments'), array('helpTextIdLabel' => 'DAT_ALLOW_USER_COMMENTS_DESC'));
 $form->addCheckbox('dat_additional_guests', $gL10n->get('DAT_ALLOW_ADDITIONAL_GUESTS'), (bool) $date->getValue('dat_additional_guests'), array('helpTextIdLabel' => 'DAT_ALLOW_ADDITIONAL_GUESTS_DESC'));

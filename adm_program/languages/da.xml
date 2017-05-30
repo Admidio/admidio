@@ -38,10 +38,8 @@
   <string name="DAT_ALL_DAY">Hele dagen</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Tilføj deltagere</string>
   <string name="DAT_ATTEND">Deltag</string>
-  <string name="DAT_ATTEND_DATE">Du bekræftede din deltagelse den #VAR1_BOLD# kl. #VAR2#.</string>
   <string name="DAT_CALENDAR">Kalender</string>
   <string name="DAT_CANCEL">Afbryd</string>
-  <string name="DAT_CANCEL_DATE">Du afviste din deltagelse den #VAR1_BOLD# kl. #VAR2#.</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Nuværende møder i organisation #VAR1#</string>
   <string name="DAT_DATE">Aktivitet</string>
   <string name="DAT_DATES">Aktiviteter</string>
@@ -97,7 +95,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detaljeret</string>
   <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
   <string name="DAT_VISIBILITY">Synlighed</string>
-  <string name="DAT_VISIBLE_TO">Synlig for</string>
+  <string name="SYS_VISIBLE_FOR">Synlig for</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Tilføj til database</string>
   <string name="DOW_ADDITIONAL_FILES">Denne listes opgave er at give et overblik over filer og foldere som ikke er importeret ind i databasen endnu. Tilføj dem her. Adgangs rettigheder vil blive kopieret fra den valgte folder.</string>
@@ -139,7 +137,6 @@
   <string name="DOW_NEW_FILE_NAME">Nyt fil navn</string>
   <string name="DOW_NEW_NAME">Nyt navn</string>
   <string name="DOW_PREVIOUS_NAME">Tidligere navn</string>
-  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">På denne side kan du definere hvem der kan se folderen #VAR1_BOLD# og downloade eller uploade filer. Underfoldere vil arve disse rettigheder. Allerede eksisterende rettigheder til underfolderne vil blive overskrevet. Du kan kun bruge roller som allerede har adgang til de overliggende foldere. Brugere med rollen #VAR2_BOLD# har altid fulde rettigheder til disse foldere.</string>
   <string name="DOW_SELECT_FILES">Vælg filer</string>
   <string name="DOW_SET_FOLDER_PERMISSIONS">Sæt folder rettigheder</string>
   <string name="DOW_UNMANAGED_FILES">Filer uden ejer</string>
@@ -206,7 +203,6 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">En opdatering kan kun foretages af en administrator. Venligst definer administratorens rettigheder.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Bestyrelsen</string>
-  <string name="INS_CHOOSE_LANGUAGE">Vælg sprog</string>
   <string name="INS_CONFERENCE_ROOM">Konference lokale</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Fil #VAR1_BOLD# kan ikke findes i hoved folderen for Admidio!\n\nVenligst download filen igen og kopier den til den oplyste folder.</string>
   <string name="INS_CONTINUE_INSTALLATION">Fortsæt installation</string>
@@ -214,10 +210,16 @@
   <string name="INS_CREATE_ADMINISTRATOR">Opretter administrator</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Opretter konfigurations fil</string>
   <string name="INS_DATA_FULLY_ENTERED">Du har indtastet alle de nødvendige oplysninger til installation af Admidio.\n\nNu skal databasen etableres og fyldes med dine data.</string>
+  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database opdatering ikke nødvendig</string>
+  <string name="INS_DATABASE_FILE_NOT_FOUND">Filen #VAR1_BOLD# kunne ikke findes i folderen #VAR2_BOLD#.</string>
+  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database er up to date</string>
+  <string name="INS_DATABASE_IS_UPDATED">Updaterer database</string>
+  <string name="INS_DATABASE_LOGIN">Indtastning af database information</string>
   <string name="INS_DATABASE_LOGIN_DESC">Angiv dine database adgangs oplysninger her. Tabel prefix kan ændres hvis behovet er derfor. Ændring af tabel prefix er kun nødvendig hvis flere Admidio installationer anvender den samme database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Din database version er #VAR1#.\n\nEn opdatering til version #VAR2# er påkrævet</string>
-  <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_PORT_INFO">Hvis dette felt ikke udfyldes så anvendes standardporten for databasen (MySQL: 3306, PostgreSQL: 5432). Hvis du eller din webhost har brug for at anvende andre porte så kan de angives her.</string>
+  <string name="INS_DATABASE_SYSTEM">Database system</string>
+  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Opretter database</string>
   <string name="INS_DELETE_CONFIG_FILE">Admidio\'s hoved bibliotek #VAR1_BOLD# indeholder en config.php. Den er allerede blevet kopieret til adm_my_files folderen. Venligst slet den fra hoved biblioteket.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Hent konfigurations fil</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Konfigurations filen #VAR1_BOLD# kunne ikke gemmes i folderen #VAR2_BOLD#. Venligst arranger skrive rettigheder til den folder (ret fil rettigheder via ftp program til 0777 eller drwxrwxrwx) eller download konfigurations filen og kopier den ind i Admidio folderen #VAR3_BOLD# ved hjælp af et FTP program.\n\nEfter filen er blevet uploaded til denne folder så kan du fortsætte installationen.</string>
@@ -225,12 +227,6 @@
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrators detaljer</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Oplys administrator\'s navn, e-mail og adgangs information. Log ind med den samme bruger lige efter installationen.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Organisations oplysninger</string>
-  <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database opdatering ikke nødvendig</string>
-  <string name="INS_DATABASE_FILE_NOT_FOUND">Filen #VAR1_BOLD# kunne ikke findes i folderen #VAR2_BOLD#.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Updaterer database</string>
-  <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database er up to date</string>
-  <string name="INS_DATABASE_LOGIN">Indtastning af database information</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Opretter database</string>
   <string name="INS_DESCRIPTION_BOARD">Organisationens Bestyrelse</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Møder kan afholdes her. Lokale skal reserveres på forhånd. Projektor kan frit afbenyttes.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle organisations medlemmer</string>
@@ -255,7 +251,6 @@
   <string name="INS_LANGUAGE_NOT_CHOOSEN">Der er ikke valgt noget sprog.</string>
   <string name="INS_MEMBERSHIP">Medlemskab</string>
   <string name="INS_MESSENGER">Messenger</string>
-  <string name="INS_MYSQL_LOGIN_NOT_COMPLETELY">Ikke alle MySQL database adgangs informationer er blevet oplyst!</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Kunne ikke finde den nuværende installation. Hvis du bruger Admidio 1.x, skal du updatere til version 2.x først. Herefter kan du opdatere til version #VAR1#. Hvis du allerede bruger Admidio 2.x eller højere skal du checke forbindelsen til samt integriteten af din database.</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organisationen #VAR1_BOLD# eksisterer allerede. Venligst vælg et andet navn.</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Det oplyste organisations navn er ikke komplet!</string>
@@ -282,7 +277,6 @@
   <string name="INS_WARNING_BETA_VERSION">Dette er en beta version af Admidio.\n\nProduktions brug kan være forbundet med risiko på grund af mulig instabilit og kan resultere i datatab. Bør kun bruges som testmiljø!</string>
   <string name="INS_WARNING_SAFE_MODE">Safe mode er aktiveret på serveren. Dette kan give problemer med visse funktioner såsom fil overførsler.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Velkommen til installationen af Admidio</string>
-  <string name="INS_WELCOME_TEXT">På de følgende sider vil du blive bedt om at oplyse nødvendig information for at kunne oprette et nyt Admidio system. Du vil blive bedt om at specificere database adgangs informationer til din Admidio installation.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# kræver mindst MySQL version #VAR2#. Venligst opdater din MySQL database eller brug en #VAR3#ældre Admidio version#VAR4# for at sikre kompatabilitet.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# kræver mindst PHP version #VAR2#. Venligst opdater din PHP version eller brug en #VAR3#ældre Admidio version#VAR4# for at sikre kompatabilitet.</string>
@@ -356,12 +350,10 @@
   <string name="LST_CREATE_NEW_CONFIGURATION">Opret ny liste</string>
   <string name="LST_CREATE_OWN_LIST">Opret egen liste</string>
   <string name="LST_DEFAULT_CONFIGURATION">Standard konfiguration</string>
-  <string name="LST_DEFAULT_CONFIGURATION_DESC">Én af de forud definerede konfigurationer kan sættes til at være standard konfigurationen for lister i denne organisation. Medlems lister over roller som ikke har en forud defineret liste konfiguration, vises også i denne konfiguration.</string>
   <string name="LST_DEFAULT_LIST_NOT_SET_UP">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</string>
   <string name="LST_DELETE_CONFIGURATION">Slet liste indstillingen</string>
   <string name="LST_EMAIL_TO_MEMBERS">E-mail til medlemmer</string>
   <string name="LST_EMAIL_TO_LIST">E-mail til liste</string>
-  <string name="LST_EMPTY_EXAMPLE_DESC">Find alle brugere med et tomt adresse felt</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">Liste konfigurationen #VAR1_BOLD# er standard konfigurationen for lister i denne organisation og kan derfor ikke slettes. Vælg en anden konfiguration som standard konfiguration i modul indstillingerne og prøv så efterfølgende at slette denne konfiguration igen.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Niels</string>
   <string name="LST_EXCLUDE_EXAMPLE_DESC">Find alle brugere der ikke hedder Niels</string>
@@ -380,7 +372,6 @@
   <string name="LST_LIST_VIEW">Liste oversigt</string>
   <string name="LST_MAX">af maximum. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Medlemskabs tildeling</string>
-  <string name="LST_MEMBER_STATUS">Medlems status</string>
   <string name="LST_MEMBERS_PER_PAGE">Medlemmer vist pr. side</string>
   <string name="LST_MEMBERS_PER_PAGE_DESC">Antal medlemmer som vises i HTML visningen. Flere medlemmer kan vises ved at bruge side opdelings funktionen. Denne værdi vil ikke påvirke print visning eller eksport funktionalitet (Standard: 25).</string>
   <string name="LST_MEMBERSHIP_END">Afslutning af medlemskab</string>
@@ -393,11 +384,9 @@
   <string name="LST_NO_MORE_COLUMN">Af tekniske grunde, kan der ikke tilføjes flere kolonner.</string>
   <string name="LST_NO_USER_FOUND">Intet medlem af dine kriterier kunne findes.</string>
   <string name="LST_NO_ROLE_GIVEN">Ingen rolle er blevet specificeret.</string>
-  <string name="LST_NO_ROLES_REMOVED">Ingen rolle er blevet slettet endnu.\n\nSlettede roller bliver først vist her efter de er slettet i rolle administations panelet.</string>
   <string name="LST_NO_RIGHTS_VIEW_LIST">Du har ikke tilladelse til at få vist en liste over definerede roller.</string>
   <string name="LST_NOT_VALID_DATE_FORMAT">Venligst anvend en valid dato som grundlag for feltet #VAR1_BOLD#.</string>
   <string name="LST_NOT_NUMERIC">Venligst anvend et validt nummer som grundlag for feltet #VAR1_BOLD#.</string>
-  <string name="LST_NOT_EMPTY_EXAMPLE_DESC">Find alle brugere med et udfyldt adresse felt</string>
   <string name="LST_NUMBER_OF_ROLES_PER_PAGE">Antal roller pr. side.</string>
   <string name="LST_PRESET_CONFIGURATION">Standard liste indstillinger</string>
   <string name="LST_PRESET_CONFIGURATION_DESC">Administratorer kan definere standard konfigurationer for alle brugere. Konfigurer rækker og kolonner og gem dem ved at give konfigurationen et navn.</string>
@@ -706,7 +695,6 @@
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Ved registrering og ved tildeling af registreringer søger Admidio efter lignende efternavne og fornavne for at undgå dobbelt registrering. Deaktivering betyder at der kun søges efter identiske navne. (Standard: Ja)</string>
   <string name="ORG_SECONDS">Sekunder</string>
   <string name="ORG_SEND_PASSWORD">Send kodeord</string>
-  <string name="ORG_SEND_PASSWORD_DESC">Brugerne kan anmode om at få tilsendt glemte og regenererede kodeord automatisk til deres egen registrerede e-mail adresse. Hvis denne indstilling deaktiveres, så kan brugerne kun få adgang ved at henvende sig til system administratoren. . (Standard: Ja)</string>
   <string name="ORG_SEND_NEW_PASSWORD">Send nyt kodeord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Vis opretter og tidspunktet for oprettelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Et felt er normalt synligt for alle brugere. Hvis denne funktion ikke er valgt, så vil dataene KUN være synlige for brugere der har rettighed til at redigere alle brugere. I deres egen profil, kan brugeren se og redigere disse data.</string>
@@ -748,7 +736,6 @@
   <string name="UPD_NEW_BOTH">En ny stabil version og en ny beta version er tilgængelig!</string>
   <string name="UPD_NO_NEW">Du bruger den nyeste version af Admidio!</string>
   <string name="UPD_STABLE_VERSION">Tilgængelig</string>
-  <string name="UPD_TITLE">Opdaterings check</string>
   <!--Phrases only in Photomodule-->
   <string name="PHO_ALBUM">Album</string>
   <string name="PHO_ALBUM_DELETE">Slet album</string>
@@ -923,11 +910,8 @@
   <string name="ROL_DEPENDENT">Afhængig</string>
   <string name="ROL_EDIT_ROLE">Rediger rolle</string>
   <string name="ROL_ENABLE_ROLE">Aktiver rolle</string>
-  <string name="ROL_HINT_DELETE_ROLE">Hvis du vælger #VAR1_BOLD# vil rollen og alle dens medlemmer, blive slettet i databasen. Det vil ikke efterfølgende være muligt at vise data for denne rolle mere. </string>
   <string name="ROL_INACTIV_ROLE">Inaktiv rolle</string>
-  <string name="ROL_INACTIV_ROLE_DESC">Du kan deaktivere en rolle. På den måde vil, medlemskabs informationen blive gemt, og det vil senere være muligt at se hvem der var medlem af den rolle. Men rollen vil ikke længere blive vist i oversigterne.</string>
   <string name="ROL_INACTIV_ROLES">Inaktive roller</string>
-  <string name="ROL_INVISIBLE_ROLES">Skjulte roller</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Lederen af denne rolle, har ikke nogen specielle rettigheder. De fremhæves kun i liste visninger.</string>
   <string name="ROL_LEADER_EDIT_MEMBERS">Lederen af denne rolle kan redigere profil data på alle rolle medlemmer.</string>
   <string name="ROL_LEADER_ASSIGN_MEMBERS">Lederen af denne rolle kan tilføje nye rolle medlemmer eller fjerne eksisterende rolle medlemmer.</string>
@@ -965,12 +949,10 @@
   <string name="ROL_ROLE_ADMINISTRATION">Rolle administration</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Roller baseret på bestemte grupper, kurser og afdelinger kan administreres her. Rolle rettigheder kan også defineres her.</string>
   <string name="ROL_ROLE_DELETE">Sletter rolle</string>
-  <string name="ROL_ROLE_DELETE_DESC">Vil du slette rolle #VAR1# ?\n\nAlle medlemskaber bliver slettet samtidigt.</string>
   <string name="ROL_ROLE_DEPENDENCIES">Et medlem af en afhængig rolle bliver automatisk medlem af #VAR1#!\n\nNår denne afhængighed er sat vil alle eksisterende medlemmer af den afhængige rolle automatisk blive medlem af #VAR1#. Når en afhængighed slettes, vil medlemskaber ikke ændres!</string>
   <string name="ROL_ROLE_MEMBERSHIPS">Rolle medlemskab</string>
   <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Rediger rolle medlemskab</string>
   <string name="ROL_ROLE_NAME_EXISTS">Rolle med samme navn findes allerede i denne kategori.</string>
-  <string name="ROL_ROLE_SET_MODE">Rolle #VAR1_BOLD# er blevet ændret til #VAR2_BOLD#.</string>
   <string name="ROL_SAVE_ROLES">Hvis du gemmer denne indstilling kan det resultere i tab af rolle konfigurerede afhængigheder.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Vis rolle medlemskaber</string>
   <string name="ROL_SEMIYEARLY">Hver andet år</string>
@@ -978,8 +960,6 @@
   <string name="ROL_SEND_MAIL_MEMBERS">Brugere som er logget ind har lov til at sende e-mail til den nuværende rolle.</string>
   <string name="ROL_SEND_MAIL_ROLE">Kun rolle medlemmer af denne rolle har lov til at sende e-mails til nuværende rolle.</string>
   <string name="ROL_SEND_MAILS">Send e-mails</string>
-  <string name="ROL_SET_ROLE_INVISIBLE">Skjul rolle</string>
-  <string name="ROL_SET_ROLE_VISIBLE">Gør rolle synlig</string>
   <string name="ROL_SHOW_MEMBERS">Vis medlemmer</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">System Standard liste</string>
   <string name="ROL_UNIQUELY">Unikt</string>
@@ -987,7 +967,6 @@
   <string name="ROL_VALID_TO" description="Date valid to">Gyldig indtil</string>
   <string name="ROL_VIEW_LIST_MEMBERS">Brugere som er logget ind kan få vist medlems lister af denne rolle.</string>
   <string name="ROL_VIEW_LIST_ROLE">Medlemmer af den nuværende rolle har lov til at få vist medlems listen.</string>
-  <string name="ROL_VISIBLE_ROLES">Synlige roller</string>
   <string name="ROL_WEEKDAY">Ugedag</string>
   <string name="ROL_WITHOUT_LEADER">Ingen leder</string>
   <!--Phrases only in Roommodule-->
@@ -999,7 +978,6 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_ABORT">Afbryd</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
-  <string name="SYS_ACTIVE">Aktiv</string>
   <string name="SYS_ACTIVATED">Aktiveret</string>
   <string name="SYS_ADD_RECIPIENTS">Tilføj modtager</string>
   <string name="SYS_ADDRESS">Adresse</string>
@@ -1013,10 +991,8 @@
   <string name="SYS_ALSO_VISITORS">også Gæster</string>
   <string name="SYS_APPLY">Udfør</string>
   <string name="SYS_ASSIGN_MEMBERS">Tilføjer medlemmer</string>
-  <string name="SYS_AUTHORIZATION">Godkendelse</string>
   <string name="SYS_BACK">Tilbage</string>
   <string name="SYS_BACK_TO_MODULE_OVERVIEW">Tilbage til modul oversigten</string>
-  <string name="SYS_BETA_VERSION">Du bruger en BETA version af Admidio.\n\nStabilitets problemer og tab af data er en mulighed. Brug venligst KUN denne version til tests!</string>
   <string name="SYS_BIRTHDAY">Fødselsdag</string>
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC">Resultat af udregningen</string>
@@ -1044,7 +1020,6 @@
   <string name="SYS_CONDITION">Krav</string>
   <string name="SYS_CONFIRM_PASSWORD">Bekræft kodeord</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bekræft værdi</string>
-  <string name="SYS_CONFIRMATION_OF_PARTICIPATION">Bekræft deltagelse</string>
   <string name="SYS_CONTACT_DETAILS">Kontakt information</string>
   <string name="SYS_CONTENT">Indhold</string>
   <string name="SYS_CONTRIBUTION">Kontingent</string>
@@ -1136,8 +1111,6 @@
   <string name="SYS_FRIDAY">fredag</string>
   <string name="SYS_FULL_SCREEN">Fuld skærm</string>
   <string name="SYS_GENDER">Køn</string>
-  <string name="SYS_GEN_RANDOM_ERROR">En uventet fejl opstod under ved generering af en tilfældig streng.</string>
-  <string name="SYS_GEN_RANDOM_FAIL">Programmet kan ikke generere en tilfældig streng.</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet forventer en streng med mindst to forskellige karakterer.</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP Header er allerede sendt!</string>
   <string name="SYS_HEADLINE">Overskrift</string>
@@ -1147,12 +1120,10 @@
   <string name="SYS_ICAL_DISABLED">ICal er blevet deaktiveret af system administratoren.</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_IMPORTANT">Vigtigt</string>
-  <string name="SYS_INACTIVE">Inaktiv</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>
   <string name="SYS_INTERNAL_NAME_DESC">Det interne navn bliver brugt som en specifik identifikation for et felt. Når Admidio kører og bliver brugt er det irrelevant. Men under udviklingen af Admidio skal dette navn tages med for at kunne bruge getValue metoden. Det interne navn bliver automatisk udfyldt ved oprettelsen af et felt.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ugyldig side visning</string>
-  <string name="SYS_INVISIBLE">Usynlig</string>
   <string name="SYS_IO_ERROR">I/O fejl</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_ITEMNAME">Emne navn</string>
@@ -1175,7 +1146,6 @@
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Dine login oplysninger er korrekte, men du er ikke et aktivt medlem af denne organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Det indtastede brugernavn og/eller kodeord er forkert.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problemer</string>
-  <string name="SYS_LOGIN_SUCCESSFUL">Logind lykkedes.</string>
   <string name="SYS_LOGOUT">Log ud</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Logud lykkedes.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du er allerede logget ind. Derfor må du være i besidelse af det korrekte kodeord!</string>
@@ -1300,7 +1270,6 @@
   <string name="SYS_SENDER">Afsender</string>
   <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server indstillinger tillader ikke fil overførsler.</string>
-  <string name="SYS_SET_BY">Sat af</string>
   <string name="SYS_SETTINGS">Indstillinger</string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_PROFILE">Vis profil</string>

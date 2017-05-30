@@ -5,6 +5,7 @@
 /adm_my_files/*
 !/adm_my_files/mail_templates/
 !/adm_my_files/config_example.php
+!/adm_my_files/.htaccess
 !/adm_my_files/index.html
 
 # Only allow commit of official plugins

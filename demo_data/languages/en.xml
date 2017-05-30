@@ -9,11 +9,10 @@
     <string name="DEMO_ANN_NEW_JERSEYS_CONTENT">Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.</string>
     <string name="DEMO_ANN_AEROBICS_COURSE">Aerobics course</string>
     <string name="DEMO_ANN_AEROBICS_COURSE_CONTENT">During the holidays we offer a [i]aerobic course[/i] to all interested members.\n\nRegistrations are accepted on our [b]homepage[/b] or in our [b]office[/b].</string>
-    <string name="DEMO_DAT_YOUTH_TRAINING">Youth training 1</string>
-    <string name="DEMO_DAT_YOUTH_TRAINING_LOCATION">Sports field Norwich</string>
-    <string name="DEMO_DAT_YOUTH_TRAINING_CONTENT">Today we will put the focus on physical fitness and stamina.\n\nPlease appear all in time with running shoes on the sports field!</string>
     <string name="DEMO_DAT_BARBECUE">Barbecue</string>
     <string name="DEMO_DAT_BARBECUE_CONTENT">Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.</string>
+    <string name="DEMO_DAT_BOARD_MEETING">Board meeting</string>
+    <string name="DEMO_DAT_CLUBHOUSE">Clubhouse</string>
     <string name="DEMO_DAT_TRAINER_COURSE">Trainer course</string>
     <string name="DEMO_DAT_TRAINER_COURSE_LOCATION">Youth hostel Lyon</string>
     <string name="DEMO_DAT_TRAINER_COURSE_CONTENT">A four-day training course for youth coaches from the tennis department :)</string>
@@ -26,6 +25,9 @@
     <string name="DEMO_DAT_YOGA">Yoga for beginners</string>
     <string name="DEMO_DAT_YOGA_LOCATION">Madrid Centrum</string>
     <string name="DEMO_DAT_YOGA_CONTENT">This course teaches the basics of yoga.\n\nA registration for this course is required.</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING">Youth training 1</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING_LOCATION">Sports field Norwich</string>
+    <string name="DEMO_DAT_YOUTH_TRAINING_CONTENT">Today we will put the focus on physical fitness and stamina.\n\nPlease appear all in time with running shoes on the sports field!</string>
     <string name="DEMO_GBO_WEBMASTER_WELCOME">Welcome to the guestbook of the demo area.\n\nHere you can play around and test the capabilities of Admidio.\n\nWe hope you enjoy it and that we can convince you of this great program.</string>
     <string name="DEMO_GBO_GUEST_ENTRY1">Then I'm going to look at the program.</string>
     <string name="DEMO_GBO_WEBMASTER_COMMENT1">For more information about the program look in the [a href="https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index"]documentation[/a].\n\nFor questions and suggestions just visit our [a href="https://forum.admidio.org"]forum[/a].</string>

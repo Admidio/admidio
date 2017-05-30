@@ -26,6 +26,7 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($list);
 
 // Initialize and check the parameters
+$editUserStatus       = false;
 $getDateFrom          = admFuncVariableIsValid($_GET, 'date_from',           'date', array('defaultValue' => DATE_NOW));
 $getDateTo            = admFuncVariableIsValid($_GET, 'date_to',             'date', array('defaultValue' => DATE_NOW));
 $getMode              = admFuncVariableIsValid($_GET, 'mode',                'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
@@ -97,6 +98,19 @@ else
 {
     $role = new TableRoles($gDb, $roleIds[0]);
 
+    // If its an event list and user has right to edit user states then a additional column with edit link is shown
+    if ($getMode === 'html')
+    {
+        if ($role->getValue('cat_name_intern') === 'EVENTS')
+        {
+            if ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleIds[0]))
+            {
+                $editUserStatus = true;
+            }
+        }
+    }
+}
+
     // check if user has right to view role
     // only users with the right to assign roles can view inactive roles
     if (!$gCurrentUser->hasRightViewRole($roleIds[0])
@@ -116,7 +130,6 @@ else
     $roleName         = $role->getValue('rol_name');
     $htmlSubHeadline .= $role->getValue('cat_name');
     $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
-}
 
 // if user should not view former roles members then disallow it
 if(!$hasRightViewFormerMembers)
@@ -349,8 +362,6 @@ if ($getMode !== 'csv')
     }
     elseif ($getMode === 'pdf')
     {
-        require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/tcpdf.php');
-
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
@@ -391,6 +402,12 @@ if ($getMode !== 'csv')
 
         // create html page object
         $page = new HtmlPage();
+
+        // enable modal window for users with permission to edit user states if list configuration is a participation list of events
+        if ($editUserStatus)
+        {
+            $page->enableModal();
+        }
 
         if ($getFullScreen)
         {
@@ -562,7 +579,7 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
     }
 
     // show hidden fields only for user with rights
-    if ($usfId === 0 || $gCurrentUser->editUsers() || $gProfileFields->getPropertyById($usfId, 'usf_hidden') == 0)
+    if ($usfId === 0 || $gProfileFields->visible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
     {
         if ($getMode === 'csv')
         {
@@ -577,7 +594,13 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
             $columnValues[] = $columnHeader;
         }
     }
-}  // End-For
+} // End-For
+
+if ($editUserStatus)
+{
+    // add column for edit link
+    $columnValues[] .= '&nbsp;';
+}
 
 if ($getMode === 'csv')
 {
@@ -701,7 +724,7 @@ foreach ($membersList as $member)
         }
 
         // hidden fields are only for users with rights
-        if ($usfId === 0 || $gCurrentUser->editUsers() || $gProfileFields->getPropertyById($usfId, 'usf_hidden') == 0)
+        if ($usfId === 0 || $gProfileFields->visible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
         {
 
             // fill content with data of database
@@ -831,6 +854,19 @@ foreach ($membersList as $member)
                 }
             }
         }
+    }
+    if ($editUserStatus)
+    {
+        // Get the matching event
+        $sql = 'SELECT dat_id
+                    FROM '.TBL_DATES.'
+                    WHERE dat_rol_id = ? -- $roleIds[0]';
+        $datesStatement = $gDb->queryPrepared($sql, $roleIds);
+        $dateId      = $datesStatement->fetchColumn();
+        // prepare edit icon
+        $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                href="'.ADMIDIO_URL.'/adm_program/modules/dates/popup_participation.php?dat_id=' . $dateId . '&amp;usr_id=' .$member['usr_id'] . '">
+                                    <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
     }
 
     if ($getMode === 'csv')

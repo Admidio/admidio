@@ -65,14 +65,17 @@ if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') ===
     // => EXIT
 }
 
+$currUsrId = (int) $gCurrentUser->getValue('usr_id');
+$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
+
 // Update the read status of the message
 if ($getMsgId > 0)
 {
     // update the read-status
-    $message->setReadValue($gCurrentUser->getValue('usr_id'));
+    $message->setReadValue($currUsrId);
 
     $getSubject = $message->getValue('msg_subject');
-    $getUserId  = $message->getConversationPartner($gCurrentUser->getValue('usr_id'));
+    $getUserId  = $message->getConversationPartner($currUsrId);
 
     $messageStatement = $message->getConversation($getMsgId);
 }
@@ -89,30 +92,30 @@ $arrAllVisibleRoles = $gCurrentUser->getAllVisibleRoles();
 if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
 {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-            INNER JOIN '.TBL_USERS.'
-                    ON usr_id = mem_usr_id
-             LEFT JOIN '.TBL_USER_DATA.' AS last_name
-                    ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-             LEFT JOIN '.TBL_USER_DATA.' AS first_name
-                    ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                 WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
-                   AND cat_name_intern <> \'EVENTS\'
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL )
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end   >= ? -- DATE_NOW
-                   AND usr_id <> ? -- $gCurrentUser->getValue(\'usr_id\')
-                   AND usr_valid  = 1
-                   AND usr_login_name IS NOT NULL
-              GROUP BY usr_id, last_name.usd_value, first_name.usd_value, usr_login_name
-              ORDER BY last_name.usd_value, first_name.usd_value';
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+        INNER JOIN '.TBL_USERS.'
+                ON usr_id = mem_usr_id
+         LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+         LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+             WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
+               AND cat_name_intern <> \'EVENTS\'
+               AND (  cat_org_id = ? -- $currOrgId
+                   OR cat_org_id IS NULL )
+               AND mem_begin <= ? -- DATE_NOW
+               AND mem_end   >= ? -- DATE_NOW
+               AND usr_id <> ? -- $currUsrId
+               AND usr_valid  = 1
+               AND usr_login_name IS NOT NULL
+          GROUP BY usr_id, last_name.usd_value, first_name.usd_value, usr_login_name
+          ORDER BY last_name.usd_value, first_name.usd_value';
     $queryParamsArr = array(
         array(
             $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -120,10 +123,10 @@ if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
         ),
         $arrAllVisibleRoles,
         array(
-            $gCurrentOrganization->getValue('org_id'),
+            $currOrgId,
             DATE_NOW,
             DATE_NOW,
-            $gCurrentUser->getValue('usr_id')
+            $currUsrId
         )
     );
     $dropStatement = $gDb->queryPrepared($sql, array_merge($queryParamsArr[0], $queryParamsArr[1], $queryParamsArr[2]));
@@ -306,7 +309,7 @@ elseif (!isset($messageStatement))
     {
         // usr_id was committed then write email to this user
         $preloadData = $getUserId;
-        $sqlUserIds  = ' AND usr_id = '.$getUserId;
+        $sqlUserIds  = ' AND usr_id = ? -- $getUserId';
     }
     elseif ($getRoleId > 0)
     {
@@ -343,17 +346,16 @@ elseif (!isset($messageStatement))
                       FROM '.TBL_ROLES.'
                 INNER JOIN '.TBL_CATEGORIES.'
                         ON cat_id = rol_cat_id
-                       AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       AND (  cat_org_id = ? -- $currOrgId
                            OR cat_org_id IS NULL)
                      WHERE rol_id IN ('.replaceValuesArrWithQM($sqlRoleIds).')
                        AND rol_valid = 1
                            '.$sqlParticipationRoles.'
                   ORDER BY rol_name ASC';
-            $queryParams = array($gCurrentOrganization->getValue('org_id'));
-            $rolesStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $sqlRoleIds));
+            $rolesStatement = $gDb->queryPrepared($sql, array_merge(array($currOrgId), $sqlRoleIds));
             $rolesArray = $rolesStatement->fetchAll();
 
-            foreach($rolesArray as $roleArray)
+            foreach ($rolesArray as $roleArray)
             {
                 // Rollenobjekt anlegen
                 $role = new TableRoles($gDb);
@@ -394,22 +396,20 @@ elseif (!isset($messageStatement))
                  LEFT JOIN '.TBL_USER_DATA.' AS first_name
                         ON first_name.usd_usr_id = usr_id
                        AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                     WHERE rol_id IN ('.replaceValuesArrWithQM($listVisibleRoleArray).')
+                     WHERE usr_id    <> ? -- $currUsrId
                        AND mem_begin <= ? -- DATE_NOW
-                       AND usr_id    <> ? -- $gCurrentUser->getValue(\'usr_id\')
+                       AND rol_id IN ('.replaceValuesArrWithQM($listVisibleRoleArray).')
                            '.$sqlUserIds.'
                        AND usr_valid = 1
                   ORDER BY last_name, first_name, mem_end DESC';
             $queryParams = array_merge(
                 array(
-                    $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-                    $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
+                    (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+                    (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+                    $currUsrId,
+                    DATE_NOW
                 ),
-                $arrAllVisibleRoles,
-                array(
-                    DATE_NOW,
-                    $gCurrentUser->getValue('usr_id')
-                )
+                $listVisibleRoleArray
             );
             if ($sqlUserIds !== '')
             {
@@ -422,19 +422,21 @@ elseif (!isset($messageStatement))
 
             while ($row = $statement->fetch())
             {
+                $usrId = (int) $row['usr_id'];
+
                 // every user should only be once in the list
-                if (!isset($currentUserId) || $currentUserId !== (int) $row['usr_id'])
+                if (!isset($currentUserId) || $currentUserId !== $usrId)
                 {
                     // if membership is active then show them as active members
                     if($row['mem_begin'] <= DATE_NOW && $row['mem_end'] >= DATE_NOW)
                     {
-                        $activeList[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
-                        $currentUserId = (int) $row['usr_id'];
+                        $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
+                        $currentUserId = $usrId;
                     }
                     elseif($gPreferences['mail_show_former'] == 1)
                     {
-                        $passiveList[] = array($row['usr_id'], $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
-                        $currentUserId  = (int) $row['usr_id'];
+                        $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
+                        $currentUserId = $usrId;
                     }
                 }
             }
@@ -450,14 +452,14 @@ elseif (!isset($messageStatement))
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $currOrgId
                        OR cat_org_id IS NULL)
                  WHERE rol_mail_this_role = 3
                    AND rol_valid  = 1
               ORDER BY cat_sequence, rol_name ';
 
-        $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
-        while($row = $statement->fetch())
+        $statement = $gDb->queryPrepared($sql, array($currOrgId));
+        while ($row = $statement->fetch())
         {
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
@@ -488,17 +490,17 @@ elseif (!isset($messageStatement))
 
     $form->addLine();
 
-    if ($gCurrentUser->getValue('usr_id') > 0)
+    if ($currUsrId > 0)
     {
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_USER_FIELDS.'
             INNER JOIN '. TBL_USER_DATA .'
                     ON usd_usf_id = usf_id
                  WHERE usf_type = \'EMAIL\'
-                   AND usd_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                   AND usd_usr_id = ? -- $currUsrId
                    AND usd_value IS NOT NULL';
 
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUser->getValue('usr_id')));
+        $pdoStatement = $gDb->queryPrepared($sql, array($currUsrId));
         $possibleEmails = $pdoStatement->fetchColumn();
 
         $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
@@ -513,10 +515,10 @@ elseif (!isset($messageStatement))
                               INNER JOIN '.TBL_USER_FIELDS.' AS field
                                       ON field.usf_id = email.usd_usf_id
                                      AND field.usf_type = \'EMAIL\'
-                                   WHERE usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
+                                   WHERE usr_id = ? -- $currUsrId
                                      AND usr_valid = 1
                                 GROUP BY email.usd_value, email.usd_value';
-            $sqlData['params'] = array($gCurrentUser->getValue('usr_id'));
+            $sqlData['params'] = array($currUsrId);
 
             $form->addSelectBoxFromSql(
                 'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gDb, $sqlData,
@@ -541,7 +543,7 @@ elseif (!isset($messageStatement))
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation'] == 2) || $gPreferences['mail_delivery_confirmation'] == 1)
+    if (($currUsrId > 0 && $gPreferences['mail_delivery_confirmation'] == 2) || $gPreferences['mail_delivery_confirmation'] == 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
@@ -594,7 +596,7 @@ if (isset($messageStatement))
     $page->addHtml('<br />');
     while ($row = $messageStatement->fetch())
     {
-        if ((int) $row['msc_usr_id'] === (int) $gCurrentUser->getValue('usr_id'))
+        if ((int) $row['msc_usr_id'] === $currUsrId)
         {
             $sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
         }

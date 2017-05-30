@@ -48,11 +48,12 @@ $gLogger->notice('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KiB'
 
 // Log Constants
 $constants = array(
-    'ADMIDIO_HOMEPAGE'   => ADMIDIO_HOMEPAGE,
-    'HTTPS'              => HTTPS,
-    'PORT'               => PORT,
-    'HOST'               => HOST,
-    'DOMAIN'             => DOMAIN,
+    'ADMIDIO_HOMEPAGE' => ADMIDIO_HOMEPAGE,
+    'HTTPS'            => HTTPS,
+    'PORT'             => PORT,
+    'HOST'             => HOST,
+    'DOMAIN'           => DOMAIN,
+    'ADMIDIO_URL_PATH' => ADMIDIO_URL_PATH,
     'URLS' => array(
         'ADMIDIO_URL' => ADMIDIO_URL,
         'FILE_URL'    => FILE_URL,

@@ -42,15 +42,6 @@ class ProfileFields
     }
 
     /**
-     * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(&$database)
-    {
-        $this->mDb =& $database;
-    }
-
-    /**
      * Called on serialization of this object. The database object could not
      * be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
@@ -327,7 +318,7 @@ class ProfileFields
      * format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
      * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
      * format = 'database' : returns the value that is stored in database with no format applied
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field whose value should be read
      * @param string $format          Returns the field value in a special format @b text, @b html, @b database
      *                                or datetime (detailed description in method description)
      * @return string|int|bool Returns the value for the column.
@@ -464,7 +455,7 @@ class ProfileFields
         if ($userId > 0)
         {
             // remember the user
-            $this->mUserId = $userId;
+            $this->mUserId = (int) $userId;
 
             // read all user data of user
             $sql = 'SELECT *
@@ -513,14 +504,23 @@ class ProfileFields
         }
 
         $this->columnsValueChanged = false;
-        $this->mUserId = $userId;
+        $this->mUserId = (int) $userId;
 
         $this->mDb->endTransaction();
     }
 
     /**
+     * Set the database object for communication with the database of this class.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setDatabase(&$database)
+    {
+        $this->mDb =& $database;
+    }
+
+    /**
      * set value for column usd_value of field
-     * @param string $fieldNameIntern
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
      * @param mixed  $fieldValue
      * @return bool
      */
@@ -569,23 +569,23 @@ class ProfileFields
                     break;
                 case 'NUMBER':
                     // A number must be numeric
-                    if (!is_numeric($fieldValue) && !$this->noValueCheck)
+                    if (!$this->noValueCheck && !is_numeric($fieldValue))
                     {
                         return false;
                     }
 
                     // numbers don't have leading zero
-                    $fieldValue = ltrim($fieldValue, '0');
+                    $fieldValue = preg_replace('/^0*(\d+)$/', '${1}', $fieldValue);
                     break;
                 case 'DECIMAL':
-                    // A number must be numeric
-                    if (!$this->noValueCheck && !is_numeric(strtr($fieldValue, ',.', '00')))
+                    // A decimal must be numeric
+                    if (!$this->noValueCheck && !is_numeric(str_replace(',', '.', $fieldValue)))
                     {
                         return false;
                     }
 
-                    // numbers don't have leading zero
-                    $fieldValue = ltrim($fieldValue, '0');
+                    // decimals don't have leading zero
+                    $fieldValue = preg_replace('/^0*(\d+([,.]\d*)?)$/', '${1}', $fieldValue);
                     break;
                 case 'PHONE':
                     // check phone number for valid characters
@@ -627,4 +627,27 @@ class ProfileFields
 
         return false;
     }
+
+
+    /**
+     * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
+     * within the context of the user in this object. If no context is set than we only check if the
+     * current user has the right to view the category of the profile field.
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
+     * @param bool   $allowedToEditProfile Set to @b true if the current user has the right to edit the profile
+     *                                    in which context the right should be checked. This param must not be
+     *                                    set if you are not in a user context.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function visible($fieldNameIntern, $allowedToEditProfile = false)
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the profile field
+        // if it's the own profile than we check if user could edit his profile and if so he could view all fields
+        // check if the profile field is only visible for users that could edit this
+        return ($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
+    }
+
 }

@@ -44,7 +44,7 @@ else
     $mainMenu->addItem('adm_menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php',
                        $gL10n->get('SYS_LOGIN'), 'key.png');
 
-    if($gPreferences['registration_mode'] > 0)
+    if($gPreferences['registration_enable_module'] == 1)
     {
         // show registration link
         $mainMenu->addItem('adm_menu_item_registration',

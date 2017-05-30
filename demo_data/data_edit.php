@@ -136,6 +136,16 @@ $sqlQueries[] = 'UPDATE '.TBL_DATES.'
                       , dat_end   = \''.addDaysToDate(20).' 14:00:00\'
                   WHERE dat_id = 14 ';
 
+$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+                    SET dat_begin = \''.addDaysToDate(3).' 20:00:00\'
+                      , dat_end   = \''.addDaysToDate(3).' 22:00:00\'
+                  WHERE dat_id = 15 ';
+
+$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+                    SET dat_begin = \''.addDaysToDate(32).' 20:00:00\'
+                      , dat_end   = \''.addDaysToDate(32).' 22:00:00\'
+                  WHERE dat_id = 16 ';
+
 $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.'
                     SET fol_timestamp = \''.addDaysToDate(7, true).'\'
                   WHERE fol_id = 1 ';

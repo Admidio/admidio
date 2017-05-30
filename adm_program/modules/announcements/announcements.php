@@ -98,6 +98,14 @@ $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/an
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
 $announcementsMenu->addForm($navbarForm->show(false));
 
+if($gCurrentUser->editAnnouncements())
+{
+    // if no calendar selectbox is shown, then show link to edit calendars
+    $announcementsMenu->addItem('admMenuItemCategories',
+                        FOLDER_MODULES.'/categories/categories.php?type=ANN',
+                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+}
+
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
@@ -144,7 +152,7 @@ else
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
                     {
-                        if($announcement->editRight())
+                        if($announcement->editable())
                         {
                             $page->addHtml('
                             <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?ann_id='. $annId. '&amp;copy=1&amp;headline='.$getHeadline.'"><img

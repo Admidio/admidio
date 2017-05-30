@@ -67,8 +67,7 @@ catch(AdmException $e)
     // => EXIT
 }
 
-// wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-// alle aus der DB aus lesen
+// if parent folder has access for all roles then read all roles from database
 $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                    FROM '.TBL_ROLES.'
              INNER JOIN '.TBL_CATEGORIES.'
@@ -85,7 +84,6 @@ $sqlDataView = array(
 
 $firstEntryViewRoles = '';
 
-$firstEntryViewRoles = '';
 if (count($rolesViewRightParentFolder) === 0)
 {
     $firstEntryViewRoles = array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null);
@@ -138,7 +136,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'
 // show form
 $form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
 $form->addSelectBoxFromSql(
-    'adm_roles_view_right', $gL10n->get('DAT_VISIBLE_TO'), $gDb, $sqlDataView,
+    'adm_roles_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
     array(
         'property'     => FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,

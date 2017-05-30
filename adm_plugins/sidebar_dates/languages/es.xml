@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Todas las citas</string>
+  <string name="PLG_DATES_HEADLINE">Citas</string>
+  <string name="PLG_SIDEBAR_DATES_MORE">más</string>
+</resources>

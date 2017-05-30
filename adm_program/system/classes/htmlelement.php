@@ -455,21 +455,18 @@ abstract class HtmlElement
      */
     private function getElementAttributesString(array $elementAttributes)
     {
-        $string = ' ';
-
-        foreach ($elementAttributes as $key => $value)
+        if (count($elementAttributes) === 0)
         {
-            if ($key === $value)
-            {
-                $string .= $key . ' ';
-            }
-            else
-            {
-                $string .= $key . '="' . $value . '" ';
-            }
+            return '';
         }
 
-        return $string;
+        $attributes = array();
+        foreach ($elementAttributes as $key => $value)
+        {
+            $attributes[] = $key . '="' . $value . '"';
+        }
+
+        return ' ' . implode(' ', $attributes);
     }
 
     /**

@@ -260,15 +260,11 @@ class ComponentUpdate extends Component
             $rowId = (int) $row['org_id'];
 
             $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                    VALUES (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',   0, 1, 0, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW
-                         , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\',0, 0, 0, 2, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+                    VALUES (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW
+                         , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 0, 2, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
             $params = array(
-                $rowId,
-                $systemUserId,
-                DATETIME_NOW,
-                $rowId,
-                $systemUserId,
-                DATETIME_NOW
+                $rowId, $systemUserId, DATETIME_NOW,
+                $rowId, $systemUserId, DATETIME_NOW
             );
             $this->db->queryPrepared($sql, $params);
 
@@ -276,9 +272,10 @@ class ComponentUpdate extends Component
                        SET ann_cat_id = (SELECT cat_id
                                            FROM '.TBL_CATEGORIES.'
                                           WHERE cat_type = \'ANN\'
-                                            AND cat_name_intern = \'COMMON\')
+                                            AND cat_name_intern = \'COMMON\'
+                                            AND cat_org_id = ? ) -- $rowId
                      WHERE ann_org_id = ? -- $rowId';
-            $this->db->queryPrepared($sql, array($rowId));
+            $this->db->queryPrepared($sql, array($rowId, $rowId));
         }
     }
 
@@ -417,12 +414,33 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * This method migrate the data of the table adm_date_role to the table adm_roles_rights_data.
+     */
+    public function updateStepMigrateDatesRightsToFolderRights()
+    {
+        global $g_tbl_praefix, $g_organization, $gCurrentUser;
+
+        // migrate adm_folder_roles to adm_roles_rights
+        $sql = 'SELECT ror_id
+                  FROM '.TBL_ROLES_RIGHTS.'
+                 WHERE ror_name_intern = \'event_participation\'';
+        $rolesRightsStatement = $this->db->queryPrepared($sql);
+        $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
+
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
+                  FROM '.$g_tbl_praefix.'_date_role
+                 WHERE dtr_rol_id IS NOT NULL';
+        $this->db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
+    }
+
+    /**
      * This method migrate the data of the table adm_folder_roles to the
      * new table adm_roles_rights_data.
      */
     public function updateStepMigrateToFolderRights()
     {
-        global $g_tbl_praefix, $g_organization;
+        global $g_tbl_praefix, $g_organization, $gCurrentUser;
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
@@ -431,10 +449,10 @@ class ComponentUpdate extends Component
         $rolesRightsStatement = $this->db->queryPrepared($sql);
         $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+                SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
                   FROM '.$g_tbl_praefix.'_folder_roles ';
-        $this->db->queryPrepared($sql);
+        $this->db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
 
         // add new right folder_update to adm_roles_rights
         $sql = 'SELECT fol_id
@@ -695,17 +713,52 @@ class ComponentUpdate extends Component
     {
         global $gL10n, $gCurrentUser;
 
-        $userId = (int) $gCurrentUser->getValue('usr_id');
+        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
         $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (4, \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (5, \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\',    8, '.$userId.', \''.DATETIME_NOW.'\')
-                     , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$userId.', \''.DATETIME_NOW.'\')';
+                VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (4, \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (5, \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (6, \''.$gL10n->get('INS_COMPANION').'\',   \''.$gL10n->get('INS_BOYFRIEND').'\',        \''.$gL10n->get('INS_GIRLFRIEND').'\',         6, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (7, \''.$gL10n->get('INS_SUPERIOR').'\',    \''.$gL10n->get('INS_SUPERIOR_MALE').'\',    \''.$gL10n->get('INS_SUPERIOR_FEMALE').'\',    8, '.$currUsrId.', \''.DATETIME_NOW.'\')
+                     , (8, \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$currUsrId.', \''.DATETIME_NOW.'\')';
         $this->db->query($sql); // TODO add more params
+    }
+
+    /**
+     * This method add all roles to the role right category_view if the role had set the flag cat_hidden = 1
+     */
+    public function updateStepVisibleCategories()
+    {
+        $sql = 'SELECT cat_id, cat_org_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type IN (\'ANN\', \'DAT\', \'LNK\', \'USF\')
+                   AND cat_org_id IS NOT NULL
+                   AND cat_hidden = 1 ';
+        $categoryStatement = $this->db->queryPrepared($sql);
+
+        while($row = $categoryStatement->fetch())
+        {
+            $roles = array();
+            $sql = 'SELECT rol_id
+                      FROM ' . TBL_ROLES . '
+                INNER JOIN ' . TBL_CATEGORIES . '
+                        ON cat_id = rol_cat_id
+                     WHERE rol_valid  = 1
+                       AND cat_name_intern <> \'EVENTS\'
+                       AND cat_org_id = ? -- $row[\'cat_org_id\']';
+            $rolesStatement = $this->db->queryPrepared($sql, array((int) $row['cat_org_id']));
+
+            while($rowRole = $rolesStatement->fetch())
+            {
+                $roles[] = (int) $rowRole['rol_id'];
+            }
+
+            // save roles to role right
+            $rightCategoryView = new RolesRights($this->db, 'category_view', (int) $row['cat_id']);
+            $rightCategoryView->saveRoles($roles);
+        }
     }
 }

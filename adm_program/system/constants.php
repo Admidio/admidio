@@ -44,12 +44,24 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
-define('HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'); // true | false
+define('SCHEME', parse_url($g_root_path, PHP_URL_SCHEME)); // get SCHEME out of $g_root_path because server doesn't have this info if ssl proxy is used
+define('HTTPS', (SCHEME === 'https') ? true : false); // true | false
+define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
-define('PORT', ((!HTTPS && (int) $_SERVER['SERVER_PORT'] === 80) || (HTTPS && (int) $_SERVER['SERVER_PORT'] === 443)) ? '' : ':' . (int) $_SERVER['SERVER_PORT']); // :1234
-define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+$port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
 
-define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
+if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
+{
+    // if ssl proxy is used than this proxy is the host and the cookie must be set for this
+    define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
+    define('DOMAIN', strstr($_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . ':', ':', true)); // ssl.example.org
+}
+else
+{
+    define('HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'] . $port); // www.example.org:1234
+    define('DOMAIN', strstr(HOST . ':', ':', true)); // www.example.org | www.myproxy.com
+}
+define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
@@ -59,8 +71,8 @@ define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfo
 
 // URLS
 define('ADMIDIO_URL', $g_root_path); // https://www.example.org:1234/subfolder | https://www.myproxy.com:1234/www.example.com/subfolder
-define('FILE_URL',    ADMIDIO_URL . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
-define('CURRENT_URL', (HTTPS ? 'https://' : 'http://') . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
+define('FILE_URL',    SCHEME . '://' . HOST . $_SERVER['SCRIPT_NAME']); // https://www.example.org:1234/subfolder/adm_program/index.php
+define('CURRENT_URL', SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https://www.example.org:1234/subfolder/adm_program/index.php?param=value
 
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
@@ -92,7 +104,6 @@ define('TBL_ANNOUNCEMENTS',       $g_tbl_praefix . '_announcements');
 define('TBL_AUTO_LOGIN',          $g_tbl_praefix . '_auto_login');
 define('TBL_CATEGORIES',          $g_tbl_praefix . '_categories');
 define('TBL_COMPONENTS',          $g_tbl_praefix . '_components');
-define('TBL_DATE_ROLE',           $g_tbl_praefix . '_date_role');
 define('TBL_DATES',               $g_tbl_praefix . '_dates');
 define('TBL_FILES',               $g_tbl_praefix . '_files');
 define('TBL_FOLDERS',             $g_tbl_praefix . '_folders');

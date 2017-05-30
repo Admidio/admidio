@@ -40,7 +40,7 @@ function getFieldCode($fieldNameIntern, User $user)
 {
     global $gPreferences, $gCurrentUser, $gProfileFields, $gL10n;
 
-    if(!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
+    if(!$gCurrentUser->allowedViewProfileField($user, $fieldNameIntern))
     {
         return false;
     }
@@ -73,11 +73,11 @@ function getFieldCode($fieldNameIntern, User $user)
 
 unset($_SESSION['profile_request']);
 
-$userId     = (int) $user->getValue('usr_id');
-$currUserId = (int) $gCurrentUser->getValue('usr_id');
+$userId    = (int) $user->getValue('usr_id');
+$currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // set headline
-if($userId === $currUserId)
+if($userId === $currUsrId)
 {
     $headline = $gL10n->get('PRO_MY_PROFILE');
 }
@@ -223,7 +223,7 @@ if($gCurrentUser->hasRightEditProfile($user))
 }
 
 // Password of own user could be changed
-if($userId === $currUserId)
+if($userId === $currUsrId)
 {
     $profileMenu->addItem('menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
                         $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
@@ -297,8 +297,7 @@ $page->addHtml('
             $form = new HtmlForm('profile_master_data_form', null);
 
             // add lastname and firstname
-            if(strlen($user->getValue('GENDER')) > 0
-            && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0))
+            if(strlen($user->getValue('GENDER')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'GENDER'))
             {
                 // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                 $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
@@ -311,7 +310,7 @@ $page->addHtml('
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
-                if ($userId !== $currUserId && $gPreferences['enable_pm_module'] == 1)
+                if ($userId !== $currUsrId && $gPreferences['enable_pm_module'] == 1)
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
                         '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
@@ -334,8 +333,7 @@ $page->addHtml('
             foreach($gProfileFields->mProfileFields as $field)
             {
                 // nur Felder der Stammdaten anzeigen
-                if($field->getValue('cat_name_intern') === 'MASTER_DATA'
-                && ($gCurrentUser->hasRightEditProfile($user) || $field->getValue('usf_hidden') == 0))
+                if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
                 {
                     switch($field->getValue('usf_name_intern'))
                     {
@@ -364,31 +362,27 @@ $page->addHtml('
                                     ',%20'. urlencode($gCurrentUser->getValue('COUNTRY')).
                                     '&amp;daddr=';
 
-                                if(strlen($user->getValue('STREET')) > 0
-                                && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('STREET', 'usf_hidden') == 0))
+                                if(strlen($user->getValue('STREET')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'STREET'))
                                 {
                                     $address  .= $user->getValue('STREET'). '<br />';
                                     $mapUrl   .= urlencode($user->getValue('STREET'));
                                     $routeUrl .= urlencode($user->getValue('STREET'));
                                 }
 
-                                if(strlen($user->getValue('POSTCODE')) > 0
-                                && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
+                                if(strlen($user->getValue('POSTCODE')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE'))
                                 {
                                     $address  .= $user->getValue('POSTCODE');
                                     $mapUrl   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $routeUrl .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
                                     // City and postcode should be shown in one line
-                                    if(strlen($user->getValue('CITY')) === 0
-                                    || (!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
+                                    if(strlen($user->getValue('CITY')) === 0 && !$gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                     {
                                         $address .= '<br />';
                                     }
                                 }
 
-                                if(strlen($user->getValue('CITY')) > 0
-                                && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
+                                if(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                 {
                                     // City and postcode should be shown in one line
                                     $address  .= ' '. $user->getValue('CITY'). '<br />';
@@ -396,8 +390,7 @@ $page->addHtml('
                                     $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
 
-                                if(strlen($user->getValue('COUNTRY')) > 0
-                                && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
+                                if(strlen($user->getValue('COUNTRY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'COUNTRY'))
                                 {
                                     $country   = $user->getValue('COUNTRY');
                                     $address  .= $country. '<br />';
@@ -416,7 +409,7 @@ $page->addHtml('
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
-                                    if($userId !== $currUserId)
+                                    if($userId !== $currUsrId)
                                     {
                                         $htmlAddress .= ' - <a href="'.$routeUrl.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
@@ -475,14 +468,12 @@ $page->addHtml('
 $category = '';
 foreach($gProfileFields->mProfileFields as $field)
 {
+    $fieldNameIntern = $field->getValue('usf_name_intern');
+
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-    if($field->getValue('cat_name_intern') !== 'MASTER_DATA'
-    && ($gCurrentUser->hasRightEditProfile($user)
-        || (!$gCurrentUser->hasRightEditProfile($user) && $field->getValue('usf_hidden') == 0)))
+    if($field->getValue('cat_name_intern') !== 'MASTER_DATA' && $gCurrentUser->allowedViewProfileField($user, $fieldNameIntern))
     {
-        $fieldNameIntern = $field->getValue('usf_name_intern');
-
         // show new category header if new category and field has value or is a checkbox field
         if($category !== $field->getValue('cat_name')
         && (strlen($user->getValue($fieldNameIntern)) > 0 || $field->getValue('usf_type') === 'CHECKBOX'))
