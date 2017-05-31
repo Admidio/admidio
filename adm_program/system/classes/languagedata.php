@@ -61,7 +61,7 @@ class LanguageData
         if($language === '')
         {
             // get browser language and set this language as default
-            $language = $this->determineBrowserLanguage($this->referenceLanguage);
+            $language = static::determineBrowserLanguage($this->referenceLanguage);
         }
 
         $this->setLanguage($language);
@@ -100,7 +100,7 @@ class LanguageData
         {
             foreach($accepted as $key => $value)
             {
-                if(!preg_match('{^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.[0-9]{1,3})?|1(?:\.0{1,3})?))?$}i', $value, $matches))
+                if(!preg_match('/^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.[0-9]{1,3})?|1(?:\.0{1,3})?))?$/i', $value, $matches))
                 {
                     continue;
                 }
@@ -109,7 +109,7 @@ class LanguageData
 
                 if(isset($matches[2]))
                 {
-                    $priority = floatval($matches[2]);
+                    $priority = (float) $matches[2];
                 }
                 else
                 {
