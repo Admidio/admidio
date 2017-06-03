@@ -432,19 +432,11 @@ class Organization extends TableAccess
 
     /**
      * Method checks if the organization is configured as a child organization in the recordset.
-     * @param int $organizationId The @b org_shortname or @b org_id of the organization that should be set.
-     *                            If parameter isn't set than check the organization of this object.
      * @return bool Return @b true if the organization is a child of another organization
      */
-    public function isChildOrganization($organizationId = 0)
+    public function isChildOrganization()
     {
-        // if no organization was set in parameter then check the organization of this object
-        if($organizationId === 0)
-        {
-            $organizationId = $this->getValue('org_id');
-        }
-
-        return array_key_exists($organizationId, $this->getChildOrganizations());
+        return array_key_exists($this->getValue('org_id'), $this->getChildOrganizations());
     }
 
     /**

@@ -117,10 +117,11 @@ if($getMode === 1)
         // => EXIT
     }
 
-    // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
-    // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
-    if(($getType === 'USF'
-    && (isset($_POST['show_in_several_organizations']) || $gCurrentOrganization->countAllRecords() === 1))
+    // set a global category if its not a role category and the flag was set,
+    // if its a profile field category and only 1 organization exists,
+    // if its the role category of events
+    if(($getType !== 'ROL' && isset($_POST['show_in_several_organizations']))
+    || ($getType === 'USF' && $gCurrentOrganization->countAllRecords() === 1)
     || ($getType === 'ROL' && $category->getValue('cat_name_intern') === 'EVENTS'))
     {
         $category->setValue('cat_org_id', 0);
