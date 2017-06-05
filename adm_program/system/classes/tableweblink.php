@@ -33,15 +33,32 @@ class TableWeblink extends TableAccess
 
     /**
      * This method checks if the current user is allowed to edit this weblink. Therefore
-     * the weblink must be visible to the user and the user must be a member of at least
-     * one role that have the right to manage weblinks.
-     * @return bool Return true if the current user is allowed to edit this announcement
+     * the weblink must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage weblinks.
+     * Global weblinks could be only edited by the parent organization.
+     * @return bool Return true if the current user is allowed to edit this weblink
      */
     public function editable()
     {
-        global $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser;
 
-        return $this->visible() && $gCurrentUser->editWeblinksRight();
+        if($this->visible() && $gCurrentUser->editDates())
+        {
+            if ($gCurrentOrganization->countAllRecords() === 1)
+            {
+                return true;
+            }
+
+            // parent organizations could edit global weblinks,
+            // child organizations could only edit their own weblinks
+            if ($gCurrentOrganization->isParentOrganization()
+            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

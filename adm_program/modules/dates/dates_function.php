@@ -226,10 +226,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         $_POST['dat_highlight'] = 0;
     }
-    if(!isset($_POST['dat_global']))
-    {
-        $_POST['dat_global'] = 0;
-    }
     if(!isset($_POST['dat_all_day']))
     {
         $_POST['dat_all_day'] = 0;

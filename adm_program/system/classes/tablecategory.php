@@ -328,7 +328,7 @@ class TableCategory extends TableAccess
         }
 
         // if new category than generate new name intern, otherwise no change will be made
-        if ($this->new_record)
+        if ($this->new_record && $this->getValue('cat_name_intern') === '')
         {
             $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
         }

@@ -783,7 +783,7 @@ if($gPreferences['profile_show_former_roles'] == 1)
 
 if($gPreferences['profile_show_extern_roles'] == 1
 && ($gCurrentOrganization->getValue('org_org_id_parent') > 0
-    || $gCurrentOrganization->hasChildOrganizations()))
+    || $gCurrentOrganization->isParentOrganization()))
 {
     // *******************************************************************************
     // Block with roles from other organizations

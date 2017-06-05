@@ -148,7 +148,8 @@ class ModuleWeblinks extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR cat_org_id IS NULL)
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
@@ -191,7 +192,8 @@ class ModuleWeblinks extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR cat_org_id IS NULL)
                        '.$this->getConditions;
         $queryParams = array_merge(
             $catIdParams,

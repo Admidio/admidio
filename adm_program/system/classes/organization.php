@@ -422,15 +422,6 @@ class Organization extends TableAccess
     }
 
     /**
-     * Method checks if this organization is the parent of other organizations.
-     * @return bool Return @b true if the organization has child organizations.
-     */
-    public function hasChildOrganizations()
-    {
-        return count($this->getChildOrganizations()) > 0;
-    }
-
-    /**
      * Method checks if the organization is configured as a child organization in the recordset.
      * @return bool Return @b true if the organization is a child of another organization
      */
@@ -441,6 +432,15 @@ class Organization extends TableAccess
             return true;
         }
         return false;
+    }
+
+    /**
+     * Method checks if the organization is configured as a parent organization in the recordset.
+     * @return bool Return @b true if the organization is the parent of a least one other organization
+     */
+    public function isParentOrganization()
+    {
+        return count($this->getChildOrganizations()) > 0;
     }
 
     /**

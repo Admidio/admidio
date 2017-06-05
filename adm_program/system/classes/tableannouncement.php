@@ -44,16 +44,15 @@ class TableAnnouncement extends TableAccess
 
         if($this->visible() && $gCurrentUser->editAnnouncements())
         {
-            $orgId = (int) $this->getValue('cat_org_id');
-
-            // only edit announcements of the current organization
-            if ((int) $gCurrentOrganization->getValue('org_id') === $orgId)
+            if ($gCurrentOrganization->countAllRecords() === 1)
             {
                 return true;
             }
 
-            // Global announcments could be edited by the parent organization
-            if ($gCurrentOrganization->isChildOrganization($orgId) && $this->getValue('ann_global'))
+            // parent organizations could edit global announcements,
+            // child organizations could only edit their own announcements
+            if ($gCurrentOrganization->isParentOrganization()
+            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
             {
                 return true;
             }

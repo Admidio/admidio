@@ -55,8 +55,6 @@
  *                     [dat_rol_id] =>
  *                     [16] =>
  *                     [dat_room_id] =>
- *                     [17] => 0
- *                     [dat_global] => 0
  *                     [18] => 2013-09-21 21:00:00
  *                     [dat_begin] => 2013-09-21 21:00:00
  *                     [19] => 2013-09-21 22:00:00
@@ -187,10 +185,7 @@ class ModuleDates extends Modules
                    AND mem.mem_end    > ? -- DATE_NOW
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR  (   dat_global = 1
-                           AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
-                           )
-                       )
+                       OR cat_org_id IS NULL)
                        ' . $this->getSqlConditions() . '
                        ORDER BY dat_begin ' . $this->order;
 
@@ -278,11 +273,8 @@ class ModuleDates extends Modules
                     ON cat_id = dat_cat_id
                        ' . $this->sqlAdditionalTablesGet('count') . '
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR  (   dat_global = 1
-                           AND cat_org_id IN (' . $gCurrentOrganization->getFamilySQL() . ')
-                           )
-                       )'
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                       OR cat_org_id IS NULL)'
                        . $this->getSqlConditions();
 
         $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));

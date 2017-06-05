@@ -55,11 +55,6 @@ $_SESSION['announcements_request'] = $_POST;
 
 if($getMode === 1)
 {
-    if(!isset($_POST['ann_global']))
-    {
-        $_POST['ann_global'] = 0;
-    }
-
     if(strlen($_POST['ann_headline']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_HEADLINE')));
