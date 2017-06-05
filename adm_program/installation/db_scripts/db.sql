@@ -54,7 +54,6 @@ create table %PREFIX%_announcements
 (
     ann_id                      integer unsigned    not null    AUTO_INCREMENT,
     ann_cat_id                  integer unsigned    not null,
-    ann_global                  boolean             not null    default '0',
     ann_headline                varchar(100)        not null,
     ann_description             text,
     ann_usr_id_create           integer unsigned,
@@ -142,7 +141,6 @@ create table %PREFIX%_dates
     dat_cat_id                  integer unsigned    not null,
     dat_rol_id                  integer unsigned,
     dat_room_id                 integer unsigned,
-    dat_global                  boolean             not null    default '0',
     dat_begin                   timestamp           null        default null,
     dat_end                     timestamp           null        default null,
     dat_all_day                 boolean             not null    default '0',
