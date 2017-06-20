@@ -33,6 +33,7 @@
   <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
   <string name="CAT_MOVE_DOWN">Move down #VAR1#</string>
   <string name="CAT_MOVE_UP">Move up #VAR1#</string>
+  <string name="CAT_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
@@ -84,14 +85,16 @@
   <string name="DAT_MAX_MEMBERS">Reduce number of participants for this event. Please leave field empty for unlimited participants.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You will be the event organizer and are allowed to add/remove further participants or name them as additional organizer.</string>
+  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the event and receive the right to add or remove further participants. In addition, you can make other people organizers.</string>
   <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2# </string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Previous #VAR1#</string>
+  <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registration possible for</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registration is closed.</string>
   <string name="DAT_REGISTRATION_POSSIBLE">Enable registration to this event.</string>
   <string name="DAT_REMOVE_APPLICATION">Would you like to remove this event? All participants will be removed.</string>
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Participants can view the list of participants</string>
   <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Participants can send emails to all participants</string>
+  <string name="DAT_ROLES_DIFFERENT">You have assigned roles to the participants who are not allowed to see the dates in the selected category. Please choose one of the following roles for the participants: # VAR1_BOLD #.</string>
   <string name="DAT_ROOM_INFORMATIONS">Room information</string>
   <string name="DAT_ROOM_OVERHANG">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</string>
   <string name="DAT_ROOM_RESERVED">Selected room is already in use at this time.</string>
@@ -115,7 +118,6 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailed</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibility</string>
-  <string name="SYS_VISIBLE_FOR">Visible for</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Add to database</string>
   <string name="DOW_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
@@ -130,7 +132,7 @@
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">A new file was uploaded</string>
   <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">A new file was uploaded at #VAR1#\n\nFile: #VAR2#\nUploaded by: #VAR3#\nUploaded at: #VAR4#</string>
   <string name="DOW_ENABLE_DOWNLOAD_MODULE">Activating download module</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Download module can be deactivated here. After deactivation it wont appear anymore as module in the overview. (default: yes)</string>
+  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">The download module can be activated or deactivated via this setting. (Default: yes)</string>
   <string name="DOW_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="DOW_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
   <string name="DOW_FILE_NAME_RULES">File name should indicate the file content. The file name affects to the listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-tt).</string>
@@ -168,7 +170,7 @@
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be deactivated and reactivated by using these options. If server is not capable of sending mails, please deactivate the module. The module is accessible for logged in users only. (default: yes)</string>
+  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
   <string name="ECA_GREETING_CARD">Greeting card </string>
   <string name="ECA_GREETING_CARDS">Greeting cards</string>
   <string name="ECA_GREETING_CARD_EDIT">Edit greeting card</string>
@@ -189,7 +191,7 @@
   <string name="GBO_CAPTCHA_DESC">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (default: yes)</string>
   <string name="GBO_COMMENT_BY">Comment of #VAR1#</string>
   <string name="GBO_COMMENTS4ALL">Allow anonyme comments</string>
-  <string name="GBO_COMMENTS4ALL_DESC">By activating this option, unregistered users will be able to make comments in guestbook. All other access permissions set in the role administration panel will be ignored. (default: no)</string>
+  <string name="GBO_COMMENTS4ALL_DESC">Users who are not logged in can comment on the entries in the guestbook after activating this option. The rights assignment for this function via role management is then ignored. (Default: no)</string>
   <string name="GBO_CREATE_COMMENT">Leave comment</string>
   <string name="GBO_CREATE_ENTRY">Leave entry</string>
   <string name="GBO_CREATE_VAR_ENTRY">Leave #VAR1# entry</string>
@@ -242,7 +244,7 @@
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
   <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Your database version is #VAR1#.\n\nUpdate to version #VAR2# is required</string>
   <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
-  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhost need a special port, you can type it here. </string>
+  <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here. </string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
   <string name="INS_DATABASE_SYSTEM">Database system</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MySQL and PostgreSQL.</string>
@@ -250,7 +252,7 @@
   <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Creating database</string>
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
-  <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurationen file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
+  <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurations file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
   <string name="INS_DATA_DO_NOT_MATCH">Data from #VAR1_BOLD# does not comply with information provided in installation wizard.\n\nCheck config.php and all other information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Enter the administrator\'s name, e-mail and access information. Log in with the administrator’s credentials after installation.</string>
@@ -330,8 +332,8 @@
   <string name="INS_SUBORDINATE">Subordinate</string>
   <string name="INS_SUBORDINATE_MALE">Male subordinate</string>
   <string name="INS_SUBORDINATE_FEMALE">Female subordinate</string>
-  <string name="INS_SUPERIOR">Superior</string>
-  <string name="INS_SUPERIOR_MALE">Male superior</string>
+  <string name="INS_SUPERIOR">Boss</string>
+  <string name="INS_SUPERIOR_MALE">Boss</string>
   <string name="INS_SUPERIOR_FEMALE">Female superior</string>
   <string name="INS_SIBLING">Sibling</string>
   <string name="INS_SISTER">Sister</string>
@@ -348,7 +350,7 @@
   <string name="LNK_DISPLAY_REDIRECT">Show redirect</string>
   <string name="LNK_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">A new weblink was created</string>
-  <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">A new weblink at #VAR1# was created.\n\nLinkadress: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
+  <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">A new weblink at #VAR1# was created.\n\nLink address: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="LNK_GO_TO">Go to #VAR1#</string>
   <string name="LNK_LINK_ADDRESS">Link address</string>
   <string name="LNK_LINK_NAME">Link name</string>
@@ -388,7 +390,7 @@
   <string name="LST_EMAIL_TO_LIST">E-mail to list</string>
   <string name="LST_EMPTY_EXAMPLE_DESC">Finds all users who have not filled the Road field</string>
   <string name="LST_ENABLE_LISTS_MODULE">Enable list module</string>
-  <string name="LST_ENABLE_LISTS_MODULE_DESC">The greeting card module can be completely deactivated or activated by this setting. If the server does not support mail delivery, the module should be deactivated. This module is generally available only to logged-in users. (Default: yes)</string>
+  <string name="LST_ENABLE_LISTS_MODULE_DESC">The display of the lists and the configuration of your own lists can be activated or deactivated by this setting. This module is generally only available to logged in users. (Default: yes)</string>
   <string name="LST_ERROR_DELETE_DEFAULT_LIST">The list configuration #VAR1_BOLD# is the default configuration for lists in this organization and can not be deleted. Choose a different configuration to the standard configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="LST_EXCLUDE_EXAMPLE">Steve</string>
   <string name="LST_EXCLUDE_EXAMPLE_DESC">Find all users who are not named Steve</string>
@@ -470,11 +472,11 @@
   <string name="LST_Z_TO_A">Z to A</string>
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Activating e-mail module</string>
-  <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">E-mail module can be deactivated by unchecking the check box. After deactivation, the module will be unavailable in the module overview panel as well. If the server does not support sending e-mails, please deactivate the module. (default: active)</string>
+  <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">The e-mail module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. (Default: enabled)</string>
   <string name="MAI_ADD_ATTACHEMENT">Attach file</string>
   <string name="MAI_ATTACHEMENT">Attachment</string>
   <string name="MAI_ATTACHMENT_SIZE">Maximum size of e-mail attachments</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1MB)</string>
+  <string name="MAI_ATTACHMENT_SIZE_DESC">Users can only attach files where the file size is less than the value specified here. If there is 0 here, no attachments are possible in the e-mail module. (Default: 1MB)</string>
   <string name="MAI_ATTACHMENT_TO_LARGE">E-mail attachment upload error.\nFile size is most likely to large!</string>
   <string name="MAI_CAPTCHA_DESC">When option is activated, logged in users will receive a picture with a captcha code or a simple calculation. It\'s necessary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (default: yes)</string>
   <string name="MAI_CARBON_COPY">Carbon copy (CC)</string>
@@ -508,12 +510,12 @@
   <string name="MAI_SEND_EMAIL">Send e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members with an e-mail address of the selected role or the selected recipients .\n\nFurther roles and recipients are available for logged in users only.</string>
   <string name="MAI_SEND_METHOD">Send via</string>
-  <string name="MAI_SEND_METHOD_DESC">The mail () function of PHP is limited by some HOSTERS and sometimes leads to suspected spam. It is therefore recommended to send emails via SMTP server. The SMTP settings can be configured below. (Default: PHP mail ())</string>
+  <string name="MAI_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
   <string name="MAI_SENDER">Sender</string>
-  <string name="MAI_SENDER_EMAIL">Sender\'s e-mail</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Certain service provider do not allow unidentified sender information. Due to that please provide an e-mail address as default sender e-mail address that will be used by the e-mail module (e.g. outbox@#VAR1#).\nIf this field remains empty, sender\'s registered e-mail address will appear as sender information. (default: empty)</string>
+  <string name="MAI_SENDER_EMAIL">Sender mail address</string>
+  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Using an unknown mail address as a sender address is not allowed by some providers. In this case you can add an email address which will be used as sender address within the mail module (e.g. noreply@#VAR1#).\nIf the field remains empty the sender\'s mail address will be used (default: empty).</string>
   <string name="MAI_SENDER_NAME">Name of sender</string>
-  <string name="MAI_SENDER_NAME_DESC">Name of the sender according to the used email address. This field must only be filled if a sender\'s e-mail address is also maintained. (default: empty)</string>
+  <string name="MAI_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty (default: empty).</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Sender was logged out. Due to that sender\'s information might be incorrect.)</string>
   <string name="MAI_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
   <string name="MAI_SMTP">SMTP</string>
@@ -593,9 +595,9 @@
   <string name="MEM_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Activate chat</string>
-  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Activate chat module. Messages will be fetched dynamically from database every 3 seconds. Only 99 entries will be saved into database. As soon as the 100th entry is to be saved the first 50 entries will be deleted.</string>
+  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">The chat module can be enabled or disabled using this setting. The module dynamically loads data from the database every 3 seconds. A maximum of 99 entries are saved. For 100 messages, the first 50 entries are deleted. (Default: Disabled)</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Activate private messages</string>
-  <string name="MSG_ACTIVATE_PM_MODULE_DESC">This option allows to deactivate private messages. The module will neither be callable nor listed in the overview. (Default: Activated)</string>
+  <string name="MSG_ACTIVATE_PM_MODULE_DESC">Private messages can be enabled or disabled using this setting. (Default: enabled)</string>
   <string name="MSG_ACTIVE_FORMER_SHORT">Active and former</string>
   <string name="MSG_CHAT">Chat</string>
   <string name="MSG_DELETE_DESC">Should message #VAR1_BOLD# be removed now?</string>
@@ -628,7 +630,7 @@
   <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">User is not a member of organization #VAR1# and has no login information registered.</string>
   <string name="NWU_NO_REGISTRATIONS">No new registrations available.</string>
   <string name="NWU_REGISTERED_ON">Registered on #VAR1#</string>
-  <string name="NWU_REMINDER_SEND_LOGIN">Would you like to remind user of login information and password?</string>
+  <string name="NWU_REMINDER_SEND_LOGIN">Do you want to send the user credentials (incl. password!) as a reminder?</string>
   <string name="NWU_SEND_LOGIN">Send login information</string>
   <string name="NWU_USER_NO_VALID_LOGIN">User has no login yet.\nWould you like to assign the information of the selected registration to the user?</string>
   <string name="NWU_USER_VALID_LOGIN">User already has valid login information.</string>
@@ -641,7 +643,6 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</string>
-  <string name="ORG_ADVANCED_REGISTRATION">Advanced registration</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto log off after</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected #VAR1_BOLD#. (default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
@@ -683,9 +684,10 @@
   <string name="ORG_EMAIL_ALERTS">E-mail alert</string>
   <string name="ORG_EMAIL_ALERTS_DESC">All members of all roles with permission #VAR1_BOLD# receive e-mail in case of new user registration. (default: yes)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha activation</string>
+  <string name="ORG_ENABLE_REGISTRATION_MODULE">Enable registration</string>
+  <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">The registration by visitors of the homepage can be activated or deactivated by this setting. The profile fields that are displayed during the registration process can be configured in the profile field settings for each field. (Default: yes)</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Enable web feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio is able to provide web feeds for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</string>
-  <string name="ORG_FAST_REGISTRATION">Quick registration</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field editable only for user with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by the user in its own profile. It can be edited only by users who have the permission to edit all users. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
@@ -693,18 +695,20 @@
   <string name="ORG_FIELD_EXIST">Field with same name already exists in this category.</string>
   <string name="ORG_FIELD_HIDDEN">Field viewable for authorized users only (own profile &amp; role rights)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Usually a field is visible to everybody who is allowed to view the profile. If this option is deselected only user who are allowed to edit this profile can see the field.</string>
-  <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Field can be edited by users themselves.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Field to see for all users.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Field is mandatory. It must be filled in.</string>
+  <string name="ORG_FIELD_NOT_REGISTRATION">Field is not displayed during registration</string>
+  <string name="ORG_FIELD_REGISTRATION">Field is displayed during registration</string>
+  <string name="ORG_FIELD_REQUIRED">Mandatory field that has to be filled in always.</string>
+  <string name="ORG_FIELD_REQUIRED_DESC">Flagged (mandatory) fields always have to be filled in. This rule applies for registrations and for regular profile changes performed by users.</string>
   <string name="ORG_FIELD_UP">Move profile field up</string>
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Colour of the JavaScript editor</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Define background colour of the JavaScript editor here. The value can be a hexadecimal colour value like #ffa500 or RGB value like (255, 185, 0).</string>
+  <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Color of the JavaScript editor</string>
+  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Define background color of the JavaScript editor here. The value can be a hexadecimal color value like #ffa500 or RGB value like (255, 185, 0).</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
@@ -720,7 +724,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a seperate homepage for this organization please add it within the config.php of the seperate homepage.</string>
+  <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a separate homepage for this organization please add it within the config.php of the separate homepage.</string>
   <string name="ORG_PARENT_ORGANIZATION">Parent organization</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Define parent organization here. Parent organizations are able to create events and announcements for example which will be displayed in selected (child) organization.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Password strength</string>
@@ -735,7 +739,6 @@
   <string name="ORG_REFUSE_REGISTRATION">Notification on refusal of registration</string>
   <string name="ORG_REGIONAL_SETTINGS">Regional settings</string>
   <string name="ORG_REGISTERED_USERS">Logged in user</string>
-  <string name="ORG_REGISTRATION_MODE">Define character of registration or deactivate it. Quick registration allows users to register by filling in mandatory fields only. The full registration provides all fields of the profile.  (default: quick registration)</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Search for similar names</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</string>
   <string name="ORG_SECONDS">seconds</string>
@@ -749,10 +752,10 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="ORG_SYSTEM_INFORMATIONS">System information</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">Email address</string>
+  <string name="ORG_SYSTEM_MAIL_ADDRESS">Mail address</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">This function is used to enable the system notification for new entries within the modules. It is used as a monitoring function within Admidio. Thus the administrator can be notified by e-mail when new entries are added within a module (only new entries will be considered). The system notifications will be sent to the email address #VAR1#. (Default: no)</string>
+  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Here you can activate system notifications for new module entries. These notifications will be used for internal monitoring of Admidio. This way an administrator has the possibility to get informed about new module entries (only new entries will be considered). System notifications will be send to the following mail address #VAR1# (default: no).</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes folder could not be opened/read.</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
@@ -763,15 +766,15 @@
   <string name="ORG_VALUE_LIST">Value list</string>
   <string name="ORG_VALUE_LIST_DESC">In this field, you can enter the entries for the drop-down list box or the option field. For each line, an entry of the drop-down list field or the option field can be entered here.\n\nThe profile is not stored as text later, but the selected position from the list. If you change the text in a line, all users already assigned will immediately see the new text in their profile. However, if you move an entry into another line, users may see a different entry.\n\nAn option field can be displayed as icon instead of a text. The name of an icon from the theme folder (ex: ok.png) or the url of an external image (example: https://www.example.com/example.jpg) can be specified. A tooltip for the icon (eg female.png|female) can optionally be set via a vertical divider.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activation link for the new password</string>
-  <string name="ORG_VARIABLE_EMAIL">User e-mail address</string>
+  <string name="ORG_VARIABLE_EMAIL">Mail address of the user in regard to the mail context</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System e-mail address of the organization</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">First name of user</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Surname of user</string>
+  <string name="ORG_VARIABLE_FIRST_NAME">First name of the user from the respective e-mail context</string>
+  <string name="ORG_VARIABLE_LAST_NAME">Surname of the user from the respective e-mail context</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Name of the organization</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">New user password</string>
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Short name of the organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
-  <string name="ORG_VARIABLE_USERNAME">username of user</string>
+  <string name="ORG_VARIABLE_USERNAME">Username of the user from the respective e-mail context</string>
   <!--Phrases only in Updatecheck-->
   <string name="UPD_ADMIDIO">Go to Admidio update page</string>
   <string name="UPD_BETA_VERSION">Available Beta</string>
@@ -792,10 +795,10 @@
   <string name="PHO_ALBUM_WRITE_SUCCESS">Album has been successfully created / changed.</string>
   <string name="PHO_BACK_TO_ALBUM">back to album</string>
   <string name="PHO_CAPTION_SIZE">Caption size</string>
-  <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisior\". By increasing the devisor,  the font size will be reduced. (Default: 40)</string>
+  <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor,  the font size will be reduced. (Default: 40)</string>
   <string name="PHO_CREATE_ALBUM">Create album</string>
   <string name="PHO_DISPLAY_PHOTOS">Photo display</string>
-  <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as seperate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the currenct image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
+  <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
   <string name="PHO_DOWNLOAD_PHOTOS">Download photos</string>
   <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Save photo</string>
   <string name="PHO_DOWNLOAD_ENABLED">Activate download</string>
@@ -808,7 +811,7 @@
   <string name="PHO_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be  inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
   <string name="PHO_KEEP_ORIGINAL">Save original files additionally</string>
   <string name="PHO_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
-  <string name="PHO_MAX_PHOTO_SIZE_DESC">Values are defining maximum size of a photo displayed by a user. Size of popup and ColorBox windows will be automatically adjusted. Ideal size should follow original picture size in order to avoid rescaling. (default: 640 x 400 pixels)</string>
+  <string name="PHO_MAX_PHOTO_SIZE_DESC">The values specified determine the maximum size that an image may have in the display window. In a modal window or pop-up window, the window is automatically resized to fit the photo. Ideal size should follow original picture size in order to avoid rescaling. (default: 640 x 400 pixels)</string>
   <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Maximum image size (height)</string>
   <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Maximum image size (width)</string>
   <string name="PHO_MODAL_WINDOW">Modal window</string>
@@ -963,7 +966,7 @@
   <string name="ROL_DISABLE_ROLE_DESC">If you select #VAR1_BOLD#, the role and all member mappings will be permanently removed from the database, and can not been seen anymore.</string>
   <string name="ROL_EDIT_ROLE">Edit role</string>
   <string name="ROL_ENABLE_ROLE">Activate role</string>
-  <string name="ROL_ENABLE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selctable in all lists.\n\nDo you want to re-activate the roles?</string>
+  <string name="ROL_ENABLE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selectable in all lists.\n\nDo you want to re-activate the roles?</string>
   <string name="ROL_INACTIV_ROLE">Inactive role</string>
   <string name="ROL_INACTIV_ROLES">Inactive roles</string>
   <string name="ROL_LEADER_NO_ADDITIONAL_RIGHTS">Head of this role have no special rights. They will be highlighted in list views only.</string>
@@ -994,7 +997,7 @@
   <string name="ROL_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add/delete users.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Define who should be able to send messages to this role by using the mail module. Role permission  #VAR1_BOLD# is parent configuration of the current permission level.</string>
+  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send e-mails to this role via the e-mail module. However, the role right #VAR1_BOLD# is still above this setting.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>
   <string name="ROL_RIGHT_PHOTO">Upload and edit photos</string>
   <string name="ROL_RIGHT_PROFILE">Edit own profile</string>
@@ -1003,7 +1006,7 @@
   <string name="ROL_ROLE_ADMINISTRATION">Role administration</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</string>
   <string name="ROL_ROLE_DELETE">Deleting role</string>
-  <string name="ROL_ROLE_DELETE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\All memberships will also be removed.</string>
+  <string name="ROL_ROLE_DELETE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="ROL_ROLE_DEPENDENCIES">A member of a dependent role will become automatically a member of #VAR1#!\n\nWhen this dependency is set all existing members of the dependent role will become a member of #VAR1#. When a dependency is going to be deleted, memberships will remain the same!</string>
   <string name="ROL_ROLE_MEMBERSHIPS">Role memberships</string>
   <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Change role memberships</string>
@@ -1095,6 +1098,9 @@
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
+  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data in this category will also appear on the websites of the following organizations and can be edited by users with appropriate rights:\n\n#VAR1_BOLD#</string>
+  <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
+  <string name="SYS_DATA_GLOBAL">When active, all dates appear on the websites of following organizations where they can be edited by authorised users:\n\n#VAR1_BOLD#</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
@@ -1104,7 +1110,6 @@
   <string name="SYS_DATE">Date</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">End date is before start date.</string>
   <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# to #VAR2#</string>
-  <string name="SYS_DATA_GLOBAL">When active, all dates appear on the websites of following organizations where they can be edited by authorised users:\n\n#VAR1_BOLD#</string>
   <string name="SYS_DATE_INVALID">Invalid date in field #VAR1_BOLD#.\n\nDate has to comply with this formatting: #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Date of modification</string>
   <string name="SYS_DATE_TO">to</string>
@@ -1156,7 +1161,7 @@
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">First name</string>
-  <string name="SYS_FIRSTNAME_LASTNAME">Firstname and lastname</string>
+  <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
   <string name="SYS_FROM">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FOLDER">Folder</string>
@@ -1312,7 +1317,7 @@
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REQUIRED_FIELDS">Required fields</string>
-  <string name="SYS_RESTRICTIONS">Resctrictions</string>
+  <string name="SYS_RESTRICTIONS">Restrictions</string>
   <string name="SYS_ROLE">Role</string>
   <string name="SYS_ROLE_MAX_MEMBERS">It was not possible to save the change. Maximum number of role members in role #VAR1_BOLD# will exceed predefined limit.</string>
   <string name="SYS_ROLES">Roles</string>
@@ -1325,6 +1330,7 @@
   <string name="SYS_SAVE">Save</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
   <string name="SYS_SECONDS">Seconds</string>
+  <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SEND">Send</string>
@@ -1344,7 +1350,7 @@
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Start</string>
-  <string name="SYS_STATUS_CODE_INVALID">Invalid Status Code!</string>
+  <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_STREET">Street</string>
@@ -1388,7 +1394,8 @@
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">View</string>
   <string name="SYS_VISIBLE">Visible</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# only visible for logged in users.</string>
+  <string name="SYS_VISIBLE_FOR">Visible for</string>
+  <string name="SYS_VISIBLE_TO_USERS">#VAR1# visible only to logged in users</string>
   <string name="SYS_VISITORS">Guests</string>
   <string name="SYS_WANT_REGISTER">I want to register!</string>
   <string name="SYS_WARNING">Warning</string>
