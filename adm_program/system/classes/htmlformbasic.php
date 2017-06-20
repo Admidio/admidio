@@ -186,8 +186,9 @@ class HtmlFormBasic extends HtmlElement
      * @param string $id       Optional Id of the option
      * @param bool   $selected Mark as selected (Default: false)
      * @param bool   $disable  Disable option (optional)
+     * @param string[] $arrAttributes Further attributes as array with key/value pairs
      */
-    public function addOption($value, $label, $id = null, $selected = false, $disable = false)
+    public function addOption($value, $label, $id = null, $selected = false, $disable = false, array $arrAttributes = null)
     {
         $this->addElement('option');
         // set attributes
@@ -207,6 +208,13 @@ class HtmlFormBasic extends HtmlElement
         {
             $this->addAttribute('disabled', 'disabled');
         }
+
+        // Check optional attributes in associative array and set all attributes
+        if ($arrAttributes !== null)
+        {
+            $this->setAttributesFromArray($arrAttributes);
+        }
+        
         // add label
         $this->addData($label);
     }
@@ -215,10 +223,10 @@ class HtmlFormBasic extends HtmlElement
      * Add an option group.
      * @param string   $label         Label of the option group
      * @param string   $id            Optional Id of the group
-     * @param string[] $arrAttributes Further attributes as array with key/value pairs
      * @param bool     $disable       Disable option group (Default: false)
+     * @param string[] $arrAttributes Further attributes as array with key/value pairs
      */
-    public function addOptionGroup($label, $id = null, array $arrAttributes = null, $disable = false)
+    public function addOptionGroup($label, $id = null, $disable = false, array $arrAttributes = null)
     {
         $this->addParentElement('optgroup');
 

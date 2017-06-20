@@ -169,16 +169,14 @@ if($getType === 'USF')
 if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 {
     $page->addJavascript('
-        function setVisibilityRoles() {
+        $("#show_in_several_organizations").click(function() { 
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
             } else {
                 $("#adm_categories_view_right_group").show("slow");
             }
-        }
-
-        setVisibilityRoles();
-        $("#show_in_several_organizations").click(function() { setVisibilityRoles(); });',
+        });
+        $("#show_in_several_organizations").trigger("click");',
         true
     );
 }
@@ -255,11 +253,17 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
     else
     {
         // show all organizations where this organization is mother or child organization
-        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
+        $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
         $fieldProperty   = FIELD_DEFAULT;
-        $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
+        if($getType === 'USF')
+        {
+            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
+        }
+        else
+        {
+            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
+        }
     }
 
     $checked = false;

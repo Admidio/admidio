@@ -28,7 +28,7 @@
     <!-- Phrases only in Category-Administration -->
     <string name="CAT_ALL_THIS_ORGANIZATION">Alle dieser Organisation</string>
     <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
-    <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n#VAR1_BOLD#\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
+    <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
     <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
     <string name="CAT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
     <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
@@ -1051,6 +1051,7 @@
     <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
     <string name="SYS_ALL">Alle</string>
     <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
+    <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Termin, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
     <string name="SYS_APPLY">Übernehmen</string>
     <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
@@ -1140,7 +1141,6 @@
     <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
     <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
     <string name="SYS_EMPTY">Leer</string>
-    <string name="SYS_ENTRY_MULTI_ORGA">Eintrag für mehrere Organisationen sichtbar</string>
     <string name="SYS_END" description="End of a date">Ende</string>
     <string name="SYS_ERROR">Fehler</string>
     <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>

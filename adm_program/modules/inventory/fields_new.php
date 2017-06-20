@@ -90,18 +90,16 @@ if(isset($_SESSION['fields_request']))
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-    function setValueList() {
+    $("#inf_type").click(function() {
         if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
             $("#inf_value_list_group").show("slow");
             $("#inf_value_list").attr("required", "required");
         } else {
             $("#inf_value_list").removeAttr("required");
             $("#inf_value_list_group").hide();
-        }
-    }
-
-    setValueList();
-    $("#inf_type").click(function() { setValueList(); });', true);
+        }        
+    });
+    $("#inf_type").trigger("click");', true);
 
 // add back link to module menu
 $profileFieldsEditMenu = $page->getMenu();
