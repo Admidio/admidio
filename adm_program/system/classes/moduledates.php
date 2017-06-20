@@ -184,10 +184,8 @@ class ModuleDates extends Modules
                    AND mem.mem_begin <= ? -- DATE_NOW
                    AND mem.mem_end    > ? -- DATE_NOW
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL)
                        ' . $this->getSqlConditions() . '
-                       ORDER BY dat_begin ' . $this->order;
+                 ORDER BY dat_begin ' . $this->order;
 
         // Parameter
         if ($limit > 0)
@@ -205,8 +203,7 @@ class ModuleDates extends Modules
                 DATE_NOW,
                 DATE_NOW
             ),
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
+            $catIdParams
         );
         $datesStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
@@ -273,12 +270,9 @@ class ModuleDates extends Modules
                     ON cat_id = dat_cat_id
                        ' . $this->sqlAdditionalTablesGet('count') . '
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL)'
-                       . $this->getSqlConditions();
+                       '. $this->getSqlConditions();
 
-        $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));
-        $statement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
+        $statement = $gDb->queryPrepared($sql, $catIdParams); // TODO add more params
 
         return (int) $statement->fetchColumn();
     }
