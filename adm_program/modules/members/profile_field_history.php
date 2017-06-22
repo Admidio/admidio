@@ -164,7 +164,8 @@ $profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl
 
 // create filter menu with input elements for Startdate and Enddate
 $FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
-$form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php?usr_id='.$getUserId, $page, array('type' => 'navbar', 'setFocus' => false));
+$form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
+$form->addInput('usr_id', null, $getUserId, array('property' => FIELD_HIDDEN));
 $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
