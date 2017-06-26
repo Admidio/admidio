@@ -298,14 +298,17 @@ class Session extends TableAccess
                 $autoLoginParts = explode(':', $_COOKIE[$this->cookieAutoLoginId]);
                 $userId = $autoLoginParts[0];
 
-                $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = atl_number_invalid + 1
-                         WHERE atl_usr_id = '.$userId;
-                $this->db->query($sql);
-
-                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
-                         WHERE atl_usr_id = '.$userId.'
-                           AND atl_number_invalid > 3 ';
-                $this->db->query($sql);
+                if($userId > 0)
+                {
+                    $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = atl_number_invalid + 1
+                             WHERE atl_usr_id = '.$userId;
+                    $this->db->query($sql);
+    
+                    $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
+                             WHERE atl_usr_id = '.$userId.'
+                               AND atl_number_invalid > 3 ';
+                    $this->db->query($sql);
+                }
             }
         }
     }
