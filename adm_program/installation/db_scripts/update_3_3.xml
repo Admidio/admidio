@@ -28,6 +28,11 @@
     <step id="230">ALTER TABLE %PREFIX%_categories DROP COLUMN cat_hidden</step>
     <step id="240">ComponentUpdate::updateStepMigrateDatesRightsToFolderRights</step>
     <step id="250">DROP TABLE %PREFIX%_date_role</step>
+    <step id="260">ComponentUpdate::updateStepAddGlobalCategories</step>
+    <step id="270">UPDATE %PREFIX%_announcements SET ann_cat_id = (SELECT cat_id FROM %PREFIX%_categories WHERE cat_name_intern = 'ANN_ALL_ORGANIZATIONS') WHERE ann_global = 1</step>
+    <step id="280">UPDATE %PREFIX%_dates SET dat_cat_id = (SELECT cat_id FROM %PREFIX%_categories WHERE cat_name_intern = 'DAT_ALL_ORGANIZATIONS') WHERE dat_global = 1</step>
+    <step id="290">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_global</step>
+    <step id="300">ALTER TABLE %PREFIX%_dates DROP COLUMN dat_global</step>
 
     <step>stop</step>
 </update>

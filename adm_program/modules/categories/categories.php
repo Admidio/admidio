@@ -251,14 +251,28 @@ while($catRow = $categoryStatement->fetch())
     {
         $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $arrRolesIds = $rightCategoryView->getRolesIds();
-    
+
         if(count($arrRolesIds) > 0)
         {
             $htmlRolesNames = implode(', ', $rightCategoryView->getRolesNames());
         }
         else
         {
-            $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+            if($gCurrentOrganization->countAllRecords() > 1)
+            {
+                if((int) $category->getValue('cat_org_id') === 0)
+                {
+                    $htmlRolesNames = $gL10n->get('SYS_ALL_ORGANIZATIONS').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                }
+                else
+                {
+                    $htmlRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                }
+            }
+            else
+            {
+                $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+            }
         }
     }
 

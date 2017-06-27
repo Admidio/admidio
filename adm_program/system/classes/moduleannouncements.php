@@ -28,8 +28,6 @@
  *                     [ann_id] => 3
  *                     [1] => DEMO
  *                     [ann_cat_id] => 1
- *                     [2] => 1
- *                     [ann_global] => 1
  *                     [3] => Willkommen im Demobereich
  *                     [ann_headline] => Willkommen im Demobereich
  *                     [4] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
@@ -92,7 +90,7 @@ class ModuleAnnouncements extends Modules
         global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gProfileFields, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
-        $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));
+        $queryParams = $catIdParams;
 
         if ($gPreferences['system_show_create_edit'] == 1)
         {
@@ -143,9 +141,6 @@ class ModuleAnnouncements extends Modules
                     ON cat_id = ann_cat_id
                        '.$additionalTables.'
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR (   ann_global = 1
-                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getSqlConditions().'
               ORDER BY ann_timestamp_create DESC';
 
@@ -186,16 +181,9 @@ class ModuleAnnouncements extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = ann_cat_id
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR (   ann_global = 1
-                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                        '.$this->getSqlConditions();
 
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
+        $pdoStatement = $gDb->queryPrepared($sql, $catIdParams);
 
         return (int) $pdoStatement->fetchColumn();
     }

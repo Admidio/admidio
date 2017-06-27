@@ -110,16 +110,15 @@ class TableDate extends TableAccess
 
         if($this->visible() && $gCurrentUser->editDates())
         {
-            $catOrgId = (int) $this->getValue('cat_org_id');
-
-            // only edit events of the current organization
-            if ((int) $gCurrentOrganization->getValue('org_id') === $catOrgId)
+            if ($gCurrentOrganization->countAllRecords() === 1)
             {
                 return true;
             }
 
-            // Global events could be edited by the parent organization
-            if ($gCurrentOrganization->isChildOrganization($catOrgId) && $this->getValue('dat_global'))
+            // parent organizations could edit global events,
+            // child organizations could only edit their own events
+            if ($gCurrentOrganization->isParentOrganization()
+            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
             {
                 return true;
             }

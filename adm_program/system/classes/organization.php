@@ -155,6 +155,28 @@ class Organization extends TableAccess
         );
         $this->db->queryPrepared($sql, $queryParams);
 
+        // if the second organization is added than also create global categories
+        if($this->countAllRecords() === 2)
+        {
+            $categoryAnnouncement = new TableCategory($this->db);
+            $categoryAnnouncement->setValue('cat_type', 'ANN');
+            $categoryAnnouncement->setValue('cat_name_intern', 'ANN_ALL_ORGANIZATIONS');
+            $categoryAnnouncement->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
+            $categoryAnnouncement->save();
+
+            $categoryEvents = new TableCategory($this->db);
+            $categoryEvents->setValue('cat_type', 'DAT');
+            $categoryEvents->setValue('cat_name_intern', 'DAT_ALL_ORGANIZATIONS');
+            $categoryEvents->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
+            $categoryEvents->save();
+
+            $categoryWeblinks = new TableCategory($this->db);
+            $categoryWeblinks->setValue('cat_type', 'LNK');
+            $categoryWeblinks->setValue('cat_name_intern', 'LNK_ALL_ORGANIZATIONS');
+            $categoryWeblinks->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
+            $categoryWeblinks->save();
+        }
+
         // insert root folder name for download module
         $sql = 'INSERT INTO '.TBL_FOLDERS.'
                        (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp)
@@ -422,29 +444,25 @@ class Organization extends TableAccess
     }
 
     /**
-     * Method checks if this organization is the parent of other organizations.
-     * @return bool Return @b true if the organization has child organizations.
+     * Method checks if the organization is configured as a child organization in the recordset.
+     * @return bool Return @b true if the organization is a child of another organization
      */
-    public function hasChildOrganizations()
+    public function isChildOrganization()
     {
-        return count($this->getChildOrganizations()) > 0;
+        if($this->getValue('org_org_id_parent') > 0)
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Method checks if the organization is configured as a child organization in the recordset.
-     * @param int $organizationId The @b org_shortname or @b org_id of the organization that should be set.
-     *                            If parameter isn't set than check the organization of this object.
-     * @return bool Return @b true if the organization is a child of another organization
+     * Method checks if the organization is configured as a parent organization in the recordset.
+     * @return bool Return @b true if the organization is the parent of a least one other organization
      */
-    public function isChildOrganization($organizationId = 0)
+    public function isParentOrganization()
     {
-        // if no organization was set in parameter then check the organization of this object
-        if($organizationId === 0)
-        {
-            $organizationId = $this->getValue('org_id');
-        }
-
-        return array_key_exists($organizationId, $this->getChildOrganizations());
+        return count($this->getChildOrganizations()) > 0;
     }
 
     /**

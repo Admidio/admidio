@@ -148,7 +148,6 @@ class ModuleWeblinks extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions.'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
@@ -160,11 +159,7 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $weblinksStatement = $gDb->queryPrepared($sql, $queryParams);
+        $weblinksStatement = $gDb->queryPrepared($sql, $catIdParams);
 
         // array for results
         return array(
@@ -191,13 +186,8 @@ class ModuleWeblinks extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        '.$this->getConditions;
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
+        $pdoStatement = $gDb->queryPrepared($sql, $catIdParams);
 
         return (int) $pdoStatement->fetchColumn();
     }

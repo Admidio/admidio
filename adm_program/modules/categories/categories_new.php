@@ -148,6 +148,12 @@ else
     {
         // a new category will be visible for all users per default
         $roleViewSet = array(0);
+
+        // profile fields should be organization independent all other categories should be organization dependent as default
+        if($getType !== 'USF')
+        {
+            $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+        }
     }
 }
 
@@ -158,17 +164,19 @@ $roleViewDescription = '';
 if($getType === 'USF')
 {
     $roleViewDescription = 'CAT_PROFILE_FIELDS_VISIBILITY';
+}
+
+if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
+{
     $page->addJavascript('
-        function setVisibilityRoles() {
+        $("#show_in_several_organizations").click(function() { 
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
             } else {
                 $("#adm_categories_view_right_group").show("slow");
             }
-        }
-
-        setVisibilityRoles();
-        $("#show_in_several_organizations").click(function() { setVisibilityRoles(); });',
+        });
+        $("#show_in_several_organizations").trigger("click");',
         true
     );
 }
@@ -197,7 +205,7 @@ $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_na
 // Roles have their own preferences for visibility, so only allow this for other types.
 // Until now we do not support visibility for categories that belong to several organizations,
 // roles could be assigned if only 1 organization exists.
-if($getType !== 'ROL' 
+if($getType !== 'ROL'
 && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
 {
     // read all roles of the current organization
@@ -234,24 +242,42 @@ if($getType !== 'ROL'
     );
 }
 
-if($getType === 'USF')
+// if current organization has a parent organization or is child organizations then show option to set this category to global
+if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrganization->countAllRecords() > 1)
 {
-    // if current organization has a parent organization or is child organizations then show option to set this category to global
-    if($category->getValue('cat_system') == 0 && $gCurrentOrganization->countAllRecords() > 1)
+    if($gCurrentOrganization->isChildOrganization())
+    {
+        $fieldProperty   = FIELD_DISABLED;
+        $helpTextIdLabel = 'CAT_ONLY_SET_BY_MOTHER_ORGANIZATION';
+    }
+    else
     {
         // show all organizations where this organization is mother or child organization
-        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
+        $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-        $checked = false;
-        if((int) $category->getValue('cat_org_id') === 0)
+        $fieldProperty   = FIELD_DEFAULT;
+        if($getType === 'USF')
         {
-            $checked = true;
+            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
         }
-
-        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
-                           array('helpTextIdLabel' => array('SYS_DATA_CATEGORY_GLOBAL', $organizations)));
+        else
+        {
+            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
+        }
     }
+
+    $checked = false;
+    if((int) $category->getValue('cat_org_id') === 0)
+    {
+        $checked = true;
+    }
+
+    $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
+        array(
+            'property'        => $fieldProperty,
+            'helpTextIdLabel' => $helpTextIdLabel
+        )
+    );
 }
 
 $form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
