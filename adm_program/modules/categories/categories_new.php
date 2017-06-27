@@ -149,7 +149,7 @@ else
         // a new category will be visible for all users per default
         $roleViewSet = array(0);
 
-        // profile fields should be organization independent all other categories should be organization dependent as defauld
+        // profile fields should be organization independent all other categories should be organization dependent as default
         if($getType !== 'USF')
         {
             $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
