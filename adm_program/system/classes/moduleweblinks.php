@@ -120,7 +120,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gDb;
+        global $gCurrentUser, $gPreferences, $gDb;
 
         // Parameter
         if($limit === null)
@@ -159,7 +159,7 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $weblinksStatement = $gDb->queryPrepared($sql, $catIdParams);
+        $weblinksStatement = $gDb->queryPrepared($sql, $catIdParams); // TODO add more params
 
         // array for results
         return array(
@@ -177,7 +177,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gCurrentUser, $gDb;
+        global $gCurrentUser, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
 
@@ -187,7 +187,7 @@ class ModuleWeblinks extends Modules
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
                        '.$this->getConditions;
-        $pdoStatement = $gDb->queryPrepared($sql, $catIdParams);
+        $pdoStatement = $gDb->queryPrepared($sql, $catIdParams); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }

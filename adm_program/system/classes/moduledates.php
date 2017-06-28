@@ -148,7 +148,7 @@ class ModuleDates extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gDb, $gPreferences, $gCurrentUser, $gCurrentOrganization;
+        global $gDb, $gPreferences, $gCurrentUser;
 
         if ($limit === null)
         {
@@ -177,7 +177,7 @@ class ModuleDates extends Modules
                   FROM ' . TBL_DATES . ' AS dat
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
-                       ' . $this->sqlAdditionalTablesGet('data') . '
+                       ' . $this->sqlAdditionalTablesGet() . '
              LEFT JOIN ' . TBL_MEMBERS . ' AS mem
                     ON mem.mem_rol_id = dat_rol_id
                    AND mem.mem_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
@@ -185,7 +185,7 @@ class ModuleDates extends Modules
                    AND mem.mem_end    > ? -- DATE_NOW
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                        ' . $this->getSqlConditions() . '
-                 ORDER BY dat_begin ' . $this->order;
+              ORDER BY dat_begin ' . $this->order;
 
         // Parameter
         if ($limit > 0)
@@ -255,7 +255,7 @@ class ModuleDates extends Modules
      */
     public function getDataSetCount()
     {
-        global $gDb, $gCurrentOrganization, $gCurrentUser;
+        global $gDb, $gCurrentUser;
 
         if ($this->id > 0)
         {

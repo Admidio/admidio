@@ -87,7 +87,7 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gProfileFields, $gDb;
+        global $gCurrentUser, $gPreferences, $gProfileFields, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
         $queryParams = $catIdParams;
@@ -172,7 +172,7 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gCurrentUser, $gDb;
+        global $gCurrentUser, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
@@ -183,7 +183,7 @@ class ModuleAnnouncements extends Modules
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
                        '.$this->getSqlConditions();
 
-        $pdoStatement = $gDb->queryPrepared($sql, $catIdParams);
+        $pdoStatement = $gDb->queryPrepared($sql, $catIdParams); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }

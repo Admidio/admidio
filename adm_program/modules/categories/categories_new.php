@@ -169,7 +169,7 @@ if($getType === 'USF')
 if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 {
     $page->addJavascript('
-        $("#show_in_several_organizations").click(function() { 
+        $("#show_in_several_organizations").click(function() {
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
             } else {

@@ -449,11 +449,7 @@ class Organization extends TableAccess
      */
     public function isChildOrganization()
     {
-        if($this->getValue('org_org_id_parent') > 0)
-        {
-            return true;
-        }
-        return false;
+        return $this->getValue('org_org_id_parent') > 0;
     }
 
     /**

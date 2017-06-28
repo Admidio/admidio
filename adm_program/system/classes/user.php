@@ -804,8 +804,8 @@ class User extends TableAccess
                                       WHERE ror_name_intern = \'category_view\'
                                         AND rrd_object_id   = cat_id )
                         OR EXISTS (SELECT 1
-                                     FROM adm_roles_rights
-                               INNER JOIN adm_roles_rights_data
+                                     FROM ' . TBL_ROLES_RIGHTS . '
+                               INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
                                        ON rrd_ror_id = ror_id
                                     WHERE ror_name_intern = \'category_view\'
                                       AND rrd_object_id   = cat_id
