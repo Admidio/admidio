@@ -9,9 +9,11 @@
 define('HASH_COST_BCRYPT_DEFAULT', 12);
 define('HASH_COST_BCRYPT_MIN', 10);
 define('HASH_COST_BCRYPT_MAX', 31);
+define('HASH_COST_BCRYPT_INCREMENT', 1);
 define('HASH_COST_SHA512_DEFAULT', 100000);
-define('HASH_COST_SHA512_MIN', 10000);
+define('HASH_COST_SHA512_MIN', 50000);
 define('HASH_COST_SHA512_MAX', 999999999);
+define('HASH_COST_SHA512_INCREMENT', 50000);
 
 define('HASH_LENGTH_BCRYPT', 60);
 define('HASH_LENGTH_SHA512', 110);
@@ -109,7 +111,7 @@ class PasswordHashing
             return $passwordHasher->CheckPassword($password, $hash);
         }
         // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
-        elseif ($hashLength === HASH_LENGTH_MD5 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
+        elseif ($hashLength === HASH_LENGTH_MD5 && preg_match('/^[\dA-Fa-f]+$/', $hash))
         {
             return md5($password) === $hash;
         }
@@ -317,7 +319,7 @@ class PasswordHashing
             return 'PRIVATE/PORTABLE_HASH';
         }
         // MD5 Hashes are 32 chars long and consists out of HEX values (digits and a-f)
-        elseif ($hashLength === HASH_LENGTH_MD5 && preg_match('/^[\dA-Fa-f]{32,32}$/', $hash))
+        elseif ($hashLength === HASH_LENGTH_MD5 && preg_match('/^[\dA-Fa-f]+$/', $hash))
         {
             return 'MD5';
         }
@@ -355,7 +357,7 @@ class PasswordHashing
         if ($algorithm === 'SHA512')
         {
             $maxCost = HASH_COST_SHA512_MAX;
-            $costIncrement = 50000;
+            $costIncrement = HASH_COST_SHA512_INCREMENT;
 
             if (!is_int($cost))
             {
@@ -369,7 +371,7 @@ class PasswordHashing
         else
         {
             $maxCost = HASH_COST_BCRYPT_MAX;
-            $costIncrement = 1;
+            $costIncrement = HASH_COST_BCRYPT_INCREMENT;
 
             if (!is_int($cost))
             {
@@ -381,11 +383,10 @@ class PasswordHashing
             }
         }
 
-        $time = 0;
-        $results = array();
+        $results = null;
 
         // loop through the cost value until the needed hashing time reaches the maximum set time
-        while ($time <= $maxTime && $cost <= $maxCost)
+        do
         {
             $options['cost'] = $cost;
 
@@ -395,9 +396,13 @@ class PasswordHashing
 
             $time = $end - $start;
 
-            $results = array('cost' => $cost, 'time' => $time);
+            if ($results === null || $time <= $maxTime)
+            {
+                $results = array('cost' => $cost, 'time' => $time);
+            }
             $cost += $costIncrement;
         }
+        while ($time <= $maxTime && $cost <= $maxCost);
 
         $gLogger->notice('Benchmark: Password-hashing results.', $results);
 
