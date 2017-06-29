@@ -1187,7 +1187,7 @@ class HtmlForm extends HtmlFormBasic
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b valueAttributes: An array which contain the same ids as the value array. The value of this array will be
      *                          onother array with the combination of attributes name and attributes value.
-     *                        - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the 
+     *                        - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the
      *                          text of the alertbox
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_GLOBAL. If set a help icon will be shown after the control label where
@@ -1343,7 +1343,7 @@ class HtmlForm extends HtmlFormBasic
                 }
                 else
                 {
-                    $this->addOption($value[0], $value[1], null, $defaultEntry);                    
+                    $this->addOption($value[0], $value[1], null, $defaultEntry);
                 }
             }
             else
@@ -1452,7 +1452,7 @@ class HtmlForm extends HtmlFormBasic
      *                                of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                              - @b valueAttributes: An array which contain the same ids as the value array. The value of this array will be
      *                                onother array with the combination of attributes name and attributes value.
-     *                              - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the 
+     *                              - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the
      *                                text of the alertbox
      *                              - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                                e.g. SYS_DATA_GLOBAL. If set a help icon will be shown after the control label where
@@ -1543,7 +1543,7 @@ class HtmlForm extends HtmlFormBasic
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - @b valueAttributes: An array which contain the same ids as the value array. The value of this array will be
      *                          onother array with the combination of attributes name and attributes value.
-     *                        - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the 
+     *                        - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the
      *                          text of the alertbox
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_GLOBAL. If set a help icon will be shown after the control label where

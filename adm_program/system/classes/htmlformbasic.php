@@ -214,7 +214,7 @@ class HtmlFormBasic extends HtmlElement
         {
             $this->setAttributesFromArray($arrAttributes);
         }
-        
+
         // add label
         $this->addData($label);
     }
