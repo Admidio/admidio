@@ -26,7 +26,7 @@
     <string name="BAC_SUM">Summe</string>
     <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
     <!-- Phrases only in Category-Administration -->
-    <string name="CAT_ALL_THIS_ORGANIZATION">Alle dieser Organisation</string>
+    <string name="CAT_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
     <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
     <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
     <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
