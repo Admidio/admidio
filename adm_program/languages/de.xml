@@ -1102,9 +1102,8 @@
     <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
     <string name="SYS_CSV">CSV</string>
     <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
-    <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Daten dieser Kategorie auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
+    <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
     <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
-    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
     <string name="SYS_DATABASE">Datenbank</string>
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
