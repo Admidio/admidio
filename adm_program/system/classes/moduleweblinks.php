@@ -103,8 +103,6 @@
  */
 class ModuleWeblinks extends Modules
 {
-    protected $getConditions;       ///< String with SQL condition
-
     /**
      * creates an new ModuleWeblink object
      */
@@ -130,21 +128,6 @@ class ModuleWeblinks extends Modules
             $limit = $gPreferences['weblinks_per_page'];
         }
 
-        // Bedingungen
-        if($this->getParameter('id') > 0)
-        {
-            $this->getConditions = ' AND lnk_id = '. $this->getParameter('id');
-        }
-        if($this->getParameter('cat_id') > 0)
-        {
-            $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
-        }
-        if(!$gValidLogin)
-        {
-            // if user isn't logged in, then don't show hidden categories
-            $this->getConditions .= ' AND cat_hidden = 0 ';
-        }
-
         // Weblinks aus der DB fischen...
         $sql = 'SELECT *
                   FROM '.TBL_LINKS.'
@@ -152,7 +135,7 @@ class ModuleWeblinks extends Modules
                     ON cat_id = lnk_cat_id
                  WHERE cat_type   = \'LNK\'
                    AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                       '.$this->getConditions.'
+                       '.$this->getSqlConditions().'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
         if($limit > 0)
         {
@@ -189,7 +172,7 @@ class ModuleWeblinks extends Modules
                     ON cat_id = lnk_cat_id
                  WHERE cat_type   = \'LNK\'
                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                       '.$this->getConditions;
+                       '.$this->getSqlConditions();
         $pdoStatement = $gDb->query($sql);
 
         return (int) $pdoStatement->fetchColumn();
@@ -211,5 +194,36 @@ class ModuleWeblinks extends Modules
             $headline .= ' - '. $category->getValue('cat_name');
         }
         return $headline;
+    }
+
+    /**
+     * Add several conditions to an SQL string that could later be used 
+     * as additional conditions in other SQL queries.
+     * @return string Return SQL string with additional conditions.
+     */
+    private function getSqlConditions()
+    {
+        global $gValidLogin;
+
+        $sqlConditions = '';
+
+        // In case ID was permitted and user has rights
+        if($this->getParameter('id') > 0)
+        {
+            $sqlConditions .= ' AND lnk_id = '. $this->getParameter('id');
+        }
+        // show all weblinks from category
+        elseif($this->getParameter('cat_id') > 0)
+        {
+            $sqlConditions .= ' AND cat_id = '. $this->getParameter('cat_id');
+        }
+
+        // if user isn't logged in, then don't show hidden categories
+        if(!$gValidLogin)
+        {
+            $sqlConditions .= ' AND cat_hidden = 0 ';
+        }
+
+        return $sqlConditions;
     }
 }

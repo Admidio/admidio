@@ -178,8 +178,9 @@ class ModuleAnnouncements extends Modules
     }
 
     /**
-     * Prepare SQL Statement.
-     * @return string
+     * Add several conditions to an SQL string that could later be used 
+     * as additional conditions in other SQL queries.
+     * @return string Return SQL string with additional conditions.
      */
     private function getSqlConditions()
     {

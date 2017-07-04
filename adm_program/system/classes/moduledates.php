@@ -412,8 +412,9 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Prepare SQL Statement.
-     * @return string
+     * Add several conditions to an SQL string that could later be used 
+     * as additional conditions in other SQL queries.
+     * @return string Return SQL string with additional conditions.
      */
     private function getSqlConditions()
     {
@@ -448,7 +449,6 @@ class ModuleDates extends Modules
             // show all events from category
             if ($this->getParameter('cat_id') > 0)
             {
-                // show all events from category
                 $sqlConditions .= ' AND cat_id = ' . $this->getParameter('cat_id');
             }
         }
