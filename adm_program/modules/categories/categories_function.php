@@ -37,38 +37,6 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requir
 $getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
-// Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // create category object
 $category = new TableCategory($gDb);
 $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
@@ -76,13 +44,6 @@ $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 if($getCatId > 0)
 {
     $category->readDataById($getCatId);
-
-    // check if category belongs to actual organization
-    if($category->getValue('cat_org_id') > 0 && (int) $category->getValue('cat_org_id') !== $currOrgId)
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
 
     // if system category then set cat_name to default
     if($category->getValue('cat_system') == 1)
@@ -95,6 +56,13 @@ else
     // create a new category
     $category->setValue('cat_org_id', $currOrgId);
     $category->setValue('cat_type', $getType);
+}
+
+// check if this category is editable by the current user and current organization
+if(!$category->editable())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT    
 }
 
 if($getMode === 1)

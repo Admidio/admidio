@@ -1691,6 +1691,17 @@ class HtmlForm extends HtmlFormBasic
             $sqlConditions .= ' AND cat_system = 0 ';
         }
 
+        // within edit dialogs child organizations are not allowed to assign categories of all organizations
+        if($selectBoxModus === 'EDIT_CATEGORIES' && $gCurrentOrganization->isChildOrganization())
+        {
+            $sqlConditions .= ' AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\') ';
+        }
+        else
+        {
+            $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                    OR cat_org_id IS NULL ) ';            
+        }
+
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
 
         // the sql statement which returns all found categories
@@ -1698,16 +1709,14 @@ class HtmlForm extends HtmlFormBasic
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL )
                    AND cat_type = ? -- $categoryType
                        ' . $sqlConditions . '
               ORDER BY cat_sequence ASC';
         $queryParams = array_merge(
             $catIdParams,
             array(
-                (int) $gCurrentOrganization->getValue('org_id'),
-                $categoryType
+                $categoryType,
+                (int) $gCurrentOrganization->getValue('org_id')
             )
         );
         $pdoStatement = $database->queryPrepared($sql, $queryParams);

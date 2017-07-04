@@ -121,6 +121,16 @@ class TableAnnouncement extends TableAccess
         {
             return parent::setValue($columnName, $newValue, false);
         }
+        elseif($columnName === 'ann_cat_id')
+        {
+            $category = new TableCategory($this->db, $newValue);
+
+            if(!$category->visible() || $category->getValue('cat_type') !== 'ANN')
+            {
+                throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
+                    because the category is not visible to the current user and current organization');
+            }
+        }
 
         return parent::setValue($columnName, $newValue, $checkValue);
     }

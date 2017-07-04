@@ -32,38 +32,6 @@ $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
-// Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // set module headline and other strings
 if($getTitle === '')
 {
@@ -135,14 +103,6 @@ else
         // get assigned roles of this category
         $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
-
-        // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-        if($category->getValue('cat_org_id') > 0
-        && (int) $category->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
     }
     else
     {
@@ -155,6 +115,13 @@ else
             $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
         }
     }
+}
+
+// check if this category is editable by the current user and current organization
+if(!$category->editable())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT    
 }
 
 // create html page object

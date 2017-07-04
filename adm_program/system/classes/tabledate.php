@@ -354,6 +354,16 @@ class TableDate extends TableAccess
         {
             return parent::setValue($columnName, $newValue, false);
         }
+        elseif($columnName === 'dat_cat_id')
+        {
+            $category = new TableCategory($this->db, $newValue);
+
+            if(!$category->visible() || $category->getValue('cat_type') !== 'DAT')
+            {
+                throw new AdmException('Category of the event '. $this->getValue('dat_name'). ' could not be set
+                    because the category is not visible to the current user and current organization');
+            }
+        }
 
         if ($columnName === 'dat_end' && (int) $this->getValue('dat_all_day') === 1)
         {

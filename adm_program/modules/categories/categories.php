@@ -276,18 +276,26 @@ while($catRow = $categoryStatement->fetch())
         }
     }
 
-    $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
-                                    src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-    if($category->getValue('cat_system') == 1)
+    if($category->editable())
     {
-        $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+                                        src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+        
+        if($category->getValue('cat_system') == 1)
+        {
+            $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        }
+        else
+        {
+            $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
+                                            $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
+                                               src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+        }
     }
     else
     {
-        $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
-                                        $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
-                                           src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+        $categoryAdministration = '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" /><img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
     }
 
     // create array with all column values

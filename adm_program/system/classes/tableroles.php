@@ -390,32 +390,6 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * @param bool $status
-     * @return bool
-     */
-    private function toggleValid($status)
-    {
-        global $gCurrentSession;
-
-        // die Systemrollem sind immer aktiv
-        if ((int) $this->getValue('rol_system') === 0)
-        {
-            $sql = 'UPDATE '.TBL_ROLES.'
-                       SET rol_valid = ? -- $status
-                     WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
-            $this->db->queryPrepared($sql, array((int) $status, $this->getValue('rol_id')));
-
-            // all active users must renew their user data because maybe their
-            // rights have been changed if they where members of this role
-            $gCurrentSession->renewUserObject();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * aktuelle Rolle wird auf aktiv gesetzt
      * @return bool
      */
@@ -445,6 +419,17 @@ class TableRoles extends TableAccess
     {
         global $gCurrentOrganization;
 
+        if($columnName === 'rol_cat_id')
+        {
+            $category = new TableCategory($this->db, $newValue);
+
+            if(!$category->visible() || $category->getValue('cat_type') !== 'ROL')
+            {
+                throw new AdmException('Category of the role '. $this->getValue('dat_name'). ' could not be set
+                    because the category is not visible to the current user and current organization');
+            }
+        }
+
         if ($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
         {
             // checks if at least one other role has this flag
@@ -464,6 +449,32 @@ class TableRoles extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * @param bool $status
+     * @return bool
+     */
+    private function toggleValid($status)
+    {
+        global $gCurrentSession;
+
+        // die Systemrollem sind immer aktiv
+        if ((int) $this->getValue('rol_system') === 0)
+        {
+            $sql = 'UPDATE '.TBL_ROLES.'
+                       SET rol_valid = ? -- $status
+                     WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
+            $this->db->queryPrepared($sql, array((int) $status, $this->getValue('rol_id')));
+
+            // all active users must renew their user data because maybe their
+            // rights have been changed if they where members of this role
+            $gCurrentSession->renewUserObject();
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

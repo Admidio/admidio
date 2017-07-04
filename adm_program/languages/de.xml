@@ -36,6 +36,7 @@
     <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
     <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Diese Einstellung kann nur von der Mutterorganisation gesetzt werden.</string>
     <string name="CAT_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
+    <string name="CAT_ONLY_PARENT_ORGANIZATION">Diese Kategorie ist für alle Organisationen sichtbar und darf aus diesem Grund nur von der Elternorganisation bearbeitet werden.</string>
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
