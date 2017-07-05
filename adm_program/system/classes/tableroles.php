@@ -426,7 +426,7 @@ class TableRoles extends TableAccess
             if(!$category->visible() || $category->getValue('cat_type') !== 'ROL')
             {
                 throw new AdmException('Category of the role '. $this->getValue('dat_name'). ' could not be set
-                    because the category is not visible to the current user and current organization');
+                    because the category is not visible to the current user and current organization.');
             }
         }
 
@@ -444,7 +444,7 @@ class TableRoles extends TableAccess
 
             if ((int) $pdoStatement->fetchColumn() === 0)
             {
-                return false;
+                throw new AdmException('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION'));
             }
         }
 

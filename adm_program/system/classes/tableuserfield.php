@@ -393,14 +393,15 @@ class TableUserField extends TableAccess
             if(!$category->visible() || $category->getValue('cat_type') !== 'USF')
             {
                 throw new AdmException('Category of the user field '. $this->getValue('dat_name'). ' could not be set
-                    because the category is not visible to the current user and current organization');
+                    because the category is not visible to the current user and current organization.');
             }
         }
 
         // name, category and type couldn't be edited if it's a system field
         if (in_array($columnName, array('usf_cat_id', 'usf_type', 'usf_name'), true) && (int) $this->getValue('usf_system') === 1)
         {
-            return false;
+            throw new AdmException('The user field ' . $this->getValue('usf_name_intern') . ' as a system field. You could
+                not change the category, type or name.');
         }
 
         if ($columnName === 'usf_cat_id' && $this->getValue($columnName) !== $newValue)
@@ -419,7 +420,7 @@ class TableUserField extends TableAccess
 
             if ($newValue === false)
             {
-                return false;
+                throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL'));
             }
         }
 

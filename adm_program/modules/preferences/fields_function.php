@@ -170,21 +170,20 @@ if($getMode === 1)
     // make html in description secure
     $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
 
-    // POST Variablen in das UserField-Objekt schreiben
-    foreach($_POST as $key => $value)
+    try
     {
-        if(strpos($key, 'usf_') === 0) // TODO possible security issue
+        // POST Variablen in das UserField-Objekt schreiben
+        foreach($_POST as $key => $value)
         {
-            if(!$userField->setValue($key, $value))
+            if(strpos($key, 'usf_') === 0) // TODO possible security issue
             {
-                // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key === 'usf_url')
-                {
-                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
-                    // => EXIT
-                }
+                $userField->setValue($key, $value);
             }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     // Daten in Datenbank schreiben

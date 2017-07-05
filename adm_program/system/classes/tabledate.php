@@ -361,7 +361,7 @@ class TableDate extends TableAccess
             if(!$category->visible() || $category->getValue('cat_type') !== 'DAT')
             {
                 throw new AdmException('Category of the event '. $this->getValue('dat_name'). ' could not be set
-                    because the category is not visible to the current user and current organization');
+                    because the category is not visible to the current user and current organization.');
             }
         }
 

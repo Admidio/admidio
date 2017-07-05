@@ -113,6 +113,8 @@ class TableWeblink extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
+        global $gL10n;
+
         if ($columnName === 'lnk_description')
         {
             return parent::setValue($columnName, $newValue, false);
@@ -124,7 +126,7 @@ class TableWeblink extends TableAccess
             if(!$category->visible() || $category->getValue('cat_type') !== 'LNK')
             {
                 throw new AdmException('Category of the weblink '. $this->getValue('lnk_name'). ' could not be set
-                    because the category is not visible to the current user and current organization');
+                    because the category is not visible to the current user and current organization.');
             }
         }
 
@@ -134,7 +136,7 @@ class TableWeblink extends TableAccess
 
             if ($newValue === false)
             {
-                return false;
+                throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE'));
             }
         }
 

@@ -75,21 +75,20 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     // make html in description secure
     $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
 
-    // POST Variablen in das Ankuendigungs-Objekt schreiben
-    foreach($_POST as $key => $value) // TODO possible security issue
+    try
     {
-        if(strpos($key, 'lnk_') === 0)
+        // POST Variablen in das Ankuendigungs-Objekt schreiben
+        foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(!$link->setValue($key, $value))
+            if(strpos($key, 'lnk_') === 0)
             {
-                // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key === 'lnk_url')
-                {
-                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
-                    // => EXIT
-                }
+                $link->setValue($key, $value);
             }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     // Link-Counter auf 0 setzen

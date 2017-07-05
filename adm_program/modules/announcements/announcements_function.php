@@ -69,39 +69,39 @@ if($getMode === 1)
     // make html in description secure
     $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
 
-    // POST Variablen in das Ankuendigungs-Objekt schreiben
-    foreach($_POST as $key => $value) // TODO possible security issue
+    try
     {
-        if(strpos($key, 'ann_') === 0)
+        // POST Variablen in das Ankuendigungs-Objekt schreiben
+        foreach($_POST as $key => $value) // TODO possible security issue
         {
-            $announcement->setValue($key, $value);
-        }
-    }
-
-    // Daten in Datenbank schreiben
-    $returnValue = $announcement->save();
-
-    if($returnValue === false)
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-    else
-    {
-        if($getAnnId === 0)
-        {
-            $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-
-            try
+            if(strpos($key, 'ann_') === 0)
             {
+                $announcement->setValue($key, $value);
+            }
+        }
+    
+        // Daten in Datenbank schreiben
+        $returnValue = $announcement->save();
+    
+        if($returnValue === false)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+        else
+        {
+            if($getAnnId === 0)
+            {
+                $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
+    
                 $notification = new Email();
                 $notification->adminNotification($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
-            catch(AdmException $e)
-            {
-                $e->showHtml();
-            }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     unset($_SESSION['announcements_request']);

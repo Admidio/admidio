@@ -240,20 +240,20 @@ if($getMode === 2)
         }
     }
 
-    // POST Variablen in das Role-Objekt schreiben
-    foreach($_POST as $key => $value) // TODO possible security issue
+    try
     {
-        if(strpos($key, 'rol_') === 0)
+        // POST Variablen in das Role-Objekt schreiben
+        foreach($_POST as $key => $value) // TODO possible security issue
         {
-            $returnCode = $role->setValue($key, $value);
-
-            // at least one role must have this flag otherwise show error
-            if(!$returnCode && $key === 'rol_default_registration')
+            if(strpos($key, 'rol_') === 0)
             {
-                $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
-                // => EXIT
+                $role->setValue($key, $value);
             }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     // Daten in Datenbank schreiben
