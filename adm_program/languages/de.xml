@@ -26,13 +26,15 @@
     <string name="BAC_SUM">Summe</string>
     <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
     <!-- Phrases only in Category-Administration -->
+    <string name="CAT_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
     <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
-    <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n#VAR1_BOLD#\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
+    <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
     <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
     <string name="CAT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
     <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
     <string name="CAT_MOVE_DOWN">#VAR1# nach unten verschieben</string>
     <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
+    <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Diese Einstellung kann nur von der Mutterorganisation gesetzt werden.</string>
     <string name="CAT_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
@@ -204,7 +206,7 @@
     <string name="GBO_ENTRY_QUEUED">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</string>
     <string name="GBO_FLOODING_PROTECTION">Dein letzter Eintrag im Gästebuch liegt weniger als #VAR1# Sekunden zurück.</string>
     <string name="GBO_FLOODING_PROTECTION_INTERVALL">Flooding Protection Intervall</string>
-    <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</string>
+    <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Für nicht angemeldete Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander unerwünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</string>
     <string name="GBO_GUESTBOOK">Gästebuch</string>
     <string name="GBO_GUESTBOOK_DESC">Besucher und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</string>
     <string name="GBO_GUESTBOOK_MODERATION">Moderation aktivieren für</string>
@@ -795,7 +797,7 @@
     <string name="PHO_ALBUM_WRITE_SUCCESS">Das Album wurde erfolgreich angelegt / geändert</string>
     <string name="PHO_BACK_TO_ALBUM">zurück zum Album</string>
     <string name="PHO_CAPTION_SIZE">Größe des Bildtextes</string>
-    <string name="PHO_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel "Bildgröße/Devisior" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Standard: 40)</string>
+    <string name="PHO_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel "Bildgröße/Devisor" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Standard: 40)</string>
     <string name="PHO_CREATE_ALBUM">Album anlegen</string>
     <string name="PHO_DISPLAY_PHOTOS">Fotodarstellung</string>
     <string name="PHO_DISPLAY_PHOTOS_DESC">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Standard: Modales Fenster)</string>
@@ -1006,7 +1008,7 @@
     <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
     <string name="ROL_ROLE_DELETE">Rolle löschen</string>
-    <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgültig entfernt.</string>
+    <string name="ROL_ROLE_DELETE_DESC">Willst du die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
     <string name="ROL_ROLE_DEPENDENCIES">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
     <string name="ROL_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
     <string name="ROL_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
@@ -1048,6 +1050,8 @@
     <string name="SYS_ADMINISTRATORS">Administratoren</string>
     <string name="SYS_AJAX_REQUEST_ERROR">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: #VAR1#</string>
     <string name="SYS_ALL">Alle</string>
+    <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
+    <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Termin, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
     <string name="SYS_ALSO_VISITORS">auch Besucher</string>
     <string name="SYS_APPLY">Übernehmen</string>
     <string name="SYS_ASSIGN_MEMBERS">Mitglieder zuordnen</string>
@@ -1098,9 +1102,8 @@
     <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
     <string name="SYS_CSV">CSV</string>
     <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
-    <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Daten dieser Kategorie auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
+    <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
     <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
-    <string name="SYS_DATA_GLOBAL">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n#VAR1_BOLD#</string>
     <string name="SYS_DATABASE">Datenbank</string>
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
@@ -1137,7 +1140,6 @@
     <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
     <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
     <string name="SYS_EMPTY">Leer</string>
-    <string name="SYS_ENTRY_MULTI_ORGA">Eintrag für mehrere Organisationen sichtbar</string>
     <string name="SYS_END" description="End of a date">Ende</string>
     <string name="SYS_ERROR">Fehler</string>
     <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>

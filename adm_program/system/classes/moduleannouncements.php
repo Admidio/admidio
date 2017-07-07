@@ -28,8 +28,6 @@
  *                     [ann_id] => 3
  *                     [1] => DEMO
  *                     [ann_cat_id] => 1
- *                     [2] => 1
- *                     [ann_global] => 1
  *                     [3] => Willkommen im Demobereich
  *                     [ann_headline] => Willkommen im Demobereich
  *                     [4] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
@@ -89,64 +87,20 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gProfileFields, $gDb;
+        global $gCurrentUser, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
-        $queryParams = array_merge($catIdParams, array((int) $gCurrentOrganization->getValue('org_id')));
-
-        if ($gPreferences['system_show_create_edit'] == 1)
-        {
-            // show firstname and lastname of create and last change user
-            $additionalFields = '
-                cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
-                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
-            $additionalTables = '
-                LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
-                       ON cre_surname.usd_usr_id = ann_usr_id_create
-                      AND cre_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
-                       ON cre_firstname.usd_usr_id = ann_usr_id_create
-                      AND cre_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
-                       ON cha_surname.usd_usr_id = ann_usr_id_change
-                      AND cha_surname.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
-                       ON cha_firstname.usd_usr_id = ann_usr_id_change
-                      AND cha_firstname.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')';
-            $queryParams = array_merge(
-                array(
-                    (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-                    (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-                    (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-                    (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
-                ),
-                $queryParams
-            );
-        }
-        else
-        {
-            // show username of create and last change user
-            $additionalFields = '
-                cre_username.usr_login_name AS create_name,
-                cha_username.usr_login_name AS change_name ';
-            $additionalTables = '
-                LEFT JOIN '.TBL_USERS.' AS cre_username
-                       ON cre_username.usr_id = ann_usr_id_create
-                LEFT JOIN '.TBL_USERS.' AS cha_username
-                       ON cha_username.usr_id = ann_usr_id_change ';
-        }
+        $additional = $this->sqlGetAdditional();
+        $sqlConditions = $this->getSqlConditions();
 
         // read announcements from database
-        $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
+        $sql = 'SELECT cat.*, ann.*, '.$additional['fields'].'
                   FROM '.TBL_ANNOUNCEMENTS.' AS ann
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
-                       '.$additionalTables.'
+                       '.$additional['tables'].'
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR (   ann_global = 1
-                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$this->getSqlConditions().'
+                       '.$sqlConditions['sql'].'
               ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
@@ -159,12 +113,13 @@ class ModuleAnnouncements extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $announcementsStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
+        $queryParams = array_merge($additional['params'], $catIdParams, $sqlConditions['params']);
+        $pdoStatement = $gDb->queryPrepared($sql, $queryParams); // TODO add more params
 
         // array for results
         return array(
-            'recordset'  => $announcementsStatement->fetchAll(),
-            'numResults' => $announcementsStatement->rowCount(),
+            'recordset'  => $pdoStatement->fetchAll(),
+            'numResults' => $pdoStatement->rowCount(),
             'limit'      => $limit,
             'totalCount' => $this->getDataSetCount(),
             'parameter'  => $this->getParameters()
@@ -177,42 +132,92 @@ class ModuleAnnouncements extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gCurrentUser, $gDb;
+        global $gCurrentUser, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
+        $sqlConditions = $this->getSqlConditions();
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = ann_cat_id
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR (   ann_global = 1
-                          AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$this->getSqlConditions();
+                       '.$sqlConditions['sql'];
 
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
+        $pdoStatement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
 
         return (int) $pdoStatement->fetchColumn();
     }
 
     /**
-     * Prepare SQL Statement.
-     * @return string
+     * Get additional tables for sql statement
+     * @return array Returns an array of a SQL string with the necessary joins and it's query params.
+     */
+    private function sqlGetAdditional()
+    {
+        global $gPreferences, $gProfileFields;
+
+        if ($gPreferences['system_show_create_edit'] == 1)
+        {
+            $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
+            $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+
+            // show firstname and lastname of create and last change user
+            $additionalFields = '
+                cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
+                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
+            $additionalTables = '
+                LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
+                       ON cre_surname.usd_usr_id = ann_usr_id_create
+                      AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
+                LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
+                       ON cre_firstname.usd_usr_id = ann_usr_id_create
+                      AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
+                LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
+                       ON cha_surname.usd_usr_id = ann_usr_id_change
+                      AND cha_surname.usd_usf_id = ? -- $lastNameUsfId
+                LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
+                       ON cha_firstname.usd_usr_id = ann_usr_id_change
+                      AND cha_firstname.usd_usf_id = ? -- $firstNameUsfId';
+            $additionalParams = array($lastNameUsfId, $firstNameUsfId, $lastNameUsfId, $firstNameUsfId);
+        }
+        else
+        {
+            // show username of create and last change user
+            $additionalFields = '
+                cre_username.usr_login_name AS create_name,
+                cha_username.usr_login_name AS change_name ';
+            $additionalTables = '
+                LEFT JOIN '.TBL_USERS.' AS cre_username
+                       ON cre_username.usr_id = ann_usr_id_create
+                LEFT JOIN '.TBL_USERS.' AS cha_username
+                       ON cha_username.usr_id = ann_usr_id_change ';
+            $additionalParams = array();
+        }
+
+        return array(
+            'fields' => $additionalFields,
+            'tables' => $additionalTables,
+            'params' => $additionalParams
+        );
+    }
+
+    /**
+     * Add several conditions to an SQL string that could later be used
+     * as additional conditions in other SQL queries.
+     * @return array Returns an array of a SQL string with additional conditions and it's query params.
      */
     private function getSqlConditions()
     {
         $sqlConditions = '';
+        $params = array();
 
         $id = (int) $this->getParameter('id');
         // In case ID was permitted and user has rights
         if ($id > 0)
         {
-            $sqlConditions .= ' AND ann_id = ' . $id;
+            $sqlConditions .= ' AND ann_id = ? '; // $id
+            $params[] = $id;
         }
         // ...otherwise get all additional announcements for a group
         else
@@ -222,18 +227,23 @@ class ModuleAnnouncements extends Modules
             if ($catId > 0)
             {
                 // show all events from category
-                $sqlConditions .= ' AND cat_id = ' . $catId;
+                $sqlConditions .= ' AND cat_id = ? '; // $catId
+                $params[] = $catId;
             }
 
             // Search announcements to date
             if ($this->getParameter('dateStartFormatEnglish'))
             {
-                $sqlConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\'
-                                                               AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
+                $sqlConditions = 'AND ann_timestamp_create BETWEEN ? AND ? '; // $this->getParameter('dateStartFormatEnglish') . ' 00:00:00' AND $this->getParameter('dateEndFormatEnglish') . ' 23:59:59'
+                $params[] = $this->getParameter('dateStartFormatEnglish') . ' 00:00:00';
+                $params[] = $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59';
             }
         }
 
-        return $sqlConditions;
+        return array(
+            'sql'    => $sqlConditions,
+            'params' => $params
+        );
     }
 
     /**

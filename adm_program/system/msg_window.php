@@ -36,14 +36,7 @@ if($getInlineView)
 
 switch ($getMessageId)
 {
-    case 'CAT_CATEGORY_GLOBAL':
-    case 'SYS_DATA_GLOBAL':
-        // show all organizations where this organization is mother or child organization
-        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
-        echo $gL10n->get(strtoupper($getMessageId), $organizations);
-        break;
-
+    // room help text
     case 'room_detail':
         if(is_numeric($getMessageVar1))
         {
@@ -72,7 +65,7 @@ switch ($getMessageId)
         echo $gProfileFields->getProperty($getMessageVar1, 'usf_description');
         break;
 
-    // Eigene Listen
+    // mylist condition description
     case 'mylist_condition':
         echo '
             <p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
@@ -150,7 +143,7 @@ switch ($getMessageId)
             </table>';
         break;
 
-    // Profil
+    // Profile photo help text
     case 'profile_photo_up_help':
         echo '
             <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
@@ -163,8 +156,8 @@ switch ($getMessageId)
         break;
 
     default:
-        // im Standardfall wird mit der ID der Text aus der Sprachdatei gelesen
-        // falls die Textvariable gefuellt ist, pruefen ob dies auch eine ID aus der Sprachdatei ist
+        // In the standard case, the ID is used to read the text from the language file.
+        // If the text variable is filled, check whether this is an ID from the language file.
         $msgVar1 = '';
         if($getMessageVar1 !== '')
         {

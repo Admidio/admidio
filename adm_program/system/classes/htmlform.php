@@ -328,12 +328,12 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -415,12 +415,12 @@ class HtmlForm extends HtmlFormBasic
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b referenceId : Optional the id of a form control if this is defined within the custom content
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -473,12 +473,12 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b labelVertical : If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
      *                          Otherwise the label will be displayed in front of the control.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -576,12 +576,12 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b hideUploadField : Hide the upload field if multi uploads are enabled. Then the first
      *                          upload field will be shown if the user will click the multi upload button.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -694,12 +694,12 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                          + @b FIELD_HIDDEN   : The field will not be shown. Useful to transport additional informations.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -971,12 +971,12 @@ class HtmlForm extends HtmlFormBasic
      *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1075,12 +1075,12 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b showNoValueButton : If set to true than one radio with no value will be set in front of the other array.
      *                          This could be used if the user should also be able to set no radio to value.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1161,6 +1161,8 @@ class HtmlForm extends HtmlFormBasic
      * @param array  $values  Array with all entries of the select box;
      *                        Array key will be the internal value of the entry
      *                        Array value will be the visual value of the entry
+     *                        If you need an option group within the selectbox than you must add an array as value.
+     *                        This array exists of 3 entries: array(0 => id, 1 => value name, 2 => option group name)
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
      *                          + @b FIELD_DEFAULT  : The field can accept an input.
@@ -1183,13 +1185,17 @@ class HtmlForm extends HtmlFormBasic
      *                          if no entry is selected
      *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
+     *                        - @b valueAttributes: An array which contain the same ids as the value array. The value of this array will be
+     *                          onother array with the combination of attributes name and attributes value.
+     *                        - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the
+     *                          text of the alertbox
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1218,6 +1224,8 @@ class HtmlForm extends HtmlFormBasic
             'search'                         => false,
             'placeholder'                    => '',
             'maximumSelectionNumber'         => 0,
+            'valueAttributes'                => '',
+            'infoAlert'                      => '',
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
             'icon'                           => '',
@@ -1329,7 +1337,14 @@ class HtmlForm extends HtmlFormBasic
                     $defaultEntry = true;
                 }
 
-                $this->addOption($value[0], $value[1], null, $defaultEntry);
+                if(is_array($optionsAll['valueAttributes']))
+                {
+                    $this->addOption($value[0], $value[1], null, $defaultEntry, false, $optionsAll['valueAttributes'][$value[0]]);
+                }
+                else
+                {
+                    $this->addOption($value[0], $value[1], null, $defaultEntry);
+                }
             }
             else
             {
@@ -1339,7 +1354,14 @@ class HtmlForm extends HtmlFormBasic
                     $defaultEntry = true;
                 }
 
-                $this->addOption($key, $value, null, $defaultEntry);
+                if(is_array($optionsAll['valueAttributes']))
+                {
+                    $this->addOption($key, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
+            }
+                else
+                {
+                    $this->addOption($key, $value, null, $defaultEntry);
+                }
             }
         }
 
@@ -1388,6 +1410,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $this->closeSelect();
+
+        if($optionsAll['infoAlert'] !== '')
+        {
+            $this->addHtml('<div id="' . $id . '_alert" class="alert alert-info" role="alert">'.$optionsAll['infoAlert'].'</div>');
+        }
+
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
 
@@ -1422,13 +1450,17 @@ class HtmlForm extends HtmlFormBasic
      *                                created within the $_POST array.
      *                              - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
      *                                of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
+     *                              - @b valueAttributes: An array which contain the same ids as the value array. The value of this array will be
+     *                                onother array with the combination of attributes name and attributes value.
+     *                              - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the
+     *                                text of the alertbox
      *                              - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                                e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                                e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                                the user can see the text if he hover over the icon. If you need an additional parameter
      *                                for the text you can add an array. The first entry must be the unique text id and the second
      *                                entry will be a parameter of the text id.
      *                              - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                                e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                                e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                                If you need an additional parameter for the text you can add an array. The first entry must
      *                                be the unique text id and the second entry will be a parameter of the text id.
      *                              - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1509,13 +1541,17 @@ class HtmlForm extends HtmlFormBasic
      *                          created within the $_POST array.
      *                        - @b maximumSelectionNumber : If @b multiselect is enabled then you can configure the maximum number
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
+     *                        - @b valueAttributes: An array which contain the same ids as the value array. The value of this array will be
+     *                          onother array with the combination of attributes name and attributes value.
+     *                        - @b infoAlert : Add a bootstrap info alert box after the select box. The value of this option will be the
+     *                          text of the alertbox
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1575,12 +1611,12 @@ class HtmlForm extends HtmlFormBasic
      *                            - @b defaultValue : Id of category that should be selected per default.
      *                            - @b showSystemCategory : Show user defined and system categories
      *                            - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                              e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                              e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                              the user can see the text if he hover over the icon. If you need an additional parameter
      *                              for the text you can add an array. The first entry must be the unique text id and the second
      *                              entry will be a parameter of the text id.
      *                            - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                              e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                              e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                              If you need an additional parameter for the text you can add an array. The first entry must
      *                              be the unique text id and the second entry will be a parameter of the text id.
      *                            - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1598,12 +1634,30 @@ class HtmlForm extends HtmlFormBasic
             'showContextDependentFirstEntry' => true,
             'multiselect'                    => false,
             'showSystemCategory'             => true,
+            'infoAlert'                      => '',
             'helpTextIdLabel'                => '',
             'helpTextIdInline'               => '',
             'icon'                           => '',
             'class'                          => ''
         );
         $optionsAll = array_replace($optionsDefault, $options);
+
+        if($gCurrentOrganization->countAllRecords() > 1 && $selectBoxModus === 'EDIT_CATEGORIES')
+        {
+            $optionsAll['infoAlert'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true)));
+
+            $this->addJavascriptCode('
+                $("#'.$id.'").change(function() {
+                    if($("option:selected", this).attr("data-global") == 1) {
+                        $("#'.$id.'_alert").show("slow");
+                    } else {
+                        $("#'.$id.'_alert").hide();
+                    }
+                });
+                $("#'.$id.'").trigger("change");',
+                true
+            );
+        }
 
         $sqlTables     = '';
         $sqlConditions = '';
@@ -1640,7 +1694,7 @@ class HtmlForm extends HtmlFormBasic
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
 
         // the sql statement which returns all found categories
-        $sql = 'SELECT DISTINCT cat_id, cat_name, cat_default, cat_sequence
+        $sql = 'SELECT DISTINCT cat_id, cat_org_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
@@ -1666,10 +1720,12 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $categoriesArray = array();
+        $optionsAll['valueAttributes'] = array();
 
         if ($countCategories > 1 && $selectBoxModus === 'FILTER_CATEGORIES')
         {
             $categoriesArray[0] = $gL10n->get('SYS_ALL');
+            $optionsAll['valueAttributes'][0] = array('data-global' => 0);
         }
 
         while ($row = $pdoStatement->fetch())
@@ -1689,6 +1745,20 @@ class HtmlForm extends HtmlFormBasic
             {
                 $categoriesArray[$row['cat_id']] = $row['cat_name'];
             }
+
+            // add label that this category is visible to all organizations
+            if($row['cat_org_id'] === null)
+            {
+                if($categoriesArray[$row['cat_id']] !== $gL10n->get('SYS_ALL_ORGANIZATIONS'))
+                {
+                    $categoriesArray[$row['cat_id']] = $categoriesArray[$row['cat_id']] . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                }
+                $optionsAll['valueAttributes'][$row['cat_id']] = array('data-global' => 1);
+            }
+            else
+            {
+                $optionsAll['valueAttributes'][$row['cat_id']] = array('data-global' => 0);
+            }
         }
 
         // now call method to create selectbox from array
@@ -1703,12 +1773,12 @@ class HtmlForm extends HtmlFormBasic
      * @param string $value   A value of the static control. The control will be created with this value.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set a help icon will be shown after the control label where
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
      *                          for the text you can add an array. The first entry must be the unique text id and the second
      *                          entry will be a parameter of the text id.
      *                        - @b helpTextIdInline : A unique text id from the translation xml files that should be shown
-     *                          e.g. SYS_ENTRY_MULTI_ORGA. If set the complete text will be shown after the form element.
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set the complete text will be shown after the form element.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.
      *                        - @b icon : An icon can be set. This will be placed in front of the label.
@@ -1756,7 +1826,7 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Closes a field structure that was added with the method openControlStructure.
-     * @param string|string[] $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     * @param string|string[] $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      *                                    If set the complete text will be shown after the form element.
      * @param string[]        $parameters If you need an additional parameter for the text you can set this array.
      */
@@ -1830,7 +1900,7 @@ class HtmlForm extends HtmlFormBasic
      *                           - @b FIELD_DEFAULT  : The field can accept an input.
      *                           - @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                           - @b FIELD_DISABLED : The field will be disabled and could not accept an input.
-     * @param string $helpTextId (optional) A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     * @param string $helpTextId (optional) A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      *                           If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                           If you need an additional parameter for the text you can add an array. The first entry
      *                           must be the unique text id and the second entry will be a parameter of the text id.
@@ -1940,7 +2010,7 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
-     * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      * @param string          $parameter If you need an additional parameter for the text you can set this parameter.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */

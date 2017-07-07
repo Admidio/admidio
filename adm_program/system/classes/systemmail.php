@@ -71,6 +71,9 @@ class SystemMail extends Email
 
         $mailSrcText = $this->smTextObject->getValue('txt_text');
 
+        // use unix linefeeds in mail
+        $mailSrcText = str_replace("\r\n", "\n", $mailSrcText);
+
         // now replace all parameters in email text
         $pregRepArray = array(
             '/#user_first_name#/'         => $user->getValue('FIRST_NAME', 'database'),

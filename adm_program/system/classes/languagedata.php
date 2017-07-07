@@ -92,46 +92,33 @@ class LanguageData
             return $defaultLanguage;
         }
 
-        $accepted = preg_split('/,\s*/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        $language = $defaultLanguage;
-        $quality = 0;
+        $languages = preg_split('/\s*,\s*/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $languageChoosed = $defaultLanguage;
+        $priorityChoosed = 0;
 
-        if (is_array($accepted) && count($accepted) > 0)
+        foreach ($languages as $value)
         {
-            foreach ($accepted as $key => $value)
+            if (!preg_match('/^([a-z]{2,3}(?:-[a-zA-Z]{2,3})?|\*)(?:\s*;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/', $value, $matches))
             {
-                if (!preg_match('/^([a-z]{1,8}(?:-[a-z]{1,8})*)(?:;\s*q=(0(?:\.\d{1,3})?|1(?:\.0{1,3})?))?$/i', $value, $matches))
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                $code = explode('-', $matches[1]);
+            $langCodes = explode('-', $matches[1]);
 
-                if (isset($matches[2]))
-                {
-                    $priority = (float) $matches[2];
-                }
-                else
-                {
-                    $priority = 1.0;
-                }
+            $priority = 1.0;
+            if (isset($matches[2]))
+            {
+                $priority = (float) $matches[2];
+            }
 
-                while (count($code) > 0)
-                {
-                    if ($priority > $quality)
-                    {
-                        $language = strtolower(implode('-', $code));
-                        $quality = $priority;
-
-                        break;
-                    }
-
-                    break;
-                }
+            if ($priorityChoosed < $priority && $langCodes[0] !== '*')
+            {
+                $languageChoosed = $langCodes[0];
+                $priorityChoosed = $priority;
             }
         }
 
-        return $language;
+        return $languageChoosed;
     }
 
     /**

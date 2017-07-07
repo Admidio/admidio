@@ -13,95 +13,96 @@
 /**
  * Creates a Chat instance
  * @constructor
+ * @param {string} inputId
+ * @param {string} chatId
  */
-function Chat() {
-    this.inputId       = "";
-    this.chatId        = "";
-    this.intervalId    = null;
-    this.state         = 0;
-    this.isUpdateingse = false;
+function Chat(inputId, chatId) {
+    this.inputId     = inputId;
+    this.chatId      = chatId;
+    this.intervalId  = null;
+    this.state       = 0;
+    this.isUpdateing = false;
 
-    /**
-     * Init Chat
-     * @param {string} inputId
-     * @param {string} chatId
-     */
-    this.init = function(inputId, chatId) {
-        var self = this;
+    this.init();
+}
 
-        this.inputId = inputId;
-        this.chatId  = chatId;
+/**
+ * Init Chat
+ */
+Chat.prototype.init = function() {
+    var self = this;
 
-        // Start update interval
-        this.intervalId = setInterval(this.update, 2500);
+    // Start update interval
+    this.intervalId = setInterval(this.update.bind(this), 2500);
 
-        // watch textarea for release of key press [enter]
-        $(this.inputId).keyup(function(e) {
-            if (e.keyCode === 13) {
-                var text = $(this).val().trim();
-                if (text.length > 0) {
-                    self.send(text);
-                }
-                $(this).val("");
+    // watch textarea for release of key press [enter]
+    $(this.inputId).keyup(function(e) {
+        if (e.keyCode === 13) {
+            var text = $(this).val().trim();
+            if (text.length > 0) {
+                self.send.call(self, text);
+            }
+            $(this).val("");
+        }
+    });
+};
+
+/**
+ * Update the chat
+ * @param {function} [callback] Optional callback function that is executed after the update
+ */
+Chat.prototype.update = function(callback) {
+    var self = this;
+
+    if (this.isUpdateing) {
+        return;
+    }
+
+    this.isUpdateing = true;
+    $.post({
+        url: "process.php",
+        data: {
+            "function": "update",
+            "state": this.state
+        },
+        dataType: "json",
+        success: function(data) {
+            if (data.text) {
+                var chatArea = $(self.chatId);
+                data.text.forEach(function (text) {
+                    chatArea.append($("<p>" + text + "</p>"));
+                });
+                chatArea.scrollTop(chatArea[0].scrollHeight);
+            }
+            self.isUpdateing = false;
+            self.state = data.state;
+
+            if (callback && typeof callback === "function") {
+                callback();
+            }
+        }
+    });
+};
+
+/**
+ * Send the message
+ * @param {string} message
+ */
+Chat.prototype.send = function(message) {
+    var self = this;
+
+    this.update(function () {
+        $.post({
+            url: "process.php",
+            data: {
+                "function": "send",
+                "message": message,
+                "state": this.state
+            },
+            dataType: "json",
+            success: function() {
+                self.update.call(self);
             }
         });
-    };
-
-    /**
-     * Update the chat
-     * @param {function} [callback] Optional callback function that is executed after the update
-     */
-    this.update = function(callback) {
-        var self = this;
-
-        if (!this.isUpdateing) {
-            this.isUpdateing = true;
-            $.post({
-                url: "process.php",
-                data: {
-                    "function": "update",
-                    "state": this.state
-                },
-                dataType: "json",
-                success: function(data) {
-                    if (data.text) {
-                        var chatArea = $(self.chatId);
-                        data.text.forEach(function(text) {
-                            chatArea.append($("<p>" + text + "</p>"));
-                        });
-                        chatArea.scrollTop(chatArea[0].scrollHeight);
-                    }
-                    self.isUpdateing = false;
-                    self.state = data.state;
-
-                    if (callback && typeof callback === "function") {
-                        callback();
-                    }
-                }
-            });
-        }
-    };
-
-    /**
-     * Send the message
-     * @param {string} message
-     */
-    this.send = function(message) {
-        var self = this;
-
-        this.update(function() {
-            $.post({
-                url: "process.php",
-                data: {
-                    "function": "send",
-                    "message": message,
-                    "state": this.state
-                },
-                dataType: "json",
-                success: function() {
-                    self.update();
-                }
-            });
-        });
-    };
-}
+    });
+};

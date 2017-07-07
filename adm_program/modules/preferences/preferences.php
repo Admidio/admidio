@@ -196,7 +196,7 @@ $page->addHtml('
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $formValues['org_homepage'], array('maxLength' => 60));
 
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-                        if(!$gCurrentOrganization->hasChildOrganizations())
+                        if(!$gCurrentOrganization->isParentOrganization())
                         {
                             $sqlData = array();
                             $sqlData['query'] = 'SELECT org_id, org_longname
@@ -768,7 +768,7 @@ $page->addHtml('
                         $form->addCheckbox('profile_show_former_roles', $gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP'), (bool) $formValues['profile_show_former_roles'], array('helpTextIdInline' => 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC'));
 
                         if($gCurrentOrganization->getValue('org_org_id_parent') > 0
-                        || $gCurrentOrganization->hasChildOrganizations())
+                        || $gCurrentOrganization->isParentOrganization())
                         {
                             $form->addCheckbox('profile_show_extern_roles', $gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS'), (bool) $formValues['profile_show_extern_roles'], array('helpTextIdInline' => 'PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC'));
                         }

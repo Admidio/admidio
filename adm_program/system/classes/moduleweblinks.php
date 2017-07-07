@@ -101,17 +101,6 @@
  */
 class ModuleWeblinks extends Modules
 {
-    protected $getConditions;       ///< String with SQL condition
-
-    /**
-     * creates an new ModuleWeblink object
-     */
-    public function __construct()
-    {
-        // get parent instance with all parameters from $_GET Array
-        parent::__construct();
-    }
-
     /**
      * Function returns a set of links with corresponding information
      * @param int $startElement Start element of result. First (and default) is 0.
@@ -120,7 +109,7 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gCurrentUser, $gPreferences, $gDb;
+        global $gCurrentUser, $gPreferences, $gDb;
 
         // Parameter
         if($limit === null)
@@ -128,19 +117,8 @@ class ModuleWeblinks extends Modules
             $limit = $gPreferences['weblinks_per_page'];
         }
 
-        // Bedingungen
-        $id = (int) $this->getParameter('id');
-        if($id > 0)
-        {
-            $this->getConditions = ' AND lnk_id = '. $id;
-        }
-        $catId = (int) $this->getParameter('cat_id');
-        if($catId > 0)
-        {
-            $this->getConditions = ' AND cat_id = '. $catId;
-        }
-
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
+        $sqlConditions = $this->getSqlConditions();
 
         // Weblinks aus der DB fischen...
         $sql = 'SELECT *
@@ -148,9 +126,9 @@ class ModuleWeblinks extends Modules
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       '.$this->getConditions.'
+                       '.$sqlConditions['sql'].'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
+
         if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
@@ -160,16 +138,12 @@ class ModuleWeblinks extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $weblinksStatement = $gDb->queryPrepared($sql, $queryParams);
+        $pdoStatement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params'])); // TODO add more params
 
         // array for results
         return array(
-            'recordset'  => $weblinksStatement->fetchAll(),
-            'numResults' => $weblinksStatement->rowCount(),
+            'recordset'  => $pdoStatement->fetchAll(),
+            'numResults' => $pdoStatement->rowCount(),
             'limit'      => $limit,
             'totalCount' => $this->getDataSetCount(),
             'parameter'  => $this->getParameters()
@@ -182,22 +156,18 @@ class ModuleWeblinks extends Modules
      */
     public function getDataSetCount()
     {
-        global $gCurrentOrganization, $gCurrentUser, $gDb;
+        global $gCurrentUser, $gDb;
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
+        $sqlConditions = $this->getSqlConditions();
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       '.$this->getConditions;
-        $queryParams = array_merge(
-            $catIdParams,
-            array((int) $gCurrentOrganization->getValue('org_id'))
-        ); // TODO add more params
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
+                       '.$sqlConditions['sql'];
+        $pdoStatement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
 
         return (int) $pdoStatement->fetchColumn();
     }
@@ -219,5 +189,37 @@ class ModuleWeblinks extends Modules
             $headline .= ' - '. $category->getValue('cat_name');
         }
         return $headline;
+    }
+
+    /**
+     * Add several conditions to an SQL string that could later be used
+     * as additional conditions in other SQL queries.
+     * @return array Returns an array of a SQL string with additional conditions and it's query params.
+     */
+    private function getSqlConditions()
+    {
+        $sqlConditions = '';
+        $params = array();
+
+        $id    = (int) $this->getParameter('id');
+        $catId = (int) $this->getParameter('cat_id');
+
+        // In case ID was permitted and user has rights
+        if($id > 0)
+        {
+            $sqlConditions .= ' AND lnk_id = ? '; // $id
+            $params[] = $id;
+        }
+        // show all weblinks from category
+        elseif($catId > 0)
+        {
+            $sqlConditions .= ' AND cat_id = ? '; // $catId
+            $params[] = $catId;
+        }
+
+        return array(
+            'sql'    => $sqlConditions,
+            'params' => $params
+        );
     }
 }

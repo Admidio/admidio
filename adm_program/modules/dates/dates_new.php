@@ -68,9 +68,14 @@ if(isset($_SESSION['dates_request']))
 {
     // By wrong input, the user returned to this form now write the previously entered contents into the object
 
-    // first set date and time field to a datetime and add this to date class
+    // first set date and time field to a datetime within system format and add this to date class
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
+
+    $dateTimeBegin = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_begin']);
+    $_SESSION['dates_request']['dat_begin'] = $dateTimeBegin->format('Y-m-d H:i:s');
+    $dateTimeEnd = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_end']);
+    $_SESSION['dates_request']['dat_end'] = $dateTimeEnd->format('Y-m-d H:i:s');
 
     $date->setArray($_SESSION['dates_request']);
 
@@ -301,16 +306,6 @@ $form->closeGroupBox();
 
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
 $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $date->getValue('dat_highlight'));
-
-// if current organization has a parent organization or is child organizations then show option to set this announcement to global
-if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
-{
-    // show all organizations where this organization is mother or child organization
-    $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-    $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
-
-    $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), (bool) $date->getValue('dat_global'), array('helpTextIdLabel' => array('SYS_DATA_GLOBAL', $organizations)));
-}
 $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
 
 // add a multiselectbox to the form where the user can choose all roles whose members could participate to this event

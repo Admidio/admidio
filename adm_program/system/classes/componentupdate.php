@@ -239,7 +239,7 @@ class ComponentUpdate extends Component
     }
 
     /**
-     * This method deletes all roles that belongs to still deleted dates.
+     * This method add new categories for announcements to the database.
      */
     public function updateStepAddAnnouncementsCategories()
     {
@@ -333,6 +333,35 @@ class ComponentUpdate extends Component
                      WHERE prf_name = \'dates_default_list_configuration\'
                        AND prf_org_id = ? -- $rowId';
             $this->db->queryPrepared($sql, array($listId, $rowId));
+        }
+    }
+
+    /**
+     * This method adds new categories for all organizations.
+     */
+    public function updateStepAddGlobalCategories()
+    {
+        global $gCurrentOrganization;
+
+        if($gCurrentOrganization->countAllRecords() > 1)
+        {
+            $categoryAnnouncement = new TableCategory($this->db);
+            $categoryAnnouncement->setValue('cat_type', 'ANN');
+            $categoryAnnouncement->setValue('cat_name_intern', 'ANN_ALL_ORGANIZATIONS');
+            $categoryAnnouncement->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
+            $categoryAnnouncement->save();
+
+            $categoryEvents = new TableCategory($this->db);
+            $categoryEvents->setValue('cat_type', 'DAT');
+            $categoryEvents->setValue('cat_name_intern', 'DAT_ALL_ORGANIZATIONS');
+            $categoryEvents->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
+            $categoryEvents->save();
+
+            $categoryWeblinks = new TableCategory($this->db);
+            $categoryWeblinks->setValue('cat_type', 'LNK');
+            $categoryWeblinks->setValue('cat_name_intern', 'LNK_ALL_ORGANIZATIONS');
+            $categoryWeblinks->setValue('cat_name', 'SYS_ALL_ORGANIZATIONS');
+            $categoryWeblinks->save();
         }
     }
 

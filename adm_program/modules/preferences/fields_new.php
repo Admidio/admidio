@@ -91,7 +91,7 @@ if(isset($_SESSION['fields_request']))
 $page = new HtmlPage($headline);
 
 $page->addJavascript('
-    function setValueList() {
+    $("#usf_type").click(function() {
         if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "RADIO_BUTTON") {
             $("#usf_value_list_group").show("slow");
             $("#usf_value_list").attr("required", "required");
@@ -99,10 +99,8 @@ $page->addJavascript('
             $("#usf_value_list").removeAttr("required");
             $("#usf_value_list_group").hide();
         }
-    }
-
-    setValueList();
-    $("#usf_type").click(function() { setValueList(); });',
+    });
+    $("#usf_type").trigger("click");',
     true
 );
 
