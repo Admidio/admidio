@@ -789,8 +789,18 @@ class User extends TableAccess
     public function getAllVisibleCategories($categoryType)
     {
         $arrVisibleCategories = array();
+        $flagAdministrator    = 0;
 
         $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+
+        if(($categoryType === 'ANN' && $this->editAnnouncements())
+        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'LNK' && $this->editWeblinksRight())
+        || ($categoryType === 'USF' && $this->editUsers()))
+        {
+            $flagAdministrator = 1;
+        }
+
 
         $sql = 'SELECT cat_id
                   FROM ' . TBL_CATEGORIES . '
@@ -810,6 +820,7 @@ class User extends TableAccess
                                     WHERE ror_name_intern = \'category_view\'
                                       AND rrd_object_id   = cat_id
                                       AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                        OR 1 = ' . $flagAdministrator . '
                         )';
         $queryParams = array_merge(
             array(

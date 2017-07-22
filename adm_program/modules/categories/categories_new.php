@@ -233,6 +233,50 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         }
     }
 
+    // read all administrator roles
+    
+    if($getType === 'LNK')
+    {
+        $rolesRightsColumn = 'rol_weblinks';
+        $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
+    }
+    elseif($getType === 'ANN')
+    {
+        $rolesRightsColumn = 'rol_announcements';
+        $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
+    }
+    elseif($getType === 'DAT')
+    {
+        $rolesRightsColumn = 'rol_dates';
+        $rolesRightsName   = 'ROL_RIGHT_DATES';
+    }
+    else
+    {
+        $rolesRightsColumn = 'rol_edit_user';
+        $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
+    }
+
+    $sqlAdminRoles = 'SELECT rol_name
+                        FROM '.TBL_ROLES.'
+                  INNER JOIN '.TBL_CATEGORIES.'
+                          ON cat_id = rol_cat_id
+                       WHERE rol_valid    = 1
+                         AND '. $rolesRightsColumn .' = 1
+                         AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                    ORDER BY cat_sequence, rol_name';
+    $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
+    
+    $adminRoles = array();
+    while($row = $statementAdminRoles->fetch())
+    {
+        $adminRoles[] = $row['rol_name'];
+    }
+
+    $form->addStaticControl(
+        'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
+        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', $gL10n->get('ROL_RIGHT_DOWNLOAD')))
+    );
+
     $checked = false;
     if((int) $category->getValue('cat_org_id') === 0)
     {
