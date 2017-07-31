@@ -280,7 +280,15 @@ while($user = $userStatement->fetch())
     }
     if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
     {
-        $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
+        // some countries have the order postcode city others have city postcode
+        if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+        {
+            $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
+        }
+        else
+        {
+            $addressText .= ' - '. $user['city']. ' '. $user['zip_code'];
+        }
     }
     if(strlen($user['address']) > 0)
     {

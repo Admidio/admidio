@@ -365,26 +365,34 @@ $page->addHtml('
                                     $route_url .= urlencode($user->getValue('ADDRESS'));
                                 }
 
+                                // City and postcode should be shown in one line
                                 if(strlen($user->getValue('POSTCODE')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                 {
-                                    $address   .= $user->getValue('POSTCODE');
                                     $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
-                                    // City and postcode should be shown in one line
-                                    if(strlen($user->getValue('CITY')) === 0
-                                    || (!$gCurrentUser->hasRightEditProfile($user) && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
+                                    if(strlen($user->getValue('CITY')) > 0
+                                    && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                     {
-                                        $address   .= '<br />';
+                                        $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
+                                        $route_url .= ',%20'. urlencode($user->getValue('CITY'));
+
+                                        // some countries have the order postcode city others have city postcode
+                                        if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+                                        {
+                                            $address .= $user->getValue('POSTCODE'). ' '. $user->getValue('CITY'). '<br />';
+                                        }
+                                        else
+                                        {
+                                            $address .= $user->getValue('CITY'). ' '. $user->getValue('POSTCODE'). '<br />';
+                                        }
                                     }
                                 }
-
-                                if(strlen($user->getValue('CITY')) > 0
+                                elseif(strlen($user->getValue('CITY')) > 0
                                 && ($gCurrentUser->hasRightEditProfile($user) || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                 {
-                                    // City and postcode should be shown in one line
-                                    $address   .= ' '. $user->getValue('CITY'). '<br />';
+                                    $address   .= $user->getValue('CITY'). '<br />';
                                     $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
                                     $route_url .= ',%20'. urlencode($user->getValue('CITY'));
                                 }

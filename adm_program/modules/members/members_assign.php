@@ -116,7 +116,15 @@ echo '
                 }
                 if(strlen($row['zip_code']) > 0 || strlen($row['city']) > 0)
                 {
-                    echo $row['zip_code'].' '.$row['city'].'<br />';
+                    // some countries have the order postcode city others have city postcode
+                    if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+                    {
+                        echo $row['zip_code'].' '.$row['city'].'<br />';
+                    }
+                    else
+                    {
+                        echo $row['city'].' '.$row['zip_code'].'<br />';
+                    }
                 }
                 if(strlen($row['email']) > 0)
                 {
