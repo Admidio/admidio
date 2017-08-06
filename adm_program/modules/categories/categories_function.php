@@ -7,9 +7,6 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/******************************************************************************
  * Parameters:
  *
  * cat_id: Id of the category that should be edited
@@ -62,7 +59,7 @@ else
 if(!$category->editable())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT    
+    // => EXIT
 }
 
 if($getMode === 1)
@@ -83,6 +80,12 @@ if($getMode === 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_VISIBLE_FOR')));
         // => EXIT
+    }
+
+    if(!isset($_POST['adm_categories_edit_right']))
+    {
+        // so initialize the parameter
+        $_POST['adm_categories_edit_right'] = array();
     }
 
     // set a global category if its not a role category and the flag was set,
@@ -161,12 +164,16 @@ if($getMode === 1)
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+        $rightCategoryEdit = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
+        $rightCategoryEdit->saveRoles($_POST['adm_categories_edit_right']);
     }
     else
     {
         // delete existing roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $rightCategoryView->delete();
+        $rightCategoryEdit = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
+        $rightCategoryEdit->delete();
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,

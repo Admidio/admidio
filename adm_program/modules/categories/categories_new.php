@@ -6,9 +6,6 @@
  * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
 /******************************************************************************
  * Parameters:
  *
@@ -32,30 +29,49 @@ $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
+$roleViewSet = array(0);
+$roleEditSet = array(0);
+
+// set text strings for the different modules
+if($getType === 'LNK')
+{
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
+    $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
+    $rolesRightsColumn = 'rol_weblinks';
+    $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
+}
+elseif($getType === 'ANN')
+{
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ANN_ANNOUNCEMENTS'));
+    $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
+    $rolesRightsColumn = 'rol_announcements';
+    $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
+}
+elseif($getType === 'DAT')
+{
+    $rolesRightEditName = 'DAT_EDIT_EVENTS';
+    $rolesRightsColumn = 'rol_dates';
+    $rolesRightsName   = 'ROL_RIGHT_DATES';
+}
+elseif($getType === 'USF')
+{
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
+    $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
+    $rolesRightsColumn = 'rol_edit_user';
+    $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
+}
+elseif($getType === 'ROL')
+{
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('SYS_ROLES'));
+}
+else
+{
+    $headline = $gL10n->get('SYS_CATEGORY');
+}
+
 // set module headline and other strings
 if($getTitle === '')
 {
-    if($getType === 'ROL')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('SYS_ROLES'));
-    }
-    elseif($getType === 'LNK')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
-    }
-    elseif($getType === 'ANN')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ANN_ANNOUNCEMENTS'));
-    }
-    elseif($getType === 'USF')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
-    }
-    else
-    {
-        $headline = $gL10n->get('SYS_CATEGORY');
-    }
-
     $addButtonText = $gL10n->get('SYS_CATEGORY');
 }
 else
@@ -86,10 +102,14 @@ if(isset($_SESSION['categories_request']))
     $category->setArray($_SESSION['categories_request']);
 
     // get the selected roles for visibility
-    $roleViewSet = $_SESSION['categories_request']['adm_categories_view_right'];
-
-    if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
+    if(isset($_SESSION['categories_request']['adm_categories_view_right']))
     {
+        $roleViewSet = $_SESSION['categories_request']['adm_categories_view_right'];
+    }
+
+    if(isset($_SESSION['categories_request']['show_in_several_organizations']))
+    {
+        $gLogger->warning('test');
         $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
     unset($_SESSION['categories_request']);
@@ -103,12 +123,11 @@ else
         // get assigned roles of this category
         $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
+        $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
+        $roleEditSet = $categoryEditRolesObject->getRolesIds();
     }
     else
     {
-        // a new category will be visible for all users per default
-        $roleViewSet = array(0);
-
         // profile fields should be organization independent all other categories should be organization dependent as default
         if($getType !== 'USF')
         {
@@ -121,7 +140,7 @@ else
 if(!$category->editable())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT    
+    // => EXIT
 }
 
 // create html page object
@@ -196,6 +215,12 @@ if($getType !== 'ROL'
         $roleViewSet[] = 0;
     }
 
+    // if no roles are assigned then set "all users" as default
+    if(count($roleEditSet) === 0)
+    {
+        $roleEditSet[] = '';
+    }
+
     // show selectbox with all assigned roles
     $form->addSelectBoxFromSql(
         'adm_categories_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
@@ -205,6 +230,16 @@ if($getType !== 'ROL'
             'multiselect'  => true,
             'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null),
             'helpTextIdInline' => $roleViewDescription
+        )
+    );
+
+    $form->addSelectBoxFromSql(
+        'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
+        array(
+            'property'     => FIELD_REQUIRED,
+            'defaultValue' => $roleEditSet,
+            'multiselect'  => true,
+            'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
         )
     );
 }
@@ -234,27 +269,6 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
     }
 
     // read all administrator roles
-    
-    if($getType === 'LNK')
-    {
-        $rolesRightsColumn = 'rol_weblinks';
-        $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
-    }
-    elseif($getType === 'ANN')
-    {
-        $rolesRightsColumn = 'rol_announcements';
-        $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
-    }
-    elseif($getType === 'DAT')
-    {
-        $rolesRightsColumn = 'rol_dates';
-        $rolesRightsName   = 'ROL_RIGHT_DATES';
-    }
-    else
-    {
-        $rolesRightsColumn = 'rol_edit_user';
-        $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
-    }
 
     $sqlAdminRoles = 'SELECT rol_name
                         FROM '.TBL_ROLES.'
@@ -265,7 +279,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
                          AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
                     ORDER BY cat_sequence, rol_name';
     $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
-    
+
     $adminRoles = array();
     while($row = $statementAdminRoles->fetch())
     {
@@ -274,7 +288,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 
     $form->addStaticControl(
         'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', $gL10n->get('ROL_RIGHT_DOWNLOAD')))
+        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', $gL10n->get($rolesRightsName)))
     );
 
     $checked = false;

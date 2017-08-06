@@ -4,6 +4,7 @@
     <string name="ANN_ANNOUNCEMENT">Ankündigung</string>
     <string name="ANN_ANNOUNCEMENTS">Ankündigungen</string>
     <string name="ANN_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
+    <string name="ANN_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
     <string name="ANN_EMAIL_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
     <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
@@ -62,6 +63,7 @@
     <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
     <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
+    <string name="DAT_EDIT_EVENTS">Termine bearbeiten</string>
     <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
     <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
     <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Ein Termin wurde geändert</string>
@@ -353,6 +355,7 @@
     <string name="LNK_CREATE_LINK">Link anlegen</string>
     <string name="LNK_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
     <string name="LNK_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)</string>
+    <string name="LNK_EDIT_WEBLINKS">Weblinks bearbeiten</string>
     <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
     <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="LNK_GO_TO">Gehe zu #VAR1#</string>
@@ -884,6 +887,7 @@
     <string name="PRO_EDIT_MY_PROFILE_PICTURE">Mein Profilfoto bearbeiten</string>
     <string name="PRO_EDIT_PASSWORD">Passwort bearbeiten</string>
     <string name="PRO_EDIT_PROFILE">Profil bearbeiten</string>
+    <string name="PRO_EDIT_PROFILE_FIELD">Profilfelder im Profil bearbeiten</string>
     <string name="PRO_EDIT_PROFILE_PIC_FROM">Profilfoto von #VAR1# #VAR2# bearbeiten</string>
     <string name="PRO_EXPORT_VCARD">vCard exportieren</string>
     <string name="PRO_EXPORT_VCARD_FROM_VAR">vCard von #VAR1# exportieren</string>

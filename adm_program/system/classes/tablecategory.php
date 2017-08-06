@@ -127,7 +127,7 @@ class TableCategory extends TableAccess
         || ($categoryType === 'AWA' && !$gCurrentUser->editUsers()))
         {
             return false;
-        }        
+        }
 
         if($this->visible())
         {
@@ -140,6 +140,12 @@ class TableCategory extends TableAccess
 
             // if category belongs to all organizations only parent organization could edit it
             if((int) $this->getValue('cat_org_id') === 0 && $gCurrentOrganization->isParentOrganization())
+            {
+                return true;
+            }
+
+            // a new record will always be visible until all data is saved
+            if($this->new_record)
             {
                 return true;
             }
