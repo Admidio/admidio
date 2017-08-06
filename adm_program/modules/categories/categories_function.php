@@ -84,6 +84,7 @@ if($getMode === 1)
 
     if(!isset($_POST['adm_categories_edit_right']))
     {
+        // edit right need not to be set because module administrators still have the right,
         // so initialize the parameter
         $_POST['adm_categories_edit_right'] = array();
     }
