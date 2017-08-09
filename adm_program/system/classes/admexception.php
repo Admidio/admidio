@@ -59,7 +59,7 @@ class AdmException extends Exception
         }
         else
         {
-            // Deprecated
+            // TODO deprecated: Remove in Admidio 4.0
             $paramCount = func_num_args();
             $paramArray = func_get_args();
 
@@ -108,7 +108,7 @@ class AdmException extends Exception
         }
         else
         {
-            // Deprecated
+            // TODO deprecated: Remove in Admidio 4.0
             $this->params = array();
 
             $paramCount = func_num_args();

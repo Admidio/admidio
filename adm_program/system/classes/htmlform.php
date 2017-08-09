@@ -1486,6 +1486,7 @@ class HtmlForm extends HtmlFormBasic
         }
         else
         {
+            // TODO deprecated: remove in Admidio 4.0
             $pdoStatement = $database->query($sql);
         }
 

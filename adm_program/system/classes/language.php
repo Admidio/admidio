@@ -146,7 +146,7 @@ class Language
         }
         else
         {
-            // Deprecated
+            // TODO deprecated: Remove in Admidio 4.0
             $paramsCount = func_num_args();
             $paramsArray = func_get_args();
         }

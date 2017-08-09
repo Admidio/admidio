@@ -156,6 +156,7 @@ define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN
 // ###  DEPRECATED  ###
 // ####################
 
+// TODO deprecated: Remove in Admidio 4.0
 define('SERVER_PATH', ADMIDIO_PATH);
 
 // Define Constants for PHP 5.3
