@@ -18,10 +18,6 @@
  * You can define the class names and the row number for line change.
  * CSS classes are needed using this option for class change !
  * This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
- * @par Notice
- * Tables should be styled by CSS !
- * Attributes, like 'align', 'bgcolor',... are worse style,
- * and deprecated in HTML5. Please check the reference.
  * @par Data array for example
  * @code
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
