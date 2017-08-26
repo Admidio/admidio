@@ -50,7 +50,7 @@ define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
 $port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
 
-if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
+if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SERVER'] !== $_SERVER['HTTP_HOST'])
 {
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
     define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
