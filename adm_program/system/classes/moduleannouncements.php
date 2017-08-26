@@ -91,7 +91,8 @@ class ModuleAnnouncements extends Modules
 
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_ANNOUNCEMENTS.'
-                  JOIN '.TBL_CATEGORIES.' ON cat_id = ann_cat_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = ann_cat_id
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
@@ -147,7 +148,8 @@ class ModuleAnnouncements extends Modules
         // read announcements from database
         $sql = 'SELECT cat.*, ann.*, '.$additionalFields.'
                   FROM '.TBL_ANNOUNCEMENTS.' ann
-                  JOIN '.TBL_CATEGORIES.' cat ON cat_id = ann_cat_id
+            INNER JOIN '.TBL_CATEGORIES.' cat
+                    ON cat_id = ann_cat_id
                        '.$additionalTables.'
                  WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR (   ann_global = 1
@@ -178,7 +180,7 @@ class ModuleAnnouncements extends Modules
     }
 
     /**
-     * Add several conditions to an SQL string that could later be used 
+     * Add several conditions to an SQL string that could later be used
      * as additional conditions in other SQL queries.
      * @return string Return SQL string with additional conditions.
      */
