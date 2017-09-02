@@ -155,12 +155,20 @@ class Session extends TableAccess
      */
     public static function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
-        global $gLogger;
+        global $gLogger, $gSetCookieForDomain;
 
         if ($path === '')
         {
-            $path = ADMIDIO_URL_PATH . '/';
+            if($gSetCookieForDomain)
+            {
+                $path = '/';
+            }
+            else
+            {
+                $path = ADMIDIO_URL_PATH . '/';
+            }
         }
+
         if ($domain === '')
         {
             $domain = DOMAIN;
@@ -303,7 +311,7 @@ class Session extends TableAccess
                     $sql = 'UPDATE '.TBL_AUTO_LOGIN.' SET atl_number_invalid = atl_number_invalid + 1
                              WHERE atl_usr_id = '.$userId;
                     $this->db->query($sql);
-    
+
                     $sql = 'DELETE FROM '.TBL_AUTO_LOGIN.'
                              WHERE atl_usr_id = '.$userId.'
                                AND atl_number_invalid > 3 ';
@@ -473,16 +481,23 @@ class Session extends TableAccess
      */
     public static function start($name, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
-        global $gLogger;
+        global $gLogger, $gSetCookieForDomain;
 
         // Set the cookie name
         session_name($name . '_PHP_SESSION_ID');
 
-        // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_URL_PATH . '/';
+            if($gSetCookieForDomain)
+            {
+                $path = '/';
+            }
+            else
+            {
+                $path = ADMIDIO_URL_PATH . '/';
+            }
         }
+
         if ($domain === '')
         {
             $domain = DOMAIN;
