@@ -255,8 +255,9 @@ foreach($gProfileFields->mProfileFields as $field)
     // they will be added after profile fields loop
     if($oldCategoryNameIntern === 'MASTER_DATA' && $field->getValue('cat_name_intern') !== 'MASTER_DATA')
     {
-        $posEndOfMasterData = $i;
-        $i += 2;
+        $posEndOfMasterData    = $i;
+        $i                    += 2;
+        $oldCategoryNameIntern = $field->getValue('cat_name_intern');
     }
 
     // add profile field to user field array
