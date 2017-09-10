@@ -69,5 +69,12 @@ header('Content-Disposition: attachment; filename="'.$filename.'"');
 header('Cache-Control: private');
 header('Pragma: public');
 
-// Datei ausgeben.
-echo readfile($completePath);
+// file output
+
+// use this function because of problems with big files
+// https://github.com/Admidio/admidio/commit/41be45790bf1a0422550e37a1c1d309e3f572884#diff-eabef127bc51cd72a8ab12491383f3dc
+//echo readfile($completePath);
+
+// use this function because of problems with ssl
+// https://github.com/Admidio/admidio/issues/643
+echo file_get_contents($completePath);
