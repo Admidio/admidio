@@ -20,7 +20,7 @@ $getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string', array('requ
 $getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requireValue' => true));
 
 // "systemmail" and "request password" must be activated
-if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
+if ($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -30,7 +30,7 @@ try
 {
     $user = new User($gDb, $gProfileFields, $getUserId);
 
-    if($user->getValue('usr_activation_code') === $getActivationId)
+    if ($user->getValue('usr_activation_code') === $getActivationId)
     {
         // activate the new password
         $user->saveChangesWithoutRights();
