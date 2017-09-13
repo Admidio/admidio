@@ -25,11 +25,11 @@
  */
 class HtmlFormInstallation extends HtmlForm
 {
-    private $descriptionTitle;  ///< A title for the description of the form. This will be displayed as h2
-    private $descriptionText;   ///< A text that will be shown after the headline before the form will be set
-    private $headline;          ///< Headline of the form
-    private $title;             ///< Title of the html page
-    private $headers;
+    private $title            = '';     ///< Title of the html page
+    private $headline         = '';     ///< Headline of the form
+    private $descriptionTitle = '';     ///< A title for the description of the form. This will be displayed as h2
+    private $descriptionText  = '';     ///< A text that will be shown after the headline before the form will be set
+    private $headers          = array();
 
     /**
      * Constructor creates the form element
@@ -39,12 +39,6 @@ class HtmlFormInstallation extends HtmlForm
     public function __construct($id, $action)
     {
         parent::__construct($id, $action);
-
-        $this->title = '';
-        $this->headline = '';
-        $this->descriptionText  = '';
-        $this->descriptionTitle = '';
-        $this->headers = array();
     }
 
     /**

@@ -32,18 +32,18 @@
  */
 class HtmlTable extends HtmlTableBasic
 {
-    protected $id;                       ///< Html id attribute of the table.
-    protected $rowsPerPage;              ///< Number of rows that should be displayed on one page.
-    protected $columnsAlign;             ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
-    protected $columnsOrder;             ///< Array with the column number as key and the 'asc' or 'desc' as value.
-    protected $groupedColumn;            ///< The number of the column which should be used to group the table data.
-    protected $datatables;               ///< A flag if the jQuery plugin DataTables should be used to show the table.
-    protected $datatablesInitParameters; ///< An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
-    protected $datatablesColumnDefs;     ///< Array that contains several elements for DataTables columnDefs parameter.
-    protected $messageNoRowsFound;       ///< The text that should be shown if no row was added to the table
-    protected $htmlPage;                 ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $serverSideProcessing;     ///< A flag that set the server-side processing for datatables.
-    protected $serverSideFile;           ///< The script that should be called when using server-side processing.
+    protected $id;                                  ///< Html id attribute of the table.
+    protected $rowsPerPage              = 25;       ///< Number of rows that should be displayed on one page.
+    protected $columnsAlign             = array();  ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
+    protected $columnsOrder             = array();  ///< Array with the column number as key and the 'asc' or 'desc' as value.
+    protected $groupedColumn            = -1;       ///< The number of the column which should be used to group the table data.
+    protected $datatables;                          ///< A flag if the jQuery plugin DataTables should be used to show the table.
+    protected $datatablesInitParameters = array();  ///< An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
+    protected $datatablesColumnDefs     = array();  ///< Array that contains several elements for DataTables columnDefs parameter.
+    protected $messageNoRowsFound;                  ///< The text that should be shown if no row was added to the table
+    protected $htmlPage;                            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $serverSideProcessing     = false;    ///< A flag that set the server-side processing for datatables.
+    protected $serverSideFile           = '';       ///< The script that should be called when using server-side processing.
 
     /**
      * Constructor creates the table element
@@ -74,16 +74,8 @@ class HtmlTable extends HtmlTableBasic
 
         // initialize class member parameters
         $this->id = $id;
-        $this->rowsPerPage   = 25;
-        $this->columnsAlign  = array();
-        $this->columnsOrder  = array();
-        $this->groupedColumn = -1;
-        $this->datatables    = $datatables;
-        $this->datatablesInitParameters = array();
-        $this->datatablesColumnDefs     = array();
-        $this->messageNoRowsFound       = $gL10n->get('SYS_NO_DATA_FOUND');
-        $this->serverSideProcessing     = false;
-        $this->serverSideFile           = '';
+        $this->datatables = $datatables;
+        $this->messageNoRowsFound = $gL10n->get('SYS_NO_DATA_FOUND');
 
         // when using DataTables we must set the width attribute so that all columns will change
         // dynamic their width if the browser window size change.

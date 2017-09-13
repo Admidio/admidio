@@ -37,15 +37,15 @@ define('FIELD_HIDDEN',   4);
  */
 class HtmlForm extends HtmlFormBasic
 {
-    protected $flagRequiredFields;    ///< Flag if this form has required fields. Then a notice must be written at the end of the form
-    protected $flagFieldListOpen;     ///< Flag if a field list was created. This must be closed later
-    protected $showRequiredFields;    ///< Flag if required fields should get a special css class to make them more visible to the user.
-    protected $htmlPage;              ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $countElements;         ///< Number of elements in this form
-    protected $datepickerInitialized; ///< Flag if datepicker is already initialized
-    protected $type;                  ///< Form type. Possible values are @b default, @b vertical or @b navbar.
-    protected $id;                    ///< Id of the form
-    protected $buttonGroupOpen;       ///< Flag that indicates if a bootstrap button-group is open and should be closed later
+    protected $flagRequiredFields = false;      ///< Flag if this form has required fields. Then a notice must be written at the end of the form
+    protected $flagFieldListOpen  = false;      ///< Flag if a field list was created. This must be closed later
+    protected $showRequiredFields;              ///< Flag if required fields should get a special css class to make them more visible to the user.
+    protected $htmlPage;                        ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $countElements         = 0;       ///< Number of elements in this form
+    protected $datepickerInitialized = false;   ///< Flag if datepicker is already initialized
+    protected $type;                            ///< Form type. Possible values are @b default, @b vertical or @b navbar.
+    protected $id;                              ///< Id of the form
+    protected $buttonGroupOpen = false;         ///< Flag that indicates if a bootstrap button-group is open and should be closed later
 
     /**
      * Constructor creates the form element
@@ -92,14 +92,9 @@ class HtmlForm extends HtmlFormBasic
 
         parent::__construct($action, $id, $optionsAll['method']);
 
-        $this->flagRequiredFields    = false;
-        $this->flagFieldListOpen     = false;
-        $this->showRequiredFields    = $optionsAll['showRequiredFields'];
-        $this->countElements         = 0;
-        $this->datepickerInitialized = false;
-        $this->type                  = $optionsAll['type'];
-        $this->id                    = $id;
-        $this->buttonGroupOpen       = false;
+        $this->showRequiredFields = $optionsAll['showRequiredFields'];
+        $this->type = $optionsAll['type'];
+        $this->id   = $id;
 
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');

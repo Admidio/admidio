@@ -26,21 +26,21 @@
  */
 class HtmlPage
 {
-    protected $title;           ///< The title for the html page and the headline for the Admidio content.
-    protected $header;          ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
-    protected $headline;        ///< The main headline for the html page.
-    protected $pageContent;     ///< Contains the custom html of the current page. This will be added to the default html of each page.
-    protected $menu;            ///< An object of the menu of this page
-    protected $showThemeHtml;   ///< If set to true then the custom html code of the theme for each page will be included.
-    protected $showMenu;        ///< If set to true then the menu will be included.
-    protected $hasNavbar;       ///< Flag if the current page has a navbar.
-    protected $showModal;       ///< If set to true then html code for a modal window will be included.
-    protected $cssFiles;        ///< An array with all necessary cascading style sheets files for the html page.
-    protected $jsFiles;         ///< An array with all necessary javascript files for the html page.
-    protected $rssFiles;        ///< An array with all necessary rss files for the html page.
-    protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
-    protected $javascriptContent; ///< Contains the custom javascript of the current page. This will be added to the header part of the page.
-    protected $javascriptContentExecute; ///< Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
+    protected $title         = '';              ///< The title for the html page and the headline for the Admidio content.
+    protected $header        = '';              ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
+    protected $headline      = '';              ///< The main headline for the html page.
+    protected $pageContent   = '';              ///< Contains the custom html of the current page. This will be added to the default html of each page.
+    protected $menu;                            ///< An object of the menu of this page
+    protected $showThemeHtml = true;            ///< If set to true then the custom html code of the theme for each page will be included.
+    protected $showMenu      = true;            ///< If set to true then the menu will be included.
+    protected $hasNavbar     = false;           ///< Flag if the current page has a navbar.
+    protected $showModal     = false;           ///< If set to true then html code for a modal window will be included.
+    protected $cssFiles      = array();         ///< An array with all necessary cascading style sheets files for the html page.
+    protected $jsFiles       = array();         ///< An array with all necessary javascript files for the html page.
+    protected $rssFiles      = array();         ///< An array with all necessary rss files for the html page.
+    protected $printMode     = false;           ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
+    protected $javascriptContent        = '';   ///< Contains the custom javascript of the current page. This will be added to the header part of the page.
+    protected $javascriptContentExecute = '';   ///< Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
 
     /**
      * Constructor creates the page object and initialized all parameters
@@ -48,20 +48,7 @@ class HtmlPage
      */
     public function __construct($headline = '')
     {
-        $this->title         = '';
-        $this->header        = '';
-        $this->headline      = '';
-        $this->pageContent   = '';
-        $this->menu          = new HtmlNavbar('menu_main_script', $headline, $this);
-        $this->showThemeHtml = true;
-        $this->showMenu      = true;
-        $this->showModal     = false;
-        $this->hasNavbar     = false;
-        $this->printMode     = false;
-        $this->javascriptContent        = '';
-        $this->javascriptContentExecute = '';
-        $this->cssFiles      = array();
-        $this->jsFiles       = array();
+        $this->menu = new HtmlNavbar('menu_main_script', $headline, $this);
 
         $this->setHeadline($headline);
 
@@ -69,7 +56,6 @@ class HtmlPage
         $this->addJavascriptFile('adm_program/libs/jquery/jquery.js');
         $this->addJavascriptFile('adm_program/system/js/common_functions.js');
         $this->addJavascriptFile('adm_program/libs/bootstrap/js/bootstrap.js');
-        $this->rssFiles = array();
     }
 
     /**

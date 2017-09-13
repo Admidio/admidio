@@ -16,16 +16,14 @@ class RoleDependency
 {
     protected $db;          ///< An object of the class Database for communication with the database
 
-    public $roleIdParent;
-    public $roleIdChild;
-    public $comment;
-    public $usr_id;
-    public $timestamp;
-
-    public $roleIdParentOrig;
-    public $roleIdChildOrig;
-
-    public $persisted;
+    public $roleIdParent = 0;
+    public $roleIdChild  = 0;
+    public $comment      = '';
+    public $usr_id       = 0;
+    public $timestamp    = '';
+    public $roleIdParentOrig = 0;
+    public $roleIdChildOrig  = 0;
+    public $persisted = false;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -34,7 +32,6 @@ class RoleDependency
     public function __construct(&$database)
     {
         $this->db =& $database;
-        $this->clear();
     }
 
     /**
@@ -47,10 +44,8 @@ class RoleDependency
         $this->comment          = '';
         $this->usr_id           = 0;
         $this->timestamp        = '';
-
         $this->roleIdParentOrig = 0;
         $this->roleIdChildOrig  = 0;
-
         $this->persisted        = false;
     }
 

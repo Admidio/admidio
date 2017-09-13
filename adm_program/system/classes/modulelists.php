@@ -166,7 +166,7 @@
  */
 class ModuleLists extends Modules
 {
-    private $memberStatus;
+    private $memberStatus = 'active';
 
     /**
      * creates an new ModuleLists object

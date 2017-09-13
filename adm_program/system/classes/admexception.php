@@ -72,7 +72,7 @@ class AdmException extends Exception
         $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => $this->params));
 
         // sicherstellen, dass alles korrekt zugewiesen wird
-        parent::__construct($message, 0);
+        parent::__construct($message);
     }
 
     /**

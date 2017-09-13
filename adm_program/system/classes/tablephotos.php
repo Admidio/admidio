@@ -38,8 +38,6 @@ class TablePhotos extends TableAccess
      */
     public function __construct(&$database, $phoId = 0)
     {
-        $this->hasChildAlbums = null;
-
         parent::__construct($database, TBL_PHOTOS, 'pho', $phoId);
     }
 
