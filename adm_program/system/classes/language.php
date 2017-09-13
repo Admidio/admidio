@@ -43,6 +43,15 @@ class Language
     private $xmlRefLanguageObjects = array();   ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
 
     /**
+     * Language constructor.
+     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
+     */
+    public function __construct(&$languageDataObject = null)
+    {
+        $this->languageData =& $languageDataObject;
+    }
+
+    /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
      * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
@@ -132,9 +141,13 @@ class Language
      */
     public function get($textId, $params = array())
     {
+        global $gLogger;
+
         if (!$this->languageData instanceof \LanguageData)
         {
-            return 'Error: ' . $this->languageData . ' is not an object!';
+            $gLogger->error('$this->languageData is not an instance of LanguageData!', array('languageData' => $this->languageData));
+
+            return 'Error: $this->languageData is not an instance of LanguageData!';
         }
 
         $text = $this->getTextFromTextId($textId);
