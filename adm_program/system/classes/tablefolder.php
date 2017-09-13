@@ -801,7 +801,7 @@ class TableFolder extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('fol_timestamp', DATETIME_NOW);
             $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));

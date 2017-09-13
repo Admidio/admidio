@@ -63,7 +63,7 @@ class TableText extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record && $this->getValue('txt_org_id') === '')
+        if ($this->newRecord && $this->getValue('txt_org_id') === '')
         {
             // Insert
             $this->setValue('txt_org_id', $gCurrentOrganization->getValue('org_id'));

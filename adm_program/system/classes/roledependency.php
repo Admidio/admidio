@@ -19,7 +19,7 @@ class RoleDependency
     public $roleIdParent = 0;
     public $roleIdChild  = 0;
     public $comment      = '';
-    public $usr_id       = 0;
+    public $usrId        = 0;
     public $timestamp    = '';
     public $roleIdParentOrig = 0;
     public $roleIdChildOrig  = 0;
@@ -42,7 +42,7 @@ class RoleDependency
         $this->roleIdParent     = 0;
         $this->roleIdChild      = 0;
         $this->comment          = '';
-        $this->usr_id           = 0;
+        $this->usrId            = 0;
         $this->timestamp        = '';
         $this->roleIdParentOrig = 0;
         $this->roleIdChildOrig  = 0;
@@ -90,7 +90,7 @@ class RoleDependency
             $this->roleIdChild      = $row->rld_rol_id_child;
             $this->comment          = $row->rld_comment;
             $this->timestamp        = $row->rld_timestamp;
-            $this->usr_id           = $row->rld_usr_id;
+            $this->usrId            = $row->rld_usr_id;
             $this->roleIdParentOrig = $row->rld_rol_id_parent;
             $this->roleIdChildOrig  = $row->rld_rol_id_child;
 

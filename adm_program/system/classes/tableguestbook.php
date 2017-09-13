@@ -107,7 +107,7 @@ class TableGuestbook extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('gbo_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);

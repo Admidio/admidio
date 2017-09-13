@@ -150,7 +150,7 @@ class TableFile extends TableAccess
     {
         global $gCurrentUser;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('fil_timestamp', DATETIME_NOW);
             $this->setValue('fil_usr_id', $gCurrentUser->getValue('usr_id'));

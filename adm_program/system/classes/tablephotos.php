@@ -210,7 +210,7 @@ class TablePhotos extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('pho_org_id', $gCurrentOrganization->getValue('org_id'));
         }

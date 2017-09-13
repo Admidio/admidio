@@ -59,7 +59,7 @@ class Session extends TableAccess
         {
             $this->readDataByColumns(array('ses_session_id' => $session));
 
-            if ($this->new_record)
+            if ($this->newRecord)
             {
                 // if PHP session id was commited then store them in that field
                 $this->setValue('ses_session_id', $session);
@@ -364,7 +364,7 @@ class Session extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             // Insert
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));

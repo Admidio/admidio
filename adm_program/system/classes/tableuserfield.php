@@ -356,7 +356,7 @@ class TableUserField extends TableAccess
         $fieldsChanged = $this->columnsValueChanged;
 
         // if new field than generate new name intern, otherwise no change will be made
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'database'), 1));
         }
