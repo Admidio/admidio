@@ -48,7 +48,7 @@ abstract class Modules
     protected $daterange  = array();            ///< Array with date settings in English format and system format
     protected $mode       = 'Default';          ///< String with current mode ( Default: "Default" )
     protected $order      = '';                 ///< String with order ASC/DESC ( Default: "ASC" )
-    protected $start      = '';                 ///< Integer for start element
+    protected $start      = 0;                  ///< Integer for start element
     protected $validModes = array('Default');   ///< Array with valid modes ( Default: "Default" )
     protected $parameters = array();            ///< Array with all parameters of the module that were added to this class.
     protected $properties;                      ///< Array Clone of $_GET Array
