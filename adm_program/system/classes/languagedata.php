@@ -32,11 +32,12 @@
  */
 class LanguageData
 {
+    const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
+
     public $textCache = array();         ///< Stores all read text data in an array to get quick access if a text is required several times
 
     private $languageFilePath = array(); ///< Array with all relevant language files
     private $language;                   ///< The ISO code of the language that should be read in this object
-    private $referenceLanguage = 'en';   ///< The ISO code of the default language that should be read if in the current language the text id is not translated
     private $countries = array();        ///< Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
 
     /**
@@ -61,7 +62,7 @@ class LanguageData
         if ($language === '')
         {
             // get browser language and set this language as default
-            $language = static::determineBrowserLanguage($this->referenceLanguage);
+            $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
 
         $this->setLanguage($language);
@@ -140,7 +141,7 @@ class LanguageData
     {
         if ($referenceLanguage)
         {
-            return $this->referenceLanguage;
+            return self::REFERENCE_LANGUAGE;
         }
 
         return $this->language;

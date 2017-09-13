@@ -103,7 +103,7 @@ class Language
         if ($text === '')
         {
             // search for text id in every SimpleXMLElement (language file) of the object array
-            $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this->languageData->getLanguage(true), $textId);
+            $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
         }
 
         return $text;
@@ -187,8 +187,8 @@ class Language
             return $countries;
         }
 
-        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage()     . '.xml';
-        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage(true) . '.xml';
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage() . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
         if (is_file($langFile))
         {
             $file = $langFile;
