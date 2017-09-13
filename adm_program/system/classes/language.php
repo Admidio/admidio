@@ -90,14 +90,15 @@ class Language
      */
     private function getTextFromTextId($textId)
     {
-        // first read text from cache if it exists there
-        if (array_key_exists($textId, $this->languageData->textCache))
-        {
-            return $this->languageData->textCache[$textId];
-        }
+        // first search text id in text-cache
+        $text = $this->languageData->getTextCache($textId);
 
-        // search for text id in every SimpleXMLElement (language file) of the object array
-        $text = $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+        // if text id wasn't found than search for it in language
+        if ($text === '')
+        {
+            // search for text id in every SimpleXMLElement (language file) of the object array
+            $text = $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+        }
 
         // if text id wasn't found than search for it in reference language
         if ($text === '')
@@ -362,7 +363,7 @@ class Language
                 // Within Android string resource all apostrophe are escaped so we must remove the escape char
                 // replace highly comma, so there are no problems in the code later
                 $text = str_replace(array('\\n', '\\\'', '\''), array('<br />', '\'', '&rsquo;'), $node[0]);
-                $this->languageData->textCache[$textId] = $text;
+                $this->languageData->setTextCache($textId, $text);
 
                 return $text;
             }

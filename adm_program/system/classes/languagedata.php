@@ -34,11 +34,10 @@ class LanguageData
 {
     const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
 
-    public $textCache = array();         ///< Stores all read text data in an array to get quick access if a text is required several times
-
     private $languageFilePath = array(); ///< Array with all relevant language files
     private $language;                   ///< The ISO code of the language that should be read in this object
     private $countries = array();        ///< Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+    private $textCache = array();        ///< Stores all read text data in an array to get quick access if a text is required several times
 
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
@@ -161,6 +160,20 @@ class LanguageData
     }
 
     /**
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @return string Returns the cached text or empty string if text id isn't found
+     */
+    public function getTextCache($textId)
+    {
+        if (array_key_exists($textId, $this->textCache))
+        {
+            return $this->textCache[$textId];
+        }
+
+        return '';
+    }
+
+    /**
      * Save the array with all countries and their ISO codes in an internal parameter for later use
      * @param string[] $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
@@ -183,5 +196,15 @@ class LanguageData
 
             $this->language = $language;
         }
+    }
+
+    /**
+     * Sets a new text into the text-cache
+     * @param string $textId Unique text id where to set the text e.g. SYS_COMMON
+     * @param string $text   The text to cache
+     */
+    public function setTextCache($textId, $text)
+    {
+        $this->textCache[$textId] = $text;
     }
 }
