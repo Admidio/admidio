@@ -192,17 +192,14 @@ class ModuleLists extends Modules
         switch ($this->memberStatus)
         {
             case 'inactive':
-                $sql = ' AND mem_end < \''.DATE_NOW.'\' ';
-                break;
+                return ' AND mem_end < \''.DATE_NOW.'\' ';
             case 'both':
-                $sql ='';
-                break;
+                return '';
             case 'active':
             default:
-                $sql = ' AND mem_begin <= \''.DATE_NOW.'\'
+                return ' AND mem_begin <= \''.DATE_NOW.'\'
                          AND mem_end   >= \''.DATE_NOW.'\' ';
         }
-        return $sql;
     }
 
     /**
