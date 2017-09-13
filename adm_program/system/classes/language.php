@@ -37,10 +37,10 @@
  */
 class Language
 {
-    private $languageData;                  ///< An object of the class @b LanguageData that stores all necessary language data in a session
-    private $languages = array();           ///< An Array with all available languages and their ISO codes
-    private $xmlLanguageObjects = array();  ///< An array with all SimpleXMLElement object of the language from all paths that are set in @b $languageData.
-    private $xmlReferenceLanguageObjects = array(); ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+    private $languageData;                      ///< An object of the class @b LanguageData that stores all necessary language data in a session
+    private $languages = array();               ///< An Array with all available languages and their ISO codes
+    private $xmlLanguageObjects    = array();   ///< An array with all SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+    private $xmlRefLanguageObjects = array();   ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
 
     /**
      * Adds a language data object to this class. The object contains all necessary
@@ -63,42 +63,50 @@ class Language
     }
 
     /**
-     * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
-     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param SimpleXMLElement[] $xmlLanguageObjects SimpleXMLElement array of each language path is stored
+     * @param string             $language           Language code
+     * @param string             $textId             Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id or empty string if not found.
      */
-    protected function getTextFromTextId($textId)
+    private function searchTextIdInLangObject(array $xmlLanguageObjects, $language, $textId)
     {
-        // first read text from cache if it exists there
-        if(array_key_exists($textId, $this->languageData->textCache))
+        foreach ($this->languageData->getLanguagePaths() as $languagePath)
         {
-            return $this->languageData->textCache[$textId];
-        }
+            $text = $this->searchLanguageText($xmlLanguageObjects, $languagePath, $language, $textId);
 
-        // search for text id in every SimpleXMLElement (language file) of the object array
-        foreach($this->languageData->getLanguagePaths() as $languagePath)
-        {
-            $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
-
-            if($text !== '')
-            {
-                return $text;
-            }
-        }
-
-        // if text id wasn't found than search for it in reference language
-        // search for text id in every SimpleXMLElement (language file) of the object array
-        foreach($this->languageData->getLanguagePaths() as $languagePath)
-        {
-            $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
-
-            if($text !== '')
+            if ($text !== '')
             {
                 return $text;
             }
         }
 
         return '';
+    }
+
+    /**
+     * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @return string Returns the text string of the text id or empty string if not found.
+     */
+    private function getTextFromTextId($textId)
+    {
+        // first read text from cache if it exists there
+        if (array_key_exists($textId, $this->languageData->textCache))
+        {
+            return $this->languageData->textCache[$textId];
+        }
+
+        // search for text id in every SimpleXMLElement (language file) of the object array
+        $text = $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+
+        // if text id wasn't found than search for it in reference language
+        if ($text === '')
+        {
+            // search for text id in every SimpleXMLElement (language file) of the object array
+            $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this->languageData->getLanguage(true), $textId);
+        }
+
+        return $text;
     }
 
     /**
@@ -118,7 +126,7 @@ class Language
      *                echo $gL10n->get('SYS_NUMBER');
      *
      * // display a text with placeholders for individual content
-     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Administrator');
+     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', ['John Doe', 'Demo-Organization', 'Administrator']);
      * @endcode
      */
     public function get($textId, $params = array())
@@ -354,8 +362,8 @@ class Language
         if($language !== $this->languageData->getLanguage())
         {
             // initialize data
-            $this->xmlLanguageObjects = array();
-            $this->xmlReferenceLanguageObjects = array();
+            $this->xmlLanguageObjects    = array();
+            $this->xmlRefLanguageObjects = array();
 
             $this->languageData->setLanguage($language);
         }
