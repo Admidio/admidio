@@ -263,7 +263,16 @@ class Language
      */
     public function getLanguageIsoCode($referenceLanguage = false)
     {
-        $language = $this->languageData->getLanguage($referenceLanguage);
+        global $gLogger;
+
+        if ($referenceLanguage)
+        {
+            $gLogger->warning('DEPRECATED: "$language->getLanguageIsoCode(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
+            return LanguageData::REFERENCE_LANGUAGE;
+        }
+
+        $language = $this->languageData->getLanguage();
 
         if($language === 'de_sie')
         {
@@ -281,7 +290,16 @@ class Language
      */
     public function getLanguage($referenceLanguage = false)
     {
-        return $this->languageData->getLanguage($referenceLanguage);
+        global $gLogger;
+
+        if ($referenceLanguage)
+        {
+            $gLogger->warning('DEPRECATED: "$language->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
+            return LanguageData::REFERENCE_LANGUAGE;
+        }
+
+        return $this->languageData->getLanguage();
     }
 
     /**

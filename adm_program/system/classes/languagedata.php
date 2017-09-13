@@ -139,8 +139,12 @@ class LanguageData
      */
     public function getLanguage($referenceLanguage = false)
     {
+        global $gLogger;
+
         if ($referenceLanguage)
         {
+            $gLogger->warning('DEPRECATED: "$languageData->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
             return self::REFERENCE_LANGUAGE;
         }
 
