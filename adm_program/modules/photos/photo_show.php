@@ -65,21 +65,19 @@ $picThumbPath = $albumFolder . '/thumbnails/' . $getPhotoNr . '.jpg';
 // im Debug-Modus den ermittelten Bildpfad ausgeben
 $gLogger->info('ImagePath: ' . $picPath);
 
-// Wenn Thumbnail existiert laengere Seite ermitteln
 if ($getThumbnail)
 {
     if ($getPhotoNr > 0)
     {
-        $thumbLength = 1;
+        $thumbLength = null;
+
+        // Wenn Thumbnail existiert laengere Seite ermitteln
         if (is_file($picThumbPath))
         {
-            // Ermittlung der Original Bildgroesse
-            $imageSize = getimagesize($picThumbPath);
-
-            $thumbLength = $imageSize[1];
-            if ($imageSize[0] > $imageSize[1])
+            $imageProperties = getimagesize($picThumbPath);
+            if (is_array($imageProperties))
             {
-                $thumbLength = $imageSize[0];
+                $thumbLength = max($imageProperties[0], $imageProperties[1]);
             }
         }
 

@@ -205,7 +205,7 @@ elseif($getMode === 'upload')
 
     // File ending
     $imageProperties = getimagesize($_FILES['userfile']['tmp_name'][0]);
-    if ($imageProperties['mime'] !== 'image/jpeg' && $imageProperties['mime'] !== 'image/png')
+    if ($imageProperties === false || !in_array($imageProperties['mime'], array('image/jpeg', 'image/png'), true))
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
         // => EXIT

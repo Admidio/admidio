@@ -58,19 +58,24 @@ class Image
      */
     public function setImageFromPath($pathAndFilename)
     {
-        if(is_file($pathAndFilename))
+        if (is_file($pathAndFilename))
         {
             $this->imagePath = $pathAndFilename;
-            $properties = getimagesize($this->imagePath);
-            $this->imageWidth  = $properties[0];
-            $this->imageHeight = $properties[1];
-            $this->imageType   = $properties[2];
+            $imageProperties = getimagesize($this->imagePath);
 
-            if($this->createResource($pathAndFilename))
+            if (is_array($imageProperties))
             {
-                return true;
+                $this->imageWidth  = $imageProperties[0];
+                $this->imageHeight = $imageProperties[1];
+                $this->imageType   = $imageProperties[2];
+
+                if ($this->createResource($pathAndFilename))
+                {
+                    return true;
+                }
             }
         }
+
         return false;
     }
 
@@ -81,12 +86,14 @@ class Image
      */
     public function setImageFromData($imageData)
     {
-        $this->imageResource = imagecreatefromstring($imageData);
+        $imageResource = imagecreatefromstring($imageData);
 
-        if($this->imageResource === false)
+        if ($imageResource === false)
         {
             return false;
         }
+
+        $this->imageResource = $imageResource;
 
         $this->imageWidth  = imagesx($this->imageResource);
         $this->imageHeight = imagesy($this->imageResource);
