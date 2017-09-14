@@ -39,8 +39,6 @@
  */
 abstract class Modules
 {
-    const HEADLINE = '';                        ///< Constant for language parameter set in module classes
-
     protected $activeRole = false;              ///< Boolean false/true for active role
     protected $headline   = '';                 ///< String with headline expression
     protected $catId      = 0;                  ///< ID as integer for chosen category

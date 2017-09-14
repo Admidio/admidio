@@ -174,8 +174,8 @@ class RoleDependency
         if ($loginUserId > 0 && !$this->isEmpty())
         {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
-                                (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES (?,?,?,?,?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
+                                (rld_rol_id_parent, rld_rol_id_child, rld_comment, rld_usr_id, rld_timestamp)
+                         VALUES (?, ?, ?, ?, ?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
             $queryParams = array($this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW);
             $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;

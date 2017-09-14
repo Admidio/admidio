@@ -39,7 +39,7 @@ class Inventory extends TableInventory
      *                                          of the current organization. This could be the default object @b $gProfileFields.
      * @param int              $itemId          The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
-    public function __construct(&$database, $inventoryFields, $itemId = 0)
+    public function __construct(&$database, InventoryFields $inventoryFields, $itemId = 0)
     {
         global $gCurrentOrganization;
 

@@ -192,8 +192,8 @@ class Participants
                  WHERE mem_rol_id = ? -- $this->rolId
               ORDER BY surname '.$this->order;
         $queryParams = array(
-            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             $this->rolId
         );
         $membersStatement = $this->mDb->queryPrepared($sql, $queryParams);

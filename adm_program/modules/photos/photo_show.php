@@ -83,7 +83,7 @@ if ($getThumbnail)
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if (!is_file($picThumbPath) || $thumbLength != $gPreferences['photo_thumbs_scale'])
+        if (!is_file($picThumbPath) || $thumbLength !== (int) $gPreferences['photo_thumbs_scale'])
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if (!is_dir($albumFolder . '/thumbnails'))
