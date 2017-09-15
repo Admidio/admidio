@@ -85,7 +85,7 @@ if(isset($_SESSION['profile_request']))
 {
     $inventory->noValueCheck();
 
-    foreach($gInventoryFields->mInventoryFields as $field)
+    foreach($gInventoryFields->getInventoryFields() as $field)
     {
         $fieldName = 'inf-'. $field->getValue('inf_id');
         if(isset($_SESSION['profile_request'][$fieldName]))
@@ -126,7 +126,7 @@ $form = new HtmlForm('edit_item_form', ADMIDIO_URL.FOLDER_MODULES.'/inventory/it
 
 $category = '';
 
-foreach($gInventoryFields->mInventoryFields as $field)
+foreach($gInventoryFields->getInventoryFields() as $field)
 {
 
     // Kategorienwechsel den Kategorienheader anzeigen

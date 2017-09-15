@@ -195,7 +195,7 @@ $page->addHtml('
 
             // Schleife ueber alle Felder der Stammdaten
 
-            foreach($gInventoryFields->mInventoryFields as $field)
+            foreach($gInventoryFields->getInventoryFields() as $field)
             {
                 // nur Felder der Stammdaten anzeigen
                 if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $field->getValue('inv_hidden') == 0)

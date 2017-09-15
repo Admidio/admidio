@@ -19,13 +19,12 @@
  */
 class InventoryFields
 {
-    public $mInventoryFields = array();     ///< Array with all inventory fields objects
-    public $mInventoryData   = array();     ///< Array with all inventory data objects
-
-    public $mDb;                            ///< db object must public because of session handling
-    public $columnsValueChanged = false;    ///< flag if a value of one field had changed
-    protected $mItemId      = 0;            ///< ItemId of the current item of this object
-    protected $noValueCheck = false;        ///< if true, than no value will be checked if method setValue is called
+    protected $mDb;                         ///< db object must public because of session handling
+    protected $columnsValueChanged = false; ///< flag if a value of one field had changed
+    protected $noValueCheck     = false;    ///< if true, than no value will be checked if method setValue is called
+    protected $mInventoryFields = array();  ///< Array with all inventory fields objects
+    protected $mInventoryData   = array();  ///< Array with all inventory data objects
+    protected $mItemId          = 0;        ///< ItemId of the current item of this object
 
     /**
      * constructor that will initialize variables and read the inventory field structure
@@ -44,9 +43,25 @@ class InventoryFields
      */
     public function clearInventoryData()
     {
-        $this->mInventoryData = array();
         $this->columnsValueChanged = false;
+        $this->mInventoryData = array();
         $this->mItemId = 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInventoryFields()
+    {
+        return $this->mInventoryFields;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return $this->columnsValueChanged;
     }
 
     /**
