@@ -22,12 +22,12 @@
  */
 class Participants
 {
-    private $count  = -1;       ///< Counter of participants of the date in current object.
-    private $leader = -1;       ///< The number of leaders of the date in the current object
-    private $rolId  = -1;       ///< RolId of the current date of this object.
-    private $order  = '';       ///< SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
-    public $memberDate = '';    ///< Array with surname, firstname of all participants of the date in current object.
-    public $mDb;                ///< db object must public because of session handling
+    private $count  = -1;           ///< Counter of participants of the date in current object.
+    private $leader = -1;           ///< The number of leaders of the date in the current object
+    private $rolId  = -1;           ///< RolId of the current date of this object.
+    private $order  = '';           ///< SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
+    private $memberDate = array();  ///< Array with surname, firstname of all participants of the date in current object.
+    private $mDb;                   ///< db object must public because of session handling
 
     /**
      * Constructor that will initialize variables and check if $rolId is numeric
@@ -67,7 +67,7 @@ class Participants
         $this->leader     = -1;
         $this->rolId      = -1;
         $this->order      = '';
-        $this->memberDate = '';
+        $this->memberDate = array();
     }
 
     /**

@@ -50,7 +50,7 @@ abstract class Modules
     protected $validModes = array('Default');   ///< Array with valid modes ( Default: "Default" )
     protected $parameters = array();            ///< Array with all parameters of the module that were added to this class.
     protected $properties;                      ///< Array Clone of $_GET Array
-    public $arrParameter = array();             ///< Array with validated parameters
+    protected $arrParameter = array();          ///< Array with validated parameters
 
     /**
      * @param int $startElement

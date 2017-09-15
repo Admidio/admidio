@@ -560,7 +560,7 @@ class User extends TableAccess
      * returns true if a column of user table or profile fields has changed
      * @return bool
      */
-    public function columnsValueChanged()
+    public function hasColumnsValueChanged()
     {
         return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
     }
@@ -1914,5 +1914,19 @@ class User extends TableAccess
         $gLogger->warning('DEPRECATED: "$user->isWebmaster()" is deprecated, use "$user->isAdministrator()" instead!');
 
         return $this->isAdministrator();
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @deprecated 3.3.0:4.0.0 Use Method hasColumnsValueChanged() instead
+     * @return bool
+     */
+    public function columnsValueChanged()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$user->columnsValueChanged()" is deprecated, use "$user->hasColumnsValueChanged()" instead!');
+
+        return $this->hasColumnsValueChanged();
     }
 }
