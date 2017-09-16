@@ -36,10 +36,10 @@ class TableAccess
     protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
     protected $db;                  ///< An object of the class Database for communication with the database
 
-    protected $newRecord;           // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    protected $columnsValueChanged; ///< Flag will be set to true if data in array dbColumns was changed
-    public $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
-    public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    protected $newRecord;              // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+    protected $columnsValueChanged;    ///< Flag will be set to true if data in array dbColumns was changed
+    protected $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+    protected $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
 
     /**
      * Constructor that will create an object of a recordset of the specified table.

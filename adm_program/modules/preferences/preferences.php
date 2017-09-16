@@ -29,7 +29,7 @@ if(!$gCurrentUser->isAdministrator())
 }
 
 // read organization and all system preferences values into form array
-$formValues = array_merge($gCurrentOrganization->dbColumns, $gPreferences);
+$formValues = array_merge($gCurrentOrganization->getDbColumns(), $gPreferences);
 
 // create html page object
 $page = new HtmlPage($headline);
