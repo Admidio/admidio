@@ -29,7 +29,7 @@ if (ADMIDIO_VERSION_BETA > 0)
 }
 
 // if safe mode is used then show a notice to the user
-// deprecated: Remove if PHP 5.3 dropped
+// TODO deprecated: Remove if PHP 5.3 dropped
 if (ini_get('safe_mode') === '1')
 {
     $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');

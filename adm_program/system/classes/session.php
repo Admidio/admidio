@@ -59,7 +59,7 @@ class Session extends TableAccess
         {
             $this->readDataByColumns(array('ses_session_id' => $session));
 
-            if ($this->new_record)
+            if ($this->newRecord)
             {
                 // if PHP session id was commited then store them in that field
                 $this->setValue('ses_session_id', $session);
@@ -364,7 +364,7 @@ class Session extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             // Insert
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
@@ -419,11 +419,18 @@ class Session extends TableAccess
      */
     public static function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
-        global $gLogger;
+        global $gLogger, $gSetCookieForDomain;
 
         if ($path === '')
         {
-            $path = ADMIDIO_URL_PATH . '/';
+            if($gSetCookieForDomain)
+            {
+                $path = '/';
+            }
+            else
+            {
+                $path = ADMIDIO_URL_PATH . '/';
+            }
         }
         if ($domain === '')
         {
@@ -470,16 +477,23 @@ class Session extends TableAccess
      */
     public static function start($name, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
-        global $gLogger;
+        global $gLogger, $gSetCookieForDomain;
 
         // Set the cookie name
         session_name($name . '_PHP_SESSION_ID');
 
-        // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_URL_PATH . '/';
+            if($gSetCookieForDomain)
+            {
+                $path = '/';
+            }
+            else
+            {
+                $path = ADMIDIO_URL_PATH . '/';
+            }
         }
+
         if ($domain === '')
         {
             $domain = DOMAIN;

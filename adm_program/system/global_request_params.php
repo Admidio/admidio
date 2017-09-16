@@ -25,7 +25,7 @@ $_POST   = admStrStripTagsSpecial($_POST);
 $_COOKIE = admStrStripTagsSpecial($_COOKIE);
 
 // escape all quotes so db queries are save
-// deprecated
+// TODO deprecated: Remove in Admidio 4.0
 if(!get_magic_quotes_gpc())
 {
     $_GET    = strAddSlashesDeep($_GET);

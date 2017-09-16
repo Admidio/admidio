@@ -19,13 +19,12 @@
  */
 class InventoryFields
 {
-    public $mInventoryFields = array(); ///< Array with all inventory fields objects
-    public $mInventoryData = array();   ///< Array with all inventory data objects
-
-    protected $mItemId;                 ///< ItemId of the current item of this object
-    public $mDb;                        ///< db object must public because of session handling
-    protected $noValueCheck;            ///< if true, than no value will be checked if method setValue is called
-    public $columnsValueChanged;        ///< flag if a value of one field had changed
+    protected $mDb;                         ///< db object must public because of session handling
+    protected $columnsValueChanged = false; ///< flag if a value of one field had changed
+    protected $noValueCheck     = false;    ///< if true, than no value will be checked if method setValue is called
+    protected $mInventoryFields = array();  ///< Array with all inventory fields objects
+    protected $mInventoryData   = array();  ///< Array with all inventory data objects
+    protected $mItemId          = 0;        ///< ItemId of the current item of this object
 
     /**
      * constructor that will initialize variables and read the inventory field structure
@@ -37,9 +36,6 @@ class InventoryFields
     {
         $this->mDb =& $database;
         $this->readInventoryFields($organizationId);
-        $this->mItemId = 0;
-        $this->noValueCheck = false;
-        $this->columnsValueChanged = false;
     }
 
     /**
@@ -47,9 +43,25 @@ class InventoryFields
      */
     public function clearInventoryData()
     {
+        $this->columnsValueChanged = false;
         $this->mInventoryData = array();
         $this->mItemId = 0;
-        $this->columnsValueChanged = false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInventoryFields()
+    {
+        return $this->mInventoryFields;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return $this->columnsValueChanged;
     }
 
     /**

@@ -86,7 +86,7 @@ class AutoLogin extends TableAccess
         $this->setValue('atl_last_login', DATETIME_NOW);
         $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             // Insert
             $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));

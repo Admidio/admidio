@@ -38,8 +38,6 @@ class TablePhotos extends TableAccess
      */
     public function __construct(&$database, $phoId = 0)
     {
-        $this->hasChildAlbums = null;
-
         parent::__construct($database, TBL_PHOTOS, 'pho', $phoId);
     }
 
@@ -212,7 +210,7 @@ class TablePhotos extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('pho_org_id', $gCurrentOrganization->getValue('org_id'));
         }

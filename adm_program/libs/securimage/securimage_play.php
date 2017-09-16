@@ -45,10 +45,6 @@ $options = array(
     'database_driver' => Securimage::SI_DRIVER_MYSQL
 );
 
-// ***** START ADMIDIO CODE *****
-require_once('../../system/common.php');
-// ***** END ADMIDIO CODE *****
-
 $img = new Securimage();
 
 

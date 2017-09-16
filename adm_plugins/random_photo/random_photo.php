@@ -132,9 +132,6 @@ if(!is_file($picPath))
     $picPath = THEME_ADMIDIO_PATH . '/images/nopix.jpg';
 }
 
-// Ermittlung der Original Bildgroesse
-$bildgroesse = getimagesize($picPath);
-
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {
     // Linktext umbrechen wenn noetig

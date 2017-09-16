@@ -16,16 +16,14 @@ class RoleDependency
 {
     protected $db;          ///< An object of the class Database for communication with the database
 
-    public $roleIdParent;
-    public $roleIdChild;
-    public $comment;
-    public $usr_id;
-    public $timestamp;
-
-    public $roleIdParentOrig;
-    public $roleIdChildOrig;
-
-    public $persisted;
+    public $roleIdParent = 0;
+    public $roleIdChild  = 0;
+    public $comment      = '';
+    public $usrId        = 0;
+    public $timestamp    = '';
+    public $roleIdParentOrig = 0;
+    public $roleIdChildOrig  = 0;
+    public $persisted = false;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -34,7 +32,6 @@ class RoleDependency
     public function __construct(&$database)
     {
         $this->db =& $database;
-        $this->clear();
     }
 
     /**
@@ -45,12 +42,10 @@ class RoleDependency
         $this->roleIdParent     = 0;
         $this->roleIdChild      = 0;
         $this->comment          = '';
-        $this->usr_id           = 0;
+        $this->usrId            = 0;
         $this->timestamp        = '';
-
         $this->roleIdParentOrig = 0;
         $this->roleIdChildOrig  = 0;
-
         $this->persisted        = false;
     }
 
@@ -95,7 +90,7 @@ class RoleDependency
             $this->roleIdChild      = $row->rld_rol_id_child;
             $this->comment          = $row->rld_comment;
             $this->timestamp        = $row->rld_timestamp;
-            $this->usr_id           = $row->rld_usr_id;
+            $this->usrId            = $row->rld_usr_id;
             $this->roleIdParentOrig = $row->rld_rol_id_parent;
             $this->roleIdChildOrig  = $row->rld_rol_id_child;
 
@@ -179,8 +174,8 @@ class RoleDependency
         if ($loginUserId > 0 && !$this->isEmpty())
         {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
-                                (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES (?,?,?,?,?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
+                                (rld_rol_id_parent, rld_rol_id_child, rld_comment, rld_usr_id, rld_timestamp)
+                         VALUES (?, ?, ?, ?, ?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
             $queryParams = array($this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW);
             $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;

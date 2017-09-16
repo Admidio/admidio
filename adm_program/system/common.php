@@ -56,9 +56,6 @@ else
     $gSessionId = session_id();
 }
 
-// create language object to handle translation texts
-$gL10n = new Language();
-
 // Session handling
 if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization'))
 {
@@ -71,7 +68,7 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
     $gSystemComponent =& $gCurrentSession->getObject('gSystemComponent');
     // read language data from session and assign them to the language object
     $gLanguageData =& $gCurrentSession->getObject('gLanguageData');
-    $gL10n->addLanguageData($gLanguageData);
+    $gL10n = new Language($gLanguageData);
     // read organization data from session object
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gPreferences = $gCurrentOrganization->getPreferences();
@@ -111,7 +108,7 @@ else
 
     // create a language data object and assign it to the language object
     $gLanguageData = new LanguageData($gPreferences['system_language']);
-    $gL10n->addLanguageData($gLanguageData);
+    $gL10n = new Language($gLanguageData);
     $gCurrentSession->addObject('gLanguageData', $gLanguageData);
 
     // delete old entries in session table
@@ -189,8 +186,8 @@ if(!array_key_exists('theme', $gPreferences))
 
 define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
 define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gPreferences['theme']);
-define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // Deprecated
-define('THEME_PATH', THEME_URL); // Deprecated
+define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // TODO deprecated: Remove in Admidio 4.0
+define('THEME_PATH', THEME_URL); // TODO deprecated: Remove in Admidio 4.0
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();

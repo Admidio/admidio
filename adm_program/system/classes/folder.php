@@ -29,15 +29,13 @@
  */
 class Folder
 {
-    protected $folderWithPath;
+    protected $folderWithPath = '';
 
     /**
      * @param string $folderWithPath
      */
     public function __construct($folderWithPath = '')
     {
-        $this->folderWithPath = '';
-
         if($folderWithPath !== '' && is_dir($folderWithPath))
         {
             $this->folderWithPath = $folderWithPath;

@@ -4,9 +4,8 @@ Short description to update the current lib
 2. Update all files in the current folder
    EXCEPT the following files:
     securimage_show.php
-    securimage_play.php
     config.inc.php
 3. Delete the following files:
     example_form.ajax.php
     example_form.php
-4. Delete folder „audio“ because we don’t implement it and it uses much space
+4. Delete folder "audio" because we don’t implement it and it uses much space

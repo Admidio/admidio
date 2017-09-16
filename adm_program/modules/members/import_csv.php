@@ -245,7 +245,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                 ++$countImportNewUser;
             }
             // existing users count as edited if mode is displace or complete
-            elseif($maxUserId > 0 && $user->columnsValueChanged())
+            elseif($maxUserId > 0 && $user->hasColumnsValueChanged())
             {
                 ++$countImportEditUser;
             }

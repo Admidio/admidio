@@ -33,7 +33,7 @@
  */
 class UserRegistration extends User
 {
-    private $sendEmail; ///< Flag if the object will send a SystemMail if registration is accepted or deleted.
+    private $sendEmail = true;  ///< Flag if the object will send a SystemMail if registration is accepted or deleted.
     private $tableRegistration;
 
     /**
@@ -50,8 +50,6 @@ class UserRegistration extends User
     public function __construct(&$database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
     {
         global $gCurrentOrganization;
-
-        $this->sendEmail = true;
 
         parent::__construct($database, $userFields, $userId);
 

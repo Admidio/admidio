@@ -29,9 +29,9 @@
 class ModuleMenu
 {
     protected $id;
-    protected $items;
-    protected $ddItemCnt;
-    protected $customCssClass;
+    protected $items          = array();
+    protected $ddItemCnt      = 0;
+    protected $customCssClass = '';
     protected $maxMenuLinkItem;
     protected $ddJS;
 
@@ -42,10 +42,7 @@ class ModuleMenu
      */
     public function __construct($id, $maxMenuLinkItem = 6)
     {
-        $this->id        = $id;
-        $this->items     = array();
-        $this->ddItemCnt = 0;
-        $this->customCssClass  = '';
+        $this->id = $id;
         $this->maxMenuLinkItem = $maxMenuLinkItem;
     }
 

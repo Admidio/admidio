@@ -119,7 +119,7 @@ class TableMembers extends TableAccess
         if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             // Beginn nicht ueberschreiben, wenn schon existiert
-            if ($this->new_record || strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0)
+            if ($this->newRecord || strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0)
             {
                 $this->setValue('mem_begin', DATE_NOW);
             }
@@ -127,7 +127,7 @@ class TableMembers extends TableAccess
             // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
             if ($leader === null)
             {
-                if ($this->new_record)
+                if ($this->newRecord)
                 {
                     $this->setValue('mem_leader', false);
                 }
@@ -181,7 +181,7 @@ class TableMembers extends TableAccess
             $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
         }
 
-        if (!$this->new_record && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
+        if (!$this->newRecord && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             // subtract one day, so that user leaves role immediately
             $now = new DateTime();

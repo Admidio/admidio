@@ -18,10 +18,6 @@
  * You can define the class names and the row number for line change.
  * CSS classes are needed using this option for class change !
  * This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
- * @par Notice
- * Tables should be styled by CSS !
- * Attributes, like 'align', 'bgcolor',... are worse style,
- * and deprecated in HTML5. Please check the reference.
  * @par Data array for example
  * @code
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
@@ -111,14 +107,14 @@
  */
 class HtmlTableBasic extends HtmlElement
 {
-    protected $border;                   ///< String with border attribute and value of the table
-    protected $rowClasses;               ///< Class names to design table rows
-    protected $columnsWidth;             ///< Array with values for the columns width
-    protected $thead;                    ///< Internal Flag for setted thead element
-    protected $tfoot;                    ///< Internal Flag for setted tfoot element
-    protected $tbody;                    ///< Internal Flag for setted tbody element
-    protected $columnCount;              ///< Counter for setted columns
-    protected $rowCount;                 ///< Counter for setted rows in body element
+    protected $border;                  ///< String with border attribute and value of the table
+    protected $rowClasses   = array();  ///< Class names to design table rows
+    protected $columnsWidth = array();  ///< Array with values for the columns width
+    protected $thead        = false;    ///< Internal Flag for setted thead element
+    protected $tfoot        = false;    ///< Internal Flag for setted tfoot element
+    protected $tbody        = false;    ///< Internal Flag for setted tbody element
+    protected $columnCount  = 0;        ///< Counter for setted columns
+    protected $rowCount     = 0;        ///< Counter for setted rows in body element
 
     /**
      * Constructor initializing all class variables
@@ -128,14 +124,7 @@ class HtmlTableBasic extends HtmlElement
      */
     public function __construct($id = null, $class = null, $border = 0)
     {
-        $this->border       = $border;
-        $this->rowClasses   = array();
-        $this->columnsWidth = array();
-        $this->thead        = false;
-        $this->tfoot        = false;
-        $this->tbody        = false;
-        $this->columnCount  = 0;
-        $this->rowCount     = 0;
+        $this->border = $border;
 
         parent::__construct('table');
 

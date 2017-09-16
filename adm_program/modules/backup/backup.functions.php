@@ -49,7 +49,7 @@ function FunctionIsDisabled($function)
         {
             $DisabledFunctions[$value] = 'global';
         }
-        // deprecated: Remove if PHP 5.3 dropped
+        // TODO deprecated: Remove if PHP 5.3 dropped
         if (@ini_get('safe_mode'))
         {
             $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');

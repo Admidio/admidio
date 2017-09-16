@@ -45,12 +45,12 @@ define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
 // BASIC STUFF
 // https://secure.php.net/manual/en/reserved.variables.server.php => $_SERVER['HTTPS']
 define('SCHEME', parse_url($g_root_path, PHP_URL_SCHEME)); // get SCHEME out of $g_root_path because server doesn't have this info if ssl proxy is used
-define('HTTPS', (SCHEME === 'https') ? true : false); // true | false
+define('HTTPS', SCHEME === 'https'); // true | false
 define('PORT', (int) $_SERVER['SERVER_PORT']); // 443 | 80
 
 $port = (PORT === 80 || PORT === 443) ? '' : ':' . PORT; // :1234
 
-if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']))
+if(isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SERVER'] !== $_SERVER['HTTP_HOST'])
 {
     // if ssl proxy is used than this proxy is the host and the cookie must be set for this
     define('HOST', $_SERVER['HTTP_X_FORWARDED_SERVER'] . $port . '/' . $_SERVER['HTTP_HOST']); // ssl.example.org/my.domain.net
@@ -156,6 +156,7 @@ define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN
 // ###  DEPRECATED  ###
 // ####################
 
+// TODO deprecated: Remove in Admidio 4.0
 define('SERVER_PATH', ADMIDIO_PATH);
 
 // Define Constants for PHP 5.3

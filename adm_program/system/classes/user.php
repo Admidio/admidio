@@ -19,7 +19,7 @@ class User extends TableAccess
     protected $administrator;
 
     public $mProfileFieldsData;                   ///< object with current user field structure
-    protected $rolesRights = array();             ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+    protected $rolesRights     = array();         ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
     protected $listViewRights  = array();         ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $listMailRights  = array();         ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $rolesMembership = array();         ///< Array with all roles who the user is assigned
@@ -29,7 +29,7 @@ class User extends TableAccess
     protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
     protected $saveChangesWithoutRights;          ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
     protected $usersEditAllowed = array();        ///< Array with all user ids where the current user is allowed to edit the profile.
-    protected $relationships = array();           ///< Array with all users to whom the current user has a relationship
+    protected $relationships    = array();        ///< Array with all users to whom the current user has a relationship
     protected $relationshipsChecked = false;      ///< Flag if relationships for this user were checked
 
     /**
@@ -560,7 +560,7 @@ class User extends TableAccess
      * returns true if a column of user table or profile fields has changed
      * @return bool
      */
-    public function columnsValueChanged()
+    public function hasColumnsValueChanged()
     {
         return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
     }
@@ -1925,5 +1925,19 @@ class User extends TableAccess
         $gLogger->warning('DEPRECATED: "$user->isWebmaster()" is deprecated, use "$user->isAdministrator()" instead!');
 
         return $this->isAdministrator();
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @deprecated 3.3.0:4.0.0 Use Method hasColumnsValueChanged() instead
+     * @return bool
+     */
+    public function columnsValueChanged()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$user->columnsValueChanged()" is deprecated, use "$user->hasColumnsValueChanged()" instead!');
+
+        return $this->hasColumnsValueChanged();
     }
 }

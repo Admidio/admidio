@@ -66,7 +66,7 @@ switch($getNewItem)
 /*------------------------------------------------------------*/
 
 // nun alle Profilfelder pruefen
-foreach($gInventoryFields->mInventoryFields as $field)
+foreach($gInventoryFields->getInventoryFields() as $field)
 {
     $postId = 'inf-'. $field->getValue('inf_id');
 

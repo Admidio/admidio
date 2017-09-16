@@ -61,14 +61,14 @@
  */
 class Email extends PHPMailer
 {
-    private $emText;     // plain text of email
-    private $emHtmlText; // html text of email
-    private $emSender;   // mail sender adress and Name
-    private $emAddresses;
-    private $emCopyToSender;
-    private $emListRecipients;
-    private $emSendAsHTML;
-    private $emBccArray = array();
+    private $emText           = ''; // plain text of email
+    private $emHtmlText       = ''; // html text of email
+    private $emAddresses      = ''; // Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
+    private $emSender         = array(); // mail sender address and Name
+    private $emCopyToSender   = false;
+    private $emListRecipients = false;
+    private $emSendAsHTML     = false;
+    private $emBccArray       = array();
 
     /**
      * Email constructor.
@@ -80,17 +80,8 @@ class Email extends PHPMailer
 
         parent::__construct(true);
 
-        $this->emCopyToSender   = false;
-        $this->emListRecipients = false;
-        $this->emSendAsHTML     = false;
-        $this->emText           = '';    // content of text part
-        $this->emHtmlText       = '';    // content of html part
         $this->exceptions       = true;  // enable exceptions in PHPMailer
         $this->Timeout          = 30;    // set timeout to 30 seconds
-
-        // Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
-        // fuer den Fall das eine Kopie der Mail angefordert wird...
-        $this->emAddresses = '';
 
         // Versandmethode festlegen
         if($gPreferences['mail_send_method'] === 'SMTP')

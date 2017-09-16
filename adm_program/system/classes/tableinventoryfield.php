@@ -259,7 +259,7 @@ class TableInventoryField extends TableAccess
     public function save($updateFingerPrint = true)
     {
         // if new field than generate new name intern, otherwise no change will be made
-        if($this->new_record)
+        if($this->newRecord)
         {
             $this->setValue('inf_name_intern', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
         }

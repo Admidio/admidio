@@ -33,14 +33,14 @@ class UploadHandlerDownload extends UploadHandler
      * @param        $type
      * @param        $error
      * @param        $index
-     * @param        $content_range
+     * @param        $contentRange
      * @return \stdClass
      */
-    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $content_range = null)
+    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
     {
         global $gPreferences, $gL10n, $gDb, $getId, $gCurrentOrganization, $gCurrentUser;
 
-        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $content_range);
+        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
         if(!isset($file->error))
         {

@@ -39,20 +39,18 @@
  */
 abstract class Modules
 {
-    const HEADLINE = '';            ///< Constant for language parameter set in module classes
-
-    protected $activeRole;          ///< Boolean false/true for active role
-    protected $headline;            ///< String with headline expression
-    protected $catId;               ///< ID as integer for chosen category
-    protected $id;                  ///< ID as integer to choose record
-    protected $daterange;           ///< Array with date settings in English format and system format
-    protected $mode;                ///< String with current mode ( Default: "Default" )
-    protected $order;               ///< String with order ASC/DESC ( Default: "ASC" )
-    protected $start;               ///< Integer for start element
-    protected $properties;          ///< Array Clone of $_GET Array
-    protected $validModes;          ///< Array with valid modes ( Default: "Default" )
-    protected $parameters;          ///< Array with all parameters of the module that were added to this class.
-    public $arrParameter;           ///< Array with validated parameters
+    protected $activeRole = false;              ///< Boolean false/true for active role
+    protected $headline   = '';                 ///< String with headline expression
+    protected $catId      = 0;                  ///< ID as integer for chosen category
+    protected $id         = 0;                  ///< ID as integer to choose record
+    protected $daterange  = array();            ///< Array with date settings in English format and system format
+    protected $mode       = 'Default';          ///< String with current mode ( Default: "Default" )
+    protected $order      = '';                 ///< String with order ASC/DESC ( Default: "ASC" )
+    protected $start      = 0;                  ///< Integer for start element
+    protected $validModes = array('Default');   ///< Array with valid modes ( Default: "Default" )
+    protected $parameters = array();            ///< Array with all parameters of the module that were added to this class.
+    protected $properties;                      ///< Array Clone of $_GET Array
+    protected $arrParameter = array();          ///< Array with validated parameters
 
     /**
      * @param int $startElement
@@ -72,18 +70,7 @@ abstract class Modules
      */
     public function __construct()
     {
-        $this->activeRole   = false;
-        $this->headline     = '';
-        $this->catId        = 0;
-        $this->id           = 0;
-        $this->daterange    = array();
-        $this->mode         = 'Default';
-        $this->order        = '';
-        $this->start        = '';
-        $this->properties   = $_GET;
-        $this->validModes   = array('Default');
-        $this->parameters   = array();
-        $this->arrParameter = array();
+        $this->properties = $_GET;
 
         // Set parameters
         $this->setId();

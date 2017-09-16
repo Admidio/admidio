@@ -372,13 +372,13 @@ $page->addHtml('
                                 // City and postcode should be shown in one line
                                 if(strlen($user->getValue('POSTCODE')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE'))
                                 {
-                                    $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
-                                    $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
+                                    $mapUrl   .= ',%20'. urlencode($user->getValue('POSTCODE'));
+                                    $routeUrl .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
                                     if(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                     {
-                                        $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
-                                        $route_url .= ',%20'. urlencode($user->getValue('CITY'));
+                                        $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
+                                        $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
 
                                         // some countries have the order postcode city others have city postcode
                                         if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
@@ -394,8 +394,8 @@ $page->addHtml('
                                 elseif(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                 {
                                     $address   .= $user->getValue('CITY'). '<br />';
-                                    $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
-                                    $route_url .= ',%20'. urlencode($user->getValue('CITY'));
+                                    $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
+                                    $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
 
                                 if(strlen($user->getValue('COUNTRY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'COUNTRY'))

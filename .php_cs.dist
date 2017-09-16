@@ -19,7 +19,7 @@ $rules = array(
 //    'braces'                                    => false, // [@PSR2, @Symfony]
     'cast_spaces'                                 => true,  // [@Symfony]
     'class_definition'                            => array('singleLine' => true, 'singleItemSingleLine' => true, 'multiLineExtendsEachSingleLine' => true), // [@PSR2, @Symfony]
-    'class_keyword_remove'                        => true,  // [@]
+    'class_keyword_remove'                        => false, // [@]
     'combine_consecutive_unsets'                  => true,  // [@]
 //    'concat_space'                              => false, // [@Symfony]
     'declare_equal_normalize'                     => true,  // [@Symfony]

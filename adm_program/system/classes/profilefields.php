@@ -19,13 +19,13 @@
  */
 class ProfileFields
 {
-    public $mProfileFields = array();   ///< Array with all user fields objects
-    public $mUserData = array();        ///< Array with all user data objects
+    public $mProfileFields = array();       ///< Array with all user fields objects
+    public $mUserData      = array();       ///< Array with all user data objects
 
-    protected $mUserId;                 ///< UserId of the current user of this object
-    protected $mDb;                     ///< An object of the class Database for communication with the database
-    protected $noValueCheck;            ///< if true, than no value will be checked if method setValue is called
-    public $columnsValueChanged;        ///< flag if a value of one field had changed
+    protected $mDb;                         ///< An object of the class Database for communication with the database
+    protected $mUserId      = 0;            ///< UserId of the current user of this object
+    protected $noValueCheck = false;        ///< if true, than no value will be checked if method setValue is called
+    public $columnsValueChanged = false;    ///< flag if a value of one field had changed
 
     /**
      * constructor that will initialize variables and read the profile field structure
@@ -36,9 +36,6 @@ class ProfileFields
     {
         $this->mDb =& $database;
         $this->readProfileFields($organizationId);
-        $this->mUserId = 0;
-        $this->noValueCheck = false;
-        $this->columnsValueChanged = false;
     }
 
     /**
