@@ -18,7 +18,7 @@ class User extends TableAccess
 {
     protected $administrator;
 
-    public $mProfileFieldsData;                   ///< object with current user field structure
+    protected $mProfileFieldsData;                ///< object with current user field structure
     protected $rolesRights     = array();         ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
     protected $listViewRights  = array();         ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $listMailRights  = array();         ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
@@ -1762,6 +1762,17 @@ class User extends TableAccess
         }
 
         return $returnCode;
+    }
+
+    /**
+     * set value for column usd_value of field
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
+     * @param mixed  $fieldValue
+     * @return bool
+     */
+    public function setProfileFieldsValue($fieldNameIntern, $fieldValue)
+    {
+        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue);
     }
 
     /**
