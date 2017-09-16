@@ -69,5 +69,6 @@ header('Content-Disposition: attachment; filename="'.$filename.'"');
 header('Cache-Control: private');
 header('Pragma: public');
 
-// Datei ausgeben.
-echo readfile($completePath);
+// file output
+// use this function because of problems with big files
+readfile($completePath);
