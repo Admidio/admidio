@@ -134,12 +134,13 @@ if ($image !== null)
         {
             $fontSize = $getMaxWidth / 40;
         }
+        $imageSize = $image->getImageSize();
         $fontX = $fontSize;
-        $fontY = $image->imageHeight-$fontSize;
-        $fontColor = imagecolorallocate($image->imageResource, 255, 255, 255);
+        $fontY = $imageSize[0] - $fontSize;
+        $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
         $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
         $text = $gPreferences['photo_image_text'];
-        imagettftext($image->imageResource, $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
+        imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 
     // Rueckgabe des neuen Bildes

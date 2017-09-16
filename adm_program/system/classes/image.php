@@ -40,9 +40,9 @@ class Image
 
     private $imagePath;
     private $imageType;
-    public $imageResource;
-    public $imageWidth  = 0;
-    public $imageHeight = 0;
+    private $imageResource;
+    private $imageWidth  = 0;
+    private $imageHeight = 0;
 
     /**
      * @param string $pathAndFilename
@@ -53,6 +53,22 @@ class Image
         {
             $this->setImageFromPath($pathAndFilename);
         }
+    }
+
+    /**
+     * @return resource Returns the image resource
+     */
+    public function getImageResource()
+    {
+        return $this->imageResource;
+    }
+
+    /**
+     * @return int[] Returns an array of the image width and height
+     */
+    public function getImageSize()
+    {
+        return array($this->imageWidth, $this->imageHeight);
     }
 
     /**
