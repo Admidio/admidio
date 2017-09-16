@@ -15,15 +15,14 @@
 class RoleDependency
 {
     protected $db;          ///< An object of the class Database for communication with the database
-
-    public $roleIdParent = 0;
-    public $roleIdChild  = 0;
-    public $comment      = '';
-    public $usrId        = 0;
-    public $timestamp    = '';
-    public $roleIdParentOrig = 0;
-    public $roleIdChildOrig  = 0;
-    public $persisted = false;
+    protected $roleIdParent = 0;
+    protected $roleIdChild  = 0;
+    protected $comment      = '';
+    protected $usrId        = 0;
+    protected $timestamp    = '';
+    protected $roleIdParentOrig = 0;
+    protected $roleIdChildOrig  = 0;
+    protected $persisted = false;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
