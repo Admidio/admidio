@@ -34,6 +34,10 @@
  */
 class Image
 {
+    const ROTATE_DIRECTION_LEFT  = 'left';
+    const ROTATE_DIRECTION_RIGHT = 'right';
+    const ROTATE_DIRECTION_FLIP  = 'flip';
+
     private $imagePath;
     private $imageType;
     public $imageResource;
@@ -215,28 +219,30 @@ class Image
      * Methode dreht das Bild um 90° in eine Richtung
      * @param string $direction 'right' o. 'left' Richtung, in die gedreht wird
      */
-    public function rotate($direction = 'right')
+    public function rotate($direction = self::ROTATE_DIRECTION_RIGHT)
     {
-        // nur bei gueltigen Uebergaben weiterarbeiten
-        if($direction === 'left' || $direction === 'right')
+        switch ($direction)
         {
-            if ($direction === 'left')
-            {
+            case self::ROTATE_DIRECTION_LEFT:
                 $angle = 90;
-            }
-            else
-            {
+                break;
+            case self::ROTATE_DIRECTION_RIGHT:
                 $angle = -90;
-            }
-
-            $imageRotated = imagerotate($this->imageResource, $angle, 0);
-
-            // speichern
-            $this->copyToFile($imageRotated);
-
-            // Loeschen des Bildes aus Arbeitsspeicher
-            imagedestroy($imageRotated);
+                break;
+            case self::ROTATE_DIRECTION_FLIP:
+                $angle = 180;
+                break;
+            default:
+                return;
         }
+
+        $imageRotated = imagerotate($this->imageResource, $angle, 0);
+
+        // save
+        $this->copyToFile($imageRotated);
+
+        // Delete image from ram
+        imagedestroy($imageRotated);
     }
 
     /**
