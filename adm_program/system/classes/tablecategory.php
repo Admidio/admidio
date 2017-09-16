@@ -145,7 +145,7 @@ class TableCategory extends TableAccess
             }
 
             // a new record will always be visible until all data is saved
-            if($this->new_record)
+            if($this->newRecord)
             {
                 return true;
             }
@@ -473,7 +473,7 @@ class TableCategory extends TableAccess
         global $gCurrentUser;
 
         // a new record will always be visible until all data is saved
-        if($this->new_record)
+        if($this->newRecord)
         {
             return true;
         }
