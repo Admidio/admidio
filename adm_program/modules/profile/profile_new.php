@@ -124,7 +124,7 @@ if(isset($_SESSION['profile_request']))
 {
     $user->noValueCheck();
 
-    foreach($gProfileFields->mProfileFields as $field)
+    foreach($gProfileFields->getProfileFields() as $field)
     {
         $fieldName = 'usf-'. $field->getValue('usf_id');
         if(isset($_SESSION['profile_request'][$fieldName]))
@@ -163,7 +163,7 @@ $form = new HtmlForm('edit_profile_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/p
 
 $category = '';
 
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     $showField = false;
 

@@ -562,7 +562,7 @@ class User extends TableAccess
      */
     public function hasColumnsValueChanged()
     {
-        return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
+        return $this->columnsValueChanged || $this->mProfileFieldsData->hasColumnsValueChanged();
     }
 
     /**
@@ -738,17 +738,7 @@ class User extends TableAccess
      */
     public function deleteUserFieldData()
     {
-        $this->db->startTransaction();
-
-        // delete every entry from adm_users_data
-        foreach ($this->mProfileFieldsData->mUserData as $field)
-        {
-            $field->delete();
-        }
-
-        $this->mProfileFieldsData->mUserData = array();
-
-        $this->db->endTransaction();
+        $this->mProfileFieldsData->deleteUserData();
     }
 
     /**
@@ -1346,7 +1336,7 @@ class User extends TableAccess
         }
 
         // if value of a field changed then update timestamp of user object
-        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->columnsValueChanged)
+        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->hasColumnsValueChanged())
         {
             $this->columnsValueChanged = true;
         }

@@ -276,7 +276,7 @@ $page->addHtml('
 // *******************************************************************************
 
 $category = '';
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren

@@ -19,13 +19,12 @@
  */
 class ProfileFields
 {
-    public $mProfileFields = array();       ///< Array with all user fields objects
-    public $mUserData      = array();       ///< Array with all user data objects
-
     protected $mDb;                         ///< An object of the class Database for communication with the database
-    protected $mUserId      = 0;            ///< UserId of the current user of this object
-    protected $noValueCheck = false;        ///< if true, than no value will be checked if method setValue is called
-    public $columnsValueChanged = false;    ///< flag if a value of one field had changed
+    protected $mProfileFields = array();    ///< Array with all user fields objects
+    protected $mUserData      = array();    ///< Array with all user data objects
+    protected $mUserId        = 0;          ///< UserId of the current user of this object
+    protected $noValueCheck   = false;      ///< if true, than no value will be checked if method setValue is called
+    protected $columnsValueChanged = false; ///< flag if a value of one field had changed
 
     /**
      * constructor that will initialize variables and read the profile field structure
@@ -57,6 +56,23 @@ class ProfileFields
         $this->mUserData = array();
         $this->mUserId = 0;
         $this->columnsValueChanged = false;
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return $this->columnsValueChanged;
+    }
+
+    /**
+     * @return \TableUserField[]
+     */
+    public function getProfileFields()
+    {
+        return $this->mProfileFields;
     }
 
     /**
@@ -647,4 +663,22 @@ class ProfileFields
             && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
 
+    /**
+     * Delete all user data
+     * @return void
+     */
+    public function deleteUserData()
+    {
+        $this->mDb->startTransaction();
+
+        // delete every entry from adm_users_data
+        foreach ($this->mUserData as $field)
+        {
+            $field->delete();
+        }
+
+        $this->mUserData = array();
+
+        $this->mDb->endTransaction();
+    }
 }

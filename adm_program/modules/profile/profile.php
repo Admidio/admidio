@@ -330,7 +330,7 @@ $page->addHtml('
 
             // Schleife ueber alle Felder der Stammdaten
 
-            foreach($gProfileFields->mProfileFields as $field)
+            foreach($gProfileFields->getProfileFields() as $field)
             {
                 // nur Felder der Stammdaten anzeigen
                 if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
@@ -474,7 +474,7 @@ $page->addHtml('
 // *******************************************************************************
 
 $category = '';
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     $fieldNameIntern = $field->getValue('usf_name_intern');
 

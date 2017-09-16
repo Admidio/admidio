@@ -249,7 +249,7 @@ $arrParticipientsInformation = array(
     'mem_count_guests'     => $gL10n->get('LST_SEAT_AMOUNT')
 );
 
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     // at the end of category master data save positions for loginname and username
     // they will be added after profile fields loop
