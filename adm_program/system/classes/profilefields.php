@@ -19,7 +19,7 @@
  */
 class ProfileFields
 {
-    protected $mDb;                         ///< An object of the class Database for communication with the database
+    protected $db;                          ///< An object of the class Database for communication with the database
     protected $mProfileFields = array();    ///< Array with all user fields objects
     protected $mUserData      = array();    ///< Array with all user data objects
     protected $mUserId        = 0;          ///< UserId of the current user of this object
@@ -33,7 +33,7 @@ class ProfileFields
      */
     public function __construct(&$database, $organizationId)
     {
-        $this->mDb =& $database;
+        $this->db =& $database;
         $this->readProfileFields($organizationId);
     }
 
@@ -44,7 +44,7 @@ class ProfileFields
      */
     public function __sleep()
     {
-        return array_diff(array_keys(get_object_vars($this)), array('mDb'));
+        return array_diff(array_keys(get_object_vars($this)), array('db'));
     }
 
     /**
@@ -438,13 +438,13 @@ class ProfileFields
                  WHERE cat_org_id IS NULL
                     OR cat_org_id = ? -- $organizationId
               ORDER BY cat_sequence ASC, usf_sequence ASC';
-        $userFieldsStatement = $this->mDb->queryPrepared($sql, array($organizationId));
+        $userFieldsStatement = $this->db->queryPrepared($sql, array($organizationId));
 
         while ($row = $userFieldsStatement->fetch())
         {
             if (!array_key_exists($row['usf_name_intern'], $this->mProfileFields))
             {
-                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->mDb);
+                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->db);
             }
             $this->mProfileFields[$row['usf_name_intern']]->setArray($row);
         }
@@ -476,13 +476,13 @@ class ProfileFields
                 INNER JOIN '.TBL_USER_FIELDS.'
                         ON usf_id = usd_usf_id
                      WHERE usd_usr_id = ? -- $userId';
-            $userDataStatement = $this->mDb->queryPrepared($sql, array($userId));
+            $userDataStatement = $this->db->queryPrepared($sql, array($userId));
 
             while ($row = $userDataStatement->fetch())
             {
                 if (!array_key_exists($row['usd_usf_id'], $this->mUserData))
                 {
-                    $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
+                    $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
             }
@@ -495,7 +495,7 @@ class ProfileFields
      */
     public function saveUserData($userId)
     {
-        $this->mDb->startTransaction();
+        $this->db->startTransaction();
 
         foreach ($this->mUserData as $value)
         {
@@ -519,7 +519,7 @@ class ProfileFields
         $this->columnsValueChanged = false;
         $this->mUserId = (int) $userId;
 
-        $this->mDb->endTransaction();
+        $this->db->endTransaction();
     }
 
     /**
@@ -528,7 +528,7 @@ class ProfileFields
      */
     public function setDatabase(&$database)
     {
-        $this->mDb =& $database;
+        $this->db =& $database;
     }
 
     /**
@@ -620,7 +620,7 @@ class ProfileFields
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '')
         {
-            $this->mUserData[$usfId] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
+            $this->mUserData[$usfId] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
             $this->mUserData[$usfId]->setValue('usd_usf_id', $usfId);
             $this->mUserData[$usfId]->setValue('usd_usr_id', $this->mUserId);
         }
@@ -669,7 +669,7 @@ class ProfileFields
      */
     public function deleteUserData()
     {
-        $this->mDb->startTransaction();
+        $this->db->startTransaction();
 
         // delete every entry from adm_users_data
         foreach ($this->mUserData as $field)
@@ -679,6 +679,6 @@ class ProfileFields
 
         $this->mUserData = array();
 
-        $this->mDb->endTransaction();
+        $this->db->endTransaction();
     }
 }
