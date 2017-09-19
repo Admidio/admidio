@@ -59,21 +59,101 @@ class HtmlPage
     }
 
     /**
-     * Adds a cascading style sheets file to the html page.
-     * @param string $file The url with filename or the relative path starting with @i adm_program of the css file.
+     * The method will return the filename. If you are in debug mode than it will return the
+     * not minified version of the filename otherwise it will return the minified version.
+     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
+     * and one version without the @b min.
+     * @param string $filepath Filename of the NOT minified file.
+     * @return string Returns the filename in dependence of the debug mode.
      */
-    public function addCssFile($file)
+    private function getDebugOrMinFilepath($filepath)
     {
-        if(!in_array($file, $this->cssFiles, true))
+        global $gDebug;
+
+        $fileInfo = pathinfo($filepath);
+        $filename = basename($fileInfo['filename'], '.min');
+
+        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+
+        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
         {
-            if(strpos($file, 'http') !== false)
+            return ADMIDIO_URL . $filepathMin;
+        }
+
+        return ADMIDIO_URL . $filepathDebug;
+    }
+
+    /**
+     * Adds a cascading style sheets file to the html page.
+     * @param string $cssFile The url with filename or the relative path starting with @i adm_program of the css file.
+     */
+    public function addCssFile($cssFile)
+    {
+        if (!in_array($cssFile, $this->cssFiles, true))
+        {
+            if (strpos($cssFile, 'http') !== false)
             {
-                $this->cssFiles[] = $file;
+                $this->cssFiles[] = $cssFile;
             }
             else
             {
-                $this->cssFiles[] = $this->getDebugOrMinFilepath($file);
+                $this->cssFiles[] = $this->getDebugOrMinFilepath($cssFile);
             }
+        }
+    }
+
+    /**
+     * Adds a RSS file to the html page.
+     * @param string $rssFile The url with filename of the rss file.
+     * @param string $title   (optional) Set a title. This is the name of the feed and will be shown when adding the rss feed.
+     */
+    public function addRssFile($rssFile, $title = '')
+    {
+        if ($title !== '')
+        {
+            $this->rssFiles[$title] = $rssFile;
+        }
+        elseif (!in_array($rssFile, $this->rssFiles, true))
+        {
+            $this->rssFiles[] = $rssFile;
+        }
+    }
+
+    /**
+     * Adds a javascript file to the html page.
+     * @param string $jsFile The url with filename or the relative path starting with @i adm_program of the javascript file.
+     */
+    public function addJavascriptFile($jsFile)
+    {
+        if (!in_array($jsFile, $this->jsFiles, true))
+        {
+            if (strpos($jsFile, 'http') !== false)
+            {
+                $this->jsFiles[] = $jsFile;
+            }
+            else
+            {
+                $this->jsFiles[] = $this->getDebugOrMinFilepath($jsFile);
+            }
+        }
+    }
+
+    /**
+     * Adds any javascript content to the page. The javascript will be added in the order you call this method.
+     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
+     * @param bool   $executeAfterPageLoad (optional) If set to @b true the javascript code will be executed after
+     *                                     the page is fully loaded.
+     */
+    public function addJavascript($javascriptCode, $executeAfterPageLoad = false)
+    {
+        if ($executeAfterPageLoad)
+        {
+            $this->javascriptContentExecute .= $javascriptCode. "\n";
+        }
+        else
+        {
+            $this->javascriptContent .= $javascriptCode. "\n";
         }
     }
 
@@ -98,43 +178,6 @@ class HtmlPage
     }
 
     /**
-     * Adds any javascript content to the page. The javascript will be added in the order you call this method.
-     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
-     * @param bool   $executeAfterPageLoad (optional) If set to @b true the javascript code will be executed after
-     *                                     the page is fully loaded.
-     */
-    public function addJavascript($javascriptCode, $executeAfterPageLoad = false)
-    {
-        if($executeAfterPageLoad)
-        {
-            $this->javascriptContentExecute .= $javascriptCode. "\n";
-        }
-        else
-        {
-            $this->javascriptContent .= $javascriptCode. "\n";
-        }
-    }
-
-    /**
-     * Adds a javascript file to the html page.
-     * @param string $file The url with filename or the relative path starting with @i adm_program of the javascript file.
-     */
-    public function addJavascriptFile($file)
-    {
-        if(!in_array($file, $this->jsFiles, true))
-        {
-            if(strpos($file, 'http') !== false)
-            {
-                $this->jsFiles[] = $file;
-            }
-            else
-            {
-                $this->jsFiles[] = $this->getDebugOrMinFilepath($file);
-            }
-        }
-    }
-
-    /**
      * Adds the default menu
      * @return void
      */
@@ -152,21 +195,21 @@ class HtmlPage
             'home.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
         );
 
-        if($gPreferences['enable_announcements_module'] == 1 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+        if ($gPreferences['enable_announcements_module'] == 1 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_announcements', FOLDER_MODULES . '/announcements/announcements.php', $gL10n->get('ANN_ANNOUNCEMENTS'),
                 'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if($gPreferences['enable_download_module'] == 1)
+        if ($gPreferences['enable_download_module'] == 1)
         {
             $this->menu->addItem(
                 'menu_item_download', FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
                 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
+        if ($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
         {
             $this->menu->addItem(
                 'menu_item_email', FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
@@ -174,7 +217,7 @@ class HtmlPage
             );
         }
 
-        if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
+        if (($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
         {
             // get number of unread messages for user
             $message = new TableMessage($gDb);
@@ -191,14 +234,14 @@ class HtmlPage
                 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if($gPreferences['enable_photo_module'] == 1 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
+        if ($gPreferences['enable_photo_module'] == 1 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_photo', FOLDER_MODULES . '/photos/photos.php', $gL10n->get('PHO_PHOTOS'),
                 'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if($gPreferences['enable_guestbook_module'] == 1 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
+        if ($gPreferences['enable_guestbook_module'] == 1 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_guestbook', FOLDER_MODULES . '/guestbook/guestbook.php', $gL10n->get('GBO_GUESTBOOK'),
@@ -209,7 +252,7 @@ class HtmlPage
         $this->menu->addItem(
             'menu_item_lists', FOLDER_MODULES . '/lists/lists.php', $gL10n->get('LST_LISTS'),
             'lists.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        if($gValidLogin)
+        if ($gValidLogin)
         {
             $this->menu->addItem(
                 'menu_item_mylist', FOLDER_MODULES . '/lists/mylist.php', $gL10n->get('LST_MY_LIST'),
@@ -217,7 +260,7 @@ class HtmlPage
             );
         }
 
-        if($gPreferences['enable_dates_module'] == 1 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
+        if ($gPreferences['enable_dates_module'] == 1 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_dates', FOLDER_MODULES . '/dates/dates.php', $gL10n->get('DAT_DATES'),
@@ -225,7 +268,7 @@ class HtmlPage
             );
         }
 
-        if($gPreferences['enable_weblinks_module'] == 1 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
+        if ($gPreferences['enable_weblinks_module'] == 1 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_links', FOLDER_MODULES . '/links/links.php', $gL10n->get('LNK_WEBLINKS'),
@@ -233,7 +276,7 @@ class HtmlPage
             );
         }
 
-        if($gCurrentUser->approveUsers() || $gCurrentUser->editUsers() || $gCurrentUser->manageRoles() || $gCurrentUser->isAdministrator())
+        if ($gCurrentUser->approveUsers() || $gCurrentUser->editUsers() || $gCurrentUser->manageRoles() || $gCurrentUser->isAdministrator())
         {
             $this->menu->addItem(
                 'menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'),
@@ -241,28 +284,28 @@ class HtmlPage
             );
 
         }
-        if($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
+        if ($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
         {
             $this->menu->addItem(
                 'menu_item_registration', FOLDER_MODULES . '/registration/registration.php', $gL10n->get('NWU_NEW_REGISTRATIONS'),
                 'new_registrations.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
-        if($gCurrentUser->editUsers())
+        if ($gCurrentUser->editUsers())
         {
             $this->menu->addItem(
                 'menu_item_members', FOLDER_MODULES . '/members/members.php', $gL10n->get('MEM_USER_MANAGEMENT'),
                 'user_administration.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
-        if($gCurrentUser->manageRoles())
+        if ($gCurrentUser->manageRoles())
         {
             $this->menu->addItem(
                 'menu_item_roles', FOLDER_MODULES . '/roles/roles.php', $gL10n->get('ROL_ROLE_ADMINISTRATION'),
                 'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
-        if($gCurrentUser->isAdministrator())
+        if ($gCurrentUser->isAdministrator())
         {
             $this->menu->addItem(
                 'menu_item_backup', FOLDER_MODULES . '/backup/backup.php', $gL10n->get('BAC_DATABASE_BACKUP'),
@@ -274,7 +317,7 @@ class HtmlPage
             );
         }
 
-        if($gValidLogin)
+        if ($gValidLogin)
         {
             // show link to own profile
             $this->menu->addItem(
@@ -303,82 +346,12 @@ class HtmlPage
     }
 
     /**
-     * Adds a RSS file to the html page.
-     * @param string $file  The url with filename of the rss file.
-     * @param string $title (optional) Set a title. This is the name of the feed and will be shown when adding the rss feed.
-     */
-    public function addRssFile($file, $title = '')
-    {
-        if($title !== '')
-        {
-            $this->rssFiles[$title] = $file;
-        }
-        else
-        {
-            $this->rssFiles[] = $file;
-        }
-    }
-
-    /*
      * Adds the html code for a modal window to the current script.
      * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
      */
     public function enableModal()
     {
         $this->showModal = true;
-    }
-
-    /**
-     * The method will return the filename. If you are in debug mode than it will return the
-     * not minified version of the filename otherwise it will return the minified version.
-     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
-     * and one version without the @b min.
-     * @param string $filepath Filename of the NOT minified file.
-     * @return string Returns the filename in dependence of the debug mode.
-     */
-    private function getDebugOrMinFilepath($filepath)
-    {
-        global $gDebug;
-
-        $fileInfo = pathinfo($filepath);
-        $filename = basename($fileInfo['filename'], '.min');
-
-        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
-
-        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
-        {
-            return ADMIDIO_URL . $filepathMin;
-        }
-
-        return ADMIDIO_URL . $filepathDebug;
-    }
-
-    /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
-     * @return string Returns the headline of the current Admidio page.
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Returns the menu object of this html page.
-     * @return \HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-
-    /**
-     * Returns the title of the html page.
-     * @return string Returns the title of the html page.
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -413,6 +386,33 @@ class HtmlPage
     }
 
     /**
+     * Returns the menu object of this html page.
+     * @return \HtmlNavbar Returns the menu object of this html page.
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * @return string Returns the headline of the current Admidio page.
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
+    }
+
+    /**
+     * Returns the title of the html page.
+     * @return string Returns the title of the html page.
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Set the h1 headline of the current html page. If the title of the page
      * was not set until now than this will also be the title.
      * @param string $headline A string that contains the headline for the page.
@@ -420,13 +420,32 @@ class HtmlPage
      */
     public function setHeadline($headline)
     {
-        if($this->title === '')
+        if ($this->title === '')
         {
             $this->setTitle($headline);
         }
 
         $this->headline = $headline;
         $this->menu->setName($headline);
+    }
+
+    /**
+     * Set the title of the html page that will be shown in the <title> tag.
+     * @param string $title A string that contains the title for the page.
+     * @return void
+     */
+    public function setTitle($title)
+    {
+        global $gCurrentOrganization;
+
+        if ($title === '')
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname');
+        }
+        else
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
+        }
     }
 
     /**
@@ -440,135 +459,34 @@ class HtmlPage
     }
 
     /**
-     * Set the title of the html page that will be shown in the <title> tag.
-     * @param string $title A string that contains the title for the page.
-     * @return void
+     * adds the main necessary files
      */
-    public function setTitle($title)
+    private function addMainFilesAndContent()
     {
-        global $gCurrentOrganization;
-
-        if($title !== '')
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
-        }
-        else
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname');
-        }
-    }
-
-    /**
-     * This method send the whole html code of the page to the browser. Call this method
-     * if you have finished your page layout.
-     * @param bool $directOutput If set to @b true (default) the html page will be directly send
-     *                           to the browser. If set to @b false the html will be returned.
-     * @return string|void If $directOutput is set to @b false this method will return the html code of the page.
-     */
-    public function show($directOutput = true)
-    {
-        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
-        global $g_root_path;
-
-        $headerContent    = '';
-        $htmlMyHeader     = '';
-        $htmlMyBodyTop    = '';
-        $htmlMyBodyBottom = '';
-        $htmlMenu         = '';
-        $htmlHeadline     = '';
-
-        if($this->showMenu)
-        {
-            // add modules and administration modules to the menu
-            $this->addDefaultMenu();
-            $htmlMenu = $this->menu->show();
-        }
-
-        if($this->headline !== '')
-        {
-            if($this->hasNavbar)
-            {
-                $htmlHeadline = '<h1 class="admidio-module-headline hidden-xs">'.$this->headline.'</h1>';
-            }
-            else
-            {
-                $htmlHeadline = '<h1 class="admidio-module-headline">'.$this->headline.'</h1>';
-            }
-        }
+        global $gPreferences;
 
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_URL.'/css/admidio.css');
 
         // if print mode is set then add a print specific css file
-        if($this->printMode)
+        if ($this->printMode)
         {
             $this->addCssFile(THEME_URL.'/css/print.css');
         }
 
         // add custom css file if it exists to add own css styles without edit the original admidio css
-        if(is_file(THEME_URL.'/css/custom.css'))
+        if (is_file(THEME_URL.'/css/custom.css'))
         {
             $this->addCssFile(THEME_URL.'/css/custom.css');
         }
-
-        // load content of theme files
-        if($this->showThemeHtml)
-        {
-            ob_start();
-            include(THEME_ADMIDIO_PATH.'/my_header.php');
-            $htmlMyHeader = ob_get_contents();
-            ob_end_clean();
-
-            ob_start();
-            include(THEME_ADMIDIO_PATH.'/my_body_top.php');
-            $htmlMyBodyTop = ob_get_contents();
-            ob_end_clean();
-
-            ob_start();
-            include(THEME_ADMIDIO_PATH.'/my_body_bottom.php');
-            $htmlMyBodyBottom = ob_get_contents();
-            ob_end_clean();
-        }
-
-        // add css files to page
-        foreach($this->cssFiles as $file)
-        {
-            $headerContent .= '<link rel="stylesheet" type="text/css" href="'.$file.'" />';
-        }
-
-        // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
-        $headerContent .= '<!--[if lt IE 9]>
-            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/html5shiv/html5shiv.min.js"></script>
-            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/respond/respond.min.js"></script>
-        <![endif]-->';
 
         if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
         {
             $this->addJavascriptFile('adm_program/libs/browser-update/browser-update.js');
         }
 
-        // add javascript files to page
-        foreach($this->jsFiles as $file)
-        {
-            $headerContent .= '<script type="text/javascript" src="'.$file.'"></script>';
-        }
-
-        // add rss feed files to page
-        foreach($this->rssFiles as $title => $file)
-        {
-            if(!is_numeric($title))
-            {
-                $headerContent .= '<link rel="alternate" type="application/rss+xml" title="'.$title.'" href="'.$file.'" />';
-            }
-            else
-            {
-                $headerContent .= '<link rel="alternate" type="application/rss+xml" href="'.$file.'" />';
-            }
-        }
-
         // add code for a modal window
-        if($this->showModal)
+        if ($this->showModal)
         {
             $this->addJavascript('
                 $("body").on("hidden.bs.modal", ".modal", function() {
@@ -584,57 +502,181 @@ class HtmlPage
                 </div>'
             );
         }
+    }
+
+    /**
+     * Loads the content of the given theme file
+     * @param string $filename Filename to load out of the theme directory
+     * @return string
+     */
+    private function getFileContent($filename)
+    {
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
+        global $g_root_path;
+
+        ob_start();
+        include(THEME_ADMIDIO_PATH . '/' . $filename);
+        $fileContent = ob_get_contents();
+        ob_end_clean();
+
+        return $fileContent;
+    }
+
+    /**
+     * Builds the HTML-Header content
+     * @return string
+     */
+    private function getHtmlHeader()
+    {
+        $headerContent = '';
+        $htmlMyHeader  = '';
+
+        // add css files to page
+        foreach ($this->cssFiles as $cssFile)
+        {
+            $headerContent .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />';
+        }
+
+        // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
+        $headerContent .= '<!--[if lt IE 9]>
+            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/html5shiv/html5shiv.min.js"></script>
+            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/respond/respond.min.js"></script>
+        <![endif]-->';
+
+        // add javascript files to page
+        foreach ($this->jsFiles as $jsFile)
+        {
+            $headerContent .= '<script type="text/javascript" src="' . $jsFile . '"></script>';
+        }
+
+        // add rss feed files to page
+        foreach ($this->rssFiles as $title => $rssFile)
+        {
+            if (!is_numeric($title))
+            {
+                $headerContent .= '<link rel="alternate" type="application/rss+xml" title="' . $title . '" href="' . $rssFile . '" />';
+            }
+            else
+            {
+                $headerContent .= '<link rel="alternate" type="application/rss+xml" href="' . $rssFile . '" />';
+            }
+        }
 
         // add javascript code to page
-        if($this->javascriptContent !== '')
+        if ($this->javascriptContent !== '')
         {
             $headerContent .= '<script type="text/javascript">' . $this->javascriptContent . '</script>';
         }
 
         // add javascript code to page that will be executed after page is fully loaded
-        if($this->javascriptContentExecute !== '')
+        if ($this->javascriptContentExecute !== '')
         {
             $headerContent .= '<script type="text/javascript">
                 $(function() {
                     $("[data-toggle=\'popover\']").popover();
                     $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
-                    '.$this->javascriptContentExecute.'
+                    ' . $this->javascriptContentExecute . '
                 });
             </script>';
         }
 
-        $html = '
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <!-- (c) 2004 - 2017 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
+        // load content of theme files
+        if ($this->showThemeHtml)
+        {
+            $htmlMyHeader = $this->getFileContent('my_header.php');
+        }
 
-                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+        $htmlHeader = '<head>
+            <!-- (c) 2004 - 2017 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
-                <title>'.$this->title.'</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-                <script type="text/javascript">
-                    var gRootPath  = "'. ADMIDIO_URL. '";
-                    var gThemePath = "'. THEME_URL. '";
-                </script>';
+            <title>' . $this->title . '</title>
 
-        $html .= $headerContent;
-        $html .= $this->header;
-        $html .= $htmlMyHeader;
-        $html .= '</head><body>';
-        $html .= $htmlMyBodyTop;
-        $html .= '<div class="admidio-content">';
-        $html .= $htmlHeadline;
-        $html .= $htmlMenu;
-        $html .= $this->pageContent;
-        $html .= '</div>';
-        $html .= $htmlMyBodyBottom;
-        $html .= '</body></html>';
+            <script type="text/javascript">
+                var gRootPath  = "' . ADMIDIO_URL . '";
+                var gThemePath = "' . THEME_URL . '";
+            </script>';
+
+        $htmlHeader .= $headerContent;
+        $htmlHeader .= $this->header;
+        $htmlHeader .= $htmlMyHeader;
+        $htmlHeader .= '</header>';
+
+        return $htmlHeader;
+    }
+
+    /**
+     * Builds the HTML-Body content
+     * @return string
+     */
+    private function getHtmlBody()
+    {
+        $htmlMyBodyTop    = '';
+        $htmlMyBodyBottom = '';
+        $htmlMenu         = '';
+        $htmlHeadline     = '';
+
+        if ($this->showMenu)
+        {
+            // add modules and administration modules to the menu
+            $this->addDefaultMenu();
+            $htmlMenu = $this->menu->show();
+        }
+
+        if ($this->headline !== '')
+        {
+            if ($this->hasNavbar)
+            {
+                $htmlHeadline = '<h1 class="admidio-module-headline hidden-xs">' . $this->headline . '</h1>';
+            }
+            else
+            {
+                $htmlHeadline = '<h1 class="admidio-module-headline">' . $this->headline . '</h1>';
+            }
+        }
+
+        // load content of theme files
+        if ($this->showThemeHtml)
+        {
+            $htmlMyBodyTop    = $this->getFileContent('my_body_top.php');
+            $htmlMyBodyBottom = $this->getFileContent('my_body_bottom.php');
+        }
+
+        $htmlBody = '<body>';
+        $htmlBody .= $htmlMyBodyTop;
+        $htmlBody .= '<div class="admidio-content">';
+        $htmlBody .= $htmlHeadline;
+        $htmlBody .= $htmlMenu;
+        $htmlBody .= $this->pageContent;
+        $htmlBody .= '</div>';
+        $htmlBody .= $htmlMyBodyBottom;
+        $htmlBody .= '</body>';
+
+        return $htmlBody;
+    }
+
+    /**
+     * This method send the whole html code of the page to the browser. Call this method
+     * if you have finished your page layout.
+     * @param bool $directOutput If set to @b true (default) the html page will be directly send
+     *                           to the browser. If set to @b false the html will be returned.
+     * @return string|void If $directOutput is set to @b false this method will return the html code of the page.
+     */
+    public function show($directOutput = true)
+    {
+        $this->addMainFilesAndContent();
+
+        $html = '<!DOCTYPE html><html>';
+        $html .= $this->getHtmlHeader();
+        $html .= $this->getHtmlBody();
+        $html .= '</html>';
 
         // now show the complete html of the page
-        if($directOutput)
+        if ($directOutput)
         {
             header('Content-type: text/html; charset=utf-8');
             echo $html;
