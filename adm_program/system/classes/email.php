@@ -49,8 +49,8 @@
  * function setListRecipientsFlag()
  *
  * Methode gibt die maximale Groesse der Anhaenge zurueck
- * sizeUnit : 'b' = byte; 'kib' = kilobyte; 'mib' = megabyte; 'gib' = gigabyte
- * getMaxAttachmentSize($sizeUnit = 'kib')
+ * sizeUnit : 'Byte' = byte; 'KiB' = kibibyte; 'MiB' = mebibyte; 'GiB' = gibibyte; 'TiB' = tebibyte
+ * getMaxAttachmentSize($sizeUnit = 'MiB')
  *
  * Soll die Nachricht als HTML Code interpretiert und versendet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
@@ -61,6 +61,12 @@
  */
 class Email extends PHPMailer
 {
+    const SIZE_UNIT_BYTE = 'Byte';
+    const SIZE_UNIT_KIBIBYTE = 'KiB';
+    const SIZE_UNIT_MEBIBYTE = 'MiB';
+    const SIZE_UNIT_GIBIBYTE = 'GiB';
+    const SIZE_UNIT_TEBIBYTE = 'TiB';
+
     private $emText           = ''; // plain text of email
     private $emHtmlText       = ''; // html text of email
     private $emAddresses      = array(); // Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
@@ -511,10 +517,10 @@ class Email extends PHPMailer
 
     /**
      * Returns the maximum size of an attachment
-     * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
+     * @param string $sizeUnit 'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
      * @return float The maximum attachment size in the given size-unit
      */
-    public static function getMaxAttachmentSize($sizeUnit = 'mib')
+    public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE)
     {
         global $gPreferences;
 
@@ -525,13 +531,13 @@ class Email extends PHPMailer
 
         switch ($sizeUnit)
         {
-            case 'tib':
+            case self::SIZE_UNIT_TEBIBYTE:
                 $attachmentSize /= 1024;
-            case 'gib':
+            case self::SIZE_UNIT_GIBIBYTE:
                 $attachmentSize /= 1024;
-            case 'mib':
+            case self::SIZE_UNIT_MEBIBYTE:
                 $attachmentSize /= 1024;
-            case 'kib':
+            case self::SIZE_UNIT_KIBIBYTE:
                 $attachmentSize /= 1024;
             default:
         }
@@ -564,7 +570,7 @@ class Email extends PHPMailer
      * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
      * @return float The maximum attachment size in the given size-unit
      */
-    public static function getMaxAttachementSize($sizeUnit = 'mib')
+    public static function getMaxAttachementSize($sizeUnit = self::SIZE_UNIT_MEBIBYTE)
     {
         global $gLogger;
 
