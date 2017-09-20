@@ -50,7 +50,7 @@
  *
  * Methode gibt die maximale Groesse der Anhaenge zurueck
  * size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
- * getMaxAttachementSize($sizeUnit = 'kb')
+ * getMaxAttachmentSize($sizeUnit = 'kb')
  *
  * Soll die Nachricht als HTML Code interpretiert und versendet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
@@ -187,7 +187,7 @@ class Email extends PHPMailer
      * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
      * @return float The maximum attachment size in the given size-unit
      */
-    public static function getMaxAttachementSize($sizeUnit = 'mib')
+    public static function getMaxAttachmentSize($sizeUnit = 'mib')
     {
         global $gPreferences;
 
@@ -343,6 +343,7 @@ class Email extends PHPMailer
      * @param string $message
      * @param string $editorName
      * @param string $editorEmail
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      * @return bool|string
      */
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '')
@@ -537,10 +538,30 @@ class Email extends PHPMailer
      * @param string $message
      * @param string $editorName
      * @param string $editorEmail
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
      * @return bool|string
      */
     public function adminNotfication($subject, $message, $editorName = '', $editorEmail = '')
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$email->adminNotfication()" is deprecated, use "$email->adminNotification()" instead!');
+
         return $this->adminNotification($subject, $message, $editorName, $editorEmail);
+    }
+
+    /**
+     * Returns the maximum size of an attachment
+     * @deprecated 3.3.0:4.0.0 "getMaxAttachementSize()" is a typo. Use "getMaxAttachmentSize()" instead.
+     * @param string $sizeUnit 'b' = byte, 'kib' = kilobyte, 'mib' = megabyte, 'gib' = gigabyte, 'tib' = terabyte
+     * @return float The maximum attachment size in the given size-unit
+     */
+    public static function getMaxAttachementSize($sizeUnit = 'mib')
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "Email::getMaxAttachementSize()" is deprecated, use "Email::getMaxAttachmentSize()" instead!');
+
+        return self::getMaxAttachmentSize($sizeUnit);
     }
 }

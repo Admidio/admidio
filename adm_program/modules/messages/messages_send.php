@@ -363,7 +363,7 @@ if ($getMsgType === 'EMAIL')
                     {
                         // check the size of the attachment
                         $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
-                        if ($attachmentSize > Email::getMaxAttachementSize('b'))
+                        if ($attachmentSize > Email::getMaxAttachmentSize('b'))
                         {
                             $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                             // => EXIT
