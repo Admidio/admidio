@@ -1018,7 +1018,7 @@ class User extends TableAccess
      */
     public function hasRightEditProfile(&$user, $checkOwnProfile = true)
     {
-        if (!$user instanceof \User)
+        if (!$user instanceof self)
         {
             return false;
         }
