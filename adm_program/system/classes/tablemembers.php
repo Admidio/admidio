@@ -31,7 +31,7 @@ class TableMembers extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $memId    The recordset of the membership with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $memId = 0)
+    public function __construct(Database $database, $memId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'mem_rol_id');

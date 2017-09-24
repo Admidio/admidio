@@ -160,7 +160,7 @@ if($gDbType === 'mysql')
  * @param string    $filename The SQL filename (db.sql, data.sql)
  * @param \Database $database
  */
-function readAndExecuteSQLFromFile($filename, &$database)
+function readAndExecuteSQLFromFile($filename, Database $database)
 {
     global $g_tbl_praefix, $gL10n;
 

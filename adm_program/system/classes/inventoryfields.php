@@ -32,7 +32,7 @@ class InventoryFields
      * @param int       $organizationId The id of the organization for which the
      *                                  profile field structure should be read
      */
-    public function __construct(&$database, $organizationId)
+    public function __construct(Database $database, $organizationId)
     {
         $this->db =& $database;
         $this->readInventoryFields($organizationId);

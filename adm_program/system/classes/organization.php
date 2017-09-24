@@ -38,7 +38,7 @@ class Organization extends TableAccess
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $organization = '')
+    public function __construct(Database $database, $organization = '')
     {
         parent::__construct($database, TBL_ORGANIZATIONS, 'org');
 

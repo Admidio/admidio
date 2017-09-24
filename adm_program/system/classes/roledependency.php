@@ -28,7 +28,7 @@ class RoleDependency
      * Constructor that will create an object of a recordset of the specified table.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$database)
+    public function __construct(Database $database)
     {
         $this->db =& $database;
     }
@@ -104,7 +104,7 @@ class RoleDependency
      * @param int       $childId
      * @return int[]
      */
-    public static function getParentRoles(&$database, $childId)
+    public static function getParentRoles(Database $database, $childId)
     {
         $allParentIds = array();
 
@@ -132,7 +132,7 @@ class RoleDependency
      * @param int       $parentId
      * @return int[]
      */
-    public static function getChildRoles(&$database, $parentId)
+    public static function getChildRoles(Database $database, $parentId)
     {
         $allChildIds = array();
 
@@ -190,7 +190,7 @@ class RoleDependency
      * @param int       $parentId
      * @return bool
      */
-    public static function removeChildRoles(&$database, $parentId)
+    public static function removeChildRoles(Database $database, $parentId)
     {
         if ($parentId > 0)
         {

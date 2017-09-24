@@ -34,7 +34,7 @@ class Participants
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $rolId    The role ID of a date
      */
-    public function __construct(&$database, $rolId = 0)
+    public function __construct(Database $database, $rolId = 0)
     {
         $this->db =& $database;
         $this->checkId($rolId);

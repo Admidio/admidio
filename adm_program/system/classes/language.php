@@ -46,7 +46,7 @@ class Language
      * Language constructor.
      * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
      */
-    public function __construct(&$languageDataObject = null)
+    public function __construct(LanguageData $languageDataObject = null)
     {
         $this->languageData =& $languageDataObject;
     }
@@ -56,7 +56,7 @@ class Language
      * language data that is stored in the PHP session.
      * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
      */
-    public function addLanguageData(&$languageDataObject)
+    public function addLanguageData(LanguageData $languageDataObject)
     {
         $this->languageData =& $languageDataObject;
     }

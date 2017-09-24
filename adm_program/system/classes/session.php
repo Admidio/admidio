@@ -45,7 +45,7 @@ class Session extends TableAccess
      *                             If id isn't set than an empty object of the table is created.
      * @param string     $cookiePrefix The prefix that is used for cookies
      */
-    public function __construct(&$database, $session = 0, $cookiePrefix = '')
+    public function __construct(Database $database, $session = 0, $cookiePrefix = '')
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
@@ -455,7 +455,7 @@ class Session extends TableAccess
      * Set the database object for communication with the database of this class.
      * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
         parent::setDatabase($database);
 

@@ -32,7 +32,7 @@ class AutoLogin extends TableAccess
      * @param string|int $session  The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $session = 0)
+    public function __construct(Database $database, $session = 0)
     {
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 

@@ -31,7 +31,7 @@ class ProfileFields
      * @param \Database $database       Database object (should be @b $gDb)
      * @param int       $organizationId The id of the organization for which the profile field structure should be read
      */
-    public function __construct(&$database, $organizationId)
+    public function __construct(Database $database, $organizationId)
     {
         $this->db =& $database;
         $this->readProfileFields($organizationId);
@@ -526,7 +526,7 @@ class ProfileFields
      * Set the database object for communication with the database of this class.
      * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
         $this->db =& $database;
     }

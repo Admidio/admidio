@@ -26,7 +26,7 @@ class TableGuestbookComment extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $gbcId    The recordset of the guestbook comment with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $gbcId = 0)
+    public function __construct(Database $database, $gbcId = 0)
     {
         // read also data of assigned guestbook entry
         $this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'gbc_gbo_id');

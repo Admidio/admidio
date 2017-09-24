@@ -49,7 +49,7 @@ class TableAccess
      * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $tableName, $columnPrefix, $id = '')
+    public function __construct(Database $database, $tableName, $columnPrefix, $id = '')
     {
         $this->db          =& $database;
         $this->tableName    = $tableName;
@@ -76,7 +76,7 @@ class TableAccess
      * Set the database object for communication with the database of this class.
      * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
         $this->db =& $database;
     }
@@ -143,7 +143,7 @@ class TableAccess
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code // Constructor of adm_dates object where the category (calendar) is connected
-     * public function __construct(&$db, $datId = 0)
+     * public function __construct($database, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
      *     parent::__construct($db, TBL_DATES, 'dat', $datId);

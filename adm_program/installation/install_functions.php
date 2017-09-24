@@ -45,20 +45,20 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 
 /**
  * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
- * @param \Database $db
+ * @param \Database $database
  * @return string
  */
-function checkDatabaseVersion(&$db)
+function checkDatabaseVersion(Database $database)
 {
     global $gL10n;
 
     $message = '';
 
     // check database version
-    if (version_compare($db->getVersion(), $db->getMinimumRequiredVersion(), '<'))
+    if (version_compare($database->getVersion(), $database->getMinimumRequiredVersion(), '<'))
     {
-        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $db->getVersion() . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $db->getMinimumRequiredVersion(),
+        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
+                   $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
                                '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
     }
 

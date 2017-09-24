@@ -42,7 +42,7 @@ class User extends TableAccess
      * @param int $userId                The id of the user who should be loaded. If id isn't set than an empty
      *                                   object with no specific user is created.
      */
-    public function __construct(&$database, ProfileFields $userFields = null, $userId = 0)
+    public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
         global $gCurrentOrganization;
 
@@ -61,7 +61,7 @@ class User extends TableAccess
      * Set the database object for communication with the database of this class.
      * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setProfileFieldsDataDatabase(&$database)
+    public function setProfileFieldsDataDatabase(Database $database)
     {
         $this->mProfileFieldsData->setDatabase($database);
     }
@@ -1095,7 +1095,7 @@ class User extends TableAccess
      * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
      * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
      */
-    public function hasRightEditProfile(&$user, $checkOwnProfile = true)
+    public function hasRightEditProfile(User $user, $checkOwnProfile = true)
     {
         if (!$user instanceof self)
         {

@@ -26,7 +26,7 @@ class TableText extends TableAccess
      * @param string    $name     The recordset of the text with this name will be loaded.
      *                            If name isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $name = '')
+    public function __construct(Database $database, $name = '')
     {
         parent::__construct($database, TBL_TEXTS, 'txt', $name);
     }
