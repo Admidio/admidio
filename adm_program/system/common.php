@@ -120,7 +120,7 @@ if($gCurrentSession->hasObject('gCurrentUser'))
 {
     $gProfileFields =& $gCurrentSession->getObject('gProfileFields');
     $gCurrentUser   =& $gCurrentSession->getObject('gCurrentUser');
-    $gCurrentUser->mProfileFieldsData->setDatabase($gDb);
+    $gCurrentUser->setProfileFieldsDataDatabase($gDb);
 
     // checks if user in database session is the same as in php session
     if($gCurrentUser->getValue('usr_id') !== $gCurrentSession->getValue('ses_usr_id'))

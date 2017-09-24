@@ -58,6 +58,15 @@ class User extends TableAccess
     }
 
     /**
+     * Set the database object for communication with the database of this class.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setProfileFieldsDataDatabase(&$database)
+    {
+        $this->mProfileFieldsData->setDatabase($database);
+    }
+
+    /**
      * Checks if the current user is allowed to view a profile field of the user of the parameter.
      * It will check if the current user could view the profile field category. Within the own profile
      * you can view profile fields of hidden categories. We will also check if the current user
