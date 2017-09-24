@@ -49,8 +49,6 @@ class UserRegistration extends User
      */
     public function __construct(Database $database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
     {
-        global $gCurrentOrganization;
-
         parent::__construct($database, $userFields, $userId);
 
         if($organizationId > 0)
