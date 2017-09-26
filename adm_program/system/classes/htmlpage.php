@@ -48,26 +48,7 @@ class HtmlPage
      */
     public function __construct($headline = '')
     {
-<<<<<<< HEAD
-        global $g_root_path;
-
-        $this->title         = '';
-        $this->header        = '';
-        $this->headline      = '';
-        $this->pageContent   = '';
-        $this->menu          = new HtmlNavbar('menu_main_script', $headline, $this);
-        $this->showThemeHtml = true;
-        $this->showMenu      = true;
-        $this->showModal     = false;
-        $this->hasNavbar     = false;
-        $this->printMode     = false;
-        $this->javascriptContent        = '';
-        $this->javascriptContentExecute = '';
-        $this->cssFiles      = array();
-        $this->jsFiles       = array();
-=======
         $this->menu = new HtmlNavbar('menu_main_script', $headline, $this);
->>>>>>> refs/remotes/origin/master
 
         $this->setHeadline($headline);
 
@@ -204,7 +185,6 @@ class HtmlPage
     public function showMainMenu($details = true)
     {
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
-<<<<<<< HEAD
         $men_icon  = '/dummy.png';
         $full_menu = '';
 
@@ -217,6 +197,8 @@ class HtmlPage
 
         while ($main_men = $main_men_statement->fetchObject())
         {
+            $unreadBadge = '';
+
             // display Menu
             $sql = 'SELECT *
               FROM '.TBL_MENU.'
@@ -225,49 +207,6 @@ class HtmlPage
             $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
             if($statement->rowCount() > 0)
-=======
-
-        $this->menu->addItem(
-            'menu_item_modules', null, $gL10n->get('SYS_MODULES'),
-            'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
-        );
-
-        $this->menu->addItem(
-            'menu_item_overview', '/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'),
-            'home.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-        );
-
-        if ($gPreferences['enable_announcements_module'] == 1 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
-        {
-            $this->menu->addItem(
-                'menu_item_announcements', FOLDER_MODULES . '/announcements/announcements.php', $gL10n->get('ANN_ANNOUNCEMENTS'),
-                'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-        if ($gPreferences['enable_download_module'] == 1)
-        {
-            $this->menu->addItem(
-                'menu_item_download', FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
-                'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-        if ($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
-        {
-            $this->menu->addItem(
-                'menu_item_email', FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
-                'email.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        if (($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
-        {
-            // get number of unread messages for user
-            $message = new TableMessage($gDb);
-            $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
-
-            $badge = '';
-            if ($unread > 0)
->>>>>>> refs/remotes/origin/master
             {
                 $last = '';
 
@@ -327,8 +266,6 @@ class HtmlPage
                     //special case because there are differnent links if you are logged in or out for mail
                     if($row->men_modul_name === 'mail' && $gValidLogin)
                     {
-                        $unreadBadge = '';
-
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
                         $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
@@ -409,7 +346,7 @@ class HtmlPage
             }
 
             $this->menu->addItem(
-                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $badge,
+                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
                 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
@@ -583,32 +520,6 @@ class HtmlPage
     }
 
     /**
-     * The method will return the filename. If you are in debug mode than it will return the
-     * not minified version of the filename otherwise it will return the minified version.
-     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
-     * and one version without the @b min.
-     * @param string $filepath Filename of the NOT minified file.
-     * @return string Returns the filename in dependence of the debug mode.
-     */
-    private function getDebugOrMinFilepath($filepath)
-    {
-        global $gDebug, $g_root_path;
-
-        $fileInfo = pathinfo($filepath);
-        $filename = basename($fileInfo['filename'], '.min');
-
-        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
-
-        if ((!$gDebug && is_file(SERVER_PATH.$filepathMin)) || !is_file(SERVER_PATH.$filepathDebug))
-        {
-            return $g_root_path.$filepathMin;
-        }
-
-        return $g_root_path.$filepathDebug;
-    }
-
-    /**
      * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
      * @return string Returns the headline of the current Admidio page.
      */
@@ -664,33 +575,6 @@ class HtmlPage
     public function hasNavbar()
     {
         $this->hasNavbar = true;
-    }
-
-    /**
-     * Returns the menu object of this html page.
-     * @return \HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-
-    /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
-     * @return string Returns the headline of the current Admidio page.
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Returns the title of the html page.
-     * @return string Returns the title of the html page.
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -843,8 +727,8 @@ class HtmlPage
 
         // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
         $headerContent .= '<!--[if lt IE 9]>
-            <script src="'.$g_root_path.'/adm_program/libs/html5shiv/html5shiv.min.js"></script>
-            <script src="'.$g_root_path.'/adm_program/libs/respond/respond.min.js"></script>
+            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/html5shiv/html5shiv.min.js"></script>
+            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/respond/respond.min.js"></script>
         <![endif]-->';
 
         // add javascript files to page
@@ -926,7 +810,7 @@ class HtmlPage
         if ($this->showMenu)
         {
             // add modules and administration modules to the menu
-            $this->addDefaultMenu();
+            $this->showMainMenu();
             $htmlMenu = $this->menu->show();
         }
 
