@@ -35,14 +35,14 @@ class UploadHandlerPhoto extends UploadHandler
      * @param        $type
      * @param        $error
      * @param        $index
-     * @param        $content_range
+     * @param        $contentRange
      * @return \stdClass
      */
-    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $content_range = null)
+    protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
     {
         global $photoAlbum, $gPreferences, $gL10n;
 
-        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $content_range);
+        $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
         if(!isset($file->error))
         {
@@ -67,26 +67,29 @@ class UploadHandlerPhoto extends UploadHandler
 
                 // read image size
                 $imageProperties = getimagesize($fileLocation);
-                $imageDimensions = $imageProperties[0] * $imageProperties[1];
-
-                if($imageDimensions > admFuncProcessableImageSize())
+                if ($imageProperties === false)
                 {
-                    $errorText = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize() / 1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
-                    throw new AdmException($errorText);
+                    throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
                 }
 
                 // check mime type and set file extension
-                if($imageProperties['mime'] === 'image/jpeg')
+                switch ($imageProperties['mime'])
                 {
-                    $fileExtension = 'jpg';
+                    case 'image/jpeg':
+                        $fileExtension = 'jpg';
+                        break;
+                    case 'image/png':
+                        $fileExtension = 'png';
+                        break;
+                    default:
+                        throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
                 }
-                elseif($imageProperties['mime'] === 'image/png')
+
+                $imageDimensions = $imageProperties[0] * $imageProperties[1];
+                if ($imageDimensions > admFuncProcessableImageSize())
                 {
-                    $fileExtension = 'png';
-                }
-                else
-                {
-                    throw new AdmException('PHO_PHOTO_FORMAT_INVALID');
+                    $imageSize = round(admFuncProcessableImageSize() / 1000000, 2);
+                    throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . $imageSize . ' ' . $gL10n->get('MEGA_PIXEL'));
                 }
 
                 // create image object and scale image to defined size of preferences

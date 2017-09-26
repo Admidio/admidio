@@ -44,7 +44,14 @@ if(!isset($gTimezone))
     $gTimezone = 'Europe/Berlin';
 }
 
+// default all cookies will only be set for the subfolder of Admidio
+if (!isset($gSetCookieForDomain))
+{
+    $gSetCookieForDomain = false;
+}
+
 // set Force permanent HTTPS redirect
-if (!isset($gForceHTTPS)) {
+if (!isset($gForceHTTPS))
+{
     $gForceHTTPS = false;
 }

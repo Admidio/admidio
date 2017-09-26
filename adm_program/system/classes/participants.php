@@ -22,22 +22,21 @@
  */
 class Participants
 {
-    private $rolId;                 ///< RolId of the current date of this object.
-    private $leader;                ///< The number of leaders of the date in the current object
-    private $count;                 ///< Counter of participants of the date in current object.
-    private $order;                 ///< SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
-    public $memberDate;             ///< Array with surname, firstname of all participants of the date in current object.
-    public $mDb;                    ///< db object must public because of session handling
+    private $count  = -1;           ///< Counter of participants of the date in current object.
+    private $leader = -1;           ///< The number of leaders of the date in the current object
+    private $rolId  = -1;           ///< RolId of the current date of this object.
+    private $order  = '';           ///< SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
+    private $memberDate = array();  ///< Array with surname, firstname of all participants of the date in current object.
+    private $db;                    ///< db object must public because of session handling
 
     /**
      * Constructor that will initialize variables and check if $rolId is numeric
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $rolId    The role ID of a date
      */
-    public function __construct(&$database, $rolId = 0)
+    public function __construct(Database $database, $rolId = 0)
     {
-        $this->mDb =& $database;
-        $this->clear();
+        $this->db =& $database;
         $this->checkId($rolId);
     }
 
@@ -68,7 +67,7 @@ class Participants
         $this->leader     = -1;
         $this->rolId      = -1;
         $this->order      = '';
-        $this->memberDate = '';
+        $this->memberDate = array();
     }
 
     /**
@@ -91,7 +90,7 @@ class Participants
                    AND (mem_approved IS NULL
                             OR mem_approved < 3)';
 
-        $membersStatement = $this->mDb->queryPrepared($sql, array($this->rolId, DATE_NOW));
+        $membersStatement = $this->db->queryPrepared($sql, array($this->rolId, DATE_NOW));
 
         // Write all member Id´s and leader status in an array
         $numParticipants = array();
@@ -193,11 +192,11 @@ class Participants
                  WHERE mem_rol_id = ? -- $this->rolId
               ORDER BY surname '.$this->order;
         $queryParams = array(
-            $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
-            $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
             $this->rolId
         );
-        $membersStatement = $this->mDb->queryPrepared($sql, $queryParams);
+        $membersStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $participants = array();
         while ($row = $membersStatement->fetch())

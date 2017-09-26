@@ -33,6 +33,15 @@ class ComponentUpdate extends Component
     private $targetVersionArray;    ///< This is the version that is stored in the files of the component. Each array element contains one part of the version.
 
     /**
+     * Constructor that will create an object for component updating.
+     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     */
+    public function __construct(Database $database)
+    {
+        parent::__construct($database);
+    }
+
+    /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
      * @param string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
@@ -548,7 +557,7 @@ class ComponentUpdate extends Component
             if($rowFolder = $folderStatement->fetch())
             {
                 $folder = new TableFolder($this->db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getCompletePathOfFolder();
+                $folderOldName = $folder->getFullFolderPath();
                 $folder->setValue('fol_name', TableFolder::getRootFolderName());
                 $folder->save();
 
@@ -559,7 +568,7 @@ class ComponentUpdate extends Component
 
                 if($row['org_shortname'] === $g_organization)
                 {
-                    rename($folderOldName, $folder->getCompletePathOfFolder());
+                    rename($folderOldName, $folder->getFullFolderPath());
                 }
             }
             else

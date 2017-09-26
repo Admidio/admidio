@@ -39,7 +39,7 @@
  * @link http://www.phpcaptcha.org/Securimage_Docs/ Online Documentation
  * @copyright 2013 Drew Phillips
  * @author Drew Phillips <drew@drew-phillips.com>
- * @version 3.5.2 (Feb 15, 2014)
+ * @version 3.6.5 (Dec 4 2016)
  * @package Securimage
  *
  */
@@ -50,11 +50,10 @@
 require_once dirname(__FILE__) . '/securimage.php';
 
 // ***** START ADMIDIO CODE *****
-require_once('../../system/common.php');
+require_once(__DIR__ . '../../system/common.php');
 // ***** END ADMIDIO CODE *****
 
 $img = new Securimage();
-
 
 // You can customize the image by making changes below, some examples are included - remove the "//" to uncomment
 
@@ -78,16 +77,7 @@ $img = new Securimage();
 // set namespace if supplied to script via HTTP GET
 if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
 
-// ***** START ADMIDIO CODE *****
-if($gPreferences['captcha_background_image'] !== '')
-{
-    $img->show(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/' . $gPreferences['captcha_background_image']);
-}
-else
-{
-    $img->show();  // outputs the image and content headers to the browser
-}
-// ***** END ADMIDIO CODE *****
 
+$img->show();  // outputs the image and content headers to the browser
 // alternate use:
 // $img->show('/path/to/background_image.jpg');

@@ -65,27 +65,25 @@ $picThumbPath = $albumFolder . '/thumbnails/' . $getPhotoNr . '.jpg';
 // im Debug-Modus den ermittelten Bildpfad ausgeben
 $gLogger->info('ImagePath: ' . $picPath);
 
-// Wenn Thumbnail existiert laengere Seite ermitteln
 if ($getThumbnail)
 {
     if ($getPhotoNr > 0)
     {
-        $thumbLength = 1;
+        $thumbLength = null;
+
+        // Wenn Thumbnail existiert laengere Seite ermitteln
         if (is_file($picThumbPath))
         {
-            // Ermittlung der Original Bildgroesse
-            $imageSize = getimagesize($picThumbPath);
-
-            $thumbLength = $imageSize[1];
-            if ($imageSize[0] > $imageSize[1])
+            $imageProperties = getimagesize($picThumbPath);
+            if (is_array($imageProperties))
             {
-                $thumbLength = $imageSize[0];
+                $thumbLength = max($imageProperties[0], $imageProperties[1]);
             }
         }
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if (!is_file($picThumbPath) || $thumbLength != $gPreferences['photo_thumbs_scale'])
+        if (!is_file($picThumbPath) || $thumbLength !== (int) $gPreferences['photo_thumbs_scale'])
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if (!is_dir($albumFolder . '/thumbnails'))
@@ -102,7 +100,7 @@ if ($getThumbnail)
         else
         {
             header('Content-Type: image/jpeg');
-            echo readfile($picThumbPath);
+            readfile($picThumbPath);
         }
     }
     else
@@ -136,12 +134,13 @@ if ($image !== null)
         {
             $fontSize = $getMaxWidth / 40;
         }
+        $imageSize = $image->getImageSize();
         $fontX = $fontSize;
-        $fontY = $image->imageHeight-$fontSize;
-        $fontColor = imagecolorallocate($image->imageResource, 255, 255, 255);
+        $fontY = $imageSize[0] - $fontSize;
+        $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
         $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
         $text = $gPreferences['photo_image_text'];
-        imagettftext($image->imageResource, $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
+        imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 
     // Rueckgabe des neuen Bildes

@@ -19,13 +19,12 @@
  */
 class InventoryFields
 {
-    public $mInventoryFields = array(); ///< Array with all inventory fields objects
-    public $mInventoryData = array();   ///< Array with all inventory data objects
-
-    protected $mItemId;                 ///< ItemId of the current item of this object
-    public $mDb;                        ///< db object must public because of session handling
-    protected $noValueCheck;            ///< if true, than no value will be checked if method setValue is called
-    public $columnsValueChanged;        ///< flag if a value of one field had changed
+    protected $db;                          ///< db object must public because of session handling
+    protected $columnsValueChanged = false; ///< flag if a value of one field had changed
+    protected $noValueCheck     = false;    ///< if true, than no value will be checked if method setValue is called
+    protected $mInventoryFields = array();  ///< Array with all inventory fields objects
+    protected $mInventoryData   = array();  ///< Array with all inventory data objects
+    protected $mItemId          = 0;        ///< ItemId of the current item of this object
 
     /**
      * constructor that will initialize variables and read the inventory field structure
@@ -33,13 +32,10 @@ class InventoryFields
      * @param int       $organizationId The id of the organization for which the
      *                                  profile field structure should be read
      */
-    public function __construct(&$database, $organizationId)
+    public function __construct(Database $database, $organizationId)
     {
-        $this->mDb =& $database;
+        $this->db =& $database;
         $this->readInventoryFields($organizationId);
-        $this->mItemId = 0;
-        $this->noValueCheck = false;
-        $this->columnsValueChanged = false;
     }
 
     /**
@@ -47,9 +43,25 @@ class InventoryFields
      */
     public function clearInventoryData()
     {
+        $this->columnsValueChanged = false;
         $this->mInventoryData = array();
         $this->mItemId = 0;
-        $this->columnsValueChanged = false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInventoryFields()
+    {
+        return $this->mInventoryFields;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return $this->columnsValueChanged;
     }
 
     /**
@@ -371,13 +383,13 @@ class InventoryFields
                  WHERE (  cat_org_id IS NULL
                        OR cat_org_id = ? ) -- $organizationId
               ORDER BY cat_sequence ASC, inf_sequence ASC';
-        $usfStatement = $this->mDb->queryPrepared($sql, array($organizationId));
+        $usfStatement = $this->db->queryPrepared($sql, array($organizationId));
 
         while($row = $usfStatement->fetch())
         {
             if(!isset($this->mInventoryFields[$row['inf_name_intern']]))
             {
-                $this->mInventoryFields[$row['inf_name_intern']] = new TableInventoryField($this->mDb);
+                $this->mInventoryFields[$row['inf_name_intern']] = new TableInventoryField($this->db);
             }
             $this->mInventoryFields[$row['inf_name_intern']]->setArray($row);
         }
@@ -409,13 +421,13 @@ class InventoryFields
                 INNER JOIN '.TBL_INVENT_FIELDS.'
                         ON inf_id = ind_inf_id
                      WHERE ind_itm_id = ? -- $itemId';
-            $usdStatement = $this->mDb->queryPrepared($sql, array($itemId));
+            $usdStatement = $this->db->queryPrepared($sql, array($itemId));
 
             while($row = $usdStatement->fetch())
             {
                 if(!isset($this->mInventoryData[$row['ind_inf_id']]))
                 {
-                    $this->mInventoryData[$row['ind_inf_id']] = new TableAccess($this->mDb, TBL_INVENT_DATA, 'ind');
+                    $this->mInventoryData[$row['ind_inf_id']] = new TableAccess($this->db, TBL_INVENT_DATA, 'ind');
                 }
                 $this->mInventoryData[$row['ind_inf_id']]->setArray($row);
             }
@@ -428,7 +440,7 @@ class InventoryFields
      */
     public function saveInventoryData($itemId)
     {
-        $this->mDb->startTransaction();
+        $this->db->startTransaction();
 
         foreach($this->mInventoryData as $value)
         {
@@ -451,7 +463,7 @@ class InventoryFields
 
         $this->columnsValueChanged = false;
         $this->mItemId = $itemId;
-        $this->mDb->endTransaction();
+        $this->db->endTransaction();
     }
 
     /**
@@ -544,7 +556,7 @@ class InventoryFields
         }
         elseif(isset($this->mInventoryFields[$fieldNameIntern]) && $fieldValue !== '')
         {
-            $this->mInventoryData[$infId] = new TableAccess($this->mDb, TBL_INVENT_DATA, 'ind');
+            $this->mInventoryData[$infId] = new TableAccess($this->db, TBL_INVENT_DATA, 'ind');
             $this->mInventoryData[$infId]->setValue('ind_inf_id', $this->mInventoryFields[$fieldNameIntern]->getValue('inf_id'));
             $this->mInventoryData[$infId]->setValue('ind_itm_id', $this->mItemId);
             $returnCode = $this->mInventoryData[$infId]->setValue('ind_value', $fieldValue);

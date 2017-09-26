@@ -38,7 +38,7 @@ class Organization extends TableAccess
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $organization = '')
+    public function __construct(Database $database, $organization = '')
     {
         parent::__construct($database, TBL_ORGANIZATIONS, 'org');
 
@@ -514,7 +514,7 @@ class Organization extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // org_shortname shouldn't be edited
-        if($columnName === 'org_shortname' && !$this->new_record)
+        if($columnName === 'org_shortname' && !$this->newRecord)
         {
             return false;
         }
@@ -529,5 +529,13 @@ class Organization extends TableAccess
             }
         }
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getDbColumns()
+    {
+        return $this->dbColumns;
     }
 }

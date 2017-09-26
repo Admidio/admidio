@@ -13,14 +13,14 @@
  * @class SystemMail
  * Beside the methods of the parent class there are the following additional methods:
  *
- * getMailText($systemMailId, &$user)
+ * getMailText($systemMailId, $user)
  *                  - diese Methode liest den Mailtext aus der DB und ersetzt
  *                    vorkommende Platzhalter durch den gewuenschten Inhalt
  *
  * setVariable($number, $value)
  *                  - hier kann der Inhalt fuer zusaetzliche Variablen gesetzt werden
  *
- * sendSystemMail($systemMailId, &$user)
+ * sendSystemMail($systemMailId, $user)
  *                  - diese Methode sendet eine Systemmail nachdem der Mailtext
  *                    ausgelesen und Platzhalter ersetzt wurden
  */
@@ -37,7 +37,7 @@ class SystemMail extends Email
      * Constructor that will create an object of a SystemMail to handle all system notifications.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$database)
+    public function __construct(Database $database)
     {
         $this->db =& $database;
         $this->smTextObject = new TableText($this->db);
@@ -50,7 +50,7 @@ class SystemMail extends Email
      * @param \User  $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
      * @return string
      */
-    public function getMailText($systemMailId, &$user)
+    public function getMailText($systemMailId, User $user)
     {
         global $gPreferences;
 
@@ -133,7 +133,7 @@ class SystemMail extends Email
      * @throws AdmException SYS_EMAIL_NOT_SEND
      * @return true
      */
-    public function sendSystemMail($systemMailId, &$user)
+    public function sendSystemMail($systemMailId, User $user)
     {
         global $gPreferences;
 

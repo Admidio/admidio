@@ -26,10 +26,10 @@
  */
 class Inventory extends TableInventory
 {
-    public $mInventoryFieldsData;           ///< object with current user field structure
-    public $mProfileFieldsData  = array();
-    protected $listViewRights = array();  ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
-    protected $organizationId;              ///< the organization for which the rights are read, could be changed with method @b setOrganization
+    protected $mInventoryFieldsData;            ///< object with current user field structure
+    protected $mProfileFieldsData = array();
+    protected $listViewRights     = array();    ///< Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
+    protected $organizationId;                  ///< the organization for which the rights are read, could be changed with method @b setOrganization
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -39,7 +39,7 @@ class Inventory extends TableInventory
      *                                          of the current organization. This could be the default object @b $gProfileFields.
      * @param int              $itemId          The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
      */
-    public function __construct(&$database, $inventoryFields, $itemId = 0)
+    public function __construct(Database $database, InventoryFields $inventoryFields, $itemId = 0)
     {
         global $gCurrentOrganization;
 
@@ -63,7 +63,7 @@ class Inventory extends TableInventory
     /**
      * @return bool returns true if a column of user table or profile fields has changed
      */
-    public function columnsValueChanged()
+    public function hasColumnsValueChanged()
     {
         return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
     }
@@ -179,7 +179,7 @@ class Inventory extends TableInventory
             $this->db->startTransaction();
 
             // if value of a field changed then update timestamp of user object
-            if($this->mInventoryFieldsData->columnsValueChanged)
+            if($this->mInventoryFieldsData->hasColumnsValueChanged())
             {
                 $this->columnsValueChanged = true;
             }

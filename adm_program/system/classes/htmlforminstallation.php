@@ -25,11 +25,11 @@
  */
 class HtmlFormInstallation extends HtmlForm
 {
-    private $descriptionTitle;  ///< A title for the description of the form. This will be displayed as h2
-    private $descriptionText;   ///< A text that will be shown after the headline before the form will be set
-    private $headline;          ///< Headline of the form
-    private $title;             ///< Title of the html page
-    private $headers;
+    private $title            = '';     ///< Title of the html page
+    private $headline         = '';     ///< Headline of the form
+    private $descriptionTitle = '';     ///< A title for the description of the form. This will be displayed as h2
+    private $descriptionText  = '';     ///< A text that will be shown after the headline before the form will be set
+    private $headers          = array();
 
     /**
      * Constructor creates the form element
@@ -39,12 +39,6 @@ class HtmlFormInstallation extends HtmlForm
     public function __construct($id, $action)
     {
         parent::__construct($id, $action);
-
-        $this->title = '';
-        $this->headline = '';
-        $this->descriptionText  = '';
-        $this->descriptionTitle = '';
-        $this->headers = array();
     }
 
     /**
@@ -126,12 +120,12 @@ class HtmlFormInstallation extends HtmlForm
             <link rel="icon" type="image/png" href="layout/favicon-16x16.png" sizes="16x16" />
             <link rel="apple-touch-icon" type="image/png" href="layout/apple-touch-icon.png" sizes="180x180" />
 
-            <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.'/adm_program/libs/bootstrap/css/bootstrap.min.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
 
-            <script type="text/javascript" src="../libs/jquery/jquery.min.js"></script>
-            <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
-            <script type="text/javascript" src="../system/js/common_functions.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/libs/jquery/jquery.min.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/libs/bootstrap/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/system/js/common_functions.js"></script>
 
             <script type="text/javascript">
                 $(function() {

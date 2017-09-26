@@ -86,10 +86,9 @@ if (isset($_SESSION['language']))
     $language = $_SESSION['language'];
 }
 
-$gL10n = new Language();
 $gLanguageData = new LanguageData($language);
+$gL10n = new Language($gLanguageData);
 
-$gL10n->addLanguageData($gLanguageData);
 $language = $gL10n->getLanguage();
 
 $pathConfigFile = ADMIDIO_PATH . FOLDER_DATA . '/config.php';

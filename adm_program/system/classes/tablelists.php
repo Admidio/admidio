@@ -26,7 +26,7 @@ class TableLists extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $lstId    The recordset of the list with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $lstId = 0)
+    public function __construct(Database $database, $lstId = 0)
     {
         parent::__construct($database, TBL_LISTS, 'lst', $lstId);
     }
@@ -86,7 +86,7 @@ class TableLists extends TableAccess
         $this->setValue('lst_timestamp', DATETIME_NOW);
         $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
 
-        if ($this->new_record && empty($orgId))
+        if ($this->newRecord && empty($orgId))
         {
             $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
         }

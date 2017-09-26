@@ -23,7 +23,7 @@ class TableMessage extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $msgId    The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $msgId = 0)
+    public function __construct(Database $database, $msgId = 0)
     {
         $this->msgId = $msgId;
 

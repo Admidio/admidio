@@ -105,7 +105,7 @@ $htmlFieldTable = '
 
         // jedes Benutzerfeld aus der Datenbank auflisten
 
-        foreach($gProfileFields->mProfileFields as $field)
+        foreach($gProfileFields->getProfileFields() as $field)
         {
             $catId = (int) $field->getValue('cat_id');
             if($categoryId !== $catId)

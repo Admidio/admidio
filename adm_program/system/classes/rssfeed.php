@@ -33,8 +33,8 @@
  */
 class RSSfeed
 {
-    protected $channel;
-    protected $items;
+    protected $channel = array();
+    protected $items   = array();
     protected $feed;
 
     /**
@@ -46,13 +46,11 @@ class RSSfeed
      */
     public function __construct($title, $link, $description, $copyright)
     {
-        $this->channel = array();
         $this->channel['title'] = $title;
         $this->channel['link']  = $link;
         $this->channel['description'] = $description;
         $this->channel['copyright']   = $copyright;
-        $this->items = array();
-        $this->feed  = CURRENT_URL;
+        $this->feed = CURRENT_URL;
     }
 
     /**

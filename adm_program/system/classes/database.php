@@ -67,13 +67,13 @@ class Database
 
     protected $dsn;
     protected $dbEngine;
-    protected $pdo;                 ///< The PDO object that handles the communication with the database.
-    protected $transactions;        ///< The transaction marker. If this is > 0 than a transaction is open.
-    protected $pdoStatement;        ///< The PdoStatement object which is needed to handle the return of a query.
-    protected $dbStructure;         ///< array with arrays of every table with their structure
-    protected $fetchArray;
-    protected $minRequiredVersion;  ///< The minimum required version of this database that is necessary to run Admidio.
-    protected $databaseName;        ///< The name of the database e.g. 'MySQL'
+    protected $pdo;                         ///< The PDO object that handles the communication with the database.
+    protected $pdoStatement;                ///< The PdoStatement object which is needed to handle the return of a query.
+    protected $transactions = 0;            ///< The transaction marker. If this is > 0 than a transaction is open.
+    protected $dbStructure  = array();      ///< array with arrays of every table with their structure
+    protected $fetchArray   = array();
+    protected $minRequiredVersion = '';     ///< The minimum required version of this database that is necessary to run Admidio.
+    protected $databaseName       = '';     ///< The name of the database e.g. 'MySQL'
 
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
@@ -103,12 +103,6 @@ class Database
         $this->username = $username;
         $this->password = $password;
         $this->options  = $options;
-
-        $this->transactions = 0;
-        $this->dbStructure  = array();
-        $this->fetchArray   = array();
-        $this->minRequiredVersion = '';
-        $this->databaseName       = '';
 
         try
         {

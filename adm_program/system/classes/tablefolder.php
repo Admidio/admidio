@@ -26,7 +26,7 @@ class TableFolder extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $folId = 0)
+    public function __construct(Database $database, $folId = 0)
     {
         parent::__construct($database, TBL_FOLDERS, 'fol', $folId);
 
@@ -48,7 +48,7 @@ class TableFolder extends TableAccess
         }
 
         // Check if folder exists
-        $folderPath = $this->getCompletePathOfFolder();
+        $folderPath = $this->getFullFolderPath();
         if (!is_dir($folderPath))
         {
             return $completeFolder;
@@ -136,7 +136,7 @@ class TableFolder extends TableAccess
      */
     public function createFolder($folderName)
     {
-        $this->folderPath->setFolder($this->getCompletePathOfFolder());
+        $this->folderPath->setFolder($this->getFullFolderPath());
         $this->folderPath->createFolder($folderName, true);
 
         if ($this->folderPath->createFolder($folderName, true))
@@ -146,7 +146,7 @@ class TableFolder extends TableAccess
 
         return array(
             'text' => 'SYS_FOLDER_NOT_CREATED',
-            'path' => $this->getCompletePathOfFolder() . '/' . $folderName
+            'path' => $this->getFullFolderPath() . '/' . $folderName
         );
     }
 
@@ -170,7 +170,7 @@ class TableFolder extends TableAccess
             }
 
             $folderId = (int) $this->getValue('fol_id');
-            $folderPath = $this->getCompletePathOfFolder();
+            $folderPath = $this->getFullFolderPath();
         }
 
         $this->db->startTransaction();
@@ -340,20 +340,24 @@ class TableFolder extends TableAccess
                          SET fol_public = ? -- $publicFlag
                        WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlUpdate, array((int) $publicFlag, $folderId));
-
     }
 
     /**
-     * Gibt den kompletten Pfad des Ordners zurueck
+     * Gets the path of the folder (with folder-name)
      * @return string
      */
-    public function getCompletePathOfFolder()
+    public function getFolderPath()
     {
-        // Put the path together
-        $folderPath = $this->getValue('fol_path');
-        $folderName = $this->getValue('fol_name');
+        return $this->getValue('fol_path') . '/' . $this->getValue('fol_name');
+    }
 
-        return ADMIDIO_PATH . $folderPath . '/' . $folderName;
+    /**
+     * Gets the absolute path of the folder (with folder-name)
+     * @return string
+     */
+    public function getFullFolderPath()
+    {
+        return ADMIDIO_PATH . $this->getFolderPath();
     }
 
     /**
@@ -375,7 +379,7 @@ class TableFolder extends TableAccess
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetchObject())
         {
-            $filePath = ADMIDIO_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name') . '/' . $rowFiles->fil_name;
+            $filePath = $this->getFullFolderPath() . '/' . $rowFiles->fil_name;
             $fileExists = is_file($filePath);
 
             $fileSize = 0;
@@ -801,7 +805,7 @@ class TableFolder extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('fol_timestamp', DATETIME_NOW);
             $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
@@ -809,5 +813,19 @@ class TableFolder extends TableAccess
         }
 
         return parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Gets the absolute path of the folder (with folder-name)
+     * @deprecated 3.3.0:4.0.0 Use Method getFullFolderPath() instead.
+     * @return string
+     */
+    public function getCompletePathOfFolder()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$folder->getCompletePathOfFolder()" is deprecated, use "$folder->getFolderPath()" instead!');
+
+        return $this->getFolderPath();
     }
 }

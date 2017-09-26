@@ -49,7 +49,7 @@
  */
 class HtmlDiv extends HtmlElement
 {
-    protected $level; ///< Integer value for the depth of nested div elements starting with level 1 for the main element
+    protected $level = 1; ///< Integer value for the depth of nested div elements starting with level 1 for the main element
 
     /**
      * Constructor creates the element
@@ -70,9 +70,6 @@ class HtmlDiv extends HtmlElement
         {
             $this->addAttribute('class', $class);
         }
-
-        // set div level to 1
-        $this->level = 1;
     }
 
     /**

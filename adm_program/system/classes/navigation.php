@@ -17,7 +17,8 @@
  * to create a html navigation bar. Therefore you should add a url and a link text
  * to the object everytime you submit a url.
  * @par Example 1
- * @code // start the navigation in a module (the object $gNavigation is created in common.php)
+ * @code
+ * // start the navigation in a module (the object $gNavigation is created in common.php)
  * $gNavigation->addStartUrl('https://www.example.com/index.php', 'Example-Module');
  *
  * // add a new url from another page within the same module
@@ -27,21 +28,42 @@
  * $gNavigation->getHtml();
  *
  * // if you want to remove the last entry from the stack
- * $gNavigation->deleteLastUrl(); @endcode
+ * $gNavigation->deleteLastUrl();
+ * @endcode
  * @par Example 2
- * @code // show a navigation bar in your html code
- * ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ... @endcode
+ * @code
+ * // show a navigation bar in your html code
+ * ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ...
+ * @endcode
  */
 class Navigation
 {
-    private $urlStack;
+    private $urlStack = array();
 
     /**
      * Constructor will initialize the local parameters
      */
     public function __construct()
     {
+
+    }
+
+    /**
+     * Initialize the url stack and set the internal counter to 0
+     * @return void
+     */
+    public function clear()
+    {
         $this->urlStack = array();
+    }
+
+    /**
+     * Number of urls that a currently in the stack
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->urlStack);
     }
 
     /**
@@ -69,45 +91,74 @@ class Navigation
      *                     would be linked with the $url.
      * @param string $icon A url to the icon that should be shown in the html navigation stack
      *                     together with the text and would be linked with the $url.
-     * @return bool Returns true if the url got added and false if not.
+     * @return bool Returns true if the navigation-stack got changed and false if not.
      */
     public function addUrl($url, $text = null, $icon = null)
     {
+        global $gLogger;
+
+        if (!strValidCharacters($url, 'url'))
+        {
+            // TODO throw Exception or return false
+            $gLogger->notice('NAVIGATION: Invalid URL added to navigation-stack!', array('url' => $url, 'text' => $text, 'icon' => $icon));
+        }
+
         $count = count($this->urlStack);
 
-        if($count === 0 || $url !== $this->urlStack[$count - 1]['url'])
+        // if the last url is equal to the new url than don't add the new url
+        if ($count > 0 && $url === $this->urlStack[$count - 1]['url'])
         {
-            if($count > 1 && $url === $this->urlStack[$count - 2]['url'])
-            {
-                // if the last but one url is equal to the current url then only remove the last url
-                array_pop($this->urlStack);
-            }
-            else
-            {
-                // if the current url will not be the last or the last but one then add the current url to stack
-                $this->urlStack[] = array('url' => $url, 'text' => $text, 'icon' => $icon);
-                return true;
-            }
+            return false;
         }
-        return false;
+
+        // if the second last url is equal to the new url then only remove the last url
+        if ($count > 1 && $url === $this->urlStack[$count - 2]['url'])
+        {
+            array_pop($this->urlStack);
+        }
+        else
+        {
+            $this->urlStack[] = array('url' => $url, 'text' => $text, 'icon' => $icon);
+        }
+
+        return true;
     }
 
     /**
-     * Initialize the url stack and set the internal counter to 0
-     * @return void
+     * Get the last added url from the stack.
+     * @return string|null Returns the last added url. If the stack is empty returns null
      */
-    public function clear()
+    public function getUrl()
     {
-        $this->urlStack = array();
+        $count = count($this->urlStack);
+
+        if ($count === 0)
+        {
+            // TODO throw Exception
+            return null;
+        }
+
+        return $this->urlStack[$count - 1]['url'];
     }
 
     /**
-     * Number of urls that a currently in the stack
-     * @return int
+     * Get the previous url from the stack. This is not the last url that was added to the stack!
+     * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
      */
-    public function count()
+    public function getPreviousUrl()
     {
-        return count($this->urlStack);
+        $count = count($this->urlStack);
+
+        if ($count === 0)
+        {
+            // TODO throw Exception
+            return null;
+        }
+
+        // Only one url, take this one
+        $entry = max(0, $count - 2);
+
+        return $this->urlStack[$entry]['url'];
     }
 
     /**
@@ -118,14 +169,12 @@ class Navigation
      */
     public function deleteLastUrl()
     {
-        if($this->count() > 1)
+        if (count($this->urlStack) > 1)
         {
             return array_pop($this->urlStack);
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     /**
@@ -136,25 +185,23 @@ class Navigation
     public function getHtmlBackButton($id = 'adm-navigation-back')
     {
         global $gL10n;
-        $html = '';
 
         // now get the "new" last url from the stack. This should be the last page
         $url = $this->getPreviousUrl();
 
-        // if no page was found then show the default homepage
-        if($url !== '')
+        // if no page was found then show nothing
+        if ($url === null)
         {
-            $html = '
-            <a class="btn" href="'.$url.'"><img src="'. THEME_URL. '/icons/back.png"
-                alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
+            return '';
         }
 
-        // if entries where found then add div element
-        if($html !== '')
-        {
-            $html = '<div id="'.$id.'" class="admNavigation admNavigationBack">'.$html.'</div>';
-        }
-        return $html;
+        return '
+        <div id="'.$id.'" class="admNavigation admNavigationBack">
+            <a class="btn" href="'.$url.'">'.
+                '<img src="'.THEME_URL.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />'
+                .$gL10n->get('SYS_BACK').
+            '</a>
+        </div>';
     }
 
     /**
@@ -166,56 +213,22 @@ class Navigation
      */
     public function getHtmlNavigationBar($id = 'adm-navigation-bar')
     {
-        $html = '';
+        $links = array();
 
         foreach ($this->urlStack as $url)
         {
-            if(strlen($url['text']) > 0)
+            if (strlen($url['text']) > 0)
             {
-                $html .= '<a href="'.$url['url'].'">'.$url['text'].'</a>';
+                $links[] = '<a href="'.$url['url'].'">'.$url['text'].'</a>';
             }
         }
 
-        // if entries where found then add div element
-        if($html !== '')
+        // if no links where found then show nothing
+        if (count($links) === 0)
         {
-            $html = '<div id="'.$id.'" class="admNavigation admNavigationBar">'.$html.'</div>';
-        }
-        return $html;
-    }
-
-    /**
-     * Get the previous url from the stack. This is not the last url that was added to the stack!
-     * @return string|null Returns the previous added url. If only one url is added it returns this one. If no url is added returns null
-     */
-    public function getPreviousUrl()
-    {
-        $count = count($this->urlStack);
-
-        if($count === 0)
-        {
-            return null;
+            return '';
         }
 
-        // Only one url, take this one
-        $entry = max(0, $count - 2);
-
-        return $this->urlStack[$entry]['url'];
-    }
-
-    /**
-     * Get the last added url from the stack.
-     * @return string|null Returns the last added url. If the stack is empty returns null
-     */
-    public function getUrl()
-    {
-        $count = count($this->urlStack);
-
-        if($count > 0)
-        {
-            return $this->urlStack[$count - 1]['url'];
-        }
-
-        return null;
+        return '<div id="'.$id.'" class="admNavigation admNavigationBar">'.implode('', $links).'</div>';
     }
 }

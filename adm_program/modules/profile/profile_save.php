@@ -129,7 +129,7 @@ if($getNewUser === 2)
 }
 
 // now check all profile fields
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     $postId    = 'usf-'. $field->getValue('usf_id');
     $showField = false;

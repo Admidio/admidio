@@ -21,7 +21,7 @@ class TableUserRelation extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $ureId    The recordset of the relation with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $ureId = 0)
+    public function __construct(Database $database, $ureId = 0)
     {
         parent::__construct($database, TBL_USER_RELATIONS, 'ure', $ureId);
     }

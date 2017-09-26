@@ -45,7 +45,7 @@ class Session extends TableAccess
      *                             If id isn't set than an empty object of the table is created.
      * @param string     $cookiePrefix The prefix that is used for cookies
      */
-    public function __construct(&$database, $session = 0, $cookiePrefix = '')
+    public function __construct(Database $database, $session = 0, $cookiePrefix = '')
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
@@ -59,7 +59,7 @@ class Session extends TableAccess
         {
             $this->readDataByColumns(array('ses_session_id' => $session));
 
-            if ($this->new_record)
+            if ($this->newRecord)
             {
                 // if PHP session id was commited then store them in that field
                 $this->setValue('ses_session_id', $session);
@@ -364,7 +364,7 @@ class Session extends TableAccess
     {
         global $gCurrentOrganization;
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             // Insert
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
@@ -419,11 +419,18 @@ class Session extends TableAccess
      */
     public static function setCookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
-        global $gLogger;
+        global $gLogger, $gSetCookieForDomain;
 
         if ($path === '')
         {
-            $path = ADMIDIO_URL_PATH . '/';
+            if($gSetCookieForDomain)
+            {
+                $path = '/';
+            }
+            else
+            {
+                $path = ADMIDIO_URL_PATH . '/';
+            }
         }
         if ($domain === '')
         {
@@ -448,7 +455,7 @@ class Session extends TableAccess
      * Set the database object for communication with the database of this class.
      * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
         parent::setDatabase($database);
 
@@ -470,16 +477,23 @@ class Session extends TableAccess
      */
     public static function start($name, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
-        global $gLogger;
+        global $gLogger, $gSetCookieForDomain;
 
         // Set the cookie name
         session_name($name . '_PHP_SESSION_ID');
 
-        // Set session cookie options
         if ($path === '')
         {
-            $path = ADMIDIO_URL_PATH . '/';
+            if($gSetCookieForDomain)
+            {
+                $path = '/';
+            }
+            else
+            {
+                $path = ADMIDIO_URL_PATH . '/';
+            }
         }
+
         if ($domain === '')
         {
             $domain = DOMAIN;

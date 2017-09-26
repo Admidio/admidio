@@ -119,9 +119,8 @@ unset($_SESSION['gCurrentSession']);
 echo 'Start with installation ...<br />';
 
 // create language and language data object to handle translations
-$gL10n = new Language();
 $gLanguageData = new LanguageData($getLanguage);
-$gL10n->addLanguageData($gLanguageData);
+$gL10n = new Language($gLanguageData);
 $gL10n->addLanguagePath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
@@ -161,7 +160,7 @@ if($gDbType === 'mysql')
  * @param string    $filename The SQL filename (db.sql, data.sql)
  * @param \Database $database
  */
-function readAndExecuteSQLFromFile($filename, &$database)
+function readAndExecuteSQLFromFile($filename, Database $database)
 {
     global $g_tbl_praefix, $gL10n;
 
@@ -269,5 +268,5 @@ else
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
- Please perform an <a href="../adm_program/installation/update.php">update of your database</a>.</p>
+ Please perform an <a href="'.ADMIDIO_URL.'/adm_program/installation/update.php">update of your database</a>.</p>
  <p style="font-size: 9pt;">&copy; 2004 - 2017&nbsp;&nbsp;The Admidio team</p>';

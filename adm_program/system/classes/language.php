@@ -37,17 +37,26 @@
  */
 class Language
 {
-    private $languageData;                  ///< An object of the class @b LanguageData that stores all necessary language data in a session
-    private $languages = array();           ///< An Array with all available languages and their ISO codes
-    private $xmlLanguageObjects = array();  ///< An array with all SimpleXMLElement object of the language from all paths that are set in @b $languageData.
-    private $xmlReferenceLanguageObjects = array(); ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+    private $languageData;                      ///< An object of the class @b LanguageData that stores all necessary language data in a session
+    private $languages = array();               ///< An Array with all available languages and their ISO codes
+    private $xmlLanguageObjects    = array();   ///< An array with all SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+    private $xmlRefLanguageObjects = array();   ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+
+    /**
+     * Language constructor.
+     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
+     */
+    public function __construct(LanguageData $languageDataObject = null)
+    {
+        $this->languageData =& $languageDataObject;
+    }
 
     /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
      * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
      */
-    public function addLanguageData(&$languageDataObject)
+    public function addLanguageData(LanguageData $languageDataObject)
     {
         $this->languageData =& $languageDataObject;
     }
@@ -63,42 +72,51 @@ class Language
     }
 
     /**
-     * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
-     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param SimpleXMLElement[] $xmlLanguageObjects SimpleXMLElement array of each language path is stored
+     * @param string             $language           Language code
+     * @param string             $textId             Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id or empty string if not found.
      */
-    protected function getTextFromTextId($textId)
+    private function searchTextIdInLangObject(array $xmlLanguageObjects, $language, $textId)
     {
-        // first read text from cache if it exists there
-        if(array_key_exists($textId, $this->languageData->textCache))
+        foreach ($this->languageData->getLanguagePaths() as $languagePath)
         {
-            return $this->languageData->textCache[$textId];
-        }
+            $text = $this->searchLanguageText($xmlLanguageObjects, $languagePath, $language, $textId);
 
-        // search for text id in every SimpleXMLElement (language file) of the object array
-        foreach($this->languageData->getLanguagePaths() as $languagePath)
-        {
-            $text = $this->searchLanguageText($this->xmlLanguageObjects, $languagePath, $this->languageData->getLanguage(), $textId);
-
-            if($text !== '')
-            {
-                return $text;
-            }
-        }
-
-        // if text id wasn't found than search for it in reference language
-        // search for text id in every SimpleXMLElement (language file) of the object array
-        foreach($this->languageData->getLanguagePaths() as $languagePath)
-        {
-            $text = $this->searchLanguageText($this->xmlReferenceLanguageObjects, $languagePath, $this->languageData->getLanguage(true), $textId);
-
-            if($text !== '')
+            if ($text !== '')
             {
                 return $text;
             }
         }
 
         return '';
+    }
+
+    /**
+     * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @return string Returns the text string of the text id or empty string if not found.
+     */
+    private function getTextFromTextId($textId)
+    {
+        // first search text id in text-cache
+        $text = $this->languageData->getTextCache($textId);
+
+        // if text id wasn't found than search for it in language
+        if ($text === '')
+        {
+            // search for text id in every SimpleXMLElement (language file) of the object array
+            $text = $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+        }
+
+        // if text id wasn't found than search for it in reference language
+        if ($text === '')
+        {
+            // search for text id in every SimpleXMLElement (language file) of the object array
+            $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
+        }
+
+        return $text;
     }
 
     /**
@@ -118,14 +136,18 @@ class Language
      *                echo $gL10n->get('SYS_NUMBER');
      *
      * // display a text with placeholders for individual content
-     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Administrator');
+     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', ['John Doe', 'Demo-Organization', 'Administrator']);
      * @endcode
      */
     public function get($textId, $params = array())
     {
+        global $gLogger;
+
         if (!$this->languageData instanceof \LanguageData)
         {
-            return 'Error: ' . $this->languageData . ' is not an object!';
+            $gLogger->error('$this->languageData is not an instance of LanguageData!', array('languageData' => $this->languageData));
+
+            return 'Error: $this->languageData is not an instance of LanguageData!';
         }
 
         $text = $this->getTextFromTextId($textId);
@@ -146,9 +168,14 @@ class Language
         }
         else
         {
-            // Deprecated
+            // TODO deprecated: Remove in Admidio 4.0
             $paramsCount = func_num_args();
             $paramsArray = func_get_args();
+
+            $gLogger->warning(
+                'DEPRECATED: "$gL10n->get(\'XXX\', 1, 2)" is deprecated, use "$gL10n->get(\'XXX\', array(1, 2))" instead!',
+                array('textId' => $textId, 'params' => $params, 'paramsArray' => $paramsArray)
+            );
         }
 
         for ($paramNumber = 1; $paramNumber < $paramsCount; ++$paramNumber)
@@ -179,8 +206,8 @@ class Language
             return $countries;
         }
 
-        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage()     . '.xml';
-        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage(true) . '.xml';
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage() . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
         if (is_file($langFile))
         {
             $file = $langFile;
@@ -255,7 +282,16 @@ class Language
      */
     public function getLanguageIsoCode($referenceLanguage = false)
     {
-        $language = $this->languageData->getLanguage($referenceLanguage);
+        global $gLogger;
+
+        if ($referenceLanguage)
+        {
+            $gLogger->warning('DEPRECATED: "$language->getLanguageIsoCode(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
+            return LanguageData::REFERENCE_LANGUAGE;
+        }
+
+        $language = $this->languageData->getLanguage();
 
         if($language === 'de_sie')
         {
@@ -273,7 +309,16 @@ class Language
      */
     public function getLanguage($referenceLanguage = false)
     {
-        return $this->languageData->getLanguage($referenceLanguage);
+        global $gLogger;
+
+        if ($referenceLanguage)
+        {
+            $gLogger->warning('DEPRECATED: "$language->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
+            return LanguageData::REFERENCE_LANGUAGE;
+        }
+
+        return $this->languageData->getLanguage();
     }
 
     /**
@@ -336,7 +381,7 @@ class Language
                 // Within Android string resource all apostrophe are escaped so we must remove the escape char
                 // replace highly comma, so there are no problems in the code later
                 $text = str_replace(array('\\n', '\\\'', '\''), array('<br />', '\'', '&rsquo;'), $node[0]);
-                $this->languageData->textCache[$textId] = $text;
+                $this->languageData->setTextCache($textId, $text);
 
                 return $text;
             }
@@ -354,8 +399,8 @@ class Language
         if($language !== $this->languageData->getLanguage())
         {
             // initialize data
-            $this->xmlLanguageObjects = array();
-            $this->xmlReferenceLanguageObjects = array();
+            $this->xmlLanguageObjects    = array();
+            $this->xmlRefLanguageObjects = array();
 
             $this->languageData->setLanguage($language);
         }

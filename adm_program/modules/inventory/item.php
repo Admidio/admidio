@@ -195,7 +195,7 @@ $page->addHtml('
 
             // Schleife ueber alle Felder der Stammdaten
 
-            foreach($gInventoryFields->mInventoryFields as $field)
+            foreach($gInventoryFields->getInventoryFields() as $field)
             {
                 // nur Felder der Stammdaten anzeigen
                 if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $field->getValue('inv_hidden') == 0)
@@ -276,7 +276,7 @@ $page->addHtml('
 // *******************************************************************************
 
 $category = '';
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren

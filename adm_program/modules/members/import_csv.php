@@ -85,7 +85,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
         // dieser dann den Wert zuordnen
-        foreach($gProfileFields->mProfileFields as $field)
+        foreach($gProfileFields->getProfileFields() as $field)
         {
             if(strlen($_POST['usf-'. $field->getValue('usf_id')]) > 0 && $columnKey == $_POST['usf-'. $field->getValue('usf_id')])
             {
@@ -245,7 +245,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                 ++$countImportNewUser;
             }
             // existing users count as edited if mode is displace or complete
-            elseif($maxUserId > 0 && $user->columnsValueChanged())
+            elseif($maxUserId > 0 && $user->hasColumnsValueChanged())
             {
                 ++$countImportEditUser;
             }

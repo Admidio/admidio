@@ -25,7 +25,7 @@ class Menu
 {
     protected $id;
     protected $title;
-    protected $items;
+    protected $items = array();
 
     /**
      * constructor
@@ -34,9 +34,8 @@ class Menu
      */
     public function __construct($id, $title)
     {
-        $this->id        = $id;
-        $this->title     = $title;
-        $this->items     = array();
+        $this->id    = $id;
+        $this->title = $title;
     }
 
     /**

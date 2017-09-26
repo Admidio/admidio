@@ -33,7 +33,7 @@ class TableCategory extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $catId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $catId = 0)
+    public function __construct(Database $database, $catId = 0)
     {
         parent::__construct($database, TBL_CATEGORIES, 'cat', $catId);
     }
@@ -293,7 +293,7 @@ class TableCategory extends TableAccess
 
         $this->db->startTransaction();
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $queryParams = array($this->getValue('cat_type'));
             if ($this->getValue('cat_org_id') > 0)
@@ -328,7 +328,7 @@ class TableCategory extends TableAccess
         }
 
         // if new category than generate new name intern, otherwise no change will be made
-        if ($this->new_record && $this->getValue('cat_name_intern') === '')
+        if ($this->newRecord && $this->getValue('cat_name_intern') === '')
         {
             $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
         }

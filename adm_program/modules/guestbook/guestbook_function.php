@@ -242,7 +242,7 @@ if ($getMode === 1 || $getMode === 3)
             try
             {
                 $notification = new Email();
-                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gPreferences['system_date'], time())), $senderName, $gboEmail);
+                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gPreferences['system_date'])), $senderName, $gboEmail);
             }
             catch (AdmException $e)
             {
@@ -433,7 +433,7 @@ elseif ($getMode === 4 || $getMode === 8)
                 $gCurrentOrganization->getValue('org_longname'),
                 $gbComment->getValue('gbc_text'),
                 $gbcName,
-                date($gPreferences['system_date'], time())
+                date($gPreferences['system_date'])
             );
             try
             {

@@ -32,14 +32,14 @@ class TableAccess
 {
     protected $additionalTables = array();  ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
-    protected $columnPrefix;       ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+    protected $columnPrefix;        ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
     protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
     protected $db;                  ///< An object of the class Database for communication with the database
 
-    protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    protected $columnsValueChanged; ///< Flag will be set to true if data in array dbColumns was changed
-    public $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
-    public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    protected $newRecord;              // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+    protected $columnsValueChanged;    ///< Flag will be set to true if data in array dbColumns was changed
+    protected $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+    protected $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -49,7 +49,7 @@ class TableAccess
      * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $tableName, $columnPrefix, $id = '')
+    public function __construct(Database $database, $tableName, $columnPrefix, $id = '')
     {
         $this->db          =& $database;
         $this->tableName    = $tableName;
@@ -76,7 +76,7 @@ class TableAccess
      * Set the database object for communication with the database of this class.
      * @param \Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
         $this->db =& $database;
     }
@@ -98,7 +98,7 @@ class TableAccess
      */
     public function clear()
     {
-        $this->new_record = true;
+        $this->newRecord = true;
         $this->columnsValueChanged = false;
 
         if (count($this->columnsInfos) > 0)
@@ -143,7 +143,7 @@ class TableAccess
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code // Constructor of adm_dates object where the category (calendar) is connected
-     * public function __construct(&$db, $datId = 0)
+     * public function __construct($database, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
      *     parent::__construct($db, TBL_DATES, 'dat', $datId);
@@ -294,7 +294,7 @@ class TableAccess
      */
     public function isNewRecord()
     {
-        return $this->new_record;
+        return $this->newRecord;
     }
 
     /**
@@ -338,7 +338,7 @@ class TableAccess
             if ($readDataStatement->rowCount() === 1)
             {
                 $row = $readDataStatement->fetch();
-                $this->new_record = false;
+                $this->newRecord = false;
 
                 // Daten in das Klassenarray schieben
                 foreach ($row as $key => $value)
@@ -454,7 +454,7 @@ class TableAccess
         {
             // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
             // dann diese hier automatisiert fuellen
-            if ($this->new_record && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
+            if ($this->newRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
             {
                 $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
                 $this->setValue($this->columnPrefix . '_usr_id_create', $gCurrentUser->getValue('usr_id'));
@@ -484,7 +484,7 @@ class TableAccess
             if (strpos($key, $this->columnPrefix . '_') === 0
             && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed'])
             {
-                if ($this->new_record)
+                if ($this->newRecord)
                 {
                     if ($value !== '')
                     {
@@ -512,7 +512,7 @@ class TableAccess
             }
         }
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             // insert record and mark this object as not new and remember the new id
             $sql = 'INSERT INTO '.$this->tableName.'
@@ -520,7 +520,7 @@ class TableAccess
                     VALUES ('.replaceValuesArrWithQM($sqlFieldArray).')';
             $this->db->queryPrepared($sql, $queryParams);
 
-            $this->new_record = false;
+            $this->newRecord = false;
             if ($this->keyColumnName !== '')
             {
                 $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
@@ -571,7 +571,7 @@ class TableAccess
             $this->columnsInfos[$field]['changed'] = false;
         }
 
-        $this->new_record = false;
+        $this->newRecord = false;
     }
 
     /**
@@ -635,7 +635,7 @@ class TableAccess
         // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
         if ($this->keyColumnName === $columnName && (int) $newValue === 0)
         {
-            $this->new_record = true;
+            $this->newRecord = true;
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value)

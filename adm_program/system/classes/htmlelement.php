@@ -123,16 +123,16 @@
  */
 abstract class HtmlElement
 {
-    protected $nesting;                   ///< Flag enables nesting of main elements, e.g div blocks ( Default : true )
-    protected $mainElement;               ///< String with main element as string
-    protected $mainElementAttributes;     ///< String with attributes of the main element
-    protected $mainElementWritten;        ///< Flag if the main element was written in the html string
-    protected $currentElement;            ///< Internal pointer showing to actual element or child element
-    protected $currentElementAttributes;  ///< Attributes of the current element
-    protected $currentElementDataWritten; ///< Flag if an element is added but the data is not added
-    protected $htmlString;                ///< String with prepared html
-    protected $parentFlag;                ///< Flag for setted parent Element
-    protected $arrParentElements;         ///< Array with opened child elements
+    protected $nesting;                                 ///< Flag enables nesting of main elements, e.g div blocks ( Default : true )
+    protected $mainElement;                             ///< String with main element as string
+    protected $mainElementAttributes     = array();     ///< String with attributes of the main element
+    protected $mainElementWritten        = false;       ///< Flag if the main element was written in the html string
+    protected $currentElement;                          ///< Internal pointer showing to actual element or child element
+    protected $currentElementAttributes  = array();     ///< Attributes of the current element
+    protected $currentElementDataWritten = true;        ///< Flag if an element is added but the data is not added
+    protected $htmlString                = '';          ///< String with prepared html
+    protected $parentFlag                = false;       ///< Flag for setted parent Element
+    protected $arrParentElements         = array();     ///< Array with opened child elements
 
     /**
      * Constructor initializing all class variables
@@ -142,16 +142,9 @@ abstract class HtmlElement
      */
     public function __construct($element, $nesting = true)
     {
-        $this->nesting                   = $nesting;
-        $this->mainElement               = $element;
-        $this->mainElementAttributes     = array();
-        $this->mainElementWritten        = false;
-        $this->currentElement            = $element;
-        $this->currentElementAttributes  = array();
-        $this->currentElementDataWritten = true;
-        $this->htmlString                = '';
-        $this->parentFlag                = false;
-        $this->arrParentElements         = array();
+        $this->nesting        = $nesting;
+        $this->mainElement    = $element;
+        $this->currentElement = $element;
     }
 
     /**

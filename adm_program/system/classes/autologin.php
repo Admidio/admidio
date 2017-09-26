@@ -32,7 +32,7 @@ class AutoLogin extends TableAccess
      * @param string|int $session  The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $session = 0)
+    public function __construct(Database $database, $session = 0)
     {
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
@@ -86,7 +86,7 @@ class AutoLogin extends TableAccess
         $this->setValue('atl_last_login', DATETIME_NOW);
         $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
 
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             // Insert
             $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));

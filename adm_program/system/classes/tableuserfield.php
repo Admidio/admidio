@@ -29,7 +29,7 @@ class TableUserField extends TableAccess
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      * @param int       $usfId    The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $usfId = 0)
+    public function __construct(Database $database, $usfId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
@@ -356,7 +356,7 @@ class TableUserField extends TableAccess
         $fieldsChanged = $this->columnsValueChanged;
 
         // if new field than generate new name intern, otherwise no change will be made
-        if ($this->new_record)
+        if ($this->newRecord)
         {
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'database'), 1));
         }

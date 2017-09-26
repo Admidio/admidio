@@ -15,26 +15,22 @@
 class RoleDependency
 {
     protected $db;          ///< An object of the class Database for communication with the database
-
-    public $roleIdParent;
-    public $roleIdChild;
-    public $comment;
-    public $usr_id;
-    public $timestamp;
-
-    public $roleIdParentOrig;
-    public $roleIdChildOrig;
-
-    public $persisted;
+    protected $roleIdParent = 0;
+    protected $roleIdChild  = 0;
+    protected $comment      = '';
+    protected $usrId        = 0;
+    protected $timestamp    = '';
+    protected $roleIdParentOrig = 0;
+    protected $roleIdChildOrig  = 0;
+    protected $persisted = false;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$database)
+    public function __construct(Database $database)
     {
         $this->db =& $database;
-        $this->clear();
     }
 
     /**
@@ -45,12 +41,10 @@ class RoleDependency
         $this->roleIdParent     = 0;
         $this->roleIdChild      = 0;
         $this->comment          = '';
-        $this->usr_id           = 0;
+        $this->usrId            = 0;
         $this->timestamp        = '';
-
         $this->roleIdParentOrig = 0;
         $this->roleIdChildOrig  = 0;
-
         $this->persisted        = false;
     }
 
@@ -95,7 +89,7 @@ class RoleDependency
             $this->roleIdChild      = $row->rld_rol_id_child;
             $this->comment          = $row->rld_comment;
             $this->timestamp        = $row->rld_timestamp;
-            $this->usr_id           = $row->rld_usr_id;
+            $this->usrId            = $row->rld_usr_id;
             $this->roleIdParentOrig = $row->rld_rol_id_parent;
             $this->roleIdChildOrig  = $row->rld_rol_id_child;
 
@@ -110,7 +104,7 @@ class RoleDependency
      * @param int       $childId
      * @return int[]
      */
-    public static function getParentRoles(&$database, $childId)
+    public static function getParentRoles(Database $database, $childId)
     {
         $allParentIds = array();
 
@@ -138,7 +132,7 @@ class RoleDependency
      * @param int       $parentId
      * @return int[]
      */
-    public static function getChildRoles(&$database, $parentId)
+    public static function getChildRoles(Database $database, $parentId)
     {
         $allChildIds = array();
 
@@ -179,8 +173,8 @@ class RoleDependency
         if ($loginUserId > 0 && !$this->isEmpty())
         {
             $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
-                                (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES (?,?,?,?,?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
+                                (rld_rol_id_parent, rld_rol_id_child, rld_comment, rld_usr_id, rld_timestamp)
+                         VALUES (?, ?, ?, ?, ?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
             $queryParams = array($this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW);
             $this->db->queryPrepared($sql, $queryParams);
             $this->persisted = true;
@@ -196,7 +190,7 @@ class RoleDependency
      * @param int       $parentId
      * @return bool
      */
-    public static function removeChildRoles(&$database, $parentId)
+    public static function removeChildRoles(Database $database, $parentId)
     {
         if ($parentId > 0)
         {

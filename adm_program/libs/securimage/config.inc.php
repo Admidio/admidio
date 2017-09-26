@@ -36,7 +36,7 @@ return array(
     /**** CAPTCHA Appearance Options ****/
     'captcha_type'     => $captchaType,
     'image_width'      => $gPreferences['captcha_width'],       // width of captcha image in pixels
-    'image_height'     => (int)($gPreferences['captcha_width'] * 0.25),        // height of captcha image in pixels
+    'image_height'     => round($gPreferences['captcha_width'] * 0.25),        // height of captcha image in pixels
     'code_length'      => mt_rand(4, 6),         // # of characters for captcha code
     'image_bg_color'   => $gPreferences['captcha_background_color'], // hex color for image background
     'text_color'       => $gPreferences['captcha_text_color'], // hex color for captcha text

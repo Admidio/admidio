@@ -557,10 +557,10 @@ elseif (!isset($messageStatement))
     if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') === '1'))
     {
         $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true,
-                                                                                         'maxUploadSize'      => Email::getMaxAttachementSize('b'),
+                                                                                         'maxUploadSize'      => Email::getMaxAttachmentSize(),
                                                                                          'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
                                                                                          'hideUploadField'    => true,
-                                                                                         'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mib'))));
+                                                                                         'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))));
     }
 
     // add textfield or ckeditor to form

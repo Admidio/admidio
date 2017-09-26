@@ -29,7 +29,7 @@ if(!$gCurrentUser->isAdministrator())
 }
 
 // read organization and all system preferences values into form array
-$formValues = array_merge($gCurrentOrganization->dbColumns, $gPreferences);
+$formValues = array_merge($gCurrentOrganization->getDbColumns(), $gPreferences);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -442,7 +442,7 @@ $page->addHtml('
                         }
                         $form->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
-                        // deprecated: Remove if PHP 5.3 dropped
+                        // TODO deprecated: Remove if PHP 5.3 dropped
                         if(ini_get('safe_mode') === '1')
                         {
                             $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');

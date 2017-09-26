@@ -31,32 +31,22 @@
  */
 class Message
 {
-    private $inline;            // wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
-    private $forwardUrl;        // Url auf die durch den Weiter-Button verwiesen wird
-    private $timer;             // Anzahl ms bis automatisch zu forwardUrl weitergeleitet wird
-    private $includeThemeBody;  ///< Includes the header and body of the theme to the message. This will be included as default.
-    private $showTextOnly;      ///< If set to true then no html elements will be shown, only the pure text message.
-    private $showHtmlTextOnly;  ///< If set to true then only the message with their html elements will be shown.
-
-    private $showButtons;       // Buttons werden angezeigt
-    private $showYesNoButtons;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
-    private $modalWindowMode;   ///< If this is set to true than the message will be show with html of the bootstrap modal window
+    private $inline           = false; // wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
+    private $forwardUrl       = '';    // Url auf die durch den Weiter-Button verwiesen wird
+    private $timer            = 0;     // Anzahl ms bis automatisch zu forwardUrl weitergeleitet wird
+    private $includeThemeBody = true;  ///< Includes the header and body of the theme to the message. This will be included as default.
+    private $showTextOnly     = false; ///< If set to true then no html elements will be shown, only the pure text message.
+    private $showHtmlTextOnly = false; ///< If set to true then only the message with their html elements will be shown.
+    private $showButtons      = true;  // Buttons werden angezeigt
+    private $showYesNoButtons = false; // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
+    private $modalWindowMode  = false; ///< If this is set to true than the message will be show with html of the bootstrap modal window
 
     /**
      * Constructor that initialize the class member parameters
      */
     public function __construct()
     {
-        $this->inline           = false;
-        $this->forwardUrl       = '';
-        $this->timer            = 0;
-        $this->includeThemeBody = true;
-        $this->showTextOnly     = false;
-        $this->showHtmlTextOnly = false;
 
-        $this->showButtons      = true;
-        $this->showYesNoButtons = false;
-        $this->modalWindowMode  = false;
     }
 
     /**

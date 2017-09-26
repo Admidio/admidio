@@ -330,7 +330,7 @@ $page->addHtml('
 
             // Schleife ueber alle Felder der Stammdaten
 
-            foreach($gProfileFields->mProfileFields as $field)
+            foreach($gProfileFields->getProfileFields() as $field)
             {
                 // nur Felder der Stammdaten anzeigen
                 if($field->getValue('cat_name_intern') === 'MASTER_DATA' && $gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern')))
@@ -369,23 +369,31 @@ $page->addHtml('
                                     $routeUrl .= urlencode($user->getValue('STREET'));
                                 }
 
+                                // City and postcode should be shown in one line
                                 if(strlen($user->getValue('POSTCODE')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE'))
                                 {
-                                    $address  .= $user->getValue('POSTCODE');
                                     $mapUrl   .= ',%20'. urlencode($user->getValue('POSTCODE'));
                                     $routeUrl .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
-                                    // City and postcode should be shown in one line
-                                    if(strlen($user->getValue('CITY')) === 0 && !$gCurrentUser->allowedViewProfileField($user, 'CITY'))
+                                    if(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                     {
-                                        $address .= '<br />';
+                                        $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
+                                        $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
+
+                                        // some countries have the order postcode city others have city postcode
+                                        if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+                                        {
+                                            $address .= $user->getValue('POSTCODE'). ' '. $user->getValue('CITY'). '<br />';
+                                        }
+                                        else
+                                        {
+                                            $address .= $user->getValue('CITY'). ' '. $user->getValue('POSTCODE'). '<br />';
+                                        }
                                     }
                                 }
-
-                                if(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
+                                elseif(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                 {
-                                    // City and postcode should be shown in one line
-                                    $address  .= ' '. $user->getValue('CITY'). '<br />';
+                                    $address   .= $user->getValue('CITY'). '<br />';
                                     $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
                                     $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
                                 }
@@ -466,7 +474,7 @@ $page->addHtml('
 // *******************************************************************************
 
 $category = '';
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     $fieldNameIntern = $field->getValue('usf_name_intern');
 

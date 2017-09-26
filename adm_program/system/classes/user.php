@@ -16,10 +16,11 @@
  */
 class User extends TableAccess
 {
-    protected $administrator;
+    const MAX_INVALID_LOGINS = 3;
 
-    public $mProfileFieldsData;                   ///< object with current user field structure
-    protected $rolesRights = array();             ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+    protected $administrator;
+    protected $mProfileFieldsData;                ///< object with current user field structure
+    protected $rolesRights     = array();         ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
     protected $listViewRights  = array();         ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $listMailRights  = array();         ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
     protected $rolesMembership = array();         ///< Array with all roles who the user is assigned
@@ -29,7 +30,7 @@ class User extends TableAccess
     protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
     protected $saveChangesWithoutRights;          ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
     protected $usersEditAllowed = array();        ///< Array with all user ids where the current user is allowed to edit the profile.
-    protected $relationships = array();           ///< Array with all users to whom the current user has a relationship
+    protected $relationships    = array();        ///< Array with all users to whom the current user has a relationship
     protected $relationshipsChecked = false;      ///< Flag if relationships for this user were checked
 
     /**
@@ -41,7 +42,7 @@ class User extends TableAccess
      * @param int $userId                The id of the user who should be loaded. If id isn't set than an empty
      *                                   object with no specific user is created.
      */
-    public function __construct(&$database, ProfileFields $userFields = null, $userId = 0)
+    public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
         global $gCurrentOrganization;
 
@@ -54,6 +55,15 @@ class User extends TableAccess
         $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
+    }
+
+    /**
+     * Set the database object for communication with the database of this class.
+     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     */
+    public function setProfileFieldsDataDatabase(Database $database)
+    {
+        $this->mProfileFieldsData->setDatabase($database);
     }
 
     /**
@@ -308,6 +318,207 @@ class User extends TableAccess
     }
 
     /**
+     * Checks if the maximum of invalid logins is reached.
+     * @return bool Returns true if the maximum of invalid logins is reached.
+     */
+    private function hasMaxInvalidLogins()
+    {
+        global $gLogger;
+
+        // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
+        $now = new DateTime();
+        $minutesOffset = new DateInterval('PT15M');
+        $minutesBefore = $now->sub($minutesOffset);
+        $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+
+        if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() > $dateInvalid->getTimestamp())
+        {
+            return false;
+        }
+
+        $loggingObject = array(
+            'username'      => $this->getValue('usr_login_name'),
+            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
+            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
+        );
+        $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
+
+        $this->clear();
+
+        return true;
+    }
+
+    /**
+     * Handles the incorrect given login password.
+     * @return string Return string with the reason why the login failed.
+     */
+    private function handleIncorrectPasswordLogin()
+    {
+        global $gLogger;
+
+        // log invalid logins
+        if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS)
+        {
+            $this->setValue('usr_number_invalid', 1);
+        }
+        else
+        {
+            $this->setValue('usr_number_invalid', $this->getValue('usr_number_invalid') + 1);
+        }
+
+        $this->setValue('usr_date_invalid', DATETIME_NOW);
+        $this->saveChangesWithoutRights();
+        $this->save(false); // don't update timestamp // TODO Exception handling
+
+        $loggingObject = array(
+            'username'      => $this->getValue('usr_login_name'),
+            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
+            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
+        );
+
+        if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS)
+        {
+            $this->clear();
+
+            $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
+
+            return 'SYS_LOGIN_MAX_INVALID_LOGIN';
+        }
+
+        $this->clear();
+
+        $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
+
+        return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+    }
+
+    /**
+     * Gets the longname of this organization.
+     * @return string Returns the longname of the organization.
+     */
+    private function getOrgLongname()
+    {
+        $sql = 'SELECT org_longname
+                  FROM '.TBL_ORGANIZATIONS.'
+                 WHERE org_id = ?';
+        $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
+
+        return $orgStatement->fetchColumn();
+    }
+
+    /**
+     * Checks if this user is a member of this organization.
+     * @param string $orgLongname The longname of this organization.
+     * @return bool Return true if user is member of this organization.
+     */
+    private function isMemberOfOrganization($orgLongname)
+    {
+        global $gLogger;
+
+        // Check if user is currently member of a role of an organisation
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                   AND rol_valid  = 1
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND cat_org_id = ? -- $this->organizationId';
+        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($pdoStatement->rowCount() > 0)
+        {
+            return true;
+        }
+
+        $loggingObject = array(
+            'username'     => $this->getValue('usr_login_name'),
+            'organisation' => $orgLongname
+        );
+
+        $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
+
+        return false;
+    }
+
+    /**
+     * Checks if this user is an admin of this organization.
+     * @param string $orgLongname The longname of this organization.
+     * @return bool Return true if user is admin of this organization.
+     */
+    private function isAdminOfOrganization($orgLongname)
+    {
+        global $gLogger, $installedDbVersion;
+
+        // only check for administrator role if version > 3.1 because before it was webmaster role
+        if (version_compare($installedDbVersion, '3.2', '>='))
+        {
+            $administratorColumn = 'rol_administrator';
+        }
+        else
+        {
+            $administratorColumn = 'rol_webmaster';
+        }
+
+        // Check if user is currently member of a role of an organisation
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                   AND rol_valid  = 1
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND cat_org_id = ? -- $this->organizationId
+                   AND '.$administratorColumn.' = 1';
+        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($pdoStatement->rowCount() > 0)
+        {
+            return true;
+        }
+
+        $loggingObject = array(
+            'username'     => $this->getValue('usr_login_name'),
+            'organisation' => $orgLongname
+        );
+
+        $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
+
+        return false;
+    }
+
+    /**
+     * Rehashes the password of the user if necessary.
+     * @param string $password The password for the current user. This should not be encoded.
+     * @return bool Returns true if password was rehashed.
+     */
+    private function rehashIfNecessary($password)
+    {
+        global $gLogger;
+
+        if (!PasswordHashing::needsRehash($this->getValue('usr_password')))
+        {
+            return false;
+        }
+
+        $this->saveChangesWithoutRights();
+        $this->setPassword($password);
+        $this->save(); // TODO Exception handling
+
+        $gLogger->info('AUTHENTICATION: Password rehashed!', array('username' => $this->getValue('usr_login_name')));
+
+        return true;
+    }
+
+    /**
      * Check if a valid password is set for the user and return true if the correct password
      * was set. Optional the current session could be updated to a valid login session.
      * @param string $password             The password for the current user. This should not be encoded.
@@ -319,7 +530,7 @@ class User extends TableAccess
      * @param bool   $updateHash           If set to true the code will check if the current password hash uses
      *                                     the best hashing algorithm. If not the password will be rehashed with
      *                                     the new algorithm. If set to false the password will not be rehashed.
-     * @param bool   $isAdministrator      If set to true the code will check if the current password hash uses
+     * @param bool   $isAdministrator      If set to true check if user is admin of organization.
      * @return true|string Return true if login was successful and a string with the reason why the login failed.
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
@@ -331,172 +542,40 @@ class User extends TableAccess
     {
         global $gLogger, $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
 
-        // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-        $now = new DateTime();
-        $minutesOffset = new DateInterval('PT15M');
-        $minutesBefore = $now->sub($minutesOffset);
-        $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
-
-        $invalidLoginCount = (int) $this->getValue('usr_number_invalid');
-
-        if ($invalidLoginCount >= 3 && $minutesBefore->getTimestamp() <= $dateInvalid->getTimestamp())
+        if ($this->hasMaxInvalidLogins())
         {
-            $loggingObject = array(
-                'username'      => $this->getValue('usr_login_name'),
-                'password'      => '******',
-                'numberInvalid' => $this->getValue('usr_number_invalid'),
-                'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
-            );
-            $gLogger->warning('AUTHENTICATION: Maximum number of invalid login!', $loggingObject);
-
-            $this->clear();
-
             return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
-        $currHash = $this->getValue('usr_password');
-
-        if (!PasswordHashing::verify($password, $currHash))
+        if (!PasswordHashing::verify($password, $this->getValue('usr_password')))
         {
-            // Password wrong
+            $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
 
-            // log invalid logins
-            if ($invalidLoginCount >= 3)
-            {
-                $this->setValue('usr_number_invalid', 1);
-            }
-            else
-            {
-                $this->setValue('usr_number_invalid', $this->getValue('usr_number_invalid') + 1);
-            }
-
-            $this->setValue('usr_date_invalid', DATETIME_NOW);
-            $this->saveChangesWithoutRights();
-            $this->save(false); // don't update timestamp // TODO Exception handling
-
-            $loggingObject = array(
-                'username'      => $this->getValue('usr_login_name'),
-                'password'      => '******',
-                'numberInvalid' => $this->getValue('usr_number_invalid'),
-                'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
-            );
-
-            if ($this->getValue('usr_number_invalid') >= 3)
-            {
-                $gLogger->warning('AUTHENTICATION: Maximum number of invalid login!', $loggingObject);
-
-                $this->clear();
-
-                return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
-            }
-
-            $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
-
-            $this->clear();
-
-            return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
+            return $gL10n->get($incorrectLoginMessage);
         }
 
-        // Password correct
-
-        // if user is not activated/valid return error message
         if (!$this->getValue('usr_valid'))
         {
-            $loggingObject = array(
-                'username' => $this->getValue('usr_login_name'),
-                'password' => '******'
-            );
-            $gLogger->warning('AUTHENTICATION: User is not activated!', $loggingObject);
+            $gLogger->warning('AUTHENTICATION: User is not activated!', array('username' => $this->getValue('usr_login_name')));
 
             return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
         }
 
-        $sql = 'SELECT org_longname
-                  FROM '.TBL_ORGANIZATIONS.'
-                 WHERE org_id = ?';
-        $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
-        $org = $orgStatement->fetch();
+        $orgLongname = $this->getOrgLongname();
 
-        $sqlAdministrator = '';
-        // only check for administrator role if version > 3.1 because before it was webmaster role
-        if ($isAdministrator && version_compare($installedDbVersion, '3.2', '>='))
+        if (!$this->isMemberOfOrganization($orgLongname))
         {
-            $sqlAdministrator = ', rol_administrator AS administrator';
-        }
-        // only check for webmaster role if version > 2.3 because before we don't have that flag
-        elseif ($isAdministrator && version_compare($installedDbVersion, '2.4', '>='))
-        {
-            $sqlAdministrator = ', rol_webmaster AS administrator';
-        }
-        // set administrator to false for version <= 2.3
-        else
-        {
-            $sqlAdministrator = ', 0 AS administrator';
+            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $orgLongname);
         }
 
-        // Check if user is currently member of a role of an organisation
-        $sql = 'SELECT DISTINCT mem_usr_id'.$sqlAdministrator.'
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                   AND rol_valid  = 1
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
-                   AND cat_org_id = ? -- $this->organizationId';
-        $queryParams = array($this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
-        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
-        $rowsCount = $pdoStatement->rowCount();
-
-        if ($rowsCount === 0)
+        if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongname))
         {
-            $loggingObject = array(
-                'username'     => $this->getValue('usr_login_name'),
-                'password'     => '******',
-                'organisation' => $org['org_longname']
-            );
-
-            $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
-
-            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $org['org_longname']);
+            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $orgLongname);
         }
 
-        if ($isAdministrator)
+        if ($updateHash)
         {
-            if ($rowsCount === 1)
-            {
-                $row = $pdoStatement->fetch();
-                $isAdmin = (bool) $row['administrator'];
-            }
-            else
-            {
-                $rows = $pdoStatement->fetchAll();
-                $isAdmin = $rows[0]['administrator'] || $rows[1]['administrator'];
-            }
-
-            if (!$isAdmin && version_compare($installedDbVersion, '2.4', '>='))
-            {
-                $loggingObject = array(
-                    'username'     => $this->getValue('usr_login_name'),
-                    'password'     => '******',
-                    'organisation' => $org['org_longname'],
-                    'admin'        => $isAdmin
-                );
-
-                $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
-
-                return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $org['org_longname']);
-            }
-        }
-
-        // Rehash password if the hash is outdated and rehashing is enabled
-        if ($updateHash && PasswordHashing::needsRehash($currHash))
-        {
-            $this->saveChangesWithoutRights();
-            $this->setPassword($password);
-            $this->save(); // TODO Exception handling
+            $this->rehashIfNecessary($password);
         }
 
         if ($updateSessionCookies)
@@ -560,9 +639,9 @@ class User extends TableAccess
      * returns true if a column of user table or profile fields has changed
      * @return bool
      */
-    public function columnsValueChanged()
+    public function hasColumnsValueChanged()
     {
-        return $this->columnsValueChanged || $this->mProfileFieldsData->columnsValueChanged;
+        return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
     }
 
     /**
@@ -738,17 +817,7 @@ class User extends TableAccess
      */
     public function deleteUserFieldData()
     {
-        $this->db->startTransaction();
-
-        // delete every entry from adm_users_data
-        foreach ($this->mProfileFieldsData->mUserData as $field)
-        {
-            $field->delete();
-        }
-
-        $this->mProfileFieldsData->mUserData = array();
-
-        $this->db->endTransaction();
+        $this->mProfileFieldsData->deleteUserData();
     }
 
     /**
@@ -1026,9 +1095,9 @@ class User extends TableAccess
      * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
      * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
      */
-    public function hasRightEditProfile(&$user, $checkOwnProfile = true)
+    public function hasRightEditProfile(User $user, $checkOwnProfile = true)
     {
-        if (!$user instanceof \User)
+        if (!$user instanceof self)
         {
             return false;
         }
@@ -1346,7 +1415,7 @@ class User extends TableAccess
         }
 
         // if value of a field changed then update timestamp of user object
-        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->columnsValueChanged)
+        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->hasColumnsValueChanged())
         {
             $this->columnsValueChanged = true;
         }
@@ -1775,6 +1844,17 @@ class User extends TableAccess
     }
 
     /**
+     * set value for column usd_value of field
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
+     * @param mixed  $fieldValue
+     * @return bool
+     */
+    public function setProfileFieldsValue($fieldNameIntern, $fieldValue)
+    {
+        return $this->mProfileFieldsData->setValue($fieldNameIntern, $fieldValue);
+    }
+
+    /**
      * Update login data for this user. These are timestamps of last login and reset count
      * and timestamp of invalid logins.
      * @return void
@@ -1914,5 +1994,19 @@ class User extends TableAccess
         $gLogger->warning('DEPRECATED: "$user->isWebmaster()" is deprecated, use "$user->isAdministrator()" instead!');
 
         return $this->isAdministrator();
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @deprecated 3.3.0:4.0.0 Use Method hasColumnsValueChanged() instead
+     * @return bool
+     */
+    public function columnsValueChanged()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$user->columnsValueChanged()" is deprecated, use "$user->hasColumnsValueChanged()" instead!');
+
+        return $this->hasColumnsValueChanged();
     }
 }
