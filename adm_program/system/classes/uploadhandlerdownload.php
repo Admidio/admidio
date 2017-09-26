@@ -75,7 +75,7 @@ class UploadHandlerDownload extends UploadHandler
                         $gCurrentOrganization->getValue('org_longname'),
                         $file->name,
                         $fullName,
-                        date($gPreferences['system_date'], time())
+                        date($gPreferences['system_date'])
                     )
                 );
                 $notification = new Email();

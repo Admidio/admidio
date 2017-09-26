@@ -436,7 +436,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date']));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
@@ -444,7 +444,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date']));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
