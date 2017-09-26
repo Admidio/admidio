@@ -268,5 +268,5 @@ else
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
- Please perform an <a href="../adm_program/installation/update.php">update of your database</a>.</p>
+ Please perform an <a href="'.ADMIDIO_URL.'/adm_program/installation/update.php">update of your database</a>.</p>
  <p style="font-size: 9pt;">&copy; 2004 - 2017&nbsp;&nbsp;The Admidio team</p>';

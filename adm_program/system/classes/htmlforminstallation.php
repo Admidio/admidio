@@ -120,12 +120,12 @@ class HtmlFormInstallation extends HtmlForm
             <link rel="icon" type="image/png" href="layout/favicon-16x16.png" sizes="16x16" />
             <link rel="apple-touch-icon" type="image/png" href="layout/apple-touch-icon.png" sizes="180x180" />
 
-            <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.'/adm_program/libs/bootstrap/css/bootstrap.min.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
 
-            <script type="text/javascript" src="../libs/jquery/jquery.min.js"></script>
-            <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
-            <script type="text/javascript" src="../system/js/common_functions.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/libs/jquery/jquery.min.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/libs/bootstrap/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/system/js/common_functions.js"></script>
 
             <script type="text/javascript">
                 $(function() {

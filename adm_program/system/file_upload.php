@@ -159,7 +159,7 @@ if($getMode === 'choose_files')
         $(function() {
             "use strict";
             $("#fileupload").fileupload({
-                url: "../../system/file_upload.php?module='.$getModule.'&mode=upload_files&id='.$getId.'",
+                url: "'.ADMIDIO_URL.'/adm_program/system/file_upload.php?module='.$getModule.'&mode=upload_files&id='.$getId.'",
                 sequentialUploads: true,
                 dataType: "json",
                 add: function(e, data) {
