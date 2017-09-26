@@ -1,0 +1,183 @@
+<?php
+
+/**
+ * @class PhpIni
+ */
+class PhpIni
+{
+    const BYTES_MULTI_1024 = 1024;
+    const BYTES_MULTI_1000 = 1000;
+
+    /**
+     * @param string $data
+     * @param int    $multi Factor to multiply. Default: 1024
+     * @return int
+     */
+    private static function getBytesFromSize($data, $multi = self::BYTES_MULTI_1024)
+    {
+        if ($data === '-1')
+        {
+            return -1;
+        }
+
+        $value = (float) substr($data, 0, -1);
+        $unit  = strtoupper(substr($data, -1));
+
+        switch ($unit)
+        {
+            case 'T':
+                $value *= $multi;
+            case 'G':
+                $value *= $multi;
+            case 'M':
+                $value *= $multi;
+            case 'K':
+                $value *= $multi;
+        }
+
+        return (int) $value;
+    }
+
+    /**
+     * @deprecated 3.3.0:4.0.0 This function will be removed if PHP 5.3 support gets dropped
+     * @return bool
+     */
+    public static function isSafeModeEnabled()
+    {
+        return (bool) ini_get('safe_mode');
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getBaseDirs()
+    {
+        return explode(PATH_SEPARATOR, ini_get('open_basedir'));
+    }
+
+    /**
+     * @return int
+     */
+    public static function getMemoryLimit()
+    {
+        return self::getBytesFromSize(ini_get('memory_limit'));
+    }
+
+    /**
+     * @return int
+     */
+    public static function getPostMaxSize()
+    {
+        return self::getBytesFromSize(ini_get('post_max_size'));
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isFileUploadEnabled()
+    {
+        return (bool) ini_get('file_uploads');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getFileUploadTmpDir()
+    {
+        return ini_get('upload_tmp_dir');
+    }
+
+    /**
+     * @return int
+     */
+    public static function getFileUploadMaxFileSize()
+    {
+        return self::getBytesFromSize(ini_get('upload_max_filesize'));
+    }
+
+    /**
+     * @return int
+     */
+    public static function getFileUploadMaxFileCount()
+    {
+        return (int) ini_get('max_file_uploads');
+    }
+
+    /**
+     * @return bool
+     */
+    public static function checkSizeLimits()
+    {
+        return (self::getMemoryLimit() === -1 || self::getMemoryLimit() >= self::getPostMaxSize()) && self::getPostMaxSize() >= self::getFileUploadMaxFileSize();
+    }
+
+    /**
+     * @param string $dirPath
+     * @return bool
+     */
+    private static function isInBaseDirs($dirPath)
+    {
+        $baseDirs = self::getBaseDirs();
+
+        if ($baseDirs[0] === '')
+        {
+            return true;
+        }
+
+        $isInBaseDirs = false;
+        foreach ($baseDirs as $baseDir)
+        {
+            if (strpos($dirPath, $baseDir) === 0)
+            {
+                $isInBaseDirs = true;
+            }
+        }
+
+        return $isInBaseDirs;
+    }
+
+    /**
+     * @param string[] $dirPaths
+     * @return bool|string
+     * @throws Exception
+     */
+    public static function setBaseDirs(array $dirPaths = array())
+    {
+        $realDirPaths = array_map('realpath', $dirPaths);
+
+        foreach ($realDirPaths as $realDirPath)
+        {
+            if ($realDirPath === false)
+            {
+                throw new Exception('Not a valid or allowed directory');
+            }
+            if (!self::isInBaseDirs($realDirPath))
+            {
+                throw new Exception('Not in base-directory!');
+            }
+        }
+
+        return ini_set('open_basedir', implode(PATH_SEPARATOR, $realDirPaths));
+    }
+
+    /**
+     * @param string $dirPath
+     * @return bool|string
+     * @throws Exception
+     */
+    public static function setFileUploadTmpDir($dirPath)
+    {
+        $realDirPath = realpath($dirPath);
+
+        if ($realDirPath === false)
+        {
+            throw new Exception('Not a valid or allowed directory');
+        }
+        if (!self::isInBaseDirs($realDirPath))
+        {
+            throw new Exception('Not in base-directory!');
+        }
+
+        return ini_set('upload_tmp_dir', $realDirPath);
+    }
+}
