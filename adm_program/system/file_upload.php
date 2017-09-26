@@ -219,7 +219,8 @@ if($getMode === 'choose_files')
                 <div class="progress-bar progress-bar-success"></div>
             </div>
             <div id="files" class="files"></div>
-        </div>');
+        </div>
+    ');
     $page->show();
 }
 elseif($getMode === 'upload_files')
