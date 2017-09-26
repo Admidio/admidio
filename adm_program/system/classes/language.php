@@ -171,6 +171,11 @@ class Language
             // TODO deprecated: Remove in Admidio 4.0
             $paramsCount = func_num_args();
             $paramsArray = func_get_args();
+
+            $gLogger->warning(
+                'DEPRECATED: "$gL10n->get(\'XXX\', 1, 2)" is deprecated, use "$gL10n->get(\'XXX\', array(1, 2))" instead!',
+                array('textId' => $textId, 'params' => $params, 'paramsArray' => $paramsArray)
+            );
         }
 
         for ($paramNumber = 1; $paramNumber < $paramsCount; ++$paramNumber)
