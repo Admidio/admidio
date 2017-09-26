@@ -443,7 +443,7 @@ $page->addHtml('
                         $form->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
                         // TODO deprecated: Remove if PHP 5.3 dropped
-                        if(ini_get('safe_mode') === '1')
+                        if(PhpIni::isSafeModeEnabled())
                         {
                             $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');

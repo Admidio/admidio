@@ -130,7 +130,7 @@ elseif($getModule === 'downloads')
 }
 
 // check if the server allow file uploads
-if (ini_get('file_uploads') !== '1')
+if (!PhpIni::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT

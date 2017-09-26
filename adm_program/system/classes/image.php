@@ -342,8 +342,7 @@ class Image
         }
 
         // check current memory limit and set this to 50MB if the current value is lower
-        preg_match('/(\d+)/', ini_get('memory_limit'), $memoryLimit);
-        if ($memoryLimit[0] < 50)
+        if (PhpIni::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
         {
             @ini_set('memory_limit', '50M');
         }
