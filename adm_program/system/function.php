@@ -265,72 +265,25 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 }
 
 /**
- * @param string $data
- * @param bool   $decimalMulti
- * @return int
- */
-function admFuncGetBytesFromSize($data, $decimalMulti = false)
-{
-    $value = (float) substr(trim($data), 0, -1);
-    $unit  = strtoupper(substr(trim($data), -1));
-
-    $multi = 1024;
-    if ($decimalMulti)
-    {
-        $multi = 1000;
-    }
-
-    switch ($unit)
-    {
-        case 'T':
-            $value *= $multi;
-        case 'G':
-            $value *= $multi;
-        case 'M':
-            $value *= $multi;
-        case 'K':
-            $value *= $multi;
-    }
-
-    return (int) $value;
-}
-
-/**
- * Berechnung der Maximalerlaubten Dateiuploadgröße in Byte
- * @return int
- */
-function admFuncMaxUploadSize()
-{
-    $postMaxSize       = admFuncGetBytesFromSize(ini_get('post_max_size'));
-    $uploadMaxFilesize = admFuncGetBytesFromSize(ini_get('upload_max_filesize'));
-
-    return min($postMaxSize, $uploadMaxFilesize);
-}
-
-/**
  * Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
- * @return float
+ * @return int
  */
 function admFuncProcessableImageSize()
 {
-    $memoryLimit = trim(ini_get('memory_limit'));
-    // falls in php.ini nicht gesetzt
-    if (!$memoryLimit || $memoryLimit === '')
+    $memoryLimit = PhpIni::getMemoryLimit();
+    // if memory_limit is disabled in php.ini
+    if ($memoryLimit === -1)
     {
-        $memoryLimit = '8M';
-    }
-    // falls in php.ini abgeschaltet
-    if ($memoryLimit === '-1')
-    {
-        $memoryLimit = '128M';
+        $memoryLimit = 128 * 1024 * 1024; // 128MB
     }
 
-    $memoryLimit = admFuncGetBytesFromSize($memoryLimit);
-
-    // Für jeden Pixel werden 3Byte benötigt (RGB)
+    // For each Pixel 3 Bytes are necessary (RGB)
+    $bytesPerPixel = 3;
     // der Speicher muss doppelt zur Verfügung stehen
-    // nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
-    return $memoryLimit / (3 * 2.5);
+    // nach ein paar tests hat sich 2.5x als sicher herausgestellt
+    $factor = 2.5;
+
+    return round($memoryLimit / ($bytesPerPixel * $factor));
 }
 
 // Verify the content of an array element if it's the expected datatype
@@ -840,4 +793,54 @@ function noHTML($input, $encoding = 'UTF-8')
 function replaceValuesArrWithQM(array $valuesArray)
 {
     return implode(',', array_fill(0, count($valuesArray), '?'));
+}
+
+/**
+ * Berechnung der Maximalerlaubten Dateiuploadgröße in Byte
+ * @deprecated 3.3.0:4.0.0 "admFuncMaxUploadSize()" is a typo. Use "PhpIni::getUploadMaxSize()" instead.
+ * @return int
+ */
+function admFuncMaxUploadSize()
+{
+    global $gLogger;
+
+    $gLogger->warning('DEPRECATED: "admFuncMaxUploadSize()" is deprecated, use "PhpIni::getUploadMaxSize()" instead!');
+
+    return PhpIni::getUploadMaxSize();
+}
+
+/**
+ * @deprecated 3.3.0:4.0.0 "admFuncGetBytesFromSize()" is deprecated, there is no replacement.
+ * @param string $data
+ * @param bool   $decimalMulti
+ * @return int
+ */
+function admFuncGetBytesFromSize($data, $decimalMulti = false)
+{
+    global $gLogger;
+
+    $gLogger->warning('DEPRECATED: "admFuncGetBytesFromSize()" is deprecated, there is no replacement!');
+
+    $value = (float) substr(trim($data), 0, -1);
+    $unit  = strtoupper(substr(trim($data), -1));
+
+    $multi = 1024;
+    if ($decimalMulti)
+    {
+        $multi = 1000;
+    }
+
+    switch ($unit)
+    {
+        case 'T':
+            $value *= $multi;
+        case 'G':
+            $value *= $multi;
+        case 'M':
+            $value *= $multi;
+        case 'K':
+            $value *= $multi;
+    }
+
+    return (int) $value;
 }
