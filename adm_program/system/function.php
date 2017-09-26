@@ -283,7 +283,7 @@ function admFuncProcessableImageSize()
     // nach ein paar tests hat sich 2.5x als sicher herausgestellt
     $factor = 2.5;
 
-    return round($memoryLimit / ($bytesPerPixel * $factor));
+    return (int) round($memoryLimit / ($bytesPerPixel * $factor));
 }
 
 // Verify the content of an array element if it's the expected datatype

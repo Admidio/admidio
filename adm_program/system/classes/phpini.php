@@ -112,7 +112,7 @@ class PhpIni
     }
 
     /**
-     * @return int
+     * @return bool
      */
     public static function checkSizeLimits()
     {
