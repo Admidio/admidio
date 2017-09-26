@@ -5,17 +5,17 @@
  */
 class PhpIni
 {
-    const BYTES_MULTI_1024 = 1024;
-    const BYTES_MULTI_1000 = 1000;
+    const BYTES_UNIT_FACTOR_1024 = 1024;
+    const BYTES_UNIT_FACTOR_1000 = 1000;
 
     /**
      * @param string $data
      * @param int    $multi Factor to multiply. Default: 1024
      * @return int
      */
-    private static function getBytesFromSize($data, $multi = self::BYTES_MULTI_1024)
+    private static function getBytesFromSize($data, $multi = self::BYTES_UNIT_FACTOR_1024)
     {
-        if ($data === '-1')
+        if ($data === '' || $data === '-1')
         {
             return -1;
         }
@@ -104,11 +104,20 @@ class PhpIni
     }
 
     /**
-     * @return bool
+     * @return int
+     */
+    public static function getUploadMaxSize()
+    {
+        return min(self::getMemoryLimit(), self::getPostMaxSize(), self::getFileUploadMaxFileSize());
+    }
+
+    /**
+     * @return int
      */
     public static function checkSizeLimits()
     {
-        return (self::getMemoryLimit() === -1 || self::getMemoryLimit() >= self::getPostMaxSize()) && self::getPostMaxSize() >= self::getFileUploadMaxFileSize();
+        return (self::getMemoryLimit() === -1 || self::getMemoryLimit() >= self::getPostMaxSize())
+            && (self::getPostMaxSize() === -1 || self::getPostMaxSize() >= self::getFileUploadMaxFileSize());
     }
 
     /**
