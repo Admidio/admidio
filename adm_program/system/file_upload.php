@@ -110,8 +110,9 @@ elseif($getModule === 'downloads')
     {
         // get recordset of current folder from database
         $folder->getFolderForDownload($getId);
-        $uploadDir = $folder->getCompletePathOfFolder().'/';
-        $uploadUrl = ADMIDIO_URL. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
+        $folderPath = $folder->getFolderPath() . '/';
+        $uploadDir = ADMIDIO_PATH . $folderPath;
+        $uploadUrl = ADMIDIO_URL . $folderPath;
     }
     catch(AdmException $e)
     {

@@ -37,7 +37,7 @@ catch(AdmException $e)
 }
 
 // kompletten Pfad der Datei holen
-$completePath = $file->getCompletePathOfFile();
+$completePath = $file->getFullFilePath();
 
 // pruefen ob File ueberhaupt physikalisch existiert
 if (!is_file($completePath))

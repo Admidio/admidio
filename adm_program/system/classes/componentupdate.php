@@ -557,7 +557,7 @@ class ComponentUpdate extends Component
             if($rowFolder = $folderStatement->fetch())
             {
                 $folder = new TableFolder($this->db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getCompletePathOfFolder();
+                $folderOldName = $folder->getFullFolderPath();
                 $folder->setValue('fol_name', TableFolder::getRootFolderName());
                 $folder->save();
 
@@ -568,7 +568,7 @@ class ComponentUpdate extends Component
 
                 if($row['org_shortname'] === $g_organization)
                 {
-                    rename($folderOldName, $folder->getCompletePathOfFolder());
+                    rename($folderOldName, $folder->getFullFolderPath());
                 }
             }
             else

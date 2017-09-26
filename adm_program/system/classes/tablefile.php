@@ -45,25 +45,29 @@ class TableFile extends TableAccess
      */
     public function delete()
     {
-        @chmod($this->getCompletePathOfFile(), 0777);
-        @unlink($this->getCompletePathOfFile());
+        @chmod($this->getFullFilePath(), 0777);
+        @unlink($this->getFullFilePath());
 
         // Even if the delete won't work, return true, so that the entry of the DB disappears
         return parent::delete();
     }
 
     /**
-     * Returns the complete filepath
-     * @return string Complete filepath
+     * Gets the absolute path of the folder (with folder-name)
+     * @return string
      */
-    public function getCompletePathOfFile()
+    public function getFullFolderPath()
     {
-        // Put the path and the filename together
-        $fileName   = $this->getValue('fil_name');
-        $folderPath = $this->getValue('fol_path');
-        $folderName = $this->getValue('fol_name');
+        return ADMIDIO_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name');
+    }
 
-        return ADMIDIO_PATH . $folderPath . '/' . $folderName . '/' . $fileName;
+    /**
+     * Gets the absolute path of the file
+     * @return string
+     */
+    public function getFullFilePath()
+    {
+        return $this->getFullFolderPath() . '/' . $this->getValue('fil_name');
     }
 
     /**
@@ -157,5 +161,19 @@ class TableFile extends TableAccess
         }
 
         return parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Returns the complete filepath
+     * @deprecated 3.3.0:4.0.0 Use Method getFullFilePath() instead.
+     * @return string Complete filepath
+     */
+    public function getCompletePathOfFile()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$file->getCompletePathOfFile()" is deprecated, use "$file->getFullFilePath()" instead!');
+
+        return $this->getFullFilePath();
     }
 }
