@@ -148,7 +148,7 @@ if(isset($_SESSION['profile_request']))
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();
-$page->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 
 // add back link to module menu
 $profileEditMenu = $page->getMenu();

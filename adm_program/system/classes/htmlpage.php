@@ -19,7 +19,7 @@
  * @par Examples
  * @code // create a simple html page with some text
  * $page = new HtmlPage();
- * $page->addJavascriptFile('adm_program/libs/jquery/jquery.min.js');
+ * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
  * $page->show(); @endcode
@@ -52,10 +52,10 @@ class HtmlPage
 
         $this->setHeadline($headline);
 
-        $this->addCssFile('adm_program/libs/bootstrap/css/bootstrap.css');
-        $this->addJavascriptFile('adm_program/libs/jquery/jquery.js');
-        $this->addJavascriptFile('adm_program/system/js/common_functions.js');
-        $this->addJavascriptFile('adm_program/libs/bootstrap/js/bootstrap.js');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/css/bootstrap.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.js');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.js');
+        $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
     }
 
     /**
@@ -482,7 +482,7 @@ class HtmlPage
 
         if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
         {
-            $this->addJavascriptFile('adm_program/libs/browser-update/browser-update.js');
+            $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }
 
         // add code for a modal window

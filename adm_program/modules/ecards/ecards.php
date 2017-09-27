@@ -112,7 +112,7 @@ else
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-$page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.min.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.min.js');
 
 $page->addJavascript('
     $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {

@@ -55,7 +55,7 @@ $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
 // create a page to enter all necessary data to create a administrator user
 $form = new HtmlFormInstallation('installation-form', 'installation.php?step=create_config');
-$form->addHeader('<script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/libs/zxcvbn/dist/zxcvbn.js"></script>');
+$form->addHeader('<script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/zxcvbn/dist/zxcvbn.js"></script>');
 $form->addHeader('
     <script type="text/javascript">
         $(function() {

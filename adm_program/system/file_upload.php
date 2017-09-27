@@ -147,10 +147,10 @@ if($getMode === 'choose_files')
     $page->hideThemeHtml();
     $page->hideMenu();
 
-    $page->addCssFile('adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');
-    $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/vendor/jquery.ui.widget.js');
-    $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/jquery.iframe-transport.js');
-    $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/css/jquery.fileupload.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/jquery.iframe-transport.js');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/jquery.fileupload.js');
 
     $page->addJavascript('
         var countErrorFiles = 0;

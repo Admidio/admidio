@@ -371,13 +371,13 @@ $page->addHtml('
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'), 'word' => $gL10n->get('ORG_CAPTCHA_TYPE_WORDS'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, array('defaultValue' => $formValues['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT'));
 
-                        $fonts = admFuncGetDirectoryEntries('../../system/fonts/');
+                        $fonts = admFuncGetDirectoryEntries(ADMIDIO_PATH . '/adm_program/system/fonts/');
                         asort($fonts);
                         $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, array('defaultValue' => $formValues['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT'));
                         $form->addInput('captcha_width', $gL10n->get('SYS_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $formValues['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
                         $form->addInput('captcha_lines_numbers', $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'), $formValues['captcha_lines_numbers'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'step' => 1, 'helpTextIdInline' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC'));
                         $form->addInput('captcha_perturbation', $gL10n->get('ORG_CAPTCHA_DISTORTION'), $formValues['captcha_perturbation'], array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small'));
-                        $backgrounds = admFuncGetDirectoryEntries('../../libs/securimage/backgrounds/');
+                        $backgrounds = admFuncGetDirectoryEntries(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/');
                         asort($backgrounds);
                         $form->addSelectBox('captcha_background_image', $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'), $backgrounds, array('defaultValue' => $formValues['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC'));
                         $form->addInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $formValues['captcha_background_color'], array('maxLength' => 7, 'class' => 'form-control-small'));

@@ -148,7 +148,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catId + "&type='. $getType. '&mode=4&sequence=" + direction);
+            $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php?cat_id=" + catId + "&type='. $getType. '&mode=4&sequence=" + direction);
         }
     }
 ');

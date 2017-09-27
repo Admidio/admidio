@@ -97,11 +97,11 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-$page->addCssFile('adm_program/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
-$page->addJavascriptFile('adm_program/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
-$page->addJavascriptFile('adm_program/libs/bootstrap-datepicker/dist/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
-$page->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
-$page->addJavascriptFile('adm_program/modules/profile/profile.js');
+$page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/locales/bootstrap-datepicker.'.$gL10n->getLanguageIsoCode().'.min.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);

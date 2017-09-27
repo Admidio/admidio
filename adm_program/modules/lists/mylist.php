@@ -459,7 +459,7 @@ $javascriptCode .= '
 
     function loadList() {
         var listId = $("#sel_select_configuration").val();
-        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
+        self.location.href = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
     }
 
     /**
@@ -478,12 +478,12 @@ $javascriptCode .= '
 
         switch (mode) {
             case "show":
-                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
+                myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?mode=2";
                 myListConfigForm.submit();
                 break;
 
             case "save":
-                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
+                myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
                 myListConfigForm.submit();
                 break;
 
@@ -491,7 +491,7 @@ $javascriptCode .= '
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
                 if (listName !== "") {
-                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
+                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?mode=1&name=" + listName;
                     myListConfigForm.submit();
                 }
                 break;
@@ -499,7 +499,7 @@ $javascriptCode .= '
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if (msg_result) {
-                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
+                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
                     myListConfigForm.submit();
                 }
                 break;
@@ -507,7 +507,7 @@ $javascriptCode .= '
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
-                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
+                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
                     myListConfigForm.submit();
                 }
                 break;

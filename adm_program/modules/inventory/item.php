@@ -84,9 +84,9 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 
 $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/css/datepicker3.css');
-$page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/bootstrap-datepicker.js');
 $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gL10n->getLanguage().'.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);

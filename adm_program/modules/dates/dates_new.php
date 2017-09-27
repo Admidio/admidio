@@ -152,7 +152,7 @@ else
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascriptFile('adm_program/system/js/date-functions.js');
+$page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');
 $page->addJavascript('
     /**
      * Funktion blendet Zeitfelder ein/aus

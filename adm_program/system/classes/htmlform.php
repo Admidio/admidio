@@ -531,7 +531,7 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof \HtmlPage)
             {
-                $this->htmlPage->addJavascriptFile('adm_program/libs/ckeditor/ckeditor.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/ckeditor/ckeditor.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
@@ -845,9 +845,9 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof \HtmlPage)
             {
-                $this->htmlPage->addCssFile('adm_program/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
-                $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
-                $this->htmlPage->addJavascriptFile('adm_program/libs/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' . $gL10n->getLanguageIsoCode() . '.min.js');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/js/bootstrap-datepicker.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' . $gL10n->getLanguageIsoCode() . '.min.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
@@ -926,7 +926,7 @@ class HtmlForm extends HtmlFormBasic
                         progressBar.addClass(cssClasses[result.score]);
                     });
                 ';
-                $this->htmlPage->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
                 $this->htmlPage->addJavascript($javascriptCode, true);
             }
 
@@ -1033,7 +1033,7 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof \HtmlPage)
             {
-                $this->htmlPage->addJavascriptFile('adm_program/libs/noblecount/jquery.noblecount.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/noblecount/jquery.noblecount.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
@@ -1396,10 +1396,10 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof \HtmlPage)
             {
-                $this->htmlPage->addCssFile('adm_program/libs/select2/dist/css/select2.css');
-                $this->htmlPage->addCssFile('adm_program/libs/select2-bootstrap-theme/dist/select2-bootstrap.css');
-                $this->htmlPage->addJavascriptFile('adm_program/libs/select2/dist/js/select2.js');
-                $this->htmlPage->addJavascriptFile('adm_program/libs/select2/dist/js/i18n/' . $gL10n->getLanguageIsoCode() . '.js');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/css/select2.css');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2-bootstrap-theme/dist/select2-bootstrap.css');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/js/select2.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/select2/dist/js/i18n/' . $gL10n->getLanguageIsoCode() . '.js');
             }
             $this->addJavascriptCode($javascriptCode, true);
         }
