@@ -81,12 +81,8 @@ $menuMenu = $page->getMenu();
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
-$menuMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/menu/menu_new.php',
+$menuMenu->addItem('admMenuItemNew', $g_root_path.'/adm_program/modules/menu/menu_new.php',
                          $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_MENU')), 'add.png');
-
-// define link to maintain categories
-$menuMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=MEN',
-                    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);

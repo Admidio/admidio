@@ -137,7 +137,7 @@ if($getMenId > 0)
 }
 
 subfolder(null, '', $menu);
-$form->addSelectBox('men_cat_id', $gL10n->get('SYS_CATEGORY'), $menuArray, array(
+$form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_parent_id'),
         'showContextDependentFirstEntry' => false,

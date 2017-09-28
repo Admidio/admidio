@@ -164,7 +164,7 @@ class TableMenu extends TableAccess
         $fields_changed = $this->columnsValueChanged;
         $this->db->startTransaction();
 
-        if($this->new_record)
+        if($this->newRecord)
         {
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
