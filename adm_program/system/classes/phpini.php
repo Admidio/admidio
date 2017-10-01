@@ -18,7 +18,8 @@ class PhpIni
     const BYTES_UNIT_FACTOR_1000 = 1000;
 
     /**
-     * @param string $data
+     * Returns the calculated bytes of a string or -1 if unlimited
+     * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit
      * @param int    $multi Factor to multiply. Default: 1024
      * @return int
      */
@@ -48,6 +49,7 @@ class PhpIni
     }
 
     /**
+     * Returns if safe-mode is enabled
      * @deprecated 3.3.0:4.0.0 This function will be removed if PHP 5.3 support gets dropped
      * @return bool
      */
@@ -57,6 +59,7 @@ class PhpIni
     }
 
     /**
+     * Returns the allowed base-dirs
      * @return string[]
      */
     public static function getBaseDirs()
@@ -65,6 +68,7 @@ class PhpIni
     }
 
     /**
+     * Returns the memory limit
      * @return int
      */
     public static function getMemoryLimit()
@@ -73,6 +77,7 @@ class PhpIni
     }
 
     /**
+     * Returns the maximum post size
      * @return int
      */
     public static function getPostMaxSize()
@@ -81,6 +86,7 @@ class PhpIni
     }
 
     /**
+     * Returns if file-upload is enabled
      * @return bool
      */
     public static function isFileUploadEnabled()
@@ -89,6 +95,7 @@ class PhpIni
     }
 
     /**
+     * Returns the file upload temporary directory
      * @return string
      */
     public static function getFileUploadTmpDir()
@@ -97,6 +104,7 @@ class PhpIni
     }
 
     /**
+     * Returns the maximum upload filesize
      * @return int
      */
     public static function getFileUploadMaxFileSize()
@@ -105,6 +113,7 @@ class PhpIni
     }
 
     /**
+     * Returns the maximum file upload count
      * @return int
      */
     public static function getFileUploadMaxFileCount()
@@ -113,6 +122,7 @@ class PhpIni
     }
 
     /**
+     * Returns the maximum upload size out of memory-limit, max-post-size and max-file-size
      * @return int
      */
     public static function getUploadMaxSize()
@@ -121,6 +131,7 @@ class PhpIni
     }
 
     /**
+     * Checks if the size limits have valid values because they depend on each other
      * @return bool
      */
     public static function checkSizeLimits()
@@ -130,7 +141,8 @@ class PhpIni
     }
 
     /**
-     * @param string $dirPath
+     * Checks if a given path is in the allowed base-dirs
+     * @param string $dirPath The path to check
      * @return bool
      */
     private static function isInBaseDirs($dirPath)
@@ -155,7 +167,8 @@ class PhpIni
     }
 
     /**
-     * @param string[] $dirPaths
+     * Sets the allowed base-dirs
+     * @param string[] $dirPaths The paths to set as allowed base-dirs
      * @return bool|string
      * @throws Exception
      */
@@ -179,7 +192,8 @@ class PhpIni
     }
 
     /**
-     * @param string $dirPath
+     * Sets the file upload temporary directory
+     * @param string $dirPath The path to set the file upload temporary directory
      * @return bool|string
      * @throws Exception
      */
