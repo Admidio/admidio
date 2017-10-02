@@ -15,6 +15,9 @@
  */
 class TableMessage extends TableAccess
 {
+    const MESSAGE_TYPE_EMAIL = 'EMAIL';
+    const MESSAGE_TYPE_PM    = 'PM';
+
     protected $msgId;
 
     /**
@@ -138,7 +141,7 @@ class TableMessage extends TableAccess
 
         $msgId = (int) $this->getValue('msg_id');
 
-        if ($this->getValue('msg_type') === 'EMAIL' || (int) $this->getValue('msg_read') === 2)
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2)
         {
             $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                      WHERE msc_msg_id = ? -- $msgId';

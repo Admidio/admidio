@@ -15,6 +15,10 @@
  */
 class TableUserRelationType extends TableAccess
 {
+    const USER_RELATION_TYPE_UNIDIRECTIONAL = 'unidirectional';
+    const USER_RELATION_TYPE_SYMMETRICAL    = 'symmetrical';
+    const USER_RELATION_TYPE_ASYMMETRICAL   = 'asymmetrical';
+
     /**
      * Constructor that will create an object of a recordset of the table adm_user_relation_types.
      * If the id is set than the specific message will be loaded.
@@ -36,15 +40,15 @@ class TableUserRelationType extends TableAccess
             $urtIdReverse = $this->getValue('urt_id_inverse');
             if (empty($urtIdReverse))
             {
-                return 'unidirectional';
+                return self::USER_RELATION_TYPE_UNIDIRECTIONAL;
             }
             elseif ((int) $this->getValue('urt_id_inverse') === (int) $this->getValue('urt_id'))
             {
-                return 'symmetrical';
+                return self::USER_RELATION_TYPE_SYMMETRICAL;
             }
         }
 
-        return 'asymmetrical';
+        return self::USER_RELATION_TYPE_ASYMMETRICAL;
     }
 
     /**
@@ -52,7 +56,7 @@ class TableUserRelationType extends TableAccess
      */
     public function isUnidirectional()
     {
-        return $this->getRelationTypeString() === 'unidirectional';
+        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_UNIDIRECTIONAL;
     }
 
     /**
@@ -60,7 +64,7 @@ class TableUserRelationType extends TableAccess
      */
     public function isSymmetrical()
     {
-        return $this->getRelationTypeString() === 'symmetrical';
+        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_SYMMETRICAL;
     }
 
     /**
@@ -68,7 +72,7 @@ class TableUserRelationType extends TableAccess
      */
     public function isAsymmetrical()
     {
-        return $this->getRelationTypeString() === 'asymmetrical';
+        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_ASYMMETRICAL;
     }
 
     /**

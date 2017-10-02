@@ -71,7 +71,14 @@ if($getMode === 1)
 
     $postRelationType = admFuncVariableIsValid(
         $_POST, 'relation_type', 'string',
-        array('defaultValue' => $relationtype->getRelationTypeString(), 'validValues' => array('asymmetrical', 'symmetrical', 'unidirectional'))
+        array(
+            'defaultValue' => $relationtype->getRelationTypeString(),
+            'validValues' => array(
+                TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL,
+                TableUserRelationType::USER_RELATION_TYPE_SYMMETRICAL,
+                TableUserRelationType::USER_RELATION_TYPE_UNIDIRECTIONAL
+            )
+        )
     );
     if ($postRelationType === 'asymmetrical')
     {

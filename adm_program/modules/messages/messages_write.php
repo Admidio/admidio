@@ -43,8 +43,8 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM')
-   || ($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM'))
+if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+   || ($gPreferences['enable_pm_module'] != 1 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -52,14 +52,14 @@ if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM')
 }
 
 // check for valid login
-if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
+if (!$gValidLogin && $getUserId === 0 && $getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 // check if user has email address for sending a email
-if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') === '')
+if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gCurrentUser->getValue('EMAIL') === '')
 {
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>'));
     // => EXIT
@@ -81,7 +81,7 @@ if ($getMsgId > 0)
 }
 
 $maxNumberRecipients = 1;
-if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
+if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 {
     $maxNumberRecipients = $gPreferences['mail_max_receiver'];
 }
@@ -89,7 +89,7 @@ if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
 $list = array();
 $arrAllVisibleRoles = $gCurrentUser->getAllVisibleRoles();
 
-if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
+if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllVisibleRoles) > 0)
 {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM '.TBL_MEMBERS.'
@@ -164,7 +164,7 @@ if ($getSubject !== '')
 else
 {
     $headline = $gL10n->get('MAI_SEND_EMAIL');
-    if ($getMsgType === 'PM')
+    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
         $headline = $gL10n->get('PMS_SEND_PM');
     }
@@ -209,7 +209,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $messagesWriteMenu = $page->getMenu();
 $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-if ($getMsgType === 'PM')
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
 
     $formParam = 'msg_type=PM';
@@ -607,7 +607,7 @@ if (isset($messageStatement))
 
         $receiverName = '';
         $messageText = htmlspecialchars_decode($row['msc_message']);
-        if ($getMsgType === 'PM')
+        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
             // list history of this PM
             $messageText = nl2br($row['msc_message']);
