@@ -52,7 +52,8 @@ class TableWeblink extends TableAccess
             // parent organizations could edit global weblinks,
             // child organizations could only edit their own weblinks
             if ($gCurrentOrganization->isParentOrganization()
-            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
+            || ($gCurrentOrganization->isChildOrganization()
+            && (int) $gCurrentOrganization->getValue('org_id') === (int) $this->getValue('cat_org_id')))
             {
                 return true;
             }

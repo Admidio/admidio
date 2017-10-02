@@ -68,9 +68,11 @@ if ($numberRoles > 1)
 
     foreach ($rolesData as $role)
     {
+        $roleId = (int) $role['rol_id'];
+
         // check if user has right to view all roles
         // only users with the right to assign roles can view inactive roles
-        if (!$gCurrentUser->hasRightViewRole($role['rol_id'])
+        if (!$gCurrentUser->hasRightViewRole($roleId)
         || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -78,13 +80,13 @@ if ($numberRoles > 1)
         }
 
         // check if user has right to send mail to role
-        if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
+        if (!$gCurrentUser->hasRightSendMailToRole($roleId))
         {
             $showLinkMailToList = false;
             // => do not show the link
         }
 
-        if (!$gCurrentUser->hasRightViewFormerRolesMembers($role['rol_id']))
+        if (!$gCurrentUser->hasRightViewFormerRolesMembers($roleId))
         {
             $hasRightViewFormerMembers = false;
         }
