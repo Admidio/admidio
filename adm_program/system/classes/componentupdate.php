@@ -82,7 +82,7 @@ class ComponentUpdate extends Component
         $dbType = $gDbType;
         if ($gDbType === 'postgresql')
         {
-            $dbType = 'pgsql';
+            $dbType = Database::PDO_ENGINE_PGSQL;
         }
 
         $executeSql = true;

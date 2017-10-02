@@ -204,7 +204,7 @@ $page->addHtml('
                     {
                         case 'ROOM_ID':
                             $field = getFieldCode($field->getValue('inf_name_intern'), $getItemId);
-                            if($gDbType === 'mysql')
+                            if($gDbType === Database::PDO_ENGINE_MYSQL)
                             {
                                 $sql = 'SELECT CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') AS name
                                           FROM '.TBL_ROOMS.'

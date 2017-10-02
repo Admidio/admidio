@@ -37,7 +37,7 @@ $getLastname  = admFuncVariableIsValid($_POST, 'lastname',  'string', array('req
 $getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('requireValue' => true));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
+if($gPreferences['system_search_similar'] == 1 && $gDbType === Database::PDO_ENGINE_MYSQL)
 {
     $sqlSimilarName = '
         (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(?), 1, 4)     -- $gDb->escapeString($getLastname)

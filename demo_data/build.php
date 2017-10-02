@@ -150,7 +150,7 @@ catch(AdmException $e)
     exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
 }
 
-if($gDbType === 'mysql')
+if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
     // disable foreign key checks for mysql, so tables can easily deleted
     $db->queryPrepared('SET foreign_key_checks = 0');
@@ -219,7 +219,7 @@ echo 'Edit data of database ...<br />';
 include_once(__DIR__ . '/data_edit.php');
 
 // in postgresql all sequences must get a new start value because our inserts have given ids
-if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
 {
     $sql = 'SELECT relname
               FROM pg_class
@@ -239,7 +239,7 @@ $sql = 'UPDATE '.$g_tbl_praefix.'_preferences
          WHERE prf_name = \'system_language\'';
 $db->queryPrepared($sql, array($getLanguage));
 
-if($gDbType === 'mysql')
+if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
     // activate foreign key checks, so database is consistent
     $db->queryPrepared('SET foreign_key_checks = 1');

@@ -40,7 +40,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check DB-type
-    if (!in_array($_SESSION['db_type'], array('mysql', 'pgsql'), true))
+    if (!in_array($_SESSION['db_type'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true))
     {
         showNotice(
             $gL10n->get('INS_DATABASE_TYPE_INVALID'),

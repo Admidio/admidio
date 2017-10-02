@@ -58,6 +58,9 @@
  */
 class Database
 {
+    const PDO_ENGINE_MYSQL = 'mysql';
+    const PDO_ENGINE_PGSQL = 'pgsql';
+
     protected $host;
     protected $port;
     protected $dbName;
@@ -94,7 +97,7 @@ class Database
         // for compatibility to old versions accept the string postgresql
         if ($engine === 'postgresql')
         {
-            $engine = 'pgsql';
+            $engine = self::PDO_ENGINE_PGSQL;
         }
 
         $this->host     = $host;
@@ -153,7 +156,7 @@ class Database
     {
         switch ($engine)
         {
-            case 'mysql':
+            case self::PDO_ENGINE_MYSQL:
 
                 $port = '';
                 if ($this->port !== null)
@@ -164,7 +167,7 @@ class Database
                 $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8';
                 break;
 
-            case 'pgsql':
+            case self::PDO_ENGINE_PGSQL:
                 $port = '';
                 if ($this->port !== null)
                 {
@@ -202,14 +205,14 @@ class Database
 
         switch ($this->dbEngine)
         {
-            case 'mysql':
+            case self::PDO_ENGINE_MYSQL:
                 // MySQL charset UTF-8 is set in DSN-string
                 // set ANSI mode, that SQL could be more compatible with other DBs
                 $this->queryPrepared('SET SQL_MODE = \'ANSI\'');
                 // if the server has limited the joins, it can be canceled with this statement
                 $this->queryPrepared('SET SQL_BIG_SELECTS = 1');
                 break;
-            case 'pgsql':
+            case self::PDO_ENGINE_PGSQL:
                 $this->queryPrepared('SET NAMES \'UTF8\'');
                 break;
         }
@@ -261,7 +264,7 @@ class Database
         $versionStatement = $this->queryPrepared('SELECT version()');
         $version = $versionStatement->fetchColumn();
 
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
             $versionArray  = explode(',', $version);
@@ -430,7 +433,7 @@ class Database
      */
     public function lastInsertId()
     {
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
             return $lastValStatement->fetchColumn();
@@ -493,7 +496,7 @@ class Database
     {
         global $gLogger;
 
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $sql = $this->preparePgSqlQuery($sql);
         }
@@ -543,7 +546,7 @@ class Database
     {
         global $gLogger;
 
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $sql = $this->preparePgSqlQuery($sql);
         }
@@ -642,7 +645,7 @@ class Database
     {
         $tableColumnsProperties = array();
 
-        if ($this->dbEngine === 'mysql')
+        if ($this->dbEngine === self::PDO_ENGINE_MYSQL)
         {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $columnsStatement = $this->query($sql); // TODO add more params
@@ -678,7 +681,7 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         }
-        elseif ($this->dbEngine === 'pgsql')
+        elseif ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type
                       FROM information_schema.columns

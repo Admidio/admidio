@@ -202,7 +202,7 @@ foreach($gInventoryFields->getInventoryFields() as $field)
             // set array with values and set default value
             if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') === 'ROOM_ID')
             {
-                if($gDbType === 'mysql')
+                if($gDbType === Database::PDO_ENGINE_MYSQL)
                 {
                     $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                               FROM '.TBL_ROOMS.'

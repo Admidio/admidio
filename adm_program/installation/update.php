@@ -360,7 +360,7 @@ elseif ($getMode === 2)
         $organization->setPreferences($updateOrgPreferences, true);
     }
 
-    if ($gDbType === 'mysql')
+    if ($gDbType === Database::PDO_ENGINE_MYSQL)
     {
         // disable foreign key checks for mysql, so tables can easily deleted
         $gDb->queryPrepared('SET foreign_key_checks = 0');
@@ -457,7 +457,7 @@ elseif ($getMode === 2)
         $componentUpdateHandle->update();
     }
 
-    if ($gDbType === 'mysql')
+    if ($gDbType === Database::PDO_ENGINE_MYSQL)
     {
         // activate foreign key checks, so database is consistent
         $gDb->queryPrepared('SET foreign_key_checks = 1');
