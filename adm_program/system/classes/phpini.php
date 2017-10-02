@@ -19,7 +19,8 @@ class PhpIni
 
     /**
      * Returns the calculated bytes of a string or -1 if unlimited
-     * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit
+     * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
+     *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
      * @param int    $multi Factor to multiply. Default: 1024
      * @return int
      */
