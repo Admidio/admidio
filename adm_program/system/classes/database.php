@@ -113,11 +113,11 @@ class Database
 
             if (count($availableDrivers) === 0)
             {
-                throw new PDOException('PDO does not support any drivers');
+                throw new \PDOException('PDO does not support any drivers');
             }
             if (!in_array($engine, $availableDrivers, true))
             {
-                throw new PDOException('The requested PDO driver ' . $engine . ' is not supported');
+                throw new \PDOException('The requested PDO driver ' . $engine . ' is not supported');
             }
 
             $this->setDSNString($engine);
@@ -129,7 +129,7 @@ class Database
 
             $this->setConnectionOptions();
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $logContext = array(
                 'engine'   => $engine,
@@ -157,7 +157,6 @@ class Database
         switch ($engine)
         {
             case self::PDO_ENGINE_MYSQL:
-
                 $port = '';
                 if ($this->port !== null)
                 {
@@ -177,7 +176,7 @@ class Database
                 break;
 
             default:
-                throw new PDOException('Engine is not supported by Admidio');
+                throw new \PDOException('Engine is not supported by Admidio');
         }
     }
 
@@ -514,7 +513,7 @@ class Database
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $gLogger->critical('PDOException: ' . $e->getMessage());
 
@@ -569,7 +568,7 @@ class Database
                 }
             }
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $gLogger->critical('PDOException: ' . $e->getMessage());
 
