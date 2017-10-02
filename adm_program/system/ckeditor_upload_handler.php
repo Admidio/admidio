@@ -27,7 +27,7 @@ $message = '';
 try
 {
     // checks if the server settings for file_upload are set to ON
-    if (ini_get('file_uploads') !== '1')
+    if (!PhpIni::isFileUploadEnabled())
     {
         $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
     }

@@ -31,7 +31,7 @@ if($getMode === 'delete')
 }
 
 // checks if the server settings for file_upload are set to ON
-if (ini_get('file_uploads') !== '1')
+if (!PhpIni::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
@@ -192,7 +192,7 @@ elseif($getMode === 'upload')
     // File size
     if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
     {
-        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
+        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(PhpIni::getUploadMaxSize()/pow(1024, 2))));
         // => EXIT
     }
 

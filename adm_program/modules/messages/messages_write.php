@@ -554,7 +554,7 @@ elseif (!isset($messageStatement))
     $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
-    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') === '1'))
+    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIni::isFileUploadEnabled())
     {
         $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true,
                                                                                          'maxUploadSize'      => Email::getMaxAttachmentSize(),
