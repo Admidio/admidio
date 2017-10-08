@@ -78,7 +78,7 @@ if(isset($_SESSION['mylist_request']))
 
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
     // muessen diese nun direkt angelegt werden
-    for($i = $defaultColumnRows+1; $i > 0; ++$i)
+    for($i = $defaultColumnRows + 1; $i > 0; ++$i)
     {
         if(isset($formValues['column'.$i]))
         {

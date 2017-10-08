@@ -132,7 +132,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // if image was successfully saved in filesystem then update image count of album
                 if(is_file($albumFolder.'/'.$newPhotoFileNumber.'.jpg'))
                 {
-                    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
+                    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity') + 1);
                     $photoAlbum->save();
                 }
                 else
