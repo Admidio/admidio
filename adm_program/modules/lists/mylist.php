@@ -713,7 +713,7 @@ else
     }
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 
 if ($gPreferences['members_enable_user_relations'] == 1)
 {

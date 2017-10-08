@@ -225,7 +225,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     if ($getUserId === 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
+        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => HtmlForm::FIELD_REQUIRED,
                                                                           'multiselect'            => true,
                                                                           'maximumSelectionNumber' => $maxNumberRecipients,
                                                                           'helpTextIdLabel'        => 'MSG_SEND_PM'));
@@ -242,14 +242,14 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 
     if($getSubject === '')
     {
-        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED));
     }
     else
     {
         $form->addInput('subject', null, $formValues['subject'], array('type' => 'hidden'));
     }
 
-    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
+    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10, array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED));
 
     $form->closeGroupBox();
 
@@ -471,8 +471,8 @@ elseif (!isset($messageStatement))
         $preloadData = 'dummy';
         $showlist = new ListConfiguration($gDb, $postListId);
         $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
-        $form->addInput('userIdList', '', $postUserIdList, array('property' => FIELD_HIDDEN));
-        $form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
+        $form->addInput('userIdList', '', $postUserIdList, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('lst_id', '', $postListId, array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
     // no roles or users found then show message
@@ -482,7 +482,7 @@ elseif (!isset($messageStatement))
         // => EXIT
     }
 
-    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
+    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => HtmlForm::FIELD_REQUIRED,
                                                                       'multiselect'            => true,
                                                                       'maximumSelectionNumber' => $maxNumberRecipients,
                                                                       'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
@@ -503,7 +503,7 @@ elseif (!isset($messageStatement))
         $pdoStatement = $gDb->queryPrepared($sql, array($currUsrId));
         $possibleEmails = $pdoStatement->fetchColumn();
 
-        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED));
 
         if($possibleEmails > 1)
         {
@@ -527,13 +527,13 @@ elseif (!isset($messageStatement))
         }
         else
         {
-            $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+            $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED));
         }
     }
     else
     {
-        $form->addInput('namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput('namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'], array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
+        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
@@ -551,7 +551,7 @@ elseif (!isset($messageStatement))
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
-    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED));
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIni::isFileUploadEnabled())
@@ -566,11 +566,11 @@ elseif (!isset($messageStatement))
     // add textfield or ckeditor to form
     if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => FIELD_REQUIRED));
+        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => HtmlForm::FIELD_REQUIRED));
     }
     else
     {
-        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10, array('property' => FIELD_REQUIRED));
+        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10, array('property' => HtmlForm::FIELD_REQUIRED));
     }
 
     $form->closeGroupBox();

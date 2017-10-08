@@ -293,11 +293,11 @@ switch($getMode)
         $form = new HtmlForm('add_new_organization_form',
                              ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?mode=3', $page);
         $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
-                        array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+                        array('maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small'));
         $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
-                        array('maxLength' => 50, 'property' => FIELD_REQUIRED));
+                        array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
         $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
-                        array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+                        array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
         $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
                                array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
 

@@ -7,13 +7,6 @@
  ***********************************************************************************************
  */
 
-// constants for field property
-define('FIELD_DEFAULT',  0);
-define('FIELD_REQUIRED', 1);
-define('FIELD_DISABLED', 2);
-define('FIELD_READONLY', 3);
-define('FIELD_HIDDEN',   4);
-
 /**
  * @class HtmlForm
  * @brief Creates an Admidio specific form with special elements
@@ -37,6 +30,12 @@ define('FIELD_HIDDEN',   4);
  */
 class HtmlForm extends HtmlFormBasic
 {
+    const FIELD_DEFAULT  = 0;
+    const FIELD_REQUIRED = 1;
+    const FIELD_DISABLED = 2;
+    const FIELD_READONLY = 3;
+    const FIELD_HIDDEN   = 4;
+
     protected $flagRequiredFields = false;      ///< Flag if this form has required fields. Then a notice must be written at the end of the form
     protected $flagFieldListOpen  = false;      ///< Flag if a field list was created. This must be closed later
     protected $showRequiredFields;              ///< Flag if required fields should get a special css class to make them more visible to the user.
@@ -298,7 +297,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a row with the captcha puzzle
-        $this->openControlStructure('captcha_puzzle', '', FIELD_DEFAULT, '', '', $attributes['class']);
+        $this->openControlStructure('captcha_puzzle', '', self::FIELD_DEFAULT, '', '', $attributes['class']);
         $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?\' + Math.random(); return false;';
         $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
                         <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '"><img
@@ -306,7 +305,7 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure();
 
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addInput($id, $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'), '', array('property'        => FIELD_REQUIRED,
+        $this->addInput($id, $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'), '', array('property'        => self::FIELD_REQUIRED,
                                                                                      'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION',
                                                                                      'class'           => 'form-control-small'));
     }
@@ -319,9 +318,9 @@ class HtmlForm extends HtmlFormBasic
      *                        the checkbox will be checked when displayed.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -345,7 +344,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'         => FIELD_DEFAULT,
+            'property'         => self::FIELD_DEFAULT,
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
             'icon'             => '',
@@ -354,11 +353,11 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === FIELD_DISABLED)
+        if ($optionsAll['property'] === self::FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif ($optionsAll['property'] === FIELD_REQUIRED)
+        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -437,7 +436,7 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         $this->openControlStructure(
-            $optionsAll['referenceId'], $label, FIELD_DEFAULT,
+            $optionsAll['referenceId'], $label, self::FIELD_DEFAULT,
             $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-custom-content'
         );
         $this->addHtml($content);
@@ -460,8 +459,8 @@ class HtmlForm extends HtmlFormBasic
      * @param string $value   A value for the editor field. The editor will contain this value when created.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
      *                        - @b toolbar : Optional set a predefined toolbar for the editor. Possible values are
      *                          @b AdmidioDefault, @b AdmidioGuestbook and @b AdmidioPlugin_WC
      *                        - @b height : Optional set the height in pixel of the editor. The default will be 300.
@@ -490,7 +489,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'         => FIELD_DEFAULT,
+            'property'         => self::FIELD_DEFAULT,
             'toolbar'          => 'AdmidioDefault',
             'height'           => '300',
             'helpTextIdLabel'  => '',
@@ -506,7 +505,7 @@ class HtmlForm extends HtmlFormBasic
             $this->type = 'vertical';
         }
 
-        if ($optionsAll['property'] === FIELD_REQUIRED)
+        if ($optionsAll['property'] === self::FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -557,9 +556,9 @@ class HtmlForm extends HtmlFormBasic
      * @param string $label   The label of the input field.
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b allowedMimeTypes : An array with the allowed MIME types (https://wiki.selfhtml.org/wiki/Referenz:MIME-Typen).
      *                          If this is set then the user can only choose the specified files with the browser file dialog.
      *                          You should check the uploaded file against the MIME type because the file could be manipulated.
@@ -591,7 +590,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'           => FIELD_DEFAULT,
+            'property'           => self::FIELD_DEFAULT,
             'maxUploadSize'      => $gPreferences['max_file_upload_size'] * 1024 * 1024, // MiB
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
@@ -605,11 +604,11 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === FIELD_DISABLED)
+        if ($optionsAll['property'] === self::FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif ($optionsAll['property'] === FIELD_REQUIRED)
+        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -684,10 +683,10 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b step : The steps between two numbers that are allowed.
      *                          E.g. if steps is set to 5 then only values 5, 10, 15 ... are allowed
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
-     *                          + @b FIELD_HIDDEN   : The field will not be shown. Useful to transport additional informations.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_HIDDEN   : The field will not be shown. Useful to transport additional informations.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -719,7 +718,7 @@ class HtmlForm extends HtmlFormBasic
             'minNumber'        => null,
             'maxNumber'        => null,
             'step'             => null,
-            'property'         => FIELD_DEFAULT,
+            'property'         => self::FIELD_DEFAULT,
             'passwordStrength' => false,
             'passwordUserData' => array(),
             'helpTextIdLabel'  => '',
@@ -776,19 +775,19 @@ class HtmlForm extends HtmlFormBasic
         // disable field
         switch ($optionsAll['property'])
         {
-            case FIELD_DISABLED:
+            case self::FIELD_DISABLED:
                 $attributes['disabled'] = 'disabled';
                 break;
 
-            case FIELD_READONLY:
+            case self::FIELD_READONLY:
                 $attributes['readonly'] = 'readonly';
                 break;
 
-            case FIELD_REQUIRED:
+            case self::FIELD_REQUIRED:
                 $attributes['required'] = 'required';
                 break;
 
-            case FIELD_HIDDEN:
+            case self::FIELD_HIDDEN:
                 $attributes['hidden'] = 'hidden';
                 $attributes['class'] .= ' hide';
                 break;
@@ -858,7 +857,7 @@ class HtmlForm extends HtmlFormBasic
             return $attribute !== '' && $attribute !== null;
         });
 
-        if ($optionsAll['property'] !== FIELD_HIDDEN)
+        if ($optionsAll['property'] !== self::FIELD_HIDDEN)
         {
             // now create html for the field
             $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
@@ -938,7 +937,7 @@ class HtmlForm extends HtmlFormBasic
             ');
         }
 
-        if ($optionsAll['property'] !== FIELD_HIDDEN)
+        if ($optionsAll['property'] !== self::FIELD_HIDDEN)
         {
             $this->closeControlStructure($optionsAll['helpTextIdInline']);
         }
@@ -962,9 +961,9 @@ class HtmlForm extends HtmlFormBasic
      *                        - @b maxLength : The maximum number of characters that are allowed in this field. If set
      *                          then show a counter how many characters still available
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. If set a help icon will be shown after the control label where
      *                          the user can see the text if he hover over the icon. If you need an additional parameter
@@ -987,7 +986,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'         => FIELD_DEFAULT,
+            'property'         => self::FIELD_DEFAULT,
             'maxLength'        => 0,
             'helpTextIdLabel'  => '',
             'helpTextIdInline' => '',
@@ -997,15 +996,15 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === FIELD_DISABLED)
+        if ($optionsAll['property'] === self::FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif ($optionsAll['property'] === FIELD_REQUIRED)
+        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
-        elseif ($optionsAll['property'] === FIELD_HIDDEN)
+        elseif ($optionsAll['property'] === self::FIELD_HIDDEN)
         {
             $attributes['hidden'] = 'hidden';
             $attributes['class']  = 'hide';
@@ -1041,7 +1040,7 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
 
-        if ($optionsAll['maxLength'] > 0 && $optionsAll['property'] !== FIELD_HIDDEN)
+        if ($optionsAll['maxLength'] > 0 && $optionsAll['property'] !== self::FIELD_HIDDEN)
         {
             // if max field length is set and field is not hidden then show a counter how many characters still available
             $this->addHtml('
@@ -1063,9 +1062,9 @@ class HtmlForm extends HtmlFormBasic
      *                        Array value will be the visual value of the entry
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b defaultValue : This is the value of that radio button that is preselected.
      *                        - @b showNoValueButton : If set to true than one radio with no value will be set in front of the other array.
      *                          This could be used if the user should also be able to set no radio to value.
@@ -1089,7 +1088,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'          => FIELD_DEFAULT,
+            'property'          => self::FIELD_DEFAULT,
             'defaultValue'      => '',
             'showNoValueButton' => false,
             'helpTextIdLabel'   => '',
@@ -1100,11 +1099,11 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === FIELD_DISABLED)
+        if ($optionsAll['property'] === self::FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-        elseif ($optionsAll['property'] === FIELD_REQUIRED)
+        elseif ($optionsAll['property'] === self::FIELD_REQUIRED)
         {
             $attributes['required'] = 'required';
         }
@@ -1160,13 +1159,13 @@ class HtmlForm extends HtmlFormBasic
      *                        This array exists of 3 entries: array(0 => id, 1 => value name, 2 => option group name)
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b defaultValue : This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                          an array with all default values could be set.
      *                        - @b showContextDependentFirstEntry : If set to @b true the select box will get an additional first entry.
-     *                          If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
+     *                          If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                          an empty entry will be added so you must not select something.
      *                        - @b firstEntry : Here you can define a string that should be shown as firstEntry and will be the
      *                          default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
@@ -1211,7 +1210,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'                       => FIELD_DEFAULT,
+            'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
             'firstEntry'                     => '',
@@ -1229,12 +1228,12 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === FIELD_DISABLED)
+        if ($optionsAll['property'] === self::FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
         // multiselect couldn't handle the required property
-        elseif ($optionsAll['property'] === FIELD_REQUIRED && !$optionsAll['multiselect'])
+        elseif ($optionsAll['property'] === self::FIELD_REQUIRED && !$optionsAll['multiselect'])
         {
             $attributes['required'] = 'required';
         }
@@ -1249,7 +1248,7 @@ class HtmlForm extends HtmlFormBasic
                 $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
             }
 
-            if ($optionsAll['showContextDependentFirstEntry'] && $optionsAll['property'] === FIELD_REQUIRED)
+            if ($optionsAll['showContextDependentFirstEntry'] && $optionsAll['property'] === self::FIELD_REQUIRED)
             {
                 if($optionsAll['placeholder'] === '')
                 {
@@ -1295,7 +1294,7 @@ class HtmlForm extends HtmlFormBasic
         }
         elseif ($optionsAll['showContextDependentFirstEntry'])
         {
-            if ($optionsAll['property'] === FIELD_REQUIRED)
+            if ($optionsAll['property'] === self::FIELD_REQUIRED)
             {
                 $this->addOption('', '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -', null, $defaultEntry);
             }
@@ -1429,13 +1428,13 @@ class HtmlForm extends HtmlFormBasic
      *                               displayed value of the item. Each row of the result will be a new selectbox entry.
      * @param array        $options (optional) An array with the following possible entries:
      *                              - @b property : With this param you can set the following properties:
-     *                                + @b FIELD_DEFAULT  : The field can accept an input.
-     *                                + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                                + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                                + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                                + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                                + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                              - @b defaultValue : This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                                an array with all default values could be set.
      *                              - @b showContextDependentFirstEntry : If set to @b true the select box will get an additional first entry.
-     *                                If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
+     *                                If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                                an empty entry will be added so you must not select something.
      *                              - @b firstEntry : Here you can define a string that should be shown as firstEntry and will be the
      *                                default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
@@ -1521,13 +1520,13 @@ class HtmlForm extends HtmlFormBasic
      * @param string $xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
      * @param array  $options (optional) An array with the following possible entries:
      *                        - @b property : With this param you can set the following properties:
-     *                          + @b FIELD_DEFAULT  : The field can accept an input.
-     *                          + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                          + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                          + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                          + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                        - @b defaultValue : This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                          an array with all default values could be set.
      *                        - @b showContextDependentFirstEntry : If set to @b true the select box will get an additional first entry.
-     *                          If FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
+     *                          If self::FIELD_REQUIRED is set than "Please choose" will be the first entry otherwise
      *                          an empty entry will be added so you must not select something.
      *                        - @b firstEntry : Here you can define a string that should be shown as firstEntry and will be the
      *                          default value if no other value is set. This entry will only be added if @b showContextDependentFirstEntry
@@ -1601,9 +1600,9 @@ class HtmlForm extends HtmlFormBasic
      *                                  - @b FILTER_CATEGORIES : First entry will be "All" and only categories with childs will be shown.
      * @param array     $options (optional) An array with the following possible entries:
      *                            - @b property : With this param you can set the following properties:
-     *                              + @b FIELD_DEFAULT  : The field can accept an input.
-     *                              + @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                              + @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                              + @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                              + @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                              + @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      *                            - @b defaultValue : Id of category that should be selected per default.
      *                            - @b showSystemCategory : Show user defined and system categories
      *                            - @b helpTextIdLabel : A unique text id from the translation xml files that should be shown
@@ -1625,7 +1624,7 @@ class HtmlForm extends HtmlFormBasic
 
         // create array with all options
         $optionsDefault = array(
-            'property'                       => FIELD_DEFAULT,
+            'property'                       => self::FIELD_DEFAULT,
             'defaultValue'                   => '',
             'showContextDependentFirstEntry' => true,
             'multiselect'                    => false,
@@ -1794,7 +1793,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure($id, $label, FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        $this->openControlStructure($id, $label, self::FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addHtml('<p class="' . $attributes['class'] . '">' . $value . '</p>');
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
@@ -1890,9 +1889,9 @@ class HtmlForm extends HtmlFormBasic
      * @param string $id         The id of this field structure.
      * @param string $label      The label of the field. This string should already be translated.
      * @param int    $property   (optional) With this param you can set the following properties:
-     *                           - @b FIELD_DEFAULT  : The field can accept an input.
-     *                           - @b FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
-     *                           - @b FIELD_DISABLED : The field will be disabled and could not accept an input.
+     *                           - @b self::FIELD_DEFAULT  : The field can accept an input.
+     *                           - @b self::FIELD_REQUIRED : The field will be marked as a mandatory field where the user must insert a value.
+     *                           - @b self::FIELD_DISABLED : The field will be disabled and could not accept an input.
      * @param string $helpTextId (optional) A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
      *                           If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                           If you need an additional parameter for the text you can add an array. The first entry
@@ -1901,7 +1900,7 @@ class HtmlForm extends HtmlFormBasic
      * @param string $class      (optional) An additional css classname for the row. The class @b admFieldRow
      *                           is set as default and need not set with this parameter.
      */
-    protected function openControlStructure($id, $label, $property = FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
+    protected function openControlStructure($id, $label, $property = self::FIELD_DEFAULT, $helpTextId = '', $icon = '', $class = '')
     {
         $cssClassRow  = '';
         $htmlIcon     = '';
@@ -1915,7 +1914,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // if necessary set css class for a mandatory element
-        if ($property === FIELD_REQUIRED && $this->showRequiredFields)
+        if ($property === self::FIELD_REQUIRED && $this->showRequiredFields)
         {
             $cssClassRow .= ' admidio-form-group-required';
             $this->flagRequiredFields = true;
@@ -2076,3 +2075,11 @@ class HtmlForm extends HtmlFormBasic
         return $html;
     }
 }
+
+// Backwards compatibility
+// constants for field property
+define('FIELD_DEFAULT',  HtmlForm::FIELD_DEFAULT);
+define('FIELD_REQUIRED', HtmlForm::FIELD_REQUIRED);
+define('FIELD_DISABLED', HtmlForm::FIELD_DISABLED);
+define('FIELD_READONLY', HtmlForm::FIELD_READONLY);
+define('FIELD_HIDDEN',   HtmlForm::FIELD_HIDDEN);

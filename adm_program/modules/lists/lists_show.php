@@ -427,8 +427,8 @@ if ($getMode !== 'csv')
             $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
-            $form->addInput('rol_ids', '', $getRoleIds, array('property' => FIELD_HIDDEN));
+            $form->addInput('lst_id', '', $getListId, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));

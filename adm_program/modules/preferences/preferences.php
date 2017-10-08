@@ -149,11 +149,11 @@ $page->addHtml('
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
                             // => EXIT
                         }
-                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
+                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
                         $form->addInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $formValues['homepage_logout'],
-                            array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
+                            array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
                         $form->addInput('homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $formValues['homepage_login'],
-                            array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS'));
+                            array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS'));
                         $form->addCheckbox('enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), (bool) $formValues['enable_rss'], array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC'));
                         $form->addCheckbox('enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'], array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC'));
                         $form->addInput('logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
@@ -191,8 +191,8 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('organization_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
-                        $form->addInput('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['org_shortname'], array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
-                        $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $formValues['org_longname'], array('maxLength' => 60, 'property' => FIELD_REQUIRED));
+                        $form->addInput('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['org_shortname'], array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small'));
+                        $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $formValues['org_longname'], array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $formValues['org_homepage'], array('maxLength' => 60));
 
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -237,9 +237,9 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('regional_settings_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
-                        $form->addInput('system_timezone', $gL10n->get('ORG_TIMEZONE'), $gTimezone, array('property' => FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextIdInline' => 'ORG_TIMEZONE_DESC'));
+                        $form->addInput('system_timezone', $gL10n->get('ORG_TIMEZONE'), $gTimezone, array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextIdInline' => 'ORG_TIMEZONE_DESC'));
                         $form->addSelectBox('system_language', $gL10n->get('SYS_LANGUAGE'), $gL10n->getAvailableLanguages(),
-                                            array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['system_language']));
+                                            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language']));
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
                                             array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC'));
                         $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $formValues['system_date'], array('maxLength'        => 20,

@@ -188,10 +188,10 @@ $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $
 $form = new HtmlForm('categories_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
 
 // systemcategories should not be renamed
-$fieldPropertyCatName = FIELD_REQUIRED;
+$fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;
 if($category->getValue('cat_system') == 1)
 {
-    $fieldPropertyCatName = FIELD_DISABLED;
+    $fieldPropertyCatName = HtmlForm::FIELD_DISABLED;
 }
 
 $form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
@@ -232,7 +232,7 @@ if($getType !== 'ROL'
     $form->addSelectBoxFromSql(
         'adm_categories_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
         array(
-            'property'     => FIELD_REQUIRED,
+            'property'     => HtmlForm::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect'  => true,
             'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null),
@@ -246,7 +246,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 {
     if($gCurrentOrganization->isChildOrganization())
     {
-        $fieldProperty   = FIELD_DISABLED;
+        $fieldProperty   = HtmlForm::FIELD_DISABLED;
         $helpTextIdLabel = 'CAT_ONLY_SET_BY_MOTHER_ORGANIZATION';
     }
     else
@@ -254,7 +254,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         // show all organizations where this organization is mother or child organization
         $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-        $fieldProperty   = FIELD_DEFAULT;
+        $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
             $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);

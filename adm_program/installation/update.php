@@ -206,12 +206,12 @@ if ($getMode === 1)
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
                 'login_name', $gL10n->get('SYS_USERNAME'), null,
-                array('maxLength' => 35, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small')
+                array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
             $form->addInput(
                 'password', $gL10n->get('SYS_PASSWORD'), null,
-                array('type' => 'password', 'property' => FIELD_REQUIRED, 'class' => 'form-control-small')
+                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
         }
 

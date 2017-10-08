@@ -54,7 +54,7 @@ $form = new HtmlForm('relationtype_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/user
 
 $form->addInput(
     'urt_name', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD'), $relationtype1->getValue('urt_name'),
-    array('maxLength' => 100, 'property' => FIELD_REQUIRED)
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'urt_name_male', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD').' '.$gL10n->get('SYS_MALE'),
@@ -73,7 +73,7 @@ $form->addCheckbox(
 $options = array('defaultValue' => $relationtype1->getRelationTypeString(), 'helpTextIdLabel' => 'REL_USER_RELATION_TYPE_DESC');
 if (!$relationtype1->isNewRecord())
 {
-    $options['property'] = FIELD_DISABLED;
+    $options['property'] = HtmlForm::FIELD_DISABLED;
 }
 
 $form->addRadioButton(
@@ -122,7 +122,7 @@ $page->addJavascript('
 
 $form->addInput(
     'urt_name_inverse', $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD'), $relationtype2->getValue('urt_name'),
-    array('maxLength' => 100, 'property' => FIELD_REQUIRED)
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'urt_name_male_inverse', $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD').' '.$gL10n->get('SYS_MALE'),

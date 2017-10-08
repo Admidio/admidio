@@ -185,9 +185,9 @@ else
 
     $form = new HtmlForm('plugin-login-form', ADMIDIO_URL.'/adm_program/system/login_check.php', null,
                          array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false));
-    $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('property' => FIELD_REQUIRED, 'maxLength' => 35));
+    $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 35));
     // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
-    $form->addInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
+    $form->addInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED));
 
     // show selectbox with all organizations of database
     if($gPreferences['system_organization_select'] == 1)

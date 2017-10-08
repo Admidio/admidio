@@ -138,7 +138,7 @@ $form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/download
 $form->addSelectBoxFromSql(
     'adm_roles_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
     array(
-        'property'     => FIELD_REQUIRED,
+        'property'     => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleViewSet,
         'multiselect'  => true,
         'firstEntry'   => $firstEntryViewRoles
@@ -147,7 +147,7 @@ $form->addSelectBoxFromSql(
 $form->addSelectBoxFromSql(
     'adm_roles_upload_right', $gL10n->get('DOW_UPLOAD_FILES'), $gDb, $sqlDataView,
     array(
-        'property'     => FIELD_REQUIRED,
+        'property'     => HtmlForm::FIELD_REQUIRED,
         'defaultValue' => $roleUploadSet,
         'multiselect'  => true,
         'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
