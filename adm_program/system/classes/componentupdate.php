@@ -42,6 +42,16 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * Gets the version parts of a version string
+     * @param string $versionString A version string
+     * @return int[] Returns an array with the version parts
+     */
+    private static function getVersionArrayFromVersion($versionString)
+    {
+        return array_map('intval', explode('.', $versionString));
+    }
+
+    /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
      * @param string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
@@ -139,7 +149,7 @@ class ComponentUpdate extends Component
     public function getMaxUpdateStep()
     {
         $maxUpdateStep = 0;
-        $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
+        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
         // open xml file for this version
         if($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
@@ -163,7 +173,7 @@ class ComponentUpdate extends Component
      */
     public function setTargetVersion($version)
     {
-        $this->targetVersionArray = array_map('intval', explode('.', $version));
+        $this->targetVersionArray = self::getVersionArrayFromVersion($version);
     }
 
     /**
@@ -176,7 +186,7 @@ class ComponentUpdate extends Component
         global $gLogger;
 
         $this->updateFinished = false;
-        $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
+        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
         $initialSubVersion = $this->currentVersionArray[1];
 
         for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
