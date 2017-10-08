@@ -27,6 +27,8 @@
  */
 class ComponentUpdate extends Component
 {
+    const UPDATE_STEP_STOP = 'stop';
+
     private $updateFinished;        ///< Flag that will store if the update process of this version was successfully finished
     private $xmlObject;             ///< The SimpleXML object with all the update steps
     private $currentVersionArray;   ///< This is the version the component has actually before update. Each array element contains one part of the version.
@@ -54,8 +56,8 @@ class ComponentUpdate extends Component
     /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
-     * @param string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
-     * @param string|int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
+     * @param int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
+     * @param int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
      * @return bool
      */
     private function createXmlObject($mainVersion, $subVersion)
@@ -95,50 +97,52 @@ class ComponentUpdate extends Component
             $dbType = Database::PDO_ENGINE_PGSQL;
         }
 
+        $updateStepContent = trim((string) $xmlNode);
+
+        if ($updateStepContent === '')
+        {
+            return;
+        }
+
         $executeSql = true;
         $showError  = true;
 
-        $updateStepContent = trim((string) $xmlNode);
-
-        if($updateStepContent !== '')
+        // if the sql statement is only for a special database and you do
+        // not have this database then don't execute this statement
+        if (isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
         {
-            // if the sql statement is only for a special database and you do
-            // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
-            {
-                $executeSql = false;
-            }
-
-            // if the attribute error was set to "ignore" then don't show errors that occures on sql execution
-            if(isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
-            {
-                $showError = false;
-            }
-
-            // if a method of this class was set in the update step
-            // then call this function and don't execute a SQL statement
-            if(strpos($updateStepContent, 'ComponentUpdate') !== false)
-            {
-                $executeSql = false;
-
-                // get the method name
-                $function = substr($updateStepContent, strpos($updateStepContent, '::')+2);
-                // now call the method
-                $this->{$function}();
-            }
-
-            if($executeSql)
-            {
-                // replace prefix with installation specific table prefix
-                $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
-
-                $this->db->query($sql, $showError); // TODO add more params
-            }
-
-            // save the successful executed update step in database
-            $this->setValue('com_update_step', (int) $xmlNode['id']);
-            $this->save();
+            $executeSql = false;
         }
+
+        // if the attribute error was set to "ignore" then don't show errors that occures on sql execution
+        if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
+        {
+            $showError = false;
+        }
+
+        // if a method of this class was set in the update step
+        // then call this function and don't execute a SQL statement
+        if (strpos($updateStepContent, 'ComponentUpdate') !== false)
+        {
+            $executeSql = false;
+
+            // get the method name
+            $function = substr($updateStepContent, strpos($updateStepContent, '::') + 2);
+            // now call the method
+            $this->{$function}();
+        }
+
+        if ($executeSql)
+        {
+            // replace prefix with installation specific table prefix
+            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
+
+            $this->db->query($sql, $showError); // TODO add more params
+        }
+
+        // save the successful executed update step in database
+        $this->setValue('com_update_step', (int) $xmlNode['id']);
+        $this->save();
     }
 
     /**
@@ -157,7 +161,7 @@ class ComponentUpdate extends Component
             // go step by step through the SQL statements until the last one is found
             foreach($this->xmlObject->children() as $updateStep)
             {
-                if((string) $updateStep !== 'stop')
+                if((string) $updateStep !== self::UPDATE_STEP_STOP)
                 {
                     $maxUpdateStep = $updateStep['id'];
                 }
@@ -224,7 +228,7 @@ class ComponentUpdate extends Component
                         {
                             $this->executeStep($updateStep);
                         }
-                        elseif((string) $updateStep === 'stop')
+                        elseif((string) $updateStep === self::UPDATE_STEP_STOP)
                         {
                             $this->updateFinished = true;
                         }
