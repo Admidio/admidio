@@ -57,7 +57,7 @@ class ComponentUpdate extends Component
 
             if(is_file($updateFile))
             {
-                $this->xmlObject = new SimpleXMLElement($updateFile, null, true);
+                $this->xmlObject = new \SimpleXMLElement($updateFile, null, true);
                 return true;
             }
         }
@@ -74,7 +74,7 @@ class ComponentUpdate extends Component
      * the update script.
      * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      */
-    private function executeStep(SimpleXMLElement $xmlNode)
+    private function executeStep(\SimpleXMLElement $xmlNode)
     {
         global $g_tbl_praefix, $gDbType;
 
