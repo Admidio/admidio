@@ -37,7 +37,6 @@ class HtmlForm extends HtmlFormBasic
     const FIELD_HIDDEN   = 4;
 
     protected $flagRequiredFields = false;      ///< Flag if this form has required fields. Then a notice must be written at the end of the form
-    protected $flagFieldListOpen  = false;      ///< Flag if a field list was created. This must be closed later
     protected $showRequiredFields;              ///< Flag if required fields should get a special css class to make them more visible to the user.
     protected $htmlPage;                        ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $countElements         = 0;       ///< Number of elements in this form

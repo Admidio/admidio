@@ -74,7 +74,6 @@ class Database
     protected $pdoStatement;                ///< The PdoStatement object which is needed to handle the return of a query.
     protected $transactions = 0;            ///< The transaction marker. If this is > 0 than a transaction is open.
     protected $dbStructure  = array();      ///< array with arrays of every table with their structure
-    protected $fetchArray   = array();
     protected $minRequiredVersion = '';     ///< The minimum required version of this database that is necessary to run Admidio.
     protected $databaseName       = '';     ///< The name of the database e.g. 'MySQL'
 
@@ -505,7 +504,6 @@ class Database
 
         try
         {
-            $this->fetchArray = array();
             $this->pdoStatement = $this->pdo->query($sql);
 
             if ($this->pdoStatement !== false && strpos(strtoupper($sql), 'SELECT') === 0)
@@ -555,7 +553,6 @@ class Database
 
         try
         {
-            $this->fetchArray = array();
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false)
