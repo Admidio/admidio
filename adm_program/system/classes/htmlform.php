@@ -1676,9 +1676,6 @@ class HtmlForm extends HtmlFormBasic
                     $sqlTables = ' INNER JOIN ' . TBL_ROLES . ' ON cat_id = rol_cat_id';
                     $sqlConditions = ' AND cat_name_intern <> \'EVENTS\' ';
                     break;
-                case 'INF':
-                    $sqlTables = ' INNER JOIN ' . TBL_INVENT_FIELDS . ' ON cat_id = inf_cat_id ';
-                    break;
             }
         }
 

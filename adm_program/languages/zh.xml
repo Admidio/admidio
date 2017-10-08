@@ -145,7 +145,6 @@
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
   <!--Phrases only in Installation-->
-  <!--Phrases only in Inventorymodule-->
   <!--Phrases only in Linkmodule-->
   <string name="LNK_SAME_WINDOW">相同的窗口</string>
   <string name="LNK_WEBLINKS">网页链接</string>

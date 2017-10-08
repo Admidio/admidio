@@ -260,10 +260,6 @@
   <string name="INS_XING">Xing</string>
   <string name="INS_XING_DESC">Vorresti impostare un link al tuo profilo Xing?  E\' necessario il tuo username per l\'accesso a Xing. Accedi al tuo account Xing e visualizza il tuo profilo. Copia l\'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Xing direttamente.</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Crea articolo</string>
-  <string name="INV_INVENTORY">Gestione scorte</string>
-  <string name="INV_ITEM_MANAGEMENT">Gestione articoli</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Hits</string>
   <string name="LNK_CREATE_LINK">Crea nuovo collegamento</string>
@@ -787,7 +783,6 @@
   <string name="ROL_NO_DEFAULT_ROLE">Non puoi rimuovere l\'impostazione #VAR1_BOLD#, perché almeno un ruolo deve avere memorizzata l\'assegnazione predefinita.</string>
   <string name="ROL_ONLY_ROLE_MEMBERS">Solo membri del ruolo</string>
   <string name="ROL_PREF" description="Abbreviation for Preferences">Pref.</string>
-  <string name="ROL_RIGHT_INVENTORY">Gestione degli articoli e delle scorte</string>
   <string name="ROL_ROLE_ASSIGNMENT">Mappatura del ruolo #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Trimestrale</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Visualizza tutti gli elenchi delle membrship di tutti i ruoli</string>

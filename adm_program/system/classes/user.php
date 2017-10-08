@@ -190,8 +190,7 @@ class User extends TableAccess
                 'rol_mail_to_all'        => false,
                 'rol_photo'              => false,
                 'rol_profile'            => false,
-                'rol_weblinks'           => false,
-                'rol_inventory'          => false
+                'rol_weblinks'           => false
             );
 
             // read all roles of the organization and join the membership if user is member of that role
@@ -1970,15 +1969,6 @@ class User extends TableAccess
     public function editWeblinksRight()
     {
         return $this->checkRolesRight('rol_weblinks');
-    }
-
-    /**
-     * Funktion prueft, ob der angemeldete User das Inventory verwalten darf
-     * @return bool
-     */
-    public function editInventory()
-    {
-        return $this->checkRolesRight('rol_inventory');
     }
 
     /**

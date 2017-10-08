@@ -85,8 +85,6 @@
   <string name="INS_SON">Sønn</string>
   <string name="INS_SPOUSE">Ektefelle</string>
   <string name="INS_WIFE">Kone</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Opprett artikkel</string>
   <!--Phrases only in Linkmodule-->
   <!--Phrases only in Listsmodule-->
   <string name="LST_A_TO_Z">A til Å</string>

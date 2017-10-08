@@ -861,31 +861,6 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>');
-            /*
-            <div class="panel panel-default" id="panel_inventory">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/inventory.png" alt="'.$gL10n->get('INV_INVENTORY').'" />'.$gL10n->get('INV_INVENTORY').'
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse_inventory" class="panel-collapse collapse">
-                    <div class="panel-body">');
-                        // show form
-                        $form = new HtmlForm('inventory_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=inventory', $page, array('class' => 'form-preferences'));
-                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('enable_inventory_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $formValues['enable_inventory_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php"><img
-                                    src="'. THEME_URL. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
-                        $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-                        $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
-                        $form->addSubmitButton('btn_save_inventory', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
-                        $page->addHtml($form->show(false));
-                    $page->addHtml('</div>
-                </div>
-            </div>
-            */
         $page->addHtml('</div>
     </div>
 </div>');

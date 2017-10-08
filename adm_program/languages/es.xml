@@ -224,10 +224,6 @@
   <string name="INS_SON">Hijo</string>
   <string name="INS_SPOUSE">Marid@</string>
   <string name="INS_WIFE">Esposa</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Nuevo articulo</string>
-  <string name="INV_INVENTORY">Gestión de inventario</string>
-  <string name="INV_ITEM_MANAGEMENT">Administrar articulo</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Contador</string>
   <string name="LNK_CREATE_LINK">Crear enlace</string>

@@ -252,7 +252,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (94089, 1, 'captcha_line_color', '#707070'),
 (94090, 1, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
 (94091, 1, 'members_enable_user_relations', '1'),
-(94092, 1, 'enable_inventory_module', '0'),
 (94093, 2, 'system_hashing_cost', '10');
 
 

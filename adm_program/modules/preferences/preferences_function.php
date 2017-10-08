@@ -193,9 +193,6 @@ switch($getMode)
                     }
                     break;
 
-                case 'inventory':
-                    break;
-
                 default:
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 // => EXIT

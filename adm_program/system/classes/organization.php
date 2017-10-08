@@ -207,7 +207,6 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_this_list_view', 1);
         $roleAdministrator->setValue('rol_all_lists_view', 1);
         $roleAdministrator->setValue('rol_administrator', 1);
-        $roleAdministrator->setValue('rol_inventory', 1);
         $roleAdministrator->save();
 
         // Create role member

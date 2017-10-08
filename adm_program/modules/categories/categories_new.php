@@ -19,7 +19,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- *         INF = Categories for Inventory
  * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
