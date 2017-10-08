@@ -596,7 +596,7 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Return PDOStatement with all subfolders of a parent folder id
+     * Return \PDOStatement with all subfolders of a parent folder id
      * @param int      $folderId Folder ID
      * @param string[] $columns  The columns that should be in the statement
      * @return \PDOStatement SubfolderStatement with fol_id column

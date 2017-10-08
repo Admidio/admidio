@@ -32,10 +32,10 @@
  * @endcode
  * Now you can use the new object @b $gDb to send a query to the database
  * @code
- * // send sql to database and assign the returned PDOStatement
+ * // send sql to database and assign the returned \PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
  *
- * // now fetch all rows of the returned PDOStatement within one array
+ * // now fetch all rows of the returned \PDOStatement within one array
  * $organizationsList = $organizationsStatement->fetchAll();
  *
  * // Array with the results:
@@ -49,7 +49,7 @@
  * //             [org_longname]  => 'Test-Organization'
  * //             )
  *
- * // you can also go step by step through the returned PDOStatement
+ * // you can also go step by step through the returned \PDOStatement
  * while ($organizationNames = $organizationsStatement->fetch())
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
@@ -488,7 +488,7 @@ class Database
      * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function query($sql, $showError = true)
@@ -538,7 +538,7 @@ class Database
      * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function queryPrepared($sql, array $params = array(), $showError = true)
@@ -817,16 +817,16 @@ class Database
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a>
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
-     * @param \PDOStatement $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
      * @param int           $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
      *                                    @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
      * @return mixed|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">\PDOStatement::fetch</a>
      */
-    public function fetch_array(PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
+    public function fetch_array(\PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
         global $gLogger;
 
@@ -850,14 +850,14 @@ class Database
      * Fetch a result row as an object.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
      *             Please use methods Database#fetchAll or Database#fetch instead.
-     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a>
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
-     * @param \PDOStatement $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
      * @return mixed|null Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">\PDOStatement::fetchObject</a>
      */
-    public function fetch_object(PDOStatement $pdoStatement = null)
+    public function fetch_object(\PDOStatement $pdoStatement = null)
     {
         global $gLogger;
 
@@ -896,14 +896,14 @@ class Database
     /**
      * Returns the number of rows of the last executed statement.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a>
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
-     * @param \PDOStatement $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
      * @return int|null Return the number of rows of the result of the sql statement.
-     * @see <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">\PDOStatement::rowCount</a>
      */
-    public function num_rows(PDOStatement $pdoStatement = null)
+    public function num_rows(\PDOStatement $pdoStatement = null)
     {
         global $gLogger;
 
