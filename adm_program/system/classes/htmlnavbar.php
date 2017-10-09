@@ -31,7 +31,7 @@ class HtmlNavbar
     /**
      * @var array[] An array with all items that should be displayed at the left part of the navbar
      */
-    protected $leftItems  = array();
+    protected $leftItems = array();
     /**
      * @var array[] An array with all items that should be displayed at the right part of the navbar
      */

@@ -62,7 +62,7 @@ class TableAccess
     /**
      * @var string[] Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
      */
-    protected $dbColumns    = array();
+    protected $dbColumns = array();
     /**
      * @var array[] Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
      */
@@ -109,8 +109,7 @@ class TableAccess
     }
 
     /**
-     * Called on serialization of this object. The database object could not
-     * be serialized and should be ignored.
+     * Called on serialization of this object. The database object could not be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()

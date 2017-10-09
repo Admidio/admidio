@@ -56,8 +56,7 @@ class ProfileFields
     }
 
     /**
-     * Called on serialization of this object. The database object could not
-     * be serialized and should be ignored.
+     * Called on serialization of this object. The database object could not be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()
