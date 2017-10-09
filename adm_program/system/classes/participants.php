@@ -39,7 +39,7 @@ class Participants
      */
     private $order = '';
     /**
-     * @var array[] Array with surname, firstname of all participants of the date in current object.
+     * @var array<int,array<string,string,int,bool>> Array with surname, firstname of all participants of the date in current object.
      */
     private $memberDate = array();
     /**

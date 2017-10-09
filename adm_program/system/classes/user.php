@@ -27,27 +27,27 @@ class User extends TableAccess
      */
     protected $mProfileFieldsData;
     /**
-     * @var bool[] Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+     * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
      */
     protected $rolesRights  = array();
     /**
-     * @var bool[] Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+     * @var array<int,bool> Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
      */
     protected $listViewRights = array();
     /**
-     * @var bool[] Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+     * @var array<int,bool> Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
      */
     protected $listMailRights = array();
     /**
-     * @var int[] Array with all roles who the user is assigned
+     * @var array<int,int> Array with all roles who the user is assigned
      */
     protected $rolesMembership = array();
     /**
-     * @var int[] Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+     * @var array<int,int> Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
      */
     protected $rolesMembershipLeader = array();
     /**
-     * @var int[] Array with all roles who the user is assigned and is not a leader of the role
+     * @var array<int,int> Array with all roles who the user is assigned and is not a leader of the role
      */
     protected $rolesMembershipNoLeader = array();
     /**
@@ -63,11 +63,11 @@ class User extends TableAccess
      */
     protected $saveChangesWithoutRights;
     /**
-     * @var bool[] Array with all user ids where the current user is allowed to edit the profile.
+     * @var array<int,bool> Array with all user ids where the current user is allowed to edit the profile.
      */
     protected $usersEditAllowed = array();
     /**
-     * @var array[] Array with all users to whom the current user has a relationship
+     * @var array<int,array<string,int|bool>> Array with all users to whom the current user has a relationship
      */
     protected $relationships = array();
     /**
@@ -863,7 +863,7 @@ class User extends TableAccess
 
     /**
      * @param array<int,bool> $rightsList
-     * @return int[]
+     * @return array<int,int>
      */
     private function getAllRolesWithRight(array $rightsList)
     {
@@ -884,7 +884,7 @@ class User extends TableAccess
 
     /**
      * Creates an array with all roles where the user has the right to mail them
-     * @return int[] Array with role ids where user has the right to mail them
+     * @return array<int,int> Array with role ids where user has the right to mail them
      */
     public function getAllMailRoles()
     {
@@ -894,7 +894,7 @@ class User extends TableAccess
     /**
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
-     * @return int[] Array with categories ids where user has the right to view them
+     * @return array<int,int> Array with categories ids where user has the right to view them
      */
     public function getAllVisibleCategories($categoryType)
     {
@@ -944,7 +944,7 @@ class User extends TableAccess
 
     /**
      * Creates an array with all roles where the user has the right to view them
-     * @return int[] Array with role ids where user has the right to view them
+     * @return array<int,int> Array with role ids where user has the right to view them
      */
     public function getAllVisibleRoles()
     {
@@ -963,7 +963,7 @@ class User extends TableAccess
 
     /**
      * Returns an array with all role ids where the user is a member.
-     * @return int[] Returns an array with all role ids where the user is a member.
+     * @return array<int,int> Returns an array with all role ids where the user is a member.
      */
     public function getRoleMemberships()
     {
@@ -973,10 +973,8 @@ class User extends TableAccess
     }
 
     /**
-     * Returns an array with all role ids where the user is a member
-     * and not a leader of the role.
-     * @return int[] Returns an array with all role ids where the user is a member
-     *         and not a leader of the role.
+     * Returns an array with all role ids where the user is a member and not a leader of the role.
+     * @return array<int,int> Returns an array with all role ids where the user is a member and not a leader of the role.
      */
     public function getRoleMembershipsNoLeader()
     {
@@ -1554,7 +1552,7 @@ class User extends TableAccess
 
     /**
      * Returns data from the user to improve dictionary attack check
-     * @return string[]
+     * @return array<int,string>
      */
     public function getPasswordUserData()
     {

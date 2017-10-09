@@ -30,11 +30,11 @@
 class RolesRights extends TableAccess
 {
     /**
-     * @var \TableAccess[]
+     * @var array<int,\TableAccess>
      */
     protected $rolesRightsDataObjects;
     /**
-     * @var int[] Array with all roles ids as values
+     * @var array<int,int> Array with all roles ids as values
      */
     protected $rolesIds;
     /**
@@ -120,7 +120,7 @@ class RolesRights extends TableAccess
 
     /**
      * Get all roles ids that where assigned to the current roles right and the selected object.
-     * @return int[] Returns an array with all role ids
+     * @return array<int,int> Returns an array with all role ids
      */
     public function getRolesIds()
     {
@@ -129,7 +129,7 @@ class RolesRights extends TableAccess
 
     /**
      * Get all names of the roles that where assigned to the current roles right and the selected object.
-     * @return string[] Returns an array with all roles names
+     * @return array<int,string> Returns an array with all roles names
      */
     public function getRolesNames()
     {

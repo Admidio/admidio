@@ -30,11 +30,11 @@ class Organization extends TableAccess
      */
     protected $bCheckChildOrganizations = false;
     /**
-     * @var string[] Array with all child organizations of this organization
+     * @var array<int,string> Array with all child organizations of this organization
      */
     protected $childOrganizations = array();
     /**
-     * @var string[] Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+     * @var array<string,string> Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
      */
     protected $preferences = array();
     /**
@@ -372,7 +372,7 @@ class Organization extends TableAccess
      * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
      * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
      *                       otherwise it will be @b org_shortname
-     * @return string[] Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+     * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
@@ -441,7 +441,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return string[] Returns an array with all child organizations
+     * @return array<int,string> Returns an array with all child organizations
      */
     protected function getChildOrganizations()
     {
@@ -544,7 +544,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return array[]
+     * @return array<string,mixed>
      */
     public function getDbColumns()
     {

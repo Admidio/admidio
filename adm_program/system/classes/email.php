@@ -76,11 +76,11 @@ class Email extends PHPMailer
      */
     private $emHtmlText = '';
     /**
-     * @var string[] Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
+     * @var array<int,string> Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
      */
     private $emAddresses = array();
     /**
-     * @var string[] Mail sender address and Name
+     * @var array<string,string> Mail sender address and Name
      */
     private $emSender = array();
     /**
@@ -96,7 +96,7 @@ class Email extends PHPMailer
      */
     private $emSendAsHTML = false;
     /**
-     * @var array[]
+     * @var array<int,array<string,string>>
      */
     private $emBccArray = array();
 

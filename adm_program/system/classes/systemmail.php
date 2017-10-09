@@ -47,7 +47,7 @@ class SystemMail extends Email
      */
     private $smMailHeader;
     /**
-     * @var string[] speichert zusaetzliche Variablen fuer den Mailtext
+     * @var array<int,string> speichert zusaetzliche Variablen fuer den Mailtext
      */
     private $smVariables = array();
 

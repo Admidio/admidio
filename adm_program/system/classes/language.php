@@ -42,15 +42,15 @@ class Language
      */
     private $languageData;
     /**
-     * @var string[] An Array with all available languages and their ISO codes
+     * @var array<string,string> An Array with all available languages and their ISO codes
      */
     private $languages = array();
     /**
-     * @var \SimpleXMLElement[] An array with all \SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in @b $languageData.
      */
     private $xmlLanguageObjects = array();
     /**
-     * @var \SimpleXMLElement[] An array with all \SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
      */
     private $xmlRefLanguageObjects = array();
 
@@ -207,7 +207,7 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @return string[] Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountries()
     {
@@ -336,7 +336,7 @@ class Language
     /**
      * Creates an array with all languages that are possible in Admidio.
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-     * @return string[] Return an array with all available languages.
+     * @return array<string,string> Return an array with all available languages.
      */
     public function getAvailableLanguages()
     {

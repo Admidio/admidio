@@ -32,7 +32,7 @@ class Menu
      */
     protected $title;
     /**
-     * @var array[]
+     * @var array<string,array<string,string|array<string,string>>>
      */
     protected $items = array();
 

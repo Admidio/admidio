@@ -107,7 +107,7 @@ class Database
      */
     protected $transactions = 0;
     /**
-     * @var array[] Array with arrays of every table with their structure
+     * @var array<string,array<string,array<string,mixed>>> Array with arrays of every table with their structure
      */
     protected $dbStructure = array();
     /**
@@ -761,7 +761,7 @@ class Database
     /**
      * Method get all columns and their properties from the database table.
      * @param string $table Name of the database table for which the columns-properties should be shown.
-     * @return array[] Returns an array with column-names.
+     * @return array<string,array<string,mixed>> Returns an array with column-names.
      */
     public function getTableColumnsProperties($table)
     {
@@ -776,7 +776,7 @@ class Database
     /**
      * Method get all columns-names from the database table.
      * @param string $table Name of the database table for which the columns should be shown.
-     * @return string[] Returns an array with each column and their properties.
+     * @return array<int,string> Returns an array with each column and their properties.
      */
     public function getTableColumns($table)
     {
@@ -841,7 +841,7 @@ class Database
     /**
      * Returns an array with all available PDO database drivers of the server.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     * @return string[] Returns an array with all available PDO database drivers of the server.
+     * @return array<int,string> Returns an array with all available PDO database drivers of the server.
      * @see <a href="https://secure.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a>
      */
     public static function getAvailableDBs()
@@ -967,7 +967,7 @@ class Database
      * @deprecated 3.2.0:4.0.0 Switch to new methods (getTableColumnsProperties(), getTableColumns()).
      * @param string $table                Name of the database table for which the columns should be shown.
      * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
-     * @return string[]|array[] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     * @return array<string,array<string,mixed>>|array<int,string> Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      */
     public function showColumns($table, $showColumnProperties = true)
     {

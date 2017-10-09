@@ -650,7 +650,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  * @param string $directory  The directory where the files or directories should be searched.
  * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
  *                           the type of entries that should be searched.
- * @return string[]|false Returns an array with all found entries or false if an error occurs.
+ * @return false|array<string,string> Returns an array with all found entries or false if an error occurs.
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {

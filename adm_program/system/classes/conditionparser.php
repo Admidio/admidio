@@ -33,7 +33,7 @@ class ConditionParser
      */
     private $destCond = '';
     /**
-     * @var string[] An array from the string @b mSrcCond where every char is one array element
+     * @var array<int,string> An array from the string @b mSrcCond where every char is one array element
      */
     private $srcCondArray = array();
     /**

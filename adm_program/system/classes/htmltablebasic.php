@@ -112,11 +112,11 @@ class HtmlTableBasic extends HtmlElement
      */
     protected $border;
     /**
-     * @var string[] Class names to design table rows
+     * @var array<int,string> Class names to design table rows
      */
     protected $rowClasses = array();
     /**
-     * @var string[] Array with values for the columns width
+     * @var array<int,string> Array with values for the columns width
      */
     protected $columnsWidth = array();
     /**

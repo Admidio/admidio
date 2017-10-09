@@ -33,7 +33,7 @@ class ModuleMenu
      */
     protected $id;
     /**
-     * @var array[]
+     * @var array<string,array<string,string|bool,array>>
      */
     protected $items = array();
     /**

@@ -24,11 +24,11 @@ class ProfileFields
      */
     protected $db;
     /**
-     * @var \TableUserField[] Array with all user fields objects
+     * @var array<string,\TableUserField> Array with all user fields objects
      */
     protected $mProfileFields = array();
     /**
-     * @var \TableAccess[] Array with all user data objects
+     * @var array<int,\TableAccess> Array with all user data objects
      */
     protected $mUserData = array();
     /**
@@ -85,7 +85,7 @@ class ProfileFields
     }
 
     /**
-     * @return \TableUserField[]
+     * @return array<string,\TableUserField>
      */
     public function getProfileFields()
     {

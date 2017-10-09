@@ -36,7 +36,7 @@ class FunctionClass
 
     /**
      * @param string $directory Path of the directory with the template files
-     * @return string[] Returns an array of the template filenames
+     * @return array<int,string> Returns an array of the template filenames
      */
     public function getFileNames($directory)
     {

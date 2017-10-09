@@ -129,7 +129,7 @@ class RoleDependency
     /**
      * @param \Database $database
      * @param int       $childId
-     * @return int[]
+     * @return array<int,int>
      */
     public static function getParentRoles(Database $database, $childId)
     {
@@ -157,7 +157,7 @@ class RoleDependency
     /**
      * @param \Database $database
      * @param int       $parentId
-     * @return int[]
+     * @return array<int,int>
      */
     public static function getChildRoles(Database $database, $parentId)
     {

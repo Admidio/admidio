@@ -31,7 +31,7 @@
 class TableAccess
 {
     /**
-     * @var string[] Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+     * @var array<string,string> Array with sub array that contains additional tables and their connected fields that should be selected when data is read
      */
     protected $additionalTables = array();
     /**
@@ -60,11 +60,11 @@ class TableAccess
      */
     protected $columnsValueChanged;
     /**
-     * @var string[] Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+     * @var array<string,mixed> Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
      */
     protected $dbColumns = array();
     /**
-     * @var array[] Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+     * @var array<string,array<string,mixed>> Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
      */
     protected $columnsInfos = array();
 

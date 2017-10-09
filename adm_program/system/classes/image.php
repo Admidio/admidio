@@ -79,7 +79,7 @@ class Image
     }
 
     /**
-     * @return int[] Returns an array of the image width and height
+     * @return array<int,int> Returns an array of the image width and height
      */
     public function getImageSize()
     {

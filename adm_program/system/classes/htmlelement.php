@@ -132,7 +132,7 @@ abstract class HtmlElement
      */
     protected $mainElement;
     /**
-     * @var string[] String array with attributes of the main element
+     * @var array<string,string> String array with attributes of the main element
      */
     protected $mainElementAttributes = array();
     /**
@@ -144,7 +144,7 @@ abstract class HtmlElement
      */
     protected $currentElement;
     /**
-     * @var string[] Attributes of the current element
+     * @var array<string,string> Attributes of the current element
      */
     protected $currentElementAttributes = array();
     /**
@@ -160,7 +160,7 @@ abstract class HtmlElement
      */
     protected $parentFlag = false;
     /**
-     * @var string[] Array with opened child elements
+     * @var array<int,string> Array with opened child elements
      */
     protected $arrParentElements = array();
 

@@ -38,11 +38,11 @@ class ComponentUpdate extends Component
      */
     private $xmlObject;
     /**
-     * @var int[] This is the version the component has actually before update. Each array element contains one part of the version.
+     * @var array<int,int> This is the version the component has actually before update. Each array element contains one part of the version.
      */
     private $currentVersionArray;
     /**
-     * @var int[] This is the version that is stored in the files of the component. Each array element contains one part of the version.
+     * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
      */
     private $targetVersionArray;
 
@@ -58,7 +58,7 @@ class ComponentUpdate extends Component
     /**
      * Gets the version parts of a version string
      * @param string $versionString A version string
-     * @return int[] Returns an array with the version parts
+     * @return array<int,int> Returns an array with the version parts
      */
     private static function getVersionArrayFromVersion($versionString)
     {

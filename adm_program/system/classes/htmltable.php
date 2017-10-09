@@ -41,11 +41,11 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $rowsPerPage = 25;
     /**
-     * @var string[] Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
+     * @var array<int,string> Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
      */
     protected $columnsAlign = array();
     /**
-     * @var string[] Array with the column number as key and the 'asc' or 'desc' as value.
+     * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected $columnsOrder = array();
     /**
@@ -57,11 +57,11 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $datatables;
     /**
-     * @var string[] An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
+     * @var array<int,string> An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
      */
     protected $datatablesInitParameters = array();
     /**
-     * @var string[] Array that contains several elements for DataTables columnDefs parameter.
+     * @var array<int,string> Array that contains several elements for DataTables columnDefs parameter.
      */
     protected $datatablesColumnDefs = array();
     /**

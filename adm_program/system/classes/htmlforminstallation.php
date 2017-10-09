@@ -42,7 +42,7 @@ class HtmlFormInstallation extends HtmlForm
      */
     private $descriptionText = '';
     /**
-     * @var string[]
+     * @var array<int,string>
      */
     private $headers = array();
 

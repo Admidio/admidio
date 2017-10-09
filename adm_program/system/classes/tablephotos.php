@@ -78,7 +78,7 @@ class TablePhotos extends TableAccess
 
     /**
      * Legt den Ordner fuer die Veranstaltung im Dateisystem an
-     * @return string[]|null
+     * @return array<string,string>|null
      */
     public function createFolder()
     {

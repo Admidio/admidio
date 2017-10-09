@@ -61,7 +61,7 @@ class PhpIni
 
     /**
      * Returns the allowed base-dirs
-     * @return string[]
+     * @return array<string,string>
      */
     public static function getBaseDirs()
     {

@@ -29,7 +29,7 @@
 class ListConfiguration extends TableLists
 {
     /**
-     * @var \TableAccess[] Array with all Listenspaltenobjekte
+     * @var array<int,\TableAccess> Array with all Listenspaltenobjekte
      */
     protected $columns = array();
 

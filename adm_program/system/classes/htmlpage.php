@@ -63,15 +63,15 @@ class HtmlPage
      */
     protected $showModal = false;
     /**
-     * @var string[] An array with all necessary cascading style sheets files for the html page.
+     * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
      */
     protected $cssFiles = array();
     /**
-     * @var string[] An array with all necessary javascript files for the html page.
+     * @var array<int,string> An array with all necessary javascript files for the html page.
      */
     protected $jsFiles = array();
     /**
-     * @var string[] An array with all necessary rss files for the html page.
+     * @var array<int|string,string> An array with all necessary rss files for the html page.
      */
     protected $rssFiles = array();
     /**
