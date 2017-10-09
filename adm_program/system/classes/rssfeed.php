@@ -72,8 +72,7 @@ class RSSfeed
      */
     public function addItem($title, $description, $link, $author, $date)
     {
-        $item = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $date);
-        $this->items[] = $item;
+        $this->items[] = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $date);
     }
 
     /**

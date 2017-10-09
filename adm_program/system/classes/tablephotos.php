@@ -187,14 +187,7 @@ class TablePhotos extends TableAccess
                      WHERE pho_pho_id_parent = ? -- $this->getValue(\'pho_id\')';
             $countChildAlbums = $this->db->queryPrepared($sql, array($this->getValue('pho_id')));
 
-            if ($countChildAlbums->fetchColumn() > 0)
-            {
-                $this->hasChildAlbums = true;
-            }
-            else
-            {
-                $this->hasChildAlbums = false;
-            }
+            $this->hasChildAlbums = $countChildAlbums->fetchColumn() > 0;
         }
 
         return $this->hasChildAlbums;
