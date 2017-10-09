@@ -30,7 +30,7 @@
 class RolesRights extends TableAccess
 {
     /**
-     * @var \TableAccess
+     * @var \TableAccess[]
      */
     protected $rolesRightsDataObjects;
     /**

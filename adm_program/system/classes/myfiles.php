@@ -41,13 +41,13 @@ class MyFiles extends Folder
      */
     protected $webPath;
     /**
-     * @var string|null
+     * @var string
      */
-    public $errorText;
+    public $errorText = '';
     /**
-     * @var string|null
+     * @var string
      */
-    public $errorPath;
+    public $errorPath = '';
 
     /**
      * module name should be the folder name in adm_my_files for this module
