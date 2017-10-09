@@ -898,8 +898,6 @@ class User extends TableAccess
      */
     public function getAllVisibleCategories($categoryType)
     {
-        $arrVisibleCategories = array();
-
         $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
 
         $sql = 'SELECT cat_id
@@ -928,14 +926,17 @@ class User extends TableAccess
             ),
             $rolIdParams
         );
-        $visibleCategoriesStatement = $this->db->queryPrepared($sql, $queryParams);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
-        if ($visibleCategoriesStatement->rowCount() > 0)
+        if ($pdoStatement->rowCount() === 0)
         {
-            while ($row = $visibleCategoriesStatement->fetch())
-            {
-                $arrVisibleCategories[] = (int) $row['cat_id'];
-            }
+            return array();
+        }
+
+        $arrVisibleCategories = array();
+        while ($catId = $pdoStatement->fetchColumn())
+        {
+            $arrVisibleCategories[] = (int) $catId;
         }
 
         return $arrVisibleCategories;

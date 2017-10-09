@@ -432,19 +432,14 @@ class TableUserField extends TableAccess
     {
         global $gCurrentUser;
 
-        if($this->mViewUserField === null || $this->mViewUserFieldUserId !== (int) $gCurrentUser->getValue('usr_id'))
-        {
-            // check if the current user could view the category of the profile field
-            if(in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true))
-            {
-                $this->mViewUserField = true;
-            }
-            else
-            {
-                $this->mViewUserField = false;
-            }
+        $usrId = (int) $gCurrentUser->getValue('usr_id');
 
-            $this->mViewUserFieldUserId = (int) $gCurrentUser->getValue('usr_id');
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
+        {
+            $this->mViewUserFieldUserId = $usrId;
+
+            // check if the current user could view the category of the profile field
+            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
         }
 
         return $this->mViewUserField;

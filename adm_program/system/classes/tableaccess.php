@@ -230,7 +230,7 @@ class TableAccess
 
         $columnValue = '';
 
-        if (array_key_exists((string) $columnName, $this->dbColumns))
+        if (array_key_exists($columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
             if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName]))
