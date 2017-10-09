@@ -634,7 +634,7 @@ class ProfileFields
             }
         }
 
-        $usfId = $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
+        $usfId = (int) $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '')
         {

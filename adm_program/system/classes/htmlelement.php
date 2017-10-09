@@ -192,19 +192,27 @@ abstract class HtmlElement
             $element = $this->currentElement;
         }
 
-        $selectedElementAttributes = 'currentElementAttributes';
         if ($element === $this->mainElement)
         {
-            $selectedElementAttributes = 'mainElementAttributes';
-        }
-
-        if (array_key_exists($attrKey, $this->{$selectedElementAttributes}))
-        {
-            $this->{$selectedElementAttributes}[$attrKey] = $this->{$selectedElementAttributes}[$attrKey] . ' ' . $attrValue;
+            if (array_key_exists($attrKey, $this->mainElementAttributes))
+            {
+                $this->mainElementAttributes[$attrKey] = $this->mainElementAttributes[$attrKey] . ' ' . $attrValue;
+            }
+            else
+            {
+                $this->mainElementAttributes[$attrKey] = $attrValue;
+            }
         }
         else
         {
-            $this->{$selectedElementAttributes}[$attrKey] = $attrValue;
+            if (array_key_exists($attrKey, $this->currentElementAttributes))
+            {
+                $this->currentElementAttributes[$attrKey] = $this->currentElementAttributes[$attrKey] . ' ' . $attrValue;
+            }
+            else
+            {
+                $this->currentElementAttributes[$attrKey] = $attrValue;
+            }
         }
     }
 

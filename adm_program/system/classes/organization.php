@@ -399,13 +399,14 @@ class Organization extends TableAccess
         $childOrganizations = array();
         while ($row = $pdoStatement->fetch())
         {
+            $orgId = (int) $row['org_id'];
             if ($longname)
             {
-                $childOrganizations[$row['org_id']] = $row['org_longname'];
+                $childOrganizations[$orgId] = $row['org_longname'];
             }
             else
             {
-                $childOrganizations[$row['org_id']] = $row['org_shortname'];
+                $childOrganizations[$orgId] = $row['org_shortname'];
             }
         }
         return $childOrganizations;
