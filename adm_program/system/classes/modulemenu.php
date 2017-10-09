@@ -28,12 +28,30 @@
  */
 class ModuleMenu
 {
+    /**
+     * @var string
+     */
     protected $id;
-    protected $items          = array();
-    protected $ddItemCnt      = 0;
+    /**
+     * @var array[]
+     */
+    protected $items = array();
+    /**
+     * @var int
+     */
+    protected $ddItemCnt = 0;
+    /**
+     * @var string
+     */
     protected $customCssClass = '';
+    /**
+     * @var int
+     */
     protected $maxMenuLinkItem;
-    protected $ddJS;
+    /**
+     * @var string
+     */
+    protected $ddJS = '';
 
     /**
      * creates the object of the module menu and initialize all class parameters

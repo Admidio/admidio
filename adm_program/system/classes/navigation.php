@@ -38,6 +38,9 @@
  */
 class Navigation
 {
+    /**
+     * @var array[]
+     */
     private $urlStack = array();
 
     /**

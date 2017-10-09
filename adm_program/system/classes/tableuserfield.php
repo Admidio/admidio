@@ -20,8 +20,14 @@
  */
 class TableUserField extends TableAccess
 {
-    protected $mViewUserField;                 ///< Flag if the current user could view this user
-    protected $mViewUserFieldUserId;           ///< Flag with the user id of which user the view property was saved
+    /**
+     * @var bool|null Flag if the current user could view this user
+     */
+    protected $mViewUserField;
+    /**
+     * @var int|null Flag with the user id of which user the view property was saved
+     */
+    protected $mViewUserFieldUserId;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.

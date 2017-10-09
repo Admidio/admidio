@@ -25,11 +25,26 @@
  */
 class HtmlFormInstallation extends HtmlForm
 {
-    private $title            = '';     ///< Title of the html page
-    private $headline         = '';     ///< Headline of the form
-    private $descriptionTitle = '';     ///< A title for the description of the form. This will be displayed as h2
-    private $descriptionText  = '';     ///< A text that will be shown after the headline before the form will be set
-    private $headers          = array();
+    /**
+     * @var string Title of the html page
+     */
+    private $title = '';
+    /**
+     * @var string Headline of the form
+     */
+    private $headline = '';
+    /**
+     * @var string A title for the description of the form. This will be displayed as h2
+     */
+    private $descriptionTitle = '';
+    /**
+     * @var string A text that will be shown after the headline before the form will be set
+     */
+    private $descriptionText = '';
+    /**
+     * @var string[]
+     */
+    private $headers = array();
 
     /**
      * Constructor creates the form element

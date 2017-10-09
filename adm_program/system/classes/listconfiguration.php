@@ -28,7 +28,10 @@
  */
 class ListConfiguration extends TableLists
 {
-    protected $columns = array(); // Array with all Listenspaltenobjekte
+    /**
+     * @var \TableAccess[] Array with all Listenspaltenobjekte
+     */
+    protected $columns = array();
 
     /**
      * Constructor that will create an object to handle the configuration of lists.

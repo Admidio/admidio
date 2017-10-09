@@ -22,12 +22,30 @@
  */
 class Participants
 {
-    private $count  = -1;           ///< Counter of participants of the date in current object.
-    private $leader = -1;           ///< The number of leaders of the date in the current object
-    private $rolId  = -1;           ///< RolId of the current date of this object.
-    private $order  = '';           ///< SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
-    private $memberDate = array();  ///< Array with surname, firstname of all participants of the date in current object.
-    private $db;                    ///< db object must public because of session handling
+    /**
+     * @var int Counter of participants of the date in current object.
+     */
+    private $count = -1;
+    /**
+     * @var int The number of leaders of the date in the current object
+     */
+    private $leader = -1;
+    /**
+     * @var int RolId of the current date of this object.
+     */
+    private $rolId = -1;
+    /**
+     * @var string SQL order of results. Parameter 'ASC'/'DESC' (Default: 'ASC')
+     */
+    private $order = '';
+    /**
+     * @var array[] Array with surname, firstname of all participants of the date in current object.
+     */
+    private $memberDate = array();
+    /**
+     * @var \Database db object must public because of session handling
+     */
+    private $db;
 
     /**
      * Constructor that will initialize variables and check if $rolId is numeric

@@ -37,10 +37,22 @@
  */
 class Language
 {
-    private $languageData;                      ///< An object of the class @b LanguageData that stores all necessary language data in a session
-    private $languages = array();               ///< An Array with all available languages and their ISO codes
-    private $xmlLanguageObjects    = array();   ///< An array with all \SimpleXMLElement object of the language from all paths that are set in @b $languageData.
-    private $xmlRefLanguageObjects = array();   ///< An array with all \SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+    /**
+     * @var \LanguageData An object of the class @b LanguageData that stores all necessary language data in a session
+     */
+    private $languageData;
+    /**
+     * @var string[] An Array with all available languages and their ISO codes
+     */
+    private $languages = array();
+    /**
+     * @var \SimpleXMLElement[] An array with all \SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+     */
+    private $xmlLanguageObjects = array();
+    /**
+     * @var \SimpleXMLElement[] An array with all \SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+     */
+    private $xmlRefLanguageObjects = array();
 
     /**
      * Language constructor.

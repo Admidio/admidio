@@ -61,21 +61,63 @@ class Database
     const PDO_ENGINE_MYSQL = 'mysql';
     const PDO_ENGINE_PGSQL = 'pgsql';
 
+    /**
+     * @var string
+     */
     protected $host;
+    /**
+     * @var int|null
+     */
     protected $port;
+    /**
+     * @var string
+     */
     protected $dbName;
+    /**
+     * @var string|null
+     */
     protected $username;
+    /**
+     * @var string|null
+     */
     protected $password;
+    /**
+     * @var array
+     */
     protected $options;
 
+    /**
+     * @var string
+     */
     protected $dsn;
+    /**
+     * @var string
+     */
     protected $dbEngine;
-    protected $pdo;                         ///< The PDO object that handles the communication with the database.
-    protected $pdoStatement;                ///< The PdoStatement object which is needed to handle the return of a query.
-    protected $transactions = 0;            ///< The transaction marker. If this is > 0 than a transaction is open.
-    protected $dbStructure  = array();      ///< array with arrays of every table with their structure
-    protected $minRequiredVersion = '';     ///< The minimum required version of this database that is necessary to run Admidio.
-    protected $databaseName       = '';     ///< The name of the database e.g. 'MySQL'
+    /**
+     * @var \PDO The PDO object that handles the communication with the database.
+     */
+    protected $pdo;
+    /**
+     * @var \PDOStatement The PDOStatement object which is needed to handle the return of a query.
+     */
+    protected $pdoStatement;
+    /**
+     * @var int The transaction marker. If this is > 0 than a transaction is open.
+     */
+    protected $transactions = 0;
+    /**
+     * @var array[] Array with arrays of every table with their structure
+     */
+    protected $dbStructure = array();
+    /**
+     * @var string The minimum required version of this database that is necessary to run Admidio.
+     */
+    protected $minRequiredVersion = '';
+    /**
+     * @var string The name of the database e.g. 'MySQL'
+     */
+    protected $databaseName = '';
 
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.

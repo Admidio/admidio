@@ -29,10 +29,22 @@ class ComponentUpdate extends Component
 {
     const UPDATE_STEP_STOP = 'stop';
 
-    private $updateFinished;        ///< Flag that will store if the update process of this version was successfully finished
-    private $xmlObject;             ///< The SimpleXML object with all the update steps
-    private $currentVersionArray;   ///< This is the version the component has actually before update. Each array element contains one part of the version.
-    private $targetVersionArray;    ///< This is the version that is stored in the files of the component. Each array element contains one part of the version.
+    /**
+     * @var bool Flag that will store if the update process of this version was successfully finished
+     */
+    private $updateFinished;
+    /**
+     * @var \SimpleXMLElement The SimpleXML object with all the update steps
+     */
+    private $xmlObject;
+    /**
+     * @var int[] This is the version the component has actually before update. Each array element contains one part of the version.
+     */
+    private $currentVersionArray;
+    /**
+     * @var int[] This is the version that is stored in the files of the component. Each array element contains one part of the version.
+     */
+    private $targetVersionArray;
 
     /**
      * Constructor that will create an object for component updating.

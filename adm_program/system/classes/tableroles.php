@@ -18,8 +18,14 @@
  */
 class TableRoles extends TableAccess
 {
-    protected $countLeaders;    ///< number of leaders of this role
-    protected $countMembers;    ///< number of members (without leaders) of this role
+    /**
+     * @var int number of leaders of this role
+     */
+    protected $countLeaders;
+    /**
+     * @var int number of members (without leaders) of this role
+     */
+    protected $countMembers;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles.

@@ -18,6 +18,9 @@ class TableMessage extends TableAccess
     const MESSAGE_TYPE_EMAIL = 'EMAIL';
     const MESSAGE_TYPE_PM    = 'PM';
 
+    /**
+     * @var int
+     */
     protected $msgId;
 
     /**

@@ -38,10 +38,25 @@ class Image
     const ROTATE_DIRECTION_RIGHT = 'right';
     const ROTATE_DIRECTION_FLIP  = 'flip';
 
+    /**
+     * @var string
+     */
     private $imagePath = '';
+    /**
+     * @var resource|null
+     */
     private $imageResource;
+    /**
+     * @var int
+     */
     private $imageType;
+    /**
+     * @var int
+     */
     private $imageWidth  = 0;
+    /**
+     * @var int
+     */
     private $imageHeight = 0;
 
     /**

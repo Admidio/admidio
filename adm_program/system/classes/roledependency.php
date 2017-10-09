@@ -14,14 +14,41 @@
  */
 class RoleDependency
 {
-    protected $db;          ///< An object of the class Database for communication with the database
+    /**
+     * @var \Database An object of the class Database for communication with the database
+     */
+    protected $db;
+    /**
+     * @var int
+     */
     protected $roleIdParent = 0;
+    /**
+     * @var int
+     */
     protected $roleIdChild  = 0;
-    protected $comment      = '';
-    protected $usrId        = 0;
-    protected $timestamp    = '';
+    /**
+     * @var string
+     */
+    protected $comment = '';
+    /**
+     * @var int
+     */
+    protected $usrId = 0;
+    /**
+     * @var string
+     */
+    protected $timestamp = '';
+    /**
+     * @var int
+     */
     protected $roleIdParentOrig = 0;
-    protected $roleIdChildOrig  = 0;
+    /**
+     * @var int
+     */
+    protected $roleIdChildOrig = 0;
+    /**
+     * @var bool
+     */
     protected $persisted = false;
 
     /**

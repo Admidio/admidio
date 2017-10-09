@@ -19,12 +19,30 @@
  */
 class ProfileFields
 {
-    protected $db;                          ///< An object of the class Database for communication with the database
-    protected $mProfileFields = array();    ///< Array with all user fields objects
-    protected $mUserData      = array();    ///< Array with all user data objects
-    protected $mUserId        = 0;          ///< UserId of the current user of this object
-    protected $noValueCheck   = false;      ///< if true, than no value will be checked if method setValue is called
-    protected $columnsValueChanged = false; ///< flag if a value of one field had changed
+    /**
+     * @var \Database An object of the class Database for communication with the database
+     */
+    protected $db;
+    /**
+     * @var \TableUserField[] Array with all user fields objects
+     */
+    protected $mProfileFields = array();
+    /**
+     * @var \TableAccess[] Array with all user data objects
+     */
+    protected $mUserData = array();
+    /**
+     * @var int UserId of the current user of this object
+     */
+    protected $mUserId = 0;
+    /**
+     * @var bool if true, than no value will be checked if method setValue is called
+     */
+    protected $noValueCheck = false;
+    /**
+     * @var bool flag if a value of one field had changed
+     */
+    protected $columnsValueChanged = false;
 
     /**
      * constructor that will initialize variables and read the profile field structure

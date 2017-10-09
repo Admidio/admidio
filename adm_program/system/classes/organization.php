@@ -25,10 +25,22 @@
  */
 class Organization extends TableAccess
 {
-    protected $bCheckChildOrganizations = false;   ///< Flag will be set if the class had already search for child organizations
-    protected $childOrganizations       = array(); ///< Array with all child organizations of this organization
-    protected $preferences              = array(); ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
-    protected $countOrganizations       = 0;       ///< Number of all organizations in database
+    /**
+     * @var bool Flag will be set if the class had already search for child organizations
+     */
+    protected $bCheckChildOrganizations = false;
+    /**
+     * @var string[] Array with all child organizations of this organization
+     */
+    protected $childOrganizations = array();
+    /**
+     * @var string[] Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+     */
+    protected $preferences = array();
+    /**
+     * @var int Number of all organizations in database
+     */
+    protected $countOrganizations = 0;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.

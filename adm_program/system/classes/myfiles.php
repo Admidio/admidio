@@ -24,11 +24,29 @@
  */
 class MyFiles extends Folder
 {
-    protected $module;      // name of the module and name of the folder in adm_my_files
-    protected $modulePath;  // absolute path of the module
-    protected $currentPath; // absolute path that is set with setSubFolder
-    protected $webPath;     // the path starts with adm_my_file
+    /**
+     * @var string name of the module and name of the folder in adm_my_files
+     */
+    protected $module;
+    /**
+     * @var string absolute path of the module
+     */
+    protected $modulePath;
+    /**
+     * @var string absolute path that is set with setSubFolder
+     */
+    protected $currentPath;
+    /**
+     * @var string the path starts with adm_my_file
+     */
+    protected $webPath;
+    /**
+     * @var string|null
+     */
     public $errorText;
+    /**
+     * @var string|null
+     */
     public $errorPath;
 
     /**

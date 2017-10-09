@@ -16,9 +16,18 @@
  */
 class TableFolder extends TableAccess
 {
+    /**
+     * @var \Folder
+     */
     protected $folderPath;
-    protected $folderViewRolesObject;   ///< Object with all roles that could view the current folder
-    protected $folderUploadRolesObject; ///< Object with all roles that could upload files the current folder
+    /**
+     * @var \RolesRights|null Object with all roles that could view the current folder
+     */
+    protected $folderViewRolesObject;
+    /**
+     * @var \RolesRights|null Object with all roles that could upload files the current folder
+     */
+    protected $folderUploadRolesObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.

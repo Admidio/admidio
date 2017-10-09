@@ -29,10 +29,22 @@
  */
 class RolesRights extends TableAccess
 {
+    /**
+     * @var \TableAccess
+     */
     protected $rolesRightsDataObjects;
-    protected $rolesIds;        ///< Array with all roles ids as values
-    protected $objectId;        ///< Id of the object for which the roles right should be loaded.
-    protected $rolesRightName;  ///< Name of the current role right
+    /**
+     * @var int[] Array with all roles ids as values
+     */
+    protected $rolesIds;
+    /**
+     * @var string Id of the object for which the roles right should be loaded.
+     */
+    protected $objectId;
+    /**
+     * @var string Name of the current role right
+     */
+    protected $rolesRightName;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles_rights.

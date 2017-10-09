@@ -36,14 +36,38 @@ class HtmlForm extends HtmlFormBasic
     const FIELD_READONLY = 3;
     const FIELD_HIDDEN   = 4;
 
-    protected $flagRequiredFields = false;      ///< Flag if this form has required fields. Then a notice must be written at the end of the form
-    protected $showRequiredFields;              ///< Flag if required fields should get a special css class to make them more visible to the user.
-    protected $htmlPage;                        ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $countElements         = 0;       ///< Number of elements in this form
-    protected $datepickerInitialized = false;   ///< Flag if datepicker is already initialized
-    protected $type;                            ///< Form type. Possible values are @b default, @b vertical or @b navbar.
-    protected $id;                              ///< Id of the form
-    protected $buttonGroupOpen = false;         ///< Flag that indicates if a bootstrap button-group is open and should be closed later
+    /**
+     * @var bool Flag if this form has required fields. Then a notice must be written at the end of the form
+     */
+    protected $flagRequiredFields = false;
+    /**
+     * @var bool Flag if required fields should get a special css class to make them more visible to the user.
+     */
+    protected $showRequiredFields;
+    /**
+     * @var \HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     */
+    protected $htmlPage;
+    /**
+     * @var int Number of elements in this form
+     */
+    protected $countElements = 0;
+    /**
+     * @var bool Flag if datepicker is already initialized
+     */
+    protected $datepickerInitialized = false;
+    /**
+     * @var string Form type. Possible values are @b default, @b vertical or @b navbar.
+     */
+    protected $type;
+    /**
+     * @var string Id of the form
+     */
+    protected $id;
+    /**
+     * @var bool Flag that indicates if a bootstrap button-group is open and should be closed later
+     */
+    protected $buttonGroupOpen = false;
 
     /**
      * Constructor creates the form element

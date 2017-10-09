@@ -24,8 +24,14 @@
  */
 class TableCategory extends TableAccess
 {
-    protected $elementTable;
-    protected $elementColumn;
+    /**
+     * @var string
+     */
+    protected $elementTable = '';
+    /**
+     * @var string
+     */
+    protected $elementColumn = '';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_category.

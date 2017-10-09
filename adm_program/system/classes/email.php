@@ -67,14 +67,38 @@ class Email extends PHPMailer
     const SIZE_UNIT_GIBIBYTE = 'GiB';
     const SIZE_UNIT_TEBIBYTE = 'TiB';
 
-    private $emText           = ''; // plain text of email
-    private $emHtmlText       = ''; // html text of email
-    private $emAddresses      = array(); // Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
-    private $emSender         = array(); // mail sender address and Name
-    private $emCopyToSender   = false;
+    /**
+     * @var string Plain text of email
+     */
+    private $emText = '';
+    /**
+     * @var string HTML text of email
+     */
+    private $emHtmlText = '';
+    /**
+     * @var string[] Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
+     */
+    private $emAddresses = array();
+    /**
+     * @var string[] Mail sender address and Name
+     */
+    private $emSender = array();
+    /**
+     * @var bool
+     */
+    private $emCopyToSender = false;
+    /**
+     * @var bool
+     */
     private $emListRecipients = false;
-    private $emSendAsHTML     = false;
-    private $emBccArray       = array();
+    /**
+     * @var bool
+     */
+    private $emSendAsHTML = false;
+    /**
+     * @var array[]
+     */
+    private $emBccArray = array();
 
     /**
      * Email constructor.

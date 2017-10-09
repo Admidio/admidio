@@ -123,16 +123,46 @@
  */
 abstract class HtmlElement
 {
-    protected $nesting;                                 ///< Flag enables nesting of main elements, e.g div blocks ( Default : true )
-    protected $mainElement;                             ///< String with main element as string
-    protected $mainElementAttributes     = array();     ///< String with attributes of the main element
-    protected $mainElementWritten        = false;       ///< Flag if the main element was written in the html string
-    protected $currentElement;                          ///< Internal pointer showing to actual element or child element
-    protected $currentElementAttributes  = array();     ///< Attributes of the current element
-    protected $currentElementDataWritten = true;        ///< Flag if an element is added but the data is not added
-    protected $htmlString                = '';          ///< String with prepared html
-    protected $parentFlag                = false;       ///< Flag for setted parent Element
-    protected $arrParentElements         = array();     ///< Array with opened child elements
+    /**
+     * @var bool Flag enables nesting of main elements, e.g div blocks ( Default : true )
+     */
+    protected $nesting;
+    /**
+     * @var string String with main element as string
+     */
+    protected $mainElement;
+    /**
+     * @var string[] String array with attributes of the main element
+     */
+    protected $mainElementAttributes = array();
+    /**
+     * @var bool Flag if the main element was written in the html string
+     */
+    protected $mainElementWritten = false;
+    /**
+     * @var string Internal pointer showing to actual element or child element
+     */
+    protected $currentElement;
+    /**
+     * @var string[] Attributes of the current element
+     */
+    protected $currentElementAttributes = array();
+    /**
+     * @var bool Flag if an element is added but the data is not added
+     */
+    protected $currentElementDataWritten = true;
+    /**
+     * @var string String with prepared html
+     */
+    protected $htmlString = '';
+    /**
+     * @var bool Flag for setted parent Element
+     */
+    protected $parentFlag = false;
+    /**
+     * @var string[] Array with opened child elements
+     */
+    protected $arrParentElements = array();
 
     /**
      * Constructor initializing all class variables

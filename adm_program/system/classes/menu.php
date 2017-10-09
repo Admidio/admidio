@@ -23,8 +23,17 @@
  */
 class Menu
 {
+    /**
+     * @var string
+     */
     protected $id;
+    /**
+     * @var string
+     */
     protected $title;
+    /**
+     * @var array[]
+     */
     protected $items = array();
 
     /**

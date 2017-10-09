@@ -26,21 +26,66 @@
  */
 class HtmlPage
 {
-    protected $title         = '';              ///< The title for the html page and the headline for the Admidio content.
-    protected $header        = '';              ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
-    protected $headline      = '';              ///< The main headline for the html page.
-    protected $pageContent   = '';              ///< Contains the custom html of the current page. This will be added to the default html of each page.
-    protected $menu;                            ///< An object of the menu of this page
-    protected $showThemeHtml = true;            ///< If set to true then the custom html code of the theme for each page will be included.
-    protected $showMenu      = true;            ///< If set to true then the menu will be included.
-    protected $hasNavbar     = false;           ///< Flag if the current page has a navbar.
-    protected $showModal     = false;           ///< If set to true then html code for a modal window will be included.
-    protected $cssFiles      = array();         ///< An array with all necessary cascading style sheets files for the html page.
-    protected $jsFiles       = array();         ///< An array with all necessary javascript files for the html page.
-    protected $rssFiles      = array();         ///< An array with all necessary rss files for the html page.
-    protected $printMode     = false;           ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
-    protected $javascriptContent        = '';   ///< Contains the custom javascript of the current page. This will be added to the header part of the page.
-    protected $javascriptContentExecute = '';   ///< Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
+    /**
+     * @var string The title for the html page and the headline for the Admidio content.
+     */
+    protected $title = '';
+    /**
+     * @var string Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
+     */
+    protected $header = '';
+    /**
+     * @var string The main headline for the html page.
+     */
+    protected $headline = '';
+    /**
+     * @var string Contains the custom html of the current page. This will be added to the default html of each page.
+     */
+    protected $pageContent = '';
+    /**
+     * @var \HtmlNavbar An object of the menu of this page
+     */
+    protected $menu;
+    /**
+     * @var bool If set to true then the custom html code of the theme for each page will be included.
+     */
+    protected $showThemeHtml = true;
+    /**
+     * @var bool If set to true then the menu will be included.
+     */
+    protected $showMenu = true;
+    /**
+     * @var bool Flag if the current page has a navbar.
+     */
+    protected $hasNavbar = false;
+    /**
+     * @var bool If set to true then html code for a modal window will be included.
+     */
+    protected $showModal = false;
+    /**
+     * @var string[] An array with all necessary cascading style sheets files for the html page.
+     */
+    protected $cssFiles = array();
+    /**
+     * @var string[] An array with all necessary javascript files for the html page.
+     */
+    protected $jsFiles = array();
+    /**
+     * @var string[] An array with all necessary rss files for the html page.
+     */
+    protected $rssFiles = array();
+    /**
+     * @var bool A flag that indicates if the page should be styled in print mode then no colors will be shown
+     */
+    protected $printMode = false;
+    /**
+     * @var string Contains the custom javascript of the current page. This will be added to the header part of the page.
+     */
+    protected $javascriptContent = '';
+    /**
+     * @var string Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
+     */
+    protected $javascriptContentExecute = '';
 
     /**
      * Constructor creates the page object and initialized all parameters

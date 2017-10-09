@@ -28,7 +28,10 @@
  */
 class TablePhotos extends TableAccess
 {
-    protected $hasChildAlbums; ///< Flag if this album has child albums
+    /**
+     * @var bool|null Flag if this album has child albums
+     */
+    protected $hasChildAlbums;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_photos.

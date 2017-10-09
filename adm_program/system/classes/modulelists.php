@@ -170,6 +170,9 @@ class ModuleLists extends Modules
     const MEMBER_STATUS_INACTIVE = 'inactive';
     const MEMBER_STATUS_BOTH = 'both';
 
+    /**
+     * @var string
+     */
     private $memberStatus = self::MEMBER_STATUS_ACTIVE;
 
     /**

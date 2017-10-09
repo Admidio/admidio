@@ -33,8 +33,17 @@
  */
 class RSSfeed
 {
+    /**
+     * @var array
+     */
     protected $channel = array();
-    protected $items   = array();
+    /**
+     * @var array[]
+     */
+    protected $items = array();
+    /**
+     * @var string
+     */
     protected $feed;
 
     /**
