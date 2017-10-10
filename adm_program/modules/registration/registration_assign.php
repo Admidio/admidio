@@ -42,7 +42,7 @@ $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gDbType === 'mysql' && $gPreferences['system_search_similar'] == 1)
+if($gDbType === Database::PDO_ENGINE_MYSQL && $gPreferences['system_search_similar'] == 1)
 {
     $sqlSimilarName =
         '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4)

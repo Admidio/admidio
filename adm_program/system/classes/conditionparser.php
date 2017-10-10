@@ -24,11 +24,26 @@
  */
 class ConditionParser
 {
-    private $srcCond  = '';             ///< The source condition with the user specific condition
-    private $destCond = '';             ///< The destination string with the valid sql statement
-    private $srcCondArray = array();    ///< An array from the string @b mSrcCond where every char is one array element
-    private $notExistsSql = '';         ///< Stores the sql statement if a record should not exists when user wants to exclude a column
-    private $openQuotes   = false;      ///< Flag if there is a open quote in this condition that must be closed before the next condition will be parsed
+    /**
+     * @var string The source condition with the user specific condition
+     */
+    private $srcCond = '';
+    /**
+     * @var string The destination string with the valid sql statement
+     */
+    private $destCond = '';
+    /**
+     * @var array<int,string> An array from the string @b mSrcCond where every char is one array element
+     */
+    private $srcCondArray = array();
+    /**
+     * @var string Stores the sql statement if a record should not exists when user wants to exclude a column
+     */
+    private $notExistsSql = '';
+    /**
+     * @var bool Flag if there is a open quote in this condition that must be closed before the next condition will be parsed
+     */
+    private $openQuotes = false;
 
     /**
      * constructor that will initialize variables

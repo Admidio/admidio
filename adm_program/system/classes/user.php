@@ -18,20 +18,62 @@ class User extends TableAccess
 {
     const MAX_INVALID_LOGINS = 3;
 
+    /**
+     * @var bool
+     */
     protected $administrator;
-    protected $mProfileFieldsData;                ///< object with current user field structure
-    protected $rolesRights     = array();         ///< Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
-    protected $listViewRights  = array();         ///< Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $listMailRights  = array();         ///< Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
-    protected $rolesMembership = array();         ///< Array with all roles who the user is assigned
-    protected $rolesMembershipLeader   = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
-    protected $rolesMembershipNoLeader = array(); ///< Array with all roles who the user is assigned and is not a leader of the role
-    protected $organizationId;                    ///< the organization for which the rights are read, could be changed with method @b setOrganization
-    protected $assignRoles;                       ///< Flag if the user has the right to assign at least one role
-    protected $saveChangesWithoutRights;          ///< If this flag is set then a user can save changes to the user if he hasn't the necessary rights
-    protected $usersEditAllowed = array();        ///< Array with all user ids where the current user is allowed to edit the profile.
-    protected $relationships    = array();        ///< Array with all users to whom the current user has a relationship
-    protected $relationshipsChecked = false;      ///< Flag if relationships for this user were checked
+    /**
+     * @var \ProfileFields object with current user field structure
+     */
+    protected $mProfileFieldsData;
+    /**
+     * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
+     */
+    protected $rolesRights  = array();
+    /**
+     * @var array<int,bool> Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+     */
+    protected $listViewRights = array();
+    /**
+     * @var array<int,bool> Array with all roles and a flag if the user could write a mail to this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
+     */
+    protected $listMailRights = array();
+    /**
+     * @var array<int,int> Array with all roles who the user is assigned
+     */
+    protected $rolesMembership = array();
+    /**
+     * @var array<int,int> Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+     */
+    protected $rolesMembershipLeader = array();
+    /**
+     * @var array<int,int> Array with all roles who the user is assigned and is not a leader of the role
+     */
+    protected $rolesMembershipNoLeader = array();
+    /**
+     * @var int the organization for which the rights are read, could be changed with method @b setOrganization
+     */
+    protected $organizationId;
+    /**
+     * @var bool Flag if the user has the right to assign at least one role
+     */
+    protected $assignRoles;
+    /**
+     * @var bool If this flag is set then a user can save changes to the user if he hasn't the necessary rights
+     */
+    protected $saveChangesWithoutRights;
+    /**
+     * @var array<int,bool> Array with all user ids where the current user is allowed to edit the profile.
+     */
+    protected $usersEditAllowed = array();
+    /**
+     * @var array<int,array<string,int|bool>> Array with all users to whom the current user has a relationship
+     */
+    protected $relationships = array();
+    /**
+     * @var bool Flag if relationships for this user were checked
+     */
+    protected $relationshipsChecked = false;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
@@ -190,8 +232,7 @@ class User extends TableAccess
                 'rol_mail_to_all'        => false,
                 'rol_photo'              => false,
                 'rol_profile'            => false,
-                'rol_weblinks'           => false,
-                'rol_inventory'          => false
+                'rol_weblinks'           => false
             );
 
             // read all roles of the organization and join the membership if user is member of that role
@@ -822,7 +863,7 @@ class User extends TableAccess
 
     /**
      * @param array<int,bool> $rightsList
-     * @return int[]
+     * @return array<int,int>
      */
     private function getAllRolesWithRight(array $rightsList)
     {
@@ -843,7 +884,7 @@ class User extends TableAccess
 
     /**
      * Creates an array with all roles where the user has the right to mail them
-     * @return int[] Array with role ids where user has the right to mail them
+     * @return array<int,int> Array with role ids where user has the right to mail them
      */
     public function getAllMailRoles()
     {
@@ -853,12 +894,10 @@ class User extends TableAccess
     /**
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
-     * @return int[] Array with categories ids where user has the right to view them
+     * @return array<int,int> Array with categories ids where user has the right to view them
      */
     public function getAllVisibleCategories($categoryType)
     {
-        $arrVisibleCategories = array();
-
         $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
 
         $sql = 'SELECT cat_id
@@ -887,14 +926,17 @@ class User extends TableAccess
             ),
             $rolIdParams
         );
-        $visibleCategoriesStatement = $this->db->queryPrepared($sql, $queryParams);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
-        if ($visibleCategoriesStatement->rowCount() > 0)
+        if ($pdoStatement->rowCount() === 0)
         {
-            while ($row = $visibleCategoriesStatement->fetch())
-            {
-                $arrVisibleCategories[] = (int) $row['cat_id'];
-            }
+            return array();
+        }
+
+        $arrVisibleCategories = array();
+        while ($catId = $pdoStatement->fetchColumn())
+        {
+            $arrVisibleCategories[] = (int) $catId;
         }
 
         return $arrVisibleCategories;
@@ -902,7 +944,7 @@ class User extends TableAccess
 
     /**
      * Creates an array with all roles where the user has the right to view them
-     * @return int[] Array with role ids where user has the right to view them
+     * @return array<int,int> Array with role ids where user has the right to view them
      */
     public function getAllVisibleRoles()
     {
@@ -921,7 +963,7 @@ class User extends TableAccess
 
     /**
      * Returns an array with all role ids where the user is a member.
-     * @return int[] Returns an array with all role ids where the user is a member.
+     * @return array<int,int> Returns an array with all role ids where the user is a member.
      */
     public function getRoleMemberships()
     {
@@ -931,10 +973,8 @@ class User extends TableAccess
     }
 
     /**
-     * Returns an array with all role ids where the user is a member
-     * and not a leader of the role.
-     * @return int[] Returns an array with all role ids where the user is a member
-     *         and not a leader of the role.
+     * Returns an array with all role ids where the user is a member and not a leader of the role.
+     * @return array<int,int> Returns an array with all role ids where the user is a member and not a leader of the role.
      */
     public function getRoleMembershipsNoLeader()
     {
@@ -1215,13 +1255,13 @@ class User extends TableAccess
 
         if($gPreferences['lists_show_former_members'] === '1'
         && ($this->checkRolesRight('rol_assign_roles')
-        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3)))))
+        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true))))
         {
             return true;
         }
         elseif($gPreferences['lists_show_former_members'] === '2'
         && ($this->checkRolesRight('rol_edit_user')
-        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3)))))
+        || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true))))
         {
             return true;
         }
@@ -1512,7 +1552,7 @@ class User extends TableAccess
 
     /**
      * Returns data from the user to improve dictionary attack check
-     * @return string[]
+     * @return array<int,string>
      */
     public function getPasswordUserData()
     {
@@ -1970,15 +2010,6 @@ class User extends TableAccess
     public function editWeblinksRight()
     {
         return $this->checkRolesRight('rol_weblinks');
-    }
-
-    /**
-     * Funktion prueft, ob der angemeldete User das Inventory verwalten darf
-     * @return bool
-     */
-    public function editInventory()
-    {
-        return $this->checkRolesRight('rol_inventory');
     }
 
     /**

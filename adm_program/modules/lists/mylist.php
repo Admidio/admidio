@@ -78,7 +78,7 @@ if(isset($_SESSION['mylist_request']))
 
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
     // muessen diese nun direkt angelegt werden
-    for($i = $defaultColumnRows+1; $i > 0; ++$i)
+    for($i = $defaultColumnRows + 1; $i > 0; ++$i)
     {
         if(isset($formValues['column'.$i]))
         {
@@ -125,7 +125,7 @@ $page->enableModal();
 
 // within MySql it's only possible to join 61 tables therefore show a message if user
 // want's to join more than 57 columns
-if($gDbType === 'mysql')
+if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
     $mySqlMaxColumnAlert = '
     if (fieldNumberIntern >= 57) {
@@ -459,7 +459,7 @@ $javascriptCode .= '
 
     function loadList() {
         var listId = $("#sel_select_configuration").val();
-        self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
+        self.location.href = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
     }
 
     /**
@@ -478,12 +478,12 @@ $javascriptCode .= '
 
         switch (mode) {
             case "show":
-                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
+                myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?mode=2";
                 myListConfigForm.submit();
                 break;
 
             case "save":
-                myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
+                myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
                 myListConfigForm.submit();
                 break;
 
@@ -491,7 +491,7 @@ $javascriptCode .= '
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
                 if (listName !== "") {
-                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
+                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?mode=1&name=" + listName;
                     myListConfigForm.submit();
                 }
                 break;
@@ -499,7 +499,7 @@ $javascriptCode .= '
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if (msg_result) {
-                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
+                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
                     myListConfigForm.submit();
                 }
                 break;
@@ -507,7 +507,7 @@ $javascriptCode .= '
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
-                    myListConfigForm.action = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
+                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
                     myListConfigForm.submit();
                 }
                 break;
@@ -713,7 +713,7 @@ else
     }
 }
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 
 if ($gPreferences['members_enable_user_relations'] == 1)
 {

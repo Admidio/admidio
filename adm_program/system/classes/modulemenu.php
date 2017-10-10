@@ -28,12 +28,30 @@
  */
 class ModuleMenu
 {
+    /**
+     * @var string
+     */
     protected $id;
-    protected $items          = array();
-    protected $ddItemCnt      = 0;
+    /**
+     * @var array<string,array<string,string|bool,array>>
+     */
+    protected $items = array();
+    /**
+     * @var int
+     */
+    protected $ddItemCnt = 0;
+    /**
+     * @var string
+     */
     protected $customCssClass = '';
+    /**
+     * @var int
+     */
     protected $maxMenuLinkItem;
-    protected $ddJS;
+    /**
+     * @var string
+     */
+    protected $ddJS = '';
 
     /**
      * creates the object of the module menu and initialize all class parameters
@@ -44,6 +62,106 @@ class ModuleMenu
     {
         $this->id = $id;
         $this->maxMenuLinkItem = $maxMenuLinkItem;
+    }
+
+    /**
+     * add new entry to array and do some checks before so that link and icon get a valid url
+     * @param string $id   Html id of the element
+     * @param string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
+     * @param string $link Link to the page that will be called if menu item is clicked
+     * @param string $text Link text
+     * @param string $icon Icon of the menu item, that will also be linked
+     * @param string $js   Javascript to be executed
+     * @return array<string,string|array>
+     */
+    private function buildItem($id, $type, $link, $text, $icon, $js = '')
+    {
+        if(strlen($link) > 1)
+        {
+            // add root path to link unless the full URL is given
+            if (preg_match('/^http(s?):\/\//', $link) !== 1)
+            {
+                $link = ADMIDIO_URL . $link;
+            }
+        }
+        else
+        {
+            $link = '#';
+        }
+
+        // add THEME_URL to images unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $icon) !== 1)
+        {
+            $icon = THEME_URL.'/icons/'.$icon;
+        }
+
+        return array(
+            'id'       => $id,
+            'type'     => $type,
+            'link'     => $link,
+            'text'     => $text,
+            'icon'     => $icon,
+            'subitems' => array(),
+            'js'       => $js
+        );
+    }
+
+    /**
+     * creates an text link icon
+     * @param string[] $menuEntry menu entry element which was added with addItem
+     * @return string HTML of created item
+     */
+    private function createIconTextLink(array &$menuEntry)
+    {
+        $html = '';
+
+        // if javascript was set then add this script to click event of this menu item
+        if(isset($menuEntry['js']) && $menuEntry['js'] !== '')
+        {
+            $html .= '
+                <script type="text/javascript">
+                    $(function() {
+                        $("#'.$menuEntry['id'].'").click(function() {
+                            '.$menuEntry['js'].'
+                        });
+                    });
+                </script>';
+        }
+
+        // add html of menu item
+        $html .= '
+            <li id="'.$menuEntry['id'].'">
+                <a class="navbar-link" href="'.$menuEntry['link'].'">
+                    <img src="'.$menuEntry['icon'].'" alt="'.strip_tags($menuEntry['text']).'" />'.$menuEntry['text'].'
+                </a>
+            </li>';
+
+        return $html;
+    }
+
+    /**
+     * add a drop down item
+     * @param string[] $menuEntry menu entry element which was added with addItem
+     * @param bool     $selected  determines if drop down element should be pre selected
+     */
+    private function addDropDownItem(array &$menuEntry, $selected = false)
+    {
+        if ($this->ddJS !== '')
+        {
+            $this->ddJS .= ',';
+        }
+
+        $selectedText = $selected ? 'true' : 'false';
+        $this->ddJS .= '
+            {
+                text: "'.$menuEntry['text'].'",
+                value: '.++$this->ddItemCnt.',
+                selected: '.$selectedText.',
+                imageSrc: "'.$menuEntry['icon'].'",
+                link: "'.$menuEntry['link'].'",
+                js: "'.$menuEntry['js'].'"
+            }
+        ';
     }
 
     /**
@@ -83,31 +201,6 @@ class ModuleMenu
     }
 
     /**
-     * add a drop down item
-     * @param string[] $menuEntry menu entry element which was added with addItem
-     * @param bool     $selected  determines if drop down element should be pre selected
-     */
-    private function addDropDownItem(array &$menuEntry, $selected = false)
-    {
-        if ($this->ddJS !== '')
-        {
-            $this->ddJS .= ',';
-        }
-
-        $selectedText = $selected ? 'true' : 'false';
-        $this->ddJS .= '
-            {
-                text: "'.$menuEntry['text'].'",
-                value: '.++$this->ddItemCnt.',
-                selected: '.$selectedText.',
-                imageSrc: "'.$menuEntry['icon'].'",
-                link: "'.$menuEntry['link'].'",
-                js: "'.$menuEntry['js'].'"
-            }
-        ';
-    }
-
-    /**
      * add a new entry to menu that contains the html as content
      * @param string $id       Html id of the element
      * @param string $formHtml A html code that will be added to the menu
@@ -137,7 +230,7 @@ class ModuleMenu
      */
     public function addItem($id, $link, $text, $icon, $js = '')
     {
-        $this->items[$id] = $this->mkItem($id, 'link', $link, $text, $icon, $js);
+        $this->items[$id] = $this->buildItem($id, 'link', $link, $text, $icon, $js);
     }
 
     /**
@@ -147,39 +240,6 @@ class ModuleMenu
     public function countItems()
     {
         return count($this->items);
-    }
-
-    /**
-     * creates an text link icon
-     * @param string[] $menuEntry menu entry element which was added with addItem
-     * @return string HTML of created item
-     */
-    private function createIconTextLink(array &$menuEntry)
-    {
-        $html = '';
-
-        // if javascript was set then add this script to click event of this menu item
-        if(isset($menuEntry['js']) && $menuEntry['js'] !== '')
-        {
-            $html .= '
-                <script type="text/javascript">
-                    $(function() {
-                        $("#'.$menuEntry['id'].'").click(function() {
-                            '.$menuEntry['js'].'
-                        });
-                    });
-                </script>';
-        }
-
-        // add html of menu item
-        $html .= '
-            <li id="'.$menuEntry['id'].'">
-                <a class="navbar-link" href="'.$menuEntry['link'].'">
-                    <img src="'.$menuEntry['icon'].'" alt="'.strip_tags($menuEntry['text']).'" />'.$menuEntry['text'].'
-                </a>
-            </li>';
-
-        return $html;
     }
 
     /**
@@ -205,51 +265,9 @@ class ModuleMenu
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
         $head = array_slice($this->items, 0, $position);
-        $insert = array($id => $this->mkItem($id, $link, $text, $icon, $desc));
+        $insert = array($id => $this->buildItem($id, $link, $text, $icon, $desc));
         $tail = array_slice($this->items, $position);
         $this->items = array_merge($head, $insert, $tail);
-    }
-
-    /**
-     * add new entry to array and do some checks before so that link and icon get a valid url
-     * @param string $id   Html id of the element
-     * @param string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
-     * @param string $link Link to the page that will be called if menu item is clicked
-     * @param string $text Link text
-     * @param string $icon Icon of the menu item, that will also be linked
-     * @param string $js   Javascript to be executed
-     * @return array<string,string|array>
-     */
-    private function mkItem($id, $type, $link, $text, $icon, $js = '')
-    {
-        if(strlen($link) > 1)
-        {
-            // add root path to link unless the full URL is given
-            if (preg_match('/^http(s?):\/\//', $link) !== 1)
-            {
-                $link = ADMIDIO_URL . $link;
-            }
-        }
-        else
-        {
-            $link = '#';
-        }
-
-        // add THEME_URL to images unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $icon) !== 1)
-        {
-            $icon = THEME_URL.'/icons/'.$icon;
-        }
-
-        return array(
-            'id'       => $id,
-            'type'     => $type,
-            'link'     => $link,
-            'text'     => $text,
-            'icon'     => $icon,
-            'subitems' => array(),
-            'js'       => $js
-        );
     }
 
     /**
@@ -260,12 +278,12 @@ class ModuleMenu
      */
     public function show()
     {
+        global $gL10n;
+
         if (count($this->items) === 0)
         {
             return false;
         }
-
-        global $gL10n;
 
         $formHtml = '';
 

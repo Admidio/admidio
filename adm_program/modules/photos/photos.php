@@ -144,8 +144,8 @@ if ($gCurrentUser->editPhotoRight())
 // integrate bootstrap ekko lightbox addon
 if ($gPreferences['photo_show_mode'] == 1)
 {
-    $page->addCssFile('adm_program/libs/lightbox/ekko-lightbox.css');
-    $page->addJavascriptFile('adm_program/libs/lightbox/ekko-lightbox.js');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.js');
 
     $page->addJavascript('
         $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
@@ -293,7 +293,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 {
                     $photoThumbnailTable .= '
                         <img class="thumbnail center-block" id="img_'.$actThumbnail.'" style="cursor: pointer"
-                            onclick="window.open(\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.($gPreferences['photo_show_height']+210).', width='.($gPreferences['photo_show_width']+70).',left=162,top=5\')"
+                            onclick="window.open(\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.($gPreferences['photo_show_height'] + 210).', width='.($gPreferences['photo_show_width']+70).',left=162,top=5\')"
                             src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$actThumbnail.'&thumb=1" alt="'.$actThumbnail.'" />';
                 }
 

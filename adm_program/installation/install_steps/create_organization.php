@@ -40,7 +40,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check DB-type
-    if (!in_array($_SESSION['db_type'], array('mysql', 'pgsql'), true))
+    if (!in_array($_SESSION['db_type'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true))
     {
         showNotice(
             $gL10n->get('INS_DATABASE_TYPE_INVALID'),
@@ -176,7 +176,7 @@ if (isset($_POST['db_host']))
 $form = new HtmlFormInstallation('installation-form', 'installation.php?step=create_administrator');
 
 // initialize form data
-$shortnameProperty = FIELD_REQUIRED;
+$shortnameProperty = HtmlForm::FIELD_REQUIRED;
 
 if (isset($_SESSION['orga_shortname']))
 {
@@ -192,7 +192,7 @@ else
 
     if ($g_organization !== '')
     {
-        $shortnameProperty = FIELD_READONLY;
+        $shortnameProperty = HtmlForm::FIELD_READONLY;
     }
 }
 
@@ -207,9 +207,9 @@ foreach ($allTimezones as $timezone)
 $form->setFormDescription($gL10n->get('ORG_NEW_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ORGANIZATION'));
 $form->addInput('orga_shortname',    $gL10n->get('SYS_NAME_ABBREVIATION'),   $orgaShortName, array('maxLength' => 10, 'property' => $shortnameProperty, 'class' => 'form-control-small'));
-$form->addInput('orga_longname',     $gL10n->get('SYS_NAME'),                $orgaLongName,  array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-$form->addInput('orga_email',        $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
-$form->addSelectBox('orga_timezone', $gL10n->get('ORG_TIMEZONE'),            $timezones,     array('property' => FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
+$form->addInput('orga_longname',     $gL10n->get('SYS_NAME'),                $orgaLongName,  array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addInput('orga_email',        $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addSelectBox('orga_timezone', $gL10n->get('ORG_TIMEZONE'),            $timezones,     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => date_default_timezone_get()));
 $form->closeGroupBox();
 $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=connect_database'));
 $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));

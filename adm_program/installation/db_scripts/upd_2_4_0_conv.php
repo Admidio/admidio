@@ -11,7 +11,7 @@
 require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/tableusers.php');
 
 // drop foreign keys to delete index
-if($gDbType === 'mysql')
+if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
     $sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_USR_ORG_REG';
     $gDb->query($sql, false);

@@ -69,14 +69,14 @@ $form = new HtmlForm('relation_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/userrela
 
 $form->addInput(
     'usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),
-     array('maxLength' => 100, 'property' => FIELD_DISABLED)
+     array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED)
 );
 
 // select box showing all relation types
 $sql = 'SELECT urt_id, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
       ORDER BY urt_name';
-$form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql, array('property' => FIELD_REQUIRED));
+$form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql, array('property' => HtmlForm::FIELD_REQUIRED));
 
 $sqlData = array();
 if($gCurrentUser->editUsers())
@@ -167,7 +167,7 @@ else
         DATE_NOW
     );
 }
-$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData, array('property' => FIELD_REQUIRED, 'search' => true));
+$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData, array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 

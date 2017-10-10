@@ -166,7 +166,14 @@
  */
 class ModuleLists extends Modules
 {
-    private $memberStatus = 'active';
+    const MEMBER_STATUS_ACTIVE = 'active';
+    const MEMBER_STATUS_INACTIVE = 'inactive';
+    const MEMBER_STATUS_BOTH = 'both';
+
+    /**
+     * @var string
+     */
+    private $memberStatus = self::MEMBER_STATUS_ACTIVE;
 
     /**
      * creates an new ModuleLists object
@@ -191,11 +198,11 @@ class ModuleLists extends Modules
     {
         switch ($this->memberStatus)
         {
-            case 'inactive':
+            case self::MEMBER_STATUS_INACTIVE:
                 return ' AND mem_end < \''.DATE_NOW.'\' ';
-            case 'both':
+            case self::MEMBER_STATUS_BOTH:
                 return '';
-            case 'active':
+            case self::MEMBER_STATUS_ACTIVE:
             default:
                 return ' AND mem_begin <= \''.DATE_NOW.'\'
                          AND mem_end   >= \''.DATE_NOW.'\' ';
@@ -358,20 +365,11 @@ class ModuleLists extends Modules
      * Sets the status of role members to be shown
      * @param string $status active(default), inactive, both
      */
-    public function setMemberStatus($status = 'active')
+    public function setMemberStatus($status = self::MEMBER_STATUS_ACTIVE)
     {
-        switch ($status)
+        if (in_array($status, array(self::MEMBER_STATUS_ACTIVE, self::MEMBER_STATUS_INACTIVE, self::MEMBER_STATUS_BOTH), true))
         {
-            case 'inactive':
-                $this->memberStatus = 'inactive';
-                break;
-            case 'both':
-                $this->memberStatus = 'both';
-                break;
-            case 'active':
-            default:
-                $this->memberStatus = 'active';
-                break;
+            $this->memberStatus = $status;
         }
     }
 }

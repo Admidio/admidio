@@ -38,6 +38,9 @@
  */
 class Navigation
 {
+    /**
+     * @var array<int,array<string,string>>
+     */
     private $urlStack = array();
 
     /**
@@ -165,7 +168,7 @@ class Navigation
      * Removes the last url from the stack. If there is only one element
      * in the stack than don't remove it, because this will be the initial
      * url that should be called.
-     * @return string[]|null Returns the removed element
+     * @return array<string,string>|null Returns the removed element
      */
     public function deleteLastUrl()
     {

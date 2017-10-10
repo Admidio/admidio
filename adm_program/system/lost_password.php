@@ -164,7 +164,7 @@ else
 
     // show form
     $form = new HtmlForm('lost_password_form', ADMIDIO_URL.'/adm_program/system/lost_password.php', $page);
-    $form->addInput('recipient_email', $gL10n->get('SYS_USERNAME_OR_EMAIL'), null, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
+    $form->addInput('recipient_email', $gL10n->get('SYS_USERNAME_OR_EMAIL'), null, array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED));
 
     // if captchas are enabled then visitors of the website must resolve this
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)

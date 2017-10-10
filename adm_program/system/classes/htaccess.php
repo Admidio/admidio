@@ -27,6 +27,9 @@
  */
 class Htaccess
 {
+    /**
+     * @var string
+     */
     protected $folderPath;
 
     /**

@@ -33,8 +33,17 @@
  */
 class RSSfeed
 {
+    /**
+     * @var array
+     */
     protected $channel = array();
-    protected $items   = array();
+    /**
+     * @var array<int,array<string,string>>
+     */
+    protected $items = array();
+    /**
+     * @var string
+     */
     protected $feed;
 
     /**
@@ -63,8 +72,7 @@ class RSSfeed
      */
     public function addItem($title, $description, $link, $author, $date)
     {
-        $item = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $date);
-        $this->items[] = $item;
+        $this->items[] = array('title' => $title, 'description' => $description, 'link' => $link, 'author' => $author, 'pubDate' => $date);
     }
 
     /**

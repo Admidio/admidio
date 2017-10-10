@@ -32,8 +32,17 @@
  */
 class Session extends TableAccess
 {
-    protected $mObjectArray = array();  ///< Array with all objects of this session object.
-    protected $mAutoLogin;              ///< Object of table auto login that will handle an auto login
+    /**
+     * @var array Array with all objects of this session object.
+     */
+    protected $mObjectArray = array();
+    /**
+     * @var \AutoLogin|null Object of table auto login that will handle an auto login
+     */
+    protected $mAutoLogin;
+    /**
+     * @var string
+     */
     protected $cookieAutoLoginId;
 
     /**

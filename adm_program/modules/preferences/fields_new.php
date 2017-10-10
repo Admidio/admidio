@@ -115,30 +115,30 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if($userField->getValue('usf_system') == 1)
 {
     $form->addInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'),
-                    array('maxLength' => 100, 'property' => FIELD_DISABLED));
+                    array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED));
 }
 else
 {
     $form->addInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'),
-                    array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+                    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED));
 }
 
 // show internal field name for information
 if($getUsfId > 0)
 {
     $form->addInput('usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $userField->getValue('usf_name_intern'),
-                    array('maxLength' => 100, 'property' => FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC'));
+                    array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC'));
 }
 
 if($userField->getValue('usf_system') == 1)
 {
     $form->addInput('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $userField->getValue('cat_name'),
-                    array('maxLength' => 100, 'property' => FIELD_DISABLED));
+                    array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED));
 }
 else
 {
     $form->addSelectBoxForCategories('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', 'EDIT_CATEGORIES',
-                                     array('property' => FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_cat_id')));
+                                     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_cat_id')));
 }
 $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
@@ -159,17 +159,17 @@ if($userField->getValue('usf_system') == 1)
 {
     // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
     $form->addInput('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText[$userField->getValue('usf_type')],
-                    array('maxLength' => 30, 'property' => FIELD_DISABLED));
+                    array('maxLength' => 30, 'property' => HtmlForm::FIELD_DISABLED));
 }
 else
 {
     // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
     $form->addSelectBox('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText,
-                        array('property' => FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type')));
+                        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type')));
 }
 $form->addMultilineTextInput('usf_value_list', $gL10n->get('ORG_VALUE_LIST'),
                              $userField->getValue('usf_value_list', 'database'), 6,
-                             array('property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
+                             array('property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
 $form->addInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'),
                 array('maxLength' => 2000));
 $form->addInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'),
@@ -185,7 +185,7 @@ $form->addCheckbox('usf_disabled', $gL10n->get('ORG_FIELD_DISABLED',
 if($userField->getValue('usf_name_intern') === 'LAST_NAME' || $userField->getValue('usf_name_intern') === 'FIRST_NAME')
 {
     $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
-                       array('property' => FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
+                       array('property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png'));
 }
 else
 {
@@ -195,7 +195,7 @@ else
 if($userField->getValue('usf_name_intern') === 'LAST_NAME' || $userField->getValue('usf_name_intern') === 'FIRST_NAME' || $userField->getValue('usf_name_intern') === 'EMAIL')
 {
     $form->addCheckbox('usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
-                       array('property' => FIELD_DISABLED, 'icon' => 'new_registrations.png'));
+                       array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'new_registrations.png'));
 }
 else
 {

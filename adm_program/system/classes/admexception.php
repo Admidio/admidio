@@ -36,6 +36,9 @@
  */
 class AdmException extends Exception
 {
+    /**
+     * @var array<int,string>|string
+     */
     protected $params = array();
 
     /**

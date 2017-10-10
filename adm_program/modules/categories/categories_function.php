@@ -19,7 +19,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- *         INF = Categories for Inventory
  * mode  : 1 - Create or edit categories
  *         2 - Delete category
  *         4 - Change sequence for parameter cat_id

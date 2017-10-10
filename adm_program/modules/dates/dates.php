@@ -214,7 +214,7 @@ if($getViewMode === 'html')
     $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', array('defaultValue' => $dates->getParameter('cat_id')));
     $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
     $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
-    $form->addInput('view', '', $getView, array('property' => FIELD_HIDDEN));
+    $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
     $FilterNavbar->addForm($form->show(false));
     $page->addHtml($FilterNavbar->show());
@@ -578,7 +578,7 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.'/adm_program/modules/dates/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
                     // Reset flags and parameters

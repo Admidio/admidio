@@ -38,10 +38,25 @@ class Image
     const ROTATE_DIRECTION_RIGHT = 'right';
     const ROTATE_DIRECTION_FLIP  = 'flip';
 
+    /**
+     * @var string
+     */
     private $imagePath = '';
+    /**
+     * @var resource|null
+     */
     private $imageResource;
+    /**
+     * @var int
+     */
     private $imageType;
+    /**
+     * @var int
+     */
     private $imageWidth  = 0;
+    /**
+     * @var int
+     */
     private $imageHeight = 0;
 
     /**
@@ -64,7 +79,7 @@ class Image
     }
 
     /**
-     * @return int[] Returns an array of the image width and height
+     * @return array<int,int> Returns an array of the image width and height
      */
     public function getImageSize()
     {
@@ -342,8 +357,7 @@ class Image
         }
 
         // check current memory limit and set this to 50MB if the current value is lower
-        preg_match('/(\d+)/', ini_get('memory_limit'), $memoryLimit);
-        if ($memoryLimit[0] < 50)
+        if (PhpIni::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
         {
             @ini_set('memory_limit', '50M');
         }

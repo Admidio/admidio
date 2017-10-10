@@ -212,11 +212,6 @@ while($row = $rolStatement->fetch())
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/lists.png"
                             alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />';
     }
-    if($role->getValue('rol_inventory') == 1)
-    {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/inventory.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_INVENTORY').'" title="'.$gL10n->get('ROL_RIGHT_INVENTORY').'" />';
-    }
     // if no assigned roles
     if($assignRoles === '')
     {

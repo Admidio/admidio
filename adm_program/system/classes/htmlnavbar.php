@@ -28,14 +28,38 @@
  */
 class HtmlNavbar
 {
-    protected $leftItems  = array();    ///< An array with all items that should be displayed at the left part of the navbar
-    protected $rightItems = array();    ///< An array with all items that should be displayed at the right part of the navbar
-    protected $htmlPage;                ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $htmlForm = '';           ///< Parameter that includes the html of the form that should be shown within the navbar
-    protected $name;                    ///< Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-    protected $type;                    ///< Navbar type. There is the @b default and the @b filter type possible.
-    protected $id;                      ///< The id of the navbar.
-    protected $customCssClass = '';     ///< A css class name that should be added to the main nav tag of the navbar
+    /**
+     * @var array<string,array<string,string|array<string,array<string,string>>>> An array with all items that should be displayed at the left part of the navbar
+     */
+    protected $leftItems = array();
+    /**
+     * @var array<string,array<string,string|array<string,array<string,string>>>> An array with all items that should be displayed at the right part of the navbar
+     */
+    protected $rightItems = array();
+    /**
+     * @var \HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     */
+    protected $htmlPage;
+    /**
+     * @var string Parameter that includes the html of the form that should be shown within the navbar
+     */
+    protected $htmlForm = '';
+    /**
+     * @var string|null Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+     */
+    protected $name;
+    /**
+     * @var string Navbar type. There is the @b default and the @b filter type possible.
+     */
+    protected $type;
+    /**
+     * @var string The id of the navbar.
+     */
+    protected $id;
+    /**
+     * @var string A css class name that should be added to the main nav tag of the navbar
+     */
+    protected $customCssClass = '';
 
     /**
      * creates the object of the module menu and initialize all class parameters

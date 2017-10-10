@@ -65,14 +65,14 @@ $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('I
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
 $form->addSelectBoxFromXml(
     'db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
-    'identifier', 'name', array('property' => FIELD_REQUIRED, 'defaultValue' => $dbType)
+    'identifier', 'name', array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $dbType)
 );
-$form->addInput('db_host',     $gL10n->get('SYS_HOST'),         $host,     array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => FIELD_REQUIRED, 'helpTextIdLabel' => 'INS_DATABASE_HOST_INFO'));
+$form->addInput('db_host',     $gL10n->get('SYS_HOST'),         $host,     array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'INS_DATABASE_HOST_INFO'));
 $form->addInput('db_port',     $gL10n->get('SYS_PORT'),         $port,     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO'));
-$form->addInput('db_database', $gL10n->get('SYS_DATABASE'),     $database, array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => FIELD_REQUIRED));
-$form->addInput('db_user',     $gL10n->get('SYS_USERNAME'),     $user,     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => FIELD_REQUIRED));
+$form->addInput('db_database', $gL10n->get('SYS_DATABASE'),     $database, array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addInput('db_user',     $gL10n->get('SYS_USERNAME'),     $user,     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED));
 $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'),     null,      array('type' => 'password'));
-$form->addInput('db_prefix',   $gL10n->get('INS_TABLE_PREFIX'), $prefix,   array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
+$form->addInput('db_prefix',   $gL10n->get('INS_TABLE_PREFIX'), $prefix,   array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small'));
 $form->closeGroupBox();
 $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=welcome'));
 $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));

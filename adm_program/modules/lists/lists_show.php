@@ -68,9 +68,11 @@ if ($numberRoles > 1)
 
     foreach ($rolesData as $role)
     {
+        $roleId = (int) $role['rol_id'];
+
         // check if user has right to view all roles
         // only users with the right to assign roles can view inactive roles
-        if (!$gCurrentUser->hasRightViewRole($role['rol_id'])
+        if (!$gCurrentUser->hasRightViewRole($roleId)
         || ((int) $role['rol_valid'] === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -78,13 +80,13 @@ if ($numberRoles > 1)
         }
 
         // check if user has right to send mail to role
-        if (!$gCurrentUser->hasRightSendMailToRole($role['rol_id']))
+        if (!$gCurrentUser->hasRightSendMailToRole($roleId))
         {
             $showLinkMailToList = false;
             // => do not show the link
         }
 
-        if (!$gCurrentUser->hasRightViewFormerRolesMembers($role['rol_id']))
+        if (!$gCurrentUser->hasRightViewFormerRolesMembers($roleId))
         {
             $hasRightViewFormerMembers = false;
         }
@@ -425,8 +427,8 @@ if ($getMode !== 'csv')
             $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', $page, array('type' => 'navbar', 'setFocus' => false));
             $form->addInput('date_from', $gL10n->get('LST_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('LST_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
-            $form->addInput('lst_id', '', $getListId, array('property' => FIELD_HIDDEN));
-            $form->addInput('rol_ids', '', $getRoleIds, array('property' => FIELD_HIDDEN));
+            $form->addInput('lst_id', '', $getListId, array('property' => HtmlForm::FIELD_HIDDEN));
+            $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $filterNavbar->addForm($form->show(false));
@@ -865,7 +867,7 @@ foreach ($membersList as $member)
         $dateId      = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.ADMIDIO_URL.'/adm_program/modules/dates/popup_participation.php?dat_id=' . $dateId . '&amp;usr_id=' .$member['usr_id'] . '">
+                                href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php?dat_id=' . $dateId . '&amp;usr_id=' .$member['usr_id'] . '">
                                     <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
     }
 

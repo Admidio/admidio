@@ -33,7 +33,13 @@
  */
 class UserRegistration extends User
 {
-    private $sendEmail = true;  ///< Flag if the object will send a SystemMail if registration is accepted or deleted.
+    /**
+     * @var bool Flag if the object will send a SystemMail if registration is accepted or deleted.
+     */
+    private $sendEmail = true;
+    /**
+     * @var \TableAccess
+     */
     private $tableRegistration;
 
     /**

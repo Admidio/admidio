@@ -16,9 +16,18 @@
  */
 class TableFolder extends TableAccess
 {
+    /**
+     * @var \Folder
+     */
     protected $folderPath;
-    protected $folderViewRolesObject;   ///< Object with all roles that could view the current folder
-    protected $folderUploadRolesObject; ///< Object with all roles that could upload files the current folder
+    /**
+     * @var \RolesRights|null Object with all roles that could view the current folder
+     */
+    protected $folderViewRolesObject;
+    /**
+     * @var \RolesRights|null Object with all roles that could upload files the current folder
+     */
+    protected $folderUploadRolesObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
@@ -34,8 +43,8 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @param array[] $completeFolder
-     * @return array[]
+     * @param array<string,array<int,array<string,mixed>>> $completeFolder
+     * @return array<string,array<int,array<string,mixed>>>
      */
     private function addAdditionalToFolderContents(array $completeFolder)
     {
@@ -132,7 +141,7 @@ class TableFolder extends TableAccess
     /**
      * Legt einen neuen Ordner im Dateisystem an
      * @param string $folderName
-     * @return string[]|null
+     * @return array<string,string>|null
      */
     public function createFolder($folderName)
     {
@@ -361,7 +370,7 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @return array[] All files with their properties
+     * @return array<int,array<string,mixed>> All files with their properties
      */
     private function getFilesWithProperties()
     {
@@ -416,7 +425,7 @@ class TableFolder extends TableAccess
 
     /**
      * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
-     * @return array[]
+     * @return array<string,array<int,array<string,mixed>>>
      */
     public function getFolderContentsForDownload()
     {
@@ -579,7 +588,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to view the folder.
-     * @return int[] Returns an array with all role ids that have the right to view the folder.
+     * @return array<int,int> Returns an array with all role ids that have the right to view the folder.
      */
     public function getRoleViewArrayOfFolder()
     {
@@ -588,7 +597,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to upload files to the folder.
-     * @return int[] Returns an array with all role ids that have the right to upload files to the folder.
+     * @return array<int,int> Returns an array with all role ids that have the right to upload files to the folder.
      */
     public function getRoleUploadArrayOfFolder()
     {
@@ -596,7 +605,7 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Return PDOStatement with all subfolders of a parent folder id
+     * Return \PDOStatement with all subfolders of a parent folder id
      * @param int      $folderId Folder ID
      * @param string[] $columns  The columns that should be in the statement
      * @return \PDOStatement SubfolderStatement with fol_id column
@@ -612,7 +621,7 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @return array[] All sub-folders with their properties
+     * @return array<int,array<string,mixed>> All sub-folders with their properties
      */
     private function getSubfoldersWithProperties()
     {

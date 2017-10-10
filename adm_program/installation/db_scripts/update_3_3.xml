@@ -33,7 +33,13 @@
     <step id="280">UPDATE %PREFIX%_dates SET dat_cat_id = (SELECT cat_id FROM %PREFIX%_categories WHERE cat_name_intern = 'DAT_ALL_ORGANIZATIONS') WHERE dat_global = 1</step>
     <step id="290">ALTER TABLE %PREFIX%_announcements DROP COLUMN ann_global</step>
     <step id="300">ALTER TABLE %PREFIX%_dates DROP COLUMN dat_global</step>
-    <step id="310">CREATE TABLE %PREFIX%_menu
+    <step id="310">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_inventory_module'</step>
+    <step id="320">DELETE FROM %PREFIX%_categories WHERE cat_type = 'INF'</step>
+    <step id="330">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_inventory</step>
+    <step id="340">DROP TABLE IF EXISTS %PREFIX%_invent_fields CASCADE</step>
+    <step id="350">DROP TABLE IF EXISTS %PREFIX%_invent_data CASCADE</step>
+    <step id="360">DROP TABLE IF EXISTS %PREFIX%_invent CASCADE</step>
+    <step id="370">CREATE TABLE %PREFIX%_menu
                 (
                     men_id                         integer       unsigned not null AUTO_INCREMENT,
                     men_parent_id                  integer,
@@ -51,8 +57,8 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="320">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
-    <step id="330">ComponentUpdate::updateStepMigrateToStandartMenu</step>
+    <step id="380">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
+    <step id="390">ComponentUpdate::updateStepMigrateToStandartMenu</step>
 
     <step>stop</step>
 </update>

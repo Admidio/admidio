@@ -149,11 +149,11 @@ $page->addHtml('
                             $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));
                             // => EXIT
                         }
-                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
+                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'helpTextIdInline' => 'ORG_ADMIDIO_THEME_DESC'));
                         $form->addInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $formValues['homepage_logout'],
-                            array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
+                            array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_VISITORS'));
                         $form->addInput('homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $formValues['homepage_login'],
-                            array('maxLength' => 250, 'property' => FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS'));
+                            array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS'));
                         $form->addCheckbox('enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), (bool) $formValues['enable_rss'], array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC'));
                         $form->addCheckbox('enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'], array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC'));
                         $form->addInput('logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
@@ -191,8 +191,8 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('organization_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=organization', $page, array('class' => 'form-preferences'));
-                        $form->addInput('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['org_shortname'], array('property' => FIELD_DISABLED, 'class' => 'form-control-small'));
-                        $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $formValues['org_longname'], array('maxLength' => 60, 'property' => FIELD_REQUIRED));
+                        $form->addInput('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['org_shortname'], array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small'));
+                        $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $formValues['org_longname'], array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $formValues['org_homepage'], array('maxLength' => 60));
 
                         // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -237,9 +237,9 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('regional_settings_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=regional_settings', $page, array('class' => 'form-preferences'));
-                        $form->addInput('system_timezone', $gL10n->get('ORG_TIMEZONE'), $gTimezone, array('property' => FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextIdInline' => 'ORG_TIMEZONE_DESC'));
+                        $form->addInput('system_timezone', $gL10n->get('ORG_TIMEZONE'), $gTimezone, array('property' => HtmlForm::FIELD_DISABLED, 'class' => 'form-control-small', 'helpTextIdInline' => 'ORG_TIMEZONE_DESC'));
                         $form->addSelectBox('system_language', $gL10n->get('SYS_LANGUAGE'), $gL10n->getAvailableLanguages(),
-                                            array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['system_language']));
+                                            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language']));
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(),
                                             array('defaultValue' => $formValues['default_country'], 'helpTextIdInline' => 'PRO_DEFAULT_COUNTRY_DESC'));
                         $form->addInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $formValues['system_date'], array('maxLength'        => 20,
@@ -371,13 +371,13 @@ $page->addHtml('
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'), 'word' => $gL10n->get('ORG_CAPTCHA_TYPE_WORDS'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, array('defaultValue' => $formValues['captcha_type'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_TYPE_TEXT'));
 
-                        $fonts = admFuncGetDirectoryEntries('../../system/fonts/');
+                        $fonts = admFuncGetDirectoryEntries(ADMIDIO_PATH . '/adm_program/system/fonts/');
                         asort($fonts);
                         $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, array('defaultValue' => $formValues['captcha_fonts'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_CAPTCHA_FONT'));
                         $form->addInput('captcha_width', $gL10n->get('SYS_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $formValues['captcha_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ORG_CAPTCHA_WIDTH_DESC'));
                         $form->addInput('captcha_lines_numbers', $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'), $formValues['captcha_lines_numbers'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'step' => 1, 'helpTextIdInline' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC'));
                         $form->addInput('captcha_perturbation', $gL10n->get('ORG_CAPTCHA_DISTORTION'), $formValues['captcha_perturbation'], array('type' => 'string', 'helpTextIdInline' => 'ORG_CAPTCHA_DISTORTION_DESC', 'class' => 'form-control-small'));
-                        $backgrounds = admFuncGetDirectoryEntries('../../libs/securimage/backgrounds/');
+                        $backgrounds = admFuncGetDirectoryEntries(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/');
                         asort($backgrounds);
                         $form->addSelectBox('captcha_background_image', $gL10n->get('ORG_CAPTCHA_BACKGROUND_IMAGE'), $backgrounds, array('defaultValue' => $formValues['captcha_background_image'], 'showContextDependentFirstEntry' => true, 'helpTextIdInline' => 'ORG_CAPTCHA_BACKGROUND_IMAGE_DESC'));
                         $form->addInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $formValues['captcha_background_color'], array('maxLength' => 7, 'class' => 'form-control-small'));
@@ -443,7 +443,7 @@ $page->addHtml('
                         $form->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
                         // TODO deprecated: Remove if PHP 5.3 dropped
-                        if(ini_get('safe_mode') === '1')
+                        if(PhpIni::isSafeModeEnabled())
                         {
                             $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
                             $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
@@ -465,25 +465,25 @@ $page->addHtml('
                         }
                         $form->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
 
-                        if(ini_get('post_max_size') !== '')
+                        if(PhpIni::getPostMaxSize() === -1)
                         {
-                            $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), ini_get('post_max_size'));
+                            $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), PhpIni::getPostMaxSize());
                         }
                         else
                         {
                             $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $gL10n->get('SYS_NOT_SET'));
                         }
 
-                        if(ini_get('memory_limit') !== '')
+                        if(PhpIni::getMemoryLimit() === -1)
                         {
-                            $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), ini_get('memory_limit'));
+                            $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), PhpIni::getMemoryLimit());
                         }
                         else
                         {
                             $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $gL10n->get('SYS_NOT_SET'));
                         }
 
-                        if(ini_get('file_uploads') === '1')
+                        if(PhpIni::isFileUploadEnabled())
                         {
                             $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
                         }
@@ -493,9 +493,9 @@ $page->addHtml('
                         }
                         $form->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-                        if(ini_get('upload_max_filesize') !== '')
+                        if(PhpIni::getFileUploadMaxFileSize() === -1)
                         {
-                            $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), ini_get('upload_max_filesize'));
+                            $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), PhpIni::getFileUploadMaxFileSize());
                         }
                         else
                         {
@@ -861,31 +861,6 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>');
-            /*
-            <div class="panel panel-default" id="panel_inventory">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_inventory">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/inventory.png" alt="'.$gL10n->get('INV_INVENTORY').'" />'.$gL10n->get('INV_INVENTORY').'
-                        </a>
-                    </h4>
-                </div>
-                <div id="collapse_inventory" class="panel-collapse collapse">
-                    <div class="panel-body">');
-                        // show form
-                        $form = new HtmlForm('inventory_preferences_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?form=inventory', $page, array('class' => 'form-preferences'));
-                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('enable_inventory_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, array('defaultValue' => $formValues['enable_inventory_module'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_ACCESS_TO_MODULE_DESC'));
-                        $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php"><img
-                                    src="'. THEME_URL. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
-                        $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-                        $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
-                        $form->addSubmitButton('btn_save_inventory', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
-                        $page->addHtml($form->show(false));
-                    $page->addHtml('</div>
-                </div>
-            </div>
-            */
         $page->addHtml('</div>
     </div>
 </div>');

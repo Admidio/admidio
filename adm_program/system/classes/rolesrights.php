@@ -29,10 +29,22 @@
  */
 class RolesRights extends TableAccess
 {
+    /**
+     * @var array<int,\TableAccess>
+     */
     protected $rolesRightsDataObjects;
-    protected $rolesIds;        ///< Array with all roles ids as values
-    protected $objectId;        ///< Id of the object for which the roles right should be loaded.
-    protected $rolesRightName;  ///< Name of the current role right
+    /**
+     * @var array<int,int> Array with all roles ids as values
+     */
+    protected $rolesIds;
+    /**
+     * @var string Id of the object for which the roles right should be loaded.
+     */
+    protected $objectId;
+    /**
+     * @var string Name of the current role right
+     */
+    protected $rolesRightName;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles_rights.
@@ -108,7 +120,7 @@ class RolesRights extends TableAccess
 
     /**
      * Get all roles ids that where assigned to the current roles right and the selected object.
-     * @return int[] Returns an array with all role ids
+     * @return array<int,int> Returns an array with all role ids
      */
     public function getRolesIds()
     {
@@ -117,7 +129,7 @@ class RolesRights extends TableAccess
 
     /**
      * Get all names of the roles that where assigned to the current roles right and the selected object.
-     * @return string[] Returns an array with all roles names
+     * @return array<int,string> Returns an array with all roles names
      */
     public function getRolesNames()
     {
@@ -164,16 +176,18 @@ class RolesRights extends TableAccess
     {
         if(parent::readData($sqlWhereCondition, $queryParams))
         {
-            $sql = 'SELECT * FROM '.TBL_ROLES_RIGHTS_DATA.'
+            $sql = 'SELECT *
+                      FROM '.TBL_ROLES_RIGHTS_DATA.'
                      WHERE rrd_ror_id    = ? -- $this->getValue(\'ror_id\')
                        AND rrd_object_id = ? -- $this->objectId';
             $rolesRightsStatement = $this->db->queryPrepared($sql, array($this->getValue('ror_id'), $this->objectId));
 
             while($row = $rolesRightsStatement->fetch())
             {
-                $this->rolesRightsDataObjects[$row['rrd_rol_id']] = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
-                $this->rolesRightsDataObjects[$row['rrd_rol_id']]->setArray($row);
-                $this->rolesIds[] = (int) $row['rrd_rol_id'];
+                $rolId = (int) $row['rrd_rol_id'];
+                $this->rolesRightsDataObjects[$rolId] = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
+                $this->rolesRightsDataObjects[$rolId]->setArray($row);
+                $this->rolesIds[] = $rolId;
             }
         }
 

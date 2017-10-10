@@ -138,7 +138,7 @@ function disableSoundexSearchIfPgSql($db)
 {
     global $gDbType;
 
-    if ($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+    if ($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
         // soundex is not a default function in PostgreSQL
         $sql = 'UPDATE ' . TBL_PREFERENCES . '

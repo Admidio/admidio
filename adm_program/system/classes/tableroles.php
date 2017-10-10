@@ -18,8 +18,14 @@
  */
 class TableRoles extends TableAccess
 {
-    protected $countLeaders;    ///< number of leaders of this role
-    protected $countMembers;    ///< number of members (without leaders) of this role
+    /**
+     * @var int number of leaders of this role
+     */
+    protected $countLeaders;
+    /**
+     * @var int number of members (without leaders) of this role
+     */
+    protected $countMembers;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles.
@@ -271,7 +277,7 @@ class TableRoles extends TableAccess
      * Returns an array with all cost periods with full name in the specific language.
      * @param int $costPeriod The number of the cost period for which the name should be returned
      *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
-     * @return string[]|string Array with all cost or if param costPeriod is set than the full name of that cost period
+     * @return array<int,string>|string Array with all cost or if param costPeriod is set than the full name of that cost period
      */
     public static function getCostPeriods($costPeriod = null)
     {

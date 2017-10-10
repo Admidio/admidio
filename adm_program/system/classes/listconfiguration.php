@@ -28,7 +28,10 @@
  */
 class ListConfiguration extends TableLists
 {
-    protected $columns = array(); // Array with all Listenspaltenobjekte
+    /**
+     * @var array<int,\TableAccess> Array with all Listenspaltenobjekte
+     */
+    protected $columns = array();
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -225,7 +228,7 @@ class ListConfiguration extends TableLists
                 {
                     // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                    if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+                    if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
                     {
                         $columnType = 'numeric';
                     }

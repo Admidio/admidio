@@ -340,10 +340,6 @@
   <string name="INS_SON">Son</string>
   <string name="INS_SPOUSE">Spouse</string>
   <string name="INS_WIFE">Wife</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Create article</string>
-  <string name="INV_INVENTORY">Inventory management</string>
-  <string name="INV_ITEM_MANAGEMENT">Item management</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Hits</string>
   <string name="LNK_CREATE_LINK">Create new link</string>
@@ -982,7 +978,6 @@
   <string name="ROL_NO_DEFAULT_ROLE">You can not remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="ROL_ONLY_ROLE_MEMBERS">Role members only</string>
   <string name="ROL_PREF" description="Abbreviation for Preferences">Pref.</string>
-  <string name="ROL_RIGHT_INVENTORY">Article and inventory management</string>
   <string name="ROL_ROLE_ASSIGNMENT">Role assignment for #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Quarterly</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>

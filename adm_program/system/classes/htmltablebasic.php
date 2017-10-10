@@ -107,14 +107,38 @@
  */
 class HtmlTableBasic extends HtmlElement
 {
-    protected $border;                  ///< String with border attribute and value of the table
-    protected $rowClasses   = array();  ///< Class names to design table rows
-    protected $columnsWidth = array();  ///< Array with values for the columns width
-    protected $thead        = false;    ///< Internal Flag for setted thead element
-    protected $tfoot        = false;    ///< Internal Flag for setted tfoot element
-    protected $tbody        = false;    ///< Internal Flag for setted tbody element
-    protected $columnCount  = 0;        ///< Counter for setted columns
-    protected $rowCount     = 0;        ///< Counter for setted rows in body element
+    /**
+     * @var int String with border attribute and value of the table
+     */
+    protected $border;
+    /**
+     * @var array<int,string> Class names to design table rows
+     */
+    protected $rowClasses = array();
+    /**
+     * @var array<int,string> Array with values for the columns width
+     */
+    protected $columnsWidth = array();
+    /**
+     * @var bool Internal Flag for setted thead element
+     */
+    protected $thead = false;
+    /**
+     * @var bool Internal Flag for setted tfoot element
+     */
+    protected $tfoot = false;
+    /**
+     * @var bool Internal Flag for setted tbody element
+     */
+    protected $tbody = false;
+    /**
+     * @var int Counter for setted columns
+     */
+    protected $columnCount = 0;
+    /**
+     * @var int Counter for setted rows in body element
+     */
+    protected $rowCount = 0;
 
     /**
      * Constructor initializing all class variables

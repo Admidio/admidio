@@ -210,7 +210,6 @@
   <string name="INS_WARNING_SAFE_MODE">Le mode veille du serveur est maintenant actif. Cette fonction pourrait entrainer des problèmes futur avec certaines fonctionnalités du programme.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Bienvenue dans l\'installation d\'Admidio</string>
   <string name="INS_YAHOO_MESSENGER">Yahoo! Messenger</string>
-  <!--Phrases only in Inventorymodule-->
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Cliques</string>
   <string name="LNK_CREATE_LINK">Créer un nouveau lien</string>

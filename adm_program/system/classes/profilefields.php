@@ -19,12 +19,30 @@
  */
 class ProfileFields
 {
-    protected $db;                          ///< An object of the class Database for communication with the database
-    protected $mProfileFields = array();    ///< Array with all user fields objects
-    protected $mUserData      = array();    ///< Array with all user data objects
-    protected $mUserId        = 0;          ///< UserId of the current user of this object
-    protected $noValueCheck   = false;      ///< if true, than no value will be checked if method setValue is called
-    protected $columnsValueChanged = false; ///< flag if a value of one field had changed
+    /**
+     * @var \Database An object of the class Database for communication with the database
+     */
+    protected $db;
+    /**
+     * @var array<string,\TableUserField> Array with all user fields objects
+     */
+    protected $mProfileFields = array();
+    /**
+     * @var array<int,\TableAccess> Array with all user data objects
+     */
+    protected $mUserData = array();
+    /**
+     * @var int UserId of the current user of this object
+     */
+    protected $mUserId = 0;
+    /**
+     * @var bool if true, than no value will be checked if method setValue is called
+     */
+    protected $noValueCheck = false;
+    /**
+     * @var bool flag if a value of one field had changed
+     */
+    protected $columnsValueChanged = false;
 
     /**
      * constructor that will initialize variables and read the profile field structure
@@ -38,8 +56,7 @@ class ProfileFields
     }
 
     /**
-     * Called on serialization of this object. The database object could not
-     * be serialized and should be ignored.
+     * Called on serialization of this object. The database object could not be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()
@@ -68,7 +85,7 @@ class ProfileFields
     }
 
     /**
-     * @return \TableUserField[]
+     * @return array<string,\TableUserField>
      */
     public function getProfileFields()
     {
@@ -616,7 +633,7 @@ class ProfileFields
             }
         }
 
-        $usfId = $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
+        $usfId = (int) $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '')
         {

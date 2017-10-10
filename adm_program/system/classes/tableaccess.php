@@ -30,16 +30,43 @@
  */
 class TableAccess
 {
-    protected $additionalTables = array();  ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
-    protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
-    protected $columnPrefix;        ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
-    protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
-    protected $db;                  ///< An object of the class Database for communication with the database
+    /**
+     * @var array<string,string> Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+     */
+    protected $additionalTables = array();
+    /**
+     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
+     */
+    protected $tableName;
+    /**
+     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+     */
+    protected $columnPrefix;
+    /**
+     * @var string Name of the unique autoincrement index column of the database table
+     */
+    protected $keyColumnName;
+    /**
+     * @var \Database An object of the class Database for communication with the database
+     */
+    protected $db;
 
-    protected $newRecord;              // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    protected $columnsValueChanged;    ///< Flag will be set to true if data in array dbColumns was changed
-    protected $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
-    protected $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    /**
+     * @var bool Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+     */
+    protected $newRecord;
+    /**
+     * @var bool Flag will be set to true if data in array dbColumns was changed
+     */
+    protected $columnsValueChanged;
+    /**
+     * @var array<string,mixed> Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+     */
+    protected $dbColumns = array();
+    /**
+     * @var array<string,array<string,mixed>> Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+     */
+    protected $columnsInfos = array();
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
@@ -82,8 +109,7 @@ class TableAccess
     }
 
     /**
-     * Called on serialization of this object. The database object could not
-     * be serialized and should be ignored.
+     * Called on serialization of this object. The database object could not be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()
@@ -203,7 +229,7 @@ class TableAccess
 
         $columnValue = '';
 
-        if (array_key_exists((string) $columnName, $this->dbColumns))
+        if (array_key_exists($columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
             if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName]))

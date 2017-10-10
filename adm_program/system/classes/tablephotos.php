@@ -28,7 +28,10 @@
  */
 class TablePhotos extends TableAccess
 {
-    protected $hasChildAlbums; ///< Flag if this album has child albums
+    /**
+     * @var bool|null Flag if this album has child albums
+     */
+    protected $hasChildAlbums;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_photos.
@@ -75,7 +78,7 @@ class TablePhotos extends TableAccess
 
     /**
      * Legt den Ordner fuer die Veranstaltung im Dateisystem an
-     * @return string[]|null
+     * @return array<string,string>|null
      */
     public function createFolder()
     {
@@ -184,14 +187,7 @@ class TablePhotos extends TableAccess
                      WHERE pho_pho_id_parent = ? -- $this->getValue(\'pho_id\')';
             $countChildAlbums = $this->db->queryPrepared($sql, array($this->getValue('pho_id')));
 
-            if ($countChildAlbums->fetchColumn() > 0)
-            {
-                $this->hasChildAlbums = true;
-            }
-            else
-            {
-                $this->hasChildAlbums = false;
-            }
+            $this->hasChildAlbums = $countChildAlbums->fetchColumn() > 0;
         }
 
         return $this->hasChildAlbums;

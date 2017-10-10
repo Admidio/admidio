@@ -152,7 +152,7 @@ else
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascriptFile('adm_program/system/js/date-functions.js');
+$page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');
 $page->addJavascript('
     /**
      * Funktion blendet Zeitfelder ein/aus
@@ -256,7 +256,7 @@ $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 $form = new HtmlForm('dates_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode.'&amp;copy='.$getCopy, $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
-$form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+$form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED));
 
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
 if($gPreferences['dates_show_map_link'] == true)
@@ -277,7 +277,7 @@ else
 // if room selection is activated then show a selectbox with all rooms
 if($gPreferences['dates_show_rooms'] == true)
 {
-    if($gDbType === 'mysql')
+    if($gDbType === Database::PDO_ENGINE_MYSQL)
     {
         $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                   FROM '.TBL_ROOMS.'
@@ -298,10 +298,10 @@ $form->closeGroupBox();
 
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
 $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), (bool) $date->getValue('dat_all_day'));
-$form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
-$form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
+$form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED));
 $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
-                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
+                                 array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));

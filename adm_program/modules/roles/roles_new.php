@@ -147,17 +147,17 @@ $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->ge
 if($role->getValue('rol_administrator') == 1)
 {
     $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
-                    array('maxLength' => 100, 'property' => FIELD_READONLY));
+                    array('maxLength' => 100, 'property' => HtmlForm::FIELD_READONLY));
 }
 else
 {
     $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
-                    array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+                    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED));
 }
 $form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3,
                              array('maxLength' => 4000));
 $form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES',
-                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id')));
+                                 array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id')));
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 if($gPreferences['enable_mail_module'])
@@ -258,10 +258,6 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
         $form->addCheckbox('rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),
                            array('icon' => 'weblinks.png'));
     }
-    /*if($gPreferences['enable_inventory_module'] > 0)
-    {
-        $form->addCheckbox('rol_inventory', $gL10n->get('ROL_RIGHT_INVENTORY'), (bool) $role->getValue('rol_inventory'), array('icon' => 'inventory.png'));
-    }*/
     $form->closeGroupBox();
     $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
     $form->addInput('rol_start_date', $gL10n->get('ROL_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));

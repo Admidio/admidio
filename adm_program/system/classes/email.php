@@ -67,14 +67,38 @@ class Email extends PHPMailer
     const SIZE_UNIT_GIBIBYTE = 'GiB';
     const SIZE_UNIT_TEBIBYTE = 'TiB';
 
-    private $emText           = ''; // plain text of email
-    private $emHtmlText       = ''; // html text of email
-    private $emAddresses      = array(); // Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
-    private $emSender         = array(); // mail sender address and Name
-    private $emCopyToSender   = false;
+    /**
+     * @var string Plain text of email
+     */
+    private $emText = '';
+    /**
+     * @var string HTML text of email
+     */
+    private $emHtmlText = '';
+    /**
+     * @var array<int,string> Hier werden noch mal alle Empfaenger der Mail reingeschrieben, fuer den Fall das eine Kopie der Mail angefordert wird...
+     */
+    private $emAddresses = array();
+    /**
+     * @var array<string,string> Mail sender address and Name
+     */
+    private $emSender = array();
+    /**
+     * @var bool
+     */
+    private $emCopyToSender = false;
+    /**
+     * @var bool
+     */
     private $emListRecipients = false;
-    private $emSendAsHTML     = false;
-    private $emBccArray       = array();
+    /**
+     * @var bool
+     */
+    private $emSendAsHTML = false;
+    /**
+     * @var array<int,array<string,string>>
+     */
+    private $emBccArray = array();
 
     /**
      * Email constructor.
@@ -524,7 +548,7 @@ class Email extends PHPMailer
     {
         global $gPreferences;
 
-        $maxUploadSize = admFuncMaxUploadSize();
+        $maxUploadSize = PhpIni::getUploadMaxSize();
         $currentAttachmentSize = $gPreferences['max_email_attachment_size'] * pow(1024, 2);
 
         $attachmentSize = min($maxUploadSize, $currentAttachmentSize);

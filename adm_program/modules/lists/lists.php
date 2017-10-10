@@ -78,9 +78,9 @@ $page->addJavascript('
         roleId    = elementId.substr(elementId.search(/_/) + 1);
 
         if ($(this).val() === "mylist") {
-            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.(int) $getActiveRole.'";
+            self.location.href = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php?rol_id=" + roleId + "&active_role='.(int) $getActiveRole.'";
         } else {
-            self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
+            self.location.href = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
         }
     });',
     true
@@ -281,7 +281,7 @@ foreach($listsResult['recordset'] as $row)
                 {
                     $html .= '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                 }
-                if($gCurrentUser->hasRightViewFormerRolesMembers($role->getValue('rol_id')) && $getActiveRole && $row['num_former'] > 0)
+                if($gCurrentUser->hasRightViewFormerRolesMembers((int) $role->getValue('rol_id')) && $getActiveRole && $row['num_former'] > 0)
                 {
                     // show former members
                     if($row['num_former'] == 1)

@@ -26,12 +26,30 @@
  */
 class SystemMail extends Email
 {
+    /**
+     * @var \TableText
+     */
     private $smTextObject;
+    /**
+     * @var \Organization
+     */
     private $smOrganization;
-    private $db;                    ///< An object of the class Database for communication with the database
+    /**
+     * @var \Database An object of the class Database for communication with the database
+     */
+    private $db;
+    /**
+     * @var string
+     */
     private $smMailText;
+    /**
+     * @var string
+     */
     private $smMailHeader;
-    private $smVariables = array(); // speichert zusaetzliche Variablen fuer den Mailtext
+    /**
+     * @var array<int,string> speichert zusaetzliche Variablen fuer den Mailtext
+     */
+    private $smVariables = array();
 
     /**
      * Constructor that will create an object of a SystemMail to handle all system notifications.

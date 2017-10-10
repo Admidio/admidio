@@ -25,10 +25,22 @@
  */
 class Organization extends TableAccess
 {
-    protected $bCheckChildOrganizations = false;   ///< Flag will be set if the class had already search for child organizations
-    protected $childOrganizations       = array(); ///< Array with all child organizations of this organization
-    protected $preferences              = array(); ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
-    protected $countOrganizations       = 0;       ///< Number of all organizations in database
+    /**
+     * @var bool Flag will be set if the class had already search for child organizations
+     */
+    protected $bCheckChildOrganizations = false;
+    /**
+     * @var array<int,string> Array with all child organizations of this organization
+     */
+    protected $childOrganizations = array();
+    /**
+     * @var array<string,string> Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+     */
+    protected $preferences = array();
+    /**
+     * @var int Number of all organizations in database
+     */
+    protected $countOrganizations = 0;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
@@ -207,7 +219,6 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_this_list_view', 1);
         $roleAdministrator->setValue('rol_all_lists_view', 1);
         $roleAdministrator->setValue('rol_administrator', 1);
-        $roleAdministrator->setValue('rol_inventory', 1);
         $roleAdministrator->save();
 
         // Create role member
@@ -361,7 +372,7 @@ class Organization extends TableAccess
      * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
      * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
      *                       otherwise it will be @b org_shortname
-     * @return string[] Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+     * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
@@ -388,13 +399,14 @@ class Organization extends TableAccess
         $childOrganizations = array();
         while ($row = $pdoStatement->fetch())
         {
+            $orgId = (int) $row['org_id'];
             if ($longname)
             {
-                $childOrganizations[$row['org_id']] = $row['org_longname'];
+                $childOrganizations[$orgId] = $row['org_longname'];
             }
             else
             {
-                $childOrganizations[$row['org_id']] = $row['org_shortname'];
+                $childOrganizations[$orgId] = $row['org_shortname'];
             }
         }
         return $childOrganizations;
@@ -429,7 +441,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return string[] Returns an array with all child organizations
+     * @return array<int,string> Returns an array with all child organizations
      */
     protected function getChildOrganizations()
     {
@@ -532,7 +544,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return array[]
+     * @return array<string,mixed>
      */
     public function getDbColumns()
     {

@@ -55,7 +55,7 @@ $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
 // create a page to enter all necessary data to create a administrator user
 $form = new HtmlFormInstallation('installation-form', 'installation.php?step=create_config');
-$form->addHeader('<script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/libs/zxcvbn/dist/zxcvbn.js"></script>');
+$form->addHeader('<script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/zxcvbn/dist/zxcvbn.js"></script>');
 $form->addHeader('
     <script type="text/javascript">
         $(function() {
@@ -76,17 +76,17 @@ $form->addHeader('
 ');
 $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
-$form->addInput('user_last_name',  $gL10n->get('SYS_LASTNAME'),  $userLastName,  array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-$form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-$form->addInput('user_email',      $gL10n->get('SYS_EMAIL'),     $userEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
-$form->addInput('user_login',      $gL10n->get('SYS_USERNAME'),  $userLogin,     array('maxLength' => 35, 'property' => FIELD_REQUIRED));
+$form->addInput('user_last_name',  $gL10n->get('SYS_LASTNAME'),  $userLastName,  array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addInput('user_email',      $gL10n->get('SYS_EMAIL'),     $userEmail,     array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED));
+$form->addInput('user_login',      $gL10n->get('SYS_USERNAME'),  $userLogin,     array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED));
 $form->addInput(
     'user_password', $gL10n->get('SYS_PASSWORD'), null,
-    array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
+    array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
 );
 $form->addInput(
     'user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null,
-    array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+    array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
 );
 $form->closeGroupBox();
 $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=create_organization'));
