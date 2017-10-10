@@ -293,7 +293,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $men_display = false;
-                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                        if($gCurrentUser->getValue('usr_id') === 0 && $gPreferences['registration_enable_module'] > 0)
                         {
                             $men_display = true;
                         }
@@ -450,7 +450,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $men_display = false;
-                        if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+                        if($gCurrentUser->getValue('usr_id') === 0 && $gPreferences['registration_enable_module'] > 0)
                         {
                             $men_display = true;
                         }

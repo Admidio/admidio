@@ -596,7 +596,7 @@ class ComponentUpdate extends Component
         // Menu entries for the standart installation
         $sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_parent_id, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
                    VALUES (1, NULL, 1, 1, NULL, NULL, \'\', \'SYS_MODULES\', \'\', 0)
-                        , (2, NULL, 3, 1, NULL, NULL, \'\', \'SYS_ADMINISTRATION\', \'\', 1)
+                        , (2, NULL, 2, 1, NULL, NULL, \'\', \'SYS_ADMINISTRATION\', \'\', 1)
                         , (3, NULL, 3, 1, NULL, NULL, \'\', \'MEN_PLUGIN\', \'\', 1)
                         , (4, 1, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\', 0)
                         , (5, 1, 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1)

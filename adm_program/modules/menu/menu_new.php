@@ -22,8 +22,6 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getMenId = admFuncVariableIsValid($_GET, 'men_id', 'int');
 
-$men_groups = array('1' => 'Administration', '2' => 'Modules', '3' => 'Plugins');
-
 // Rechte pruefen
 if(!$gCurrentUser->isAdministrator())
 {
@@ -149,13 +147,15 @@ $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_
 
 $form->addCheckbox('men_need_enable', 'need to be enabled in config', $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
 
-$form->addSelectBox('men_display', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
+$form->addSelectBox('men_display', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
                                                                                               'defaultValue' => $roleViewSet,
                                                                                               'multiselect'  => true));
 
 $form->addInput('men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), array('maxLength' => 100));
 
-$form->addInput('men_icon', $gL10n->get('SYS_ICON'), $menu->getValue('men_icon', 'database'), array('maxLength' => 100));
+$array_icon = array_slice(scandir(THEME_ADMIDIO_PATH . '/icons'), 2);
+$form->addSelectBox('men_icon', $gL10n->get('SYS_ICON'), $array_icon, array('defaultValue' => $menu->getValue('men_icon', 'database'),
+                                                                            'showContextDependentFirstEntry' => true));
 
 $form->addInput('men_translate_name', 'Translation '.$gL10n->get('SYS_NAME'), $menu->getValue('men_translate_name', 'database'), array('maxLength' => 100));
 
