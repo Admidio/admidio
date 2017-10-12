@@ -1841,9 +1841,9 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Closes a field structure that was added with the method openControlStructure.
-     * @param string|string[] $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     *                                    If set the complete text will be shown after the form element.
-     * @param string[]        $parameters If you need an additional parameter for the text you can set this array.
+     * @param string|string[]   $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
+     *                                      If set the complete text will be shown after the form element.
+     * @param array<int,string> $parameters If you need an additional parameter for the text you can set this array.
      */
     protected function closeControlStructure($helpTextId = '', array $parameters = array())
     {

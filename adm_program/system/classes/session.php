@@ -33,7 +33,7 @@
 class Session extends TableAccess
 {
     /**
-     * @var array Array with all objects of this session object.
+     * @var array<string,mixed> Array with all objects of this session object.
      */
     protected $mObjectArray = array();
     /**

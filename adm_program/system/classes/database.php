@@ -573,11 +573,11 @@ class Database
      * then this statement will be written to the error log. If it's a @b SELECT statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
-     * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param array  $params     An array of parameters to bind to the prepared statement.
-     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
-     *                           occurred the error with a backtrace will be send to the browser. If set to
-     *                           @b false no error will be shown and the script will be continued.
+     * @param string           $sql        A string with the sql statement that should be executed in database.
+     * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
+     * @param bool             $showError  Default will be @b true and if an error the script will be terminated and
+     *                                     occurred the error with a backtrace will be send to the browser. If set to
+     *                                     @b false no error will be shown and the script will be continued.
      * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */

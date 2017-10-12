@@ -293,20 +293,20 @@ function admFuncProcessableImageSize()
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
- * @param array  $array        The array with the element that should be checked
- * @param string $variableName Name of the array element that should be checked
- * @param string $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
- *                             @b date or @b file that is expected and which will be checked.
- *                             Datatype @b date expects a date that has the Admidio default format from the
- *                             preferences or the english date format @b Y-m-d
- * @param array  $options      (optional) An array with the following possible entries:
- *                             - @b defaultValue : A value that will be set if the variable has no value
- *                             - @b requireValue : If set to @b true than a value is required otherwise the function
- *                                                 returns an error
- *                             - @b validValues :  An array with all values that the variable could have. If another
- *                                                 value is found than the function returns an error
- *                             - @b directOutput : If set to @b true the function returns only the error string, if set
- *                                                 to false a html message with the error will be returned
+ * @param array<string,mixed> $array        The array with the element that should be checked
+ * @param string              $variableName Name of the array element that should be checked
+ * @param string              $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
+ *                                          @b date or @b file that is expected and which will be checked.
+ *                                          Datatype @b date expects a date that has the Admidio default format from the
+ *                                          preferences or the english date format @b Y-m-d
+ * @param array<string,mixed> $options      (optional) An array with the following possible entries:
+ *                                          - @b defaultValue : A value that will be set if the variable has no value
+ *                                          - @b requireValue : If set to @b true than a value is required otherwise the function
+ *                                                              returns an error
+ *                                          - @b validValues :  An array with all values that the variable could have. If another
+ *                                                              value is found than the function returns an error
+ *                                          - @b directOutput : If set to @b true the function returns only the error string, if set
+ *                                                              to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
  * @par Examples
@@ -787,7 +787,7 @@ function noHTML($input, $encoding = 'UTF-8')
 
 /**
  * Get an string with question marks that are comma separated.
- * @param array $valuesArray An array with the values that should be replaced with question marks
+ * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
  * @return string Question marks string
  */
 function replaceValuesArrWithQM(array $valuesArray)

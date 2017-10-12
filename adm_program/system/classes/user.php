@@ -1211,9 +1211,9 @@ class User extends TableAccess
     }
 
     /**
-     * @param bool[] $rightsList
-     * @param string $rightName
-     * @param int    $roleId
+     * @param array<int,bool> $rightsList
+     * @param string          $rightName
+     * @param int             $roleId
      * @return bool
      */
     private function hasRightRole(array $rightsList, $rightName, $roleId)

@@ -123,11 +123,11 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add a input field with attribute properties.
-     * @param string   $type          Type of input field e.g. 'text'
-     * @param string   $name          Name of the input field
-     * @param string   $id            Optional ID for the input
-     * @param string   $value         Value of the field (Default: empty)
-     * @param string[] $arrAttributes Further attributes as array with key/value pairs
+     * @param string               $type          Type of input field e.g. 'text'
+     * @param string               $name          Name of the input field
+     * @param string               $id            Optional ID for the input
+     * @param string               $value         Value of the field (Default: empty)
+     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
      */
     public function addSimpleInput($type, $name, $id = null, $value = '', array $arrAttributes = null)
     {
@@ -181,12 +181,12 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add inline element into current division.
-     * @param string $value    Option value
-     * @param string $label    Label of the option
-     * @param string $id       Optional Id of the option
-     * @param bool   $selected Mark as selected (Default: false)
-     * @param bool   $disable  Disable option (optional)
-     * @param string[] $arrAttributes Further attributes as array with key/value pairs
+     * @param string               $value         Option value
+     * @param string               $label         Label of the option
+     * @param string               $id            Optional Id of the option
+     * @param bool                 $selected      Mark as selected (Default: false)
+     * @param bool                 $disable       Disable option (optional)
+     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
      */
     public function addOption($value, $label, $id = null, $selected = false, $disable = false, array $arrAttributes = null)
     {
@@ -221,10 +221,10 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add an option group.
-     * @param string   $label         Label of the option group
-     * @param string   $id            Optional Id of the group
-     * @param bool     $disable       Disable option group (Default: false)
-     * @param string[] $arrAttributes Further attributes as array with key/value pairs
+     * @param string               $label         Label of the option group
+     * @param string               $id            Optional Id of the group
+     * @param bool                 $disable       Disable option group (Default: false)
+     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
      */
     public function addOptionGroup($label, $id = null, $disable = false, array $arrAttributes = null)
     {
@@ -252,10 +252,10 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add an option group.
-     * @param string   $name          Name of the select
-     * @param string   $id            Optional Id of the select
-     * @param string[] $arrAttributes Further attributes as array with key/value pairs
-     * @param bool     $disable       Disable select (Default: false)
+     * @param string               $name          Name of the select
+     * @param string               $id            Optional Id of the select
+     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
+     * @param bool                 $disable       Disable select (Default: false)
      */
     public function addSelect($name, $id = null, array $arrAttributes = null, $disable = false)
     {
@@ -310,13 +310,13 @@ class HtmlFormBasic extends HtmlElement
 
     /**
      * Add a text area.
-     * @param string   $name          Name of the text area
-     * @param int      $rows          Number of rows
-     * @param int      $cols          Number of cols
-     * @param string   $text          Text as content
-     * @param string   $id            Optional Id
-     * @param string[] $arrAttributes Further attributes as array with key/value pairs
-     * @param bool     $disable       Disable text area (Default: false)
+     * @param string               $name          Name of the text area
+     * @param int                  $rows          Number of rows
+     * @param int                  $cols          Number of cols
+     * @param string               $text          Text as content
+     * @param string               $id            Optional Id
+     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
+     * @param bool                 $disable       Disable text area (Default: false)
      */
     public function addTextArea($name, $rows, $cols, $text = '', $id = null, array $arrAttributes = null, $disable = false)
     {

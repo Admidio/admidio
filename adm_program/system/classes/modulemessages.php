@@ -74,7 +74,7 @@ class ModuleMessages
     /**
      * check for Group and give back a array with group ID[0] and if it is active, inactive or both [1].
      * @param string $groupString (e.g: "groupID: 4-2")
-     * @return array Returns the groupId and status
+     * @return array<string,string|int> Returns the groupId and status
      */
     public function msgGroupSplit($groupString)
     {

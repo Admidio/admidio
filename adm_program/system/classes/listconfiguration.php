@@ -175,12 +175,12 @@ class ListConfiguration extends TableLists
 
     /**
      * prepare SQL to list configuration
-     * @param int[]  $roleIds Array with all roles, which members are shown
-     * @param int    $showFormerMembers 0 - Only active members of a role
-     *                             1 - Only former members
-     * @param string $startDate
-     * @param string $endDate
-     * @param int[]  $relationtypeIds
+     * @param array<int,int> $roleIds Array with all roles, which members are shown
+     * @param int            $showFormerMembers 0 - Only active members of a role
+     *                                          1 - Only former members
+     * @param string         $startDate
+     * @param string         $endDate
+     * @param array<int,int> $relationtypeIds
      * @return string
      */
     public function getSQL(array $roleIds, $showFormerMembers = 0, $startDate = null, $endDate = null, array $relationtypeIds = array())

@@ -169,7 +169,7 @@ class PhpIni
 
     /**
      * Sets the allowed base-dirs
-     * @param string[] $dirPaths The paths to set as allowed base-dirs
+     * @param array<int,string> $dirPaths The paths to set as allowed base-dirs
      * @return bool|string
      * @throws Exception
      */

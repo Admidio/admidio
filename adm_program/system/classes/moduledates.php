@@ -144,7 +144,7 @@ class ModuleDates extends Modules
      * SQL query returns an array with available dates.
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit        Limit of query rows (default: 0)
-     * @return array Array with all results, dates and parameters.
+     * @return array<string,mixed> Array with all results, dates and parameters.
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -354,7 +354,7 @@ class ModuleDates extends Modules
 
     /**
      * Get additional tables for sql statement
-     * @return array Returns an array of a SQL string with the necessary joins and it's query params.
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
      */
     private function sqlGetAdditional()
     {
@@ -408,7 +408,7 @@ class ModuleDates extends Modules
     /**
      * Add several conditions to an SQL string that could later be used
      * as additional conditions in other SQL queries.
-     * @return array Returns an array of a SQL string with additional conditions and it's query params.
+     * @return array<string,mixed> Returns an array of a SQL string with additional conditions and it's query params.
      */
     private function getSqlConditions()
     {

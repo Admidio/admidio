@@ -183,7 +183,7 @@ class Participants
      * Return all participants with surname,firstname, leader and approval status as array
      * @param int    $roleId
      * @param string $order Values ASC/DESC Default: 'ASC'
-     * @return array|false Returns all participants in an array with fieldnames ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
+     * @return false|array<int,array<string,string,int,bool>> Returns all participants in an array with fieldnames ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
      */
     public function getParticipantsArray($roleId = 0, $order = 'ASC')
     {

@@ -105,7 +105,7 @@ class ModuleWeblinks extends Modules
      * Function returns a set of links with corresponding information
      * @param int $startElement Start element of result. First (and default) is 0.
      * @param int $limit        Number of elements returned max. Default NULL will take number from preferences.
-     * @return array with links and corresponding information
+     * @return array<string,mixed> with links and corresponding information
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -192,9 +192,8 @@ class ModuleWeblinks extends Modules
     }
 
     /**
-     * Add several conditions to an SQL string that could later be used
-     * as additional conditions in other SQL queries.
-     * @return array Returns an array of a SQL string with additional conditions and it's query params.
+     * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
+     * @return array<string,string|int> Returns an array of a SQL string with additional conditions and it's query params.
      */
     private function getSqlConditions()
     {

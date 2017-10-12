@@ -65,7 +65,7 @@ class RolesRights extends TableAccess
 
     /**
      * Add all roles of the parameter array to the current roles rights object.
-     * @param int[] $roleIds Array with all role ids that should be add.
+     * @param array<int,int> $roleIds Array with all role ids that should be add.
      */
     public function addRoles(array $roleIds)
     {
@@ -155,7 +155,7 @@ class RolesRights extends TableAccess
     /**
      * Check if one of the assigned roles is also a role of the current object.
      * Method will return true if at least one role was found.
-     * @param int[] $assignedRoles Array with all assigned roles of the user whose rights should be checked
+     * @param array<int,int> $assignedRoles Array with all assigned roles of the user whose rights should be checked
      * @return bool Return @b true if at least one role of the assigned roles exists at the current object.
      */
     public function hasRight(array $assignedRoles)
@@ -167,8 +167,8 @@ class RolesRights extends TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array  $queryParams       The query params for the prepared statement
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
@@ -197,7 +197,7 @@ class RolesRights extends TableAccess
 
     /**
      * Remove all roles of the parameter array from the current roles rights object.
-     * @param int[] $roleIds Array with all role ids that should be removed.
+     * @param array<int,int> $roleIds Array with all role ids that should be removed.
      */
     public function removeRoles(array $roleIds)
     {
@@ -215,7 +215,7 @@ class RolesRights extends TableAccess
      * Save all roles of the array to the current roles rights object.
      * The method will only save the changes to an existing object. Therefore
      * it will check which roles already exists and which roles must be removed.
-     * @param int[] $roleIds Array with all role ids that should be saved.
+     * @param array<int,int> $roleIds Array with all role ids that should be saved.
      */
     public function saveRoles(array $roleIds)
     {

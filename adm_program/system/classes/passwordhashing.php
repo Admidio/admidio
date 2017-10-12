@@ -45,9 +45,9 @@ class PasswordHashing
     /**
      * Hash the given password with the given options. The default algorithm uses the password_* methods,
      * otherwise the builtin helper for SHA-512 crypt hashes from the operating system. Minimum cost is 10.
-     * @param string $password  The password string
-     * @param string $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'BCRYPT' or 'SHA512'.
-     * @param array  $options   The hash-options array
+     * @param string              $password  The password string
+     * @param string              $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'BCRYPT' or 'SHA512'.
+     * @param array<string,mixed> $options   The hash-options array
      * @return string|false Returns the hashed password or false if an error occurs
      */
     public static function hash($password, $algorithm = 'DEFAULT', array $options = array())
@@ -123,9 +123,9 @@ class PasswordHashing
     /**
      * Checks if the given hash is generated from the given options. The default algorithm uses the
      * password_* methods, otherwise the builtin helper for SHA-512 crypt hashes from the operating system.
-     * @param string $hash      The hash string that should checked
-     * @param string $algorithm The hash-algorithm the hash should match to
-     * @param array  $options   The hash-options the hash should match to
+     * @param string              $hash      The hash string that should checked
+     * @param string              $algorithm The hash-algorithm the hash should match to
+     * @param array<string,mixed> $options   The hash-options the hash should match to
      * @return bool Returns false if the hash match the given options and false if not
      */
     public static function needsRehash($hash, $algorithm = 'DEFAULT', array $options = array())
@@ -302,7 +302,7 @@ class PasswordHashing
     /**
      * Provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
      * @param string $hash The hash you want the get infos about
-     * @return array|string Returns an array or string with infos about the given hash
+     * @return string|array<string,mixed> Returns an array or string with infos about the given hash
      */
     public static function hashInfo($hash)
     {
@@ -330,8 +330,8 @@ class PasswordHashing
 
     /**
      * Calculates the strength of a given password from 0-4.
-     * @param string   $password The password to check
-     * @param string[] $userData An array of strings for dictionary attacks
+     * @param string            $password The password to check
+     * @param array<int,string> $userData An array of strings for dictionary attacks
      * @return int Returns the score of the password
      */
     public static function passwordStrength($password, array $userData = array())
@@ -343,11 +343,11 @@ class PasswordHashing
 
     /**
      * Run a benchmark to get the best fitting cost value. The cost value can vary from 4 to 31.
-     * @param float  $maxTime   The maximum time the hashing process should take in seconds
-     * @param string $password  The password to test
-     * @param string $algorithm The algorithm to test
-     * @param array  $options   The options to test
-     * @return array Returns an array with the maximum tested cost with the required time
+     * @param float               $maxTime   The maximum time the hashing process should take in seconds
+     * @param string              $password  The password to test
+     * @param string              $algorithm The algorithm to test
+     * @param array<string,mixed> $options   The options to test
+     * @return array<int,array<string,int|float>> Returns an array with the maximum tested cost with the required time
      */
     public static function costBenchmark($maxTime = 0.35, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => null))
     {

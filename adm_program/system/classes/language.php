@@ -84,9 +84,9 @@ class Language
     }
 
     /**
-     * @param \SimpleXMLElement[] $xmlLanguageObjects SimpleXMLElement array of each language path is stored
-     * @param string              $language           Language code
-     * @param string              $textId             Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
+     * @param string                          $language           Language code
+     * @param string                          $textId             Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id or empty string if not found.
      */
     private function searchTextIdInLangObject(array $xmlLanguageObjects, $language, $textId)
@@ -135,8 +135,8 @@ class Language
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
-     * @param string   $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @param string[] $params Optional parameter for language string of translation id
+     * @param string            $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param array<int,string> $params Optional parameter for language string of translation id
      *
      * param  string $param1,$param2... The function accepts an undefined number of values which will be used
      *                                  to replace the placeholder in the text.
@@ -356,10 +356,10 @@ class Language
 
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param \SimpleXMLElement[] $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param string              $languagePath The path in which the different language xml files are.
-     * @param string              $language     The ISO code of the language in which the text will be searched
-     * @param string              $textId       The id of the text that will be searched in the file.
+     * @param array<string,\SimpleXMLElement> $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param string                          $languagePath The path in which the different language xml files are.
+     * @param string                          $language     The ISO code of the language in which the text will be searched
+     * @param string                          $textId       The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
     public function searchLanguageText(array &$objectArray, $languagePath, $language, $textId)

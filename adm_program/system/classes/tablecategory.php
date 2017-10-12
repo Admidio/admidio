@@ -267,7 +267,7 @@ class TableCategory extends TableAccess
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of adm_categories will be read and stored in the object.
-     * @param array $columnArray An array where every element index is the column name and the value is the column value
+     * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns @b true if one record is found
      */
     public function readDataByColumns(array $columnArray)
