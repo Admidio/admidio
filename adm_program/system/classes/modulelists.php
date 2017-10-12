@@ -356,7 +356,7 @@ class ModuleLists extends Modules
         $configurations = array();
         while($row = $pdoStatement->fetch())
         {
-            $configurations[] = array($row['lst_id'], $row['lst_name'], $row['lst_global']);
+            $configurations[] = array((int) $row['lst_id'], $row['lst_name'], (bool) $row['lst_global']);
         }
         return $configurations;
     }
