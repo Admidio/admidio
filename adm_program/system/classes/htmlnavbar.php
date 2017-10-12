@@ -202,11 +202,11 @@ class HtmlNavbar
     }
 
     /**
-     * @param array<int,array<string,string>> $items
-     * @param string                          $class
+     * @param array<string,array<string,string|array<string,array<string,string>>>> $items
+     * @param string                                                                $class
      * @return string
      */
-    private function getNavHtml($items, $class = '')
+    private function getNavHtml(array $items, $class = '')
     {
         $html = '<ul class="nav navbar-nav ' . $class . '">';
 

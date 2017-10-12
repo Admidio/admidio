@@ -191,7 +191,7 @@ if($getMode === 1)
     {
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
-        $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+        $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
     }
     else
     {

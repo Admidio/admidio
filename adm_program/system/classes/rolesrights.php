@@ -69,7 +69,6 @@ class RolesRights extends TableAccess
      */
     public function addRoles(array $roleIds)
     {
-        $roleIds = array_map('intval', $roleIds);
         foreach ($roleIds as $roleId)
         {
             if (!in_array($roleId, $this->rolesIds, true) && $roleId > 0)
@@ -201,7 +200,6 @@ class RolesRights extends TableAccess
      */
     public function removeRoles(array $roleIds)
     {
-        $roleIds = array_map('intval', $roleIds);
         foreach ($roleIds as $roleId)
         {
             if (in_array($roleId, $this->rolesIds, true))
@@ -219,8 +217,6 @@ class RolesRights extends TableAccess
      */
     public function saveRoles(array $roleIds)
     {
-        $roleIds = array_map('intval', $roleIds);
-
         // if array is empty or only contain the role id = 0 then delete all roles rights
         if(count($roleIds) === 0 || (count($roleIds) === 1 && $roleIds[0] === 0))
         {

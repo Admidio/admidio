@@ -295,10 +295,10 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
 
-        // if roles for visibility are assigned to the category than check if the assigned roles of event particiaption
+        // if roles for visibility are assigned to the category than check if the assigned roles of event participation
         // are within the visibility roles set otherwise show error
         if(count($rightCategoryView->getRolesIds()) > 0
-        && count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
+        && count(array_intersect(array_map('intval', $_POST['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
         {
             $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
             // => EXIT
@@ -368,12 +368,14 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // save event in database
     $returnCode = $date->save();
 
+    $datId = (int) $date->getValue('dat_id');
+
     if(isset($_POST['adm_event_participation_right']))
     {
 
         // save changed roles rights of the category
-        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
-        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
+        $rightEventParticipation->saveRoles(array_map('intval', $_POST['adm_event_participation_right']));
     }
 
     if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
@@ -492,7 +494,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
         }
 
-        $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id'));
+        $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId);
         $role->setValue('rol_description', $date->getValue('dat_headline'));
 
         // save role in database
@@ -531,7 +533,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // only change name of role if no custom name was set
         if(strpos($role->getValue('rol_name'), $gL10n->get('DAT_DATE')) !== false)
         {
-            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId;
         }
         else
         {

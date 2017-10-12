@@ -45,7 +45,7 @@ function admStrToUpper($string)
 /**
  * removes html, php code and blancs at beginning and end
  * of string or all elements of array without ckeditor variables !!!
- * @param array<string,string> $srcArray
+ * @param array<string,string|array<mixed,string>> $srcArray
  * @return array<string,string>
  */
 function admStrStripTagsSpecial(array $srcArray)
@@ -69,8 +69,8 @@ function admStrStripTagsSpecial(array $srcArray)
 
 /**
  * removes html, php code and whitespaces at beginning and end of string or all elements of array
- * @param string|string[] $value
- * @return string|string[]
+ * @param string|array<mixed,string> $value
+ * @return string|array<mixed,string>
  */
 function strStripTags($value)
 {

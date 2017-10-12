@@ -141,7 +141,7 @@ class TableFolder extends TableAccess
     /**
      * Legt einen neuen Ordner im Dateisystem an
      * @param string $folderName
-     * @return array<string,string>|null
+     * @return null|array<string,string>
      */
     public function createFolder($folderName)
     {
