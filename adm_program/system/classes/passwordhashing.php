@@ -347,7 +347,7 @@ class PasswordHashing
      * @param string              $password  The password to test
      * @param string              $algorithm The algorithm to test
      * @param array<string,mixed> $options   The options to test
-     * @return array<int,array<string,int|float>> Returns an array with the maximum tested cost with the required time
+     * @return array<string,int|float> Returns an array with the maximum tested cost with the required time
      */
     public static function costBenchmark($maxTime = 0.35, $password = 'password', $algorithm = 'DEFAULT', array $options = array('cost' => null))
     {

@@ -46,7 +46,7 @@ function admStrToUpper($string)
  * removes html, php code and blancs at beginning and end
  * of string or all elements of array without ckeditor variables !!!
  * @param array<string,string|array<mixed,string>> $srcArray
- * @return array<string,string>
+ * @return array<string,string|array<mixed,string>>
  */
 function admStrStripTagsSpecial(array $srcArray)
 {
@@ -112,8 +112,8 @@ function strAddSlashesDeep($value)
 
 /**
  * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
- * @param string|string[] $value
- * @return string|string[]
+ * @param string|array<mixed,string|array> $value
+ * @return string|array<mixed,string|array>
  */
 function strStripSlashesDeep($value)
 {

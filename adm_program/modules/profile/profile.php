@@ -34,7 +34,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
  * diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder dabei wird der Inhalt richtig formatiert
  * @param string $fieldNameIntern
  * @param \User  $user
- * @return false|string[]
+ * @return false|array<string,string>
  */
 function getFieldCode($fieldNameIntern, User $user)
 {
