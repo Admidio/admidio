@@ -92,8 +92,8 @@ function strStripTags($value)
 
 /**
  * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
- * @param string|string[] $value
- * @return string|string[]
+ * @param string|array<mixed,string|array> $value
+ * @return string|array<mixed,string|array>
  */
 function strAddSlashesDeep($value)
 {
