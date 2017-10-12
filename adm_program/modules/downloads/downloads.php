@@ -278,11 +278,14 @@ if ($gCurrentUser->editDownloadRight())
         {
             foreach ($folderContent['additionalFolders'] as $nextFolder)
             {
-                $columnValues = array('<img src="'. THEME_URL. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" />',
-                                      $nextFolder['fol_name'],
-                                      '',
-                                      '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
-                                          <img src="'. THEME_URL. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>');
+                $columnValues = array(
+                    '<img src="'. THEME_URL. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" />',
+                    $nextFolder['fol_name'],
+                    '',
+                    '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
+                        <img src="'. THEME_URL. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" />
+                    </a>'
+                );
                 $adminTable->addRowByArray($columnValues);
             }
         }
@@ -302,11 +305,14 @@ if ($gCurrentUser->editDownloadRight())
                     $iconFile = $iconFileExtension[$fileExtension];
                 }
 
-                $columnValues = array('<img src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
-                                      $nextFile['fil_name'],
-                                      $nextFile['fil_size']. ' kB&nbsp;',
-                                      '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
-                                          <img src="'. THEME_URL. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>');
+                $columnValues = array(
+                    '<img src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
+                    $nextFile['fil_name'],
+                    $nextFile['fil_size']. ' kB&nbsp;',
+                    '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
+                        <img src="'. THEME_URL. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" />
+                    </a>'
+                );
                 $adminTable->addRowByArray($columnValues);
             }
         }
