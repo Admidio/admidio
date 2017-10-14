@@ -1580,7 +1580,7 @@ class HtmlForm extends HtmlFormBasic
     {
         $selectBoxEntries = array();
 
-        $xmlRootNode = new \SimpleXMLElement($xmlFile, null, true);
+        $xmlRootNode = new \SimpleXMLElement($xmlFile, 0, true);
         foreach ($xmlRootNode->children() as $xmlChildNode)
         {
             $key   = '';

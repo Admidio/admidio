@@ -264,7 +264,7 @@ class Database
      */
     protected function getPropertyFromDatabaseConfig($property)
     {
-        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', null, true);
+        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
         return (string) $node[0];
     }
