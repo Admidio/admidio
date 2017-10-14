@@ -10,8 +10,8 @@
  */
 
 /**
- * @param  int    $days Count of days for offset
- * @param  bool   $sub  If true the days are subtracted
+ * @param int  $days Count of days for offset
+ * @param bool $sub  If true the days are subtracted
  * @return string
  */
 function addDaysToDate($days, $sub = false)

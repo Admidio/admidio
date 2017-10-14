@@ -50,7 +50,7 @@ class AdmException extends Exception
     {
         global $gLogger, $gDb;
 
-        if ($gDb instanceof \Database)
+        if ($gDb instanceof Database)
         {
             // if there is an open transaction we should perform a rollback
             $gDb->rollback();
@@ -132,7 +132,7 @@ class AdmException extends Exception
         global $gMessage;
 
         // display database error to user
-        if ($gMessage instanceof \Message)
+        if ($gMessage instanceof Message)
         {
             $gMessage->show($this->getText());
             // => EXIT

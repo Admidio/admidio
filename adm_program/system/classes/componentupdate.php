@@ -48,7 +48,7 @@ class ComponentUpdate extends Component
 
     /**
      * Constructor that will create an object for component updating.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(Database $database)
     {

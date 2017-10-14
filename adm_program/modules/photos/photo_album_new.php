@@ -74,12 +74,12 @@ if (isset($_SESSION['photo_album_request']))
 
 /**
  * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
- * @param int    $parentId
- * @param string $vorschub
- * @param        $photoAlbum
- * @param        $phoId
+ * @param int         $parentId
+ * @param string      $vorschub
+ * @param TablePhotos $photoAlbum
+ * @param int         $phoId
  */
-function subfolder($parentId, $vorschub, $photoAlbum, $phoId)
+function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
 {
     global $gDb, $gCurrentOrganization, $photoAlbumsArray;
 

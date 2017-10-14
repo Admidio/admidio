@@ -37,7 +37,7 @@ class Session extends TableAccess
      */
     protected $mObjectArray = array();
     /**
-     * @var \AutoLogin|null Object of table auto login that will handle an auto login
+     * @var AutoLogin|null Object of table auto login that will handle an auto login
      */
     protected $mAutoLogin;
     /**
@@ -48,10 +48,10 @@ class Session extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
-     * @param \Database  $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int|string $session  The recordset of the session with this id will be loaded.
-     *                             The session can be the table id or the alphanumeric session id.
-     *                             If id isn't set than an empty object of the table is created.
+     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param int|string $session      The recordset of the session with this id will be loaded.
+     *                                 The session can be the table id or the alphanumeric session id.
+     *                                 If id isn't set than an empty object of the table is created.
      * @param string     $cookiePrefix The prefix that is used for cookies
      */
     public function __construct(Database $database, $session = 0, $cookiePrefix = '')
@@ -104,7 +104,7 @@ class Session extends TableAccess
     {
         global $gCurrentUser;
 
-        if (isset($gCurrentUser) && $gCurrentUser instanceof \User)
+        if (isset($gCurrentUser) && $gCurrentUser instanceof User)
         {
             $gCurrentUser->clear();
         }
@@ -145,7 +145,7 @@ class Session extends TableAccess
      */
     public function getOrganizationId()
     {
-        if ($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof AutoLogin)
         {
             return (int) $this->mAutoLogin->getValue('atl_org_id');
         }
@@ -182,7 +182,7 @@ class Session extends TableAccess
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if ($this->mAutoLogin instanceof \AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
+                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
                 {
                     return true;
                 }
@@ -208,7 +208,7 @@ class Session extends TableAccess
         $this->setValue('ses_usr_id', '');
         $this->save();
 
-        if ($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof AutoLogin)
         {
             // remove auto login cookie from users browser by setting expired timestamp to 0
             self::setCookie($this->cookieAutoLoginId, $this->mAutoLogin->getValue('atl_auto_login_id'));
@@ -305,7 +305,7 @@ class Session extends TableAccess
 
         // session in database could be deleted if user was some time inactive and another user
         // clears the table. Therefore we must reset the user id
-        if ($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof AutoLogin)
         {
             if((int) $this->getValue('ses_usr_id') === 0)
             {
@@ -462,13 +462,13 @@ class Session extends TableAccess
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(Database $database)
     {
         parent::setDatabase($database);
 
-        if ($this->mAutoLogin instanceof \AutoLogin)
+        if ($this->mAutoLogin instanceof AutoLogin)
         {
             $this->mAutoLogin->setDatabase($database);
         }

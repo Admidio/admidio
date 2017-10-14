@@ -36,8 +36,8 @@ class TableCategory extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_category.
      * If the id is set than the specific category will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $catId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $catId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $catId = 0)
     {
@@ -342,7 +342,7 @@ class TableCategory extends TableAccess
         $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if ($fieldsChanged && $gCurrentSession instanceof \Session && $this->getValue('cat_type') === 'USF')
+        if ($fieldsChanged && $gCurrentSession instanceof Session && $this->getValue('cat_type') === 'USF')
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();

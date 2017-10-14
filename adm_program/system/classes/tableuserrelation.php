@@ -18,8 +18,8 @@ class TableUserRelation extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_user_relation_types.
      * If the id is set than the specific message will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $ureId    The recordset of the relation with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $ureId    The recordset of the relation with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $ureId = 0)
     {
@@ -28,7 +28,7 @@ class TableUserRelation extends TableAccess
 
     /**
      * Returns the inverse relation.
-     * @return null|\TableUserRelation Returns the inverse relation
+     * @return null|TableUserRelation Returns the inverse relation
      */
     public function getInverse()
     {

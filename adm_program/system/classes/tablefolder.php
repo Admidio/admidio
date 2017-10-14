@@ -17,23 +17,23 @@
 class TableFolder extends TableAccess
 {
     /**
-     * @var \Folder
+     * @var Folder
      */
     protected $folderPath;
     /**
-     * @var \RolesRights|null Object with all roles that could view the current folder
+     * @var RolesRights|null Object with all roles that could view the current folder
      */
     protected $folderViewRolesObject;
     /**
-     * @var \RolesRights|null Object with all roles that could upload files the current folder
+     * @var RolesRights|null Object with all roles that could upload files the current folder
      */
     protected $folderUploadRolesObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
      * If the id is set than the specific folder will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $folId = 0)
     {

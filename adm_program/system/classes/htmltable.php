@@ -69,7 +69,7 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $messageNoRowsFound;
     /**
-     * @var \HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
     protected $htmlPage;
     /**
@@ -83,14 +83,14 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Constructor creates the table element
-     * @param string    $id         Id of the table
-     * @param \HtmlPage $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
-     *                              or files to the html output page.
-     * @param bool      $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
-     * @param bool      $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
-     *                              Then column sort, search within the table and other features are possible.
-     * @param string    $class      (optional) An additional css classname. The class @b table
-     *                              is set as default and need not set with this parameter.
+     * @param string   $id         Id of the table
+     * @param HtmlPage $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
+     *                             or files to the html output page.
+     * @param bool     $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
+     * @param bool     $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
+     *                             Then column sort, search within the table and other features are possible.
+     * @param string   $class      (optional) An additional css classname. The class @b table
+     *                             is set as default and need not set with this parameter.
      */
     public function __construct($id, HtmlPage $htmlPage = null, $hoverRows = true, $datatables = false, $class = null)
     {
@@ -122,7 +122,7 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
         }
 
-        if ($htmlPage instanceof \HtmlPage)
+        if ($htmlPage instanceof HtmlPage)
         {
             $this->htmlPage =& $htmlPage;
         }
@@ -437,7 +437,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         // show table content
-        if ($this->datatables && $this->htmlPage instanceof \HtmlPage)
+        if ($this->datatables && $this->htmlPage instanceof HtmlPage)
         {
             $this->initDatatablesTable();
 

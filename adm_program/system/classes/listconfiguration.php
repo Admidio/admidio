@@ -29,14 +29,14 @@
 class ListConfiguration extends TableLists
 {
     /**
-     * @var array<int,\TableAccess> Array with all Listenspaltenobjekte
+     * @var array<int,TableAccess> Array with all Listenspaltenobjekte
      */
     protected $columns = array();
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $lstId    The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $lstId    The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $lstId = 0)
     {
@@ -154,7 +154,7 @@ class ListConfiguration extends TableLists
      * column list. If that won't help then @b null will be returned.
      * @param int $number The internal number of the column.
      *                    This will be the position of the column in the list.
-     * @return \TableAccess|null Returns a TableAccess object of the database table @b adm_list_columns.
+     * @return TableAccess|null Returns a TableAccess object of the database table @b adm_list_columns.
      */
     public function getColumnObject($number)
     {

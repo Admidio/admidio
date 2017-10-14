@@ -38,7 +38,7 @@
 class Language
 {
     /**
-     * @var \LanguageData An object of the class @b LanguageData that stores all necessary language data in a session
+     * @var LanguageData An object of the class @b LanguageData that stores all necessary language data in a session
      */
     private $languageData;
     /**
@@ -56,7 +56,7 @@ class Language
 
     /**
      * Language constructor.
-     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
+     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
      */
     public function __construct(LanguageData $languageDataObject = null)
     {
@@ -66,7 +66,7 @@ class Language
     /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
-     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
+     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
      */
     public function addLanguageData(LanguageData $languageDataObject)
     {
@@ -155,7 +155,7 @@ class Language
     {
         global $gLogger;
 
-        if (!$this->languageData instanceof \LanguageData)
+        if (!$this->languageData instanceof LanguageData)
         {
             $gLogger->error('$this->languageData is not an instance of LanguageData!', array('languageData' => $this->languageData));
 

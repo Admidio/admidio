@@ -47,7 +47,7 @@ class TableAccess
      */
     protected $keyColumnName;
     /**
-     * @var \Database An object of the class Database for communication with the database
+     * @var Database An object of the class Database for communication with the database
      */
     protected $db;
 
@@ -71,7 +71,7 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param \Database  $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
      * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
      * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
@@ -101,7 +101,7 @@ class TableAccess
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(Database $database)
     {

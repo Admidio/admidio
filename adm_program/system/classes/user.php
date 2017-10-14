@@ -23,7 +23,7 @@ class User extends TableAccess
      */
     protected $administrator;
     /**
-     * @var \ProfileFields object with current user field structure
+     * @var ProfileFields object with current user field structure
      */
     protected $mProfileFieldsData;
     /**
@@ -78,11 +78,11 @@ class User extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param \Database      $database   Object of the class Database. This should be the default global object @b $gDb.
-     * @param \ProfileFields $userFields An object of the ProfileFields class with the profile field structure
-     *                                   of the current organization. This could be the default object @b $gProfileFields.
-     * @param int $userId                The id of the user who should be loaded. If id isn't set than an empty
-     *                                   object with no specific user is created.
+     * @param Database      $database   Object of the class Database. This should be the default global object @b $gDb.
+     * @param ProfileFields $userFields An object of the ProfileFields class with the profile field structure
+     *                                  of the current organization. This could be the default object @b $gProfileFields.
+     * @param int           $userId     The id of the user who should be loaded. If id isn't set than an empty
+     *                                  object with no specific user is created.
      */
     public function __construct(Database $database, ProfileFields $userFields = null, $userId = 0)
     {
@@ -101,7 +101,7 @@ class User extends TableAccess
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setProfileFieldsDataDatabase(Database $database)
     {
@@ -113,7 +113,7 @@ class User extends TableAccess
      * It will check if the current user could view the profile field category. Within the own profile
      * you can view profile fields of hidden categories. We will also check if the current user
      * could edit the @b $user profile so the current user could also view hidden fields.
-     * @param \User $user User object of the user that should be checked if the current user can view his profile field.
+     * @param User   $user            User object of the user that should be checked if the current user can view his profile field.
      * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of @b $user.
      */
@@ -661,7 +661,7 @@ class User extends TableAccess
         $this->setValue('usr_valid', 1);
         $this->columnsValueChanged = false;
 
-        if ($this->mProfileFieldsData instanceof \ProfileFields)
+        if ($this->mProfileFieldsData instanceof ProfileFields)
         {
             // data of all profile fields will be deleted, the internal structure will not be destroyed
             $this->mProfileFieldsData->clearUserData();
@@ -1131,7 +1131,7 @@ class User extends TableAccess
      * Checks if the current user is allowed to edit the profile of the user of the parameter.
      * If will check if user can generally edit all users or if he is a group leader and can edit users
      * of a special role where @b $user is a member or if it's the own profile and he could edit this.
-     * @param \User $user            User object of the user that should be checked if the current user can edit his profile.
+     * @param User  $user            User object of the user that should be checked if the current user can edit his profile.
      * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
      * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
      */
@@ -1273,7 +1273,7 @@ class User extends TableAccess
      * Checks if the current user is allowed to view the profile of the user of the parameter.
      * If will check if user has edit rights with method editProfile or if the user is a member
      * of a role where the current user has the right to view profiles.
-     * @param \User $user User object of the user that should be checked if the current user can view his profile.
+     * @param User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */
     public function hasRightViewProfile(User $user)
@@ -1455,7 +1455,7 @@ class User extends TableAccess
         }
 
         // if value of a field changed then update timestamp of user object
-        if ($this->mProfileFieldsData instanceof \ProfileFields && $this->mProfileFieldsData->hasColumnsValueChanged())
+        if ($this->mProfileFieldsData instanceof ProfileFields && $this->mProfileFieldsData->hasColumnsValueChanged())
         {
             $this->columnsValueChanged = true;
         }
@@ -1470,13 +1470,13 @@ class User extends TableAccess
             $returnValue = $returnValue && parent::save($updateFingerPrint);
         }
 
-        if ($this->mProfileFieldsData instanceof \ProfileFields)
+        if ($this->mProfileFieldsData instanceof ProfileFields)
         {
             // save data of all user fields
             $this->mProfileFieldsData->saveUserData((int) $this->getValue('usr_id'));
         }
 
-        if ($this->columnsValueChanged && $gCurrentSession instanceof \Session)
+        if ($this->columnsValueChanged && $gCurrentSession instanceof Session)
         {
             // now set user object in session of that user to invalid,
             // because he has new data and maybe new rights

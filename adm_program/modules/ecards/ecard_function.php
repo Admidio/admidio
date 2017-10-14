@@ -20,7 +20,7 @@ class FunctionClass
     public $emailString              = '';
 
     /**
-     * @param \Language $gL10n
+     * @param Language $gL10n
      */
     public function __construct(Language $gL10n)
     {
