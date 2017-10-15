@@ -236,7 +236,7 @@ class Session extends TableAccess
             // valid AutoLogin found
             if ($this->mAutoLogin->getValue('atl_id') > 0)
             {
-                $autoLoginId = $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id'));
+                $autoLoginId = $this->mAutoLogin->generateAutoLoginId((int) $this->getValue('ses_usr_id'));
                 $this->mAutoLogin->setValue('atl_auto_login_id', $autoLoginId);
                 $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
                 $this->mAutoLogin->save();
@@ -401,7 +401,7 @@ class Session extends TableAccess
         $this->mAutoLogin->setValue('atl_usr_id', $this->getValue('ses_usr_id'));
 
         // set new auto_login_id and save data
-        $this->mAutoLogin->setValue('atl_auto_login_id', $this->mAutoLogin->generateAutoLoginId($this->getValue('ses_usr_id')));
+        $this->mAutoLogin->setValue('atl_auto_login_id', $this->mAutoLogin->generateAutoLoginId((int) $this->getValue('ses_usr_id')));
         $this->mAutoLogin->save();
 
         // save cookie for autologin
