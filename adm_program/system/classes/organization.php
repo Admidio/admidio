@@ -342,7 +342,7 @@ class Organization extends TableAccess
      */
     public function getFamilySQL($shortname = false)
     {
-        $organizations = $this->getOrganizationsInRelationship(true, true);
+        $organizations = $this->getOrganizationsInRelationship();
 
         if($shortname)
         {

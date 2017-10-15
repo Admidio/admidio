@@ -110,7 +110,7 @@ class ListConfiguration extends TableLists
     /**
      * Delete pointed columns out of configuration
      * @param int  $number
-     * @param bool $all Define all columns to be deleted
+     * @param bool $all    Define all columns to be deleted
      * @return bool
      */
     public function deleteColumn($number, $all = false)
@@ -175,7 +175,7 @@ class ListConfiguration extends TableLists
 
     /**
      * prepare SQL to list configuration
-     * @param array<int,int> $roleIds Array with all roles, which members are shown
+     * @param array<int,int> $roleIds           Array with all roles, which members are shown
      * @param int            $showFormerMembers 0 - Only active members of a role
      *                                          1 - Only former members
      * @param string         $startDate
