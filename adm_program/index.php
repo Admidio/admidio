@@ -81,7 +81,7 @@ if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'
 
     // get number of unread messages for user
     $message = new TableMessage($gDb);
-    $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+    $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
 
     if($unread > 0)
     {

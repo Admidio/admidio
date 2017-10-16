@@ -191,6 +191,7 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
 // create list with all possible recipients
+$list = array();
 
 // list all roles where login users could send mails to
 $arrayMailRoles = $gCurrentUser->getAllMailRoles();
