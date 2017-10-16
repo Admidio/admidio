@@ -256,11 +256,20 @@ $form->addSelectBox(
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
 );
 $form->addLine();
-$form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED));
-$form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED));
+$form->addInput(
+    'name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+    array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+);
+$form->addInput(
+    'mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+    array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+);
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-editor');
-$form->addEditor('ecard_message', '', $message, array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
+$form->addEditor(
+    'ecard_message', '', $message,
+    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
+);
 $form->closeGroupBox();
 $form->openButtonGroup();
 $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_URL. '/icons/eye.png'));

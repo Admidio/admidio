@@ -662,7 +662,10 @@ if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 // current configuration can be duplicated and saved with another name
 if(strlen($list->getValue('lst_name')) > 0)
 {
-    $form->addButton('btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')), array('icon' => THEME_URL.'/icons/application_double.png'));
+    $form->addButton(
+        'btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')),
+        array('icon' => THEME_URL.'/icons/application_double.png')
+    );
 }
 $form->closeButtonGroup();
 
@@ -729,7 +732,10 @@ if ($gPreferences['members_enable_user_relations'] == 1)
 
 $form->closeGroupBox();
 
-$form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary'));
+$form->addButton(
+    'btn_show_list', $gL10n->get('LST_SHOW_LIST'),
+    array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary')
+);
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

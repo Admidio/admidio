@@ -144,14 +144,26 @@ $form = new HtmlForm('guestbook_comment_edit_form', ADMIDIO_URL.FOLDER_MODULES.'
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name
-    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'), array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED));
+    $form->addInput(
+        'gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'),
+        array('maxLength' => 60, 'property' => HtmlForm::FIELD_DISABLED)
+    );
 }
 else
 {
-    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'), array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED));
+    $form->addInput(
+        'gbc_name', $gL10n->get('SYS_NAME'), $gbComment->getValue('gbc_name'),
+        array('maxLength' => 60, 'property' => HtmlForm::FIELD_REQUIRED)
+    );
 }
-$form->addInput('gbc_email', $gL10n->get('SYS_EMAIL'), $gbComment->getValue('gbc_email'), array('type' => 'email', 'maxLength' => 254));
-$form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $gbComment->getValue('gbc_text'), array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
+$form->addInput(
+    'gbc_email', $gL10n->get('SYS_EMAIL'), $gbComment->getValue('gbc_email'),
+    array('type' => 'email', 'maxLength' => 254)
+);
+$form->addEditor(
+    'gbc_text', $gL10n->get('SYS_COMMENT'), $gbComment->getValue('gbc_text'),
+    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
+);
 
 // if captchas are enabled then visitors of the website must resolve this
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)

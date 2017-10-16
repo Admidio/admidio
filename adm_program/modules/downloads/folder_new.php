@@ -73,9 +73,18 @@ $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentF
 
 // show form
 $form = new HtmlForm('new_folder_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId, $page);
-$form->addInput('new_folder', $gL10n->get('SYS_NAME'), $formValues['new_folder'], array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED));
-$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $formValues['new_description'], 4, array('maxLength' => 4000));
-$form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), array('icon' => THEME_URL.'/icons/folder_create.png', 'class' => ' col-sm-offset-3'));
+$form->addInput(
+    'new_folder', $gL10n->get('SYS_NAME'), $formValues['new_folder'],
+    array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED)
+);
+$form->addMultilineTextInput(
+    'new_description', $gL10n->get('SYS_DESCRIPTION'), $formValues['new_description'], 4,
+    array('maxLength' => 4000)
+);
+$form->addSubmitButton(
+    'btn_create', $gL10n->get('DOW_CREATE_FOLDER'),
+    array('icon' => THEME_URL.'/icons/folder_create.png', 'class' => ' col-sm-offset-3')
+);
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

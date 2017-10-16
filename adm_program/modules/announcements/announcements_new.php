@@ -90,10 +90,18 @@ $announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 
 // show form
 $form = new HtmlForm('announcements_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1', $page);
-$form->addInput('ann_headline', $gL10n->get('SYS_TITLE'), noHTML($announcement->getValue('ann_headline')), array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED));
-$form->addSelectBoxForCategories('ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'EDIT_CATEGORIES',
-                                 array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $announcement->getValue('ann_cat_id')));
-$form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'), array('property' => HtmlForm::FIELD_REQUIRED, 'height' => '400'));
+$form->addInput(
+    'ann_headline', $gL10n->get('SYS_TITLE'), noHTML($announcement->getValue('ann_headline')),
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+);
+$form->addSelectBoxForCategories(
+    'ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'EDIT_CATEGORIES',
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $announcement->getValue('ann_cat_id'))
+);
+$form->addEditor(
+    'ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'),
+    array('property' => HtmlForm::FIELD_REQUIRED, 'height' => '400')
+);
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),

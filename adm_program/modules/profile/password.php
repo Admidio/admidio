@@ -187,15 +187,31 @@ elseif($getMode === 'html')
         {
             // to change own password user must enter the valid old password for verification
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
-            $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED));
+            $form->addInput(
+                'old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null,
+                array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
+            );
             $form->addLine();
         }
         $form->addInput(
             'new_password', $gL10n->get('PRO_NEW_PASSWORD'), null,
-            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $user->getPasswordUserData(), 'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION')
+            array(
+                'type'             => 'password',
+                'property'         => HtmlForm::FIELD_REQUIRED,
+                'minLength'        => PASSWORD_MIN_LENGTH,
+                'passwordStrength' => true,
+                'passwordUserData' => $user->getPasswordUserData(),
+                'helpTextIdInline' => 'PRO_PASSWORD_DESCRIPTION'
+            )
         );
-        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH));
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
+        $form->addInput(
+            'new_password_confirm', $gL10n->get('SYS_REPEAT'), null,
+            array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
+        );
+        $form->addSubmitButton(
+            'btn_save', $gL10n->get('SYS_SAVE'),
+            array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+        );
         $form->show();
     echo '</div>';
 }

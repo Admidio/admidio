@@ -178,8 +178,14 @@ if($getMode === 'choose')
     // show form
     $form = new HtmlForm('upload_files_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
-    $form->addFileUpload('foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'), array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help'));
-    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
+    $form->addFileUpload(
+        'foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'),
+        array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
+    );
+    $form->addSubmitButton(
+        'btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'),
+        array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3')
+    );
 
     // add form to html page and show page
     $page->addHtml($form->show(false));

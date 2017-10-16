@@ -231,7 +231,7 @@ class HtmlPage
         global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
 
         $this->menu->addItem(
-            'menu_item_modules', null, $gL10n->get('SYS_MODULES'),
+            'menu_item_modules', '', $gL10n->get('SYS_MODULES'),
             'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
         );
 
@@ -324,7 +324,7 @@ class HtmlPage
         if ($gCurrentUser->approveUsers() || $gCurrentUser->editUsers() || $gCurrentUser->manageRoles() || $gCurrentUser->isAdministrator())
         {
             $this->menu->addItem(
-                'menu_item_administration', null, $gL10n->get('SYS_ADMINISTRATION'),
+                'menu_item_administration', '', $gL10n->get('SYS_ADMINISTRATION'),
                 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
             );
 

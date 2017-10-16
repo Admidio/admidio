@@ -157,7 +157,10 @@ $form->addStaticControl(
     'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
     array('helpTextIdLabel' => array('DOW_ADMINISTRATORS_DESC', $gL10n->get('ROL_RIGHT_DOWNLOAD')))
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
+$form->addSubmitButton(
+    'btn_save', $gL10n->get('SYS_SAVE'),
+    array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+);
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

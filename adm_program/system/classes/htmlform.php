@@ -328,9 +328,10 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure();
 
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addInput($id, $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'), '', array('property'        => self::FIELD_REQUIRED,
-                                                                                     'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION',
-                                                                                     'class'           => 'form-control-small'));
+        $this->addInput(
+            $id, $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE'), '',
+            array('property' => self::FIELD_REQUIRED, 'helpTextIdLabel' => 'SYS_CAPTCHA_DESCRIPTION', 'class' => 'form-control-small')
+        );
     }
 
     /**
