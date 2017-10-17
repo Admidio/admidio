@@ -239,7 +239,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
     else
     {
-        $form->addInput('msg_to', null, $getUserId, array('type' => 'hidden'));
+        $form->addInput('msg_to', '', $getUserId, array('type' => 'hidden'));
         $sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
     }
 
@@ -254,7 +254,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     }
     else
     {
-        $form->addInput('subject', null, $formValues['subject'], array('type' => 'hidden'));
+        $form->addInput('subject', '', $formValues['subject'], array('type' => 'hidden'));
     }
 
     $form->addMultilineTextInput(

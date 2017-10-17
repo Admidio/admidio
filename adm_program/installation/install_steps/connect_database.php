@@ -83,7 +83,10 @@ $form->addInput(
     'db_user', $gL10n->get('SYS_USERNAME'), $user,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED)
 );
-$form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
+$form->addInput(
+    'db_password', $gL10n->get('SYS_PASSWORD'), '',
+    array('type' => 'password')
+);
 $form->addInput(
     'db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')

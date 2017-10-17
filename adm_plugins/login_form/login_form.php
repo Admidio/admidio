@@ -192,12 +192,12 @@ else
         array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
     );
     $form->addInput(
-        'plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null,
+        'plg_usr_login_name', $gL10n->get('SYS_USERNAME'), '',
         array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 35)
     );
     // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
     $form->addInput(
-        'plg_usr_password', $gL10n->get('SYS_PASSWORD'), null,
+        'plg_usr_password', $gL10n->get('SYS_PASSWORD'), '',
         array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
     );
 

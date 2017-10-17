@@ -93,11 +93,11 @@ $form->addInput(
     array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'user_password', $gL10n->get('SYS_PASSWORD'), null,
+    'user_password', $gL10n->get('SYS_PASSWORD'), '',
     array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'passwordUserData' => $userData, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION')
 );
 $form->addInput(
-    'user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null,
+    'user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), '',
     array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
 );
 $form->closeGroupBox();

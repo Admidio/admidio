@@ -161,9 +161,9 @@ if($gCurrentUser->isAdministrator())
 
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
-$form->addInput('submit_action', null, '', array('type' => 'hidden'));
-$form->addInput('photo_id', null, $getPhotoId, array('type' => 'hidden'));
-$form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
+$form->addInput('submit_action', '', '', array('type' => 'hidden'));
+$form->addInput('photo_id', '', $getPhotoId, array('type' => 'hidden'));
+$form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '

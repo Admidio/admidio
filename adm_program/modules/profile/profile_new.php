@@ -219,7 +219,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                 {
                     // at registration add password and password confirm to form
                     $form->addInput(
-                        'usr_password', $gL10n->get('SYS_PASSWORD'), null,
+                        'usr_password', $gL10n->get('SYS_PASSWORD'), '',
                         array(
                             'type'             => 'password',
                             'property'         => HtmlForm::FIELD_REQUIRED,
@@ -230,7 +230,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                         )
                     );
                     $form->addInput(
-                        'password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null,
+                        'password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), '',
                         array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'class' => 'form-control-small')
                     );
 

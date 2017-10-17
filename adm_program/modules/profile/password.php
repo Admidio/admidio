@@ -188,13 +188,13 @@ elseif($getMode === 'html')
             // to change own password user must enter the valid old password for verification
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
             $form->addInput(
-                'old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null,
+                'old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), '',
                 array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
             );
             $form->addLine();
         }
         $form->addInput(
-            'new_password', $gL10n->get('PRO_NEW_PASSWORD'), null,
+            'new_password', $gL10n->get('PRO_NEW_PASSWORD'), '',
             array(
                 'type'             => 'password',
                 'property'         => HtmlForm::FIELD_REQUIRED,
@@ -205,7 +205,7 @@ elseif($getMode === 'html')
             )
         );
         $form->addInput(
-            'new_password_confirm', $gL10n->get('SYS_REPEAT'), null,
+            'new_password_confirm', $gL10n->get('SYS_REPEAT'), '',
             array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH)
         );
         $form->addSubmitButton(
