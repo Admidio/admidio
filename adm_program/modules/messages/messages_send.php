@@ -194,7 +194,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 // logged in user is just allowed to send to role with permission
                 // role must be from actual Organisation
                 if ((!$gValidLogin && (int) $row['rol_mail_this_role'] !== 3)
-                || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($row['rol_id']))
+                || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole((int) $row['rol_id']))
                 || $row['rol_id'] === null)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
