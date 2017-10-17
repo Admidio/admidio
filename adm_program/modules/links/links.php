@@ -105,7 +105,10 @@ if($weblinks->getId() === 0)
     );
 
     $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
-    $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
+    $navbarForm->addSelectBoxForCategories(
+        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES',
+        array('defaultValue' => $getCatId)
+    );
     $linksMenu->addForm($navbarForm->show(false));
 }
 

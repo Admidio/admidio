@@ -95,7 +95,10 @@ $page->addJavascript('
 );
 
 $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
-$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
+$navbarForm->addSelectBoxForCategories(
+    'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES',
+    array('defaultValue' => $getCatId)
+);
 $announcementsMenu->addForm($navbarForm->show(false));
 
 if($gCurrentUser->editAnnouncements())

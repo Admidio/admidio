@@ -318,8 +318,10 @@ $form->addInput(
     'date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']),
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
 );
-$form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
-                                 array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
+$form->addSelectBoxForCategories(
+    'dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id'))
+);
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
