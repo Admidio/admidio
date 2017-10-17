@@ -159,8 +159,10 @@ $categoriesMenu = $page->getMenu();
 $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new category
-$categoriesMenu->addItem('admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
-                         $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
+$categoriesMenu->addItem(
+    'admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
+    $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png'
+);
 
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);

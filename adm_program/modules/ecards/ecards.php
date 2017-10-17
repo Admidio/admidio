@@ -151,11 +151,8 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $ecardMenu->addItem(
-        'menu_item_preferences',
-        ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=ecards',
-        $gL10n->get('SYS_MODULE_PREFERENCES'),
-        'options.png',
-        'right'
+        'menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=ecards',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }
 

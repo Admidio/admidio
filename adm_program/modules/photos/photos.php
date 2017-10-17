@@ -190,20 +190,16 @@ if ($gCurrentUser->editPhotoRight())
 {
     // show link to create new album
     $photosMenu->addItem(
-        'menu_item_new_album',
-        ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php?mode=new&amp;pho_id='.$getPhotoId,
-        $gL10n->get('PHO_CREATE_ALBUM'),
-        'add.png'
+        'menu_item_new_album', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php?mode=new&amp;pho_id='.$getPhotoId,
+        $gL10n->get('PHO_CREATE_ALBUM'), 'add.png'
     );
 
     if ($getPhotoId > 0)
     {
         // show link to upload photos
         $photosMenu->addItem(
-            'menu_item_upload_photo',
-            ADMIDIO_URL.'/adm_program/system/file_upload.php?module=photos&id='.$getPhotoId,
-            $gL10n->get('PHO_UPLOAD_PHOTOS'),
-            'photo_upload.png'
+            'menu_item_upload_photo', ADMIDIO_URL.'/adm_program/system/file_upload.php?module=photos&id='.$getPhotoId,
+            $gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png'
         );
     }
 }
@@ -213,10 +209,8 @@ if ($gPreferences['photo_download_enabled'] == 1 && $photoAlbum->getValue('pho_q
 {
     // show link to download photos
     $photosMenu->addItem(
-        'menu_item_download_photos',
-        ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$getPhotoId,
-        $gL10n->get('PHO_DOWNLOAD_PHOTOS'),
-        'page_white_compressed.png'
+        'menu_item_download_photos', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$getPhotoId,
+        $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png'
     );
 }
 
@@ -224,11 +218,8 @@ if ($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of photos
     $photosMenu->addItem(
-        'menu_item_preferences_photos',
-        ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=photos',
-        $gL10n->get('SYS_MODULE_PREFERENCES'),
-        'options.png',
-        'right'
+        'menu_item_preferences_photos', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=photos',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }
 

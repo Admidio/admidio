@@ -60,24 +60,35 @@ $EmailMenu = $page->getMenu();
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', $gL10n->get('MAI_SEND_EMAIL'), '/email.png');
+    $EmailMenu->addItem(
+        'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
+        $gL10n->get('MAI_SEND_EMAIL'), '/email.png'
+    );
 }
 // link to write new PM
 if ($gPreferences['enable_pm_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM', $gL10n->get('PMS_SEND_PM'), '/pm.png');
+    $EmailMenu->addItem(
+        'admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM',
+        $gL10n->get('PMS_SEND_PM'), '/pm.png'
+    );
 }
 
 // link to Chat
 if ($gPreferences['enable_chat_module'] == 1)
 {
-    $EmailMenu->addItem('admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
+    $EmailMenu->addItem(
+        'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',
+        $gL10n->get('MSG_CHAT'), '/chat.png'
+    );
 }
 
 if($gCurrentUser->isAdministrator())
 {
-    $EmailMenu->addItem('admMenuItemPreferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=messages',
-                    $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $EmailMenu->addItem(
+        'admMenuItemPreferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=messages',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+    );
 }
 
 $table = new HtmlTable('adm_lists_table', $page, true, true);

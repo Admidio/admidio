@@ -83,8 +83,10 @@ $announcementsMenu = $page->getMenu();
 if($gCurrentUser->editAnnouncements())
 {
     // show link to create new announcement
-    $announcementsMenu->addItem('menu_item_new_announcement', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?headline='.$getHeadline,
-                                $gL10n->get('SYS_CREATE_ENTRY'), 'add.png');
+    $announcementsMenu->addItem(
+        'menu_item_new_announcement', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?headline='.$getHeadline,
+        $gL10n->get('SYS_CREATE_ENTRY'), 'add.png'
+    );
 }
 
 $page->addJavascript('
@@ -104,16 +106,19 @@ $announcementsMenu->addForm($navbarForm->show(false));
 if($gCurrentUser->editAnnouncements())
 {
     // if no calendar selectbox is shown, then show link to edit calendars
-    $announcementsMenu->addItem('admMenuItemCategories',
-                        FOLDER_MODULES.'/categories/categories.php?type=ANN',
-                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+    $announcementsMenu->addItem(
+        'admMenuItemCategories', FOLDER_MODULES.'/categories/categories.php?type=ANN',
+        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+    );
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
-    $announcementsMenu->addItem('menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=announcements',
-                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $announcementsMenu->addItem(
+        'menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=announcements',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+    );
 }
 
 if($announcementsCount === 0)

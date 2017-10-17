@@ -164,15 +164,19 @@ $guestbookMenu = $page->getMenu();
 if($getGboId === 0 && !$getModeration)
 {
     // show link to create new guestbook entry
-    $guestbookMenu->addItem('admMenuItemNewEntry', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php?headline='. $getHeadline,
-                            $gL10n->get('GBO_CREATE_ENTRY'), 'add.png');
+    $guestbookMenu->addItem(
+        'admMenuItemNewEntry', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php?headline='. $getHeadline,
+        $gL10n->get('GBO_CREATE_ENTRY'), 'add.png'
+    );
 }
 
 if($getGboId > 0 || $getModeration)
 {
     // show link to navigate back to guestbook
-    $guestbookMenu->addItem('admMenuItemNavigateBack', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?headline='. $getHeadline,
-                            $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png');
+    $guestbookMenu->addItem(
+        'admMenuItemNavigateBack', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?headline='. $getHeadline,
+        $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png'
+    );
 }
 
 if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
@@ -196,16 +200,20 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enab
 
     if($countLockedEntries > 0)
     {
-        $guestbookMenu->addItem('admMenuItemModerate', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline,
-                                $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png');
+        $guestbookMenu->addItem(
+            'admMenuItemModerate', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline,
+            $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png'
+        );
     }
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
-    $guestbookMenu->addItem('admMenuItemPreferencesGuestbook', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=guestbook',
-                            $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $guestbookMenu->addItem(
+        'admMenuItemPreferencesGuestbook', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=guestbook',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+    );
 }
 
 $guestbook = new TableGuestbook($gDb);

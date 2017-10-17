@@ -90,20 +90,28 @@ $page->addJavascript('$(".admidio-group-heading").click(function() { showHideBlo
 $rolesMenu = $page->getMenu();
 
 // define link to create new profile field
-$rolesMenu->addItem('menu_item_new_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
-                    $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+$rolesMenu->addItem(
+    'menu_item_new_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
+    $gL10n->get('SYS_CREATE_ROLE'), 'add.png'
+);
 // define link to maintain categories
-$rolesMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=ROL',
-                    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+$rolesMenu->addItem(
+    'menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=ROL',
+    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+);
 // define link to show inactive roles
-$rolesMenu->addItem('menu_item_inactive_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?inactive='.$activeRolesFlag,
-                    $activeRolesLinkDescription, $activeRolesImage);
+$rolesMenu->addItem(
+    'menu_item_inactive_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?inactive='.$activeRolesFlag,
+    $activeRolesLinkDescription, $activeRolesImage
+);
 
 if($gPreferences['enable_dates_module'] > 0)
 {
     // if event module is enabled then define link to confirmation roles of event participations
-    $rolesMenu->addItem('menu_item_hidden_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?events='.$eventsRolesFlag,
-                        $eventsRolesLinkDescription, $eventsRolesImage);
+    $rolesMenu->addItem(
+        'menu_item_hidden_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles.php?events='.$eventsRolesFlag,
+        $eventsRolesLinkDescription, $eventsRolesImage
+    );
 }
 
 // Create table

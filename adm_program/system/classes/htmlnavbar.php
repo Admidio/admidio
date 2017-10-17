@@ -22,8 +22,10 @@
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *
  * // show link to create new announcement
- * $myNavbar->addItem('menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
- *                         $gL10n->get('SYS_CREATE'), 'add.png');
+ * $myNavbar->addItem(
+ *     'menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
+ *     $gL10n->get('SYS_CREATE'), 'add.png'
+ * );
  * $myNavbar->show(); @endcode
  */
 class HtmlNavbar

@@ -95,11 +95,15 @@ $fieldsMenu = $page->getMenu();
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new profile field
-$fieldsMenu->addItem('menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php',
-                     $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
+$fieldsMenu->addItem(
+    'menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php',
+    $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png'
+);
 // define link to maintain categories
-$fieldsMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=USF',
-                     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+$fieldsMenu->addItem(
+    'menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=USF',
+    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+);
 
 $sql = 'SELECT *
           FROM '.TBL_USER_FIELDS.'

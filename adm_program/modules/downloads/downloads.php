@@ -84,25 +84,33 @@ if ($currentFolder->hasUploadRight())
     if ($gPreferences['max_file_upload_size'] > 0)
     {
         // show links for upload, create folder and folder configuration
-        $DownloadsMenu->addItem('menu_item_create_folder', ADMIDIO_URL.FOLDER_MODULES.'/downloads/folder_new.php?folder_id='.$getFolderId,
-                            $gL10n->get('DOW_CREATE_FOLDER'), 'folder_create.png');
+        $DownloadsMenu->addItem(
+            'menu_item_create_folder', ADMIDIO_URL.FOLDER_MODULES.'/downloads/folder_new.php?folder_id='.$getFolderId,
+            $gL10n->get('DOW_CREATE_FOLDER'), 'folder_create.png'
+        );
 
-        $DownloadsMenu->addItem('menu_item_upload_files', ADMIDIO_URL.'/adm_program/system/file_upload.php?module=downloads&id='.$getFolderId,
-                            $gL10n->get('DOW_UPLOAD_FILES'), 'page_white_upload.png');
+        $DownloadsMenu->addItem(
+            'menu_item_upload_files', ADMIDIO_URL.'/adm_program/system/file_upload.php?module=downloads&id='.$getFolderId,
+            $gL10n->get('DOW_UPLOAD_FILES'), 'page_white_upload.png'
+        );
     }
 
     if($gCurrentUser->editDownloadRight())
     {
-        $DownloadsMenu->addItem('menu_item_config_folder', ADMIDIO_URL.FOLDER_MODULES.'/downloads/folder_config.php?folder_id='.$getFolderId,
-                            $gL10n->get('SYS_PERMISSIONS'), 'lock.png');
+        $DownloadsMenu->addItem(
+            'menu_item_config_folder', ADMIDIO_URL.FOLDER_MODULES.'/downloads/folder_config.php?folder_id='.$getFolderId,
+            $gL10n->get('SYS_PERMISSIONS'), 'lock.png'
+        );
     }
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of weblinks
-    $DownloadsMenu->addItem('admMenuItemPreferencesLinks', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=downloads',
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $DownloadsMenu->addItem(
+        'admMenuItemPreferencesLinks', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=downloads',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+    );
 }
 
 // Create table object
