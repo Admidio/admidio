@@ -89,11 +89,13 @@ class TableCategory extends TableAccess
         $queryParams = array($gCurrentSession->getValue('ses_org_id'), $this->getValue('cat_sequence'), $this->getValue('cat_type'));
         $this->db->queryPrepared($sql, $queryParams);
 
+        $catId = (int) $this->getValue('cat_id');
+
         // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
         $sql = 'SELECT *
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
-        $recordsetsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id')));
+        $recordsetsStatement = $this->db->queryPrepared($sql, array($catId));
 
         if ($recordsetsStatement->rowCount() > 0)
         {
@@ -101,7 +103,7 @@ class TableCategory extends TableAccess
         }
 
         // delete all roles assignments that have the right to view this category
-        $categoryViewRoles = new RolesRights($this->db, 'category_view', $this->getValue('cat_id'));
+        $categoryViewRoles = new RolesRights($this->db, 'category_view', $catId);
         $categoryViewRoles->delete();
 
         // now delete category

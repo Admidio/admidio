@@ -132,7 +132,7 @@ else
         $category->readDataById($getCatId);
 
         // get assigned roles of this category
-        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
 
         // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist

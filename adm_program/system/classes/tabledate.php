@@ -42,7 +42,7 @@ class TableDate extends TableAccess
 
         if($this->getValue('dat_rol_id') > 0)
         {
-            $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $this->getValue('dat_id'));
+            $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
 
             if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)
             {

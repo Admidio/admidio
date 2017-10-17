@@ -107,7 +107,7 @@ else
         $date->readDataById($getDateId);
 
         // get assigned roles of this event
-        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', (int) $date->getValue('dat_id'));
         $roleViewSet = $eventParticipationRolesObject->getRolesIds();
 
         // check if the current user could edit this event

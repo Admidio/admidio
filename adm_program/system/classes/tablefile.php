@@ -110,7 +110,7 @@ class TableFile extends TableAccess
         }
 
         // check if user has a membership in a role that is assigned to the current folder
-        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
+        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', (int) $this->getValue('fol_id'));
 
         if ($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
         {
