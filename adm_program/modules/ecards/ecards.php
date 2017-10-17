@@ -250,9 +250,7 @@ while ($row = $statement->fetch())
 }
 
 $form->addSelectBox(
-    'ecard_recipients',
-    $gL10n->get('SYS_TO'),
-    $list,
+    'ecard_recipients', $gL10n->get('SYS_TO'), $list,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
 );
 $form->addLine();
