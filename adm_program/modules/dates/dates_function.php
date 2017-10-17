@@ -372,7 +372,6 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     if(isset($_POST['adm_event_participation_right']))
     {
-
         // save changed roles rights of the category
         $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
         $rightEventParticipation->saveRoles(array_map('intval', $_POST['adm_event_participation_right']));

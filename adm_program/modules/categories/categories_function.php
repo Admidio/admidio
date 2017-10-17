@@ -186,7 +186,7 @@ if($getMode === 1)
     $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
     // roles have their own preferences for visibility, so only allow this for other types
     // until now we do not support visibility for categories that belong to several organizations
-    if($getType !== 'ROL'
+    if ($getType !== 'ROL'
     && ($category->getValue('cat_org_id') > 0
     || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
     {
