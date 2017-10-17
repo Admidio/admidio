@@ -51,7 +51,7 @@ try
     {
         // get recordset of parent folder from database
         $parentFolder = new TableFolder($gDb);
-        $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
+        $parentFolder->getFolderForDownload((int) $folder->getValue('fol_fol_id_parent'));
 
         // get assigned roles of the parent folder
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();

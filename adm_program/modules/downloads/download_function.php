@@ -423,7 +423,7 @@ elseif ($getMode === 7)
         {
             // get recordset of parent folder from database
             $parentFolder = new TableFolder($gDb);
-            $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
+            $parentFolder->getFolderForDownload((int) $folder->getValue('fol_fol_id_parent'));
         }
 
         // Read current view roles rights of the folder

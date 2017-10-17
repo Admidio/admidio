@@ -111,8 +111,10 @@ $href  = 'href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_i
 // open some additonal functions for messages
 $moduleMessages = new ModuleMessages();
 
+$usrId = (int) $gCurrentUser->getValue('usr_id');
+
 // find all own Email messages
-$statement = $moduleMessages->msgGetUserEmails($gCurrentUser->getValue('usr_id'));
+$statement = $moduleMessages->msgGetUserEmails($usrId);
 if(isset($statement))
 {
     require_once(__DIR__ . '/messages_functions.php');
@@ -142,12 +144,12 @@ if(isset($statement))
 }
 
 // find all unread PM messages
-$statement = $moduleMessages->msgGetUserUnread($gCurrentUser->getValue('usr_id'));
+$statement = $moduleMessages->msgGetUserUnread($usrId);
 if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
-        if((int) $row['msg_usr_id_sender'] === (int) $gCurrentUser->getValue('usr_id'))
+        if((int) $row['msg_usr_id_sender'] === $usrId)
         {
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
         }
@@ -178,12 +180,12 @@ if(isset($statement))
 }
 
 // find all read or own PM messages
-$statement = $moduleMessages->msgGetUser($gCurrentUser->getValue('usr_id'));
+$statement = $moduleMessages->msgGetUser($usrId);
 if(isset($statement))
 {
     while ($row = $statement->fetch())
     {
-        if((int) $row['msg_usr_id_sender'] === (int) $gCurrentUser->getValue('usr_id'))
+        if((int) $row['msg_usr_id_sender'] === $usrId)
         {
             $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
         }

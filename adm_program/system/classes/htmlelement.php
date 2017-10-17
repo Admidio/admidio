@@ -218,14 +218,14 @@ abstract class HtmlElement
 
     /**
      * Set attributes from associative array.
-     * @param array<string,string> $arrAttributes An array that contains all attribute names as array key
-     *                                            and all attribute content as array value
+     * @param array<string,mixed> $arrAttributes An array that contains all attribute names as array key
+     *                                           and all attribute content as array value
      */
     protected function setAttributesFromArray(array $arrAttributes)
     {
         foreach ($arrAttributes as $key => $value)
         {
-            $this->addAttribute($key, $value);
+            $this->addAttribute($key, (string) $value);
         }
     }
 

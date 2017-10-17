@@ -324,8 +324,8 @@ class HtmlFormBasic extends HtmlElement
 
         // set attributes
         $this->addAttribute('name', $name);
-        $this->addAttribute('rows', $rows);
-        $this->addAttribute('cols', $cols);
+        $this->addAttribute('rows', (string) $rows);
+        $this->addAttribute('cols', (string) $cols);
 
         if ($id !== null)
         {
