@@ -602,7 +602,7 @@ if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen(
 
 // If necessary show links to navigate to next and previous albums of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $albumsCount, (int) $gPreferences['photo_albums_per_page'], $getStart, true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $albumsCount, (int) $gPreferences['photo_albums_per_page'], $getStart));
 
 // show html of complete page
 $page->show();

@@ -403,7 +403,7 @@ else
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $guestbookEntries, $guestbookEntriesPerPage, $getStart, true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $guestbookEntries, $guestbookEntriesPerPage, $getStart));
 
 // show html of complete page
 $page->show();

@@ -218,7 +218,7 @@ $page->addHtml('</div>');
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/links/links.php?headline='. $getHeadline.'&cat_id='.$getCatId;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement(), true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
 
 // show html of complete page
 $page->show();

@@ -263,8 +263,7 @@ foreach($listsResult['recordset'] as $row)
                     $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
                 }
 
-                if($role->getValue('rol_weekday') > 0
-                || strlen($role->getValue('rol_start_time')) > 0)
+                if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                 {
                     if($role->getValue('rol_weekday') > 0)
                     {
@@ -337,7 +336,7 @@ if($listsResult['numResults'] > 0)
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.$getActiveRole;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart, true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart));
 
 $page->addHtml('</div>');
 $page->show();

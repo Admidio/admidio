@@ -969,5 +969,5 @@ else
 }
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '&view_mode=' . $getViewMode;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $datesTotalCount, $datesResult['limit'], $getStart, true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $datesTotalCount, $datesResult['limit'], $getStart));
 $page->show();
