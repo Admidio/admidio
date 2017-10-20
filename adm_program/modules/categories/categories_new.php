@@ -154,14 +154,20 @@ if($getType === 'USF')
 if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 {
     $page->addJavascript('
-        $("#show_in_several_organizations").click(function() {
+        function showHideViewRightControl()
+        {
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
             } else {
                 $("#adm_categories_view_right_group").show("slow");
             }
+        }
+
+        $("#show_in_several_organizations").click(function() {
+            showHideViewRightControl();
         });
-        $("#show_in_several_organizations").trigger("click");',
+
+        showHideViewRightControl();',
         true
     );
 }
