@@ -25,20 +25,32 @@
  */
 class Organization extends TableAccess
 {
-    protected $bCheckChildOrganizations = false;   ///< Flag will be set if the class had already search for child organizations
-    protected $childOrganizations       = array(); ///< Array with all child organizations of this organization
-    protected $preferences              = array(); ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
-    protected $countOrganizations       = 0;       ///< Number of all organizations in database
+    /**
+     * @var bool Flag will be set if the class had already search for child organizations
+     */
+    protected $bCheckChildOrganizations = false;
+    /**
+     * @var array<int,string> Array with all child organizations of this organization
+     */
+    protected $childOrganizations = array();
+    /**
+     * @var array<string,string> Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+     */
+    protected $preferences = array();
+    /**
+     * @var int Number of all organizations in database
+     */
+    protected $countOrganizations = 0;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
      * If the id is set than the specific organization will be loaded.
-     * @param \Database  $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
      * @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $organization = '')
+    public function __construct(Database $database, $organization = '')
     {
         parent::__construct($database, TBL_ORGANIZATIONS, 'org');
 
@@ -207,7 +219,6 @@ class Organization extends TableAccess
         $roleAdministrator->setValue('rol_this_list_view', 1);
         $roleAdministrator->setValue('rol_all_lists_view', 1);
         $roleAdministrator->setValue('rol_administrator', 1);
-        $roleAdministrator->setValue('rol_inventory', 1);
         $roleAdministrator->save();
 
         // Create role member
@@ -331,7 +342,7 @@ class Organization extends TableAccess
      */
     public function getFamilySQL($shortname = false)
     {
-        $organizations = $this->getOrganizationsInRelationship(true, true);
+        $organizations = $this->getOrganizationsInRelationship();
 
         if($shortname)
         {
@@ -361,7 +372,7 @@ class Organization extends TableAccess
      * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
      * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
      *                       otherwise it will be @b org_shortname
-     * @return string[] Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+     * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
@@ -388,13 +399,14 @@ class Organization extends TableAccess
         $childOrganizations = array();
         while ($row = $pdoStatement->fetch())
         {
+            $orgId = (int) $row['org_id'];
             if ($longname)
             {
-                $childOrganizations[$row['org_id']] = $row['org_longname'];
+                $childOrganizations[$orgId] = $row['org_longname'];
             }
             else
             {
-                $childOrganizations[$row['org_id']] = $row['org_shortname'];
+                $childOrganizations[$orgId] = $row['org_shortname'];
             }
         }
         return $childOrganizations;
@@ -404,8 +416,8 @@ class Organization extends TableAccess
      * Reads all preferences of the current organization out of the database table adm_preferences.
      * If the object has read the preferences than the method will return the stored values of the object.
      * @param bool $update Should the preferences data be updated.
-     * @return array Returns an array with all preferences of this organization.
-     *               Array key is the column @b prf_name and array value is the column @b prf_value.
+     * @return array<string,string> Returns an array with all preferences of this organization.
+     *                              Array key is the column @b prf_name and array value is the column @b prf_value.
      */
     public function getPreferences($update = false)
     {
@@ -429,7 +441,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * @return string[] Returns an array with all child organizations
+     * @return array<int,string> Returns an array with all child organizations
      */
     protected function getChildOrganizations()
     {
@@ -464,9 +476,8 @@ class Organization extends TableAccess
     /**
      * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
      * The method will only insert or update changed preferences.
-     * @param array $preferences Array with all preferences that should be stored in database.
-     *                           array('name_of_preference' => 'value')
-     * @param bool  $update      If set to @b false then no update will be done, only inserts
+     * @param array<string,string> $preferences Array with all preferences that should be stored in database. array('name_of_preference' => 'value')
+     * @param bool                 $update      If set to @b false then no update will be done, only inserts
      */
     public function setPreferences(array $preferences, $update = true)
     {
@@ -529,5 +540,13 @@ class Organization extends TableAccess
             }
         }
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function getDbColumns()
+    {
+        return $this->dbColumns;
     }
 }

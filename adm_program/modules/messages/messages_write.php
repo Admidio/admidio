@@ -43,8 +43,8 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM')
-   || ($gPreferences['enable_pm_module'] != 1 && $getMsgType === 'PM'))
+if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+   || ($gPreferences['enable_pm_module'] != 1 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -52,14 +52,14 @@ if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== 'PM')
 }
 
 // check for valid login
-if (!$gValidLogin && $getUserId === 0 && $getMsgType === 'PM')
+if (!$gValidLogin && $getUserId === 0 && $getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT
 }
 
 // check if user has email address for sending a email
-if ($gValidLogin && $getMsgType !== 'PM' && $gCurrentUser->getValue('EMAIL') === '')
+if ($gValidLogin && $getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gCurrentUser->getValue('EMAIL') === '')
 {
     $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php">', '</a>'));
     // => EXIT
@@ -81,7 +81,7 @@ if ($getMsgId > 0)
 }
 
 $maxNumberRecipients = 1;
-if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
+if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 {
     $maxNumberRecipients = $gPreferences['mail_max_receiver'];
 }
@@ -89,7 +89,7 @@ if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== 'PM')
 $list = array();
 $arrAllVisibleRoles = $gCurrentUser->getAllVisibleRoles();
 
-if ($gValidLogin && $getMsgType === 'PM' && count($arrAllVisibleRoles) > 0)
+if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllVisibleRoles) > 0)
 {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM '.TBL_MEMBERS.'
@@ -164,7 +164,7 @@ if ($getSubject !== '')
 else
 {
     $headline = $gL10n->get('MAI_SEND_EMAIL');
-    if ($getMsgType === 'PM')
+    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
         $headline = $gL10n->get('PMS_SEND_PM');
     }
@@ -209,7 +209,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $messagesWriteMenu = $page->getMenu();
 $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-if ($getMsgType === 'PM')
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
 
     $formParam = 'msg_type=PM';
@@ -225,16 +225,21 @@ if ($getMsgType === 'PM')
     if ($getUserId === 0)
     {
         $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-        $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
-                                                                          'multiselect'            => true,
-                                                                          'maximumSelectionNumber' => $maxNumberRecipients,
-                                                                          'helpTextIdLabel'        => 'MSG_SEND_PM'));
+        $form->addSelectBox(
+            'msg_to', $gL10n->get('SYS_TO'), $list,
+            array(
+                'property'               => HtmlForm::FIELD_REQUIRED,
+                'multiselect'            => true,
+                'maximumSelectionNumber' => $maxNumberRecipients,
+                'helpTextIdLabel'        => 'MSG_SEND_PM'
+            )
+        );
         $form->closeGroupBox();
         $sendto = '';
     }
     else
     {
-        $form->addInput('msg_to', null, $getUserId, array('type' => 'hidden'));
+        $form->addInput('msg_to', '', $getUserId, array('type' => 'hidden'));
         $sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
     }
 
@@ -242,14 +247,20 @@ if ($getMsgType === 'PM')
 
     if($getSubject === '')
     {
-        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+        $form->addInput(
+            'subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'],
+            array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
+        );
     }
     else
     {
-        $form->addInput('subject', null, $formValues['subject'], array('type' => 'hidden'));
+        $form->addInput('subject', '', $formValues['subject'], array('type' => 'hidden'));
     }
 
-    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10, array('maxLength' => 254, 'property' => FIELD_REQUIRED));
+    $form->addMultilineTextInput(
+        'msg_body', $gL10n->get('SYS_PM'), $formValues['msg_body'], 10,
+        array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
+    );
 
     $form->closeGroupBox();
 
@@ -471,8 +482,8 @@ elseif (!isset($messageStatement))
         $preloadData = 'dummy';
         $showlist = new ListConfiguration($gDb, $postListId);
         $list = array('dummy' => $gL10n->get('LST_LIST'). (strlen($showlist->getValue('lst_name')) > 0 ? ' - '.$showlist->getValue('lst_name') : ''));
-        $form->addInput('userIdList', '', $postUserIdList, array('property' => FIELD_HIDDEN));
-        $form->addInput('lst_id', '', $postListId, array('property' => FIELD_HIDDEN));
+        $form->addInput('userIdList', '', $postUserIdList, array('property' => HtmlForm::FIELD_HIDDEN));
+        $form->addInput('lst_id', '', $postListId, array('property' => HtmlForm::FIELD_HIDDEN));
     }
 
     // no roles or users found then show message
@@ -482,11 +493,16 @@ elseif (!isset($messageStatement))
         // => EXIT
     }
 
-    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, array('property'               => FIELD_REQUIRED,
-                                                                      'multiselect'            => true,
-                                                                      'maximumSelectionNumber' => $maxNumberRecipients,
-                                                                      'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
-                                                                      'defaultValue'           => $preloadData));
+    $form->addSelectBox(
+        'msg_to', $gL10n->get('SYS_TO'), $list,
+        array(
+            'property'               => HtmlForm::FIELD_REQUIRED,
+            'multiselect'            => true,
+            'maximumSelectionNumber' => $maxNumberRecipients,
+            'helpTextIdLabel'        => 'MAI_SEND_MAIL_TO_ROLE',
+            'defaultValue'           => $preloadData
+        )
+    );
 
     $form->addLine();
 
@@ -503,7 +519,10 @@ elseif (!isset($messageStatement))
         $pdoStatement = $gDb->queryPrepared($sql, array($currUsrId));
         $possibleEmails = $pdoStatement->fetchColumn();
 
-        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+        $form->addInput(
+            'name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+            array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+        );
 
         if($possibleEmails > 1)
         {
@@ -527,13 +546,22 @@ elseif (!isset($messageStatement))
         }
         else
         {
-            $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+            $form->addInput(
+                'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+                array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+            );
         }
     }
     else
     {
-        $form->addInput('namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'], array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
+        $form->addInput(
+            'namefrom', $gL10n->get('MAI_YOUR_NAME'), $formValues['namefrom'],
+            array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+        );
+        $form->addInput(
+            'mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $formValues['mailfrom'],
+            array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+        );
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
@@ -551,26 +579,37 @@ elseif (!isset($messageStatement))
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
-    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'], array('maxLength' => 77, 'property' => FIELD_REQUIRED));
+    $form->addInput(
+        'subject', $gL10n->get('MAI_SUBJECT'), $formValues['subject'],
+        array('maxLength' => 77, 'property' => HtmlForm::FIELD_REQUIRED)
+    );
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
-    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') === '1'))
+    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIni::isFileUploadEnabled())
     {
-        $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), array('enableMultiUploads' => true,
-                                                                                         'maxUploadSize'      => Email::getMaxAttachementSize('b'),
-                                                                                         'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
-                                                                                         'hideUploadField'    => true,
-                                                                                         'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mib'))));
+        $form->addFileUpload(
+            'btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'),
+            array(
+                'enableMultiUploads' => true,
+                'maxUploadSize'      => Email::getMaxAttachmentSize(),
+                'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
+                'hideUploadField'    => true,
+                'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))
+            )
+        );
     }
 
     // add textfield or ckeditor to form
     if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
     {
-        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => FIELD_REQUIRED));
+        $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => HtmlForm::FIELD_REQUIRED));
     }
     else
     {
-        $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10, array('property' => FIELD_REQUIRED));
+        $form->addMultilineTextInput(
+            'msg_body', $gL10n->get('SYS_TEXT'), $formValues['msg_body'], 10,
+            array('property' => HtmlForm::FIELD_REQUIRED)
+        );
     }
 
     $form->closeGroupBox();
@@ -607,7 +646,7 @@ if (isset($messageStatement))
 
         $receiverName = '';
         $messageText = htmlspecialchars_decode($row['msc_message']);
-        if ($getMsgType === 'PM')
+        if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
         {
             // list history of this PM
             $messageText = nl2br($row['msc_message']);

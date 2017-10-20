@@ -108,22 +108,25 @@ else
 
     // create a language data object and assign it to the language object
     $gLanguageData = new LanguageData($gPreferences['system_language']);
-    $gL10n = new Language($gLanguageData);
+    $gL10n         = new Language($gLanguageData);
     $gCurrentSession->addObject('gLanguageData', $gLanguageData);
 
     // delete old entries in session table
-    $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
+    $gCurrentSession->tableCleanup((int) $gPreferences['logout_minutes']);
 }
+
+$orgId    = (int) $gCurrentOrganization->getValue('org_id');
+$sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 
 // now if auto login is done, read global user data
 if($gCurrentSession->hasObject('gCurrentUser'))
 {
     $gProfileFields =& $gCurrentSession->getObject('gProfileFields');
     $gCurrentUser   =& $gCurrentSession->getObject('gCurrentUser');
-    $gCurrentUser->mProfileFieldsData->setDatabase($gDb);
+    $gCurrentUser->setProfileFieldsDataDatabase($gDb);
 
     // checks if user in database session is the same as in php session
-    if($gCurrentUser->getValue('usr_id') !== $gCurrentSession->getValue('ses_usr_id'))
+    if((int) $gCurrentUser->getValue('usr_id') !== $sesUsrId)
     {
         $gCurrentUser->clear();
         $gCurrentSession->setValue('ses_usr_id', '');
@@ -132,13 +135,13 @@ if($gCurrentSession->hasObject('gCurrentUser'))
 else
 {
     // create object with current user field structure und user object
-    $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
-    $gCurrentUser   = new User($gDb, $gProfileFields, $gCurrentSession->getValue('ses_usr_id'));
+    $gProfileFields = new ProfileFields($gDb, $orgId);
+    $gCurrentUser   = new User($gDb, $gProfileFields, $sesUsrId);
 
     // if session is created with auto login then update user login data
     // if user object is created and session has usr_id then this is an auto login
     // and we should update the login data and count logins
-    if($gCurrentSession->getValue('ses_usr_id') > 0)
+    if($sesUsrId > 0)
     {
         $gCurrentUser->updateLoginData();
     }
@@ -148,20 +151,22 @@ else
     $gCurrentSession->addObject('gCurrentUser', $gCurrentUser);
 }
 
-// check if organization or user object must be renewed if data was changed by other users
 $sesRenew = (int) $gCurrentSession->getValue('ses_renew');
+$usrId    = (int) $gCurrentUser->getValue('usr_id');
+
+// check if organization or user object must be renewed if data was changed by other users
 if($sesRenew === 1 || $sesRenew === 3)
 {
     // read new field structure in object and than create new user object with new field structure
-    $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
-    $gCurrentUser->readDataById((int) $gCurrentUser->getValue('usr_id'));
+    $gProfileFields->readProfileFields($orgId);
+    $gCurrentUser->readDataById($usrId);
     $gCurrentSession->setValue('ses_renew', 0);
 }
 
 // check session if user login is valid
-if($gCurrentSession->getValue('ses_usr_id') > 0)
+if($sesUsrId > 0)
 {
-    if($gCurrentSession->isValidLogin((int) $gCurrentUser->getValue('usr_id')))
+    if($gCurrentSession->isValidLogin($usrId))
     {
         $gValidLogin = true;
     }
@@ -174,9 +179,7 @@ if($gCurrentSession->getValue('ses_usr_id') > 0)
 // update session recordset (i.a. refresh timestamp)
 $gCurrentSession->save();
 
-/*********************************************************************************
- create necessary objects and parameters
-/********************************************************************************/
+// create necessary objects and parameters
 
 // set default theme if no theme was set
 if(!array_key_exists('theme', $gPreferences))

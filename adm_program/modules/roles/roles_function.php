@@ -131,8 +131,7 @@ if($getMode === 2)
         'rol_weblinks',
         'rol_all_lists_view',
         'rol_mail_to_all',
-        'rol_profile',
-        'rol_inventory'
+        'rol_profile'
     );
 
     foreach($checkboxes as $value)

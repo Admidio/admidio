@@ -19,33 +19,49 @@
  */
 class ProfileFields
 {
-    public $mProfileFields = array();       ///< Array with all user fields objects
-    public $mUserData      = array();       ///< Array with all user data objects
-
-    protected $mDb;                         ///< An object of the class Database for communication with the database
-    protected $mUserId      = 0;            ///< UserId of the current user of this object
-    protected $noValueCheck = false;        ///< if true, than no value will be checked if method setValue is called
-    public $columnsValueChanged = false;    ///< flag if a value of one field had changed
+    /**
+     * @var Database An object of the class Database for communication with the database
+     */
+    protected $db;
+    /**
+     * @var array<string,TableUserField> Array with all user fields objects
+     */
+    protected $mProfileFields = array();
+    /**
+     * @var array<int,TableAccess> Array with all user data objects
+     */
+    protected $mUserData = array();
+    /**
+     * @var int UserId of the current user of this object
+     */
+    protected $mUserId = 0;
+    /**
+     * @var bool if true, than no value will be checked if method setValue is called
+     */
+    protected $noValueCheck = false;
+    /**
+     * @var bool flag if a value of one field had changed
+     */
+    protected $columnsValueChanged = false;
 
     /**
      * constructor that will initialize variables and read the profile field structure
-     * @param \Database $database       Database object (should be @b $gDb)
-     * @param int       $organizationId The id of the organization for which the profile field structure should be read
+     * @param Database $database       Database object (should be @b $gDb)
+     * @param int      $organizationId The id of the organization for which the profile field structure should be read
      */
-    public function __construct(&$database, $organizationId)
+    public function __construct(Database $database, $organizationId)
     {
-        $this->mDb =& $database;
+        $this->db =& $database;
         $this->readProfileFields($organizationId);
     }
 
     /**
-     * Called on serialization of this object. The database object could not
-     * be serialized and should be ignored.
+     * Called on serialization of this object. The database object could not be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()
     {
-        return array_diff(array_keys(get_object_vars($this)), array('mDb'));
+        return array_diff(array_keys(get_object_vars($this)), array('db'));
     }
 
     /**
@@ -57,6 +73,23 @@ class ProfileFields
         $this->mUserData = array();
         $this->mUserId = 0;
         $this->columnsValueChanged = false;
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return $this->columnsValueChanged;
+    }
+
+    /**
+     * @return array<string,TableUserField>
+     */
+    public function getProfileFields()
+    {
+        return $this->mProfileFields;
     }
 
     /**
@@ -422,13 +455,13 @@ class ProfileFields
                  WHERE cat_org_id IS NULL
                     OR cat_org_id = ? -- $organizationId
               ORDER BY cat_sequence ASC, usf_sequence ASC';
-        $userFieldsStatement = $this->mDb->queryPrepared($sql, array($organizationId));
+        $userFieldsStatement = $this->db->queryPrepared($sql, array($organizationId));
 
         while ($row = $userFieldsStatement->fetch())
         {
             if (!array_key_exists($row['usf_name_intern'], $this->mProfileFields))
             {
-                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->mDb);
+                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->db);
             }
             $this->mProfileFields[$row['usf_name_intern']]->setArray($row);
         }
@@ -460,13 +493,13 @@ class ProfileFields
                 INNER JOIN '.TBL_USER_FIELDS.'
                         ON usf_id = usd_usf_id
                      WHERE usd_usr_id = ? -- $userId';
-            $userDataStatement = $this->mDb->queryPrepared($sql, array($userId));
+            $userDataStatement = $this->db->queryPrepared($sql, array($userId));
 
             while ($row = $userDataStatement->fetch())
             {
                 if (!array_key_exists($row['usd_usf_id'], $this->mUserData))
                 {
-                    $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
+                    $this->mUserData[$row['usd_usf_id']] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
             }
@@ -479,7 +512,7 @@ class ProfileFields
      */
     public function saveUserData($userId)
     {
-        $this->mDb->startTransaction();
+        $this->db->startTransaction();
 
         foreach ($this->mUserData as $value)
         {
@@ -503,16 +536,16 @@ class ProfileFields
         $this->columnsValueChanged = false;
         $this->mUserId = (int) $userId;
 
-        $this->mDb->endTransaction();
+        $this->db->endTransaction();
     }
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
-        $this->mDb =& $database;
+        $this->db =& $database;
     }
 
     /**
@@ -600,11 +633,11 @@ class ProfileFields
             }
         }
 
-        $usfId = $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
+        $usfId = (int) $this->mProfileFields[$fieldNameIntern]->getValue('usf_id');
 
         if (!array_key_exists($usfId, $this->mUserData) && $fieldValue !== '')
         {
-            $this->mUserData[$usfId] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
+            $this->mUserData[$usfId] = new TableAccess($this->db, TBL_USER_DATA, 'usd');
             $this->mUserData[$usfId]->setValue('usd_usf_id', $usfId);
             $this->mUserData[$usfId]->setValue('usd_usr_id', $this->mUserId);
         }
@@ -647,4 +680,22 @@ class ProfileFields
             && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
     }
 
+    /**
+     * Delete all user data
+     * @return void
+     */
+    public function deleteUserData()
+    {
+        $this->db->startTransaction();
+
+        // delete every entry from adm_users_data
+        foreach ($this->mUserData as $field)
+        {
+            $field->delete();
+        }
+
+        $this->mUserData = array();
+
+        $this->db->endTransaction();
+    }
 }

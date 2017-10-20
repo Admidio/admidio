@@ -265,72 +265,25 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
 }
 
 /**
- * @param string $data
- * @param bool   $decimalMulti
- * @return int
- */
-function admFuncGetBytesFromSize($data, $decimalMulti = false)
-{
-    $value = (float) substr(trim($data), 0, -1);
-    $unit  = strtoupper(substr(trim($data), -1));
-
-    $multi = 1024;
-    if ($decimalMulti)
-    {
-        $multi = 1000;
-    }
-
-    switch ($unit)
-    {
-        case 'T':
-            $value *= $multi;
-        case 'G':
-            $value *= $multi;
-        case 'M':
-            $value *= $multi;
-        case 'K':
-            $value *= $multi;
-    }
-
-    return (int) $value;
-}
-
-/**
- * Berechnung der Maximalerlaubten Dateiuploadgröße in Byte
- * @return int
- */
-function admFuncMaxUploadSize()
-{
-    $postMaxSize       = admFuncGetBytesFromSize(ini_get('post_max_size'));
-    $uploadMaxFilesize = admFuncGetBytesFromSize(ini_get('upload_max_filesize'));
-
-    return min($postMaxSize, $uploadMaxFilesize);
-}
-
-/**
  * Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
- * @return float
+ * @return int
  */
 function admFuncProcessableImageSize()
 {
-    $memoryLimit = trim(ini_get('memory_limit'));
-    // falls in php.ini nicht gesetzt
-    if (!$memoryLimit || $memoryLimit === '')
+    $memoryLimit = PhpIni::getMemoryLimit();
+    // if memory_limit is disabled in php.ini
+    if ($memoryLimit === -1)
     {
-        $memoryLimit = '8M';
-    }
-    // falls in php.ini abgeschaltet
-    if ($memoryLimit === '-1')
-    {
-        $memoryLimit = '128M';
+        $memoryLimit = 128 * 1024 * 1024; // 128MB
     }
 
-    $memoryLimit = admFuncGetBytesFromSize($memoryLimit);
-
-    // Für jeden Pixel werden 3Byte benötigt (RGB)
+    // For each Pixel 3 Bytes are necessary (RGB)
+    $bytesPerPixel = 3;
     // der Speicher muss doppelt zur Verfügung stehen
-    // nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
-    return $memoryLimit / (3 * 2.5);
+    // nach ein paar tests hat sich 2.5x als sicher herausgestellt
+    $factor = 2.5;
+
+    return (int) round($memoryLimit / ($bytesPerPixel * $factor));
 }
 
 // Verify the content of an array element if it's the expected datatype
@@ -340,20 +293,20 @@ function admFuncProcessableImageSize()
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
- * @param array  $array        The array with the element that should be checked
- * @param string $variableName Name of the array element that should be checked
- * @param string $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
- *                             @b date or @b file that is expected and which will be checked.
- *                             Datatype @b date expects a date that has the Admidio default format from the
- *                             preferences or the english date format @b Y-m-d
- * @param array  $options      (optional) An array with the following possible entries:
- *                             - @b defaultValue : A value that will be set if the variable has no value
- *                             - @b requireValue : If set to @b true than a value is required otherwise the function
- *                                                 returns an error
- *                             - @b validValues :  An array with all values that the variable could have. If another
- *                                                 value is found than the function returns an error
- *                             - @b directOutput : If set to @b true the function returns only the error string, if set
- *                                                 to false a html message with the error will be returned
+ * @param array<string,mixed> $array        The array with the element that should be checked
+ * @param string              $variableName Name of the array element that should be checked
+ * @param string              $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
+ *                                          @b date or @b file that is expected and which will be checked.
+ *                                          Datatype @b date expects a date that has the Admidio default format from the
+ *                                          preferences or the english date format @b Y-m-d
+ * @param array<string,mixed> $options      (optional) An array with the following possible entries:
+ *                                          - @b defaultValue : A value that will be set if the variable has no value
+ *                                          - @b requireValue : If set to @b true than a value is required otherwise the function
+ *                                                              returns an error
+ *                                          - @b validValues :  An array with all values that the variable could have. If another
+ *                                                              value is found than the function returns an error
+ *                                          - @b directOutput : If set to @b true the function returns only the error string, if set
+ *                                                              to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
  * @par Examples
@@ -520,7 +473,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
         return $value;
     }
 
-    if (isset($gMessage) && $gMessage instanceof \Message)
+    if (isset($gMessage) && $gMessage instanceof Message)
     {
         if ($optionsAll['directOutput'])
         {
@@ -697,7 +650,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
  * @param string $directory  The directory where the files or directories should be searched.
  * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
  *                           the type of entries that should be searched.
- * @return string[]|false Returns an array with all found entries or false if an error occurs.
+ * @return false|array<string,string> Returns an array with all found entries or false if an error occurs.
  */
 function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 {
@@ -834,10 +787,60 @@ function noHTML($input, $encoding = 'UTF-8')
 
 /**
  * Get an string with question marks that are comma separated.
- * @param array $valuesArray An array with the values that should be replaced with question marks
+ * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
  * @return string Question marks string
  */
 function replaceValuesArrWithQM(array $valuesArray)
 {
     return implode(',', array_fill(0, count($valuesArray), '?'));
+}
+
+/**
+ * Berechnung der Maximalerlaubten Dateiuploadgröße in Byte
+ * @deprecated 3.3.0:4.0.0 "admFuncMaxUploadSize()" is a typo. Use "PhpIni::getUploadMaxSize()" instead.
+ * @return int
+ */
+function admFuncMaxUploadSize()
+{
+    global $gLogger;
+
+    $gLogger->warning('DEPRECATED: "admFuncMaxUploadSize()" is deprecated, use "PhpIni::getUploadMaxSize()" instead!');
+
+    return PhpIni::getUploadMaxSize();
+}
+
+/**
+ * @deprecated 3.3.0:4.0.0 "admFuncGetBytesFromSize()" is deprecated, there is no replacement.
+ * @param string $data
+ * @param bool   $decimalMulti
+ * @return int
+ */
+function admFuncGetBytesFromSize($data, $decimalMulti = false)
+{
+    global $gLogger;
+
+    $gLogger->warning('DEPRECATED: "admFuncGetBytesFromSize()" is deprecated, there is no replacement!');
+
+    $value = (float) substr(trim($data), 0, -1);
+    $unit  = strtoupper(substr(trim($data), -1));
+
+    $multi = 1024;
+    if ($decimalMulti)
+    {
+        $multi = 1000;
+    }
+
+    switch ($unit)
+    {
+        case 'T':
+            $value *= $multi;
+        case 'G':
+            $value *= $multi;
+        case 'M':
+            $value *= $multi;
+        case 'K':
+            $value *= $multi;
+    }
+
+    return (int) $value;
 }

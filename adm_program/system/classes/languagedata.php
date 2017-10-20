@@ -34,10 +34,22 @@ class LanguageData
 {
     const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
 
-    private $languageFilePath = array(); ///< Array with all relevant language files
-    private $language;                   ///< The ISO code of the language that should be read in this object
-    private $countries = array();        ///< Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
-    private $textCache = array();        ///< Stores all read text data in an array to get quick access if a text is required several times
+    /**
+     * @var array<int,string> Array with all relevant language files
+     */
+    private $languageFilePath = array();
+    /**
+     * @var string The ISO code of the language that should be read in this object
+     */
+    private $language = '';
+    /**
+     * @var array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     */
+    private $countries = array();
+    /**
+     * @var array<string,string> Stores all read text data in an array to get quick access if a text is required several times
+     */
+    private $textCache = array();
 
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
@@ -123,7 +135,7 @@ class LanguageData
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @return string[] Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountriesArray()
     {
@@ -152,7 +164,7 @@ class LanguageData
 
     /**
      * Returns an array with all language paths that were set.
-     * @return string[] with all language paths that were set.
+     * @return array<int,string> with all language paths that were set.
      */
     public function getLanguagePaths()
     {
@@ -175,7 +187,7 @@ class LanguageData
 
     /**
      * Save the array with all countries and their ISO codes in an internal parameter for later use
-     * @param string[] $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @param array<string,string> $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function setCountriesArray(array $countries)
     {

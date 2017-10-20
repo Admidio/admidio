@@ -83,8 +83,10 @@ $announcementsMenu = $page->getMenu();
 if($gCurrentUser->editAnnouncements())
 {
     // show link to create new announcement
-    $announcementsMenu->addItem('menu_item_new_announcement', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?headline='.$getHeadline,
-                                $gL10n->get('SYS_CREATE_ENTRY'), 'add.png');
+    $announcementsMenu->addItem(
+        'menu_item_new_announcement', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?headline='.$getHeadline,
+        $gL10n->get('SYS_CREATE_ENTRY'), 'add.png'
+    );
 }
 
 $page->addJavascript('
@@ -95,22 +97,28 @@ $page->addJavascript('
 );
 
 $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
-$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
+$navbarForm->addSelectBoxForCategories(
+    'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'FILTER_CATEGORIES',
+    array('defaultValue' => $getCatId)
+);
 $announcementsMenu->addForm($navbarForm->show(false));
 
 if($gCurrentUser->editAnnouncements())
 {
     // if no calendar selectbox is shown, then show link to edit calendars
-    $announcementsMenu->addItem('admMenuItemCategories',
-                        FOLDER_MODULES.'/categories/categories.php?type=ANN',
-                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+    $announcementsMenu->addItem(
+        'admMenuItemCategories', FOLDER_MODULES.'/categories/categories.php?type=ANN',
+        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+    );
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
-    $announcementsMenu->addItem('menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=announcements',
-                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $announcementsMenu->addItem(
+        'menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=announcements',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+    );
 }
 
 if($announcementsCount === 0)
@@ -194,7 +202,7 @@ else
 
     // If necessary show links to navigate to next and previous recordsets of the query
     $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?headline='.$getHeadline.'&cat_id='.$getCatId;
-    $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart, true));
+    $page->addHtml(admFuncGeneratePagination($baseUrl, $announcementsCount, $announcementsPerPage, $getStart));
 }
 
 // show html of complete page

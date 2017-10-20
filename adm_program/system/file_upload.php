@@ -110,8 +110,9 @@ elseif($getModule === 'downloads')
     {
         // get recordset of current folder from database
         $folder->getFolderForDownload($getId);
-        $uploadDir = $folder->getCompletePathOfFolder().'/';
-        $uploadUrl = ADMIDIO_URL. $folder->getValue('fol_path'). '/'. $folder->getValue('fol_name').'/';
+        $folderPath = $folder->getFolderPath() . '/';
+        $uploadDir = ADMIDIO_PATH . $folderPath;
+        $uploadUrl = ADMIDIO_URL . $folderPath;
     }
     catch(AdmException $e)
     {
@@ -129,7 +130,7 @@ elseif($getModule === 'downloads')
 }
 
 // check if the server allow file uploads
-if (ini_get('file_uploads') !== '1')
+if (!PhpIni::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
@@ -146,10 +147,10 @@ if($getMode === 'choose_files')
     $page->hideThemeHtml();
     $page->hideMenu();
 
-    $page->addCssFile('adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');
-    $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/vendor/jquery.ui.widget.js');
-    $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/jquery.iframe-transport.js');
-    $page->addJavascriptFile('adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/css/jquery.fileupload.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/jquery.iframe-transport.js');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery-file-upload/js/jquery.fileupload.js');
 
     $page->addJavascript('
         var countErrorFiles = 0;
@@ -158,7 +159,7 @@ if($getMode === 'choose_files')
         $(function() {
             "use strict";
             $("#fileupload").fileupload({
-                url: "../../system/file_upload.php?module='.$getModule.'&mode=upload_files&id='.$getId.'",
+                url: "'.ADMIDIO_URL.'/adm_program/system/file_upload.php?module='.$getModule.'&mode=upload_files&id='.$getId.'",
                 sequentialUploads: true,
                 dataType: "json",
                 add: function(e, data) {
@@ -218,7 +219,8 @@ if($getMode === 'choose_files')
                 <div class="progress-bar progress-bar-success"></div>
             </div>
             <div id="files" class="files"></div>
-        </div>');
+        </div>
+    ');
     $page->show();
 }
 elseif($getMode === 'upload_files')

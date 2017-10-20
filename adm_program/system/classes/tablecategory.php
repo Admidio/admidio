@@ -24,16 +24,22 @@
  */
 class TableCategory extends TableAccess
 {
-    protected $elementTable;
-    protected $elementColumn;
+    /**
+     * @var string
+     */
+    protected $elementTable = '';
+    /**
+     * @var string
+     */
+    protected $elementColumn = '';
 
     /**
      * Constructor that will create an object of a recordset of the table adm_category.
      * If the id is set than the specific category will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $catId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $catId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $catId = 0)
+    public function __construct(Database $database, $catId = 0)
     {
         parent::__construct($database, TBL_CATEGORIES, 'cat', $catId);
     }
@@ -83,11 +89,13 @@ class TableCategory extends TableAccess
         $queryParams = array($gCurrentSession->getValue('ses_org_id'), $this->getValue('cat_sequence'), $this->getValue('cat_type'));
         $this->db->queryPrepared($sql, $queryParams);
 
+        $catId = (int) $this->getValue('cat_id');
+
         // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
         $sql = 'SELECT *
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
-        $recordsetsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id')));
+        $recordsetsStatement = $this->db->queryPrepared($sql, array($catId));
 
         if ($recordsetsStatement->rowCount() > 0)
         {
@@ -95,7 +103,7 @@ class TableCategory extends TableAccess
         }
 
         // delete all roles assignments that have the right to view this category
-        $categoryViewRoles = new RolesRights($this->db, 'category_view', $this->getValue('cat_id'));
+        $categoryViewRoles = new RolesRights($this->db, 'category_view', $catId);
         $categoryViewRoles->delete();
 
         // now delete category
@@ -309,7 +317,7 @@ class TableCategory extends TableAccess
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of adm_categories will be read and stored in the object.
-     * @param array $columnArray An array where every element index is the column name and the value is the column value
+     * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns @b true if one record is found
      */
     public function readDataByColumns(array $columnArray)
@@ -384,7 +392,7 @@ class TableCategory extends TableAccess
         $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if ($fieldsChanged && $gCurrentSession instanceof \Session && $this->getValue('cat_type') === 'USF')
+        if ($fieldsChanged && $gCurrentSession instanceof Session && $this->getValue('cat_type') === 'USF')
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();

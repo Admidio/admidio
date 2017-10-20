@@ -20,7 +20,7 @@ class FunctionClass
     public $emailString              = '';
 
     /**
-     * @param \Language $gL10n
+     * @param Language $gL10n
      */
     public function __construct(Language $gL10n)
     {
@@ -36,7 +36,7 @@ class FunctionClass
 
     /**
      * @param string $directory Path of the directory with the template files
-     * @return string[] Returns an array of the template filenames
+     * @return array<int,string> Returns an array of the template filenames
      */
     public function getFileNames($directory)
     {

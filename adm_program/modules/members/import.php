@@ -19,7 +19,7 @@ if(!$gCurrentUser->editUsers())
 }
 
 // pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
-if (ini_get('file_uploads') !== '1')
+if (!PhpIni::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
@@ -54,9 +54,15 @@ $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->g
 // show form
 $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
-$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values')));
+$form->addFileUpload(
+    'userfile', $gL10n->get('MEM_CHOOSE_FILE'),
+    array('property' => HtmlForm::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values'))
+);
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_REQUIRED, 'defaultValue' => $formValues['import_coding']));
+$form->addSelectBox(
+    'import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries,
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['import_coding'])
+);
 
 // add a selectbox to the form where the user can choose a role from all roles he could see
 // first read all relevant roles from database and create an array with them
@@ -90,16 +96,34 @@ while($row = $statement->fetch())
 {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
-$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property'        => FIELD_REQUIRED,
-                                                                                    'defaultValue'    => $formValues['import_role_id'],
-                                                                                    'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'));
+$form->addSelectBox(
+    'import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles,
+    array(
+        'property'        => HtmlForm::FIELD_REQUIRED,
+        'defaultValue'    => $formValues['import_role_id'],
+        'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'
+    )
+);
 
-$selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
-$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property'                       => FIELD_REQUIRED,
-                                                                                                    'defaultValue'                   => $formValues['user_import_mode'],
-                                                                                                    'showContextDependentFirstEntry' => false,
-                                                                                                    'helpTextIdLabel'                => 'MEM_IDENTIFY_USERS'));
-$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
+$selectBoxEntries = array(
+    1 => $gL10n->get('MEM_NOT_EDIT'),
+    2 => $gL10n->get('MEM_DUPLICATE'),
+    3 => $gL10n->get('MEM_REPLACE'),
+    4 => $gL10n->get('MEM_COMPLEMENT')
+);
+$form->addSelectBox(
+    'user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries,
+    array(
+        'property'                       => HtmlForm::FIELD_REQUIRED,
+        'defaultValue'                   => $formValues['user_import_mode'],
+        'showContextDependentFirstEntry' => false,
+        'helpTextIdLabel'                => 'MEM_IDENTIFY_USERS'
+    )
+);
+$form->addSubmitButton(
+    'btn_forward', $gL10n->get('SYS_NEXT'),
+    array('icon' => THEME_URL.'/icons/forward.png', 'class' => ' col-sm-offset-3')
+);
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

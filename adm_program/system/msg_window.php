@@ -151,7 +151,7 @@ switch ($getMessageId)
                 <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
                 <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_2').'</li>
                 <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_3', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
-                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_4', round(admFuncMaxUploadSize()/pow(1024, 2), 2)).'</li>
+                <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_4', round(PhpIni::getUploadMaxSize()/pow(1024, 2), 2)).'</li>
             </ul>';
         break;
 

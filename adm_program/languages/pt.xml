@@ -309,10 +309,6 @@
   <string name="INS_SON">Filho</string>
   <string name="INS_SPOUSE">Cônjuge</string>
   <string name="INS_WIFE">Esposa</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Criar artigo</string>
-  <string name="INV_INVENTORY">Gestão de inventário</string>
-  <string name="INV_ITEM_MANAGEMENT">Gestão de itens</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Contador</string>
   <string name="LNK_CREATE_LINK">Criar novo link</string>
@@ -927,7 +923,6 @@
   <string name="ROL_NO_DEFAULT_ROLE">Não podes remover a configuração #VAR1_BOLD#, porque é necessário que pelo menos um cargo esteja guardado como atribuição padrão.</string>
   <string name="ROL_ONLY_ROLE_MEMBERS">Apenas membros do cargo</string>
   <string name="ROL_PREF" description="Abbreviation for Preferences">Config.</string>
-  <string name="ROL_RIGHT_INVENTORY">Gerenciamento de inventário e artigo</string>
   <string name="ROL_ROLE_ASSIGNMENT">Atribuição de cargo para #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Trimestralmente</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Exibir todas as listas de filiação de todos os cargos</string>

@@ -14,22 +14,48 @@
  */
 class RoleDependency
 {
-    protected $db;          ///< An object of the class Database for communication with the database
-
-    public $roleIdParent = 0;
-    public $roleIdChild  = 0;
-    public $comment      = '';
-    public $usrId        = 0;
-    public $timestamp    = '';
-    public $roleIdParentOrig = 0;
-    public $roleIdChildOrig  = 0;
-    public $persisted = false;
+    /**
+     * @var Database An object of the class Database for communication with the database
+     */
+    protected $db;
+    /**
+     * @var int
+     */
+    protected $roleIdParent = 0;
+    /**
+     * @var int
+     */
+    protected $roleIdChild  = 0;
+    /**
+     * @var string
+     */
+    protected $comment = '';
+    /**
+     * @var int
+     */
+    protected $usrId = 0;
+    /**
+     * @var string
+     */
+    protected $timestamp = '';
+    /**
+     * @var int
+     */
+    protected $roleIdParentOrig = 0;
+    /**
+     * @var int
+     */
+    protected $roleIdChildOrig = 0;
+    /**
+     * @var bool
+     */
+    protected $persisted = false;
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$database)
+    public function __construct(Database $database)
     {
         $this->db =& $database;
     }
@@ -101,11 +127,11 @@ class RoleDependency
     }
 
     /**
-     * @param \Database $database
-     * @param int       $childId
-     * @return int[]
+     * @param Database $database
+     * @param int      $childId
+     * @return array<int,int>
      */
-    public static function getParentRoles(&$database, $childId)
+    public static function getParentRoles(Database $database, $childId)
     {
         $allParentIds = array();
 
@@ -129,11 +155,11 @@ class RoleDependency
     }
 
     /**
-     * @param \Database $database
-     * @param int       $parentId
-     * @return int[]
+     * @param Database $database
+     * @param int      $parentId
+     * @return array<int,int>
      */
-    public static function getChildRoles(&$database, $parentId)
+    public static function getChildRoles(Database $database, $parentId)
     {
         $allChildIds = array();
 
@@ -187,11 +213,11 @@ class RoleDependency
     }
 
     /**
-     * @param \Database $database
-     * @param int       $parentId
+     * @param Database $database
+     * @param int      $parentId
      * @return bool
      */
-    public static function removeChildRoles(&$database, $parentId)
+    public static function removeChildRoles(Database $database, $parentId)
     {
         if ($parentId > 0)
         {

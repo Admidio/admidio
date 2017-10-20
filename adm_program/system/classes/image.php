@@ -34,21 +34,56 @@
  */
 class Image
 {
-    private $imagePath;
+    const ROTATE_DIRECTION_LEFT  = 'left';
+    const ROTATE_DIRECTION_RIGHT = 'right';
+    const ROTATE_DIRECTION_FLIP  = 'flip';
+
+    /**
+     * @var string
+     */
+    private $imagePath = '';
+    /**
+     * @var resource|null
+     */
+    private $imageResource;
+    /**
+     * @var int
+     */
     private $imageType;
-    public $imageResource;
-    public $imageWidth  = 0;
-    public $imageHeight = 0;
+    /**
+     * @var int
+     */
+    private $imageWidth  = 0;
+    /**
+     * @var int
+     */
+    private $imageHeight = 0;
 
     /**
      * @param string $pathAndFilename
      */
     public function __construct($pathAndFilename = '')
     {
-        if($pathAndFilename !== '')
+        if ($pathAndFilename !== '')
         {
             $this->setImageFromPath($pathAndFilename);
         }
+    }
+
+    /**
+     * @return resource|null Returns the image resource
+     */
+    public function getImageResource()
+    {
+        return $this->imageResource;
+    }
+
+    /**
+     * @return array<int,int> Returns an array of the image width and height
+     */
+    public function getImageSize()
+    {
+        return array($this->imageWidth, $this->imageHeight);
     }
 
     /**
@@ -58,25 +93,24 @@ class Image
      */
     public function setImageFromPath($pathAndFilename)
     {
-        if (is_file($pathAndFilename))
+        if (!is_file($pathAndFilename))
         {
-            $this->imagePath = $pathAndFilename;
-            $imageProperties = getimagesize($this->imagePath);
-
-            if (is_array($imageProperties))
-            {
-                $this->imageWidth  = $imageProperties[0];
-                $this->imageHeight = $imageProperties[1];
-                $this->imageType   = $imageProperties[2];
-
-                if ($this->createResource($pathAndFilename))
-                {
-                    return true;
-                }
-            }
+            return false;
         }
 
-        return false;
+        $this->imagePath = $pathAndFilename;
+        $imageProperties = getimagesize($this->imagePath);
+
+        if ($imageProperties === false)
+        {
+            return false;
+        }
+
+        $this->imageWidth  = $imageProperties[0];
+        $this->imageHeight = $imageProperties[1];
+        $this->imageType   = $imageProperties[2];
+
+        return $this->createResource($pathAndFilename);
     }
 
     /**
@@ -111,15 +145,24 @@ class Image
         switch ($this->imageType)
         {
             case IMAGETYPE_JPEG:
-                $this->imageResource = imagecreatefromjpeg($pathAndFilename);
+                $imageResource = imagecreatefromjpeg($pathAndFilename);
                 break;
 
             case IMAGETYPE_PNG:
-                $this->imageResource = imagecreatefrompng($pathAndFilename);
+                $imageResource = imagecreatefrompng($pathAndFilename);
                 break;
+            default:
+                return false;
         }
 
-        return $this->imageResource !== false;
+        if ($imageResource === false)
+        {
+            return false;
+        }
+
+        $this->imageResource = $imageResource;
+
+        return true;
     }
 
     /**
@@ -131,12 +174,12 @@ class Image
      */
     public function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
     {
-        if($imageResource === null)
+        if ($imageResource === null)
         {
             $imageResource = $this->imageResource;
         }
 
-        if($pathAndFilename === '')
+        if ($pathAndFilename === '')
         {
             $pathAndFilename = $this->imagePath;
         }
@@ -162,7 +205,7 @@ class Image
      */
     public function copyToBrowser($imageResource = null, $quality = 95)
     {
-        if($imageResource === null)
+        if ($imageResource === null)
         {
             $imageResource = $this->imageResource;
         }
@@ -196,6 +239,7 @@ class Image
     /**
      * setzt den Image-Type des Bildes neu
      * @param string $imageType
+     * @return bool
      */
     public function setImageType($imageType)
     {
@@ -208,35 +252,44 @@ class Image
             case 'png':
                 $this->imageType = IMAGETYPE_PNG;
                 break;
+            default:
+                return false;
         }
+
+        return true;
     }
 
     /**
      * Methode dreht das Bild um 90° in eine Richtung
      * @param string $direction 'right' o. 'left' Richtung, in die gedreht wird
+     * @return bool
      */
-    public function rotate($direction = 'right')
+    public function rotate($direction = self::ROTATE_DIRECTION_RIGHT)
     {
-        // nur bei gueltigen Uebergaben weiterarbeiten
-        if($direction === 'left' || $direction === 'right')
+        switch ($direction)
         {
-            if ($direction === 'left')
-            {
+            case self::ROTATE_DIRECTION_LEFT:
                 $angle = 90;
-            }
-            else
-            {
+                break;
+            case self::ROTATE_DIRECTION_RIGHT:
                 $angle = -90;
-            }
-
-            $imageRotated = imagerotate($this->imageResource, $angle, 0);
-
-            // speichern
-            $this->copyToFile($imageRotated);
-
-            // Loeschen des Bildes aus Arbeitsspeicher
-            imagedestroy($imageRotated);
+                break;
+            case self::ROTATE_DIRECTION_FLIP:
+                $angle = 180;
+                break;
+            default:
+                return false;
         }
+
+        $imageRotated = imagerotate($this->imageResource, $angle, 0);
+
+        // save
+        $this->copyToFile($imageRotated);
+
+        // Delete image from ram
+        imagedestroy($imageRotated);
+
+        return true;
     }
 
     /**
@@ -250,7 +303,7 @@ class Image
         // calc aspect ratio
         $aspectRatio = $this->imageWidth / $this->imageHeight;
 
-        if($this->imageWidth > $this->imageHeight)
+        if ($this->imageWidth > $this->imageHeight)
         {
             // x-Seite soll scalliert werden
             $newXSize = $newMaxSize;
@@ -277,9 +330,9 @@ class Image
      */
     public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
     {
-        if($maintainAspectRatio)
+        if ($maintainAspectRatio)
         {
-            if($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight)
+            if ($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight)
             {
                 return false;
             }
@@ -304,8 +357,7 @@ class Image
         }
 
         // check current memory limit and set this to 50MB if the current value is lower
-        preg_match('/(\d+)/', ini_get('memory_limit'), $memoryLimit);
-        if($memoryLimit[0] < 50)
+        if (PhpIni::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
         {
             @ini_set('memory_limit', '50M');
         }

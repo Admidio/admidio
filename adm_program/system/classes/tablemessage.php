@@ -15,15 +15,21 @@
  */
 class TableMessage extends TableAccess
 {
+    const MESSAGE_TYPE_EMAIL = 'EMAIL';
+    const MESSAGE_TYPE_PM    = 'PM';
+
+    /**
+     * @var int
+     */
     protected $msgId;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_messages.
      * If the id is set than the specific message will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $msgId    The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $msgId    The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $msgId = 0)
+    public function __construct(Database $database, $msgId = 0)
     {
         $this->msgId = $msgId;
 
@@ -138,7 +144,7 @@ class TableMessage extends TableAccess
 
         $msgId = (int) $this->getValue('msg_id');
 
-        if ($this->getValue('msg_type') === 'EMAIL' || (int) $this->getValue('msg_read') === 2)
+        if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2)
         {
             $sql = 'DELETE FROM '.TBL_MESSAGES_CONTENT.'
                      WHERE msc_msg_id = ? -- $msgId';

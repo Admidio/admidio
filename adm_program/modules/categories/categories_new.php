@@ -16,7 +16,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- *         INF = Categories for Inventory
  * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
@@ -121,7 +120,7 @@ else
         $category->readDataById($getCatId);
 
         // get assigned roles of this category
-        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
         $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
         $roleEditSet = $categoryEditRolesObject->getRolesIds();
@@ -175,24 +174,21 @@ $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $
 $form = new HtmlForm('categories_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
 
 // systemcategories should not be renamed
-$fieldPropertyCatName = FIELD_REQUIRED;
+$fieldPropertyCatName = HtmlForm::FIELD_REQUIRED;
 if($category->getValue('cat_system') == 1)
 {
-    $fieldPropertyCatName = FIELD_DISABLED;
+    $fieldPropertyCatName = HtmlForm::FIELD_DISABLED;
 }
 
-$form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
-    array(
-        'maxLength' => 100,
-        'property' => $fieldPropertyCatName
-    )
+$form->addInput(
+    'cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
+    array('maxLength' => 100, 'property' => $fieldPropertyCatName)
 );
 
 // Roles have their own preferences for visibility, so only allow this for other types.
 // Until now we do not support visibility for categories that belong to several organizations,
 // roles could be assigned if only 1 organization exists.
-if($getType !== 'ROL'
-&& ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
+if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
 {
     // read all roles of the current organization
     $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
@@ -225,7 +221,7 @@ if($getType !== 'ROL'
     $form->addSelectBoxFromSql(
         'adm_categories_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
         array(
-            'property'     => FIELD_REQUIRED,
+            'property'     => HtmlForm::FIELD_REQUIRED,
             'defaultValue' => $roleViewSet,
             'multiselect'  => true,
             'firstEntry'   => array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null),
@@ -249,7 +245,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 {
     if($gCurrentOrganization->isChildOrganization())
     {
-        $fieldProperty   = FIELD_DISABLED;
+        $fieldProperty   = HtmlForm::FIELD_DISABLED;
         $helpTextIdLabel = 'CAT_ONLY_SET_BY_MOTHER_ORGANIZATION';
     }
     else
@@ -257,7 +253,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         // show all organizations where this organization is mother or child organization
         $organizations = implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
 
-        $fieldProperty   = FIELD_DEFAULT;
+        $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
             $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
@@ -297,16 +293,16 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $checked = true;
     }
 
-    $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
-        array(
-            'property'        => $fieldProperty,
-            'helpTextIdLabel' => $helpTextIdLabel
-        )
+    $form->addCheckbox(
+        'show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
+        array('property' => $fieldProperty, 'helpTextIdLabel' => $helpTextIdLabel)
     );
 }
 
-$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
-                   array('icon' => 'star.png'));
+$form->addCheckbox(
+    'cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
+    array('icon' => 'star.png')
+);
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'),

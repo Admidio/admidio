@@ -338,10 +338,6 @@
   <string name="INS_SON">Sohn</string>
   <string name="INS_SPOUSE">Ehepartner/-in</string>
   <string name="INS_WIFE">Ehefrau</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Neuer Artikel</string>
-  <string name="INV_INVENTORY">Inventarverwaltung</string>
-  <string name="INV_ITEM_MANAGEMENT">Artikel verwalten</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Zähler</string>
   <string name="LNK_CREATE_LINK">Link anlegen</string>
@@ -979,7 +975,6 @@
   <string name="ROL_NO_DEFAULT_ROLE">Sie können die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
   <string name="ROL_ONLY_ROLE_MEMBERS">Nur Rollenmitglieder</string>
   <string name="ROL_PREF" description="Abbreviation for Preferences">Einst.</string>
-  <string name="ROL_RIGHT_INVENTORY">Artikel und Lagerverwaltung</string>
   <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Vierteljährlich</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>

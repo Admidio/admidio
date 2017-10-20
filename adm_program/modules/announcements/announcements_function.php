@@ -79,10 +79,10 @@ if($getMode === 1)
                 $announcement->setValue($key, $value);
             }
         }
-    
+
         // Daten in Datenbank schreiben
         $returnValue = $announcement->save();
-    
+
         if($returnValue === false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -92,8 +92,8 @@ if($getMode === 1)
         {
             if($getAnnId === 0)
             {
-                $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-    
+                $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date']));
+
                 $notification = new Email();
                 $notification->adminNotification($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }

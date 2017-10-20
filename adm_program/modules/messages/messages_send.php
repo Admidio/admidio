@@ -71,20 +71,20 @@ if ($getMsgId > 0)
 }
 
 // if message not PM it must be Email and then directly check the parameters
-if ($getMsgType !== 'PM')
+if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 {
-    $getMsgType = 'EMAIL';
+    $getMsgType = TableMessage::MESSAGE_TYPE_EMAIL;
 }
 
 // Stop if pm should be send pm module is disabled
-if ($getMsgType === 'PM' && (bool) $gPreferences['enable_pm_module'] === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && (bool) $gPreferences['enable_pm_module'] === false)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // Stop if mail should be send and mail module is disabled
-if ($getMsgType === 'EMAIL' && (bool) $gPreferences['enable_mail_module'] === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && (bool) $gPreferences['enable_mail_module'] === false)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -94,7 +94,7 @@ $sendResult = false;
 $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // if message is EMAIL then check the parameters
-if ($getMsgType === 'EMAIL')
+if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 {
     // allow option to send a copy to your email address only for registered users because of spam abuse
     $postCarbonCopy = 0;
@@ -156,7 +156,7 @@ if (!($currUsrId > 0 && (int) $gPreferences['mail_delivery_confirmation'] === 2)
 }
 
 // check if PM or Email and to steps:
-if ($getMsgType === 'EMAIL')
+if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 {
     $receiver = array();
     $receiverString = '';
@@ -194,7 +194,7 @@ if ($getMsgType === 'EMAIL')
                 // logged in user is just allowed to send to role with permission
                 // role must be from actual Organisation
                 if ((!$gValidLogin && (int) $row['rol_mail_this_role'] !== 3)
-                || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($row['rol_id']))
+                || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole((int) $row['rol_id']))
                 || $row['rol_id'] === null)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -363,7 +363,7 @@ if ($getMsgType === 'EMAIL')
                     {
                         // check the size of the attachment
                         $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
-                        if ($attachmentSize > Email::getMaxAttachementSize('b'))
+                        if ($attachmentSize > Email::getMaxAttachmentSize())
                         {
                             $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                             // => EXIT
@@ -538,7 +538,7 @@ else
 if ($sendResult === true) // don't remove check === true. ($sendResult) won't work
 {
     // save mail also to database
-    if ($getMsgType === 'EMAIL' && $gValidLogin)
+    if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $gValidLogin)
     {
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
                 VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$currUsrId.', \''.$receiverString.'\', CURRENT_TIMESTAMP, 0)';
@@ -566,7 +566,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
         $gMessage->setForwardUrl($gHomepage, 2000);
     }
 
-    if ($getMsgType === 'PM')
+    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
         $gMessage->show($gL10n->get('MSG_PM_SEND', $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         // => EXIT
@@ -579,7 +579,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
 }
 else
 {
-    if ($getMsgType === 'PM')
+    if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
         $gMessage->show($sendResult . '<br />' . $gL10n->get('MSG_PM_NOT_SEND', $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
         // => EXIT

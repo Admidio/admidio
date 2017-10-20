@@ -115,12 +115,6 @@ $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, c
         VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 3, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 
-// create inventory categories
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-        VALUES (NULL, \'INF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
-$db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
-$categoryIdMasterInventory = $db->lastInsertId();
-
 // create roles rights
 $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
         VALUES (\'folder_view\',   \'adm_folders\')
@@ -178,18 +172,6 @@ $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
            SET urt_id_inverse = 8
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
-
-// Inventoryfelder anlegen
-$sql = 'INSERT INTO '.TBL_INVENT_FIELDS.' (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
-        VALUES (?, \'TEXT\',   \'ITEM_NAME\', \'SYS_ITEMNAME\', NULL, 1, 1, 1, 1, ?, ?) -- $categoryIdMasterInventory, $currUsrId, DATETIME_NOW
-             , (?, \'NUMBER\', \'ROOM_ID\',   \'SYS_ROOM\',     NULL, 1, 1, 1, 2, ?, ?) -- $categoryIdMasterInventory, $currUsrId, DATETIME_NOW
-             , (?, \'NUMBER\', \'PRICE\',     \'SYS_QUANTITY\', NULL, 0, 0, 0, 3, ?, ?) -- $categoryIdMasterInventory, $currUsrId, DATETIME_NOW';
-$params = array(
-    $categoryIdMasterInventory, $currUsrId, DATETIME_NOW,
-    $categoryIdMasterInventory, $currUsrId, DATETIME_NOW,
-    $categoryIdMasterInventory, $currUsrId, DATETIME_NOW
-);
-$db->queryPrepared($sql, $params);
 
 disableSoundexSearchIfPgSql($db);
 
@@ -277,6 +259,9 @@ $form->setFormDescription(
 );
 $form->openButtonGroup();
 $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
-$form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
+$form->addButton(
+    'main_page', $gL10n->get('SYS_LATER'),
+    array('icon' => 'layout/application_view_list.png', 'link' => '../index.php')
+);
 $form->closeButtonGroup();
 echo $form->show();

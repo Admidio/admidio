@@ -31,7 +31,7 @@ if($getMode === 'delete')
 }
 
 // checks if the server settings for file_upload are set to ON
-if (ini_get('file_uploads') !== '1')
+if (!PhpIni::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT
@@ -178,8 +178,14 @@ if($getMode === 'choose')
     // show form
     $form = new HtmlForm('upload_files_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, array('enableFileUpload' => true));
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
-    $form->addFileUpload('foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'), array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help'));
-    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
+    $form->addFileUpload(
+        'foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'),
+        array('allowedMimeTypes' => array('image/jpeg', 'image/png'), 'helpTextIdLabel' => 'profile_photo_up_help')
+    );
+    $form->addSubmitButton(
+        'btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'),
+        array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3')
+    );
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -192,7 +198,7 @@ elseif($getMode === 'upload')
     // File size
     if ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
     {
-        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
+        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(PhpIni::getUploadMaxSize()/pow(1024, 2))));
         // => EXIT
     }
 

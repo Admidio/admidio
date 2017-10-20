@@ -22,30 +22,56 @@
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *
  * // show link to create new announcement
- * $myNavbar->addItem('menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
- *                         $gL10n->get('SYS_CREATE'), 'add.png');
+ * $myNavbar->addItem(
+ *     'menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
+ *     $gL10n->get('SYS_CREATE'), 'add.png'
+ * );
  * $myNavbar->show(); @endcode
  */
 class HtmlNavbar
 {
-    protected $leftItems  = array();    ///< An array with all items that should be displayed at the left part of the navbar
-    protected $rightItems = array();    ///< An array with all items that should be displayed at the right part of the navbar
-    protected $htmlPage;                ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    protected $htmlForm = '';           ///< Parameter that includes the html of the form that should be shown within the navbar
-    protected $name;                    ///< Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-    protected $type;                    ///< Navbar type. There is the @b default and the @b filter type possible.
-    protected $id;                      ///< The id of the navbar.
-    protected $customCssClass = '';     ///< A css class name that should be added to the main nav tag of the navbar
+    /**
+     * @var array<string,array<string,string|array<string,array<string,string>>>> An array with all items that should be displayed at the left part of the navbar
+     */
+    protected $leftItems = array();
+    /**
+     * @var array<string,array<string,string|array<string,array<string,string>>>> An array with all items that should be displayed at the right part of the navbar
+     */
+    protected $rightItems = array();
+    /**
+     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     */
+    protected $htmlPage;
+    /**
+     * @var string Parameter that includes the html of the form that should be shown within the navbar
+     */
+    protected $htmlForm = '';
+    /**
+     * @var string|null Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+     */
+    protected $name;
+    /**
+     * @var string Navbar type. There is the @b default and the @b filter type possible.
+     */
+    protected $type;
+    /**
+     * @var string The id of the navbar.
+     */
+    protected $id;
+    /**
+     * @var string A css class name that should be added to the main nav tag of the navbar
+     */
+    protected $customCssClass = '';
 
     /**
      * creates the object of the module menu and initialize all class parameters
-     * @param string    $id       Html id of the navbar
-     * @param string    $name     Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-     * @param \HtmlPage $htmlPage Optional a HtmlPage object that will be used to add javascript code
-     *                            or files to the html output page.
-     * @param string    $type     Different types of the navbar can be defined.
-     *                            default: will be the standard navbar of all modules.
-     *                            filter:  should be used if this navbar is used to filter data of within the script.
+     * @param string   $id       Html id of the navbar
+     * @param string   $name     Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+     * @param HtmlPage $htmlPage Optional a HtmlPage object that will be used to add javascript code
+     *                           or files to the html output page.
+     * @param string   $type     Different types of the navbar can be defined.
+     *                           default: will be the standard navbar of all modules.
+     *                           filter:  should be used if this navbar is used to filter data of within the script.
      */
     public function __construct($id, $name = null, HtmlPage $htmlPage = null, $type = 'default')
     {
@@ -63,7 +89,7 @@ class HtmlNavbar
             }
         }
 
-        if ($htmlPage instanceof \HtmlPage)
+        if ($htmlPage instanceof HtmlPage)
         {
             $this->htmlPage =& $htmlPage;
         }
@@ -75,7 +101,7 @@ class HtmlNavbar
 
     /**
      * Creates the html for the menu entry.
-     * @param string[] $data An array with all data if the item. This will be @id, @url, @text and @icon.
+     * @param array<string,string> $data An array with all data if the item. This will be @id, @url, @text and @icon.
      * @return string Returns the html for the menu entry
      */
     protected function createHtmlLink(array $data)
@@ -178,11 +204,11 @@ class HtmlNavbar
     }
 
     /**
-     * @param array[] $items
-     * @param string  $class
+     * @param array<string,array<string,string|array<string,array<string,string>>>> $items
+     * @param string                                                                $class
      * @return string
      */
-    private function getNavHtml($items, $class = '')
+    private function getNavHtml(array $items, $class = '')
     {
         $html = '<ul class="nav navbar-nav ' . $class . '">';
 
@@ -262,7 +288,7 @@ class HtmlNavbar
         }
 
         // if navbar will be shown then set this flag in page object
-        if ($this->htmlPage instanceof \HtmlPage)
+        if ($this->htmlPage instanceof HtmlPage)
         {
             $this->htmlPage->hasNavbar();
         }

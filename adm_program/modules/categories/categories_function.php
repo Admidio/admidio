@@ -16,7 +16,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- *         INF = Categories for Inventory
  * mode  : 1 - Create or edit categories
  *         2 - Delete category
  *         4 - Change sequence for parameter cat_id
@@ -156,22 +155,22 @@ if($getMode === 1)
         // => EXIT
     }
 
+    $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
     // roles have their own preferences for visibility, so only allow this for other types
     // until now we do not support visibility for categories that belong to several organizations
-    if($getType !== 'ROL'
+    if ($getType !== 'ROL'
     && ($category->getValue('cat_org_id') > 0
     || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
     {
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
-        $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+        $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
         $rightCategoryEdit = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
-        $rightCategoryEdit->saveRoles($_POST['adm_categories_edit_right']);
+        $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
     }
     else
     {
         // delete existing roles rights of the category
-        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $rightCategoryView->delete();
         $rightCategoryEdit = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
         $rightCategoryEdit->delete();

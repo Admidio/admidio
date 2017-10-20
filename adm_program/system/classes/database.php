@@ -32,10 +32,10 @@
  * @endcode
  * Now you can use the new object @b $gDb to send a query to the database
  * @code
- * // send sql to database and assign the returned PDOStatement
+ * // send sql to database and assign the returned \PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
  *
- * // now fetch all rows of the returned PDOStatement within one array
+ * // now fetch all rows of the returned \PDOStatement within one array
  * $organizationsList = $organizationsStatement->fetchAll();
  *
  * // Array with the results:
@@ -49,7 +49,7 @@
  * //             [org_longname]  => 'Test-Organization'
  * //             )
  *
- * // you can also go step by step through the returned PDOStatement
+ * // you can also go step by step through the returned \PDOStatement
  * while ($organizationNames = $organizationsStatement->fetch())
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
@@ -58,22 +58,66 @@
  */
 class Database
 {
+    const PDO_ENGINE_MYSQL = 'mysql';
+    const PDO_ENGINE_PGSQL = 'pgsql';
+
+    /**
+     * @var string
+     */
     protected $host;
+    /**
+     * @var int|null
+     */
     protected $port;
+    /**
+     * @var string
+     */
     protected $dbName;
+    /**
+     * @var string|null
+     */
     protected $username;
+    /**
+     * @var string|null
+     */
     protected $password;
+    /**
+     * @var array
+     */
     protected $options;
 
+    /**
+     * @var string
+     */
     protected $dsn;
+    /**
+     * @var string
+     */
     protected $dbEngine;
-    protected $pdo;                         ///< The PDO object that handles the communication with the database.
-    protected $pdoStatement;                ///< The PdoStatement object which is needed to handle the return of a query.
-    protected $transactions = 0;            ///< The transaction marker. If this is > 0 than a transaction is open.
-    protected $dbStructure  = array();      ///< array with arrays of every table with their structure
-    protected $fetchArray   = array();
-    protected $minRequiredVersion = '';     ///< The minimum required version of this database that is necessary to run Admidio.
-    protected $databaseName       = '';     ///< The name of the database e.g. 'MySQL'
+    /**
+     * @var \PDO The PDO object that handles the communication with the database.
+     */
+    protected $pdo;
+    /**
+     * @var \PDOStatement The PDOStatement object which is needed to handle the return of a query.
+     */
+    protected $pdoStatement;
+    /**
+     * @var int The transaction marker. If this is > 0 than a transaction is open.
+     */
+    protected $transactions = 0;
+    /**
+     * @var array<string,array<string,array<string,mixed>>> Array with arrays of every table with their structure
+     */
+    protected $dbStructure = array();
+    /**
+     * @var string The minimum required version of this database that is necessary to run Admidio.
+     */
+    protected $minRequiredVersion = '';
+    /**
+     * @var string The name of the database e.g. 'MySQL'
+     */
+    protected $databaseName = '';
 
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
@@ -94,7 +138,7 @@ class Database
         // for compatibility to old versions accept the string postgresql
         if ($engine === 'postgresql')
         {
-            $engine = 'pgsql';
+            $engine = self::PDO_ENGINE_PGSQL;
         }
 
         $this->host     = $host;
@@ -110,11 +154,11 @@ class Database
 
             if (count($availableDrivers) === 0)
             {
-                throw new PDOException('PDO does not support any drivers');
+                throw new \PDOException('PDO does not support any drivers');
             }
             if (!in_array($engine, $availableDrivers, true))
             {
-                throw new PDOException('The requested PDO driver ' . $engine . ' is not supported');
+                throw new \PDOException('The requested PDO driver ' . $engine . ' is not supported');
             }
 
             $this->setDSNString($engine);
@@ -126,7 +170,7 @@ class Database
 
             $this->setConnectionOptions();
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $logContext = array(
                 'engine'   => $engine,
@@ -153,8 +197,7 @@ class Database
     {
         switch ($engine)
         {
-            case 'mysql':
-
+            case self::PDO_ENGINE_MYSQL:
                 $port = '';
                 if ($this->port !== null)
                 {
@@ -164,7 +207,7 @@ class Database
                 $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8';
                 break;
 
-            case 'pgsql':
+            case self::PDO_ENGINE_PGSQL:
                 $port = '';
                 if ($this->port !== null)
                 {
@@ -174,7 +217,7 @@ class Database
                 break;
 
             default:
-                throw new PDOException('Engine is not supported by Admidio');
+                throw new \PDOException('Engine is not supported by Admidio');
         }
     }
 
@@ -202,14 +245,14 @@ class Database
 
         switch ($this->dbEngine)
         {
-            case 'mysql':
+            case self::PDO_ENGINE_MYSQL:
                 // MySQL charset UTF-8 is set in DSN-string
                 // set ANSI mode, that SQL could be more compatible with other DBs
                 $this->queryPrepared('SET SQL_MODE = \'ANSI\'');
                 // if the server has limited the joins, it can be canceled with this statement
                 $this->queryPrepared('SET SQL_BIG_SELECTS = 1');
                 break;
-            case 'pgsql':
+            case self::PDO_ENGINE_PGSQL:
                 $this->queryPrepared('SET NAMES \'UTF8\'');
                 break;
         }
@@ -221,7 +264,7 @@ class Database
      */
     protected function getPropertyFromDatabaseConfig($property)
     {
-        $xmlDatabases = new SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', null, true);
+        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
         return (string) $node[0];
     }
@@ -261,7 +304,7 @@ class Database
         $versionStatement = $this->queryPrepared('SELECT version()');
         $version = $versionStatement->fetchColumn();
 
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
             $versionArray  = explode(',', $version);
@@ -430,7 +473,7 @@ class Database
      */
     public function lastInsertId()
     {
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
             return $lastValStatement->fetchColumn();
@@ -486,14 +529,14 @@ class Database
      * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
      *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function query($sql, $showError = true)
     {
         global $gLogger;
 
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $sql = $this->preparePgSqlQuery($sql);
         }
@@ -503,7 +546,6 @@ class Database
 
         try
         {
-            $this->fetchArray = array();
             $this->pdoStatement = $this->pdo->query($sql);
 
             if ($this->pdoStatement !== false && strpos(strtoupper($sql), 'SELECT') === 0)
@@ -511,7 +553,7 @@ class Database
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $gLogger->critical('PDOException: ' . $e->getMessage());
 
@@ -531,19 +573,19 @@ class Database
      * then this statement will be written to the error log. If it's a @b SELECT statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
-     * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param array  $params     An array of parameters to bind to the prepared statement.
-     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
-     *                           occurred the error with a backtrace will be send to the browser. If set to
-     *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a> will be returned.
+     * @param string           $sql        A string with the sql statement that should be executed in database.
+     * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
+     * @param bool             $showError  Default will be @b true and if an error the script will be terminated and
+     *                                     occurred the error with a backtrace will be send to the browser. If set to
+     *                                     @b false no error will be shown and the script will be continued.
+     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
     public function queryPrepared($sql, array $params = array(), $showError = true)
     {
         global $gLogger;
 
-        if ($this->dbEngine === 'pgsql')
+        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $sql = $this->preparePgSqlQuery($sql);
         }
@@ -553,7 +595,6 @@ class Database
 
         try
         {
-            $this->fetchArray = array();
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false)
@@ -566,7 +607,7 @@ class Database
                 }
             }
         }
-        catch (PDOException $e)
+        catch (\PDOException $e)
         {
             $gLogger->critical('PDOException: ' . $e->getMessage());
 
@@ -642,7 +683,7 @@ class Database
     {
         $tableColumnsProperties = array();
 
-        if ($this->dbEngine === 'mysql')
+        if ($this->dbEngine === self::PDO_ENGINE_MYSQL)
         {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $columnsStatement = $this->query($sql); // TODO add more params
@@ -678,7 +719,7 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         }
-        elseif ($this->dbEngine === 'pgsql')
+        elseif ($this->dbEngine === self::PDO_ENGINE_PGSQL)
         {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type
                       FROM information_schema.columns
@@ -720,7 +761,7 @@ class Database
     /**
      * Method get all columns and their properties from the database table.
      * @param string $table Name of the database table for which the columns-properties should be shown.
-     * @return array[] Returns an array with column-names.
+     * @return array<string,array<string,mixed>> Returns an array with column-names.
      */
     public function getTableColumnsProperties($table)
     {
@@ -735,7 +776,7 @@ class Database
     /**
      * Method get all columns-names from the database table.
      * @param string $table Name of the database table for which the columns should be shown.
-     * @return string[] Returns an array with each column and their properties.
+     * @return array<int,string> Returns an array with each column and their properties.
      */
     public function getTableColumns($table)
     {
@@ -800,7 +841,7 @@ class Database
     /**
      * Returns an array with all available PDO database drivers of the server.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     * @return string[] Returns an array with all available PDO database drivers of the server.
+     * @return array<int,string> Returns an array with all available PDO database drivers of the server.
      * @see <a href="https://secure.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a>
      */
     public static function getAvailableDBs()
@@ -815,16 +856,16 @@ class Database
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a>
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
-     * @param \PDOStatement $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
      * @param int           $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
      *                                    @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
      * @return mixed|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">PDOStatement::fetch</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">\PDOStatement::fetch</a>
      */
-    public function fetch_array(PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
+    public function fetch_array(\PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
     {
         global $gLogger;
 
@@ -848,14 +889,14 @@ class Database
      * Fetch a result row as an object.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
      *             Please use methods Database#fetchAll or Database#fetch instead.
-     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a>
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">fetchObject</a> instead.
-     * @param \PDOStatement $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
      * @return mixed|null Returns an object that corresponds to the fetched row and moves the internal data pointer ahead.
-     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">PDOStatement::fetchObject</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.fetchobject.php">\PDOStatement::fetchObject</a>
      */
-    public function fetch_object(PDOStatement $pdoStatement = null)
+    public function fetch_object(\PDOStatement $pdoStatement = null)
     {
         global $gLogger;
 
@@ -894,14 +935,14 @@ class Database
     /**
      * Returns the number of rows of the last executed statement.
      * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">PDOStatement</a>
+     *             Please use the PHP class <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a>
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">rowCount</a> instead.
-     * @param \PDOStatement $pdoStatement An object of the class PDOStatement. This should be set if multiple
+     * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
      * @return int|null Return the number of rows of the result of the sql statement.
-     * @see <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">PDOStatement::rowCount</a>
+     * @see <a href="https://secure.php.net/manual/en/pdostatement.rowcount.php">\PDOStatement::rowCount</a>
      */
-    public function num_rows(PDOStatement $pdoStatement = null)
+    public function num_rows(\PDOStatement $pdoStatement = null)
     {
         global $gLogger;
 
@@ -926,7 +967,7 @@ class Database
      * @deprecated 3.2.0:4.0.0 Switch to new methods (getTableColumnsProperties(), getTableColumns()).
      * @param string $table                Name of the database table for which the columns should be shown.
      * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
-     * @return string[]|array[] Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     * @return array<string,array<string,mixed>>|array<int,string> Returns an array with each column and their properties if $showColumnProperties is set to @b true.
      */
     public function showColumns($table, $showColumnProperties = true)
     {

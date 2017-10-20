@@ -37,7 +37,7 @@ catch(AdmException $e)
 }
 
 // kompletten Pfad der Datei holen
-$completePath = $file->getCompletePathOfFile();
+$completePath = $file->getFullFilePath();
 
 // pruefen ob File ueberhaupt physikalisch existiert
 if (!is_file($completePath))
@@ -69,5 +69,6 @@ header('Content-Disposition: attachment; filename="'.$filename.'"');
 header('Cache-Control: private');
 header('Pragma: public');
 
-// Datei ausgeben.
-echo readfile($completePath);
+// file output
+// use this function because of problems with big files
+readfile($completePath);

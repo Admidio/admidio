@@ -161,7 +161,7 @@ $birthdaysMonthDayArray = array();
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && $page instanceof \HtmlPage)
+if(isset($page) && $page instanceof HtmlPage)
 {
     $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/calendar/calendar.css');
 }
@@ -281,7 +281,7 @@ if($plg_ter_aktiv)
 // query of all birthdays
 if($plg_geb_aktiv)
 {
-    if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+    if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
         $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
         $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';

@@ -92,8 +92,8 @@ define('FOLDER_PLUGINS', '/adm_plugins');
 date_default_timezone_set($gTimezone);
 
 // date and time for use in scripts
-define('DATE_NOW', date('Y-m-d', time()));
-define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
+define('DATE_NOW', date('Y-m-d'));
+define('DATETIME_NOW', date('Y-m-d H:i:s'));
 define('DATE_MAX', '9999-12-31');
 
 // ###################
@@ -110,9 +110,6 @@ define('TBL_FOLDERS',             $g_tbl_praefix . '_folders');
 define('TBL_GUESTBOOK',           $g_tbl_praefix . '_guestbook');
 define('TBL_GUESTBOOK_COMMENTS',  $g_tbl_praefix . '_guestbook_comments');
 define('TBL_IDS',                 $g_tbl_praefix . '_ids');
-define('TBL_INVENT',              $g_tbl_praefix . '_invent');
-define('TBL_INVENT_DATA',         $g_tbl_praefix . '_invent_data');
-define('TBL_INVENT_FIELDS',       $g_tbl_praefix . '_invent_fields');
 define('TBL_LINKS',               $g_tbl_praefix . '_links');
 define('TBL_LIST_COLUMNS',        $g_tbl_praefix . '_list_columns');
 define('TBL_LISTS',               $g_tbl_praefix . '_lists');

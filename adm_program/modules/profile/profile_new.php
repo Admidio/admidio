@@ -124,12 +124,12 @@ if(isset($_SESSION['profile_request']))
 {
     $user->noValueCheck();
 
-    foreach($gProfileFields->mProfileFields as $field)
+    foreach($gProfileFields->getProfileFields() as $field)
     {
         $fieldName = 'usf-'. $field->getValue('usf_id');
         if(isset($_SESSION['profile_request'][$fieldName]))
         {
-            $user->mProfileFieldsData->setValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]));
+            $user->setProfileFieldsValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]));
         }
     }
 
@@ -148,7 +148,7 @@ if(isset($_SESSION['profile_request']))
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();
-$page->addJavascriptFile('adm_program/libs/zxcvbn/dist/zxcvbn.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn.js');
 
 // add back link to module menu
 $profileEditMenu = $page->getMenu();
@@ -163,7 +163,7 @@ $form = new HtmlForm('edit_profile_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/p
 
 $category = '';
 
-foreach($gProfileFields->mProfileFields as $field)
+foreach($gProfileFields->getProfileFields() as $field)
 {
     $showField = false;
 
@@ -197,29 +197,42 @@ foreach($gProfileFields->mProfileFields as $field)
             if($getUserId > 0 || $getNewUser === 2)
             {
                 // add username to form
-                $fieldProperty = FIELD_DEFAULT;
+                $fieldProperty = HtmlForm::FIELD_DEFAULT;
                 $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
 
                 if(!$gCurrentUser->isAdministrator() && $getNewUser === 0)
                 {
-                    $fieldProperty = FIELD_DISABLED;
+                    $fieldProperty = HtmlForm::FIELD_DISABLED;
                     $fieldHelpId   = '';
                 }
                 elseif($getNewUser > 0)
                 {
-                    $fieldProperty = FIELD_REQUIRED;
+                    $fieldProperty = HtmlForm::FIELD_REQUIRED;
                 }
 
-                $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), array('maxLength' => 35, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small'));
+                $form->addInput(
+                    'usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'),
+                    array('maxLength' => 35, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small')
+                );
 
                 if($getNewUser === 2)
                 {
                     // at registration add password and password confirm to form
                     $form->addInput(
-                        'usr_password', $gL10n->get('SYS_PASSWORD'), null,
-                        array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'passwordStrength' => true, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small')
+                        'usr_password', $gL10n->get('SYS_PASSWORD'), '',
+                        array(
+                            'type'             => 'password',
+                            'property'         => HtmlForm::FIELD_REQUIRED,
+                            'minLength'        => PASSWORD_MIN_LENGTH,
+                            'passwordStrength' => true,
+                            'helpTextIdLabel'  => 'PRO_PASSWORD_DESCRIPTION',
+                            'class'            => 'form-control-small'
+                        )
                     );
-                    $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'class' => 'form-control-small'));
+                    $form->addInput(
+                        'password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), '',
+                        array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'minLength' => PASSWORD_MIN_LENGTH, 'class' => 'form-control-small')
+                    );
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
@@ -229,7 +242,7 @@ foreach($gProfileFields->mProfileFields as $field)
                               ORDER BY org_longname ASC, org_shortname ASC';
                         $form->addSelectBoxFromSql(
                             'reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-                            array('property' => FIELD_REQUIRED, 'defaultValue' => $registrationOrgId)
+                            array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $registrationOrgId)
                         );
                     }
                 }
@@ -258,7 +271,7 @@ foreach($gProfileFields->mProfileFields as $field)
     if($showField)
     {
         // add profile fields to form
-        $fieldProperty = FIELD_DEFAULT;
+        $fieldProperty = HtmlForm::FIELD_DEFAULT;
         $helpId        = '';
         $usfNameIntern = $field->getValue('usf_name_intern');
 
@@ -266,12 +279,12 @@ foreach($gProfileFields->mProfileFields as $field)
         && !$gCurrentUser->hasRightEditProfile($user, false) && $getNewUser === 0)
         {
             // disable field if this is configured in profile field configuration
-            $fieldProperty = FIELD_DISABLED;
+            $fieldProperty = HtmlForm::FIELD_DISABLED;
         }
         elseif($gProfileFields->getProperty($usfNameIntern, 'usf_mandatory') == 1)
         {
             // set mandatory field
-            $fieldProperty = FIELD_REQUIRED;
+            $fieldProperty = HtmlForm::FIELD_REQUIRED;
         }
 
         if(strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0)
@@ -405,8 +418,16 @@ foreach($gProfileFields->mProfileFields as $field)
                 $maxlength = '50';
             }
 
-            $form->addInput('usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'), $gProfileFields->getProperty($usfNameIntern, 'usf_name'), $user->getValue($usfNameIntern),
-                array('type' => $fieldType, 'maxLength' => $maxlength, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')));
+            $form->addInput(
+                'usf-'. $gProfileFields->getProperty($usfNameIntern, 'usf_id'), $gProfileFields->getProperty($usfNameIntern, 'usf_name'), $user->getValue($usfNameIntern),
+                array(
+                    'type'            => $fieldType,
+                    'maxLength'       => $maxlength,
+                    'property'        => $fieldProperty,
+                    'helpTextIdLabel' => $helpId,
+                    'icon'            => $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database')
+                )
+            );
         }
     }
 }

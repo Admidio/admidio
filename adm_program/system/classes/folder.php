@@ -29,6 +29,9 @@
  */
 class Folder
 {
+    /**
+     * @var string
+     */
     protected $folderWithPath = '';
 
     /**

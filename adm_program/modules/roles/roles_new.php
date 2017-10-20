@@ -146,32 +146,58 @@ $form = new HtmlForm('roles_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 if($role->getValue('rol_administrator') == 1)
 {
-    $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
-                    array('maxLength' => 100, 'property' => FIELD_READONLY));
+    $form->addInput(
+        'rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
+        array('maxLength' => 100, 'property' => HtmlForm::FIELD_READONLY)
+    );
 }
 else
 {
-    $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
-                    array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+    $form->addInput(
+        'rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'),
+        array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+    );
 }
-$form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3,
-                             array('maxLength' => 4000));
-$form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES',
-                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id')));
+$form->addMultilineTextInput(
+    'rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3,
+    array('maxLength' => 4000)
+);
+$form->addSelectBoxForCategories(
+    'rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES',
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id'))
+);
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 if($gPreferences['enable_mail_module'])
 {
     $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'), 3 => $gL10n->get('ROL_ALL_GUESTS'));
-    $form->addSelectBox('rol_mail_this_role', $gL10n->get('ROL_SEND_MAILS'), $selectBoxEntries,
-                        array('defaultValue' => $role->getValue('rol_mail_this_role'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => array('ROL_RIGHT_MAIL_THIS_ROLE_DESC', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'))));
+    $form->addSelectBox(
+        'rol_mail_this_role', $gL10n->get('ROL_SEND_MAILS'), $selectBoxEntries,
+        array(
+            'defaultValue'                   => $role->getValue('rol_mail_this_role'),
+            'showContextDependentFirstEntry' => false,
+            'helpTextIdLabel'                => array('ROL_RIGHT_MAIL_THIS_ROLE_DESC', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'))
+        )
+    );
 }
 $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'));
-$form->addSelectBox('rol_this_list_view', $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'), $selectBoxEntries,
-                    array('defaultValue' => $role->getValue('rol_this_list_view'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => array('ROL_RIGHT_THIS_LIST_VIEW_DESC', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'))));
+$form->addSelectBox(
+    'rol_this_list_view', $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'), $selectBoxEntries,
+    array(
+        'defaultValue'                   => $role->getValue('rol_this_list_view'),
+        'showContextDependentFirstEntry' => false,
+        'helpTextIdLabel'                => array('ROL_RIGHT_THIS_LIST_VIEW_DESC', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'))
+    )
+);
 $selectBoxEntries = array(0 => $gL10n->get('ROL_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('ROL_ASSIGN_EDIT_MEMBERS'));
-$form->addSelectBox('rol_leader_rights', $gL10n->get('SYS_LEADER'), $selectBoxEntries,
-                    array('defaultValue' => $role->getValue('rol_leader_rights'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_LEADER_RIGHTS_DESC'));
+$form->addSelectBox(
+    'rol_leader_rights', $gL10n->get('SYS_LEADER'), $selectBoxEntries,
+    array(
+        'defaultValue'                   => $role->getValue('rol_leader_rights'),
+        'showContextDependentFirstEntry' => false,
+        'helpTextIdLabel'                => 'ROL_LEADER_RIGHTS_DESC'
+    )
+);
 
 $selectBoxEntries = array(0 => $gL10n->get('ROL_SYSTEM_DEFAULT_LIST'));
 // SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen
@@ -187,19 +213,29 @@ while($row = $pdoStatement->fetch())
 {
     $selectBoxEntries[$row['lst_id']] = $row['lst_name'];
 }
-$form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries,
-                    array('defaultValue' => $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC'));
+$form->addSelectBox(
+    'rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries,
+    array('defaultValue' => $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC')
+);
 
 if($role->getValue('cat_name_intern') !== 'EVENTS')
 {
-    $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), (bool) $role->getValue('rol_default_registration'),
-                       array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC'));
-    $form->addInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'),
-                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1));
-    $form->addInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'),
-                    array('maxLength' => 6, 'class' => 'form-control-small'));
-    $form->addSelectBox('rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods(),
-                        array('defaultValue' => $role->getValue('rol_cost_period')));
+    $form->addCheckbox(
+        'rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), (bool) $role->getValue('rol_default_registration'),
+        array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC')
+    );
+    $form->addInput(
+        'rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'),
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1)
+    );
+    $form->addInput(
+        'rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'),
+        array('maxLength' => 6, 'class' => 'form-control-small'
+        ));
+    $form->addSelectBox(
+        'rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods(),
+        array('defaultValue' => $role->getValue('rol_cost_period'))
+    );
 }
 $form->closeGroupBox();
 
@@ -207,61 +243,83 @@ $form->closeGroupBox();
 if($role->getValue('cat_name_intern') !== 'EVENTS')
 {
     $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
-    $form->addCheckbox('rol_assign_roles', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'), (bool) $role->getValue('rol_assign_roles'),
-                       array('helpTextIdLabel' => 'ROL_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'roles.png'));
-    $form->addCheckbox('rol_all_lists_view', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'), (bool) $role->getValue('rol_all_lists_view'),
-                       array('icon' => 'lists.png'));
-    $form->addCheckbox('rol_approve_users', $gL10n->get('ROL_RIGHT_APPROVE_USERS'), (bool) $role->getValue('rol_approve_users'),
-                       array('icon' => 'new_registrations.png'));
-    $form->addCheckbox('rol_edit_user', $gL10n->get('ROL_RIGHT_EDIT_USER'), (bool) $role->getValue('rol_edit_user'),
-                       array('helpTextIdLabel' => 'ROL_RIGHT_EDIT_USER_DESC', 'icon' => 'group.png'));
+    $form->addCheckbox(
+        'rol_assign_roles', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'), (bool) $role->getValue('rol_assign_roles'),
+        array('helpTextIdLabel' => 'ROL_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'roles.png')
+    );
+    $form->addCheckbox(
+        'rol_all_lists_view', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'), (bool) $role->getValue('rol_all_lists_view'),
+        array('icon' => 'lists.png')
+    );
+    $form->addCheckbox(
+        'rol_approve_users', $gL10n->get('ROL_RIGHT_APPROVE_USERS'), (bool) $role->getValue('rol_approve_users'),
+        array('icon' => 'new_registrations.png')
+    );
+    $form->addCheckbox(
+        'rol_edit_user', $gL10n->get('ROL_RIGHT_EDIT_USER'), (bool) $role->getValue('rol_edit_user'),
+        array('helpTextIdLabel' => 'ROL_RIGHT_EDIT_USER_DESC', 'icon' => 'group.png')
+    );
     if($gPreferences['enable_mail_module'] > 0)
     {
-        $form->addCheckbox('rol_mail_to_all', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'), (bool) $role->getValue('rol_mail_to_all'),
-                           array('icon' => 'email.png'));
+        $form->addCheckbox(
+            'rol_mail_to_all', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'), (bool) $role->getValue('rol_mail_to_all'),
+            array('icon' => 'email.png')
+        );
     }
-    $form->addCheckbox('rol_profile', $gL10n->get('ROL_RIGHT_PROFILE'), (bool) $role->getValue('rol_profile'),
-                       array('icon' => 'profile.png'));
+    $form->addCheckbox(
+        'rol_profile', $gL10n->get('ROL_RIGHT_PROFILE'), (bool) $role->getValue('rol_profile'),
+        array('icon' => 'profile.png')
+    );
     if($gPreferences['enable_announcements_module'] > 0)
     {
-        $form->addCheckbox('rol_announcements', $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
-                           array('icon' => 'announcements.png'));
+        $form->addCheckbox(
+            'rol_announcements', $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
+            array('icon' => 'announcements.png')
+        );
     }
     if($gPreferences['enable_dates_module'] > 0)
     {
-        $form->addCheckbox('rol_dates', $gL10n->get('ROL_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
-                           array('icon' => 'dates.png'));
+        $form->addCheckbox(
+            'rol_dates', $gL10n->get('ROL_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
+            array('icon' => 'dates.png')
+        );
     }
     if($gPreferences['enable_photo_module'] > 0)
     {
-        $form->addCheckbox('rol_photo', $gL10n->get('ROL_RIGHT_PHOTO'), (bool) $role->getValue('rol_photo'),
-                           array('icon' => 'photo.png'));
+        $form->addCheckbox(
+            'rol_photo', $gL10n->get('ROL_RIGHT_PHOTO'), (bool) $role->getValue('rol_photo'),
+            array('icon' => 'photo.png')
+        );
     }
     if($gPreferences['enable_download_module'] > 0)
     {
-        $form->addCheckbox('rol_download', $gL10n->get('ROL_RIGHT_DOWNLOAD'), (bool) $role->getValue('rol_download'),
-                           array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'download.png'));
+        $form->addCheckbox(
+            'rol_download', $gL10n->get('ROL_RIGHT_DOWNLOAD'), (bool) $role->getValue('rol_download'),
+            array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'download.png')
+        );
     }
     if($gPreferences['enable_guestbook_module'] > 0)
     {
-        $form->addCheckbox('rol_guestbook', $gL10n->get('ROL_RIGHT_GUESTBOOK'), (bool) $role->getValue('rol_guestbook'),
-                           array('icon' => 'guestbook.png'));
+        $form->addCheckbox(
+            'rol_guestbook', $gL10n->get('ROL_RIGHT_GUESTBOOK'), (bool) $role->getValue('rol_guestbook'),
+            array('icon' => 'guestbook.png')
+        );
         // if not registered users can set comments than there is no need to set a role dependent right
         if(!$gPreferences['enable_gbook_comments4all'])
         {
-            $form->addCheckbox('rol_guestbook_comments', $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'), (bool) $role->getValue('rol_guestbook_comments'),
-                               array('icon' => 'comment.png'));
+            $form->addCheckbox(
+                'rol_guestbook_comments', $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'), (bool) $role->getValue('rol_guestbook_comments'),
+                array('icon' => 'comment.png')
+            );
         }
     }
     if($gPreferences['enable_weblinks_module'] > 0)
     {
-        $form->addCheckbox('rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),
-                           array('icon' => 'weblinks.png'));
+        $form->addCheckbox(
+            'rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),
+            array('icon' => 'weblinks.png')
+        );
     }
-    /*if($gPreferences['enable_inventory_module'] > 0)
-    {
-        $form->addCheckbox('rol_inventory', $gL10n->get('ROL_RIGHT_INVENTORY'), (bool) $role->getValue('rol_inventory'), array('icon' => 'inventory.png'));
-    }*/
     $form->closeGroupBox();
     $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
     $form->addInput('rol_start_date', $gL10n->get('ROL_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));

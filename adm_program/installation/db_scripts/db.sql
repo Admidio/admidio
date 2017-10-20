@@ -17,9 +17,6 @@ drop table if exists %PREFIX%_files cascade;
 drop table if exists %PREFIX%_folders cascade;
 drop table if exists %PREFIX%_guestbook_comments cascade;
 drop table if exists %PREFIX%_guestbook cascade;
-drop table if exists %PREFIX%_invent_fields cascade;
-drop table if exists %PREFIX%_invent_data cascade;
-drop table if exists %PREFIX%_invent cascade;
 drop table if exists %PREFIX%_links cascade;
 drop table if exists %PREFIX%_members cascade;
 drop table if exists %PREFIX%_messages cascade;
@@ -267,79 +264,6 @@ collate = utf8_unicode_ci;
 
 
 /*==============================================================*/
-/* Table: adm_invent_fields                                     */
-/*==============================================================*/
-create table %PREFIX%_invent_fields
-(
-    inf_id                      integer unsigned    not null    AUTO_INCREMENT,
-    inf_cat_id                  integer unsigned    not null,
-    inf_type                    varchar(30)         not null,
-    inf_name_intern             varchar(110)        not null,
-    inf_name                    varchar(100)        not null,
-    inf_description             text,
-    inf_value_list              text,
-    inf_system                  boolean             not null    default '0',
-    inf_disabled                boolean             not null    default '0',
-    inf_hidden                  boolean             not null    default '0',
-    inf_mandatory               boolean             not null    default '0',
-    inf_sequence                smallint            not null,
-    inf_usr_id_create           integer unsigned,
-    inf_timestamp_create        timestamp           not null    default CURRENT_TIMESTAMP,
-    inf_usr_id_change           integer unsigned,
-    inf_timestamp_change        timestamp           null        default null,
-    primary key (inf_id)
-)
-engine = InnoDB
-default character set = utf8
-collate = utf8_unicode_ci;
-
-create unique index IDX_%PREFIX%_INF_NAME_INTERN on %PREFIX%_invent_fields (inf_name_intern);
-
-
-/*==============================================================*/
-/* Table: adm_invent_data                                       */
-/*==============================================================*/
-create table %PREFIX%_invent_data
-(
-    ind_id                      integer unsigned    not null    AUTO_INCREMENT,
-    ind_itm_id                  integer unsigned    not null,
-    ind_inf_id                  integer unsigned    not null,
-    ind_value                   varchar(255),
-    primary key (ind_id)
-)
-engine = InnoDB
-default character set = utf8
-collate = utf8_unicode_ci;
-
-create unique index IDX_%PREFIX%_IND_ITM_INF_ID on %PREFIX%_invent_data (ind_itm_id, ind_inf_id);
-
-
-/*==============================================================*/
-/* Table: adm_invent                                            */
-/*==============================================================*/
-create table %PREFIX%_invent
-(
-    inv_id                      integer unsigned    not null    AUTO_INCREMENT,
-    inv_photo                   blob,
-    inv_text                    text,
-    inv_for_loan                boolean             not null    default '0',
-    inv_last_lent               timestamp           null        default null,
-    inv_usr_id_lent             integer unsigned,
-    inv_lent_until              timestamp           null        default null,
-    inv_number_lent             integer             not null    default 0,
-    inv_usr_id_create           integer unsigned,
-    inv_timestamp_create        timestamp           not null    default CURRENT_TIMESTAMP,
-    inv_usr_id_change           integer unsigned,
-    inv_timestamp_change        timestamp           null        default null,
-    inv_valid                   boolean             not null    default '0',
-    primary key (inv_id)
-)
-engine = InnoDB
-default character set = utf8
-collate = utf8_unicode_ci;
-
-
-/*==============================================================*/
 /* Table: adm_links                                             */
 /*==============================================================*/
 create table %PREFIX%_links
@@ -576,7 +500,6 @@ create table %PREFIX%_roles
     rol_edit_user               boolean             not null    default '0',
     rol_guestbook               boolean             not null    default '0',
     rol_guestbook_comments      boolean             not null    default '0',
-    rol_inventory               boolean             not null    default '0',
     rol_mail_to_all             boolean             not null    default '0',
     rol_mail_this_role          smallint            not null    default 0,
     rol_photo                   boolean             not null    default '0',

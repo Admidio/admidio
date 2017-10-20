@@ -27,25 +27,49 @@
  */
 class ComponentUpdate extends Component
 {
-    private $updateFinished;        ///< Flag that will store if the update process of this version was successfully finished
-    private $xmlObject;             ///< The SimpleXML object with all the update steps
-    private $currentVersionArray;   ///< This is the version the component has actually before update. Each array element contains one part of the version.
-    private $targetVersionArray;    ///< This is the version that is stored in the files of the component. Each array element contains one part of the version.
+    const UPDATE_STEP_STOP = 'stop';
+
+    /**
+     * @var bool Flag that will store if the update process of this version was successfully finished
+     */
+    private $updateFinished;
+    /**
+     * @var \SimpleXMLElement The SimpleXML object with all the update steps
+     */
+    private $xmlObject;
+    /**
+     * @var array<int,int> This is the version the component has actually before update. Each array element contains one part of the version.
+     */
+    private $currentVersionArray;
+    /**
+     * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
+     */
+    private $targetVersionArray;
 
     /**
      * Constructor that will create an object for component updating.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
-    public function __construct(&$database)
+    public function __construct(Database $database)
     {
         parent::__construct($database);
     }
 
     /**
+     * Gets the version parts of a version string
+     * @param string $versionString A version string
+     * @return array<int,int> Returns an array with the version parts
+     */
+    private static function getVersionArrayFromVersion($versionString)
+    {
+        return array_map('intval', explode('.', $versionString));
+    }
+
+    /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
-     * @param string|int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
-     * @param string|int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
+     * @param int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
+     * @param int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
      * @return bool
      */
     private function createXmlObject($mainVersion, $subVersion)
@@ -57,7 +81,7 @@ class ComponentUpdate extends Component
 
             if(is_file($updateFile))
             {
-                $this->xmlObject = new SimpleXMLElement($updateFile, null, true);
+                $this->xmlObject = new \SimpleXMLElement($updateFile, 0, true);
                 return true;
             }
         }
@@ -74,7 +98,7 @@ class ComponentUpdate extends Component
      * the update script.
      * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      */
-    private function executeStep(SimpleXMLElement $xmlNode)
+    private function executeStep(\SimpleXMLElement $xmlNode)
     {
         global $g_tbl_praefix, $gDbType;
 
@@ -82,53 +106,55 @@ class ComponentUpdate extends Component
         $dbType = $gDbType;
         if ($gDbType === 'postgresql')
         {
-            $dbType = 'pgsql';
+            $dbType = Database::PDO_ENGINE_PGSQL;
+        }
+
+        $updateStepContent = trim((string) $xmlNode);
+
+        if ($updateStepContent === '')
+        {
+            return;
         }
 
         $executeSql = true;
         $showError  = true;
 
-        $updateStepContent = trim((string) $xmlNode);
-
-        if($updateStepContent !== '')
+        // if the sql statement is only for a special database and you do
+        // not have this database then don't execute this statement
+        if (isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
         {
-            // if the sql statement is only for a special database and you do
-            // not have this database then don't execute this statement
-            if(isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
-            {
-                $executeSql = false;
-            }
-
-            // if the attribute error was set to "ignore" then don't show errors that occures on sql execution
-            if(isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
-            {
-                $showError = false;
-            }
-
-            // if a method of this class was set in the update step
-            // then call this function and don't execute a SQL statement
-            if(strpos($updateStepContent, 'ComponentUpdate') !== false)
-            {
-                $executeSql = false;
-
-                // get the method name
-                $function = substr($updateStepContent, strpos($updateStepContent, '::')+2);
-                // now call the method
-                $this->{$function}();
-            }
-
-            if($executeSql)
-            {
-                // replace prefix with installation specific table prefix
-                $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
-
-                $this->db->query($sql, $showError); // TODO add more params
-            }
-
-            // save the successful executed update step in database
-            $this->setValue('com_update_step', (int) $xmlNode['id']);
-            $this->save();
+            $executeSql = false;
         }
+
+        // if the attribute error was set to "ignore" then don't show errors that occures on sql execution
+        if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
+        {
+            $showError = false;
+        }
+
+        // if a method of this class was set in the update step
+        // then call this function and don't execute a SQL statement
+        if (strpos($updateStepContent, 'ComponentUpdate') !== false)
+        {
+            $executeSql = false;
+
+            // get the method name
+            $function = substr($updateStepContent, strpos($updateStepContent, '::') + 2);
+            // now call the method
+            $this->{$function}();
+        }
+
+        if ($executeSql)
+        {
+            // replace prefix with installation specific table prefix
+            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
+
+            $this->db->query($sql, $showError); // TODO add more params
+        }
+
+        // save the successful executed update step in database
+        $this->setValue('com_update_step', (int) $xmlNode['id']);
+        $this->save();
     }
 
     /**
@@ -139,7 +165,7 @@ class ComponentUpdate extends Component
     public function getMaxUpdateStep()
     {
         $maxUpdateStep = 0;
-        $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
+        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
         // open xml file for this version
         if($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
@@ -147,7 +173,7 @@ class ComponentUpdate extends Component
             // go step by step through the SQL statements until the last one is found
             foreach($this->xmlObject->children() as $updateStep)
             {
-                if((string) $updateStep !== 'stop')
+                if((string) $updateStep !== self::UPDATE_STEP_STOP)
                 {
                     $maxUpdateStep = $updateStep['id'];
                 }
@@ -163,7 +189,7 @@ class ComponentUpdate extends Component
      */
     public function setTargetVersion($version)
     {
-        $this->targetVersionArray = array_map('intval', explode('.', $version));
+        $this->targetVersionArray = self::getVersionArrayFromVersion($version);
     }
 
     /**
@@ -176,7 +202,7 @@ class ComponentUpdate extends Component
         global $gLogger;
 
         $this->updateFinished = false;
-        $this->currentVersionArray = array_map('intval', explode('.', $this->getValue('com_version')));
+        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
         $initialSubVersion = $this->currentVersionArray[1];
 
         for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
@@ -214,7 +240,7 @@ class ComponentUpdate extends Component
                         {
                             $this->executeStep($updateStep);
                         }
-                        elseif((string) $updateStep === 'stop')
+                        elseif((string) $updateStep === self::UPDATE_STEP_STOP)
                         {
                             $this->updateFinished = true;
                         }
@@ -557,7 +583,7 @@ class ComponentUpdate extends Component
             if($rowFolder = $folderStatement->fetch())
             {
                 $folder = new TableFolder($this->db, $rowFolder['fol_id']);
-                $folderOldName = $folder->getCompletePathOfFolder();
+                $folderOldName = $folder->getFullFolderPath();
                 $folder->setValue('fol_name', TableFolder::getRootFolderName());
                 $folder->save();
 
@@ -568,7 +594,7 @@ class ComponentUpdate extends Component
 
                 if($row['org_shortname'] === $g_organization)
                 {
-                    rename($folderOldName, $folder->getCompletePathOfFolder());
+                    rename($folderOldName, $folder->getFullFolderPath());
                 }
             }
             else

@@ -18,17 +18,23 @@
  */
 class TableRoles extends TableAccess
 {
-    protected $countLeaders;    ///< number of leaders of this role
-    protected $countMembers;    ///< number of members (without leaders) of this role
+    /**
+     * @var int number of leaders of this role
+     */
+    protected $countLeaders;
+    /**
+     * @var int number of members (without leaders) of this role
+     */
+    protected $countMembers;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_roles.
      * If the id is set than the specific role will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $rolId    The recordset of the role with this id will be loaded.
-     *                            If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $rolId    The recordset of the role with this id will be loaded.
+     *                           If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $rolId = 0)
+    public function __construct(Database $database, $rolId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
@@ -38,7 +44,7 @@ class TableRoles extends TableAccess
 
     /**
      * checks if user is allowed to assign members to this role
-     * @param \User $user UserObject of user who should be checked
+     * @param User $user UserObject of user who should be checked
      * @return bool
      */
     public function allowedToAssignMembers(User $user)
@@ -74,7 +80,7 @@ class TableRoles extends TableAccess
 
     /**
      * checks if user is allowed to edit members of this role
-     * @param \User $user UserObject of user who should be checked
+     * @param User $user UserObject of user who should be checked
      * @return bool
      */
     public function allowedToEditMembers(User $user)
@@ -257,7 +263,7 @@ class TableRoles extends TableAccess
 
         $this->db->endTransaction();
 
-        if ($gCurrentSession instanceof \Session)
+        if ($gCurrentSession instanceof Session)
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role
@@ -271,7 +277,7 @@ class TableRoles extends TableAccess
      * Returns an array with all cost periods with full name in the specific language.
      * @param int $costPeriod The number of the cost period for which the name should be returned
      *                        (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
-     * @return string[]|string Array with all cost or if param costPeriod is set than the full name of that cost period
+     * @return array<int,string>|string Array with all cost or if param costPeriod is set than the full name of that cost period
      */
     public static function getCostPeriods($costPeriod = null)
     {
@@ -379,7 +385,7 @@ class TableRoles extends TableAccess
         $returnValue = parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if ($fieldsChanged && $gCurrentSession instanceof \Session)
+        if ($fieldsChanged && $gCurrentSession instanceof Session)
         {
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role

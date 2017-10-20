@@ -116,9 +116,10 @@ if($getViewMode === 'html')
 
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
-        $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php?headline=' . $getHeadline,
-                          $gL10n->get('SYS_RSS_FEED_FOR_VAR',
-                          $gCurrentOrganization->getValue('org_longname') . ' - ' . $getHeadline));
+        $page->addRssFile(
+            ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php?headline=' . $getHeadline,
+            $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname') . ' - ' . $getHeadline)
+        );
     }
 
     $page->addJavascript('
@@ -145,9 +146,10 @@ if($getViewMode === 'html')
     // Add new event
     if($gCurrentUser->editDates() && $getId === 0)
     {
-        $datesMenu->addItem('admMenuItemAdd',
-                            ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?headline=' . $getHeadline,
-                            $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
+        $datesMenu->addItem(
+            'admMenuItemAdd', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?headline=' . $getHeadline,
+            $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png'
+        );
     }
 
     if($getId === 0)
@@ -172,7 +174,10 @@ if($getViewMode === 'html')
                 'description'  => $gL10n->get('DAT_VIEW_MODE_COMPACT').' - '.$gL10n->get('SYS_DESCRIPTION')
             );
         }
-        $form->addSelectBox('sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries, array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false));
+        $form->addSelectBox(
+            'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
+            array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
+        );
         $datesMenu->addForm($form->show(false));
 
         // show print button
@@ -186,35 +191,47 @@ if($getViewMode === 'html')
         // ical Download
         if($gPreferences['enable_dates_ical'] == 1)
         {
-            $datesMenu->addItem('admMenuItemICal',
-                                ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php?headline=' . $getHeadline . '&amp;cat_id=' . $getCatId,
-                                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
+            $datesMenu->addItem(
+                'admMenuItemICal', ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php?headline=' . $getHeadline . '&amp;cat_id=' . $getCatId,
+                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras'
+            );
         }
 
         if($gCurrentUser->editDates())
         {
             // if no calendar selectbox is shown, then show link to edit calendars
-            $datesMenu->addItem('admMenuItemCategories',
-                                FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
-                                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras');
+            $datesMenu->addItem(
+                'admMenuItemCategories', FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
+                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras'
+            );
         }
 
         if($gCurrentUser->isAdministrator())
         {
             // show link to system preferences of weblinks
-            $datesMenu->addItem('admMenuItemPreferencesLinks',
-                                ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=events',
-                                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+            $datesMenu->addItem(
+                'admMenuItemPreferencesLinks', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=events',
+                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+            );
         }
     }
 
     // create filter menu with elements for calendar and start-/enddate
     $FilterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?headline=' . $getHeadline . '&view=' . $getView, $page, array('type' => 'navbar', 'setFocus' => false));
-    $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', array('defaultValue' => $dates->getParameter('cat_id')));
-    $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
-    $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
-    $form->addInput('view', '', $getView, array('property' => FIELD_HIDDEN));
+    $form->addSelectBoxForCategories(
+        'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES',
+        array('defaultValue' => $dates->getParameter('cat_id'))
+    );
+    $form->addInput(
+        'date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'),
+        array('type' => 'date', 'maxLength' => 10)
+    );
+    $form->addInput(
+        'date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'),
+        array('type' => 'date', 'maxLength' => 10)
+    );
+    $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
     $FilterNavbar->addForm($form->show(false));
     $page->addHtml($FilterNavbar->show());
@@ -520,6 +537,8 @@ else
                     $buttonText = '';
                 }
 
+                $usrId = (int) $gCurrentUser->getValue('usr_id');
+
                 // Check limit of participants
                 if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
                 {
@@ -527,9 +546,9 @@ else
                     $participationPossible = false;
 
                     // Check current user. If user is member of the event role then get his current approval status and set the options
-                    if (in_array((int) $gCurrentUser->getValue('usr_id'), $participantsArray, true))
+                    if (in_array($usrId, $participantsArray, true))
                     {
-                        switch ($participantsArray[$gCurrentUser->getValue('usr_id')]['approved'])
+                        switch ($participantsArray[$usrId]['approved'])
                         {
                             case 1:
                                 $disableStatusTentative = 'disabled';
@@ -578,29 +597,30 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.'/adm_program/modules/dates/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
+                                <button class="btn btn-default" data-toggle="modal" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php?dat_id=' . $dateId . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
                     // Reset flags and parameters
-                    $disableStatusAttend        = '';
-                    $disableStatusTentative     = '';
-                    $participateModalForm       = false;
+                    $disableStatusAttend    = '';
+                    $disableStatusTentative = '';
+                    $participateModalForm   = false;
                 }
                 else
                 {
                     // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
-                    if ($participants->isMemberOfEvent($gCurrentUser->getValue('usr_id')))
+                    if ($participants->isMemberOfEvent($usrId))
                     {
-                        $attentionDeadline =    '<div class="alert alert-warning" role="alert">
-                                                    <strong>' .$gL10n->get('DAT_DEADLINE') . '! </strong>' . $gL10n->get('DAT_DEADLINE_ATTENTION') . '
-                                                </div>';
+                        $attentionDeadline = '
+                            <div class="alert alert-warning" role="alert">
+                                <strong>' .$gL10n->get('DAT_DEADLINE') . '! </strong>' . $gL10n->get('DAT_DEADLINE_ATTENTION') . '
+                            </div>';
                     }
                 }
 
                 if ($participationPossible === false)
                 {
                     // Check participation of current user. If user is member of the event role, he/she should also be able to change to possible states.
-                    if (!$participants->isMemberOfEvent((int) $gCurrentUser->getValue('usr_id')) && $date->getValue('dat_max_members') > 0)
+                    if (!$participants->isMemberOfEvent($usrId) && $date->getValue('dat_max_members') > 0)
                     {
                         $outputButtonParticipation = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                         $iconParticipationStatus = '';
@@ -949,5 +969,5 @@ else
 }
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '&view_mode=' . $getViewMode;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $datesTotalCount, $datesResult['limit'], $getStart, true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $datesTotalCount, $datesResult['limit'], $getStart));
 $page->show();

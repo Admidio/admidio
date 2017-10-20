@@ -18,7 +18,6 @@
  *         ANN = Categories for announcements
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
- *         INF = Categories for Inventory
  * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
@@ -148,7 +147,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catId + "&type='. $getType. '&mode=4&sequence=" + direction);
+            $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php?cat_id=" + catId + "&type='. $getType. '&mode=4&sequence=" + direction);
         }
     }
 ');
@@ -160,8 +159,10 @@ $categoriesMenu = $page->getMenu();
 $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new category
-$categoriesMenu->addItem('admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
-                         $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png');
+$categoriesMenu->addItem(
+    'admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
+    $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png'
+);
 
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
@@ -205,10 +206,12 @@ while($catRow = $categoryStatement->fetch())
     $category->clear();
     $category->setArray($catRow);
 
+    $catId = (int) $category->getValue('cat_id');
+
     if($category->getValue('cat_system') == 1 && $getType === 'USF')
     {
         // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
-        $categoriesOverview->addTableBody('id', 'cat_'.$category->getValue('cat_id'));
+        $categoriesOverview->addTableBody('id', 'cat_'.$catId);
     }
     elseif((int) $category->getValue('cat_org_id') === 0 && $getType === 'USF')
     {
@@ -231,9 +234,9 @@ while($catRow = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$catId.')"><img
                                 src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_UP', $addButtonText).'" /></a>
-                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
+                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$catId.')"><img
                                 src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" /></a>';
     }
 
@@ -249,7 +252,7 @@ while($catRow = $categoryStatement->fetch())
     }
     else
     {
-        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $rightCategoryView = new RolesRights($gDb, 'category_view', $catId);
         $arrRolesIds = $rightCategoryView->getRolesIds();
 
         if(count($arrRolesIds) > 0)
@@ -278,9 +281,9 @@ while($catRow = $categoryStatement->fetch())
 
     if($category->editable())
     {
-        $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $catId. '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
                                         src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-        
+
         if($category->getValue('cat_system') == 1)
         {
             $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
@@ -289,7 +292,7 @@ while($catRow = $categoryStatement->fetch())
         {
             $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                             href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
-                                            $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
+                                            $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$catId.'&amp;database_id_2='.$getType.'"><img
                                                src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
         }
     }
@@ -300,13 +303,13 @@ while($catRow = $categoryStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
+        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $catId. '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlDefaultCategory,
         $htmlRolesNames,
         $categoryAdministration
     );
-    $categoriesOverview->addRowByArray($columnValues, 'row_'. $category->getValue('cat_id'));
+    $categoriesOverview->addRowByArray($columnValues, 'row_'. $catId);
 }
 
 $page->addHtml($categoriesOverview->show());

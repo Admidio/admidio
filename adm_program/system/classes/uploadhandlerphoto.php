@@ -27,7 +27,7 @@ class UploadHandlerPhoto extends UploadHandler
 {
     /**
      * Override the default method to handle the specific things of the photo module and
-     * update the database after file was succesful uploaded.
+     * update the database after file was successful uploaded.
      * This method has the same parameters as the default.
      * @param string $uploadedFile
      * @param string $name
@@ -88,8 +88,8 @@ class UploadHandlerPhoto extends UploadHandler
                 $imageDimensions = $imageProperties[0] * $imageProperties[1];
                 if ($imageDimensions > admFuncProcessableImageSize())
                 {
-                    $errorText = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize() / 1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
-                    throw new AdmException($errorText);
+                    $imageSize = round(admFuncProcessableImageSize() / 1000000, 2);
+                    throw new AdmException($gL10n->get('PHO_RESOLUTION_MORE_THAN') . ' ' . $imageSize . ' ' . $gL10n->get('MEGA_PIXEL'));
                 }
 
                 // create image object and scale image to defined size of preferences
@@ -132,7 +132,7 @@ class UploadHandlerPhoto extends UploadHandler
                 // if image was successfully saved in filesystem then update image count of album
                 if(is_file($albumFolder.'/'.$newPhotoFileNumber.'.jpg'))
                 {
-                    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')+1);
+                    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity') + 1);
                     $photoAlbum->save();
                 }
                 else

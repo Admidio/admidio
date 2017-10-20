@@ -30,26 +30,53 @@
  */
 class TableAccess
 {
-    protected $additionalTables = array();  ///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
-    protected $tableName;           ///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
-    protected $columnPrefix;        ///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
-    protected $keyColumnName;       ///< Name of the unique autoincrement index column of the database table
-    protected $db;                  ///< An object of the class Database for communication with the database
+    /**
+     * @var array<string,string> Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+     */
+    protected $additionalTables = array();
+    /**
+     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
+     */
+    protected $tableName;
+    /**
+     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+     */
+    protected $columnPrefix;
+    /**
+     * @var string Name of the unique autoincrement index column of the database table
+     */
+    protected $keyColumnName;
+    /**
+     * @var Database An object of the class Database for communication with the database
+     */
+    protected $db;
 
-    protected $newRecord;           // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    protected $columnsValueChanged; ///< Flag will be set to true if data in array dbColumns was changed
-    public $dbColumns    = array(); // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
-    public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    /**
+     * @var bool Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+     */
+    protected $newRecord;
+    /**
+     * @var bool Flag will be set to true if data in array dbColumns was changed
+     */
+    protected $columnsValueChanged;
+    /**
+     * @var array<string,mixed> Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+     */
+    protected $dbColumns = array();
+    /**
+     * @var array<string,array<string,mixed>> Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+     */
+    protected $columnsInfos = array();
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param \Database  $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
      * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
      * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $tableName, $columnPrefix, $id = '')
+    public function __construct(Database $database, $tableName, $columnPrefix, $id = '')
     {
         $this->db          =& $database;
         $this->tableName    = $tableName;
@@ -74,16 +101,15 @@ class TableAccess
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
-    public function setDatabase(&$database)
+    public function setDatabase(Database $database)
     {
         $this->db =& $database;
     }
 
     /**
-     * Called on serialization of this object. The database object could not
-     * be serialized and should be ignored.
+     * Called on serialization of this object. The database object could not be serialized and should be ignored.
      * @return string[] Returns all class variables that should be serialized.
      */
     public function __sleep()
@@ -143,7 +169,7 @@ class TableAccess
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
      * @par Examples
      * @code // Constructor of adm_dates object where the category (calendar) is connected
-     * public function __construct(&$db, $datId = 0)
+     * public function __construct($database, $datId = 0)
      * {
      *     $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
      *     parent::__construct($db, TBL_DATES, 'dat', $datId);
@@ -203,7 +229,7 @@ class TableAccess
 
         $columnValue = '';
 
-        if (array_key_exists((string) $columnName, $this->dbColumns))
+        if (array_key_exists($columnName, $this->dbColumns))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
             if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName]))
@@ -301,8 +327,8 @@ class TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array  $queryParams       The query params for the prepared statement
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
@@ -391,7 +417,7 @@ class TableAccess
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param array $columnArray An array where every element index is the column name and the value is the column value
+     * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns @b true if one record is found
      * @par Examples
      * @code // reads data not be mem_id but with combination of role and user id

@@ -107,7 +107,7 @@ else
         $date->readDataById($getDateId);
 
         // get assigned roles of this event
-        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
+        $eventParticipationRolesObject = new RolesRights($gDb, 'event_participation', (int) $date->getValue('dat_id'));
         $roleViewSet = $eventParticipationRolesObject->getRolesIds();
 
         // check if the current user could edit this event
@@ -152,7 +152,7 @@ else
 // create html page object
 $page = new HtmlPage($headline);
 
-$page->addJavascriptFile('adm_program/system/js/date-functions.js');
+$page->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/date-functions.js');
 $page->addJavascript('
     /**
      * Funktion blendet Zeitfelder ein/aus
@@ -256,28 +256,40 @@ $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 $form = new HtmlForm('dates_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode='.$mode.'&amp;copy='.$getCopy, $page);
 
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
-$form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+$form->addInput(
+    'dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'),
+    array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
+);
 
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
 if($gPreferences['dates_show_map_link'] == true)
 {
-    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
+    $form->addInput(
+        'dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'),
+        array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
+    );
 
     if($date->getValue('dat_country') === '' && $getDateId === 0)
     {
         $date->setValue('dat_country', $gPreferences['default_country']);
     }
-    $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), array('defaultValue' => $date->getValue('dat_country', 'database')));
+    $form->addSelectBox(
+        'dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(),
+        array('defaultValue' => $date->getValue('dat_country', 'database'))
+    );
 }
 else
 {
-    $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 100));
+    $form->addInput(
+        'dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'),
+        array('maxLength' => 100)
+    );
 }
 
 // if room selection is activated then show a selectbox with all rooms
 if($gPreferences['dates_show_rooms'] == true)
 {
-    if($gDbType === 'mysql')
+    if($gDbType === Database::PDO_ENGINE_MYSQL)
     {
         $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                   FROM '.TBL_ROOMS.'
@@ -298,15 +310,26 @@ $form->closeGroupBox();
 
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
 $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), (bool) $date->getValue('dat_all_day'));
-$form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
-$form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_REQUIRED));
-$form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
-                                 array('property' => FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id')));
+$form->addInput(
+    'date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']),
+    array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
+);
+$form->addInput(
+    'date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']),
+    array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
+);
+$form->addSelectBoxForCategories(
+    'dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id'))
+);
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
 $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), (bool) $date->getValue('dat_highlight'));
-$form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
+$form->addCheckbox(
+    'date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible,
+    array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE')
+);
 
 // add a multiselectbox to the form where the user can choose all roles whose members could participate to this event
 // read all roles of the current organization
@@ -332,12 +355,26 @@ $form->addSelectBoxFromSql(
         'multiselect'  => true
     )
 );
-$form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
-$form->addCheckbox('dat_allow_comments', $gL10n->get('DAT_ALLOW_USER_COMMENTS'), (bool) $date->getValue('dat_allow_comments'), array('helpTextIdLabel' => 'DAT_ALLOW_USER_COMMENTS_DESC'));
-$form->addCheckbox('dat_additional_guests', $gL10n->get('DAT_ALLOW_ADDITIONAL_GUESTS'), (bool) $date->getValue('dat_additional_guests'), array('helpTextIdLabel' => 'DAT_ALLOW_ADDITIONAL_GUESTS_DESC'));
-$form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
-                array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
-$form->addInput('date_deadline', $gL10n->get('DAT_DEADLINE'), $date->getValue('dat_deadline', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC'));
+$form->addCheckbox(
+    'date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned,
+    array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC')
+);
+$form->addCheckbox(
+    'dat_allow_comments', $gL10n->get('DAT_ALLOW_USER_COMMENTS'), (bool) $date->getValue('dat_allow_comments'),
+    array('helpTextIdLabel' => 'DAT_ALLOW_USER_COMMENTS_DESC')
+);
+$form->addCheckbox(
+    'dat_additional_guests', $gL10n->get('DAT_ALLOW_ADDITIONAL_GUESTS'), (bool) $date->getValue('dat_additional_guests'),
+    array('helpTextIdLabel' => 'DAT_ALLOW_ADDITIONAL_GUESTS_DESC')
+);
+$form->addInput(
+    'dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS')
+);
+$form->addInput(
+    'date_deadline', $gL10n->get('DAT_DEADLINE'), $date->getValue('dat_deadline', $gPreferences['system_date'].' '.$gPreferences['system_time']),
+    array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
+);
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_this_list_view'));
 $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), (bool) $role->getValue('rol_mail_this_role'));
 $form->closeGroupBox();

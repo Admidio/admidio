@@ -42,10 +42,10 @@ if (!$gCurrentUser->editPhotoRight())
 
 /**
  * Loeschen eines Thumbnails
- * @param \TablePhotos $photoAlbum Referenz auf Objekt des relevanten Albums
- * @param int          $picNr      Nr des Bildes dessen Thumbnail geloescht werden soll
+ * @param TablePhotos $photoAlbum Referenz auf Objekt des relevanten Albums
+ * @param int         $picNr      Nr des Bildes dessen Thumbnail geloescht werden soll
  */
-function deleteThumbnail(&$photoAlbum, $picNr)
+function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
 {
     // Ordnerpfad zusammensetzen
     $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';

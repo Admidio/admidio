@@ -150,17 +150,17 @@ catch(AdmException $e)
     exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
 }
 
-if($gDbType === 'mysql')
+if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
     // disable foreign key checks for mysql, so tables can easily deleted
     $db->queryPrepared('SET foreign_key_checks = 0');
 }
 
 /**
- * @param string    $filename The SQL filename (db.sql, data.sql)
- * @param \Database $database
+ * @param string   $filename The SQL filename (db.sql, data.sql)
+ * @param Database $database
  */
-function readAndExecuteSQLFromFile($filename, &$database)
+function readAndExecuteSQLFromFile($filename, Database $database)
 {
     global $g_tbl_praefix, $gL10n;
 
@@ -219,7 +219,7 @@ echo 'Edit data of database ...<br />';
 include_once(__DIR__ . '/data_edit.php');
 
 // in postgresql all sequences must get a new start value because our inserts have given ids
-if($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
 {
     $sql = 'SELECT relname
               FROM pg_class
@@ -239,7 +239,7 @@ $sql = 'UPDATE '.$g_tbl_praefix.'_preferences
          WHERE prf_name = \'system_language\'';
 $db->queryPrepared($sql, array($getLanguage));
 
-if($gDbType === 'mysql')
+if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
     // activate foreign key checks, so database is consistent
     $db->queryPrepared('SET foreign_key_checks = 1');
@@ -268,5 +268,5 @@ else
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
- Please perform an <a href="../adm_program/installation/update.php">update of your database</a>.</p>
+ Please perform an <a href="'.ADMIDIO_URL.'/adm_program/installation/update.php">update of your database</a>.</p>
  <p style="font-size: 9pt;">&copy; 2004 - 2017&nbsp;&nbsp;The Admidio team</p>';

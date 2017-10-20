@@ -20,16 +20,22 @@
  */
 class TableUserField extends TableAccess
 {
-    protected $mViewUserField;                 ///< Flag if the current user could view this user
-    protected $mViewUserFieldUserId;           ///< Flag with the user id of which user the view property was saved
+    /**
+     * @var bool|null Flag if the current user could view this user
+     */
+    protected $mViewUserField;
+    /**
+     * @var int|null Flag with the user id of which user the view property was saved
+     */
+    protected $mViewUserFieldUserId;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.
      * If the id is set than the specific user field will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $usfId    The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $usfId    The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $usfId = 0)
+    public function __construct(Database $database, $usfId = 0)
     {
         // read also data of assigned category
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
@@ -363,7 +369,7 @@ class TableUserField extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if ($fieldsChanged && $gCurrentSession instanceof \Session)
+        if ($fieldsChanged && $gCurrentSession instanceof Session)
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();
@@ -437,19 +443,14 @@ class TableUserField extends TableAccess
     {
         global $gCurrentUser;
 
-        if($this->mViewUserField === null || $this->mViewUserFieldUserId !== (int) $gCurrentUser->getValue('usr_id'))
-        {
-            // check if the current user could view the category of the profile field
-            if(in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true))
-            {
-                $this->mViewUserField = true;
-            }
-            else
-            {
-                $this->mViewUserField = false;
-            }
+        $usrId = (int) $gCurrentUser->getValue('usr_id');
 
-            $this->mViewUserFieldUserId = (int) $gCurrentUser->getValue('usr_id');
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
+        {
+            $this->mViewUserFieldUserId = $usrId;
+
+            // check if the current user could view the category of the profile field
+            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
         }
 
         return $this->mViewUserField;

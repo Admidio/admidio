@@ -83,7 +83,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-            $.get(gRootPath + "/adm_program/modules/preferences/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
+            $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
     }
 ');
@@ -95,11 +95,15 @@ $fieldsMenu = $page->getMenu();
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new profile field
-$fieldsMenu->addItem('menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php',
-                     $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
+$fieldsMenu->addItem(
+    'menu_item_new_field', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php',
+    $gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png'
+);
 // define link to maintain categories
-$fieldsMenu->addItem('menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=USF',
-                     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+$fieldsMenu->addItem(
+    'menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=USF',
+    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+);
 
 $sql = 'SELECT *
           FROM '.TBL_USER_FIELDS.'

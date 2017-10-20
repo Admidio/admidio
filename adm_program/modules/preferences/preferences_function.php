@@ -47,8 +47,10 @@ switch($getMode)
             switch($getForm)
             {
                 case 'common':
-                    $checkboxes = array('enable_rss', 'enable_auto_login', 'enable_password_recovery',
-                                        'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check');
+                    $checkboxes = array(
+                        'enable_rss', 'enable_auto_login', 'enable_password_recovery',
+                        'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
+                    );
 
                     if(!admStrIsValidFileName($_POST['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
@@ -193,9 +195,6 @@ switch($getMode)
                     }
                     break;
 
-                case 'inventory':
-                    break;
-
                 default:
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 // => EXIT
@@ -295,14 +294,22 @@ switch($getMode)
         // show form
         $form = new HtmlForm('add_new_organization_form',
                              ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?mode=3', $page);
-        $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
-                        array('maxLength' => 10, 'property' => FIELD_REQUIRED, 'class' => 'form-control-small'));
-        $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
-                        array('maxLength' => 50, 'property' => FIELD_REQUIRED));
-        $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
-                        array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_REQUIRED));
-        $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
-                               array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
+        $form->addInput(
+            'orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
+            array('maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+        );
+        $form->addInput(
+            'orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'],
+            array('maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+        );
+        $form->addInput(
+            'orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'],
+            array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
+        );
+        $form->addSubmitButton(
+            'btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
+            array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3')
+        );
 
         // add form to html page and show page
         $page->addHtml($form->show(false));

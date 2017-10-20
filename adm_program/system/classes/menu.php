@@ -23,8 +23,17 @@
  */
 class Menu
 {
+    /**
+     * @var string
+     */
     protected $id;
+    /**
+     * @var string
+     */
     protected $title;
+    /**
+     * @var array<string,array<string,string|array<string,string>>>
+     */
     protected $items = array();
 
     /**
@@ -46,7 +55,7 @@ class Menu
      * @param string $desc
      * @return array<string,string|array>
      */
-    private function mkItem($id, $link, $text, $icon, $desc = '')
+    private function buildItem($id, $link, $text, $icon, $desc = '')
     {
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $link) === 0)
@@ -78,7 +87,7 @@ class Menu
      */
     public function addItem($id, $link, $text, $icon, $desc = '')
     {
-        $this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
+        $this->items[$id] = $this->buildItem($id, $link, $text, $icon, $desc);
     }
 
     /**
@@ -120,7 +129,7 @@ class Menu
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
-        $item = $this->mkItem($id, $link, $text, $icon, $desc);
+        $item = $this->buildItem($id, $link, $text, $icon, $desc);
         $insert = array($id => $item);
         $this->items = array_splice($this->items, $position, 0, $insert);
     }

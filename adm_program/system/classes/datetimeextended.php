@@ -14,6 +14,9 @@
  */
 class DateTimeExtended extends DateTime
 {
+    /**
+     * @var bool
+     */
     private $valid;
 
     /**

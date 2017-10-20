@@ -123,16 +123,46 @@
  */
 abstract class HtmlElement
 {
-    protected $nesting;                                 ///< Flag enables nesting of main elements, e.g div blocks ( Default : true )
-    protected $mainElement;                             ///< String with main element as string
-    protected $mainElementAttributes     = array();     ///< String with attributes of the main element
-    protected $mainElementWritten        = false;       ///< Flag if the main element was written in the html string
-    protected $currentElement;                          ///< Internal pointer showing to actual element or child element
-    protected $currentElementAttributes  = array();     ///< Attributes of the current element
-    protected $currentElementDataWritten = true;        ///< Flag if an element is added but the data is not added
-    protected $htmlString                = '';          ///< String with prepared html
-    protected $parentFlag                = false;       ///< Flag for setted parent Element
-    protected $arrParentElements         = array();     ///< Array with opened child elements
+    /**
+     * @var bool Flag enables nesting of main elements, e.g div blocks ( Default : true )
+     */
+    protected $nesting;
+    /**
+     * @var string String with main element as string
+     */
+    protected $mainElement;
+    /**
+     * @var array<string,string> String array with attributes of the main element
+     */
+    protected $mainElementAttributes = array();
+    /**
+     * @var bool Flag if the main element was written in the html string
+     */
+    protected $mainElementWritten = false;
+    /**
+     * @var string Internal pointer showing to actual element or child element
+     */
+    protected $currentElement;
+    /**
+     * @var array<string,string> Attributes of the current element
+     */
+    protected $currentElementAttributes = array();
+    /**
+     * @var bool Flag if an element is added but the data is not added
+     */
+    protected $currentElementDataWritten = true;
+    /**
+     * @var string String with prepared html
+     */
+    protected $htmlString = '';
+    /**
+     * @var bool Flag for setted parent Element
+     */
+    protected $parentFlag = false;
+    /**
+     * @var array<int,string> Array with opened child elements
+     */
+    protected $arrParentElements = array();
 
     /**
      * Constructor initializing all class variables
@@ -162,32 +192,40 @@ abstract class HtmlElement
             $element = $this->currentElement;
         }
 
-        $selectedElementAttributes = 'currentElementAttributes';
         if ($element === $this->mainElement)
         {
-            $selectedElementAttributes = 'mainElementAttributes';
-        }
-
-        if (array_key_exists($attrKey, $this->{$selectedElementAttributes}))
-        {
-            $this->{$selectedElementAttributes}[$attrKey] = $this->{$selectedElementAttributes}[$attrKey] . ' ' . $attrValue;
+            if (array_key_exists($attrKey, $this->mainElementAttributes))
+            {
+                $this->mainElementAttributes[$attrKey] = $this->mainElementAttributes[$attrKey] . ' ' . $attrValue;
+            }
+            else
+            {
+                $this->mainElementAttributes[$attrKey] = $attrValue;
+            }
         }
         else
         {
-            $this->{$selectedElementAttributes}[$attrKey] = $attrValue;
+            if (array_key_exists($attrKey, $this->currentElementAttributes))
+            {
+                $this->currentElementAttributes[$attrKey] = $this->currentElementAttributes[$attrKey] . ' ' . $attrValue;
+            }
+            else
+            {
+                $this->currentElementAttributes[$attrKey] = $attrValue;
+            }
         }
     }
 
     /**
      * Set attributes from associative array.
-     * @param string[] $arrAttributes An array that contains all attribute names as array key
-     *                                and all attribute content as array value
+     * @param array<string,mixed> $arrAttributes An array that contains all attribute names as array key
+     *                                           and all attribute content as array value
      */
     protected function setAttributesFromArray(array $arrAttributes)
     {
         foreach ($arrAttributes as $key => $value)
         {
-            $this->addAttribute($key, $value);
+            $this->addAttribute($key, (string) $value);
         }
     }
 
@@ -443,7 +481,7 @@ abstract class HtmlElement
 
     /**
      * Create a valid html compatible string with all attributes and their values of the given element.
-     * @param string[] $elementAttributes
+     * @param array<string,string> $elementAttributes
      * @return string Returns a string with all attributes and values.
      */
     private function getElementAttributesString(array $elementAttributes)

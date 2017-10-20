@@ -75,7 +75,7 @@ if(!isset($plg_rank))
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && $page instanceof \HtmlPage)
+if(isset($page) && $page instanceof HtmlPage)
 {
     $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/login_form/login_form.css');
 }
@@ -105,7 +105,7 @@ if($gValidLogin)
 
     $jsContent = '$("#adm_logout_link").click(function() {'.$jsContentNextPage.'});';
 
-    if(isset($page) && $page instanceof \HtmlPage)
+    if(isset($page) && $page instanceof HtmlPage)
     {
         $page->addJavascript($jsContent, true);
     }
@@ -154,8 +154,12 @@ if($gValidLogin)
 
     // create a static form
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
-    $form->addStaticControl('plg_user', $gL10n->get('SYS_MEMBER'), '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '"
-                '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '</a>');
+    $form->addStaticControl(
+        'plg_user', $gL10n->get('SYS_MEMBER'),
+        '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '" '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
+        . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
+        '</a>'
+    );
     $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gPreferences['system_time']));
     $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
@@ -183,11 +187,19 @@ else
         $iconCode  = THEME_URL. '/icons/key.png';
     }
 
-    $form = new HtmlForm('plugin-login-form', ADMIDIO_URL.'/adm_program/system/login_check.php', null,
-                         array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false));
-    $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('property' => FIELD_REQUIRED, 'maxLength' => 35));
+    $form = new HtmlForm(
+        'plugin-login-form', ADMIDIO_URL.'/adm_program/system/login_check.php', null,
+        array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
+    );
+    $form->addInput(
+        'plg_usr_login_name', $gL10n->get('SYS_USERNAME'), '',
+        array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 35)
+    );
     // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
-    $form->addInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_REQUIRED));
+    $form->addInput(
+        'plg_usr_password', $gL10n->get('SYS_PASSWORD'), '',
+        array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)
+    );
 
     // show selectbox with all organizations of database
     if($gPreferences['system_organization_select'] == 1)

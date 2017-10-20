@@ -13,7 +13,7 @@
  *
  * The class will read a language specific text that is identified with their
  * text id out of an language xml file. The access will be manages with the
- * SimpleXMLElement which search through xml files. An object of this class
+ * \SimpleXMLElement which search through xml files. An object of this class
  * can't be stored in a PHP session because it creates PHP core objects which
  * couldn't be stored in sessions. Therefore an object of @b LanguageData
  * should be assigned to this class that stored all necessary data and can be
@@ -37,16 +37,28 @@
  */
 class Language
 {
-    private $languageData;                      ///< An object of the class @b LanguageData that stores all necessary language data in a session
-    private $languages = array();               ///< An Array with all available languages and their ISO codes
-    private $xmlLanguageObjects    = array();   ///< An array with all SimpleXMLElement object of the language from all paths that are set in @b $languageData.
-    private $xmlRefLanguageObjects = array();   ///< An array with all SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+    /**
+     * @var LanguageData An object of the class @b LanguageData that stores all necessary language data in a session
+     */
+    private $languageData;
+    /**
+     * @var array<string,string> An Array with all available languages and their ISO codes
+     */
+    private $languages = array();
+    /**
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+     */
+    private $xmlLanguageObjects = array();
+    /**
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+     */
+    private $xmlRefLanguageObjects = array();
 
     /**
      * Language constructor.
-     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
+     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
      */
-    public function __construct(&$languageDataObject = null)
+    public function __construct(LanguageData $languageDataObject = null)
     {
         $this->languageData =& $languageDataObject;
     }
@@ -54,9 +66,9 @@ class Language
     /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
-     * @param \LanguageData $languageDataObject An object of the class @b LanguageData.
+     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
      */
-    public function addLanguageData(&$languageDataObject)
+    public function addLanguageData(LanguageData $languageDataObject)
     {
         $this->languageData =& $languageDataObject;
     }
@@ -72,9 +84,9 @@ class Language
     }
 
     /**
-     * @param SimpleXMLElement[] $xmlLanguageObjects SimpleXMLElement array of each language path is stored
-     * @param string             $language           Language code
-     * @param string             $textId             Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
+     * @param string                          $language           Language code
+     * @param string                          $textId             Unique text id of the text that should be read e.g. SYS_COMMON
      * @return string Returns the text string of the text id or empty string if not found.
      */
     private function searchTextIdInLangObject(array $xmlLanguageObjects, $language, $textId)
@@ -105,14 +117,14 @@ class Language
         // if text id wasn't found than search for it in language
         if ($text === '')
         {
-            // search for text id in every SimpleXMLElement (language file) of the object array
+            // search for text id in every \SimpleXMLElement (language file) of the object array
             $text = $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
         }
 
         // if text id wasn't found than search for it in reference language
         if ($text === '')
         {
-            // search for text id in every SimpleXMLElement (language file) of the object array
+            // search for text id in every \SimpleXMLElement (language file) of the object array
             $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
         }
 
@@ -123,8 +135,8 @@ class Language
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
-     * @param string   $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @param string[] $params Optional parameter for language string of translation id
+     * @param string            $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param array<int,string> $params Optional parameter for language string of translation id
      *
      * param  string $param1,$param2... The function accepts an undefined number of values which will be used
      *                                  to replace the placeholder in the text.
@@ -143,7 +155,7 @@ class Language
     {
         global $gLogger;
 
-        if (!$this->languageData instanceof \LanguageData)
+        if (!$this->languageData instanceof LanguageData)
         {
             $gLogger->error('$this->languageData is not an instance of LanguageData!', array('languageData' => $this->languageData));
 
@@ -171,6 +183,11 @@ class Language
             // TODO deprecated: Remove in Admidio 4.0
             $paramsCount = func_num_args();
             $paramsArray = func_get_args();
+
+            $gLogger->warning(
+                'DEPRECATED: "$gL10n->get(\'XXX\', 1, 2)" is deprecated, use "$gL10n->get(\'XXX\', array(1, 2))" instead!',
+                array('textId' => $textId, 'params' => $params, 'paramsArray' => $paramsArray)
+            );
         }
 
         for ($paramNumber = 1; $paramNumber < $paramsCount; ++$paramNumber)
@@ -190,7 +207,7 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes
-     * @return string[] Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountries()
     {
@@ -217,7 +234,7 @@ class Language
         }
 
         // read all countries from xml file
-        $countriesXml = new SimpleXMLElement($file, null, true);
+        $countriesXml = new \SimpleXMLElement($file, 0, true);
 
         foreach ($countriesXml->children() as $stringNode)
         {
@@ -319,13 +336,13 @@ class Language
     /**
      * Creates an array with all languages that are possible in Admidio.
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-     * @return string[] Return an array with all available languages.
+     * @return array<string,string> Return an array with all available languages.
      */
     public function getAvailableLanguages()
     {
         if(count($this->languages) === 0)
         {
-            $languagesXml = new SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', null, true);
+            $languagesXml = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', 0, true);
 
             foreach($languagesXml->children() as $stringNode)
             {
@@ -339,15 +356,15 @@ class Language
 
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param SimpleXMLElement[] $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param string             $languagePath The path in which the different language xml files are.
-     * @param string             $language     The ISO code of the language in which the text will be searched
-     * @param string             $textId       The id of the text that will be searched in the file.
+     * @param array<string,\SimpleXMLElement> $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param string                          $languagePath The path in which the different language xml files are.
+     * @param string                          $language     The ISO code of the language in which the text will be searched
+     * @param string                          $textId       The id of the text that will be searched in the file.
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
     public function searchLanguageText(array &$objectArray, $languagePath, $language, $textId)
     {
-        // if not exists create a SimpleXMLElement of the language file in the language path
+        // if not exists create a \SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
         if(!array_key_exists($languagePath, $objectArray))
         {
@@ -355,7 +372,7 @@ class Language
 
             if(is_file($languageFile))
             {
-                $objectArray[$languagePath] = new SimpleXMLElement($languageFile, null, true);
+                $objectArray[$languagePath] = new \SimpleXMLElement($languageFile, 0, true);
             }
         }
 

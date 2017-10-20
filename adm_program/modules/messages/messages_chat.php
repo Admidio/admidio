@@ -34,7 +34,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 
 $page->addCssFile(THEME_URL.'/css/chat.css');
-$page->addJavascriptFile('adm_program/modules/messages/chat.js');
+$page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/messages/chat.js');
 
 $page->addJavascript('
     var chat = new Chat("#sendie", "#chat-area");

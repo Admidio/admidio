@@ -307,10 +307,6 @@
   <string name="INS_SON">Søn</string>
   <string name="INS_SPOUSE">Ægtefælle</string>
   <string name="INS_WIFE">Kone</string>
-  <!--Phrases only in Inventorymodule-->
-  <string name="INV_CREATE_ITEM">Opret artikel</string>
-  <string name="INV_INVENTORY">Inventar administration</string>
-  <string name="INV_ITEM_MANAGEMENT">Artikel administration</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_COUNTER">Hits</string>
   <string name="LNK_CREATE_LINK">Opret nyt link</string>
@@ -925,7 +921,6 @@
   <string name="ROL_NO_DEFAULT_ROLE">Du kan ikke fjerne indstillingen #VAR1_BOLD#, fordi mindst én rolle skal bestå som standard tildelt.</string>
   <string name="ROL_ONLY_ROLE_MEMBERS">Kun for rolle medlemmer</string>
   <string name="ROL_PREF" description="Abbreviation for Preferences">Inst.</string>
-  <string name="ROL_RIGHT_INVENTORY">Artikel og inventar administration</string>
   <string name="ROL_ROLE_ASSIGNMENT">Rollefordeling for #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Kvartalsvis</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Vis alle medlemskabs lister for alle roller</string>

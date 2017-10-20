@@ -45,20 +45,20 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 
 /**
  * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
- * @param \Database $db
+ * @param Database $database
  * @return string
  */
-function checkDatabaseVersion(&$db)
+function checkDatabaseVersion(Database $database)
 {
     global $gL10n;
 
     $message = '';
 
     // check database version
-    if (version_compare($db->getVersion(), $db->getMinimumRequiredVersion(), '<'))
+    if (version_compare($database->getVersion(), $database->getMinimumRequiredVersion(), '<'))
     {
-        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $db->getVersion() . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $db->getMinimumRequiredVersion(),
+        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
+                   $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
                                '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
     }
 
@@ -88,11 +88,11 @@ function checkPhpVersion()
 
 /**
  * Read data from sql file and execute all statements to the current database
- * @param \Database $db
- * @param string $sqlFileName
+ * @param Database $db
+ * @param string   $sqlFileName
  * @return true|string Returns true no error occurs ales error message is returned
  */
-function querySqlFile($db, $sqlFileName)
+function querySqlFile(Database $db, $sqlFileName)
 {
     global $gL10n, $g_tbl_praefix;
 
@@ -132,13 +132,13 @@ function querySqlFile($db, $sqlFileName)
 }
 
 /**
- * @param \Database $db
+ * @param Database $db
  */
-function disableSoundexSearchIfPgSql($db)
+function disableSoundexSearchIfPgSql(Database $db)
 {
     global $gDbType;
 
-    if ($gDbType === 'pgsql' || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+    if ($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
     {
         // soundex is not a default function in PostgreSQL
         $sql = 'UPDATE ' . TBL_PREFERENCES . '

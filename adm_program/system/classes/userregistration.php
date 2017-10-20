@@ -33,24 +33,28 @@
  */
 class UserRegistration extends User
 {
-    private $sendEmail = true;  ///< Flag if the object will send a SystemMail if registration is accepted or deleted.
+    /**
+     * @var bool Flag if the object will send a SystemMail if registration is accepted or deleted.
+     */
+    private $sendEmail = true;
+    /**
+     * @var TableAccess
+     */
     private $tableRegistration;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param \Database      $database       Object of the class Database. This should be the default global object @b $gDb.
-     * @param \ProfileFields $userFields     An object of the ProfileFields class with the profile field structure
-     *                                       of the current organization. This could be the default object @b $gProfileFields.
-     * @param int            $userId         The id of the user who should be loaded. If id isn't set than an empty object
-     *                                       with no specific user is created.
-     * @param int            $organizationId The id of the organization for which the user should be registered.
-     *                                       If no id is set than the user will be registered for the current organization.
+     * @param Database      $database       Object of the class Database. This should be the default global object @b $gDb.
+     * @param ProfileFields $userFields     An object of the ProfileFields class with the profile field structure
+     *                                      of the current organization. This could be the default object @b $gProfileFields.
+     * @param int           $userId         The id of the user who should be loaded. If id isn't set than an empty object
+     *                                      with no specific user is created.
+     * @param int           $organizationId The id of the organization for which the user should be registered.
+     *                                      If no id is set than the user will be registered for the current organization.
      */
-    public function __construct(&$database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
+    public function __construct(Database $database, ProfileFields $userFields, $userId = 0, $organizationId = 0)
     {
-        global $gCurrentOrganization;
-
         parent::__construct($database, $userFields, $userId);
 
         if($organizationId > 0)

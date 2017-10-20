@@ -39,18 +39,54 @@
  */
 abstract class Modules
 {
-    protected $activeRole = false;              ///< Boolean false/true for active role
-    protected $headline   = '';                 ///< String with headline expression
-    protected $catId      = 0;                  ///< ID as integer for chosen category
-    protected $id         = 0;                  ///< ID as integer to choose record
-    protected $daterange  = array();            ///< Array with date settings in English format and system format
-    protected $mode       = 'Default';          ///< String with current mode ( Default: "Default" )
-    protected $order      = '';                 ///< String with order ASC/DESC ( Default: "ASC" )
-    protected $start      = 0;                  ///< Integer for start element
-    protected $validModes = array('Default');   ///< Array with valid modes ( Default: "Default" )
-    protected $parameters = array();            ///< Array with all parameters of the module that were added to this class.
-    protected $properties;                      ///< Array Clone of $_GET Array
-    protected $arrParameter = array();          ///< Array with validated parameters
+    /**
+     * @var bool Boolean false/true for active role
+     */
+    protected $activeRole = false;
+    /**
+     * @var string String with headline expression
+     */
+    protected $headline = '';
+    /**
+     * @var int ID as integer for chosen category
+     */
+    protected $catId = 0;
+    /**
+     * @var int ID as integer to choose record
+     */
+    protected $id = 0;
+    /**
+     * @var array Array with date settings in English format and system format
+     */
+    protected $daterange = array();
+    /**
+     * @var string String with current mode ( Default: "Default" )
+     */
+    protected $mode = 'Default';
+    /**
+     * @var string String with order ASC/DESC ( Default: "ASC" )
+     */
+    protected $order = '';
+    /**
+     * @var int Integer for start element
+     */
+    protected $start = 0;
+    /**
+     * @var array Array with valid modes ( Default: "Default" )
+     */
+    protected $validModes = array('Default');
+    /**
+     * @var array<string,mixed> Array with all parameters of the module that were added to this class.
+     */
+    protected $parameters = array();
+    /**
+     * @var array Array Clone of $_GET Array
+     */
+    protected $properties;
+    /**
+     * @var array Array with validated parameters
+     */
+    protected $arrParameter = array();
 
     /**
      * @param int $startElement
@@ -141,7 +177,7 @@ abstract class Modules
 
     /**
      * Return parameter set as Array
-     * @return array Returns an Array with all needed parameters as Key/Value pair
+     * @return array<string,mixed> Returns an Array with all needed parameters as Key/Value pair
      */
     public function getParameters()
     {

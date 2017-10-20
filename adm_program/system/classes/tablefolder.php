@@ -16,17 +16,26 @@
  */
 class TableFolder extends TableAccess
 {
+    /**
+     * @var Folder
+     */
     protected $folderPath;
-    protected $folderViewRolesObject;   ///< Object with all roles that could view the current folder
-    protected $folderUploadRolesObject; ///< Object with all roles that could upload files the current folder
+    /**
+     * @var RolesRights|null Object with all roles that could view the current folder
+     */
+    protected $folderViewRolesObject;
+    /**
+     * @var RolesRights|null Object with all roles that could upload files the current folder
+     */
+    protected $folderUploadRolesObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
      * If the id is set than the specific folder will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $folId = 0)
+    public function __construct(Database $database, $folId = 0)
     {
         parent::__construct($database, TBL_FOLDERS, 'fol', $folId);
 
@@ -34,8 +43,8 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @param array[] $completeFolder
-     * @return array[]
+     * @param array<string,array<int,array<string,mixed>>> $completeFolder
+     * @return array<string,array<int,array<string,mixed>>>
      */
     private function addAdditionalToFolderContents(array $completeFolder)
     {
@@ -48,7 +57,7 @@ class TableFolder extends TableAccess
         }
 
         // Check if folder exists
-        $folderPath = $this->getCompletePathOfFolder();
+        $folderPath = $this->getFullFolderPath();
         if (!is_dir($folderPath))
         {
             return $completeFolder;
@@ -120,23 +129,23 @@ class TableFolder extends TableAccess
     /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
-     * @param string $rolesRightNameIntern Name of the right where the roles should be added
-     * @param int[]  $rolesArray
-     * @param bool   $recursive If set to @b true than the rights will be set recursive to all subfolders
+     * @param string         $rolesRightNameIntern Name of the right where the roles should be added
+     * @param array<int,int> $rolesArray
+     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
      */
     public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
     {
-        $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $recursive, 0);
+        $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $recursive);
     }
 
     /**
      * Legt einen neuen Ordner im Dateisystem an
      * @param string $folderName
-     * @return string[]|null
+     * @return null|array<string,string>
      */
     public function createFolder($folderName)
     {
-        $this->folderPath->setFolder($this->getCompletePathOfFolder());
+        $this->folderPath->setFolder($this->getFullFolderPath());
         $this->folderPath->createFolder($folderName, true);
 
         if ($this->folderPath->createFolder($folderName, true))
@@ -146,7 +155,7 @@ class TableFolder extends TableAccess
 
         return array(
             'text' => 'SYS_FOLDER_NOT_CREATED',
-            'path' => $this->getCompletePathOfFolder() . '/' . $folderName
+            'path' => $this->getFullFolderPath() . '/' . $folderName
         );
     }
 
@@ -170,7 +179,7 @@ class TableFolder extends TableAccess
             }
 
             $folderId = (int) $this->getValue('fol_id');
-            $folderPath = $this->getCompletePathOfFolder();
+            $folderPath = $this->getFullFolderPath();
         }
 
         $this->db->startTransaction();
@@ -230,11 +239,11 @@ class TableFolder extends TableAccess
     /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
-     * @param string $mode                 "mode" could be "add" or "remove"
-     * @param string $rolesRightNameIntern Name of the right where the roles should be added
-     * @param int[]  $rolesArray
-     * @param bool   $recursive If set to @b true than the rights will be set recursive to all subfolders
-     * @param int    $folderId  The folder id of the subfolder if this method is called recursive
+     * @param string         $mode                 "mode" could be "add" or "remove"
+     * @param string         $rolesRightNameIntern Name of the right where the roles should be added
+     * @param array<int,int> $rolesArray
+     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
+     * @param int            $folderId             The folder id of the subfolder if this method is called recursive
      */
     private function editRolesOnFolder($mode, $rolesRightNameIntern, array $rolesArray, $recursive, $folderId = 0)
     {
@@ -340,24 +349,28 @@ class TableFolder extends TableAccess
                          SET fol_public = ? -- $publicFlag
                        WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlUpdate, array((int) $publicFlag, $folderId));
-
     }
 
     /**
-     * Gibt den kompletten Pfad des Ordners zurueck
+     * Gets the path of the folder (with folder-name)
      * @return string
      */
-    public function getCompletePathOfFolder()
+    public function getFolderPath()
     {
-        // Put the path together
-        $folderPath = $this->getValue('fol_path');
-        $folderName = $this->getValue('fol_name');
-
-        return ADMIDIO_PATH . $folderPath . '/' . $folderName;
+        return $this->getValue('fol_path') . '/' . $this->getValue('fol_name');
     }
 
     /**
-     * @return array[] All files with their properties
+     * Gets the absolute path of the folder (with folder-name)
+     * @return string
+     */
+    public function getFullFolderPath()
+    {
+        return ADMIDIO_PATH . $this->getFolderPath();
+    }
+
+    /**
+     * @return array<int,array<string,mixed>> All files with their properties
      */
     private function getFilesWithProperties()
     {
@@ -375,7 +388,7 @@ class TableFolder extends TableAccess
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetchObject())
         {
-            $filePath = ADMIDIO_PATH . $this->getValue('fol_path') . '/' . $this->getValue('fol_name') . '/' . $rowFiles->fil_name;
+            $filePath = $this->getFullFolderPath() . '/' . $rowFiles->fil_name;
             $fileExists = is_file($filePath);
 
             $fileSize = 0;
@@ -412,7 +425,7 @@ class TableFolder extends TableAccess
 
     /**
      * Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
-     * @return array[]
+     * @return array<string,array<int,array<string,mixed>>>
      */
     public function getFolderContentsForDownload()
     {
@@ -575,7 +588,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to view the folder.
-     * @return int[] Returns an array with all role ids that have the right to view the folder.
+     * @return array<int,int> Returns an array with all role ids that have the right to view the folder.
      */
     public function getRoleViewArrayOfFolder()
     {
@@ -584,7 +597,7 @@ class TableFolder extends TableAccess
 
     /**
      * Returns an array with all roles ids that have the right to upload files to the folder.
-     * @return int[] Returns an array with all role ids that have the right to upload files to the folder.
+     * @return array<int,int> Returns an array with all role ids that have the right to upload files to the folder.
      */
     public function getRoleUploadArrayOfFolder()
     {
@@ -592,9 +605,9 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Return PDOStatement with all subfolders of a parent folder id
-     * @param int      $folderId Folder ID
-     * @param string[] $columns  The columns that should be in the statement
+     * Return \PDOStatement with all subfolders of a parent folder id
+     * @param int               $folderId Folder ID
+     * @param array<int,string> $columns  The columns that should be in the statement
      * @return \PDOStatement SubfolderStatement with fol_id column
      */
     private function getSubfolderStatement($folderId, array $columns = array('fol_id'))
@@ -608,7 +621,7 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * @return array[] All sub-folders with their properties
+     * @return array<int,array<string,mixed>> All sub-folders with their properties
      */
     private function getSubfoldersWithProperties()
     {
@@ -722,8 +735,8 @@ class TableFolder extends TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array  $queryParams       The query params for the prepared statement
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
@@ -745,9 +758,9 @@ class TableFolder extends TableAccess
     /**
      * Remove all roles of the array from the current folder and all of the subfolders. The
      * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
-     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
-     * @param int[]  $rolesArray
-     * @param bool   $recursive If set to @b true than the rights will be set recursive to all subfolders
+     * @param string         $rolesRightNameIntern Name of the right where the roles should be removed
+     * @param array<int,int> $rolesArray
+     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
      */
     public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
     {
@@ -809,5 +822,19 @@ class TableFolder extends TableAccess
         }
 
         return parent::save($updateFingerPrint);
+    }
+
+    /**
+     * Gets the absolute path of the folder (with folder-name)
+     * @deprecated 3.3.0:4.0.0 Use Method getFullFolderPath() instead.
+     * @return string
+     */
+    public function getCompletePathOfFolder()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$folder->getCompletePathOfFolder()" is deprecated, use "$folder->getFolderPath()" instead!');
+
+        return $this->getFolderPath();
     }
 }
