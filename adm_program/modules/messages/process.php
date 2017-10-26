@@ -37,7 +37,7 @@ $postLines    = admFuncVariableIsValid($_POST, 'state',    'int');
 
 $log = array();
 
-// open some additonal functions for messages
+// open some additional functions for messages
 $moduleMessages = new ModuleMessages();
 // find ID of the admidio Chat
 $msgId = $moduleMessages->msgGetChatId();

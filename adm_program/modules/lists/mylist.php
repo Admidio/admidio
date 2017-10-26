@@ -274,7 +274,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                 "usf_value_list": {}
             };';
 
-        // get avaiable values for current field type and push to array
+        // get available values for current field type and push to array
         if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
         {
             foreach($field->getValue('usf_value_list', 'text') as $key => $value)
@@ -336,7 +336,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
         };';
 
-    // add new category with participient information of events
+    // add new category with participant information of events
     foreach($arrParticipientsInformation as $memberStatus => $columnName)
     {
         ++$i;

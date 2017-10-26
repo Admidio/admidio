@@ -108,7 +108,7 @@ $part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio
 $part2 = '"><img src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
 $href  = 'href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_id=';
 
-// open some additonal functions for messages
+// open some additional functions for messages
 $moduleMessages = new ModuleMessages();
 
 $usrId = (int) $gCurrentUser->getValue('usr_id');

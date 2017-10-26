@@ -30,7 +30,7 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 }
 if($gPreferences['enable_weblinks_module'] == 2)
 {
-    // avaiable only with valid login
+    // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
