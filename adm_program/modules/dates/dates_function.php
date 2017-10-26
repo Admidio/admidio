@@ -36,7 +36,7 @@ $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
 $getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
 $getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
-$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
+$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
 $participationPossible  = true;

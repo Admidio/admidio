@@ -108,7 +108,7 @@ $participationForm->addMultilineTextInput(
     array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments)
 );
 $participationForm->addInput(
-    'additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $member->getValue('mem_count_guests'),
+    'additional_guests', $gL10n->get('LST_SEAT_AMOUNT'), $member->getValue('mem_count_guests'),
     array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests)
 );
 $participationForm->addHtml('</div><div class="modal-footer">');
