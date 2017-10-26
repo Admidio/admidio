@@ -649,7 +649,7 @@ class HtmlPage
         $htmlHeader .= $headerContent;
         $htmlHeader .= $this->header;
         $htmlHeader .= $htmlMyHeader;
-        $htmlHeader .= '</header>';
+        $htmlHeader .= '</head>';
 
         return $htmlHeader;
     }
