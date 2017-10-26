@@ -337,7 +337,7 @@ foreach($gProfileFields->getProfileFields() as $field)
         };';
 
     // add new category with participient information of events
-    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    foreach($arrParticipientsInformation as $memberStatus => $columnName)
     {
         ++$i;
         $javascriptCode .= '
@@ -345,8 +345,8 @@ foreach($gProfileFields->getProfileFields() as $field)
                 "cat_id"   : -1,
                 "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
                 "usf_id"   : "'.$memberStatus.'",
-                "usf_name" : "'.$ColumnName.'",
-                "usf_name_intern" : "'.$ColumnName.'",
+                "usf_name" : "'.$columnName.'",
+                "usf_name_intern" : "'.$columnName.'",
             };';
     }
 

@@ -217,7 +217,7 @@ if($getViewMode === 'html')
     }
 
     // create filter menu with elements for calendar and start-/enddate
-    $FilterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
+    $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?headline=' . $getHeadline . '&view=' . $getView, $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories(
         'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES',
@@ -233,8 +233,8 @@ if($getViewMode === 'html')
     );
     $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-    $FilterNavbar->addForm($form->show(false));
-    $page->addHtml($FilterNavbar->show());
+    $filterNavbar->addForm($form->show(false));
+    $page->addHtml($filterNavbar->show());
 }
 else // $getViewMode = 'print'
 {

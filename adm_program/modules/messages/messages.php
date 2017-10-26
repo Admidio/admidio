@@ -56,11 +56,11 @@ $page = new HtmlPage($headline);
 $page->enableModal();
 
 // get module menu for emails
-$EmailMenu = $page->getMenu();
+$emailMenu = $page->getMenu();
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1)
 {
-    $EmailMenu->addItem(
+    $emailMenu->addItem(
         'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
         $gL10n->get('MAI_SEND_EMAIL'), '/email.png'
     );
@@ -68,7 +68,7 @@ if ($gPreferences['enable_mail_module'] == 1)
 // link to write new PM
 if ($gPreferences['enable_pm_module'] == 1)
 {
-    $EmailMenu->addItem(
+    $emailMenu->addItem(
         'admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM',
         $gL10n->get('PMS_SEND_PM'), '/pm.png'
     );
@@ -77,7 +77,7 @@ if ($gPreferences['enable_pm_module'] == 1)
 // link to Chat
 if ($gPreferences['enable_chat_module'] == 1)
 {
-    $EmailMenu->addItem(
+    $emailMenu->addItem(
         'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',
         $gL10n->get('MSG_CHAT'), '/chat.png'
     );
@@ -85,7 +85,7 @@ if ($gPreferences['enable_chat_module'] == 1)
 
 if($gCurrentUser->isAdministrator())
 {
-    $EmailMenu->addItem(
+    $emailMenu->addItem(
         'admMenuItemPreferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=messages',
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );

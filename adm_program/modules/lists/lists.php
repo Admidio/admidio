@@ -90,19 +90,19 @@ $page->addJavascript('
 $page->addHtml('<div id="lists_overview">');
 
 // get module menu
-$ListsMenu = $page->getMenu();
+$listsMenu = $page->getMenu();
 
 if($gCurrentUser->manageRoles())
 {
     // show link to create new role
-    $ListsMenu->addItem('admMenuItemNewRole', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
+    $listsMenu->addItem('admMenuItemNewRole', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
 if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 {
     // show link to maintain categories
-    $ListsMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=ROL',
+    $listsMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=ROL',
                         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
 }
 
@@ -112,12 +112,12 @@ $navbarForm->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES',
     array('defaultValue' => $getCatId)
 );
-$ListsMenu->addForm($navbarForm->show(false));
+$listsMenu->addForm($navbarForm->show(false));
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of roles
-    $ListsMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=lists',
+    $listsMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=lists',
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
