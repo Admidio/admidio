@@ -76,8 +76,7 @@ if(isset($_SESSION['mylist_request']))
         $formValues['sel_roles_ids'] = 0;
     }
 
-    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
-    // muessen diese nun direkt angelegt werden
+    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, muessen diese nun direkt angelegt werden
     for($i = $defaultColumnRows + 1; $i > 0; ++$i)
     {
         if(isset($formValues['column'.$i]))
@@ -682,8 +681,8 @@ if($getActiveRole)
     // check if there are roles that the current user could view
     if(count($allVisibleRoles) === 0)
     {
-            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
-            // => EXIT
+        $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+        // => EXIT
     }
 
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
