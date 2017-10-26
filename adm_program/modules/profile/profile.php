@@ -54,7 +54,8 @@ function getFieldCode($fieldNameIntern, User $user)
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY' && $value !== '')
     {
         $birthday = DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
-        $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->diff(new DateTime('now'))->y. ' '.$gL10n->get('PRO_YEARS').')';
+        $now = new DateTime('now');
+        $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->diff($now)->y. ' '.$gL10n->get('PRO_YEARS').')';
     }
     elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
     {
