@@ -451,7 +451,7 @@ elseif ($getMode === 7)
             $folder->editPublicFlagOnFolder(false);
 
             // get new roles and removed roles
-            $addViewRoles = array_merge(array_diff($_POST['adm_roles_view_right'], $rolesFolderView), $_POST['adm_roles_upload_right'], $rolesFolderUpload);
+            $addViewRoles = array_unique(array_merge(array_diff(array_map('intval', $_POST['adm_roles_view_right']), $rolesFolderView), array_map('intval', $_POST['adm_roles_upload_right']), $rolesFolderUpload));
             $removeViewRoles = array_diff($rolesFolderView, $_POST['adm_roles_view_right']);
 
             $folder->addRolesOnFolder('folder_view', $addViewRoles);
