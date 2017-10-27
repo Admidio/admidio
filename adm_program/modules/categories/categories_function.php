@@ -158,8 +158,6 @@ if($getMode === 1)
     if ($getType !== 'ROL')
     {
         $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
-        $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
-        $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
     
         // roles have their own preferences for visibility, so only allow this for other types
         // until now we do not support visibility for categories that belong to several organizations
@@ -174,6 +172,9 @@ if($getMode === 1)
             // delete existing roles rights of the category
             $rightCategoryView->delete();
         }
+
+        $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
+        $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
