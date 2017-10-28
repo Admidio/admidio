@@ -141,7 +141,7 @@ if ($getMode === 1 || $getMode === 3)
     // POST Variablen in das Gaestebuchobjekt schreiben
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
-        if (strpos($key, 'gbo_') === 0)
+        if (admStrStartsWith($key, 'gbo_'))
         {
             if (!$guestbook->setValue($key, $value))
             {
@@ -334,7 +334,7 @@ elseif ($getMode === 4 || $getMode === 8)
     // POST Variablen in das Gaestebuchkommentarobjekt schreiben
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
-        if (strpos($key, 'gbc_') === 0)
+        if (admStrStartsWith($key, 'gbc_'))
         {
             if (!$gbComment->setValue($key, $value))
             {

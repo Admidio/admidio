@@ -116,7 +116,7 @@ class ConditionParser
     {
         $sourceCondition = admStrToUpper($sourceCondition);
 
-        return $columnType === 'date' && (strpos($sourceCondition, 'J') !== false || strpos($sourceCondition, 'Y') !== false);
+        return $columnType === 'date' && (admStrContains($sourceCondition, 'J') || admStrContains($sourceCondition, 'Y'));
     }
 
     /**

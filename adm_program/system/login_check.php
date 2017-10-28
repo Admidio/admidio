@@ -117,7 +117,7 @@ else
         }
 
         // remove login page from navigation stack
-        if(strpos($gNavigation->getUrl(), '/login.php') > 0)
+        if(admStrEndsWith($gNavigation->getUrl(), '/login.php'))
         {
             $gNavigation->deleteLastUrl();
         }

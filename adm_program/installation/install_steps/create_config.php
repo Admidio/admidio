@@ -130,7 +130,7 @@ if ($_SESSION['db_port'])
 // detect root path
 $rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
-if (!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
+if (!admStrStartsWith($rootPath, 'http://') && !admStrStartsWith($rootPath, 'https://'))
 {
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     {

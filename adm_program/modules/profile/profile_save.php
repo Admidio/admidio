@@ -168,7 +168,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             || $field->getValue('usf_name_intern') === 'TWITTER'
             || $field->getValue('usf_name_intern') === 'XING')
             {
-                if(strValidCharacters($_POST[$postId], 'url') && strpos($_POST[$postId], '/') !== false)
+                if(strValidCharacters($_POST[$postId], 'url') && admStrContains($_POST[$postId], '/'))
                 {
                     if(strrpos($_POST[$postId], '/profile.php?id=') > 0)
                     {

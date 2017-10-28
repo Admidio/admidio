@@ -230,6 +230,45 @@ function strValidCharacters($string, $checkType)
 }
 
 /**
+ * @param string $string
+ * @param string $contains
+ * @return bool
+ */
+function admStrContains($string, $contains)
+{
+    return strpos($string, $contains) !== false;
+}
+
+/**
+ * @param string $string
+ * @param string $start
+ * @return bool
+ */
+function admStrStartsWith($string, $start)
+{
+    return strpos($string, $start) === 0;
+}
+
+/**
+ * @param string $string
+ * @param string $end
+ * @return bool
+ */
+function admStrEndsWith($string, $end)
+{
+    return strrpos($string, $end) === strlen($string) - strlen($end);
+}
+
+/**
+ * @param string $string
+ * @return bool
+ */
+function admIsTranslationStr($string)
+{
+    return (bool) preg_match('/^[A-Z]{3}_/', $string);
+}
+
+/**
  * Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
  * In addition the function checks if the name contains .. or a . at the beginning.
  * @param string $filename     Name of the file that should be checked.
@@ -249,7 +288,7 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     }
 
     // filename should only contains valid characters and don't start with a dot
-    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || strpos($filename, '.') === 0)
+    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || admStrStartsWith($filename, '.'))
     {
         throw new AdmException('BAC_FILE_NAME_INVALID');
     }

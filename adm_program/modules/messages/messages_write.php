@@ -172,7 +172,7 @@ else
 
 // Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
 // dann soll das Formular gefuellt werden mit den Werten aus der Session
-if (strpos($gNavigation->getUrl(), 'messages_send.php') > 0 && isset($_SESSION['message_request']))
+if (admStrContains($gNavigation->getUrl(), 'messages_send.php') && isset($_SESSION['message_request']))
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite

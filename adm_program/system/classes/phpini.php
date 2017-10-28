@@ -158,7 +158,7 @@ class PhpIni
         $isInBaseDirs = false;
         foreach ($baseDirs as $baseDir)
         {
-            if (strpos($dirPath, $baseDir) === 0)
+            if (admStrStartsWith($dirPath, $baseDir))
             {
                 $isInBaseDirs = true;
             }

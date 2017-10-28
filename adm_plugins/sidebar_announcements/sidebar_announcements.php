@@ -79,7 +79,7 @@ if(!isset($plg_headline) || $plg_headline === '')
 {
     $plg_headline = $gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE');
 }
-elseif(strpos($plg_headline, '_') === 3)
+elseif(admIsTranslationStr($plg_headline))
 {
     // if text is a translation-id then translate it
     $plg_headline = $gL10n->get($plg_headline);

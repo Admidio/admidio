@@ -47,7 +47,7 @@ switch($getJob)
         $fileSize = filesize($completePath);
 
         // for IE the filename must have special chars in hexadecimal
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+        if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
         {
             $getFilename = urlencode($getFilename);
         }
