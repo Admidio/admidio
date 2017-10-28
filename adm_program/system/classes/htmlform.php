@@ -1515,7 +1515,7 @@ class HtmlForm extends HtmlFormBasic
             if(array_key_exists(2, $row))
             {
                 // translate category name
-                if (admIsTranslationStr($row[2]))
+                if (admIsTranslationStrId($row[2]))
                 {
                     $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get(admStrToUpper($row[2])));
                 }
@@ -1753,7 +1753,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if text is a translation-id then translate it
-            if (admIsTranslationStr($row['cat_name']))
+            if (admIsTranslationStrId($row['cat_name']))
             {
                 $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
             }
@@ -1862,7 +1862,7 @@ class HtmlForm extends HtmlFormBasic
             if (count($parameters) === 0)
             {
                 // if text is a translation-id then translate it
-                if (admIsTranslationStr($helpTextId))
+                if (admIsTranslationStrId($helpTextId))
                 {
                     $helpText = $gL10n->get($helpTextId);
                 }
@@ -1876,7 +1876,7 @@ class HtmlForm extends HtmlFormBasic
                 foreach ($parameters as &$parameter)
                 {
                     // if parameter is a translation-id then translate it
-                    if (admIsTranslationStr($parameter))
+                    if (admIsTranslationStrId($parameter))
                     {
                         $parameter = $gL10n->get($parameter);
                     }

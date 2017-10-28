@@ -236,7 +236,7 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            if (admIsTranslationStr($listValueText))
+                            if (admIsTranslationStrId($listValueText))
                             {
                                 $listValueText = $gL10n->get(admStrToUpper($listValueText));
                             }
@@ -261,7 +261,7 @@ class ProfileFields
                         }
 
                         // if text is a translation-id then translate it
-                        if (admIsTranslationStr($listValue))
+                        if (admIsTranslationStrId($listValue))
                         {
                             $listValue = $gL10n->get(admStrToUpper($listValue));
                         }

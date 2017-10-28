@@ -267,7 +267,7 @@ function admStrEndsWith($string, $end)
  * @param string $string The string to check
  * @return bool Returns true if the given string is a translation-string-id
  */
-function admIsTranslationStr($string)
+function admIsTranslationStrId($string)
 {
     return (bool) preg_match('/^[A-Z]{3}_[A-Z_]+/', $string);
 }

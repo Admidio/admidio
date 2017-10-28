@@ -189,7 +189,7 @@ class TableUserField extends TableAccess
                 case 'usf_name':
                 case 'cat_name':
                     // if text is a translation-id then translate it
-                    if (admIsTranslationStr($value))
+                    if (admIsTranslationStrId($value))
                     {
                         $value = $gL10n->get(admStrToUpper($value));
                     }
@@ -225,7 +225,7 @@ class TableUserField extends TableAccess
                                     }
 
                                     // if text is a translation-id then translate it
-                                    if (admIsTranslationStr($listValueText))
+                                    if (admIsTranslationStrId($listValueText))
                                     {
                                         $listValueText = $gL10n->get(admStrToUpper($listValueText));
                                     }
@@ -266,7 +266,7 @@ class TableUserField extends TableAccess
                             }
 
                             // if text is a translation-id then translate it
-                            if (admIsTranslationStr($listValue))
+                            if (admIsTranslationStrId($listValue))
                             {
                                 $listValue = $gL10n->get(admStrToUpper($listValue));
                             }
