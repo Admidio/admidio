@@ -269,7 +269,7 @@ function admStrEndsWith($string, $end)
  */
 function admIsTranslationStr($string)
 {
-    return (bool) preg_match('/^[A-Z]{3}_/', $string);
+    return (bool) preg_match('/^[A-Z]{3}_[A-Z_]+/', $string);
 }
 
 /**
