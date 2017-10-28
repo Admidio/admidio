@@ -230,9 +230,10 @@ function strValidCharacters($string, $checkType)
 }
 
 /**
- * @param string $string
- * @param string $contains
- * @return bool
+ * Checks if a string contains another given string
+ * @param string $string   The string to check
+ * @param string $contains The containing string pattern
+ * @return bool Returns true if the string contains the other string
  */
 function admStrContains($string, $contains)
 {
@@ -240,9 +241,10 @@ function admStrContains($string, $contains)
 }
 
 /**
- * @param string $string
- * @param string $start
- * @return bool
+ * Checks if a string starts with another given string
+ * @param string $string The string to check
+ * @param string $start  The starting string pattern
+ * @return bool Returns true if the string starts with the other string
  */
 function admStrStartsWith($string, $start)
 {
@@ -250,9 +252,10 @@ function admStrStartsWith($string, $start)
 }
 
 /**
- * @param string $string
- * @param string $end
- * @return bool
+ * Checks if a string ends with another given string
+ * @param string $string The string to check
+ * @param string $end    The ending string pattern
+ * @return bool Returns true if the string ends with the other string
  */
 function admStrEndsWith($string, $end)
 {
@@ -260,8 +263,9 @@ function admStrEndsWith($string, $end)
 }
 
 /**
- * @param string $string
- * @return bool
+ * Checks if a given string is a translation-string-id
+ * @param string $string The string to check
+ * @return bool Returns true if the given string is a translation-string-id
  */
 function admIsTranslationStr($string)
 {
