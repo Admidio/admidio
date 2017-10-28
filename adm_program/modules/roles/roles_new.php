@@ -274,14 +274,14 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     {
         $form->addCheckbox(
             'rol_announcements', $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
-            array('icon' => 'announcements.png')
+            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'announcements.png')
         );
     }
     if($gPreferences['enable_dates_module'] > 0)
     {
         $form->addCheckbox(
             'rol_dates', $gL10n->get('ROL_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
-            array('icon' => 'dates.png')
+            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'dates.png')
         );
     }
     if($gPreferences['enable_photo_module'] > 0)
@@ -317,7 +317,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     {
         $form->addCheckbox(
             'rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),
-            array('icon' => 'weblinks.png')
+            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'weblinks.png')
         );
     }
     $form->closeGroupBox();
