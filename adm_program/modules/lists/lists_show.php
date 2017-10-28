@@ -316,7 +316,7 @@ elseif (count($relationTypeIds) > 1)
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
-if ($getMode === 'html' && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
+if ($getMode === 'html' && !admStrContains($gNavigation->getUrl(), 'lists_show.php'))
 {
     $gNavigation->addUrl(CURRENT_URL);
 }
@@ -899,7 +899,7 @@ if ($getMode === 'csv' || $getMode === 'pdf')
     $filename .= '.' . $getMode;
 
     // for IE the filename must have special chars in hexadecimal
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
     {
         $filename = urlencode($filename);
     }

@@ -137,7 +137,7 @@ class HtmlPage
     {
         if (!in_array($cssFile, $this->cssFiles, true))
         {
-            if (strpos($cssFile, 'http') !== false)
+            if (admStrStartsWith($cssFile, 'http'))
             {
                 $this->cssFiles[] = $cssFile;
             }
@@ -173,7 +173,7 @@ class HtmlPage
     {
         if (!in_array($jsFile, $this->jsFiles, true))
         {
-            if (strpos($jsFile, 'http') !== false)
+            if (admStrStartsWith($jsFile, 'http'))
             {
                 $this->jsFiles[] = $jsFile;
             }

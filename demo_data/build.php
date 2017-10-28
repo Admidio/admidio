@@ -190,14 +190,14 @@ function readAndExecuteSQLFromFile($filename, Database $database)
                 foreach($results[0] as $value)
                 {
                     // if it's a string of a systemmail then html linefeeds must be replaced
-                    if(strpos($value, 'SYS_SYSMAIL') === false)
-                    {
-                        $convertedText = $gL10n->get($value);
-                    }
-                    else
+                    if(admStrStartsWith($value, 'SYS_SYSMAIL_'))
                     {
                         // convert <br /> to a normal line feed
                         $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
+                    }
+                    else
+                    {
+                        $convertedText = $gL10n->get($value);
                     }
 
                     // search for the exact value as a separate word and replace it with the translation

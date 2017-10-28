@@ -134,7 +134,7 @@ class ComponentUpdate extends Component
 
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
-        if (strpos($updateStepContent, 'ComponentUpdate') !== false)
+        if (admStrContains($updateStepContent, 'ComponentUpdate'))
         {
             $executeSql = false;
 

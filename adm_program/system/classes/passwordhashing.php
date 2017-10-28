@@ -105,16 +105,16 @@ class PasswordHashing
     public static function verify($password, $hash)
     {
         $hashLength = strlen($hash);
-        if ($hashLength === self::HASH_LENGTH_BCRYPT && strpos($hash, self::HASH_INDICATOR_BCRYPT) === 0)
+        if ($hashLength === self::HASH_LENGTH_BCRYPT && admStrStartsWith($hash, self::HASH_INDICATOR_BCRYPT))
         {
             return password_verify($password, $hash);
         }
-        elseif ($hashLength >= self::HASH_LENGTH_SHA512 && strpos($hash, self::HASH_INDICATOR_SHA512) === 0)
+        elseif ($hashLength >= self::HASH_LENGTH_SHA512 && admStrStartsWith($hash, self::HASH_INDICATOR_SHA512))
         {
             $passwordHash = crypt($password, $hash);
             return hash_equals($passwordHash, $hash);
         }
-        elseif ($hashLength === self::HASH_LENGTH_PORTABLE && strpos($hash, self::HASH_INDICATOR_PORTABLE) === 0)
+        elseif ($hashLength === self::HASH_LENGTH_PORTABLE && admStrStartsWith($hash, self::HASH_INDICATOR_PORTABLE))
         {
             $passwordHasher = new PasswordHash(9, true);
             return $passwordHasher->CheckPassword($password, $hash);
@@ -139,7 +139,7 @@ class PasswordHashing
     public static function needsRehash($hash, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {
         $hashLength = strlen($hash);
-        if ($algorithm === self::HASH_ALGORITHM_SHA512 && $hashLength >= self::HASH_LENGTH_SHA512 && strpos($hash, self::HASH_INDICATOR_SHA512) === 0)
+        if ($algorithm === self::HASH_ALGORITHM_SHA512 && $hashLength >= self::HASH_LENGTH_SHA512 && admStrStartsWith($hash, self::HASH_INDICATOR_SHA512))
         {
             if (!array_key_exists('cost', $options))
             {
@@ -155,7 +155,7 @@ class PasswordHashing
 
             return $cost !== $options['cost'];
         }
-        elseif ($algorithm === self::HASH_ALGORITHM_BCRYPT && $hashLength === self::HASH_LENGTH_BCRYPT && strpos($hash, self::HASH_INDICATOR_BCRYPT) === 0)
+        elseif ($algorithm === self::HASH_ALGORITHM_BCRYPT && $hashLength === self::HASH_LENGTH_BCRYPT && admStrStartsWith($hash, self::HASH_INDICATOR_BCRYPT))
         {
             $algorithmPhpConstant = PASSWORD_BCRYPT;
         }
@@ -299,7 +299,7 @@ class PasswordHashing
         {
             $passwordInfo['upperCase'] = true;
         }
-        if (preg_match('/\W/', $password) === 1 || strpos($password, '_') !== false) // Note: \W = ![0-9a-zA-Z_]
+        if (preg_match('/\W/', $password) === 1 || admStrContains($password, '_')) // Note: \W = ![0-9a-zA-Z_]
         {
             $passwordInfo['symbol'] = true;
         }
@@ -315,15 +315,15 @@ class PasswordHashing
     public static function hashInfo($hash)
     {
         $hashLength = strlen($hash);
-        if ($hashLength === self::HASH_LENGTH_BCRYPT && strpos($hash, self::HASH_INDICATOR_BCRYPT) === 0)
+        if ($hashLength === self::HASH_LENGTH_BCRYPT && admStrStartsWith($hash, self::HASH_INDICATOR_BCRYPT))
         {
             return password_get_info($hash);
         }
-        elseif ($hashLength >= self::HASH_LENGTH_SHA512 && strpos($hash, self::HASH_INDICATOR_SHA512) === 0)
+        elseif ($hashLength >= self::HASH_LENGTH_SHA512 && admStrStartsWith($hash, self::HASH_INDICATOR_SHA512))
         {
             return 'SHA512';
         }
-        elseif ($hashLength === self::HASH_LENGTH_PORTABLE && strpos($hash, self::HASH_INDICATOR_PORTABLE) === 0)
+        elseif ($hashLength === self::HASH_LENGTH_PORTABLE && admStrStartsWith($hash, self::HASH_INDICATOR_PORTABLE))
         {
             return 'PRIVATE/PORTABLE_HASH';
         }

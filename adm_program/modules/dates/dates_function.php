@@ -357,7 +357,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // write all POST parameters into the date object
     foreach($_POST as $key => $value) // TODO possible security issue
     {
-        if(strpos($key, 'dat_') === 0)
+        if(admStrStartsWith($key, 'dat_'))
         {
             $date->setValue($key, $value);
         }
@@ -530,7 +530,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
 
         // only change name of role if no custom name was set
-        if(strpos($role->getValue('rol_name'), $gL10n->get('DAT_DATE')) !== false)
+        if(admStrContains($role->getValue('rol_name'), $gL10n->get('DAT_DATE')))
         {
             $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId;
         }
@@ -594,7 +594,7 @@ elseif($getMode === 6)  // export event in ical format
     $filename = $date->getValue('dat_headline');
 
     // for IE the filename must have special chars in hexadecimal
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
     {
         $filename = urlencode($filename);
     }
