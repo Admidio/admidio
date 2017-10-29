@@ -92,15 +92,15 @@ echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 
 if($gValidLogin)
 {
-    if($plg_link_target !== '' && strpos($plg_link_target, '_') === false)
+    if($plg_link_target === '' || admStrStartsWith($plg_link_target, '_'))
     {
-        $jsContentNextPage = '
-        parent.'. $plg_link_target. '.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';
-        self.location.reload(); ';
+        $jsContentNextPage = 'self.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';';
     }
     else
     {
-        $jsContentNextPage = 'self.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';';
+        $jsContentNextPage = '
+        parent.'. $plg_link_target. '.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';
+        self.location.reload();';
     }
 
     $jsContent = '$("#adm_logout_link").click(function() {'.$jsContentNextPage.'});';

@@ -47,7 +47,7 @@ if($getMode === 1)
     $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
     // for IE the filename must have special chars in hexadecimal
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
     {
         $filename = urlencode($filename);
     }
@@ -210,7 +210,7 @@ elseif ($getMode === 8)
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
 
         // for IE the filename must have special chars in hexadecimal
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+        if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
         {
             $filename = urlencode($filename);
         }

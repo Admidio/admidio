@@ -80,7 +80,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
         // POST Variablen in das Ankuendigungs-Objekt schreiben
         foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(strpos($key, 'lnk_') === 0)
+            if(admStrStartsWith($key, 'lnk_'))
             {
                 $link->setValue($key, $value);
             }

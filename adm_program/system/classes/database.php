@@ -491,12 +491,12 @@ class Database
         $sqlCompare = strtolower($sql);
 
         // prepare the sql statement to be compatible with PostgreSQL
-        if (strpos($sqlCompare, 'create table') !== false)
+        if (admStrContains($sqlCompare, 'create table'))
         {
             // on a create-table-statement if necessary cut existing MySQL table options
             $sql = substr($sql, 0, strrpos($sql, ')') + 1);
         }
-        if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
+        if (admStrContains($sqlCompare, 'create table') || admStrContains($sqlCompare, 'alter table'))
         {
             $replaceArray = array(
                 // PostgreSQL doesn't know unsigned
@@ -512,7 +512,7 @@ class Database
             $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
             if ($posAutoIncrement > 0)
             {
-                $posInteger = strrpos(substr(strtolower($sql), 0, $posAutoIncrement), 'integer');
+                $posInteger = strripos(substr($sql, 0, $posAutoIncrement), 'integer');
                 $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
             }
         }
@@ -548,7 +548,7 @@ class Database
         {
             $this->pdoStatement = $this->pdo->query($sql);
 
-            if ($this->pdoStatement !== false && strpos(strtoupper($sql), 'SELECT') === 0)
+            if ($this->pdoStatement !== false && admStrStartsWith(strtoupper($sql), 'SELECT'))
             {
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
@@ -601,7 +601,7 @@ class Database
             {
                 $this->pdoStatement->execute($params);
 
-                if (strpos(strtoupper($sql), 'SELECT') === 0)
+                if (admStrStartsWith(strtoupper($sql), 'SELECT'))
                 {
                     $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
                 }
@@ -696,18 +696,18 @@ class Database
                     'null'     => $properties['Null'] === 'YES',
                     'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
                     'default'  => $properties['Default'],
-                    'unsigned' => strpos($properties['Type'], 'unsigned' !== false)
+                    'unsigned' => admStrContains($properties['Type'], 'unsigned')
                 );
 
-                if (strpos($properties['Type'], 'tinyint(1)') !== false)
+                if (admStrContains($properties['Type'], 'tinyint(1)'))
                 {
                     $props['type'] = 'boolean';
                 }
-                elseif (strpos($properties['Type'], 'smallint') !== false)
+                elseif (admStrContains($properties['Type'], 'smallint'))
                 {
                     $props['type'] = 'smallint';
                 }
-                elseif (strpos($properties['Type'], 'int') !== false)
+                elseif (admStrContains($properties['Type'], 'int'))
                 {
                     $props['type'] = 'integer';
                 }
@@ -730,18 +730,18 @@ class Database
             foreach ($columnsList as $properties)
             {
                 $props = array(
-                    'serial'   => strpos($properties['column_default'], 'nextval') !== false,
+                    'serial'   => admStrContains($properties['column_default'], 'nextval'),
                     'null'     => $properties['is_nullable'] === 'YES',
                     'key'      => null,
                     'default'  => $properties['column_default'],
                     'unsigned' => null
                 );
 
-                if (strpos($properties['data_type'], 'timestamp') !== false)
+                if (admStrContains($properties['data_type'], 'timestamp'))
                 {
                     $props['type'] = 'timestamp';
                 }
-                elseif (strpos($properties['data_type'], 'time') !== false)
+                elseif (admStrContains($properties['data_type'], 'time'))
                 {
                     $props['type'] = 'time';
                 }

@@ -69,7 +69,7 @@ class TableFolder extends TableAccess
         {
             while (($entry = readdir($dirHandle)) !== false)
             {
-                if ($entry === '.' || $entry === '..' || strpos($entry, '.') === 0)
+                if ($entry === '.' || $entry === '..' || admStrStartsWith($entry, '.'))
                 {
                     continue;
                 }

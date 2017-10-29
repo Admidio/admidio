@@ -76,8 +76,7 @@ if(isset($_SESSION['mylist_request']))
         $formValues['sel_roles_ids'] = 0;
     }
 
-    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
-    // muessen diese nun direkt angelegt werden
+    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, muessen diese nun direkt angelegt werden
     for($i = $defaultColumnRows + 1; $i > 0; ++$i)
     {
         if(isset($formValues['column'.$i]))
@@ -274,7 +273,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                 "usf_value_list": {}
             };';
 
-        // get avaiable values for current field type and push to array
+        // get available values for current field type and push to array
         if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
         {
             foreach($field->getValue('usf_value_list', 'text') as $key => $value)
@@ -336,8 +335,8 @@ foreach($gProfileFields->getProfileFields() as $field)
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
         };';
 
-    // add new category with participient information of events
-    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    // add new category with participant information of events
+    foreach($arrParticipientsInformation as $memberStatus => $columnName)
     {
         ++$i;
         $javascriptCode .= '
@@ -345,8 +344,8 @@ foreach($gProfileFields->getProfileFields() as $field)
                 "cat_id"   : -1,
                 "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
                 "usf_id"   : "'.$memberStatus.'",
-                "usf_name" : "'.$ColumnName.'",
-                "usf_name_intern" : "'.$ColumnName.'",
+                "usf_name" : "'.$columnName.'",
+                "usf_name_intern" : "'.$columnName.'",
             };';
     }
 
@@ -682,8 +681,8 @@ if($getActiveRole)
     // check if there are roles that the current user could view
     if(count($allVisibleRoles) === 0)
     {
-            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
-            // => EXIT
+        $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+        // => EXIT
     }
 
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name

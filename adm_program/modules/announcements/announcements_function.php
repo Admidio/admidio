@@ -74,7 +74,7 @@ if($getMode === 1)
         // POST Variablen in das Ankuendigungs-Objekt schreiben
         foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(strpos($key, 'ann_') === 0)
+            if(admStrStartsWith($key, 'ann_'))
             {
                 $announcement->setValue($key, $value);
             }

@@ -72,7 +72,8 @@ class DateTimeExtended extends DateTime
 
         $gLogger->warning('DEPRECATED: "$dateTimeExtended->getAge()" is deprecated, use "DateTime::createFromFormat()->diff(new DateTime(\'now\'))->y" instead!');
 
-        return $this->diff(new DateTime('now'))->y;
+        $now = new DateTime('now');
+        return $this->diff($now)->y;
     }
 
     /**

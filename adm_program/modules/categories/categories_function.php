@@ -138,7 +138,7 @@ if($getMode === 1)
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value) // TODO possible security issue
     {
-        if(strpos($key, 'cat_') === 0)
+        if(admStrStartsWith($key, 'cat_'))
         {
             $category->setValue($key, $value);
         }

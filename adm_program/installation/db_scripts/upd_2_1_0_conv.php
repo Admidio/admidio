@@ -191,59 +191,59 @@ while($rowOrga = $orgaStatement->fetch())
     $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$rowOrga['org_id'].', '.$rowWebmaster['webmaster_id'].', \'Adressliste\', \''.DATETIME_NOW.'\', 1, 1)';
     $gDb->query($sql);
-    $AdresslisteId = $gDb->lastInsertId();
+    $addressListId = $gDb->lastInsertId();
 
     $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
-                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 3, '.$rowGeburtstag[0].', null, null)
-                      , ('.$AdresslisteId.', 4, '.$rowAdresse[0].', null, null)
-                      , ('.$AdresslisteId.', 5, '.$rowPLZ[0].', null, null)
-                      , ('.$AdresslisteId.', 6, '.$rowOrt[0].', null, null)';
+                 VALUES ('.$addressListId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 3, '.$rowGeburtstag[0].', null, null)
+                      , ('.$addressListId.', 4, '.$rowAdresse[0].', null, null)
+                      , ('.$addressListId.', 5, '.$rowPLZ[0].', null, null)
+                      , ('.$addressListId.', 6, '.$rowOrt[0].', null, null)';
     $gDb->query($sql);
 
     $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$rowOrga['org_id'].', '.$rowWebmaster['webmaster_id'].', \'Telefonliste\', \''.DATETIME_NOW.'\', 1, 0)';
     $gDb->query($sql);
-    $AdresslisteId = $gDb->lastInsertId();
+    $addressListId = $gDb->lastInsertId();
 
     $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
-                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 3, '.$rowTelefon[0].', null, null)
-                      , ('.$AdresslisteId.', 4, '.$rowHandy[0].', null, null)
-                      , ('.$AdresslisteId.', 5, '.$rowEMail[0].', null, null)
-                      , ('.$AdresslisteId.', 6, '.$rowFax[0].', null, null)';
+                 VALUES ('.$addressListId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 3, '.$rowTelefon[0].', null, null)
+                      , ('.$addressListId.', 4, '.$rowHandy[0].', null, null)
+                      , ('.$addressListId.', 5, '.$rowEMail[0].', null, null)
+                      , ('.$addressListId.', 6, '.$rowFax[0].', null, null)';
     $gDb->query($sql);
 
     $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$rowOrga['org_id'].', '.$rowWebmaster['webmaster_id'].', \'Kontaktdaten\', \''.DATETIME_NOW.'\', 1, 0)';
     $gDb->query($sql);
-    $AdresslisteId = $gDb->lastInsertId();
+    $addressListId = $gDb->lastInsertId();
 
     $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
-                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 3, '.$rowGeburtstag[0].', null, null)
-                      , ('.$AdresslisteId.', 4, '.$rowAdresse[0].', null, null)
-                      , ('.$AdresslisteId.', 5, '.$rowPLZ[0].', null, null)
-                      , ('.$AdresslisteId.', 6, '.$rowOrt[0].', null, null)
-                      , ('.$AdresslisteId.', 7, '.$rowTelefon[0].', null, null)
-                      , ('.$AdresslisteId.', 8, '.$rowHandy[0].', null, null)
-                      , ('.$AdresslisteId.', 9, '.$rowEMail[0].', null, null)';
+                 VALUES ('.$addressListId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 3, '.$rowGeburtstag[0].', null, null)
+                      , ('.$addressListId.', 4, '.$rowAdresse[0].', null, null)
+                      , ('.$addressListId.', 5, '.$rowPLZ[0].', null, null)
+                      , ('.$addressListId.', 6, '.$rowOrt[0].', null, null)
+                      , ('.$addressListId.', 7, '.$rowTelefon[0].', null, null)
+                      , ('.$addressListId.', 8, '.$rowHandy[0].', null, null)
+                      , ('.$addressListId.', 9, '.$rowEMail[0].', null, null)';
     $gDb->query($sql);
 
     $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
                  VALUES ('.$rowOrga['org_id'].', '.$rowWebmaster['webmaster_id'].', \'Mitgliedschaft\', \''.DATETIME_NOW.'\', 1, 0)';
     $gDb->query($sql);
-    $AdresslisteId = $gDb->lastInsertId();
+    $addressListId = $gDb->lastInsertId();
 
     $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
-                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
-                      , ('.$AdresslisteId.', 3, '.$rowGeburtstag[0].', null, null)
-                      , ('.$AdresslisteId.', 4, null, \'mem_begin\', null)
-                      , ('.$AdresslisteId.', 5, null, \'mem_end\', null)';
+                 VALUES ('.$addressListId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$addressListId.', 3, '.$rowGeburtstag[0].', null, null)
+                      , ('.$addressListId.', 4, null, \'mem_begin\', null)
+                      , ('.$addressListId.', 5, null, \'mem_end\', null)';
     $gDb->query($sql);
 
     // Beta-Flag für Datenbank-Versionsnummer schreiben

@@ -401,7 +401,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['icon'] !== '')
         {
             // create html for icon
-            if (strpos(admStrToLower($optionsAll['icon']), 'http') === 0 && strValidCharacters($optionsAll['icon'], 'url'))
+            if (admStrStartsWith(admStrToLower($optionsAll['icon']), 'http') && strValidCharacters($optionsAll['icon'], 'url'))
             {
                 $htmlIcon = '<img class="admidio-icon-info" src="' . $optionsAll['icon'] . '" title="' . $label . '" alt="' . $label . '" />';
             }
@@ -1515,7 +1515,7 @@ class HtmlForm extends HtmlFormBasic
             if(array_key_exists(2, $row))
             {
                 // translate category name
-                if (strpos($row[2], '_') === 3)
+                if (admIsTranslationStrId($row[2]))
                 {
                     $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get(admStrToUpper($row[2])));
                 }
@@ -1762,7 +1762,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if text is a translation-id then translate it
-            if (strpos($row['cat_name'], '_') === 3)
+            if (admIsTranslationStrId($row['cat_name']))
             {
                 $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
             }
@@ -1871,7 +1871,7 @@ class HtmlForm extends HtmlFormBasic
             if (count($parameters) === 0)
             {
                 // if text is a translation-id then translate it
-                if (strpos($helpTextId, '_') === 3)
+                if (admIsTranslationStrId($helpTextId))
                 {
                     $helpText = $gL10n->get($helpTextId);
                 }
@@ -1885,7 +1885,7 @@ class HtmlForm extends HtmlFormBasic
                 foreach ($parameters as &$parameter)
                 {
                     // if parameter is a translation-id then translate it
-                    if (strpos($parameter, '_') === 3)
+                    if (admIsTranslationStrId($parameter))
                     {
                         $parameter = $gL10n->get($parameter);
                     }
@@ -1966,7 +1966,7 @@ class HtmlForm extends HtmlFormBasic
         if (strlen($icon) > 0)
         {
             // create html for icon
-            if (strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
+            if (admStrStartsWith(admStrToLower($icon), 'http') && strValidCharacters($icon, 'url'))
             {
                 $htmlIcon = '<img class="admidio-icon-info" src="' . $icon . '" title="' . $label . '" alt="' . $label . '" />';
             }

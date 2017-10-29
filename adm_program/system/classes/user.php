@@ -1014,7 +1014,7 @@ class User extends TableAccess
     {
         global $gPreferences;
 
-        if (strpos($columnName, 'usr_') !== 0)
+        if (!admStrStartsWith($columnName, 'usr_'))
         {
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
@@ -1824,7 +1824,7 @@ class User extends TableAccess
         global $gCurrentUser, $gPreferences;
 
         // users data from adm_users table
-        if (strpos($columnName, 'usr_') === 0)
+        if (admStrStartsWith($columnName, 'usr_'))
         {
             // don't change user password; use $user->setPassword()
             if ($columnName === 'usr_password' || $columnName === 'usr_new_password')

@@ -96,7 +96,7 @@ if($datesResult['numResults'] > 0)
 $iCal .= $date->getIcalFooter();
 
 // for IE the filename must have special chars in hexadecimal
-if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+if (isset($_SERVER['HTTP_USER_AGENT']) && admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
 {
     $getHeadline = urlencode($getHeadline);
 }

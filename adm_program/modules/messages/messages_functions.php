@@ -22,7 +22,7 @@ function prepareReceivers($receiversString)
     $receiversSplit = explode('|', $receiversString);
     foreach ($receiversSplit as $receivers)
     {
-        if (strpos($receivers, 'list ') === 0)
+        if (admStrStartsWith($receivers, 'list '))
         {
             $receiverNames .= '; ' . substr($receivers, 5);
         }
