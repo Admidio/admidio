@@ -32,14 +32,7 @@ $roleViewSet = array(0);
 $roleEditSet = array(0);
 
 // set text strings for the different modules
-if($getType === 'LNK')
-{
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
-    $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
-    $rolesRightsColumn = 'rol_weblinks';
-    $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
-}
-elseif($getType === 'ANN')
+if($getType === 'ANN')
 {
     $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ANN_ANNOUNCEMENTS'));
     $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
@@ -51,6 +44,13 @@ elseif($getType === 'DAT')
     $rolesRightEditName = 'DAT_EDIT_EVENTS';
     $rolesRightsColumn = 'rol_dates';
     $rolesRightsName   = 'ROL_RIGHT_DATES';
+}
+elseif($getType === 'LNK')
+{
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
+    $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
+    $rolesRightsColumn = 'rol_weblinks';
+    $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
 }
 elseif($getType === 'USF')
 {

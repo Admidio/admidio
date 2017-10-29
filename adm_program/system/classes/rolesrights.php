@@ -213,6 +213,8 @@ class RolesRights extends TableAccess
      * Save all roles of the array to the current roles rights object.
      * The method will only save the changes to an existing object. Therefore
      * it will check which roles already exists and which roles must be removed.
+     * If the current right has a parent right than all roles will also be added
+     * to the parent right and saved.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
      */
     public function saveRoles(array $roleIds)
@@ -232,6 +234,31 @@ class RolesRights extends TableAccess
             // now save changes to database
             $this->addRoles($addRoles);
             $this->removeRoles($removeRoles);
+
+            // if current right has a parent role right than add the roles also to the parent role right
+            if((int) $this->getValue('ror_ror_id_parent') > 0)
+            {
+                $parentRight      = new TableAccess($this->db, TBL_ROLES_RIGHTS, 'ror', $this->getValue('ror_ror_id_parent'));
+                $parentRolesRight = new RolesRights($this->db, $parentRight->getValue('ror_name_intern'), $this->objectId);
+                $parentRolesRight->saveRolesOfChildRight($roleIds);
+            }
+        }
+    }
+
+    /**
+     * Unlike saveRoles, this method adds all the roles of the passed array to the current role right. 
+     * This method should only be called from a child role right, which wants to store its roles 
+     * in the parent role right.
+     * @param array<int,int> $roleIds Array with all role ids that should be saved.
+     */
+    public function saveRolesOfChildRight(array $roleIds)
+    {
+        // if array is empty or only contain the role id = 0 then delete all roles rights
+        if(count($roleIds) > 0 )
+        {
+            // add new roles and save them to database
+            $addRoles = array_diff($roleIds, $this->getRolesIds());
+            $this->addRoles($addRoles);
         }
     }
 }
