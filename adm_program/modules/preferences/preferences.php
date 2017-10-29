@@ -333,7 +333,7 @@ $formRegionalSettings->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('regional_settings', $gL10n->get('SYS_REGIONAL_SETTINGS'), 'world.png', $formRegionalSettings->show(false)));
+$page->addHtml(getPreferencePanel('regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'world.png', $formRegionalSettings->show(false)));
 
 // PANEL: REGISTRATION
 
