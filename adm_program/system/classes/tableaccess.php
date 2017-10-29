@@ -363,7 +363,7 @@ class TableAccess
 
             if ($readDataStatement->rowCount() === 1)
             {
-                $row = $readDataStatement->fetch(\PDO::FETCH_ASSOC);
+                $row = $readDataStatement->fetch();
                 $this->newRecord = false;
 
                 // Daten in das Klassenarray schieben
