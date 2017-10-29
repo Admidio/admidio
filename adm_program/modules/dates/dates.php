@@ -144,7 +144,7 @@ if($getViewMode === 'html')
     $datesMenu = $page->getMenu();
 
     // Add new event
-    if($gCurrentUser->editDates() && $getId === 0)
+    if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getId === 0)
     {
         $datesMenu->addItem(
             'admMenuItemAdd', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?headline=' . $getHeadline,
@@ -365,28 +365,20 @@ else
             }
 
             // change and delete is only for users with additional rights
-            if ($gCurrentUser->editDates())
+            if ($date->editable())
             {
-                if($date->editable())
-                {
-                    $outputButtonCopy = '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id=' . $dateId . '&amp;copy=1&amp;headline=' . $getHeadline . '">
-                            <img src="'.THEME_URL.'/icons/application_double.png" alt="' . $gL10n->get('SYS_COPY') . '" title="' . $gL10n->get('SYS_COPY') . '" /></a>';
-                    $outputButtonEdit = '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id=' . $dateId . '&amp;headline=' . $getHeadline . '">
-                            <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
-                }
-
-                // Deleting events is only allowed for group members
-                if((int) $date->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-                {
-                    $outputButtonDelete = '
-                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_' . $dateId .
-                            '&amp;name=' . urlencode($date->getValue('dat_begin', $gPreferences['system_date']) . ' ' . $dateHeadline).
-                            '&amp;database_id=' . $dateId . '">
-                            <img src="'.THEME_URL.'/icons/delete.png" alt="' . $gL10n->get('SYS_DELETE') . '" title="' . $gL10n->get('SYS_DELETE') . '" /></a>';
-                }
+                $outputButtonCopy = '
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id=' . $dateId . '&amp;copy=1&amp;headline=' . $getHeadline . '">
+                        <img src="'.THEME_URL.'/icons/application_double.png" alt="' . $gL10n->get('SYS_COPY') . '" title="' . $gL10n->get('SYS_COPY') . '" /></a>';
+                $outputButtonEdit = '
+                    <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?dat_id=' . $dateId . '&amp;headline=' . $getHeadline . '">
+                        <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
+                $outputButtonDelete = '
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_' . $dateId .
+                        '&amp;name=' . urlencode($date->getValue('dat_begin', $gPreferences['system_date']) . ' ' . $dateHeadline).
+                        '&amp;database_id=' . $dateId . '">
+                        <img src="'.THEME_URL.'/icons/delete.png" alt="' . $gL10n->get('SYS_DELETE') . '" title="' . $gL10n->get('SYS_DELETE') . '" /></a>';
             }
         }
 

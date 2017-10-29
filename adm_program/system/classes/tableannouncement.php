@@ -42,7 +42,9 @@ class TableAnnouncement extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if($this->visible() && $gCurrentUser->editAnnouncements())
+        // check if the current user could edit the category of the announcement
+        if($gCurrentUser->editAnnouncements()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true))
         {
             if ($gCurrentOrganization->countAllRecords() === 1)
             {

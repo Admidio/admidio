@@ -56,13 +56,6 @@ if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 if($getCopy)
 {
     $originalDateId = $getDateId;
@@ -77,11 +70,23 @@ if($getDateId > 0)
     $date->readDataById($getDateId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if(!$date->editable())
+    if(!$date->editable()
+    && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
+}
+else
+{
+    // check if the user has the right to edit at least one category
+    if(count($gCurrentUser->getAllEditableCategories('DAT')) === 0
+    && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+
 }
 
 if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing event

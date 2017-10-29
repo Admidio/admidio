@@ -862,6 +862,61 @@ class User extends TableAccess
     }
 
     /**
+     * Creates an array with all categories of one type where the user has the right to edit them
+     * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @return array<int,int> Array with categories ids where user has the right to edit them
+     */
+    public function getAllEditableCategories($categoryType)
+    {
+        $arrEditableCategories = array();
+        $flagAdministrator     = 0;
+        $rolIdParams           = array_merge(array(0), $this->getRoleMemberships());
+
+        if(($categoryType === 'ANN' && $this->editAnnouncements())
+        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'LNK' && $this->editWeblinksRight())
+        || ($categoryType === 'USF' && $this->editUsers()))
+        {
+            $flagAdministrator = 1;
+        }
+
+        $sql = 'SELECT cat_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = ? -- $categoryType
+                   AND (  cat_org_id IS NULL
+                       OR cat_org_id = ? ) -- $this->organizationId
+                   AND ( EXISTS (SELECT 1
+                                     FROM ' . TBL_ROLES_RIGHTS . '
+                               INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                       ON rrd_ror_id = ror_id
+                                    WHERE ror_name_intern = \'category_edit\'
+                                      AND rrd_object_id   = cat_id
+                                      AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                        OR 1 = ' . $flagAdministrator . '
+                        )';
+        $queryParams = array_merge(
+            array(
+                $categoryType,
+                $this->organizationId
+            ),
+            $rolIdParams
+        );
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($pdoStatement->rowCount() === 0)
+        {
+            return array();
+        }
+
+        while ($catId = $pdoStatement->fetchColumn())
+        {
+            $arrEditableCategories[] = (int) $catId;
+        }
+
+        return $arrEditableCategories;
+    }
+
+    /**
      * @param array<int,bool> $rightsList
      * @return array<int,int>
      */
@@ -945,7 +1000,6 @@ class User extends TableAccess
             return array();
         }
 
-        $arrVisibleCategories = array();
         while ($catId = $pdoStatement->fetchColumn())
         {
             $arrVisibleCategories[] = (int) $catId;

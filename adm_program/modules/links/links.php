@@ -76,9 +76,9 @@ if($weblinks->getId() === 0)
     // get module menu
     $linksMenu = $page->getMenu();
 
-    if($gCurrentUser->editWeblinksRight())
+    if(count($gCurrentUser->getAllEditableCategories('LNK')) > 0)
     {
-        // show link to create new announcement
+        // show link to create new weblink
         $linksMenu->addItem(
             'menu_item_new_link', ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php?headline='. $getHeadline,
             $gL10n->get('LNK_CREATE_LINK'), 'add.png'
@@ -176,7 +176,7 @@ else
                     alt="'.$gL10n->get('LNK_GO_TO', $lnkName).'" title="'.$gL10n->get('LNK_GO_TO', $lnkName).'" />'.$lnkName.'</a>');
 
                 // change and delete only users with rights
-                if ($gCurrentUser->editWeblinksRight())
+                if ($weblink->editable())
                 {
                     $page->addHtml('
                     <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php?lnk_id='.$lnkId.'&amp;headline='. $getHeadline. '"><img

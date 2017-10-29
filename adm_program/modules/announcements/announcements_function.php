@@ -25,13 +25,6 @@ if ($gPreferences['enable_announcements_module'] == 0)
     // => EXIT
 }
 
-// pruefen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // Initialize and check the parameters
 $getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'int');
 $getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
@@ -43,8 +36,17 @@ if($getAnnId > 0)
 {
     $announcement->readDataById($getAnnId);
 
-    // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
+    // check if the user has the right to edit this announcement
     if(!$announcement->editable())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+}
+else
+{
+    // check if the user has the right to edit at least one category
+    if(count($gCurrentUser->getAllEditableCategories('ANN')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

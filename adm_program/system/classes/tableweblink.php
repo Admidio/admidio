@@ -42,7 +42,8 @@ class TableWeblink extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if($this->visible() && $gCurrentUser->editDates())
+        if($gCurrentUser->editDates()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true))
         {
             if ($gCurrentOrganization->countAllRecords() === 1)
             {

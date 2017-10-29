@@ -80,7 +80,7 @@ else
 // get module menu
 $announcementsMenu = $page->getMenu();
 
-if($gCurrentUser->editAnnouncements())
+if(count($gCurrentUser->getAllEditableCategories('ANN')) > 0)
 {
     // show link to create new announcement
     $announcementsMenu->addItem(
@@ -157,27 +157,18 @@ else
                 </div>
                 <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));
 
-                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                    if($gCurrentUser->editAnnouncements())
+                    // check if the user could edit this announcement
+                    if($announcement->editable())
                     {
-                        if($announcement->editable())
-                        {
-                            $page->addHtml('
-                            <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?ann_id='. $annId. '&amp;copy=1&amp;headline='.$getHeadline.'"><img
-                                src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
-                            <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?ann_id='. $annId. '&amp;headline='.$getHeadline.'"><img
-                                src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
-                        }
-
-                        // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                        if((int) $announcement->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-                        {
-                            $page->addHtml('
-                            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
-                                $annId.'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$annId.'"><img
-                                src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
-                        }
+                        $page->addHtml('
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?ann_id='. $annId. '&amp;copy=1&amp;headline='.$getHeadline.'"><img
+                            src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
+                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php?ann_id='. $annId. '&amp;headline='.$getHeadline.'"><img
+                            src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                            $annId.'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$annId.'"><img
+                            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                     }
                 $page->addHtml('</div>
             </div>

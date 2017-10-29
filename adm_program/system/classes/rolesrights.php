@@ -246,15 +246,15 @@ class RolesRights extends TableAccess
     }
 
     /**
-     * Unlike saveRoles, this method adds all the roles of the passed array to the current role right. 
-     * This method should only be called from a child role right, which wants to store its roles 
+     * Unlike saveRoles, this method adds all the roles of the passed array to the current role right.
+     * This method should only be called from a child role right, which wants to store its roles
      * in the parent role right.
      * @param array<int,int> $roleIds Array with all role ids that should be saved.
      */
     public function saveRolesOfChildRight(array $roleIds)
     {
-        // if array is empty or only contain the role id = 0 then delete all roles rights
-        if(count($roleIds) > 0 )
+        // if array is empty of new roles is empty or viewable roles array is empty than add nothing
+        if(count($roleIds) > 0 && count($this->getRolesIds()) > 0)
         {
             // add new roles and save them to database
             $addRoles = array_diff($roleIds, $this->getRolesIds());
