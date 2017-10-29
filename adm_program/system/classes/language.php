@@ -139,7 +139,7 @@ class Language
 
         if ($text === '')
         {
-            $gLogger->error('L10n: ', array('textId' => $textId));
+            $gLogger->error('L10n: Could not found translation id!', array('textId' => $textId));
         }
 
         return $text;
