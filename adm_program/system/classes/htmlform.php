@@ -1509,7 +1509,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // create array from sql result
-        while ($row = $pdoStatement->fetch())
+        while ($row = $pdoStatement->fetch(PDO::FETCH_BOTH))
         {
             // if result has 3 columns then create a array in array
             if(array_key_exists(2, $row))
