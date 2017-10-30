@@ -264,7 +264,7 @@ if($gPreferences['profile_log_edit_fields'] == 1 && $gCurrentUser->hasRightEditP
     );
 }
 
-$profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+$profileMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
 
 // show link to export the profile as vCard
 $profileMenu->addItem(
