@@ -115,7 +115,8 @@ class ListConfiguration extends TableLists
      */
     public function deleteColumn($number, $all = false)
     {
-        if($number > $this->countColumns()) {
+        if($number > $this->countColumns())
+        {
             return false;
         }
 

@@ -1439,7 +1439,8 @@ class User extends TableAccess
 
         // if current user is not new and is not allowed to edit this user
         // and saveChangesWithoutRights isn't true than throw exception
-        if (!$this->saveChangesWithoutRights && $this->getValue('usr_id') > 0 && !$gCurrentUser->hasRightEditProfile($this)) {
+        if (!$this->saveChangesWithoutRights && $this->getValue('usr_id') > 0 && !$gCurrentUser->hasRightEditProfile($this))
+        {
             throw new AdmException('The profile data of user ' . $this->getValue('FIRST_NAME') . ' '
                 . $this->getValue('LAST_NAME') . ' could not be saved because you don\'t have the right to do this.');
         }
