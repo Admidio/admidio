@@ -884,7 +884,7 @@
     <string name="PRO_EDIT_MY_PROFILE_PICTURE">Mein Profilfoto bearbeiten</string>
     <string name="PRO_EDIT_PASSWORD">Passwort bearbeiten</string>
     <string name="PRO_EDIT_PROFILE">Profil bearbeiten</string>
-    <string name="PRO_EDIT_PROFILE_FIELD">Profilfelder im Profil bearbeiten</string>
+    <string name="PRO_EDIT_PROFILE_FIELDS">Profilfelder im Profil bearbeiten</string>
     <string name="PRO_EDIT_PROFILE_PIC_FROM">Profilfoto von #VAR1# #VAR2# bearbeiten</string>
     <string name="PRO_EXPORT_VCARD">vCard exportieren</string>
     <string name="PRO_EXPORT_VCARD_FROM_VAR">vCard von #VAR1# exportieren</string>

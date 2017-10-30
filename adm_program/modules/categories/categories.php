@@ -286,11 +286,16 @@ while($catRow = $categoryStatement->fetch())
             {
                 if((int) $category->getValue('cat_org_id') === 0)
                 {
-                    $htmlViewRolesNames = $gL10n->get('SYS_ALL_ORGANIZATIONS').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                    $htmlViewRolesNames = $gL10n->get('SYS_ALL_ORGANIZATIONS');
                 }
                 else
                 {
-                    $htmlViewRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                    $htmlViewRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION');
+                }
+
+                if($getType !== 'USF')
+                {
+                    $htmlViewRolesNames .= ' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
                 }
             }
             else

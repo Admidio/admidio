@@ -34,7 +34,7 @@ $roleEditSet = array(0);
 // set text strings for the different modules
 if($getType === 'ANN')
 {
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ANN_ANNOUNCEMENTS'));
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
     $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
     $rolesRightsColumn = 'rol_announcements';
     $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
@@ -47,21 +47,21 @@ elseif($getType === 'DAT')
 }
 elseif($getType === 'LNK')
 {
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('LNK_WEBLINKS'));
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
     $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
     $rolesRightsColumn = 'rol_weblinks';
     $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
 }
 elseif($getType === 'USF')
 {
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
     $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
     $rolesRightsColumn = 'rol_edit_user';
     $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
 }
 elseif($getType === 'ROL')
 {
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', $gL10n->get('SYS_ROLES'));
+    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ROLES')));
 }
 else
 {
@@ -217,7 +217,7 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         $roleViewSet[] = 0;
     }
 
-    // if no roles are assigned then set "all users" as default
+    // if no roles are assigned then set nothing as default
     if(count($roleEditSet) === 0)
     {
         $roleEditSet[] = '';
@@ -262,11 +262,11 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
-            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
+            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', array($organizations));
         }
         else
         {
-            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
+            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', array($organizations));
         }
     }
 
@@ -290,7 +290,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 
     $form->addStaticControl(
         'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', $gL10n->get($rolesRightsName)))
+        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', array($gL10n->get($rolesRightsName))))
     );
 
     $checked = false;
