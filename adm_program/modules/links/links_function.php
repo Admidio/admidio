@@ -73,6 +73,12 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
         // => EXIT
     }
+    // check if the current user is allowed to use the selected category
+    if(!in_array((int) $_POST['lnk_cat_id'], $gCurrentUser->getAllEditableCategories('LNK'), true))
+    {        
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
 
     // make html in description secure
     $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
@@ -131,10 +137,10 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
 }
 elseif ($getMode === 2 && $getLinkId > 0)
 {
-    // Loeschen von Weblinks...
+    // delete current announcements, right checks were done before
     $link->delete();
 
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Delete successful -> Return for XMLHttpRequest
     echo 'done';
 }
 else

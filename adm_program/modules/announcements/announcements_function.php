@@ -67,6 +67,12 @@ if($getMode === 1)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
         // => EXIT
     }
+    // check if the current user is allowed to use the selected category
+    if(!in_array((int) $_POST['ann_cat_id'], $gCurrentUser->getAllEditableCategories('ANN'), true))
+    {        
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
 
     // make html in description secure
     $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
@@ -114,12 +120,9 @@ if($getMode === 1)
 }
 elseif($getMode === 2)
 {
-    // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
-    if((int) $announcement->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-    {
-        $announcement->delete();
+    // delete current announcements, right checks were done before
+    $announcement->delete();
 
-        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-        echo 'done';
-    }
+    // Delete successful -> Return for XMLHttpRequest
+    echo 'done';
 }

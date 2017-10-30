@@ -278,7 +278,7 @@ while($catRow = $categoryStatement->fetch())
 
         if(count($arrRolesIds) > 0)
         {
-            $htmlViewRolesNames = implode(', ', $rightCategoryView->getRolesNames());
+            $htmlViewRolesNames = implode(', ', array_merge($rightCategoryView->getRolesNames(), $adminRoles));
         }
         else
         {
@@ -314,10 +314,8 @@ while($catRow = $categoryStatement->fetch())
         }
         else
         {
-            $rightCategoryEdit = new RolesRights($gDb, 'category_edit', $catId);
-            $arrRolesIds   = $rightCategoryEdit->getRolesIds();
-            $arrRolesNames = array_merge($rightCategoryEdit->getRolesNames(), $adminRoles);    
-            $htmlEditRolesNames = implode(', ', $arrRolesNames);
+            $rightCategoryEdit  = new RolesRights($gDb, 'category_edit', $catId);
+            $htmlEditRolesNames = implode(', ', array_merge($rightCategoryEdit->getRolesNames(), $adminRoles));
         }
     }
 

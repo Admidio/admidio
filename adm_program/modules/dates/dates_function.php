@@ -139,6 +139,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_CALENDAR')));
         // => EXIT
     }
+    // check if the current user is allowed to use the selected category
+    if(!in_array((int) $_POST['dat_cat_id'], $gCurrentUser->getAllEditableCategories('DAT'), true))
+    {        
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
 
     if(isset($_POST['dat_all_day']))
     {
@@ -588,17 +594,13 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     admRedirect($gNavigation->getUrl());
     // => EXIT
 }
-elseif($getMode === 2)  // Delete the event
+elseif($getMode === 2)
 {
-    // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
-    if((int) $date->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-    {
-        // member bzw. Teilnahme/Rolle löschen
-        $date->delete();
+    // delete current announcements, right checks were done before
+    $date->delete();
 
-        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-        echo 'done';
-    }
+    // Delete successful -> Return for XMLHttpRequest
+    echo 'done';
 }
 
 elseif($getMode === 6)  // export event in ical format

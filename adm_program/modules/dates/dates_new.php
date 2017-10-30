@@ -31,12 +31,6 @@ if($gPreferences['enable_dates_module'] == 0)
     // => EXIT
 }
 
-if(!$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // lokale Variablen der Uebergabevariablen initialisieren
 $dateRegistrationPossible = false;
 $dateCurrentUserAssigned  = false;
@@ -119,6 +113,13 @@ else
     }
     else
     {
+        // check if the user has the right to edit at least one category
+        if(count($gCurrentUser->getAllEditableCategories('DAT')) === 0)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
         $now = new DateTime();
         $oneHourOffset = new DateInterval('PT1H');
