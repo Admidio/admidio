@@ -103,13 +103,28 @@ $participationForm->addHtml('<div class="modal-header">
                                     <h4 class="modal-title">' .$gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION') . '</h4>
                                     <p>' .$date->getValue('dat_headline'). ': ' .$date->getValue('dat_begin') . ' - ' .$date->getValue('dat_end'). '</p>
                             </div><div class="modal-body">');
-$participationForm->addMultilineTextInput('dat_comment', $gL10n->get('SYS_COMMENT'), $member->getValue('mem_comment'), 6, array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments));
-$participationForm->addInput('additonal_guests', $gL10n->get('LST_SEAT_AMOUNT'), $member->getValue('mem_count_guests'), array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests));
+$participationForm->addMultilineTextInput(
+    'dat_comment', $gL10n->get('SYS_COMMENT'), $member->getValue('mem_comment'), 6,
+    array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments)
+);
+$participationForm->addInput(
+    'additional_guests', $gL10n->get('LST_SEAT_AMOUNT'), $member->getValue('mem_count_guests'),
+    array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests)
+);
 $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
-$participationForm->addButton('btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'), array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend));
-$participationForm->addButton('btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'), array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative));
-$participationForm->addButton('btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'), array('icon' => THEME_URL.'/icons/no.png'));
+$participationForm->addButton(
+    'btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'),
+    array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend)
+);
+$participationForm->addButton(
+    'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
+    array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative)
+);
+$participationForm->addButton(
+    'btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'),
+    array('icon' => THEME_URL.'/icons/no.png')
+);
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');
 // Outut form

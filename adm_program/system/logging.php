@@ -30,7 +30,8 @@ if ($gDebug)
 }
 
 // Append line/file/class/function where the log message came from
-$gLogger->pushProcessor(new IntrospectionProcessor($logLevel));
+$inspectionProcessor = new IntrospectionProcessor($logLevel);
+$gLogger->pushProcessor($inspectionProcessor);
 
 $formatter = new LineFormatter(null, null, false, true);
 $streamHandler = new RotatingFileHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', 0, $logLevel, true, 0666);

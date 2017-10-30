@@ -132,7 +132,7 @@ else
         $category->readDataById($getCatId);
 
         // get assigned roles of this category
-        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
+        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
 
         // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
@@ -194,18 +194,15 @@ if($category->getValue('cat_system') == 1)
     $fieldPropertyCatName = HtmlForm::FIELD_DISABLED;
 }
 
-$form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
-    array(
-        'maxLength' => 100,
-        'property' => $fieldPropertyCatName
-    )
+$form->addInput(
+    'cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'),
+    array('maxLength' => 100, 'property' => $fieldPropertyCatName)
 );
 
 // Roles have their own preferences for visibility, so only allow this for other types.
 // Until now we do not support visibility for categories that belong to several organizations,
 // roles could be assigned if only 1 organization exists.
-if($getType !== 'ROL'
-&& ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
+if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1))
 {
     // read all roles of the current organization
     $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
@@ -271,16 +268,16 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $checked = true;
     }
 
-    $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
-        array(
-            'property'        => $fieldProperty,
-            'helpTextIdLabel' => $helpTextIdLabel
-        )
+    $form->addCheckbox(
+        'show_in_several_organizations', $gL10n->get('SYS_DATA_MULTI_ORGA'), $checked,
+        array('property' => $fieldProperty, 'helpTextIdLabel' => $helpTextIdLabel)
     );
 }
 
-$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
-                   array('icon' => 'star.png'));
+$form->addCheckbox(
+    'cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
+    array('icon' => 'star.png')
+);
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'),

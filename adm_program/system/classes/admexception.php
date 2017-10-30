@@ -43,14 +43,14 @@ class AdmException extends Exception
 
     /**
      * Constructor that will @b rollback an open database translation
-     * @param string   $message Translation @b id that should be shown when exception is catched
-     * @param string[] $params  Optional parameter for language string of translation id
+     * @param string            $message Translation @b id that should be shown when exception is catched
+     * @param array<int,string> $params  Optional parameter for language string of translation id
      */
     public function __construct($message, $params = array())
     {
         global $gLogger, $gDb;
 
-        if ($gDb instanceof \Database)
+        if ($gDb instanceof Database)
         {
             // if there is an open transaction we should perform a rollback
             $gDb->rollback();
@@ -87,7 +87,7 @@ class AdmException extends Exception
         global $gL10n;
 
         // if text is a translation-id then translate it
-        if (strpos($this->message, '_') === 3)
+        if (admIsTranslationStrId($this->message))
         {
             return $gL10n->get($this->message, $this->params);
         }
@@ -98,8 +98,8 @@ class AdmException extends Exception
     /**
      * Set a new Admidio message id with their parameters. This method should be used
      * if during the exception processing a new better message should be set.
-     * @param string   $message Translation @b id that should be shown when exception is catched
-     * @param string[] $params  Optional parameter for language string of translation id
+     * @param string            $message Translation @b id that should be shown when exception is catched
+     * @param array<int,string> $params  Optional parameter for language string of translation id
      */
     public function setNewMessage($message, $params = array())
     {
@@ -132,7 +132,7 @@ class AdmException extends Exception
         global $gMessage;
 
         // display database error to user
-        if ($gMessage instanceof \Message)
+        if ($gMessage instanceof Message)
         {
             $gMessage->show($this->getText());
             // => EXIT

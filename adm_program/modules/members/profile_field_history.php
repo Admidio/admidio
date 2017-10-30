@@ -20,7 +20,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
-$filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
+$filterDateFrom = \DateTime::createFromFormat('Y-m-d', DATE_NOW);
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
@@ -56,25 +56,25 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
-$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
+$objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if($objDateFrom === false)
 {
     // check if date has system format
-    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+    $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
     if($objDateFrom === false)
     {
-        $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
+        $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
     }
 }
 
-$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
+$objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
 if($objDateTo === false)
 {
     // check if date has system format
-    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+    $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
     if($objDateTo === false)
     {
-        $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
+        $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
     }
 }
 
@@ -163,14 +163,14 @@ $profileFieldHistoryMenu = $page->getMenu();
 $profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // create filter menu with input elements for Startdate and Enddate
-$FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
+$filterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
 $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php', $page, array('type' => 'navbar', 'setFocus' => false));
-$form->addInput('usr_id', null, $getUserId, array('property' => HtmlForm::FIELD_HIDDEN));
+$form->addInput('usr_id', '', $getUserId, array('property' => HtmlForm::FIELD_HIDDEN));
 $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-$FilterNavbar->addForm($form->show(false));
-$page->addHtml($FilterNavbar->show());
+$filterNavbar->addForm($form->show(false));
+$page->addHtml($filterNavbar->show());
 
 $table = new HtmlTable('profile_field_history_table', $page, true, true);
 
@@ -196,7 +196,7 @@ $table->addRowHeadingByArray($columnHeading);
 
 while($row = $fieldHistoryStatement->fetch())
 {
-    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
+    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
     $columnValues    = array();
 
     if($getUserId === 0)

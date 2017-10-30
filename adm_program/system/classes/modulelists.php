@@ -250,7 +250,7 @@ class ModuleLists extends Modules
      * Function returns a set of lists with corresponding information
      * @param int $startElement Start element of result. First (and default) is 0.
      * @param int $limit        Number of elements returned max. Default NULL will take number from preferences.
-     * @return array with list and corresponding information
+     * @return array<string,mixed> with list and corresponding information
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -338,7 +338,7 @@ class ModuleLists extends Modules
 
     /**
      * Function to get list configurations accessible by current user
-     * @return array with accessible list configurations
+     * @return array<int,array<int,int|string|bool>> with accessible list configurations
      */
     public function getListConfigurations()
     {
@@ -356,7 +356,7 @@ class ModuleLists extends Modules
         $configurations = array();
         while($row = $pdoStatement->fetch())
         {
-            $configurations[] = array($row['lst_id'], $row['lst_name'], $row['lst_global']);
+            $configurations[] = array((int) $row['lst_id'], $row['lst_name'], (bool) $row['lst_global']);
         }
         return $configurations;
     }

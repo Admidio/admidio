@@ -27,7 +27,7 @@ class UploadHandlerPhoto extends UploadHandler
 {
     /**
      * Override the default method to handle the specific things of the photo module and
-     * update the database after file was succesful uploaded.
+     * update the database after file was successful uploaded.
      * This method has the same parameters as the default.
      * @param string $uploadedFile
      * @param string $name

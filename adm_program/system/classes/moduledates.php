@@ -144,7 +144,7 @@ class ModuleDates extends Modules
      * SQL query returns an array with available dates.
      * @param int $startElement Defines the offset of the query (default: 0)
      * @param int $limit        Limit of query rows (default: 0)
-     * @return array Array with all results, dates and parameters.
+     * @return array<string,mixed> Array with all results, dates and parameters.
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -160,8 +160,8 @@ class ModuleDates extends Modules
         $sqlConditions = $this->getSqlConditions();
 
         // read dates from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved as member_approval_state,
-                       mem.mem_leader, mem.mem_comment as comment, mem.mem_count_guests as additional_guests,' . $additional['fields'] . '
+        $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id AS member_date_role, mem.mem_approved AS member_approval_state,
+                       mem.mem_leader, mem.mem_comment AS comment, mem.mem_count_guests AS additional_guests,' . $additional['fields'] . '
                   FROM ' . TBL_DATES . ' AS dat
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
@@ -310,12 +310,12 @@ class ModuleDates extends Modules
         }
 
         // Create date object and format date_from in English format and system format and push to daterange array
-        $objDateFrom = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
+        $objDateFrom = \DateTime::createFromFormat('Y-m-d', $dateRangeStart);
 
         if ($objDateFrom === false)
         {
             // check if date_from has system format
-            $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
+            $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], $dateRangeStart);
         }
 
         if ($objDateFrom === false)
@@ -327,12 +327,12 @@ class ModuleDates extends Modules
         $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gPreferences['system_date']));
 
         // Create date object and format date_to in English format and system format and push to daterange array
-        $objDateTo = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
+        $objDateTo = \DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
 
         if ($objDateTo === false)
         {
             // check if date_from  has system format
-            $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
+            $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], $dateRangeEnd);
         }
 
         if ($objDateTo === false)
@@ -354,7 +354,7 @@ class ModuleDates extends Modules
 
     /**
      * Get additional tables for sql statement
-     * @return array Returns an array of a SQL string with the necessary joins and it's query params.
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
      */
     private function sqlGetAdditional()
     {
@@ -371,16 +371,16 @@ class ModuleDates extends Modules
                 cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
             $additionalTables = '
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
-                       ON cre_surname.usd_usr_id = ann_usr_id_create
+                       ON cre_surname.usd_usr_id = dat_usr_id_create
                       AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
                 LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
-                       ON cre_firstname.usd_usr_id = ann_usr_id_create
+                       ON cre_firstname.usd_usr_id = dat_usr_id_create
                       AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
                 LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
-                       ON cha_surname.usd_usr_id = ann_usr_id_change
+                       ON cha_surname.usd_usr_id = dat_usr_id_change
                       AND cha_surname.usd_usf_id = ? -- $lastNameUsfId
                 LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
-                       ON cha_firstname.usd_usr_id = ann_usr_id_change
+                       ON cha_firstname.usd_usr_id = dat_usr_id_change
                       AND cha_firstname.usd_usf_id = ? -- $firstNameUsfId';
             $additionalParams = array($lastNameUsfId, $firstNameUsfId, $lastNameUsfId, $firstNameUsfId);
         }
@@ -392,9 +392,9 @@ class ModuleDates extends Modules
                 cha_username.usr_login_name AS change_name ';
             $additionalTables = '
                 LEFT JOIN '.TBL_USERS.' AS cre_username
-                       ON cre_username.usr_id = ann_usr_id_create
+                       ON cre_username.usr_id = dat_usr_id_create
                 LEFT JOIN '.TBL_USERS.' AS cha_username
-                       ON cha_username.usr_id = ann_usr_id_change ';
+                       ON cha_username.usr_id = dat_usr_id_change ';
             $additionalParams = array();
         }
 
@@ -406,9 +406,8 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Add several conditions to an SQL string that could later be used
-     * as additional conditions in other SQL queries.
-     * @return array Returns an array of a SQL string with additional conditions and it's query params.
+     * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
+     * @return array<string,mixed> Returns an array of a SQL string with additional conditions and it's query params.
      */
     private function getSqlConditions()
     {
@@ -497,14 +496,14 @@ class ModuleDates extends Modules
 
         $gLogger->warning('DEPRECATED: "$moduleDates->formatDate()" is deprecated without replacement!');
 
-        $objDate = DateTime::createFromFormat('Y-m-d', $date);
+        $objDate = \DateTime::createFromFormat('Y-m-d', $date);
         if ($objDate !== false)
         {
             return $date;
         }
 
         // check if date has system format
-        $objDate = DateTime::createFromFormat($gPreferences['system_date'], $date);
+        $objDate = \DateTime::createFromFormat($gPreferences['system_date'], $date);
         if ($objDate !== false)
         {
             return $objDate->format('Y-m-d');

@@ -17,23 +17,23 @@
 class TableFolder extends TableAccess
 {
     /**
-     * @var \Folder
+     * @var Folder
      */
     protected $folderPath;
     /**
-     * @var \RolesRights|null Object with all roles that could view the current folder
+     * @var RolesRights|null Object with all roles that could view the current folder
      */
     protected $folderViewRolesObject;
     /**
-     * @var \RolesRights|null Object with all roles that could upload files the current folder
+     * @var RolesRights|null Object with all roles that could upload files the current folder
      */
     protected $folderUploadRolesObject;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
      * If the id is set than the specific folder will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $folId = 0)
     {
@@ -69,7 +69,7 @@ class TableFolder extends TableAccess
         {
             while (($entry = readdir($dirHandle)) !== false)
             {
-                if ($entry === '.' || $entry === '..' || strpos($entry, '.') === 0)
+                if ($entry === '.' || $entry === '..' || admStrStartsWith($entry, '.'))
                 {
                     continue;
                 }
@@ -129,19 +129,19 @@ class TableFolder extends TableAccess
     /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
-     * @param string $rolesRightNameIntern Name of the right where the roles should be added
-     * @param int[]  $rolesArray
-     * @param bool   $recursive If set to @b true than the rights will be set recursive to all subfolders
+     * @param string         $rolesRightNameIntern Name of the right where the roles should be added
+     * @param array<int,int> $rolesArray
+     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
      */
     public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
     {
-        $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $recursive, 0);
+        $this->editRolesOnFolder('add', $rolesRightNameIntern, $rolesArray, $recursive);
     }
 
     /**
      * Legt einen neuen Ordner im Dateisystem an
      * @param string $folderName
-     * @return array<string,string>|null
+     * @return null|array<string,string>
      */
     public function createFolder($folderName)
     {
@@ -239,11 +239,11 @@ class TableFolder extends TableAccess
     /**
      * Add all roles of the array to the current folder and all of the subfolders. The
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
-     * @param string $mode                 "mode" could be "add" or "remove"
-     * @param string $rolesRightNameIntern Name of the right where the roles should be added
-     * @param int[]  $rolesArray
-     * @param bool   $recursive If set to @b true than the rights will be set recursive to all subfolders
-     * @param int    $folderId  The folder id of the subfolder if this method is called recursive
+     * @param string         $mode                 "mode" could be "add" or "remove"
+     * @param string         $rolesRightNameIntern Name of the right where the roles should be added
+     * @param array<int,int> $rolesArray
+     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
+     * @param int            $folderId             The folder id of the subfolder if this method is called recursive
      */
     private function editRolesOnFolder($mode, $rolesRightNameIntern, array $rolesArray, $recursive, $folderId = 0)
     {
@@ -606,8 +606,8 @@ class TableFolder extends TableAccess
 
     /**
      * Return \PDOStatement with all subfolders of a parent folder id
-     * @param int      $folderId Folder ID
-     * @param string[] $columns  The columns that should be in the statement
+     * @param int               $folderId Folder ID
+     * @param array<int,string> $columns  The columns that should be in the statement
      * @return \PDOStatement SubfolderStatement with fol_id column
      */
     private function getSubfolderStatement($folderId, array $columns = array('fol_id'))
@@ -735,8 +735,8 @@ class TableFolder extends TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array  $queryParams       The query params for the prepared statement
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
@@ -758,9 +758,9 @@ class TableFolder extends TableAccess
     /**
      * Remove all roles of the array from the current folder and all of the subfolders. The
      * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
-     * @param string $rolesRightNameIntern Name of the right where the roles should be removed
-     * @param int[]  $rolesArray
-     * @param bool   $recursive If set to @b true than the rights will be set recursive to all subfolders
+     * @param string         $rolesRightNameIntern Name of the right where the roles should be removed
+     * @param array<int,int> $rolesArray
+     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
      */
     public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
     {

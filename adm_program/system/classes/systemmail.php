@@ -27,15 +27,15 @@
 class SystemMail extends Email
 {
     /**
-     * @var \TableText
+     * @var TableText
      */
     private $smTextObject;
     /**
-     * @var \Organization
+     * @var Organization
      */
     private $smOrganization;
     /**
-     * @var \Database An object of the class Database for communication with the database
+     * @var Database An object of the class Database for communication with the database
      */
     private $db;
     /**
@@ -53,7 +53,7 @@ class SystemMail extends Email
 
     /**
      * Constructor that will create an object of a SystemMail to handle all system notifications.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(Database $database)
     {
@@ -65,7 +65,7 @@ class SystemMail extends Email
     /**
      * diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
      * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-     * @param \User  $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @param User   $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
      * @return string
      */
     public function getMailText($systemMailId, User $user)
@@ -73,7 +73,7 @@ class SystemMail extends Email
         global $gPreferences;
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
-        if(!$this->smOrganization instanceof \Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization())
+        if(!$this->smOrganization instanceof Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization())
         {
             $this->smOrganization = new Organization($this->db, $user->getOrganization());
         }
@@ -113,7 +113,7 @@ class SystemMail extends Email
         }
 
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
-        if(strpos($mailSrcText, '#subject#') !== false)
+        if(admStrContains($mailSrcText, '#subject#'))
         {
             $this->smMailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
         }
@@ -122,7 +122,7 @@ class SystemMail extends Email
             $this->smMailHeader = 'Systemmail von '.$this->smOrganization->getValue('org_homepage');
         }
 
-        if(strpos($mailSrcText, '#content#') !== false)
+        if(admStrContains($mailSrcText, '#content#'))
         {
             $this->smMailText = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
         }
@@ -147,7 +147,7 @@ class SystemMail extends Email
     /**
      * diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
      * @param string $systemMailId eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
-     * @param \User  $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
+     * @param User   $user         Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
      * @throws AdmException SYS_EMAIL_NOT_SEND
      * @return true
      */

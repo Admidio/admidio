@@ -21,7 +21,7 @@ class DateTimeExtended extends DateTime
 
     /**
      * es muss das Datum und das dazugehoerige Format uebergeben werden
-     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use DateTime::createFromFormat()
+     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use \DateTime::createFromFormat()
      * @param string        $date     String mit dem Datum
      * @param string        $format   das zum Datum passende Format (Schreibweise aus date())
      * @param \DateTimeZone $timezone DateTimeZone
@@ -30,9 +30,9 @@ class DateTimeExtended extends DateTime
     {
         global $gLogger;
 
-        $gLogger->warning('DEPRECATED: "new DateTimeExtended()" is deprecated, use "DateTime::createFromFormat()" instead!');
+        $gLogger->warning('DEPRECATED: "new DateTimeExtended()" is deprecated, use "\DateTime::createFromFormat()" instead!');
 
-        $datetime = DateTime::createFromFormat($format, $date);
+        $datetime = \DateTime::createFromFormat($format, $date);
 
         if ($datetime === false)
         {
@@ -48,14 +48,14 @@ class DateTimeExtended extends DateTime
 
     /**
      * gibt true oder false zurueck, je nachdem ob DateTime gueltig ist
-     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use DateTime::createFromFormat() === false
+     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use \DateTime::createFromFormat() === false
      * @return bool
      */
     public function isValid()
     {
         global $gLogger;
 
-        $gLogger->warning('DEPRECATED: "$dateTimeExtended->isValid()" is deprecated, use "DateTime::createFromFormat() === false" instead!');
+        $gLogger->warning('DEPRECATED: "$dateTimeExtended->isValid()" is deprecated, use "\DateTime::createFromFormat() === false" instead!');
 
         return $this->valid;
     }
@@ -63,16 +63,17 @@ class DateTimeExtended extends DateTime
     /**
      * berechnet aus dem Datum das Alter einer Person
      * @deprecated 3.2.0:4.0.0 Switched to native DateTime method.
-     *             Use DateTime::createFromFormat()->diff(new DateTime('now'))->y
+     *             Use \DateTime::createFromFormat()->diff(new \DateTime('now'))->y
      * @return int
      */
     public function getAge()
     {
         global $gLogger;
 
-        $gLogger->warning('DEPRECATED: "$dateTimeExtended->getAge()" is deprecated, use "DateTime::createFromFormat()->diff(new DateTime(\'now\'))->y" instead!');
+        $gLogger->warning('DEPRECATED: "$dateTimeExtended->getAge()" is deprecated, use "\DateTime::createFromFormat()->diff(new \DateTime(\'now\'))->y" instead!');
 
-        return $this->diff(new DateTime('now'))->y;
+        $now = new \DateTime('now');
+        return $this->diff($now)->y;
     }
 
     /**

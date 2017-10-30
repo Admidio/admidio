@@ -32,24 +32,31 @@ $mainMenu = $page->getMenu();
 if($gValidLogin)
 {
     // show link to own profile
-    $mainMenu->addItem('adm_menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                       $gL10n->get('PRO_MY_PROFILE'), 'profile.png');
+    $mainMenu->addItem(
+        'adm_menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+        $gL10n->get('PRO_MY_PROFILE'), 'profile.png'
+    );
     // show logout link
-    $mainMenu->addItem('adm_menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php',
-                       $gL10n->get('SYS_LOGOUT'), 'door_in.png');
+    $mainMenu->addItem(
+        'adm_menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php',
+        $gL10n->get('SYS_LOGOUT'), 'door_in.png'
+    );
 }
 else
 {
     // show login link
-    $mainMenu->addItem('adm_menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php',
-                       $gL10n->get('SYS_LOGIN'), 'key.png');
+    $mainMenu->addItem(
+        'adm_menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php',
+        $gL10n->get('SYS_LOGIN'), 'key.png'
+    );
 
     if($gPreferences['registration_enable_module'] == 1)
     {
         // show registration link
-        $mainMenu->addItem('adm_menu_item_registration',
-                           ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php',
-                           $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
+        $mainMenu->addItem(
+            'adm_menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php',
+            $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png'
+        );
     }
 }
 

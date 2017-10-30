@@ -294,6 +294,9 @@ $form->setFormDescription(
 );
 $form->openButtonGroup();
 $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
-$form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
+$form->addButton(
+    'main_page', $gL10n->get('SYS_LATER'),
+    array('icon' => 'layout/application_view_list.png', 'link' => '../index.php')
+);
 $form->closeButtonGroup();
 echo $form->show();

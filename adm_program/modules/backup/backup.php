@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Show list with avaiable backup files and button to create a new backup
+ * Show list with available backup files and button to create a new backup
  *
  * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
@@ -95,8 +95,10 @@ if($getMode === 'show_list')
     $backupMenu = $page->getMenu();
 
     // show link to create new backup
-    $backupMenu->addItem('admMenuItemNewBackup', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php?mode=create_backup',
-                         $gL10n->get('BAC_START_BACKUP'), 'database_save.png');
+    $backupMenu->addItem(
+        'admMenuItemNewBackup', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php?mode=create_backup',
+        $gL10n->get('BAC_START_BACKUP'), 'database_save.png'
+    );
 
     // Define table
     $table = new HtmlTable('tableList', $page, true);
@@ -107,7 +109,8 @@ if($getMode === 'show_list')
         $gL10n->get('BAC_BACKUP_FILE'),
         $gL10n->get('BAC_CREATION_DATE'),
         $gL10n->get('SYS_SIZE'),
-        $gL10n->get('SYS_DELETE'));
+        $gL10n->get('SYS_DELETE')
+    );
     $table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
     $table->addRowHeadingByArray($columnHeading);
 
@@ -147,7 +150,10 @@ elseif($getMode === 'create_backup')
 
     // show button with link to backup list
     $form = new HtmlForm('show_backup_list_form', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', $page);
-    $form->addSubmitButton('btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'), array('icon' => THEME_URL.'/icons/back.png'));
+    $form->addSubmitButton(
+        'btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'),
+        array('icon' => THEME_URL.'/icons/back.png')
+    );
     $page->addHtml($form->show(false));
 
 }

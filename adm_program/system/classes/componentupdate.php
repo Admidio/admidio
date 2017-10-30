@@ -48,7 +48,7 @@ class ComponentUpdate extends Component
 
     /**
      * Constructor that will create an object for component updating.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(Database $database)
     {
@@ -81,7 +81,7 @@ class ComponentUpdate extends Component
 
             if(is_file($updateFile))
             {
-                $this->xmlObject = new \SimpleXMLElement($updateFile, null, true);
+                $this->xmlObject = new \SimpleXMLElement($updateFile, 0, true);
                 return true;
             }
         }
@@ -134,7 +134,7 @@ class ComponentUpdate extends Component
 
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
-        if (strpos($updateStepContent, 'ComponentUpdate') !== false)
+        if (admStrContains($updateStepContent, 'ComponentUpdate'))
         {
             $executeSql = false;
 

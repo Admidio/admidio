@@ -91,7 +91,7 @@ function getFormerRolesFromDatabase($userId)
 
 /**
  * @param string        $htmlListId
- * @param \User         $user
+ * @param User          $user
  * @param \PDOStatement $roleStatement
  * @param int           $countRole
  * @param bool          $directOutput
@@ -217,9 +217,18 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                     </li>
                     <li class="list-group-item" id="membership_period_'.$memberId.'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
                         $form = new HtmlForm('membership_period_form_'.$memberId, ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=7&amp;user_id='.$user->getValue('usr_id').'&amp;mem_id='.$row['mem_id'], null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
-                        $form->addInput('membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
-                        $form->addInput('membership_end_date_'.$memberId, $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
-                        $form->addButton('btn_send_'.$memberId, $gL10n->get('SYS_OK'), array('class' => 'button-membership-period-form', 'data-admidio' => $memberId));
+                        $form->addInput(
+                            'membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']),
+                            array('type' => 'date', 'maxLength' => 10)
+                        );
+                        $form->addInput(
+                            'membership_end_date_'.$memberId, $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']),
+                            array('type' => 'date', 'maxLength' => 10)
+                        );
+                        $form->addButton(
+                            'btn_send_'.$memberId, $gL10n->get('SYS_OK'),
+                            array('class' => 'button-membership-period-form', 'data-admidio' => $memberId)
+                        );
                         $roleMemHTML .= $form->show(false);
                     $roleMemHTML .= '</div></li>
                     <li class="list-group-item" id="member_info_'.$memberId.'_Content" style="display: none;">';

@@ -33,8 +33,8 @@ if(!$gCurrentUser->hasRightViewProfile($user))
 /**
  * diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder dabei wird der Inhalt richtig formatiert
  * @param string $fieldNameIntern
- * @param \User  $user
- * @return false|string[]
+ * @param User   $user
+ * @return false|array<string,string>
  */
 function getFieldCode($fieldNameIntern, User $user)
 {
@@ -53,8 +53,9 @@ function getFieldCode($fieldNameIntern, User $user)
     // if birthday then show age
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY' && $value !== '')
     {
-        $birthday = DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
-        $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->diff(new DateTime('now'))->y. ' '.$gL10n->get('PRO_YEARS').')';
+        $birthday = \DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
+        $now = new \DateTime('now');
+        $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->diff($now)->y. ' '.$gL10n->get('PRO_YEARS').')';
     }
     elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
     {
@@ -218,15 +219,19 @@ if($gNavigation->count() > 1)
 // if user has right then show link to edit profile
 if($gCurrentUser->hasRightEditProfile($user))
 {
-    $profileMenu->addItem('menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$userId,
-                        $gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
+    $profileMenu->addItem(
+        'menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$userId,
+        $gL10n->get('PRO_EDIT_PROFILE'), 'edit.png'
+    );
 }
 
 // Password of own user could be changed
 if($userId === $currUsrId)
 {
-    $profileMenu->addItem('menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
-                        $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+    $profileMenu->addItem(
+        'menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
+        $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png'
+    );
 }
 elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0)
 {
@@ -235,53 +240,69 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
         // if email is set and systemmails are activated then administrator can send a new password to user
-        $profileMenu->addItem('menu_item_send_password', ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='.$userId.'&amp;mode=5',
-                            $gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
+        $profileMenu->addItem(
+            'menu_item_send_password', ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='.$userId.'&amp;mode=5',
+            $gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png'
+        );
     }
     else
     {
         // if user has no email or send email is disabled then administrator could set a new password
-        $profileMenu->addItem('menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
-                            $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+        $profileMenu->addItem(
+            'menu_item_password', ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='. $userId,
+            $gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png'
+        );
     }
 }
 
 // show link to view profile field change history
 if($gPreferences['profile_log_edit_fields'] == 1 && $gCurrentUser->hasRightEditProfile($user))
 {
-    $profileMenu->addItem('menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php?usr_id='. $userId,
-                        $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
+    $profileMenu->addItem(
+        'menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php?usr_id='. $userId,
+        $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png'
+    );
 }
 
 $profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to export the profile as vCard
-$profileMenu->addItem('menu_item_vcard', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=1&amp;user_id='. $userId,
-                        $gL10n->get('PRO_EXPORT_VCARD'), 'vcard.png', 'right', 'menu_item_extras');
+$profileMenu->addItem(
+    'menu_item_vcard', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=1&amp;user_id='. $userId,
+    $gL10n->get('PRO_EXPORT_VCARD'), 'vcard.png', 'right', 'menu_item_extras'
+);
 
 // if you have the right to assign roles then show the link to assign new roles to this user
 if($gCurrentUser->assignRoles())
 {
-    $profileMenu->addItem('menu_item_role_memberships_change', ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$userId.'&amp;inline=1',
-                            $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
+    $profileMenu->addItem(
+        'menu_item_role_memberships_change', ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$userId.'&amp;inline=1',
+        $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras'
+    );
 }
 
 // show link to create relations
 if($gPreferences['members_enable_user_relations'] == 1 && $gCurrentUser->editUsers())
 {
-    $profileMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
-        $gL10n->get('PRO_ADD_USER_RELATION'), 'user_administration.png', 'right', 'menu_item_extras');
+    $profileMenu->addItem(
+        'menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
+        $gL10n->get('PRO_ADD_USER_RELATION'), 'user_administration.png', 'right', 'menu_item_extras'
+    );
 }
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $profileMenu->addItem('menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
-                                $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
+    $profileMenu->addItem(
+        'menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
+        $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras'
+    );
 
     // show link to system preferences of weblinks
-    $profileMenu->addItem('menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=profile',
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+    $profileMenu->addItem(
+        'menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=profile',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+    );
 }
 
 // *******************************************************************************
@@ -849,7 +870,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                     $showRolesOtherOrganizations = true;
                 }
 
-                $startDate = DateTime::createFromFormat('Y-m-d', $row['mem_begin']);
+                $startDate = \DateTime::createFromFormat('Y-m-d', $row['mem_begin']);
                 // jede einzelne Rolle anzeigen
                 $page->addHtml('
                 <li class="list-group-item">

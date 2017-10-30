@@ -80,9 +80,10 @@ if($gCurrentUser->isAdministrator())
     $registrationMenu = $page->getMenu();
 
     // show link to system preferences of announcements
-    $registrationMenu->addItem('menu_item_preferences',
-                               ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=registration',
-                               $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+    $registrationMenu->addItem(
+        'menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=registration',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+    );
 }
 
 $table = new HtmlTable('new_user_table', $page, true);
@@ -96,12 +97,11 @@ $columnHeading = array(
     '&nbsp;'
 );
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$table->setDatatablesOrderColumns(array(1));
 $table->addRowHeadingByArray($columnHeading);
 
 while($row = $usrStatement->fetch())
 {
-    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
+    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
     $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     if($gPreferences['enable_mail_module'] == 1)

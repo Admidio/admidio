@@ -22,8 +22,10 @@
  * $myModuleMenu = new ModuleMenu('admMenuMyModule');
  *
  * // show link to create new announcement
- * $myModuleMenu->addItem('admMenuItemNewEntry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
- *                         $gL10n->get('SYS_CREATE'), 'add.png');
+ * $myModuleMenu->addItem(
+ *     'admMenuItemNewEntry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
+ *     $gL10n->get('SYS_CREATE'), 'add.png'
+ * );
  * $myModuleMenu->show(); @endcode
  */
 class ModuleMenu
@@ -108,7 +110,7 @@ class ModuleMenu
 
     /**
      * creates an text link icon
-     * @param string[] $menuEntry menu entry element which was added with addItem
+     * @param array<string,string|bool|array> $menuEntry menu entry element which was added with addItem
      * @return string HTML of created item
      */
     private function createIconTextLink(array &$menuEntry)
@@ -141,8 +143,8 @@ class ModuleMenu
 
     /**
      * add a drop down item
-     * @param string[] $menuEntry menu entry element which was added with addItem
-     * @param bool     $selected  determines if drop down element should be pre selected
+     * @param array<string,string|bool|array> $menuEntry menu entry element which was added with addItem
+     * @param bool                            $selected  determines if drop down element should be pre selected
      */
     private function addDropDownItem(array &$menuEntry, $selected = false)
     {

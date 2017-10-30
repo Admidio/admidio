@@ -83,7 +83,7 @@ class ModuleAnnouncements extends Modules
      * Get all records and push it to the array
      * @param int $startElement
      * @param int $limit
-     * @return array Returns the Array with results, recordsets and validated parameters from $_GET Array
+     * @return array<string,mixed> Returns the Array with results, recordsets and validated parameters from $_GET Array
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
@@ -151,7 +151,7 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Get additional tables for sql statement
-     * @return array Returns an array of a SQL string with the necessary joins and it's query params.
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
      */
     private function sqlGetAdditional()
     {
@@ -205,7 +205,7 @@ class ModuleAnnouncements extends Modules
     /**
      * Add several conditions to an SQL string that could later be used
      * as additional conditions in other SQL queries.
-     * @return array Returns an array of a SQL string with additional conditions and it's query params.
+     * @return array<string,mixed> Returns an array of a SQL string with additional conditions and it's query params.
      */
     private function getSqlConditions()
     {
@@ -288,7 +288,7 @@ class ModuleAnnouncements extends Modules
     {
         global $gPreferences;
 
-        $objDate = DateTime::createFromFormat($dateFormat, $dateRange);
+        $objDate = \DateTime::createFromFormat($dateFormat, $dateRange);
 
         if ($objDate === false)
         {

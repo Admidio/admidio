@@ -33,7 +33,7 @@ if ($gPreferences['enable_weblinks_module'] == 0)
 }
 elseif($gPreferences['enable_weblinks_module'] == 2)
 {
-    // avaiable only with valid login
+    // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
@@ -74,27 +74,33 @@ $page->addHtml('<div id="links_overview">');
 if($weblinks->getId() === 0)
 {
     // get module menu
-    $LinksMenu = $page->getMenu();
+    $linksMenu = $page->getMenu();
 
     if($gCurrentUser->editWeblinksRight())
     {
         // show link to create new announcement
-        $LinksMenu->addItem('menu_item_new_link', ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php?headline='. $getHeadline,
-                            $gL10n->get('LNK_CREATE_LINK'), 'add.png');
+        $linksMenu->addItem(
+            'menu_item_new_link', ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php?headline='. $getHeadline,
+            $gL10n->get('LNK_CREATE_LINK'), 'add.png'
+        );
     }
 
     if($gCurrentUser->editWeblinksRight())
     {
         // show link to maintain categories
-        $LinksMenu->addItem('menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=LNK&title='. $getHeadline,
-                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+        $linksMenu->addItem(
+            'menu_item_maintain_categories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=LNK&title='. $getHeadline,
+            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+        );
     }
 
     if($gCurrentUser->isAdministrator())
     {
         // show link to system preferences of weblinks
-        $LinksMenu->addItem('menu_items_links_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=links',
-                            $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+        $linksMenu->addItem(
+            'menu_items_links_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=links',
+            $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+        );
     }
 
     $page->addJavascript('
@@ -105,8 +111,11 @@ if($weblinks->getId() === 0)
     );
 
     $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links.php?headline='. $getHeadline, $page, array('type' => 'navbar', 'setFocus' => false));
-    $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
-    $LinksMenu->addForm($navbarForm->show(false));
+    $navbarForm->addSelectBoxForCategories(
+        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES',
+        array('defaultValue' => $getCatId)
+    );
+    $linksMenu->addForm($navbarForm->show(false));
 }
 
 if ($weblinksCount === 0)
@@ -209,7 +218,7 @@ $page->addHtml('</div>');
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/links/links.php?headline='. $getHeadline.'&cat_id='.$getCatId;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement(), true));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement()));
 
 // show html of complete page
 $page->show();

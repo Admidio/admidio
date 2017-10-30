@@ -47,7 +47,7 @@ class TableAccess
      */
     protected $keyColumnName;
     /**
-     * @var \Database An object of the class Database for communication with the database
+     * @var Database An object of the class Database for communication with the database
      */
     protected $db;
 
@@ -71,7 +71,7 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param \Database  $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
      * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
      * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
@@ -101,7 +101,7 @@ class TableAccess
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(Database $database)
     {
@@ -270,11 +270,11 @@ class TableAccess
                     {
                         if ($format === '' && isset($gPreferences))
                         {
-                            if (strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false)
+                            if (admStrContains($this->columnsInfos[$columnName]['type'], 'timestamp'))
                             {
                                 $format = $gPreferences['system_date'] . ' ' . $gPreferences['system_time'];
                             }
-                            elseif (strpos($this->columnsInfos[$columnName]['type'], 'date') !== false)
+                            elseif (admStrContains($this->columnsInfos[$columnName]['type'], 'date'))
                             {
                                 $format = $gPreferences['system_date'];
                             }
@@ -287,7 +287,7 @@ class TableAccess
                         // try to format the date, else output the available data
                         try
                         {
-                            $datetime = new DateTime($columnValue);
+                            $datetime = new \DateTime($columnValue);
                             $columnValue = $datetime->format($format);
                         }
                         catch (Exception $e)
@@ -327,8 +327,8 @@ class TableAccess
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param string $sqlWhereCondition Conditions for the table to select one record
-     * @param array  $queryParams       The query params for the prepared statement
+     * @param string           $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams       The query params for the prepared statement
      * @return bool Returns @b true if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
@@ -348,7 +348,7 @@ class TableAccess
         }
 
         // if condition starts with AND then remove this
-        if (strpos(strtoupper(ltrim($sqlWhereCondition)), 'AND') === 0)
+        if (admStrStartsWith(strtoupper(ltrim($sqlWhereCondition)), 'AND'))
         {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
@@ -417,7 +417,7 @@ class TableAccess
      * The columns and values must be selected so that they identify only one record.
      * If the sql will find more than one record the method returns @b false.
      * Per default all columns of the default table will be read and stored in the object.
-     * @param array $columnArray An array where every element index is the column name and the value is the column value
+     * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns @b true if one record is found
      * @par Examples
      * @code // reads data not be mem_id but with combination of role and user id
@@ -507,7 +507,7 @@ class TableAccess
         {
             // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
             // Felder anderer Tabellen auch nicht
-            if (strpos($key, $this->columnPrefix . '_') === 0
+            if (admStrStartsWith($key, $this->columnPrefix . '_')
             && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed'])
             {
                 if ($this->newRecord)

@@ -34,9 +34,9 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 
 // Daterange defined in preferences
-$now = new DateTime();
-$dayOffsetPast   = new DateInterval('P'.$gPreferences['dates_ical_days_past'].'D');
-$dayOffsetFuture = new DateInterval('P'.$gPreferences['dates_ical_days_future'].'D');
+$now = new \DateTime();
+$dayOffsetPast   = new \DateInterval('P'.$gPreferences['dates_ical_days_past'].'D');
+$dayOffsetFuture = new \DateInterval('P'.$gPreferences['dates_ical_days_future'].'D');
 $startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
 $endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
 
@@ -96,7 +96,7 @@ if($datesResult['numResults'] > 0)
 $iCal .= $date->getIcalFooter();
 
 // for IE the filename must have special chars in hexadecimal
-if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+if (isset($_SERVER['HTTP_USER_AGENT']) && admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
 {
     $getHeadline = urlencode($getHeadline);
 }

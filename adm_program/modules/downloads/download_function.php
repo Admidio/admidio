@@ -119,10 +119,12 @@ elseif ($getMode === 3)
 
             if($error === null)
             {
+                $folId = (int) $folder->getValue('fol_id');
+
                 // Jetzt noch den Ordner der DB hinzufuegen...
                 $newFolder = new TableFolder($gDb);
 
-                $newFolder->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
+                $newFolder->setValue('fol_fol_id_parent', $folId);
                 $newFolder->setValue('fol_type', 'DOWNLOAD');
                 $newFolder->setValue('fol_name', $newFolderName);
                 $newFolder->setValue('fol_description', $newFolderDescription);
@@ -132,9 +134,9 @@ elseif ($getMode === 3)
                 $newFolder->save();
 
                 // get roles rights of parent folder
-                $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
+                $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folId);
                 $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
-                $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
+                $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folId);
                 $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
             }
             else
@@ -337,12 +339,14 @@ elseif ($getMode === 6)
 
     $newObjectPath = $folder->getFullFolderPath() . '/' . $getName;
 
+    $folId = (int) $folder->getValue('fol_id');
+
     // Pruefen ob das neue Element eine Datei order ein Ordner ist.
     if (is_file($newObjectPath))
     {
         // Datei hinzufuegen
         $newFile = new TableFile($gDb);
-        $newFile->setValue('fil_fol_id', $folder->getValue('fol_id'));
+        $newFile->setValue('fil_fol_id', $folId);
         $newFile->setValue('fil_name', $getName);
         $newFile->setValue('fil_locked', $folder->getValue('fol_locked'));
         $newFile->setValue('fil_counter', '0');
@@ -359,7 +363,7 @@ elseif ($getMode === 6)
 
         // Ordner der DB hinzufuegen
         $newFolder = new TableFolder($gDb);
-        $newFolder->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
+        $newFolder->setValue('fol_fol_id_parent', $folId);
         $newFolder->setValue('fol_type', 'DOWNLOAD');
         $newFolder->setValue('fol_name', $getName);
         $newFolder->setValue('fol_path', $folder->getFolderPath());
@@ -368,9 +372,9 @@ elseif ($getMode === 6)
         $newFolder->save();
 
         // get roles rights of parent folder
-        $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folder->getValue('fol_id'));
+        $rightParentFolderView = new RolesRights($gDb, 'folder_view', $folId);
         $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
-        $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folder->getValue('fol_id'));
+        $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folId);
         $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
 
         // Zurueck zur letzten Seite
@@ -419,7 +423,7 @@ elseif ($getMode === 7)
         {
             // get recordset of parent folder from database
             $parentFolder = new TableFolder($gDb);
-            $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
+            $parentFolder->getFolderForDownload((int) $folder->getValue('fol_fol_id_parent'));
         }
 
         // Read current view roles rights of the folder

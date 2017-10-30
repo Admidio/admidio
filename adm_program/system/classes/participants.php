@@ -43,14 +43,14 @@ class Participants
      */
     private $memberDate = array();
     /**
-     * @var \Database db object must public because of session handling
+     * @var Database db object must public because of session handling
      */
     private $db;
 
     /**
      * Constructor that will initialize variables and check if $rolId is numeric
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $rolId    The role ID of a date
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $rolId    The role ID of a date
      */
     public function __construct(Database $database, $rolId = 0)
     {
@@ -183,7 +183,7 @@ class Participants
      * Return all participants with surname,firstname, leader and approval status as array
      * @param int    $roleId
      * @param string $order Values ASC/DESC Default: 'ASC'
-     * @return array|false Returns all participants in an array with fieldnames ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
+     * @return false|array<int,array<string,string|int|bool>> Returns all participants in an array with fieldnames ['usrId'], ['surname'], ['firstname'], ['leader'], ['approved'].
      */
     public function getParticipantsArray($roleId = 0, $order = 'ASC')
     {

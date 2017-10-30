@@ -166,7 +166,7 @@ if($getMode === 1)
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value) // TODO possible security issue
     {
-        if(strpos($key, 'cat_') === 0)
+        if(admStrStartsWith($key, 'cat_'))
         {
             $category->setValue($key, $value);
         }
@@ -183,20 +183,19 @@ if($getMode === 1)
         // => EXIT
     }
 
+    $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
     // roles have their own preferences for visibility, so only allow this for other types
     // until now we do not support visibility for categories that belong to several organizations
-    if($getType !== 'ROL'
+    if ($getType !== 'ROL'
     && ($category->getValue('cat_org_id') > 0
     || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
     {
         // save changed roles rights of the category
-        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
-        $rightCategoryView->saveRoles($_POST['adm_categories_view_right']);
+        $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
     }
     else
     {
         // delete existing roles rights of the category
-        $rightCategoryView = new RolesRights($gDb, 'category_view', $category->getValue('cat_id'));
         $rightCategoryView->delete();
     }
 

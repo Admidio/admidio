@@ -67,7 +67,8 @@ $form->addInput(
     array('maxLength' => 100)
 );
 $form->addCheckbox(
-    'urt_edit_user', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'), array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
+    'urt_edit_user', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'),
+    array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
 $options = array('defaultValue' => $relationtype1->getRelationTypeString(), 'helpTextIdLabel' => 'REL_USER_RELATION_TYPE_DESC');
@@ -135,7 +136,8 @@ $form->addInput(
     array('maxLength' => 100)
 );
 $form->addCheckbox(
-    'urt_edit_user_inverse', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'), array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
+    'urt_edit_user_inverse', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'),
+    array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));

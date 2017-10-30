@@ -32,8 +32,8 @@ class TableUserField extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_user_fields.
      * If the id is set than the specific user field will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $usfId    The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $usfId    The recordset of the user field with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $usfId = 0)
     {
@@ -189,7 +189,7 @@ class TableUserField extends TableAccess
                 case 'usf_name':
                 case 'cat_name':
                     // if text is a translation-id then translate it
-                    if (strpos($value, '_') === 3)
+                    if (admIsTranslationStrId($value))
                     {
                         $value = $gL10n->get(admStrToUpper($value));
                     }
@@ -209,7 +209,7 @@ class TableUserField extends TableAccess
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
                             {
                                 // if value is imagefile or imageurl then show image
-                                if (strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+                                if (admStrEndsWith(admStrToLower($listValue), '.png') || admStrEndsWith(admStrToLower($listValue), '.jpg'))
                                 {
                                     // if there is imagefile and text separated by | then explode them
                                     $listValues = explode('|', $listValue);
@@ -225,7 +225,7 @@ class TableUserField extends TableAccess
                                     }
 
                                     // if text is a translation-id then translate it
-                                    if (strpos($listValueText, '_') === 3)
+                                    if (admIsTranslationStrId($listValueText))
                                     {
                                         $listValueText = $gL10n->get(admStrToUpper($listValueText));
                                     }
@@ -246,7 +246,7 @@ class TableUserField extends TableAccess
                                     {
                                         try
                                         {
-                                            if (strpos(admStrToLower($listValueImage), 'http') !== 0 || !strValidCharacters($listValueImage, 'url'))
+                                            if (!admStrStartsWith(admStrToLower($listValueImage), 'http') || !strValidCharacters($listValueImage, 'url'))
                                             {
                                                 if (admStrIsValidFileName($listValueImage, true))
                                                 {
@@ -266,7 +266,7 @@ class TableUserField extends TableAccess
                             }
 
                             // if text is a translation-id then translate it
-                            if (strpos($listValue, '_') === 3)
+                            if (admIsTranslationStrId($listValue))
                             {
                                 $listValue = $gL10n->get(admStrToUpper($listValue));
                             }
@@ -281,11 +281,11 @@ class TableUserField extends TableAccess
                     break;
                 case 'usf_icon':
                     // if value is imagefile or imageurl then show image
-                    if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
+                    if(admStrEndsWith(admStrToLower($value), '.png') || admStrEndsWith(admStrToLower($value), '.jpg'))
                     {
                         try
                         {
-                            if (strpos(admStrToLower($value), 'http') !== 0 || !strValidCharacters($value, 'url'))
+                            if (!admStrStartsWith(admStrToLower($value), 'http') || !strValidCharacters($value, 'url'))
                             {
                                 if (admStrIsValidFileName($value, true))
                                 {
@@ -369,7 +369,7 @@ class TableUserField extends TableAccess
 
         $returnValue = parent::save($updateFingerPrint);
 
-        if ($fieldsChanged && $gCurrentSession instanceof \Session)
+        if ($fieldsChanged && $gCurrentSession instanceof Session)
         {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();

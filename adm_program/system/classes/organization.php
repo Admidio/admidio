@@ -45,7 +45,7 @@ class Organization extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
      * If the id is set than the specific organization will be loaded.
-     * @param \Database  $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
      * @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
@@ -342,7 +342,7 @@ class Organization extends TableAccess
      */
     public function getFamilySQL($shortname = false)
     {
-        $organizations = $this->getOrganizationsInRelationship(true, true);
+        $organizations = $this->getOrganizationsInRelationship();
 
         if($shortname)
         {
@@ -416,8 +416,8 @@ class Organization extends TableAccess
      * Reads all preferences of the current organization out of the database table adm_preferences.
      * If the object has read the preferences than the method will return the stored values of the object.
      * @param bool $update Should the preferences data be updated.
-     * @return array Returns an array with all preferences of this organization.
-     *               Array key is the column @b prf_name and array value is the column @b prf_value.
+     * @return array<string,string> Returns an array with all preferences of this organization.
+     *                              Array key is the column @b prf_name and array value is the column @b prf_value.
      */
     public function getPreferences($update = false)
     {
@@ -476,9 +476,8 @@ class Organization extends TableAccess
     /**
      * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
      * The method will only insert or update changed preferences.
-     * @param array $preferences Array with all preferences that should be stored in database.
-     *                           array('name_of_preference' => 'value')
-     * @param bool  $update      If set to @b false then no update will be done, only inserts
+     * @param array<string,string> $preferences Array with all preferences that should be stored in database. array('name_of_preference' => 'value')
+     * @param bool                 $update      If set to @b false then no update will be done, only inserts
      */
     public function setPreferences(array $preferences, $update = true)
     {

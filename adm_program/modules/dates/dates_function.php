@@ -36,7 +36,7 @@ $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
 $getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
 $getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
-$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additonal_guests', 'int');
+$postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
 $participationPossible  = true;
@@ -137,7 +137,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     if(isset($_POST['dat_all_day']))
     {
-        $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+        $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
         $_POST['date_from_time']        = $midnightDateTime->format($gPreferences['system_time']);
         $_POST['date_to_time']          = $midnightDateTime->format($gPreferences['system_time']);
         $_POST['date_deadline_time']    = $midnightDateTime->format($gPreferences['system_time']);
@@ -158,11 +158,11 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
+    $startDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
     if(!$startDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
-        $startDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
+        $startDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
 
         if(!$startDateTime)
         {
@@ -191,12 +191,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
 
-    $endDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
+    $endDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
 
     if(!$endDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
-        $endDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
+        $endDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
 
         if(!$endDateTime)
         {
@@ -264,14 +264,14 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         if(strlen($_POST['date_deadline_time']) === 0)
         {
-            $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+            $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
             $_POST['date_deadline_time'] = $midnightDateTime->format($gPreferences['system_time']);
         }
 
-        $deadlineDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
+        $deadlineDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
         if(!$deadlineDateTime)
         {
-            $deadlineDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_deadline']);
+            $deadlineDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_deadline']);
         }
 
         if(!$deadlineDateTime || $deadlineDateTime > $startDateTime)
@@ -295,10 +295,10 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // save changed roles rights of the category
         $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $_POST['dat_cat_id']);
 
-        // if roles for visibility are assigned to the category than check if the assigned roles of event particiaption
+        // if roles for visibility are assigned to the category than check if the assigned roles of event participation
         // are within the visibility roles set otherwise show error
         if(count($rightCategoryView->getRolesIds()) > 0
-        && count(array_intersect($_POST['adm_event_participation_right'], $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
+        && count(array_intersect(array_map('intval', $_POST['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
         {
             $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
             // => EXIT
@@ -357,7 +357,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // write all POST parameters into the date object
     foreach($_POST as $key => $value) // TODO possible security issue
     {
-        if(strpos($key, 'dat_') === 0)
+        if(admStrStartsWith($key, 'dat_'))
         {
             $date->setValue($key, $value);
         }
@@ -368,12 +368,13 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // save event in database
     $returnCode = $date->save();
 
+    $datId = (int) $date->getValue('dat_id');
+
     if(isset($_POST['adm_event_participation_right']))
     {
-
         // save changed roles rights of the category
-        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $date->getValue('dat_id'));
-        $rightEventParticipation->saveRoles($_POST['adm_event_participation_right']);
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', $datId);
+        $rightEventParticipation->saveRoles(array_map('intval', $_POST['adm_event_participation_right']));
     }
 
     if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
@@ -492,7 +493,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             $role->setValue('rol_max_members', (int) $_POST['dat_max_members']);
         }
 
-        $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id'));
+        $role->setValue('rol_name', $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId);
         $role->setValue('rol_description', $date->getValue('dat_headline'));
 
         // save role in database
@@ -529,9 +530,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
 
         // only change name of role if no custom name was set
-        if(strpos($role->getValue('rol_name'), $gL10n->get('DAT_DATE')) !== false)
+        if(admStrContains($role->getValue('rol_name'), $gL10n->get('DAT_DATE')))
         {
-            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+            $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId;
         }
         else
         {
@@ -593,7 +594,7 @@ elseif($getMode === 6)  // export event in ical format
     $filename = $date->getValue('dat_headline');
 
     // for IE the filename must have special chars in hexadecimal
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)
+    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
     {
         $filename = urlencode($filename);
     }

@@ -150,7 +150,7 @@ class Database
 
         try
         {
-            $availableDrivers = PDO::getAvailableDrivers();
+            $availableDrivers = \PDO::getAvailableDrivers();
 
             if (count($availableDrivers) === 0)
             {
@@ -164,9 +164,9 @@ class Database
             $this->setDSNString($engine);
 
             // needed to avoid leaking username, password, ... if a PDOException is thrown
-            $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
+            $this->pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
 
-            $this->dbEngine = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+            $this->dbEngine = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
             $this->setConnectionOptions();
         }
@@ -231,17 +231,17 @@ class Database
 
         if ($gDebug)
         {
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         }
         else
         {
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
         }
 
-        $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-        $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); // change to false if we convert to prepared statements
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH); // maybe change in future to PDO::FETCH_ASSOC or PDO::FETCH_OBJ
-        $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC); // maybe change in future to \PDO::FETCH_OBJ
+        $this->pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
 
         switch ($this->dbEngine)
         {
@@ -264,7 +264,7 @@ class Database
      */
     protected function getPropertyFromDatabaseConfig($property)
     {
-        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', null, true);
+        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
         return (string) $node[0];
     }
@@ -491,12 +491,12 @@ class Database
         $sqlCompare = strtolower($sql);
 
         // prepare the sql statement to be compatible with PostgreSQL
-        if (strpos($sqlCompare, 'create table') !== false)
+        if (admStrContains($sqlCompare, 'create table'))
         {
             // on a create-table-statement if necessary cut existing MySQL table options
             $sql = substr($sql, 0, strrpos($sql, ')') + 1);
         }
-        if (strpos($sqlCompare, 'create table') !== false || strpos($sqlCompare, 'alter table') !== false)
+        if (admStrContains($sqlCompare, 'create table') || admStrContains($sqlCompare, 'alter table'))
         {
             $replaceArray = array(
                 // PostgreSQL doesn't know unsigned
@@ -512,7 +512,7 @@ class Database
             $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');
             if ($posAutoIncrement > 0)
             {
-                $posInteger = strrpos(substr(strtolower($sql), 0, $posAutoIncrement), 'integer');
+                $posInteger = strripos(substr($sql, 0, $posAutoIncrement), 'integer');
                 $sql = substr($sql, 0, $posInteger) . ' serial ' . substr($sql, $posAutoIncrement + 14);
             }
         }
@@ -548,7 +548,7 @@ class Database
         {
             $this->pdoStatement = $this->pdo->query($sql);
 
-            if ($this->pdoStatement !== false && strpos(strtoupper($sql), 'SELECT') === 0)
+            if ($this->pdoStatement !== false && admStrStartsWith(strtoupper($sql), 'SELECT'))
             {
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
@@ -573,11 +573,11 @@ class Database
      * then this statement will be written to the error log. If it's a @b SELECT statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
-     * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param array  $params     An array of parameters to bind to the prepared statement.
-     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
-     *                           occurred the error with a backtrace will be send to the browser. If set to
-     *                           @b false no error will be shown and the script will be continued.
+     * @param string           $sql        A string with the sql statement that should be executed in database.
+     * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
+     * @param bool             $showError  Default will be @b true and if an error the script will be terminated and
+     *                                     occurred the error with a backtrace will be send to the browser. If set to
+     *                                     @b false no error will be shown and the script will be continued.
      * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
      *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
      */
@@ -601,7 +601,7 @@ class Database
             {
                 $this->pdoStatement->execute($params);
 
-                if (strpos(strtoupper($sql), 'SELECT') === 0)
+                if (admStrStartsWith(strtoupper($sql), 'SELECT'))
                 {
                     $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
                 }
@@ -696,18 +696,18 @@ class Database
                     'null'     => $properties['Null'] === 'YES',
                     'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
                     'default'  => $properties['Default'],
-                    'unsigned' => strpos($properties['Type'], 'unsigned' !== false)
+                    'unsigned' => admStrContains($properties['Type'], 'unsigned')
                 );
 
-                if (strpos($properties['Type'], 'tinyint(1)') !== false)
+                if (admStrContains($properties['Type'], 'tinyint(1)'))
                 {
                     $props['type'] = 'boolean';
                 }
-                elseif (strpos($properties['Type'], 'smallint') !== false)
+                elseif (admStrContains($properties['Type'], 'smallint'))
                 {
                     $props['type'] = 'smallint';
                 }
-                elseif (strpos($properties['Type'], 'int') !== false)
+                elseif (admStrContains($properties['Type'], 'int'))
                 {
                     $props['type'] = 'integer';
                 }
@@ -730,18 +730,18 @@ class Database
             foreach ($columnsList as $properties)
             {
                 $props = array(
-                    'serial'   => strpos($properties['column_default'], 'nextval') !== false,
+                    'serial'   => admStrContains($properties['column_default'], 'nextval'),
                     'null'     => $properties['is_nullable'] === 'YES',
                     'key'      => null,
                     'default'  => $properties['column_default'],
                     'unsigned' => null
                 );
 
-                if (strpos($properties['data_type'], 'timestamp') !== false)
+                if (admStrContains($properties['data_type'], 'timestamp'))
                 {
                     $props['type'] = 'timestamp';
                 }
-                elseif (strpos($properties['data_type'], 'time') !== false)
+                elseif (admStrContains($properties['data_type'], 'time'))
                 {
                     $props['type'] = 'time';
                 }
@@ -848,9 +848,9 @@ class Database
     {
         global $gLogger;
 
-        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "PDO::getAvailableDrivers()" instead!');
+        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "\PDO::getAvailableDrivers()" instead!');
 
-        return PDO::getAvailableDrivers();
+        return \PDO::getAvailableDrivers();
     }
 
     /**
@@ -860,12 +860,12 @@ class Database
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
      * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
-     * @param int           $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
-     *                                    @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
+     * @param int           $fetchType    Set the result type. Can contain @b \PDO::FECTH_ASSOC for an associative array,
+     *                                    @b \PDO::FETCH_NUM for a numeric array or @b \PDO::FETCH_BOTH (Default).
      * @return mixed|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">\PDOStatement::fetch</a>
      */
-    public function fetch_array(\PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
+    public function fetch_array(\PDOStatement $pdoStatement = null, $fetchType = \PDO::FETCH_BOTH)
     {
         global $gLogger;
 

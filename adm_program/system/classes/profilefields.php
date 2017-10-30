@@ -20,15 +20,15 @@
 class ProfileFields
 {
     /**
-     * @var \Database An object of the class Database for communication with the database
+     * @var Database An object of the class Database for communication with the database
      */
     protected $db;
     /**
-     * @var array<string,\TableUserField> Array with all user fields objects
+     * @var array<string,TableUserField> Array with all user fields objects
      */
     protected $mProfileFields = array();
     /**
-     * @var array<int,\TableAccess> Array with all user data objects
+     * @var array<int,TableAccess> Array with all user data objects
      */
     protected $mUserData = array();
     /**
@@ -46,8 +46,8 @@ class ProfileFields
 
     /**
      * constructor that will initialize variables and read the profile field structure
-     * @param \Database $database       Database object (should be @b $gDb)
-     * @param int       $organizationId The id of the organization for which the profile field structure should be read
+     * @param Database $database       Database object (should be @b $gDb)
+     * @param int      $organizationId The id of the organization for which the profile field structure should be read
      */
     public function __construct(Database $database, $organizationId)
     {
@@ -85,7 +85,7 @@ class ProfileFields
     }
 
     /**
-     * @return array<string,\TableUserField>
+     * @return array<string,TableUserField>
      */
     public function getProfileFields()
     {
@@ -174,7 +174,7 @@ class ProfileFields
                     if ($value !== '')
                     {
                         // date must be formated
-                        $date = DateTime::createFromFormat('Y-m-d', $value);
+                        $date = \DateTime::createFromFormat('Y-m-d', $value);
                         if ($date instanceof \DateTime)
                         {
                             $htmlValue = $date->format($gPreferences['system_date']);
@@ -221,7 +221,7 @@ class ProfileFields
                     {
                         // if value is imagefile or imageurl then show image
                         if ($usfType === 'RADIO_BUTTON'
-                        && (strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0))
+                        && (admStrEndsWith(admStrToLower($listValue), '.png') || admStrEndsWith(admStrToLower($listValue), '.jpg')))
                         {
                             // if there is imagefile and text separated by | then explode them
                             if (strpos($listValue, '|') > 0)
@@ -236,7 +236,7 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            if (strpos($listValueText, '_') === 3)
+                            if (admIsTranslationStrId($listValueText))
                             {
                                 $listValueText = $gL10n->get(admStrToUpper($listValueText));
                             }
@@ -244,7 +244,7 @@ class ProfileFields
                             try
                             {
                                 // create html for optionbox entry
-                                if (strValidCharacters($listValueImage, 'url') && strpos(admStrToLower($listValueImage), 'http') === 0)
+                                if (strValidCharacters($listValueImage, 'url') && admStrStartsWith(admStrToLower($listValueImage), 'http'))
                                 {
                                     $listValue = '<img class="admidio-icon-info" src="' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
                                 }
@@ -261,7 +261,7 @@ class ProfileFields
                         }
 
                         // if text is a translation-id then translate it
-                        if (strpos($listValue, '_') === 3)
+                        if (admIsTranslationStrId($listValue))
                         {
                             $listValue = $gL10n->get(admStrToUpper($listValue));
                         }
@@ -284,7 +284,7 @@ class ProfileFields
                         $displayValue = $value;
 
                         // trim "http://", "https://", "//"
-                        if (strpos($displayValue, '//') !== false)
+                        if (admStrContains($displayValue, '//'))
                         {
                             $displayValue = substr($displayValue, strpos($displayValue, '//') + 2);
                         }
@@ -317,7 +317,7 @@ class ProfileFields
                 }
 
                 // replace a variable in url with user value
-                if (strpos($usfUrl, '#user_content#') !== false)
+                if (admStrContains($usfUrl, '#user_content#'))
                 {
                     $htmlValue = str_replace('#user_content#', $value, $htmlValue);
                 }
@@ -387,7 +387,7 @@ class ProfileFields
                         if ($value !== '')
                         {
                             // if date field then the current date format must be used
-                            $date = DateTime::createFromFormat('Y-m-d', $value);
+                            $date = \DateTime::createFromFormat('Y-m-d', $value);
                             if ($date === false)
                             {
                                 return $value;
@@ -541,7 +541,7 @@ class ProfileFields
 
     /**
      * Set the database object for communication with the database of this class.
-     * @param \Database $database An object of the class Database. This should be the global $gDb object.
+     * @param Database $database An object of the class Database. This should be the global $gDb object.
      */
     public function setDatabase(Database $database)
     {
@@ -576,10 +576,10 @@ class ProfileFields
                     break;
                 case 'DATE':
                     // Datum muss gueltig sein und formatiert werden
-                    $date = DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
+                    $date = \DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
                     if ($date === false)
                     {
-                        $date = DateTime::createFromFormat('Y-m-d', $fieldValue);
+                        $date = \DateTime::createFromFormat('Y-m-d', $fieldValue);
                         if ($date === false && !$this->noValueCheck)
                         {
                             return false;

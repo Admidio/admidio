@@ -27,8 +27,8 @@ class TableFile extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_files.
      * If the id is set than the specific files will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $filId    The recordset of the files with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $filId    The recordset of the files with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $filId = 0)
     {
@@ -110,7 +110,7 @@ class TableFile extends TableAccess
         }
 
         // check if user has a membership in a role that is assigned to the current folder
-        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', $this->getValue('fol_id'));
+        $folderViewRolesObject = new RolesRights($this->db, 'folder_view', (int) $this->getValue('fol_id'));
 
         if ($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
         {

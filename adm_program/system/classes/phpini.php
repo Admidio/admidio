@@ -158,7 +158,7 @@ class PhpIni
         $isInBaseDirs = false;
         foreach ($baseDirs as $baseDir)
         {
-            if (strpos($dirPath, $baseDir) === 0)
+            if (admStrStartsWith($dirPath, $baseDir))
             {
                 $isInBaseDirs = true;
             }
@@ -169,9 +169,9 @@ class PhpIni
 
     /**
      * Sets the allowed base-dirs
-     * @param string[] $dirPaths The paths to set as allowed base-dirs
-     * @return bool|string
+     * @param array<int,string> $dirPaths The paths to set as allowed base-dirs
      * @throws Exception
+     * @return bool|string
      */
     public static function setBaseDirs(array $dirPaths = array())
     {
@@ -181,11 +181,11 @@ class PhpIni
         {
             if ($realDirPath === false)
             {
-                throw new Exception('Not a valid or allowed directory');
+                throw new \Exception('Not a valid or allowed directory');
             }
             if (!self::isInBaseDirs($realDirPath))
             {
-                throw new Exception('Not in base-directory!');
+                throw new \Exception('Not in base-directory!');
             }
         }
 
@@ -195,8 +195,8 @@ class PhpIni
     /**
      * Sets the file upload temporary directory
      * @param string $dirPath The path to set the file upload temporary directory
-     * @return bool|string
      * @throws Exception
+     * @return bool|string
      */
     public static function setFileUploadTmpDir($dirPath)
     {
@@ -204,11 +204,11 @@ class PhpIni
 
         if ($realDirPath === false)
         {
-            throw new Exception('Not a valid or allowed directory');
+            throw new \Exception('Not a valid or allowed directory');
         }
         if (!self::isInBaseDirs($realDirPath))
         {
-            throw new Exception('Not in base-directory!');
+            throw new \Exception('Not in base-directory!');
         }
 
         return ini_set('upload_tmp_dir', $realDirPath);

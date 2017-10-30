@@ -69,7 +69,7 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $messageNoRowsFound;
     /**
-     * @var \HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
+     * @var HtmlPage A HtmlPage object that will be used to add javascript code or files to the html output page.
      */
     protected $htmlPage;
     /**
@@ -83,14 +83,14 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Constructor creates the table element
-     * @param string    $id         Id of the table
-     * @param \HtmlPage $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
-     *                              or files to the html output page.
-     * @param bool      $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
-     * @param bool      $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
-     *                              Then column sort, search within the table and other features are possible.
-     * @param string    $class      (optional) An additional css classname. The class @b table
-     *                              is set as default and need not set with this parameter.
+     * @param string   $id         Id of the table
+     * @param HtmlPage $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
+     *                             or files to the html output page.
+     * @param bool     $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
+     * @param bool     $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
+     *                             Then column sort, search within the table and other features are possible.
+     * @param string   $class      (optional) An additional css classname. The class @b table
+     *                             is set as default and need not set with this parameter.
      */
     public function __construct($id, HtmlPage $htmlPage = null, $hoverRows = true, $datatables = false, $class = null)
     {
@@ -122,7 +122,7 @@ class HtmlTable extends HtmlTableBasic
             $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.lang"}';
         }
 
-        if ($htmlPage instanceof \HtmlPage)
+        if ($htmlPage instanceof HtmlPage)
         {
             $this->htmlPage =& $htmlPage;
         }
@@ -130,16 +130,16 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Adds a complete row with all columns to the table. Each column element will be a value of the array parameter.
-     * @param string           $type            'th' for header row or 'td' for body row
-     * @param string[]|array[] $arrColumnValues Array with the values for each column. If you use datatables
-     *                                          than you could set an array for each value with the following entries:
-     *                                          array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
-     *                                          With this you can specify special values for sorting and searching.
-     * @param string           $id              (optional) Set an unique id for the column.
-     * @param string[]         $arrAttributes   (optional) Further attributes as array with key/value pairs
-     * @param int              $colspan         (optional) Number of columns that should be join together.
-     * @param int              $colspanOffset   (optional) Number of column where the colspan should start.
-     *                                          The first column of a table will be 1.
+     * @param string               $type            'th' for header row or 'td' for body row
+     * @param array<int,mixed>     $arrColumnValues Array with the values for each column. If you use datatables
+     *                                              than you could set an array for each value with the following entries:
+     *                                              array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
+     *                                              With this you can specify special values for sorting and searching.
+     * @param string               $id              (optional) Set an unique id for the column.
+     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param int                  $colspan         (optional) Number of columns that should be join together.
+     * @param int                  $colspanOffset   (optional) Number of column where the colspan should start.
+     *                                              The first column of a table will be 1.
      */
     private function addRowTypeByArray($type = 'td', array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
     {
@@ -163,11 +163,11 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Adds a complete row with all columns to the table. This will be the column heading row.
      * Each value of the array represents the heading text for each column.
-     * @param string[] $arrColumnValues Array with the values for each column.
-     * @param string   $id              (optional) Set an unique id for the column.
-     * @param string[] $arrAttributes   (optional) Further attributes as array with key/value pairs
-     * @param int      $colspan         (optional) Number of columns that should be join together.
-     * @param int      $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
+     * @param array<int,string>    $arrColumnValues Array with the values for each column.
+     * @param string               $id              (optional) Set an unique id for the column.
+     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param int                  $colspan         (optional) Number of columns that should be join together.
+     * @param int                  $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
      */
     public function addRowHeadingByArray(array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
     {
@@ -177,15 +177,15 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Adds a complete row with all columns to the table. Each column element will be a value of the array parameter.
-     * @param string[]|array[] $arrColumnValues Array with the values for each column. If you use datatables
-     *                                          than you could set an array for each value with the following entries:
-     *                                          array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
-     *                                          With this you can specify special values for sorting and searching.
-     * @param string           $id              (optional) Set an unique id for the column.
-     * @param string[]         $arrAttributes   (optional) Further attributes as array with key/value pairs
-     * @param int              $colspan         (optional) Number of columns that should be join together.
-     * @param int              $colspanOffset   (optional) Number of the column where the colspan should start.
-     *                                          The first column of a table will be 1.
+     * @param array<int,mixed>     $arrColumnValues Array with the values for each column. If you use datatables
+     *                                              than you could set an array for each value with the following entries:
+     *                                              array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
+     *                                              With this you can specify special values for sorting and searching.
+     * @param string               $id              (optional) Set an unique id for the column.
+     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param int                  $colspan         (optional) Number of columns that should be join together.
+     * @param int                  $colspanOffset   (optional) Number of the column where the colspan should start.
+     *                                              The first column of a table will be 1.
      */
     public function addRowByArray(array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
     {
@@ -201,8 +201,8 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Disable the sort function for some columns. This is useful if a sorting of the column doesn't make sense
      * because it only show function icons or something equal.
-     * @param int[] $columnsSort An array which contain the columns where the sort should be disabled.
-     *                           The columns of the table starts with 1 (not 0).
+     * @param array<int,int> $columnsSort An array which contain the columns where the sort should be disabled.
+     *                                    The columns of the table starts with 1 (not 0).
      */
     public function disableDatatablesColumnsSort(array $columnsSort)
     {
@@ -272,8 +272,8 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Set the align for each column of the current table. This method must be called
      * before a row is added to the table. Each entry of the array represents a column.
-     * @param string[] $columnsAlign An array which contains the align for each column of the table.
-     *                               E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
+     * @param array<int,string> $columnsAlign An array which contains the align for each column of the table.
+     *                                        E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
      */
     public function setColumnAlignByArray(array $columnsAlign)
     {
@@ -314,8 +314,8 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Hide some columns for the user. This is useful if you want to use the column for ordering but
      * won't show the content if this column.
-     * @param int[] $columnsHide An array which contain the columns that should be hidden.
-     *                           The columns of the table starts with 1 (not 0).
+     * @param array<int,int> $columnsHide An array which contain the columns that should be hidden.
+     *                                    The columns of the table starts with 1 (not 0).
      */
     public function setDatatablesColumnsHide(array $columnsHide)
     {
@@ -345,12 +345,12 @@ class HtmlTable extends HtmlTableBasic
 
     /**
      * Set the order of the columns which should be used to sort the rows.
-     * @param int[]|array[] $arrayOrderColumns An array which could contain the columns that should be
-     *                                         ascending ordered or contain arrays where each array
-     *                                         contain the column and the sorting 'asc' or 'desc'. The columns
-     *                                         of the table starts with 1 (not 0).
-     *                                         Optional this could also only be a numeric value than the
-     *                                         datatable will be ordered by the number of this column ascending.
+     * @param array<int,int|array<int,int|string>> $arrayOrderColumns An array which could contain the columns that should be
+     *                                                                ascending ordered or contain arrays where each array
+     *                                                                contain the column and the sorting 'asc' or 'desc'. The columns
+     *                                                                of the table starts with 1 (not 0).
+     *                                                                Optional this could also only be a numeric value than the
+     *                                                                datatable will be ordered by the number of this column ascending.
      * @par Examples
      * @code $table = new HtmlTable('simple-table');
      *
@@ -437,7 +437,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         // show table content
-        if ($this->datatables && $this->htmlPage instanceof \HtmlPage)
+        if ($this->datatables && $this->htmlPage instanceof HtmlPage)
         {
             $this->initDatatablesTable();
 

@@ -76,8 +76,7 @@ if(isset($_SESSION['mylist_request']))
         $formValues['sel_roles_ids'] = 0;
     }
 
-    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden,
-    // muessen diese nun direkt angelegt werden
+    // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, muessen diese nun direkt angelegt werden
     for($i = $defaultColumnRows + 1; $i > 0; ++$i)
     {
         if(isset($formValues['column'.$i]))
@@ -274,7 +273,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                 "usf_value_list": {}
             };';
 
-        // get avaiable values for current field type and push to array
+        // get available values for current field type and push to array
         if($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON')
         {
             foreach($field->getValue('usf_value_list', 'text') as $key => $value)
@@ -336,8 +335,8 @@ foreach($gProfileFields->getProfileFields() as $field)
             "usf_name_intern": "'.$gL10n->get('LST_MEMBERSHIP_END').'"
         };';
 
-    // add new category with participient information of events
-    foreach($arrParticipientsInformation as $memberStatus => $ColumnName)
+    // add new category with participant information of events
+    foreach($arrParticipientsInformation as $memberStatus => $columnName)
     {
         ++$i;
         $javascriptCode .= '
@@ -345,8 +344,8 @@ foreach($gProfileFields->getProfileFields() as $field)
                 "cat_id"   : -1,
                 "cat_name" : "'.$gL10n->get('LST_PARTICIPATION_INFORMATION').'",
                 "usf_id"   : "'.$memberStatus.'",
-                "usf_name" : "'.$ColumnName.'",
-                "usf_name_intern" : "'.$ColumnName.'",
+                "usf_name" : "'.$columnName.'",
+                "usf_name_intern" : "'.$columnName.'",
             };';
     }
 
@@ -587,7 +586,7 @@ foreach($configurations as $configuration)
     // if its a temporary saved configuration than show timestamp of creating as name
     if(strlen($configuration['lst_name']) === 0)
     {
-        $objListTimestamp = new DateTime($configuration['lst_timestamp']);
+        $objListTimestamp = new \DateTime($configuration['lst_timestamp']);
         ++$numberLastConfigurations;
 
         // only 5 configurations without a name should be saved for each user
@@ -662,7 +661,10 @@ if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 // current configuration can be duplicated and saved with another name
 if(strlen($list->getValue('lst_name')) > 0)
 {
-    $form->addButton('btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')), array('icon' => THEME_URL.'/icons/application_double.png'));
+    $form->addButton(
+        'btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')),
+        array('icon' => THEME_URL.'/icons/application_double.png')
+    );
 }
 $form->closeButtonGroup();
 
@@ -679,8 +681,8 @@ if($getActiveRole)
     // check if there are roles that the current user could view
     if(count($allVisibleRoles) === 0)
     {
-            $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
-            // => EXIT
+        $gMessage->show($gL10n->get('LST_NO_RIGHTS_VIEW_LIST'));
+        // => EXIT
     }
 
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name
@@ -729,7 +731,10 @@ if ($gPreferences['members_enable_user_relations'] == 1)
 
 $form->closeGroupBox();
 
-$form->addButton('btn_show_list', $gL10n->get('LST_SHOW_LIST'), array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary'));
+$form->addButton(
+    'btn_show_list', $gL10n->get('LST_SHOW_LIST'),
+    array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary')
+);
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

@@ -20,7 +20,7 @@ class FunctionClass
     public $emailString              = '';
 
     /**
-     * @param \Language $gL10n
+     * @param Language $gL10n
      */
     public function __construct(Language $gL10n)
     {
@@ -196,7 +196,7 @@ class FunctionClass
                 $imgServerPath = str_replace(array(THEME_URL, ADMIDIO_URL), array(THEME_ADMIDIO_PATH, ADMIDIO_PATH), $match);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
-                if (strpos($imgServerPath, 'photo_show.php') !== false)
+                if (admStrContains($imgServerPath, 'photo_show.php'))
                 {
                     $imgServerPath = $photoServerPath;
                 }
@@ -207,7 +207,7 @@ class FunctionClass
                 $imgType = $imagePathInfo['extension'];
 
                 // das zu versendende eigentliche Bild, muss noch auf das entsprechende Format angepasst werden
-                if (strpos($match, 'photo_show.php') !== false)
+                if (admStrContains($match, 'photo_show.php'))
                 {
                     $imgName = 'picture.' . $imgType;
                     $imgNameIntern = substr(md5(uniqid($imgName . time(), true)), 0, 8) . '.' . $imgType;

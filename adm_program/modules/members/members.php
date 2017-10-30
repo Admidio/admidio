@@ -58,13 +58,18 @@ $page->addJavascript('
 // get module menu
 $membersAdministrationMenu = $page->getMenu();
 
-$membersAdministrationMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
+$membersAdministrationMenu->addItem(
+    'menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
+    $gL10n->get('MEM_CREATE_USER'), 'add.png'
+);
 
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
     // show link to view profile field change history
-    $membersAdministrationMenu->addItem('menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php',
-                                $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
+    $membersAdministrationMenu->addItem(
+        'menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php',
+        $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png'
+    );
 }
 
 // show checkbox to select all users or only active members
@@ -78,25 +83,33 @@ if($gPreferences['members_show_all_users'] == 1)
 $membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to import users
-$membersAdministrationMenu->addItem('menu_item_import_users', ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
-                            $gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
+$membersAdministrationMenu->addItem(
+    'menu_item_import_users', ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
+    $gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras'
+);
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to maintain profile fields
-    $membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
-                                $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
+    $membersAdministrationMenu->addItem(
+        'menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
+        $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras'
+    );
 
     if($gPreferences['members_enable_user_relations'] == 1)
     {
         // show link to relation types
-        $membersAdministrationMenu->addItem('menu_item_maintain_user_relation_types', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
-            $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'user_administration.png', 'right', 'menu_item_extras');
+        $membersAdministrationMenu->addItem(
+            'menu_item_maintain_user_relation_types', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
+            $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'user_administration.png', 'right', 'menu_item_extras'
+        );
     }
 
     // show link to system preferences of weblinks
-    $membersAdministrationMenu->addItem('menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=user_management',
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+    $membersAdministrationMenu->addItem(
+        'menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=user_management',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+    );
 }
 
 $orgName = $gCurrentOrganization->getValue('org_longname');

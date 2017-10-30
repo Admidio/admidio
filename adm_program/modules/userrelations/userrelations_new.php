@@ -76,7 +76,10 @@ $form->addInput(
 $sql = 'SELECT urt_id, urt_name
           FROM '.TBL_USER_RELATION_TYPES.'
       ORDER BY urt_name';
-$form->addSelectBoxFromSql('urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql, array('property' => HtmlForm::FIELD_REQUIRED));
+$form->addSelectBoxFromSql(
+    'urt_id', $gL10n->get('SYS_USER_RELATION'), $gDb, $sql,
+    array('property' => HtmlForm::FIELD_REQUIRED)
+);
 
 $sqlData = array();
 if($gCurrentUser->editUsers())
@@ -167,8 +170,11 @@ else
         DATE_NOW
     );
 }
-$form->addSelectBoxFromSql('usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData, array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true));
 
+$form->addSelectBoxFromSql(
+    'usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData,
+    array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true)
+);
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 
 // add form to html page and show page

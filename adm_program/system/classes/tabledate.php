@@ -19,8 +19,8 @@ class TableDate extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_dates.
      * If the id is set than the specific date will be loaded.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $datId    The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param int      $datId    The recordset of the date with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $datId = 0)
     {
@@ -42,7 +42,7 @@ class TableDate extends TableAccess
 
         if($this->getValue('dat_rol_id') > 0)
         {
-            $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $this->getValue('dat_id'));
+            $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
 
             if(count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0)
             {
@@ -234,8 +234,8 @@ class TableDate extends TableAccess
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
-            $oneDayOffset = new DateInterval('P1D');
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
+            $oneDayOffset = new \DateInterval('P1D');
 
             $iCalVEvent[] = 'DTSTART;VALUE=DATE:' . $this->getValue('dat_begin', 'Ymd');
             $iCalVEvent[] = 'DTEND;VALUE=DATE:' . $dateTime->add($oneDayOffset)->format('Ymd');
@@ -274,8 +274,8 @@ class TableDate extends TableAccess
             }
 
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
-            $oneDayOffset = new DateInterval('P1D');
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
+            $oneDayOffset = new \DateInterval('P1D');
             $value = $dateTime->sub($oneDayOffset)->format($format);
         }
         elseif ($columnName === 'dat_description')
@@ -308,7 +308,7 @@ class TableDate extends TableAccess
             elseif ($columnName === 'cat_name')
             {
                 // if text is a translation-id then translate it
-                if (strpos($value, '_') === 3)
+                if (admIsTranslationStrId($value))
                 {
                     $value = $gL10n->get(admStrToUpper($value));
                 }
@@ -335,7 +335,7 @@ class TableDate extends TableAccess
             $validDeadline = $this->getValue('dat_deadline');
         }
 
-        $objDateDeadline = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
+        $objDateDeadline = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
 
         return $objDateDeadline->format('Y-m-d H:i:s');
     }
@@ -359,8 +359,8 @@ class TableDate extends TableAccess
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
-            $oneDayOffset = new DateInterval('P1D');
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
+            $oneDayOffset = new \DateInterval('P1D');
             $newValue = $dateTime->add($oneDayOffset)->format('Y-m-d H:i:s');
         }
 

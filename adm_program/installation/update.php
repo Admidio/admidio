@@ -205,12 +205,12 @@ if ($getMode === 1)
         {
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
-                'login_name', $gL10n->get('SYS_USERNAME'), null,
+                'login_name', $gL10n->get('SYS_USERNAME'), '',
                 array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
             $form->addInput(
-                'password', $gL10n->get('SYS_PASSWORD'), null,
+                'password', $gL10n->get('SYS_PASSWORD'), '',
                 array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
         }
@@ -500,7 +500,10 @@ elseif ($getMode === 2)
     );
     $form->openButtonGroup();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
-    $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
+    $form->addButton(
+        'main_page', $gL10n->get('SYS_LATER'),
+        array('icon' => 'layout/application_view_list.png', 'link' => '../index.php')
+    );
     $form->closeButtonGroup();
     echo $form->show();
 }

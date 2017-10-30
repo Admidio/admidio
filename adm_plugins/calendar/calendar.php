@@ -161,7 +161,7 @@ $birthdaysMonthDayArray = array();
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && $page instanceof \HtmlPage)
+if(isset($page) && $page instanceof HtmlPage)
 {
     $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/calendar/calendar.css');
 }
@@ -198,8 +198,8 @@ if($plg_ter_aktiv)
 
     while($row = $datesStatement->fetch())
     {
-        $startDate = new DateTime($row['dat_begin']);
-        $endDate   = new DateTime($row['dat_end']);
+        $startDate = new \DateTime($row['dat_begin']);
+        $endDate   = new \DateTime($row['dat_end']);
 
         // set custom name of plugin for calendar or use default Admidio name
         if($plg_kal_cat_show)
@@ -250,7 +250,7 @@ if($plg_ter_aktiv)
             {
                 if($row['dat_all_day'] == 1)
                 {
-                    $oneDay  = new DateInterval('P1D');
+                    $oneDay  = new \DateInterval('P1D');
                     $endDate = $endDate->sub($oneDay);
                 }
 
@@ -332,7 +332,7 @@ if($plg_geb_aktiv)
 
     while($row = $birthdayStatement->fetch())
     {
-        $birthdayDate   = new DateTime($row['birthday']);
+        $birthdayDate = new \DateTime($row['birthday']);
 
         $birthdaysMonthDayArray[$birthdayDate->format('j')][] = array(
             'year' => $birthdayDate->format('Y'),
@@ -430,7 +430,7 @@ while($currentDay <= $lastDayCurrentMonth)
     $hasBirthdays = false;
     $countEvents  = 0;
 
-    $dateObj = DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
+    $dateObj = \DateTime::createFromFormat('Y-m-j', $currentYear.'-'.$currentMonth.'-'.$currentDay);
 
     // Terminanzeige generieren
     if($plg_ter_aktiv)

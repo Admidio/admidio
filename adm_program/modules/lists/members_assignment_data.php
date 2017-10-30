@@ -355,7 +355,7 @@ while($user = $userStatement->fetch())
         // show birthday if it's known
         if(strlen($user['birthday']) > 0)
         {
-            $birthdayDate = DateTime::createFromFormat('Y-m-d', $user['birthday']);
+            $birthdayDate = \DateTime::createFromFormat('Y-m-d', $user['birthday']);
             $arrContent[] = $birthdayDate->format($gPreferences['system_date']);
         }
         else

@@ -15,7 +15,7 @@
 class RoleDependency
 {
     /**
-     * @var \Database An object of the class Database for communication with the database
+     * @var Database An object of the class Database for communication with the database
      */
     protected $db;
     /**
@@ -53,7 +53,7 @@ class RoleDependency
 
     /**
      * Constructor that will create an object of a recordset of the specified table.
-     * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
     public function __construct(Database $database)
     {
@@ -127,8 +127,8 @@ class RoleDependency
     }
 
     /**
-     * @param \Database $database
-     * @param int       $childId
+     * @param Database $database
+     * @param int      $childId
      * @return array<int,int>
      */
     public static function getParentRoles(Database $database, $childId)
@@ -155,8 +155,8 @@ class RoleDependency
     }
 
     /**
-     * @param \Database $database
-     * @param int       $parentId
+     * @param Database $database
+     * @param int      $parentId
      * @return array<int,int>
      */
     public static function getChildRoles(Database $database, $parentId)
@@ -213,8 +213,8 @@ class RoleDependency
     }
 
     /**
-     * @param \Database $database
-     * @param int       $parentId
+     * @param Database $database
+     * @param int      $parentId
      * @return bool
      */
     public static function removeChildRoles(Database $database, $parentId)

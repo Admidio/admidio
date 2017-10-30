@@ -42,8 +42,8 @@ if (!$gCurrentUser->editPhotoRight())
 
 /**
  * Loeschen eines Thumbnails
- * @param \TablePhotos $photoAlbum Referenz auf Objekt des relevanten Albums
- * @param int          $picNr      Nr des Bildes dessen Thumbnail geloescht werden soll
+ * @param TablePhotos $photoAlbum Referenz auf Objekt des relevanten Albums
+ * @param int         $picNr      Nr des Bildes dessen Thumbnail geloescht werden soll
  */
 function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
 {

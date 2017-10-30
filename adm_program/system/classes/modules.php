@@ -76,7 +76,7 @@ abstract class Modules
      */
     protected $validModes = array('Default');
     /**
-     * @var array Array with all parameters of the module that were added to this class.
+     * @var array<string,mixed> Array with all parameters of the module that were added to this class.
      */
     protected $parameters = array();
     /**
@@ -177,7 +177,7 @@ abstract class Modules
 
     /**
      * Return parameter set as Array
-     * @return array Returns an Array with all needed parameters as Key/Value pair
+     * @return array<string,mixed> Returns an Array with all needed parameters as Key/Value pair
      */
     public function getParameters()
     {

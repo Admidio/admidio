@@ -105,7 +105,7 @@ if($plg_show_names_extern === 0 && !$gValidLogin)
 
 // if page object is set then integrate css file of this plugin
 global $page;
-if(isset($page) && $page instanceof \HtmlPage)
+if(isset($page) && $page instanceof HtmlPage)
 {
     $page->addCssFile(ADMIDIO_URL . FOLDER_PLUGINS . '/birthday/birthday.css');
 }
@@ -263,7 +263,7 @@ if($numberBirthdays > 0)
                     }
                     else
                     {
-                        $birthayDate  = DateTime::createFromFormat('Y-m-d', $row['birthday']);
+                        $birthayDate  = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
                         $plgDays      = ' ';
                         $plgCssClass  = '';
                         $birthdayText = '';

@@ -130,7 +130,7 @@ if ($_SESSION['db_port'])
 // detect root path
 $rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
-if (!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
+if (!admStrStartsWith($rootPath, 'http://') && !admStrStartsWith($rootPath, 'https://'))
 {
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     {
@@ -171,7 +171,10 @@ if ($configFileHandle)
     // start installation
     $form = new HtmlFormInstallation('installation-form', 'installation.php?step=start_installation');
     $form->setFormDescription($gL10n->get('INS_DATA_FULLY_ENTERED'), $gL10n->get('INS_INSTALL_ADMIDIO'));
-    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+    $form->addSubmitButton(
+        'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
+        array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
+    );
     echo $form->show();
 }
 else
@@ -179,8 +182,17 @@ else
     // if user doesn't has write access then create a page with a download link for the config file
     $form = new HtmlFormInstallation('installation-form', 'installation.php?step=start_installation');
     $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', ADMIDIO_PATH . FOLDER_DATA, 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-    $form->addButton('previous_page', $gL10n->get('SYS_BACK'), array('icon' => 'layout/back.png', 'link' => 'installation.php?step=create_administrator'));
-    $form->addButton('download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'), array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?step=download_config'));
-    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
+    $form->addButton(
+        'previous_page', $gL10n->get('SYS_BACK'),
+        array('icon' => 'layout/back.png', 'link' => 'installation.php?step=create_administrator')
+    );
+    $form->addButton(
+        'download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
+        array('icon' => 'layout/page_white_download.png', 'link' => 'installation.php?step=download_config')
+    );
+    $form->addSubmitButton(
+        'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
+        array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
+    );
     echo $form->show();
 }

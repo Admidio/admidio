@@ -151,19 +151,16 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $ecardMenu->addItem(
-        'menu_item_preferences',
-        ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=ecards',
-        $gL10n->get('SYS_MODULE_PREFERENCES'),
-        'options.png',
-        'right'
+        'menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=ecards',
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }
 
 // show form
 $form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
-$form->addInput('submit_action', null, '', array('type' => 'hidden'));
-$form->addInput('photo_id', null, $getPhotoId, array('type' => 'hidden'));
-$form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
+$form->addInput('submit_action', '', '', array('type' => 'hidden'));
+$form->addInput('photo_id', '', $getPhotoId, array('type' => 'hidden'));
+$form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
@@ -191,6 +188,7 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
 // create list with all possible recipients
+$list = array();
 
 // list all roles where login users could send mails to
 $arrayMailRoles = $gCurrentUser->getAllMailRoles();
@@ -249,17 +247,24 @@ while ($row = $statement->fetch())
 }
 
 $form->addSelectBox(
-    'ecard_recipients',
-    $gL10n->get('SYS_TO'),
-    $list,
+    'ecard_recipients', $gL10n->get('SYS_TO'), $list,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $recipients, 'multiselect' => true)
 );
 $form->addLine();
-$form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED));
-$form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED));
+$form->addInput(
+    'name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'),
+    array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+);
+$form->addInput(
+    'mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'),
+    array('maxLength' => 50, 'property' => HtmlForm::FIELD_DISABLED)
+);
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'admidio-panel-editor');
-$form->addEditor('ecard_message', '', $message, array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook'));
+$form->addEditor(
+    'ecard_message', '', $message,
+    array('property' => HtmlForm::FIELD_REQUIRED, 'toolbar' => 'AdmidioGuestbook')
+);
 $form->closeGroupBox();
 $form->openButtonGroup();
 $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_URL. '/icons/eye.png'));

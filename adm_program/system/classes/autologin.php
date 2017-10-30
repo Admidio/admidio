@@ -28,7 +28,7 @@ class AutoLogin extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_auto_login.
      * If the id is set than the specific auto login will be loaded.
-     * @param \Database  $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database Object of the class Database. This should be the default global object @b $gDb.
      * @param string|int $session  The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
      */
@@ -106,8 +106,8 @@ class AutoLogin extends TableAccess
     public function tableCleanup()
     {
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
-        $currDateTime = new DateTime();
-        $oneYearDateInterval = new DateInterval('P1Y');
+        $currDateTime = new \DateTime();
+        $oneYearDateInterval = new \DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
         $dateSessionDelete = $oneYearBeforeDateTime->format('Y-m-d H:i:s');
 

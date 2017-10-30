@@ -43,7 +43,7 @@ class HtmlPage
      */
     protected $pageContent = '';
     /**
-     * @var \HtmlNavbar An object of the menu of this page
+     * @var HtmlNavbar An object of the menu of this page
      */
     protected $menu;
     /**
@@ -137,7 +137,7 @@ class HtmlPage
     {
         if (!in_array($cssFile, $this->cssFiles, true))
         {
-            if (strpos($cssFile, 'http') !== false)
+            if (admStrStartsWith($cssFile, 'http'))
             {
                 $this->cssFiles[] = $cssFile;
             }
@@ -173,7 +173,7 @@ class HtmlPage
     {
         if (!in_array($jsFile, $this->jsFiles, true))
         {
-            if (strpos($jsFile, 'http') !== false)
+            if (admStrStartsWith($jsFile, 'http'))
             {
                 $this->jsFiles[] = $jsFile;
             }
@@ -623,6 +623,33 @@ class HtmlPage
     }
 
     /**
+     * Returns the menu object of this html page.
+     * @return HtmlNavbar Returns the menu object of this html page.
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * @return string Returns the headline of the current Admidio page.
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
+    }
+
+    /**
+     * Returns the title of the html page.
+     * @return string Returns the title of the html page.
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
      * Set the h1 headline of the current html page. If the title of the page
      * was not set until now than this will also be the title.
      * @param string $headline A string that contains the headline for the page.
@@ -836,7 +863,7 @@ class HtmlPage
         $htmlHeader .= $headerContent;
         $htmlHeader .= $this->header;
         $htmlHeader .= $htmlMyHeader;
-        $htmlHeader .= '</header>';
+        $htmlHeader .= '</head>';
 
         return $htmlHeader;
     }

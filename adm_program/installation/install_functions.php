@@ -45,7 +45,7 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 
 /**
  * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
- * @param \Database $database
+ * @param Database $database
  * @return string
  */
 function checkDatabaseVersion(Database $database)
@@ -88,11 +88,11 @@ function checkPhpVersion()
 
 /**
  * Read data from sql file and execute all statements to the current database
- * @param \Database $db
- * @param string $sqlFileName
+ * @param Database $db
+ * @param string   $sqlFileName
  * @return true|string Returns true no error occurs ales error message is returned
  */
-function querySqlFile($db, $sqlFileName)
+function querySqlFile(Database $db, $sqlFileName)
 {
     global $gL10n, $g_tbl_praefix;
 
@@ -132,9 +132,9 @@ function querySqlFile($db, $sqlFileName)
 }
 
 /**
- * @param \Database $db
+ * @param Database $db
  */
-function disableSoundexSearchIfPgSql($db)
+function disableSoundexSearchIfPgSql(Database $db)
 {
     global $gDbType;
 

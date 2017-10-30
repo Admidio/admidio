@@ -45,8 +45,8 @@ function admStrToUpper($string)
 /**
  * removes html, php code and blancs at beginning and end
  * of string or all elements of array without ckeditor variables !!!
- * @param array<string,string> $srcArray
- * @return array<string,string>
+ * @param array<string,string|array<mixed,string>> $srcArray
+ * @return array<string,string|array<mixed,string>>
  */
 function admStrStripTagsSpecial(array $srcArray)
 {
@@ -69,8 +69,8 @@ function admStrStripTagsSpecial(array $srcArray)
 
 /**
  * removes html, php code and whitespaces at beginning and end of string or all elements of array
- * @param string|string[] $value
- * @return string|string[]
+ * @param string|array<mixed,string> $value
+ * @return string|array<mixed,string>
  */
 function strStripTags($value)
 {
@@ -92,8 +92,8 @@ function strStripTags($value)
 
 /**
  * fuegt Quotes einem mittels addslashes() gequoteten Array und String hinzu
- * @param string|string[] $value
- * @return string|string[]
+ * @param string|array<mixed,string|array> $value
+ * @return string|array<mixed,string|array>
  */
 function strAddSlashesDeep($value)
 {
@@ -112,8 +112,8 @@ function strAddSlashesDeep($value)
 
 /**
  * Entfernt Quotes aus einem mittels addslashes() gequoteten Array und String
- * @param string|string[] $value
- * @return string|string[]
+ * @param string|array<mixed,string|array> $value
+ * @return string|array<mixed,string|array>
  */
 function strStripSlashesDeep($value)
 {
@@ -230,6 +230,49 @@ function strValidCharacters($string, $checkType)
 }
 
 /**
+ * Checks if a string contains another given string
+ * @param string $string   The string to check
+ * @param string $contains The containing string pattern
+ * @return bool Returns true if the string contains the other string
+ */
+function admStrContains($string, $contains)
+{
+    return strpos($string, $contains) !== false;
+}
+
+/**
+ * Checks if a string starts with another given string
+ * @param string $string The string to check
+ * @param string $start  The starting string pattern
+ * @return bool Returns true if the string starts with the other string
+ */
+function admStrStartsWith($string, $start)
+{
+    return strpos($string, $start) === 0;
+}
+
+/**
+ * Checks if a string ends with another given string
+ * @param string $string The string to check
+ * @param string $end    The ending string pattern
+ * @return bool Returns true if the string ends with the other string
+ */
+function admStrEndsWith($string, $end)
+{
+    return strrpos($string, $end) === strlen($string) - strlen($end);
+}
+
+/**
+ * Checks if a given string is a translation-string-id
+ * @param string $string The string to check
+ * @return bool Returns true if the given string is a translation-string-id
+ */
+function admIsTranslationStrId($string)
+{
+    return (bool) preg_match('/^[A-Z]{3}_[A-Z_]+/', $string);
+}
+
+/**
  * Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
  * In addition the function checks if the name contains .. or a . at the beginning.
  * @param string $filename     Name of the file that should be checked.
@@ -249,7 +292,7 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     }
 
     // filename should only contains valid characters and don't start with a dot
-    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || strpos($filename, '.') === 0)
+    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || admStrStartsWith($filename, '.'))
     {
         throw new AdmException('BAC_FILE_NAME_INVALID');
     }

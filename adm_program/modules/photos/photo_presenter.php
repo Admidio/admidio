@@ -76,21 +76,27 @@ if ($gPreferences['photo_show_mode'] == 2)
     // if you have no popup or colorbox then show a button back to the album
     if ($gPreferences['photo_show_mode'] == 2)
     {
-        $photoPresenterMenu->addItem('menu_item_back_to_album', ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId,
-                                     $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png');
+        $photoPresenterMenu->addItem(
+            'menu_item_back_to_album', ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId,
+            $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png'
+        );
     }
 
     // show link to navigate to next and previous photos
     if ($previousImage > 0)
     {
-        $photoPresenterMenu->addItem('menu_item_previous_photo', $urlPreviousImage,
-                                     $gL10n->get('PHO_PREVIOUS_PHOTO'), 'back.png');
+        $photoPresenterMenu->addItem(
+            'menu_item_previous_photo', $urlPreviousImage,
+            $gL10n->get('PHO_PREVIOUS_PHOTO'), 'back.png'
+        );
     }
 
     if ($nextImage <= $photoAlbum->getValue('pho_quantity'))
     {
-        $photoPresenterMenu->addItem('menu_item_next_photo', $urlNextImage,
-                                     $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png');
+        $photoPresenterMenu->addItem(
+            'menu_item_next_photo', $urlNextImage,
+            $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png'
+        );
     }
 }
 
