@@ -64,11 +64,11 @@ if(isset($_SESSION['links_request']))
 // Html-Kopf ausgeben
 if($getLinkId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
 // add current url to navigation stack

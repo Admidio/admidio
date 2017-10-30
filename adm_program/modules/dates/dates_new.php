@@ -39,17 +39,17 @@ $roleViewSet              = array();
 // set headline of the script
 if($getCopy)
 {
-    $headline = $gL10n->get('SYS_COPY_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
     $mode = 5;
 }
 elseif($getDateId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
     $mode = 5;
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_CREATE_VAR', $array($getHeadline));
     $mode = 1;
 }
 

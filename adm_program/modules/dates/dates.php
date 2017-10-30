@@ -148,7 +148,7 @@ if($getViewMode === 'html')
     {
         $datesMenu->addItem(
             'admMenuItemAdd', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?headline=' . $getHeadline,
-            $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png'
+            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'add.png'
         );
     }
 

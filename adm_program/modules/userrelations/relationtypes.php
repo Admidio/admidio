@@ -40,7 +40,7 @@ $relationtypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 // define link to create new category
 $relationtypesMenu->addItem(
     'admMenuItemNewRelationType', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
-    $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_USER_RELATION_TYPE')), 'add.png'
+    $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_USER_RELATION_TYPE'))), 'add.png'
 );
 
 // Create table object

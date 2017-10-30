@@ -82,11 +82,11 @@ else
 // set headline of the script
 if($getCatId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $headline);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($headline));
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $headline);
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($headline));
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -306,7 +306,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 }
 
 $form->addCheckbox(
-    'cat_default', $gL10n->get('CAT_DEFAULT_VAR', $addButtonText), (bool) $category->getValue('cat_default'),
+    'cat_default', $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)), (bool) $category->getValue('cat_default'),
     array('icon' => 'star.png')
 );
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));

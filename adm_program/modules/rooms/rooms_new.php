@@ -31,11 +31,11 @@ if (!$gCurrentUser->isAdministrator())
 // set headline of the script
 if ($getRoomId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($getHeadline));
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
 // add current url to navigation stack
