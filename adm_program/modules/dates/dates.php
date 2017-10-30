@@ -836,8 +836,8 @@ else
                 if ($date->getValue('dat_all_day'))
                 {
                     // full-time event that only exists one day should only show the begin date
-                    $objDateBegin = new DateTime($row['dat_begin']);
-                    $objDateEnd = new DateTime($row['dat_end']);
+                    $objDateBegin = new \DateTime($row['dat_begin']);
+                    $objDateEnd = new \DateTime($row['dat_end']);
                     $dateDiff = $objDateBegin->diff($objDateEnd);
 
                     if($dateDiff->d === 1)

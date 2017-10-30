@@ -106,8 +106,8 @@ class AutoLogin extends TableAccess
     public function tableCleanup()
     {
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
-        $currDateTime = new DateTime();
-        $oneYearDateInterval = new DateInterval('P1Y');
+        $currDateTime = new \DateTime();
+        $oneYearDateInterval = new \DateInterval('P1Y');
         $oneYearBeforeDateTime = $currDateTime->sub($oneYearDateInterval);
         $dateSessionDelete = $oneYearBeforeDateTime->format('Y-m-d H:i:s');
 

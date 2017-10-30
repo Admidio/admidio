@@ -894,7 +894,7 @@ class HtmlForm extends HtmlFormBasic
             $timeValue = '';
 
             // first try to split datetime to a date and a time value
-            $datetime = DateTime::createFromFormat($gPreferences['system_date'] . ' ' . $gPreferences['system_time'], $value);
+            $datetime = \DateTime::createFromFormat($gPreferences['system_date'] . ' ' . $gPreferences['system_time'], $value);
 
             if ($datetime)
             {

@@ -94,8 +94,8 @@ if ($getPhotoNr == null)
     $zipTempName = tempnam($tempFolder, 'zip');
     $zipNiceName = $photoAlbum->getValue('pho_name').' - '.$photoAlbum->getValue('pho_photographers').'.zip';
 
-    $zip = new ZipArchive();
-    $zipOpenCode = $zip->open($zipTempName, ZipArchive::CREATE);
+    $zip = new \ZipArchive();
+    $zipOpenCode = $zip->open($zipTempName, \ZipArchive::CREATE);
 
     if ($zipOpenCode !== true)
     {

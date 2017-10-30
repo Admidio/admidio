@@ -586,7 +586,7 @@ foreach($configurations as $configuration)
     // if its a temporary saved configuration than show timestamp of creating as name
     if(strlen($configuration['lst_name']) === 0)
     {
-        $objListTimestamp = new DateTime($configuration['lst_timestamp']);
+        $objListTimestamp = new \DateTime($configuration['lst_timestamp']);
         ++$numberLastConfigurations;
 
         // only 5 configurations without a name should be saved for each user

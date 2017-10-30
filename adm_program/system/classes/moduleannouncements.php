@@ -288,7 +288,7 @@ class ModuleAnnouncements extends Modules
     {
         global $gPreferences;
 
-        $objDate = DateTime::createFromFormat($dateFormat, $dateRange);
+        $objDate = \DateTime::createFromFormat($dateFormat, $dateRange);
 
         if ($objDate === false)
         {

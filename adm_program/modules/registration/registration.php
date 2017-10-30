@@ -101,7 +101,7 @@ $table->addRowHeadingByArray($columnHeading);
 
 while($row = $usrStatement->fetch())
 {
-    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
+    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
     $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     if($gPreferences['enable_mail_module'] == 1)

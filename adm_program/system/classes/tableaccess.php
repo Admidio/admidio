@@ -287,7 +287,7 @@ class TableAccess
                         // try to format the date, else output the available data
                         try
                         {
-                            $datetime = new DateTime($columnValue);
+                            $datetime = new \DateTime($columnValue);
                             $columnValue = $datetime->format($format);
                         }
                         catch (Exception $e)

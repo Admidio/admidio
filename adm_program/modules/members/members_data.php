@@ -299,7 +299,7 @@ while($row = $mglStatement->fetch())
     if(strlen($row['birthday']) > 0)
     {
         // date must be formated
-        $date = DateTime::createFromFormat('Y-m-d', $row['birthday']);
+        $date = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
         $columnValues[] = $date->format($gPreferences['system_date']);
     }
     else
@@ -308,7 +308,7 @@ while($row = $mglStatement->fetch())
     }
 
     // Add "change date"
-    $timestampChange = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
+    $timestampChange = \DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
     $columnValues[]  = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     // Add "user-administration icons"

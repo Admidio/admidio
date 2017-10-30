@@ -234,8 +234,8 @@ class TableDate extends TableAccess
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
-            $oneDayOffset = new DateInterval('P1D');
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('dat_end', 'Y-m-d H:i:s'));
+            $oneDayOffset = new \DateInterval('P1D');
 
             $iCalVEvent[] = 'DTSTART;VALUE=DATE:' . $this->getValue('dat_begin', 'Ymd');
             $iCalVEvent[] = 'DTEND;VALUE=DATE:' . $dateTime->add($oneDayOffset)->format('Ymd');
@@ -274,8 +274,8 @@ class TableDate extends TableAccess
             }
 
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
-            $oneDayOffset = new DateInterval('P1D');
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $this->dbColumns['dat_end']);
+            $oneDayOffset = new \DateInterval('P1D');
             $value = $dateTime->sub($oneDayOffset)->format($format);
         }
         elseif ($columnName === 'dat_description')
@@ -335,7 +335,7 @@ class TableDate extends TableAccess
             $validDeadline = $this->getValue('dat_deadline');
         }
 
-        $objDateDeadline = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
+        $objDateDeadline = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
 
         return $objDateDeadline->format('Y-m-d H:i:s');
     }
@@ -359,8 +359,8 @@ class TableDate extends TableAccess
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
-            $oneDayOffset = new DateInterval('P1D');
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $newValue);
+            $oneDayOffset = new \DateInterval('P1D');
             $newValue = $dateTime->add($oneDayOffset)->format('Y-m-d H:i:s');
         }
 

@@ -218,8 +218,8 @@ foreach($rolesList as $row)
             if($row['mem_id'] > 0)
             {
                 // subtract one day, so that user leaves role immediately
-                $now = new DateTime();
-                $oneDayOffset = new DateInterval('P1D');
+                $now = new \DateTime();
+                $oneDayOffset = new \DateInterval('P1D');
                 $newEndDate = $now->sub($oneDayOffset)->format('Y-m-d');
                 $user->editRoleMembership($row['mem_id'], $row['mem_begin'], $newEndDate, $roleLeader);
             }

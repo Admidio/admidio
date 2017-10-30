@@ -97,7 +97,7 @@ switch($postFunction)
             while($row = $statement->fetch())
             {
                 $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
-                $date = DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
+                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
                 $text[] = '<time>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
             }
 

@@ -70,8 +70,8 @@ else
 }
 
 // Referenzzeit setzen
-$now = new DateTime();
-$minutesOffset = new DateInterval('PT' . $plg_time_online . 'M');
+$now = new \DateTime();
+$minutesOffset = new \DateInterval('PT' . $plg_time_online . 'M');
 $refDate = $now->sub($minutesOffset)->format('Y-m-d H:i:s');
 
 // User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind

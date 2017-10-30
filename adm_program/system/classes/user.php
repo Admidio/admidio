@@ -367,10 +367,10 @@ class User extends TableAccess
         global $gLogger;
 
         // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-        $now = new DateTime();
-        $minutesOffset = new DateInterval('PT15M');
+        $now = new \DateTime();
+        $minutesOffset = new \DateInterval('PT15M');
         $minutesBefore = $now->sub($minutesOffset);
-        $dateInvalid = DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+        $dateInvalid = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
 
         if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() > $dateInvalid->getTimestamp())
         {
@@ -1613,13 +1613,13 @@ class User extends TableAccess
         {
             // subtract 1 day from start date so that we find memberships that ends yesterday
             // these memberships can be continued with new date
-            $oneDayOffset = new DateInterval('P1D');
+            $oneDayOffset = new \DateInterval('P1D');
 
-            $startDate = DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
+            $startDate = \DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
             // add 1 to max date because we subtract one day if a membership ends
             if ($endDate !== DATE_MAX)
             {
-                $endDate = DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
+                $endDate = \DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
             }
         }
 
@@ -1836,7 +1836,7 @@ class User extends TableAccess
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE')
         {
-            $date = DateTime::createFromFormat($gPreferences['system_date'], $newValue);
+            $date = \DateTime::createFromFormat($gPreferences['system_date'], $newValue);
 
             if($date !== false)
             {

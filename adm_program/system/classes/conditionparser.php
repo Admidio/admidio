@@ -135,10 +135,10 @@ class ConditionParser
         if ($lastDateChar === 'J' || $lastDateChar === 'Y')
         {
             $ageCondition = '';
-            $dateObj = new DateTime();
-            $years   = new DateInterval('P' . substr($date, 0, -1) . 'Y');
-            $oneYear = new DateInterval('P1Y');
-            $oneDay  = new DateInterval('P1D');
+            $dateObj = new \DateTime();
+            $years   = new \DateInterval('P' . substr($date, 0, -1) . 'Y');
+            $oneYear = new \DateInterval('P1Y');
+            $oneDay  = new \DateInterval('P1D');
             $dateObj->sub($years);
 
             switch ($operator)
@@ -186,7 +186,7 @@ class ConditionParser
         // validate date and return it in database format
         if ($date !== '')
         {
-            $dateObject = DateTime::createFromFormat($gPreferences['system_date'], $date);
+            $dateObject = \DateTime::createFromFormat($gPreferences['system_date'], $date);
             if ($dateObject !== false)
             {
                 return $dateObject->format('Y-m-d');

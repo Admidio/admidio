@@ -204,7 +204,7 @@ if (isset($folderContent['files']))
         }
 
         // Format timestamp
-        $timestamp = DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
+        $timestamp = \DateTime::createFromFormat('Y-m-d H:i:s', $nextFile['fil_timestamp']);
 
         $fileDescription = '';
         if($nextFile['fil_description'] !== null)

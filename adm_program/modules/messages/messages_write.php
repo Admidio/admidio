@@ -661,7 +661,7 @@ if (isset($messageStatement))
             $receiverName = '<div class="panel-footer">'.$gL10n->get('MSG_OPPOSITE').': '.$receiverName.'</div>';
         }
 
-        $date = DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
+        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
         $page->addHtml('
         <div class="panel panel-default">
             <div class="panel-heading">

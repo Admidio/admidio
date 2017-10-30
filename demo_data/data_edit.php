@@ -16,16 +16,16 @@
  */
 function addDaysToDate($days, $sub = false)
 {
-    $now = new DateTime();
-    $daysOffset = new DateInterval('P'.$days.'D');
+    $now = new \DateTime();
+    $daysOffset = new \DateInterval('P'.$days.'D');
     $newDate = $sub ? $now->sub($daysOffset) : $now->add($daysOffset);
 
     return $newDate->format('Y-m-d');
 }
 
 // set birthday of user to today 25 years ago
-$now = new DateTime();
-$yearsBack = new DateInterval('P25Y');
+$now = new \DateTime();
+$yearsBack = new \DateInterval('P25Y');
 $birthday = $now->sub($yearsBack)->format('Y-m-d');
 
 $sqlQueries = array();

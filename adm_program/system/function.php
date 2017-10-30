@@ -401,12 +401,12 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
         case 'date':
             // check if date is a valid Admidio date format
-            $objAdmidioDate = DateTime::createFromFormat($gPreferences['system_date'], $value);
+            $objAdmidioDate = \DateTime::createFromFormat($gPreferences['system_date'], $value);
 
             if (!$objAdmidioDate)
             {
                 // check if date has english format
-                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
+                $objEnglishDate = \DateTime::createFromFormat('Y-m-d', $value);
 
                 if (!$objEnglishDate)
                 {

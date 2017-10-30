@@ -181,11 +181,11 @@ class PhpIni
         {
             if ($realDirPath === false)
             {
-                throw new Exception('Not a valid or allowed directory');
+                throw new \Exception('Not a valid or allowed directory');
             }
             if (!self::isInBaseDirs($realDirPath))
             {
-                throw new Exception('Not in base-directory!');
+                throw new \Exception('Not in base-directory!');
             }
         }
 
@@ -204,11 +204,11 @@ class PhpIni
 
         if ($realDirPath === false)
         {
-            throw new Exception('Not a valid or allowed directory');
+            throw new \Exception('Not a valid or allowed directory');
         }
         if (!self::isInBaseDirs($realDirPath))
         {
-            throw new Exception('Not in base-directory!');
+            throw new \Exception('Not in base-directory!');
         }
 
         return ini_set('upload_tmp_dir', $realDirPath);
