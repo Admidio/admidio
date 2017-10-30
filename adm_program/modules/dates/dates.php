@@ -185,7 +185,7 @@ if($getViewMode === 'html')
 
         if($gPreferences['enable_dates_ical'] == 1 || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
         {
-            $datesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+            $datesMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
         }
 
         // ical Download

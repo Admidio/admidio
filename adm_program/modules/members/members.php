@@ -80,7 +80,7 @@ if($gPreferences['members_show_all_users'] == 1)
     $membersAdministrationMenu->addForm($navbarForm->show(false));
 }
 
-$membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+$membersAdministrationMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
 
 // show link to import users
 $membersAdministrationMenu->addItem(

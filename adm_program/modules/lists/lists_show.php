@@ -481,7 +481,7 @@ if ($getMode !== 'csv')
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser))
             {
-                $listsMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'left');
+                $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
 
                 $listsMenu->addItem('menu_item_assign_members', ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
                     $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png', 'left', 'menu_item_extras');
