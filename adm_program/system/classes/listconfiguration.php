@@ -327,8 +327,6 @@ class ListConfiguration extends TableLists
         $sqlRoleIds     = implode(', ', $roleIds);
 
         // Set state of membership
-        $sqlMemberStatus = '';
-
         if ($showFormerMembers)
         {
             $sqlMemberStatus = 'AND mem_end < \''.DATE_NOW.'\'';
@@ -346,11 +344,11 @@ class ListConfiguration extends TableLists
 
             if ($endDate === null)
             {
-                $sqlMemberStatus .= 'AND mem_end >= \''.DATE_NOW.'\'';
+                $sqlMemberStatus .= ' AND mem_end >= \''.DATE_NOW.'\'';
             }
             else
             {
-                $sqlMemberStatus .= 'AND mem_end >= \''.$startDate.' 00:00:00\'';
+                $sqlMemberStatus .= ' AND mem_end >= \''.$startDate.' 00:00:00\'';
             }
         }
 

@@ -99,13 +99,8 @@ class TableRoles extends TableAccess
         $rolLeaderRights = (int) $this->getValue('rol_leader_rights');
 
         // leader are allowed to assign members if it's configured in the role
-        if (($rolLeaderRights === ROLE_LEADER_MEMBERS_EDIT || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-        && $user->isMemberOfRole((int) $this->getValue('rol_id')))
-        {
-            return true;
-        }
-
-        return false;
+        return ($rolLeaderRights === ROLE_LEADER_MEMBERS_EDIT || $rolLeaderRights === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+            && $user->isMemberOfRole((int) $this->getValue('rol_id'));
     }
 
     /**
