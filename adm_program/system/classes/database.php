@@ -150,7 +150,7 @@ class Database
 
         try
         {
-            $availableDrivers = PDO::getAvailableDrivers();
+            $availableDrivers = \PDO::getAvailableDrivers();
 
             if (count($availableDrivers) === 0)
             {
@@ -166,7 +166,7 @@ class Database
             // needed to avoid leaking username, password, ... if a PDOException is thrown
             $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
 
-            $this->dbEngine = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+            $this->dbEngine = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
             $this->setConnectionOptions();
         }
@@ -231,17 +231,17 @@ class Database
 
         if ($gDebug)
         {
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         }
         else
         {
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
         }
 
-        $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-        $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true); // change to false if we convert to prepared statements
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH); // maybe change in future to PDO::FETCH_ASSOC or PDO::FETCH_OBJ
-        $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC); // maybe change in future to \PDO::FETCH_OBJ
+        $this->pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
 
         switch ($this->dbEngine)
         {
@@ -848,9 +848,9 @@ class Database
     {
         global $gLogger;
 
-        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "PDO::getAvailableDrivers()" instead!');
+        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "\PDO::getAvailableDrivers()" instead!');
 
-        return PDO::getAvailableDrivers();
+        return \PDO::getAvailableDrivers();
     }
 
     /**
@@ -860,12 +860,12 @@ class Database
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
      * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
-     * @param int           $fetchType    Set the result type. Can contain @b PDO::FECTH_ASSOC for an associative array,
-     *                                    @b PDO::FETCH_NUM for a numeric array or @b PDO::FETCH_BOTH (Default).
+     * @param int           $fetchType    Set the result type. Can contain @b \PDO::FECTH_ASSOC for an associative array,
+     *                                    @b \PDO::FETCH_NUM for a numeric array or @b \PDO::FETCH_BOTH (Default).
      * @return mixed|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">\PDOStatement::fetch</a>
      */
-    public function fetch_array(\PDOStatement $pdoStatement = null, $fetchType = PDO::FETCH_BOTH)
+    public function fetch_array(\PDOStatement $pdoStatement = null, $fetchType = \PDO::FETCH_BOTH)
     {
         global $gLogger;
 
