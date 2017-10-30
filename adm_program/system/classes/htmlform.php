@@ -1859,19 +1859,8 @@ class HtmlForm extends HtmlFormBasic
 
         if ($helpTextId !== '')
         {
-            if (count($parameters) === 0)
-            {
-                // if text is a translation-id then translate it
-                if (admIsTranslationStrId($helpTextId))
-                {
-                    $helpText = $gL10n->get($helpTextId);
-                }
-                else
-                {
-                    $helpText = $helpTextId;
-                }
-            }
-            else
+            // if text is a translation-id then translate it
+            if (admIsTranslationStrId($helpTextId))
             {
                 foreach ($parameters as &$parameter)
                 {
@@ -1883,15 +1872,11 @@ class HtmlForm extends HtmlFormBasic
                 }
                 unset($parameter);
 
-                // PHP 5.6+ use: $helpText = $gL10n->get($helpTextId, ...$parameters);
-                if (count($parameters) === 1)
-                {
-                    $helpText = $gL10n->get($helpTextId, $parameters[0]);
-                }
-                else
-                {
-                    $helpText = $gL10n->get($helpTextId, $parameters[0], $parameters[1]);
-                }
+                $helpText = $gL10n->get($helpTextId, $parameters);
+            }
+            else
+            {
+                $helpText = $helpTextId;
             }
 
             $this->addHtml('<div class="help-block">' . $helpText . '</div>');
