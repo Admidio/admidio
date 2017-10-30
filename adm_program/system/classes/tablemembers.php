@@ -184,8 +184,8 @@ class TableMembers extends TableAccess
         if (!$this->newRecord && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
         {
             // subtract one day, so that user leaves role immediately
-            $now = new DateTime();
-            $oneDayOffset = new DateInterval('P1D');
+            $now = new \DateTime();
+            $oneDayOffset = new \DateInterval('P1D');
             $nowDate = $now->format('Y-m-d');
             $endDate = $now->sub($oneDayOffset)->format('Y-m-d');
 

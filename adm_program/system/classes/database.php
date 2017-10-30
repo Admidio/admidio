@@ -164,7 +164,7 @@ class Database
             $this->setDSNString($engine);
 
             // needed to avoid leaking username, password, ... if a PDOException is thrown
-            $this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->options);
+            $this->pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
 
             $this->dbEngine = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 

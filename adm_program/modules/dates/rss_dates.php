@@ -123,7 +123,7 @@ if ($datesResult['numResults'] > 0)
             $description,
             ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?id=' . $dateId . '&view=detail',
             $row['create_name'],
-            DateTime::createFromFormat('Y-m-d H:i:s', $date->getValue('dat_timestamp_create'))->format('r')
+            \DateTime::createFromFormat('Y-m-d H:i:s', $date->getValue('dat_timestamp_create'))->format('r')
         );
     }
 }

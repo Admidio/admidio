@@ -142,20 +142,20 @@ if(!$hasRightViewFormerMembers)
 }
 
 // Create date objects and format dates in system format
-$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
+$objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false)
 {
     // check if date_from  has system format
-    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+    $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
 }
 $dateFrom = $objDateFrom->format($gPreferences['system_date']);
 $startDateEnglishFormat = $objDateFrom->format('Y-m-d');
 
-$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
+$objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
 if ($objDateTo === false)
 {
     // check if date_from  has system format
-    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+    $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
 }
 $dateTo = $objDateTo->format($gPreferences['system_date']);
 $endDateEnglishFormat = $objDateTo->format('Y-m-d');
@@ -776,7 +776,7 @@ foreach ($membersList as $member)
                 if (strlen($member[$sqlColumnNumber]) > 0)
                 {
                     // date must be formated
-                    $date = DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
+                    $date = \DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
                     $content = $date->format($gPreferences['system_date']);
                 }
             }

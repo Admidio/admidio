@@ -148,7 +148,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
 
     if(isset($_POST['dat_all_day']))
     {
-        $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+        $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
         $_POST['date_from_time']        = $midnightDateTime->format($gPreferences['system_time']);
         $_POST['date_to_time']          = $midnightDateTime->format($gPreferences['system_time']);
         $_POST['date_deadline_time']    = $midnightDateTime->format($gPreferences['system_time']);
@@ -169,11 +169,11 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
+    $startDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
     if(!$startDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
-        $startDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
+        $startDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
 
         if(!$startDateTime)
         {
@@ -202,12 +202,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
 
-    $endDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
+    $endDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
 
     if(!$endDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
-        $endDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
+        $endDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
 
         if(!$endDateTime)
         {
@@ -275,14 +275,14 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         if(strlen($_POST['date_deadline_time']) === 0)
         {
-            $midnightDateTime = DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
+            $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
             $_POST['date_deadline_time'] = $midnightDateTime->format($gPreferences['system_time']);
         }
 
-        $deadlineDateTime = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
+        $deadlineDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
         if(!$deadlineDateTime)
         {
-            $deadlineDateTime = DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_deadline']);
+            $deadlineDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_deadline']);
         }
 
         if(!$deadlineDateTime || $deadlineDateTime > $startDateTime)

@@ -20,7 +20,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
-$filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
+$filterDateFrom = \DateTime::createFromFormat('Y-m-d', DATE_NOW);
 $filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
 
 // Initialize and check the parameters
@@ -56,25 +56,25 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
-$objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
+$objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if($objDateFrom === false)
 {
     // check if date has system format
-    $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+    $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
     if($objDateFrom === false)
     {
-        $objDateFrom = DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
+        $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
     }
 }
 
-$objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
+$objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
 if($objDateTo === false)
 {
     // check if date has system format
-    $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+    $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
     if($objDateTo === false)
     {
-        $objDateTo = DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
+        $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
     }
 }
 
@@ -196,7 +196,7 @@ $table->addRowHeadingByArray($columnHeading);
 
 while($row = $fieldHistoryStatement->fetch())
 {
-    $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
+    $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['usl_timestamp_create']);
     $columnValues    = array();
 
     if($getUserId === 0)

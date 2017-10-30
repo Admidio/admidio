@@ -66,9 +66,9 @@ if(isset($_SESSION['dates_request']))
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
 
-    $dateTimeBegin = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_begin']);
+    $dateTimeBegin = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_begin']);
     $_SESSION['dates_request']['dat_begin'] = $dateTimeBegin->format('Y-m-d H:i:s');
-    $dateTimeEnd = DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_end']);
+    $dateTimeEnd = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_end']);
     $_SESSION['dates_request']['dat_end'] = $dateTimeEnd->format('Y-m-d H:i:s');
 
     $date->setArray($_SESSION['dates_request']);
@@ -121,9 +121,9 @@ else
         }
 
         // bei neuem Termin Datum mit aktuellen Daten vorbelegen
-        $now = new DateTime();
-        $oneHourOffset = new DateInterval('PT1H');
-        $twoHourOffset = new DateInterval('PT2H');
+        $now = new \DateTime();
+        $oneHourOffset = new \DateInterval('PT1H');
+        $twoHourOffset = new \DateInterval('PT2H');
         $beginDate = $now->add($oneHourOffset)->format('Y-m-d H:00:00');
         $endDate   = $now->add($twoHourOffset)->format('Y-m-d H:00:00');
         $date->setValue('dat_begin', $beginDate);

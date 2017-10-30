@@ -244,8 +244,8 @@ class Session extends TableAccess
                 $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
 
                 // save cookie for autologin
-                $currDateTime = new DateTime();
-                $oneYearDateInterval = new DateInterval('P1Y');
+                $currDateTime = new \DateTime();
+                $oneYearDateInterval = new \DateInterval('P1Y');
                 $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
                 $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
@@ -405,8 +405,8 @@ class Session extends TableAccess
         $this->mAutoLogin->save();
 
         // save cookie for autologin
-        $currDateTime = new DateTime();
-        $oneYearDateInterval = new DateInterval('P1Y');
+        $currDateTime = new \DateTime();
+        $oneYearDateInterval = new \DateInterval('P1Y');
         $oneYearAfterDateTime = $currDateTime->add($oneYearDateInterval);
         $timestampExpired = $oneYearAfterDateTime->getTimestamp();
 
@@ -537,8 +537,8 @@ class Session extends TableAccess
      */
     public function tableCleanup($maxInactiveMinutes = 30)
     {
-        $now = new DateTime();
-        $minutesBack = new DateInterval('PT' . $maxInactiveMinutes . 'M');
+        $now = new \DateTime();
+        $minutesBack = new \DateInterval('PT' . $maxInactiveMinutes . 'M');
         $timestamp = $now->sub($minutesBack)->format('Y-m-d H:i:s');
 
         $sql = 'DELETE FROM '.TBL_SESSIONS.'

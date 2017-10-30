@@ -74,7 +74,7 @@ if($announcements->getDataSetCount() > 0)
             $announcement->getValue('ann_description'),
             ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?id='.(int) $announcement->getValue('ann_id').'&headline='.$getHeadline,
             $row['create_name'],
-            DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create'))->format('r')
+            \DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create'))->format('r')
         );
     }
 }
