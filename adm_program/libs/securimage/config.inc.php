@@ -19,17 +19,19 @@
 */
 global $gCookiePraefix, $gPreferences;
 
-if($gPreferences['captcha_type'] === 'pic')
+switch ($gPreferences['captcha_type'])
 {
-    $captchaType = Securimage::SI_CAPTCHA_STRING;
-}
-elseif($gPreferences['captcha_type'] === 'calc')
-{
-    $captchaType = Securimage::SI_CAPTCHA_MATHEMATIC;
-}
-elseif($gPreferences['captcha_type'] === 'word')
-{
-    $captchaType = Securimage::SI_CAPTCHA_WORDS;
+    case 'pic':
+        $captchaType = Securimage::SI_CAPTCHA_STRING;
+        break;
+    case 'calc':
+        $captchaType = Securimage::SI_CAPTCHA_MATHEMATIC;
+        break;
+    case 'word':
+        $captchaType = Securimage::SI_CAPTCHA_WORDS;
+        break;
+    default:
+        $captchaType = '';
 }
 
 return array(
