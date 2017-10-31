@@ -513,7 +513,7 @@ if ($getMode !== 'csv')
         $listsMenu->addForm($form->show(false));
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-        $table->setDatatablesRowsPerPage($gPreferences['lists_members_per_page']);
+        $table->setDatatablesRowsPerPage((int) $gPreferences['lists_members_per_page']);
     }
     else
     {
