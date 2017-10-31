@@ -235,15 +235,19 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         )
     );
 
-    $form->addSelectBoxFromSql(
-        'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
-        array(
-            'property'     => FIELD_REQUIRED,
-            'defaultValue' => $roleEditSet,
-            'multiselect'  => true,
-            'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
-        )
-    );
+    // until now we don't use edit rights for profile fields
+    if($getType !== 'USF')
+    {
+        $form->addSelectBoxFromSql(
+            'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
+            array(
+                'property'     => FIELD_REQUIRED,
+                'defaultValue' => $roleEditSet,
+                'multiselect'  => true,
+                'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
+            )
+        );
+    }
 }
 
 // if current organization has a parent organization or is child organizations then show option to set this category to global

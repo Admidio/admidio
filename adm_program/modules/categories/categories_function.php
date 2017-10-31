@@ -158,7 +158,7 @@ if($getMode === 1)
     if ($getType !== 'ROL')
     {
         $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
-    
+
         // roles have their own preferences for visibility, so only allow this for other types
         // until now we do not support visibility for categories that belong to several organizations
         if ($category->getValue('cat_org_id') > 0
@@ -173,8 +173,12 @@ if($getMode === 1)
             $rightCategoryView->delete();
         }
 
-        $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
-        $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
+        // until now we don't use edit rights for profile fields
+        if ($getType !== 'USF')
+        {
+            $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
+            $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
+        }
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,

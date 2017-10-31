@@ -294,7 +294,7 @@ while($catRow = $categoryStatement->fetch())
                 }
 
                 if($getType !== 'USF')
-                {
+                {
                     $htmlViewRolesNames .= ' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
                 }
             }
