@@ -21,7 +21,7 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireV
 $headline = $gL10n->get('DOW_SET_FOLDER_PERMISSIONS');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_download_module'] != 1)
+if ($gSettingsManager->get('enable_download_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

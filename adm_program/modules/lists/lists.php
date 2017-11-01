@@ -23,7 +23,7 @@ $getCatId      = admFuncVariableIsValid($_GET, 'cat_id',      'int');
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['lists_enable_module'] != 1)
+if ($gSettingsManager->get('lists_enable_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -67,7 +67,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage($headline);
 
-if($gPreferences['lists_hide_overview_details'] == 0)
+if($gSettingsManager->get('lists_hide_overview_details') == 0)
 {
     $page->addJavascript('$(".collapse").collapse();', true);
 }
@@ -206,7 +206,7 @@ foreach($listsResult['recordset'] as $row)
             </div>
             <div class="pull-right text-right">');
                 // send a mail to all role members
-                if($gCurrentUser->hasRightSendMailToRole($rolId) && $gPreferences['enable_mail_module'] == 1)
+                if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->get('enable_mail_module') == 1)
                 {
                     $page->addHtml('
                     <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?rol_id='.$rolId.'"><img
@@ -260,7 +260,7 @@ foreach($listsResult['recordset'] as $row)
 
                 if(strlen($role->getValue('rol_start_date')) > 0)
                 {
-                    $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
+                    $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gSettingsManager->get('system_date')), $role->getValue('rol_end_date', $gSettingsManager->get('system_date'))));
                 }
 
                 if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
@@ -271,7 +271,7 @@ foreach($listsResult['recordset'] as $row)
                     }
                     if(strlen($role->getValue('rol_start_time')) > 0)
                     {
-                        $html = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+                        $html = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gSettingsManager->get('system_time')), $role->getValue('rol_end_time', $gSettingsManager->get('system_time')));
                     }
                     $form->addStaticControl('list_date', $gL10n->get('DAT_DATE'), $html);
                 }
@@ -314,7 +314,7 @@ foreach($listsResult['recordset'] as $row)
                 // Member fee
                 if(strlen($role->getValue('rol_cost')) > 0)
                 {
-                    $form->addStaticControl('list_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gPreferences['system_currency']);
+                    $form->addStaticControl('list_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gSettingsManager->get('system_currency'));
                 }
 
                 // Contributory period
@@ -336,7 +336,7 @@ if($listsResult['numResults'] > 0)
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?cat_id='.$getCatId.'&active_role='.$getActiveRole;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, (int) $gPreferences['lists_roles_per_page'], $getStart));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, (int) $gSettingsManager->get('lists_roles_per_page'), $getStart));
 
 $page->addHtml('</div>');
 $page->show();

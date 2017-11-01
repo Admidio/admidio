@@ -82,7 +82,7 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
      * @var Organization $gCurrentOrganization
      */
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
-    $gPreferences = $gCurrentOrganization->getPreferences();
+    $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 }
 else
 {
@@ -113,19 +113,22 @@ else
         exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     // add the organization to the session
-    $gPreferences = $gCurrentOrganization->getPreferences();
+    $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
     $gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization);
     $gCurrentSession->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
 
     // create a language data object and assign it to the language object
-    $gLanguageData = new LanguageData($gPreferences['system_language']);
+    $gLanguageData = new LanguageData($gSettingsManager->get('system_language'));
     $gCurrentSession->addObject('gLanguageData', $gLanguageData);
 
     // delete old entries in session table
-    $gCurrentSession->tableCleanup((int) $gPreferences['logout_minutes']);
+    $gCurrentSession->tableCleanup((int) $gSettingsManager->get('logout_minutes'));
 }
 
 $gL10n = new Language($gLanguageData);
+
+// Deprecated: backwards compatibility
+$gPreferences = $gSettingsManager->getAll();
 
 $orgId    = (int) $gCurrentOrganization->getValue('org_id');
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
@@ -200,13 +203,13 @@ $gCurrentSession->save();
 // create necessary objects and parameters
 
 // set default theme if no theme was set
-if(!array_key_exists('theme', $gPreferences))
+if ($gSettingsManager->has('theme'))
 {
-    $gPreferences['theme'] = 'modern';
+    $gSettingsManager->set('theme', 'modern');
 }
 
-define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gPreferences['theme']); // Will get "THEME_PATH" in v4.0
-define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gPreferences['theme']);
+define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->get('theme')); // Will get "THEME_PATH" in v4.0
+define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gSettingsManager->get('theme'));
 define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // TODO deprecated: Remove in Admidio 4.0
 define('THEME_PATH', THEME_URL); // TODO deprecated: Remove in Admidio 4.0
 
@@ -243,9 +246,9 @@ catch(AdmException $e)
 // set default homepage
 if($gValidLogin)
 {
-    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_login'];
+    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->get('homepage_login');
 }
 else
 {
-    $gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
+    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->get('homepage_logout');
 }

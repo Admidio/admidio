@@ -202,7 +202,8 @@ $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordH
 $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
 // create all necessary data for this organization
-$gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
+$settingsManager =& $gCurrentOrganization->getSettingsManager();
+$settingsManager->setMutli($defaultOrgPreferences, false);
 $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
 // create default room for room module in database

@@ -106,24 +106,24 @@ class Email extends PHPMailer
     public function __construct()
     {
         // Übername Einstellungen
-        global $gL10n, $gPreferences, $gDebug;
+        global $gL10n, $gSettingsManager, $gDebug;
 
         parent::__construct(true); // enable exceptions in PHPMailer
 
         $this->Timeout = 30; // set timeout to 30 seconds
 
         // Versandmethode festlegen
-        if ($gPreferences['mail_send_method'] === 'SMTP')
+        if ($gSettingsManager->get('mail_send_method') === 'SMTP')
         {
             $this->isSMTP();
 
-            $this->Host        = $gPreferences['mail_smtp_host'];
-            $this->SMTPAuth    = $gPreferences['mail_smtp_auth'];
-            $this->Port        = $gPreferences['mail_smtp_port'];
-            $this->SMTPSecure  = $gPreferences['mail_smtp_secure'];
-            $this->AuthType    = $gPreferences['mail_smtp_authentication_type'];
-            $this->Username    = $gPreferences['mail_smtp_user'];
-            $this->Password    = $gPreferences['mail_smtp_password'];
+            $this->Host        = $gSettingsManager->get('mail_smtp_host');
+            $this->SMTPAuth    = $gSettingsManager->get('mail_smtp_auth');
+            $this->Port        = $gSettingsManager->get('mail_smtp_port');
+            $this->SMTPSecure  = $gSettingsManager->get('mail_smtp_secure');
+            $this->AuthType    = $gSettingsManager->get('mail_smtp_authentication_type');
+            $this->Username    = $gSettingsManager->get('mail_smtp_user');
+            $this->Password    = $gSettingsManager->get('mail_smtp_password');
             $this->Debugoutput = 'html';
 
             if ($gDebug)
@@ -138,7 +138,7 @@ class Email extends PHPMailer
 
         // set language for error reporting
         $this->setLanguage($gL10n->getLanguageIsoCode());
-        $this->CharSet = $gPreferences['mail_character_encoding'];
+        $this->CharSet = $gSettingsManager->get('mail_character_encoding');
     }
 
     /**
@@ -219,7 +219,7 @@ class Email extends PHPMailer
      */
     public function setSender($address, $name = '')
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $address = admStrToLower($address);
 
@@ -227,11 +227,11 @@ class Email extends PHPMailer
         $this->emSender = array('address' => $address, 'name' => $name);
 
         // Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
-        if (strlen($gPreferences['mail_sendmail_address']) > 0)
+        if (strlen($gSettingsManager->get('mail_sendmail_address')) > 0)
         {
             // hier wird die Absenderadresse gesetzt
-            $fromName    = $gPreferences['mail_sendmail_name'];
-            $fromAddress = $gPreferences['mail_sendmail_address'];
+            $fromName    = $gSettingsManager->get('mail_sendmail_name');
+            $fromAddress = $gSettingsManager->get('mail_sendmail_address');
 
         }
         // Im Normalfall wird aber versucht von der Adresse des schreibenden aus zu schicken
@@ -349,20 +349,20 @@ class Email extends PHPMailer
      */
     public function adminNotification($subject, $message, $editorName = '', $editorEmail = '')
     {
-        global $gPreferences, $gCurrentOrganization;
+        global $gSettingsManager, $gCurrentOrganization;
 
-        if ($gPreferences['enable_email_notification'] == 0)
+        if ($gSettingsManager->get('enable_email_notification') == 0)
         {
             return false;
         }
 
         // Send Notification to Admin
-        $this->addRecipient($gPreferences['email_administrator']);
+        $this->addRecipient($gSettingsManager->get('email_administrator'));
 
         // Set Sender
         if ($editorEmail === '')
         {
-            $this->setSender($gPreferences['email_administrator']);
+            $this->setSender($gSettingsManager->get('email_administrator'));
         }
         else
         {
@@ -373,7 +373,7 @@ class Email extends PHPMailer
         $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
 
         // send html if preference is set
-        if ($gPreferences['mail_html_registered_users'] == 1)
+        if ($gSettingsManager->get('mail_html_registered_users') == 1)
         {
             $this->sendDataAsHtml();
         }
@@ -392,7 +392,7 @@ class Email extends PHPMailer
         // if something went wrong then throw an exception with the error message
         if ($returnCode !== true)
         {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', $gPreferences['email_administrator'], $returnCode);
+            throw new AdmException('SYS_EMAIL_NOT_SEND', $gSettingsManager->get('email_administrator'), $returnCode);
         }
 
         return true;
@@ -404,10 +404,10 @@ class Email extends PHPMailer
      */
     private function sendBccMails()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         // Bcc Array in Päckchen zerlegen
-        $bccArrays = array_chunk($this->emBccArray, $gPreferences['mail_bcc_count']);
+        $bccArrays = array_chunk($this->emBccArray, $gSettingsManager->get('mail_bcc_count'));
 
         foreach ($bccArrays as $bccArray)
         {
@@ -419,7 +419,7 @@ class Email extends PHPMailer
 
                 $this->addAddress($bccArray[0]['address'], $bccArray[0]['name']);
             }
-            elseif ($gPreferences['mail_into_to'] == 1)
+            elseif ($gSettingsManager->get('mail_into_to') == 1)
             {
                 // remove all current recipients from mail
                 $this->clearAllRecipients();
@@ -546,10 +546,10 @@ class Email extends PHPMailer
      */
     public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $maxUploadSize = PhpIni::getUploadMaxSize();
-        $currentAttachmentSize = $gPreferences['max_email_attachment_size'] * pow(1024, 2);
+        $currentAttachmentSize = $gSettingsManager->get('max_email_attachment_size') * pow(1024, 2);
 
         $attachmentSize = min($maxUploadSize, $currentAttachmentSize);
 

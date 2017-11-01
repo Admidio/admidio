@@ -20,7 +20,7 @@ $getActivationId = admFuncVariableIsValid($_GET, 'aid',    'string', array('requ
 $getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'int',    array('requireValue' => true));
 
 // "systemmail" and "request password" must be activated
-if ($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
+if ($gSettingsManager->get('enable_system_mails') == 0 || $gSettingsManager->get('enable_password_recovery') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

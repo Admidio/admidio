@@ -301,7 +301,7 @@ class TableRoles extends TableAccess
      */
     public function getDefaultList()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $defaultListId = (int) $this->getValue('rol_lst_id');
 
@@ -314,12 +314,12 @@ class TableRoles extends TableAccess
         if($this->getValue('cat_name_intern') === 'EVENTS')
         {
             // read system default list configuration for events
-            return (int) $gPreferences['dates_default_list_configuration'];
+            return (int) $gSettingsManager->get('dates_default_list_configuration');
         }
         else
         {
             // read system default list configuration
-            return (int) $gPreferences['lists_default_configuration'];
+            return (int) $gSettingsManager->get('lists_default_configuration');
         }
     }
 

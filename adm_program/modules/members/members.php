@@ -21,7 +21,7 @@ unset($_SESSION['import_request']);
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 
 // if only active members should be shown then set parameter
-if($gPreferences['members_show_all_users'] == 0)
+if($gSettingsManager->get('members_show_all_users') == 0)
 {
     $getMembers = true;
 }
@@ -63,7 +63,7 @@ $membersAdministrationMenu->addItem(
     $gL10n->get('MEM_CREATE_USER'), 'add.png'
 );
 
-if($gPreferences['profile_log_edit_fields'] == 1)
+if($gSettingsManager->get('profile_log_edit_fields') == 1)
 {
     // show link to view profile field change history
     $membersAdministrationMenu->addItem(
@@ -73,7 +73,7 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 }
 
 // show checkbox to select all users or only active members
-if($gPreferences['members_show_all_users'] == 1)
+if($gSettingsManager->get('members_show_all_users') == 1)
 {
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
@@ -96,7 +96,7 @@ if($gCurrentUser->isAdministrator())
         $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras'
     );
 
-    if($gPreferences['members_enable_user_relations'] == 1)
+    if($gSettingsManager->get('members_enable_user_relations') == 1)
     {
         // show link to relation types
         $membersAdministrationMenu->addItem(
@@ -135,7 +135,7 @@ $membersTable->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/members/memb
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage((int) $gPreferences['members_users_per_page']);
+$membersTable->setDatatablesRowsPerPage((int) $gSettingsManager->get('members_users_per_page'));
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $page->addHtml($membersTable->show());

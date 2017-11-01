@@ -155,9 +155,9 @@ class ModuleAnnouncements extends Modules
      */
     private function sqlGetAdditional()
     {
-        global $gPreferences, $gProfileFields;
+        global $gSettingsManager, $gProfileFields;
 
-        if ($gPreferences['system_show_create_edit'] == 1)
+        if ($gSettingsManager->get('system_show_create_edit') == 1)
         {
             $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
             $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
@@ -257,11 +257,11 @@ class ModuleAnnouncements extends Modules
      */
     public function setDateRange($dateRangeStart = '1970-01-01', $dateRangeEnd = DATE_NOW)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         if (!$this->setDateRangeParams($dateRangeStart, 'Start', 'Y-m-d'))
         {
-            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gPreferences['system_date']))
+            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gSettingsManager->get('system_date')))
             {
                 return false;
             }
@@ -269,7 +269,7 @@ class ModuleAnnouncements extends Modules
 
         if (!$this->setDateRangeParams($dateRangeEnd, 'End', 'Y-m-d'))
         {
-            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gPreferences['system_date']))
+            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gSettingsManager->get('system_date')))
             {
                 return false;
             }
@@ -286,7 +286,7 @@ class ModuleAnnouncements extends Modules
      */
     private function setDateRangeParams($dateRange, $dateRangePoint, $dateFormat)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $objDate = \DateTime::createFromFormat($dateFormat, $dateRange);
 
@@ -296,7 +296,7 @@ class ModuleAnnouncements extends Modules
         }
 
         $this->setParameter('date' . $dateRangePoint . 'FormatEnglish', $objDate->format('Y-m-d'));
-        $this->setParameter('date' . $dateRangePoint . 'FormatAdmidio', $objDate->format($gPreferences['system_date']));
+        $this->setParameter('date' . $dateRangePoint . 'FormatAdmidio', $objDate->format($gSettingsManager->get('system_date')));
 
         return true;
     }

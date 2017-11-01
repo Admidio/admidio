@@ -21,11 +21,11 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // calculate default date from which the profile fields history should be shown
 $filterDateFrom = \DateTime::createFromFormat('Y-m-d', DATE_NOW);
-$filterDateFrom->modify('-'.$gPreferences['members_days_field_history'].' day');
+$filterDateFrom->modify('-'.$gSettingsManager->get('members_days_field_history').' day');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id',           'int');
-$getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gPreferences['system_date'])));
+$getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->get('system_date'))));
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to',   'date', array('defaultValue' => DATE_NOW));
 
 // create a user object from the user parameter
@@ -43,7 +43,7 @@ else
 
 // if profile log is activated and current user is allowed to edit users
 // then the profile field history will be shown otherwise show error
-if ($gPreferences['profile_log_edit_fields'] == 0
+if ($gSettingsManager->get('profile_log_edit_fields') == 0
     || ($getUserId === 0 && !$gCurrentUser->editUsers())
     || ($getUserId > 0   && !$gCurrentUser->hasRightEditProfile($user)))
 {
@@ -60,10 +60,10 @@ $objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if($objDateFrom === false)
 {
     // check if date has system format
-    $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+    $objDateFrom = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $getDateFrom);
     if($objDateFrom === false)
     {
-        $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
+        $objDateFrom = \DateTime::createFromFormat($gSettingsManager->get('system_date'), '1970-01-01');
     }
 }
 
@@ -71,10 +71,10 @@ $objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
 if($objDateTo === false)
 {
     // check if date has system format
-    $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+    $objDateTo = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $getDateTo);
     if($objDateTo === false)
     {
-        $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], '1970-01-01');
+        $objDateTo = \DateTime::createFromFormat($gSettingsManager->get('system_date'), '1970-01-01');
     }
 }
 
@@ -86,9 +86,9 @@ if($objDateFrom > $objDateTo)
 }
 
 $dateFromIntern = $objDateFrom->format('Y-m-d');
-$dateFromHtml   = $objDateFrom->format($gPreferences['system_date']);
+$dateFromHtml   = $objDateFrom->format($gSettingsManager->get('system_date'));
 $dateToIntern   = $objDateTo->format('Y-m-d');
-$dateToHtml     = $objDateTo->format($gPreferences['system_date']);
+$dateToHtml     = $objDateTo->format($gSettingsManager->get('system_date'));
 
 // create sql conditions
 $sqlConditions = '';
@@ -226,7 +226,7 @@ while($row = $fieldHistoryStatement->fetch())
     }
 
     $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usl_usr_id_create'].'">'.$row['create_last_name'].', '.$row['create_first_name'].'</a>';
-    $columnValues[] = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $columnValues[] = $timestampCreate->format($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'));
     $table->addRowByArray($columnValues);
 }
 

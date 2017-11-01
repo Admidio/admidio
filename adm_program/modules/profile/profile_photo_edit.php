@@ -48,13 +48,13 @@ if(!$gCurrentUser->hasRightEditProfile($user))
 }
 
 // bei Ordnerspeicherung pruefen ob der Unterordner in adm_my_files mit entsprechenden Rechten existiert
-if($gPreferences['profile_photo_storage'] == 1)
+if($gSettingsManager->get('profile_photo_storage') == 1)
 {
     // ggf. Ordner für Userfotos in adm_my_files anlegen
     $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
     if(!$myFilesProfilePhotos->checkSettings())
     {
-        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gSettingsManager->get('email_administrator').'">', '</a>'));
         // => EXIT
     }
 }
@@ -69,7 +69,7 @@ if($getMode === 'save')
 {
     /*****************************Foto speichern*************************************/
 
-    if($gPreferences['profile_photo_storage'] == 1)
+    if($gSettingsManager->get('profile_photo_storage') == 1)
     {
         // Foto im Dateisystem speichern
 
@@ -113,7 +113,7 @@ elseif($getMode === 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
     // Ordnerspeicherung
-    if($gPreferences['profile_photo_storage'] == 1)
+    if($gSettingsManager->get('profile_photo_storage') == 1)
     {
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
         if(is_file($file))
@@ -136,7 +136,7 @@ elseif($getMode === 'delete')
 {
     /***************************** Foto loeschen *************************************/
     // Ordnerspeicherung, Datei löschen
-    if($gPreferences['profile_photo_storage'] == 1)
+    if($gSettingsManager->get('profile_photo_storage') == 1)
     {
         unlink(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
     }
@@ -231,7 +231,7 @@ elseif($getMode === 'upload')
     $userImage->scale(130, 170);
 
     // Ordnerspeicherung
-    if($gPreferences['profile_photo_storage'] == 1)
+    if($gSettingsManager->get('profile_photo_storage') == 1)
     {
         $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg');
     }

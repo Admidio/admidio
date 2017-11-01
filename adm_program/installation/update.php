@@ -88,16 +88,16 @@ if ($currOrgId === 0)
 }
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
-$gPreferences = $gCurrentOrganization->getPreferences();
+$gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
 $gProfileFields = new ProfileFields($gDb, $currOrgId);
 
 // create language and language data object to handle translations
-if (!isset($gPreferences['system_language']))
+if ($gSettingsManager->has('system_language'))
 {
-    $gPreferences['system_language'] = 'de';
+    $gSettingsManager->set('system_language', 'de');
 }
-$gLanguageData = new LanguageData($gPreferences['system_language']);
+$gLanguageData = new LanguageData($gSettingsManager->get('system_language'));
 $gL10n = new Language($gLanguageData);
 
 // config.php exists at wrong place
@@ -140,10 +140,10 @@ $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
 if (!$gDb->queryPrepared($sql, array(), false))
 {
     // in Admidio version 2 the database version was stored in preferences table
-    if (isset($gPreferences['db_version']))
+    if ($gSettingsManager->has('db_version'))
     {
-        $installedDbVersion     = $gPreferences['db_version'];
-        $installedDbBetaVersion = $gPreferences['db_version_beta'];
+        $installedDbVersion     = $gSettingsManager->get('db_version');
+        $installedDbBetaVersion = $gSettingsManager->get('db_version_beta');
     }
 }
 else
@@ -356,8 +356,9 @@ elseif ($getMode === 2)
     while($orgId = $orgaStatement->fetchColumn())
     {
         $organization = new Organization($gDb, $orgId);
-        $organization->setPreferences($defaultOrgPreferences, false);
-        $organization->setPreferences($updateOrgPreferences, true);
+        $settingsManager =& $gCurrentOrganization->getSettingsManager();
+        $settingsManager->setMulti($defaultOrgPreferences, false);
+        $settingsManager->setMulti($updateOrgPreferences);
     }
 
     if ($gDbType === Database::PDO_ENGINE_MYSQL)

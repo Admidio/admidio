@@ -16,7 +16,7 @@ $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // "systemmail" and "request password" must be activated
-if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
+if($gSettingsManager->get('enable_system_mails') == 0 || $gSettingsManager->get('enable_password_recovery') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -34,7 +34,7 @@ if(!empty($_POST['recipient_email']))
     try
     {
         // if user is not logged in and captcha is activated then check captcha
-        if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+        if (!$gValidLogin && $gSettingsManager->get('enable_mail_captcha') == 1)
         {
             FormValidation::checkCaptcha($_POST['captcha_code']);
         }
@@ -170,7 +170,7 @@ else
     );
 
     // if captchas are enabled then visitors of the website must resolve this
-    if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+    if (!$gValidLogin && $gSettingsManager->get('enable_mail_captcha') == 1)
     {
         $form->addCaptcha('captcha_code');
     }

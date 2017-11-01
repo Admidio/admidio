@@ -26,7 +26,7 @@ $getJob       = admFuncVariableIsValid($_GET, 'job',       'string', array('requ
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr',  'int',    array('requireValue' => true));
 $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', array('validValues' => array('left', 'right')));
 
-if ($gPreferences['enable_photo_module'] == 0)
+if ($gSettingsManager->get('enable_photo_module') == 0)
 {
     // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));

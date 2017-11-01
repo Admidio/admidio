@@ -31,7 +31,7 @@ if (filter_var($getUrl, FILTER_VALIDATE_URL) === false)
 $page = new HtmlPage($gL10n->get('LNK_REDIRECT'));
 
 // add special header for automatic redirection after x seconds
-$page->addHeader('<meta http-equiv="refresh" content="' . $gPreferences['weblinks_redirect_seconds'] . '; url=' . $getUrl . '">');
+$page->addHeader('<meta http-equiv="refresh" content="' . $gSettingsManager->get('weblinks_redirect_seconds') . '; url=' . $getUrl . '">');
 
 // Counter zählt die sekunden bis zur Weiterleitung runter
 $page->addJavascript('
@@ -52,7 +52,7 @@ $page->addHtml(
         $gL10n->get(
             'LNK_REDIRECT_DESC',
             $gCurrentOrganization->getValue('org_longname'),
-            '<span id="counter">' . $gPreferences['weblinks_redirect_seconds'] . '</span>',
+            '<span id="counter">' . $gSettingsManager->get('weblinks_redirect_seconds') . '</span>',
             '<strong>' . $getUrl . '</strong>',
             '<a href="' . $getUrl . '" target="_self">',
             '</a>'

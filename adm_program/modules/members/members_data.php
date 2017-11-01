@@ -54,7 +54,7 @@ $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 $jsonArray = array('draw' => $getDraw);
 
 // if only active members should be shown then set parameter
-if($gPreferences['members_show_all_users'] == 0)
+if($gSettingsManager->get('members_show_all_users') == 0)
 {
     $getMembers = true;
 }
@@ -300,7 +300,7 @@ while($row = $mglStatement->fetch())
     {
         // date must be formated
         $date = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-        $columnValues[] = $date->format($gPreferences['system_date']);
+        $columnValues[] = $date->format($gSettingsManager->get('system_date'));
     }
     else
     {
@@ -309,7 +309,7 @@ while($row = $mglStatement->fetch())
 
     // Add "change date"
     $timestampChange = \DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-    $columnValues[]  = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $columnValues[]  = $timestampChange->format($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'));
 
     // Add "user-administration icons"
     $userAdministration = '';
@@ -318,7 +318,7 @@ while($row = $mglStatement->fetch())
     if($memberOfThisOrganization && $gCurrentUser->isAdministrator()
     && strlen($row['usr_login_name']) > 0 && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id'))
     {
-        if(strlen($row['email']) > 0 && $gPreferences['enable_system_mails'] == 1)
+        if(strlen($row['email']) > 0 && $gSettingsManager->get('enable_system_mails') == 1)
         {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '
@@ -337,7 +337,7 @@ while($row = $mglStatement->fetch())
     // add link to send email to user
     if(strlen($row['email']) > 0)
     {
-        if($gPreferences['enable_mail_module'] != 1)
+        if($gSettingsManager->get('enable_mail_module') != 1)
         {
             $mailLink = 'mailto:'.$row['email'];
         }

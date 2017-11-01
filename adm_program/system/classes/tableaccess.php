@@ -225,7 +225,7 @@ class TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $columnValue = '';
 
@@ -268,19 +268,19 @@ class TableAccess
                 case 'time':
                     if ($columnValue !== '' && $columnValue !== null)
                     {
-                        if ($format === '' && isset($gPreferences))
+                        if ($format === '' && isset($gSettingsManager))
                         {
                             if (admStrContains($this->columnsInfos[$columnName]['type'], 'timestamp'))
                             {
-                                $format = $gPreferences['system_date'] . ' ' . $gPreferences['system_time'];
+                                $format = $gSettingsManager->get('system_date') . ' ' . $gSettingsManager->get('system_time');
                             }
                             elseif (admStrContains($this->columnsInfos[$columnName]['type'], 'date'))
                             {
-                                $format = $gPreferences['system_date'];
+                                $format = $gSettingsManager->get('system_date');
                             }
                             else
                             {
-                                $format = $gPreferences['system_time'];
+                                $format = $gSettingsManager->get('system_time');
                             }
                         }
 

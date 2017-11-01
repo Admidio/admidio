@@ -168,7 +168,7 @@ $form->addSelectBoxForCategories(
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
-if($gPreferences['enable_mail_module'])
+if($gSettingsManager->get('enable_mail_module'))
 {
     $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'), 3 => $gL10n->get('ROL_ALL_GUESTS'));
     $form->addSelectBox(
@@ -229,7 +229,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
         array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1)
     );
     $form->addInput(
-        'rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'),
+        'rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gSettingsManager->get('system_currency'), $role->getValue('rol_cost'),
         array('maxLength' => 6, 'class' => 'form-control-small'
         ));
     $form->addSelectBox(
@@ -259,7 +259,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
         'rol_edit_user', $gL10n->get('ROL_RIGHT_EDIT_USER'), (bool) $role->getValue('rol_edit_user'),
         array('helpTextIdLabel' => 'ROL_RIGHT_EDIT_USER_DESC', 'icon' => 'group.png')
     );
-    if($gPreferences['enable_mail_module'] > 0)
+    if($gSettingsManager->get('enable_mail_module') > 0)
     {
         $form->addCheckbox(
             'rol_mail_to_all', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'), (bool) $role->getValue('rol_mail_to_all'),
@@ -270,42 +270,42 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
         'rol_profile', $gL10n->get('ROL_RIGHT_PROFILE'), (bool) $role->getValue('rol_profile'),
         array('icon' => 'profile.png')
     );
-    if($gPreferences['enable_announcements_module'] > 0)
+    if($gSettingsManager->get('enable_announcements_module') > 0)
     {
         $form->addCheckbox(
             'rol_announcements', $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
             array('icon' => 'announcements.png')
         );
     }
-    if($gPreferences['enable_dates_module'] > 0)
+    if($gSettingsManager->get('enable_dates_module') > 0)
     {
         $form->addCheckbox(
             'rol_dates', $gL10n->get('ROL_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
             array('icon' => 'dates.png')
         );
     }
-    if($gPreferences['enable_photo_module'] > 0)
+    if($gSettingsManager->get('enable_photo_module') > 0)
     {
         $form->addCheckbox(
             'rol_photo', $gL10n->get('ROL_RIGHT_PHOTO'), (bool) $role->getValue('rol_photo'),
             array('icon' => 'photo.png')
         );
     }
-    if($gPreferences['enable_download_module'] > 0)
+    if($gSettingsManager->get('enable_download_module') > 0)
     {
         $form->addCheckbox(
             'rol_download', $gL10n->get('ROL_RIGHT_DOWNLOAD'), (bool) $role->getValue('rol_download'),
             array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'download.png')
         );
     }
-    if($gPreferences['enable_guestbook_module'] > 0)
+    if($gSettingsManager->get('enable_guestbook_module') > 0)
     {
         $form->addCheckbox(
             'rol_guestbook', $gL10n->get('ROL_RIGHT_GUESTBOOK'), (bool) $role->getValue('rol_guestbook'),
             array('icon' => 'guestbook.png')
         );
         // if not registered users can set comments than there is no need to set a role dependent right
-        if(!$gPreferences['enable_gbook_comments4all'])
+        if(!$gSettingsManager->get('enable_gbook_comments4all'))
         {
             $form->addCheckbox(
                 'rol_guestbook_comments', $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'), (bool) $role->getValue('rol_guestbook_comments'),
@@ -313,7 +313,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
             );
         }
     }
-    if($gPreferences['enable_weblinks_module'] > 0)
+    if($gSettingsManager->get('enable_weblinks_module') > 0)
     {
         $form->addCheckbox(
             'rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),

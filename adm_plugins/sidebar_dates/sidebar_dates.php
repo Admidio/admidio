@@ -116,23 +116,23 @@ if($plgDatesResult['numResults'] > 0)
         $plgDate->setArray($plgRow);
         $plgHtmlEndDate = '';
 
-        echo '<h4>'.$plgDate->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
+        echo '<h4>'.$plgDate->getValue('dat_begin', $gSettingsManager->get('system_date')). '&nbsp;&nbsp;';
 
         if ($plgDate->getValue('dat_all_day') != 1)
         {
-            echo $plgDate->getValue('dat_begin', $gPreferences['system_time']);
+            echo $plgDate->getValue('dat_begin', $gSettingsManager->get('system_time'));
         }
 
         // Bis-Datum und Uhrzeit anzeigen
         if($plg_show_date_end)
         {
-            if($plgDate->getValue('dat_begin', $gPreferences['system_date']) !== $plgDate->getValue('dat_end', $gPreferences['system_date']))
+            if($plgDate->getValue('dat_begin', $gSettingsManager->get('system_date')) !== $plgDate->getValue('dat_end', $gSettingsManager->get('system_date')))
             {
-                $plgHtmlEndDate .= $plgDate->getValue('dat_end', $gPreferences['system_date']);
+                $plgHtmlEndDate .= $plgDate->getValue('dat_end', $gSettingsManager->get('system_date'));
             }
             if ($plgDate->getValue('dat_all_day') != 1)
             {
-                $plgHtmlEndDate .= ' '. $plgDate->getValue('dat_end', $gPreferences['system_time']);
+                $plgHtmlEndDate .= ' '. $plgDate->getValue('dat_end', $gSettingsManager->get('system_time'));
             }
             if($plgHtmlEndDate !== '')
             {

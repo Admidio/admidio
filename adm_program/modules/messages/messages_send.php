@@ -77,14 +77,14 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 }
 
 // Stop if pm should be send pm module is disabled
-if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && (bool) $gPreferences['enable_pm_module'] === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && (bool) $gSettingsManager->get('enable_pm_module') === false)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // Stop if mail should be send and mail module is disabled
-if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && (bool) $gPreferences['enable_mail_module'] === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && (bool) $gSettingsManager->get('enable_mail_module') === false)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -111,7 +111,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // Check Captcha if enabled and user logged out
-    if (!$gValidLogin && (bool) $gPreferences['enable_mail_captcha'])
+    if (!$gValidLogin && (bool) $gSettingsManager->get('enable_mail_captcha'))
     {
         try
         {
@@ -149,8 +149,8 @@ else
 }
 
 // if no User is set, he is not able to ask for delivery confirmation
-if (!($currUsrId > 0 && (int) $gPreferences['mail_delivery_confirmation'] === 2)
-&&  (int) $gPreferences['mail_delivery_confirmation'] !== 1)
+if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2)
+&&  (int) $gSettingsManager->get('mail_delivery_confirmation') !== 1)
 {
     $postDeliveryConfirmation = false;
 }
@@ -208,13 +208,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $gCurrentOrganization->getValue('org_id')
                 );
 
-                if ($group['status'] === 'former' && (bool) $gPreferences['mail_show_former'])
+                if ($group['status'] === 'former' && (bool) $gSettingsManager->get('mail_show_former'))
                 {
                     // only former members
                     $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
                     $queryParams[] = DATE_NOW;
                 }
-                elseif ($group['status'] === 'active_former' && (bool) $gPreferences['mail_show_former'])
+                elseif ($group['status'] === 'active_former' && (bool) $gSettingsManager->get('mail_show_former'))
                 {
                     // former members and active members
                     $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
@@ -269,15 +269,15 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 {
                     // normally we need no To-address and set "undisclosed recipients", but if
                     // that won't work than the following address will be set
-                    if ((int) $gPreferences['mail_recipients_with_roles'] === 1)
+                    if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1)
                     {
                         // fill recipient with sender address to prevent problems with provider
                         $email->addRecipient($postFrom, $postName);
                     }
-                    elseif ((int) $gPreferences['mail_recipients_with_roles'] === 2)
+                    elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2)
                     {
                         // fill recipient with administrators address to prevent problems with provider
-                        $email->addRecipient($gPreferences['email_administrator'], $gL10n->get('SYS_ADMINISTRATOR'));
+                        $email->addRecipient($gSettingsManager->get('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
                     }
 
                     // all role members will be attached as BCC
@@ -402,7 +402,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // if possible send html mail
-    if ($gValidLogin && (bool) $gPreferences['mail_html_registered_users'])
+    if ($gValidLogin && (bool) $gSettingsManager->get('mail_html_registered_users'))
     {
         $email->sendDataAsHtml();
     }

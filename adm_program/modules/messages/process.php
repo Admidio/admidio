@@ -24,7 +24,7 @@ if (!$gValidLogin)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_chat_module'] != 1)
+if ($gSettingsManager->get('enable_chat_module') != 1)
 {
     // message if the Chat is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -98,7 +98,7 @@ switch($postFunction)
             {
                 $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
                 $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
-                $text[] = '<time>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
+                $text[] = '<time>'.$date->format($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time')).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
             }
 
             $log['state'] = $msgId;

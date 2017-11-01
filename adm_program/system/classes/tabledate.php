@@ -324,7 +324,7 @@ class TableDate extends TableAccess
      */
     public function getValidDeadline()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         if ($this->getValue('dat_deadline') == null)
         {
@@ -335,7 +335,7 @@ class TableDate extends TableAccess
             $validDeadline = $this->getValue('dat_deadline');
         }
 
-        $objDateDeadline = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $validDeadline);
+        $objDateDeadline = \DateTime::createFromFormat($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'), $validDeadline);
 
         return $objDateDeadline->format('Y-m-d H:i:s');
     }

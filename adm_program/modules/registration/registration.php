@@ -11,7 +11,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if module is active
-if($gPreferences['registration_enable_module'] == 0)
+if($gSettingsManager->get('registration_enable_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -102,9 +102,9 @@ $table->addRowHeadingByArray($columnHeading);
 while($row = $usrStatement->fetch())
 {
     $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
-    $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $datetimeCreate  = $timestampCreate->format($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'));
 
-    if($gPreferences['enable_mail_module'] == 1)
+    if($gSettingsManager->get('enable_mail_module') == 1)
     {
         $mailLink = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
     }

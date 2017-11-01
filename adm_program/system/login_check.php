@@ -23,12 +23,12 @@ $organizationId = (int) $gCurrentOrganization->getValue('org_id');
  */
 function initLoginParams($prefix = '')
 {
-    global $bAutoLogin, $loginname, $password, $organizationId, $gPreferences;
+    global $bAutoLogin, $loginname, $password, $organizationId, $gSettingsManager;
 
     $loginname = $_POST[$prefix.'usr_login_name'];
     $password  = $_POST[$prefix.'usr_password'];
 
-    if($gPreferences['enable_auto_login'] == 1 && array_key_exists($prefix.'auto_login', $_POST) && $_POST[$prefix.'auto_login'] == 1)
+    if($gSettingsManager->get('enable_auto_login') == 1 && array_key_exists($prefix.'auto_login', $_POST) && $_POST[$prefix.'auto_login'] == 1)
     {
         $bAutoLogin = true;
     }
@@ -87,7 +87,7 @@ else
     {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);
-        $gPreferences = $gCurrentOrganization->getPreferences();
+        $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
         // read new profile field structure for this organization
         $gProfileFields->readProfileFields($organizationId);

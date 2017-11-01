@@ -228,7 +228,7 @@ class HtmlPage
      */
     public function addDefaultMenu()
     {
-        global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
 
         $this->menu->addItem(
             'menu_item_modules', '', $gL10n->get('SYS_MODULES'),
@@ -240,21 +240,21 @@ class HtmlPage
             'home.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
         );
 
-        if ($gPreferences['enable_announcements_module'] == 1 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+        if ($gSettingsManager->get('enable_announcements_module') == 1 || ($gSettingsManager->get('enable_announcements_module') == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_announcements', FOLDER_MODULES . '/announcements/announcements.php', $gL10n->get('ANN_ANNOUNCEMENTS'),
                 'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if ($gPreferences['enable_download_module'] == 1)
+        if ($gSettingsManager->get('enable_download_module') == 1)
         {
             $this->menu->addItem(
                 'menu_item_download', FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
                 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if ($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
+        if ($gSettingsManager->get('enable_mail_module') == 1 && !$gValidLogin)
         {
             $this->menu->addItem(
                 'menu_item_email', FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
@@ -262,7 +262,7 @@ class HtmlPage
             );
         }
 
-        if (($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
+        if (($gSettingsManager->get('enable_pm_module') == 1 || $gSettingsManager->get('enable_mail_module') == 1) && $gValidLogin)
         {
             // get number of unread messages for user
             $message = new TableMessage($gDb);
@@ -279,14 +279,14 @@ class HtmlPage
                 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if ($gPreferences['enable_photo_module'] == 1 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
+        if ($gSettingsManager->get('enable_photo_module') == 1 || ($gSettingsManager->get('enable_photo_module') == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_photo', FOLDER_MODULES . '/photos/photos.php', $gL10n->get('PHO_PHOTOS'),
                 'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if ($gPreferences['enable_guestbook_module'] == 1 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
+        if ($gSettingsManager->get('enable_guestbook_module') == 1 || ($gSettingsManager->get('enable_guestbook_module') == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_guestbook', FOLDER_MODULES . '/guestbook/guestbook.php', $gL10n->get('GBO_GUESTBOOK'),
@@ -305,7 +305,7 @@ class HtmlPage
             );
         }
 
-        if ($gPreferences['enable_dates_module'] == 1 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
+        if ($gSettingsManager->get('enable_dates_module') == 1 || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_dates', FOLDER_MODULES . '/dates/dates.php', $gL10n->get('DAT_DATES'),
@@ -313,7 +313,7 @@ class HtmlPage
             );
         }
 
-        if ($gPreferences['enable_weblinks_module'] == 1 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
+        if ($gSettingsManager->get('enable_weblinks_module') == 1 || ($gSettingsManager->get('enable_weblinks_module') == 2 && $gValidLogin))
         {
             $this->menu->addItem(
                 'menu_item_links', FOLDER_MODULES . '/links/links.php', $gL10n->get('LNK_WEBLINKS'),
@@ -329,7 +329,7 @@ class HtmlPage
             );
 
         }
-        if ($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
+        if ($gCurrentUser->approveUsers() && $gSettingsManager->get('registration_enable_module') == 1)
         {
             $this->menu->addItem(
                 'menu_item_registration', FOLDER_MODULES . '/registration/registration.php', $gL10n->get('NWU_NEW_REGISTRATIONS'),
@@ -508,7 +508,7 @@ class HtmlPage
      */
     private function addMainFilesAndContent()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_URL.'/css/admidio.css');
@@ -525,7 +525,7 @@ class HtmlPage
             $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
-        if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
+        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->get('system_browser_update_check') == 1)
         {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }
@@ -556,9 +556,9 @@ class HtmlPage
      */
     private function getFileContent($filename)
     {
-        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
-        global $g_root_path;
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
+        global $g_root_path, $gPreferences;
 
         ob_start();
         include(THEME_ADMIDIO_PATH . '/' . $filename);

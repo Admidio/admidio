@@ -23,7 +23,7 @@ $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 if ($getGbcGboId > 0)
 {
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-    if($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
+    if($gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
     {
         $conditions = ' AND gbc_locked = 1 ';
     }
@@ -71,7 +71,7 @@ if ($getGbcGboId > 0)
                     alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbcEmail).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbcEmail).'" /></a>';
             }
             echo '</div>
-            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
+            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'));
 
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
             if ($gCurrentUser->editGuestbookRight())
@@ -114,7 +114,7 @@ if ($getGbcGboId > 0)
             echo '</div>';
         }
 
-        if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1))
+        if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->get('enable_gbook_comments4all') == 1))
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '

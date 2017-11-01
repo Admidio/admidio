@@ -172,13 +172,13 @@ elseif($getMode === 4)
     // only administrators are allowed to send new login data
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
     // nur an Mitglieder der eigenen Organisation schicken
-    if(!$gCurrentUser->isAdministrator() || $gPreferences['enable_system_mails'] != 1 || !$thisOrga)
+    if(!$gCurrentUser->isAdministrator() || $gSettingsManager->get('enable_system_mails') != 1 || !$thisOrga)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
-    if($gPreferences['enable_system_mails'] == 1)
+    if($gSettingsManager->get('enable_system_mails') == 1)
     {
         try
         {

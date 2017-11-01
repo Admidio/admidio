@@ -40,7 +40,7 @@ class UploadHandlerPhoto extends UploadHandler
      */
     protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
     {
-        global $photoAlbum, $gPreferences, $gL10n;
+        global $photoAlbum, $gSettingsManager, $gL10n;
 
         $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
@@ -95,12 +95,12 @@ class UploadHandlerPhoto extends UploadHandler
                 // create image object and scale image to defined size of preferences
                 $image = new Image($fileLocation);
                 $image->setImageType('jpeg');
-                $image->scaleLargerSide($gPreferences['photo_save_scale']);
+                $image->scaleLargerSide($gSettingsManager->get('photo_save_scale'));
                 $image->copyToFile(null, $albumFolder.'/'.$newPhotoFileNumber.'.jpg');
                 $image->delete();
 
                 // if enabled then save original image
-                if ($gPreferences['photo_keep_original'] == 1)
+                if ($gSettingsManager->get('photo_keep_original') == 1)
                 {
                     if(!is_dir($albumFolder.'/originals'))
                     {
@@ -119,7 +119,7 @@ class UploadHandlerPhoto extends UploadHandler
                 }
 
                 $image = new Image($fileLocation);
-                $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
+                $image->scaleLargerSide($gSettingsManager->get('photo_thumbs_scale'));
                 $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newPhotoFileNumber.'.jpg');
                 $image->delete();
 

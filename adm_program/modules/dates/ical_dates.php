@@ -35,26 +35,26 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 
 // Daterange defined in preferences
 $now = new \DateTime();
-$dayOffsetPast   = new \DateInterval('P'.$gPreferences['dates_ical_days_past'].'D');
-$dayOffsetFuture = new \DateInterval('P'.$gPreferences['dates_ical_days_future'].'D');
+$dayOffsetPast   = new \DateInterval('P'.$gSettingsManager->get('dates_ical_days_past').'D');
+$dayOffsetFuture = new \DateInterval('P'.$gSettingsManager->get('dates_ical_days_future').'D');
 $startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
 $endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
 
 // Message if module is disabled
-if($gPreferences['enable_dates_module'] == 0)
+if($gSettingsManager->get('enable_dates_module') == 0)
 {
     // Module disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gPreferences['enable_dates_module'] == 2)
+elseif($gSettingsManager->get('enable_dates_module') == 2)
 {
     // only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // If Ical enabled and module is public
-if ($gPreferences['enable_dates_ical'] != 1)
+if ($gSettingsManager->get('enable_dates_ical') != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));

@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gPreferences['enable_rss'] != 1)
+if ($gSettingsManager->get('enable_rss') != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -32,12 +32,12 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ($gSettingsManager->get('enable_photo_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gPreferences['enable_photo_module'] == 2)
+elseif ($gSettingsManager->get('enable_photo_module') == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -46,7 +46,7 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
 
-if ($gPreferences['system_show_create_edit'] == 1)
+if ($gSettingsManager->get('system_show_create_edit') == 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
@@ -127,11 +127,11 @@ while ($row = $statement->fetch())
     }
 
     // Inhalt zusammensetzen
-    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
+    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gSettingsManager->get('system_date'));
     // Enddatum nur wenn anders als startdatum
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin'))
     {
-        $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photoAlbum->getValue('pho_end', $gPreferences['system_date']));
+        $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photoAlbum->getValue('pho_end', $gSettingsManager->get('system_date')));
     }
     $description .= '<br />'.$gL10n->get('PHO_PHOTOS').': '.$photoAlbum->countImages();
     $description .= '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photoAlbum->getValue('pho_photographers');

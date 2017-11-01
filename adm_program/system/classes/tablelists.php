@@ -39,17 +39,17 @@ class TableLists extends TableAccess
      */
     public function delete()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $lstId = (int) $this->getValue('lst_id');
 
         // if this list is the default configuration than it couldn't be deleted
-        if ($lstId === (int) $gPreferences['lists_default_configuration'])
+        if ($lstId === (int) $gSettingsManager->get('lists_default_configuration'))
         {
             throw new AdmException('LST_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }
         // if this list is the default configuration for particpation list than it couldn't be deleted
-        if ($lstId === (int) $gPreferences['dates_default_list_configuration'])
+        if ($lstId === (int) $gSettingsManager->get('dates_default_list_configuration'))
         {
             throw new AdmException('DAT_ERROR_DELETE_DEFAULT_LIST', $this->getValue('lst_name'));
         }

@@ -31,12 +31,12 @@ $getMaxHeight = admFuncVariableIsValid($_GET, 'max_height', 'int');
 $getThumbnail = admFuncVariableIsValid($_GET, 'thumb',      'bool');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ($gSettingsManager->get('enable_photo_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gPreferences['enable_photo_module'] == 2)
+elseif ($gSettingsManager->get('enable_photo_module') == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -83,7 +83,7 @@ if ($getThumbnail)
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if (!is_file($picThumbPath) || $thumbLength !== (int) $gPreferences['photo_thumbs_scale'])
+        if (!is_file($picThumbPath) || $thumbLength !== (int) $gSettingsManager->get('photo_thumbs_scale'))
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if (!is_dir($albumFolder . '/thumbnails'))
@@ -94,7 +94,7 @@ if ($getThumbnail)
 
             // nun das Thumbnail anlegen
             $image = new Image($picPath);
-            $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
+            $image->scaleLargerSide($gSettingsManager->get('photo_thumbs_scale'));
             $image->copyToFile(null, $picThumbPath);
         }
         else
@@ -107,7 +107,7 @@ if ($getThumbnail)
     {
         // kein Bild uebergeben, dann NoPix anzeigen
         $image = new Image(THEME_ADMIDIO_PATH . '/images/nopix.jpg');
-        $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
+        $image->scaleLargerSide($gSettingsManager->get('photo_thumbs_scale'));
     }
 }
 else
@@ -124,11 +124,11 @@ else
 if ($image !== null)
 {
     // insert copyright text into photo if photo size is larger than 200px
-    if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] !== '')
+    if (($getMaxWidth > 200) && $gSettingsManager->get('photo_image_text') !== '')
     {
-        if ($gPreferences['photo_image_text_size'] > 0)
+        if ($gSettingsManager->get('photo_image_text_size') > 0)
         {
-            $fontSize = $getMaxWidth / $gPreferences['photo_image_text_size'];
+            $fontSize = $getMaxWidth / $gSettingsManager->get('photo_image_text_size');
         }
         else
         {
@@ -139,7 +139,7 @@ if ($image !== null)
         $fontY = $imageSize[0] - $fontSize;
         $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
         $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
-        $text = $gPreferences['photo_image_text'];
+        $text = $gSettingsManager->get('photo_image_text');
         imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 

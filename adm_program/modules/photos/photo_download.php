@@ -27,19 +27,19 @@ $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int');
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ($gSettingsManager->get('enable_photo_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gPreferences['enable_photo_module'] == 2)
+elseif ($gSettingsManager->get('enable_photo_module') == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
 // check if download function is enabled
-if ($gPreferences['photo_download_enabled'] == 0)
+if ($gSettingsManager->get('photo_download_enabled') == 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('PHO_DOWNLOAD_DISABLED'));
@@ -74,7 +74,7 @@ if ((int) $photoAlbum->getValue('pho_quantity') === 0)
 
 // check whether to take original version instead of scaled one
 $takeOriginalsIfAvailable = false;
-if ($gPreferences['photo_keep_original'] == 1)
+if ($gSettingsManager->get('photo_keep_original') == 1)
 {
     $takeOriginalsIfAvailable = true;
 }

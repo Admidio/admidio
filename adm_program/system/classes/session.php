@@ -171,7 +171,7 @@ class Session extends TableAccess
      */
     public function isValidLogin($userId)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         if ($userId > 0)
         {
@@ -182,7 +182,7 @@ class Session extends TableAccess
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
+                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gSettingsManager->get('logout_minutes') * 60)
                 {
                     return true;
                 }

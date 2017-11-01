@@ -26,7 +26,7 @@ if(!$gCurrentUser->approveUsers())
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if($gPreferences['registration_enable_module'] == 0)
+if($gSettingsManager->get('registration_enable_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -42,7 +42,7 @@ $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gDbType === Database::PDO_ENGINE_MYSQL && $gPreferences['system_search_similar'] == 1)
+if($gDbType === Database::PDO_ENGINE_MYSQL && $gSettingsManager->get('system_search_similar') == 1)
 {
     $sqlSimilarName =
         '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(\''. $lastName.'\'), 1, 4)
@@ -149,7 +149,7 @@ while($row = $usrStatement->fetchObject())
         }
         if($row->email !== '')
         {
-            if($gPreferences['enable_mail_module'] == 1)
+            if($gSettingsManager->get('enable_mail_module') == 1)
             {
                 $page->addHtml('<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />');
             }
@@ -167,7 +167,7 @@ while($row = $usrStatement->fetchObject())
         {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
-            if($gPreferences['enable_system_mails'] == 1)
+            if($gSettingsManager->get('enable_system_mails') == 1)
             {
                 $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
 

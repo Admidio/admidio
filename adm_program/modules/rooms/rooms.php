@@ -41,7 +41,7 @@ $roomsMenu->addItem(
     $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png'
 );
 
-if($gPreferences['system_show_create_edit'] == 1)
+if($gSettingsManager->get('system_show_create_edit') == 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = '

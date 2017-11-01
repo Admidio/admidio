@@ -452,7 +452,7 @@ class HtmlTable extends HtmlTableBasic
      */
     private function initDatatablesTable()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.js');
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/moment/min/moment.min.js');
@@ -524,8 +524,8 @@ class HtmlTable extends HtmlTableBasic
         }
 
         $this->htmlPage->addJavascript('
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gPreferences['system_date'] . '"));
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gPreferences['system_date'] . ' ' . $gPreferences['system_time'] . '"));
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->get('system_date') . '"));
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->get('system_date') . ' ' . $gSettingsManager->get('system_time') . '"));
 
             var admidioTable = $("#' . $this->id . '").DataTable({' .
             implode(',', $this->datatablesInitParameters) .

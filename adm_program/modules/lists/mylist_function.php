@@ -27,7 +27,7 @@ $getName   = admFuncVariableIsValid($_GET, 'name',   'string');
 $_SESSION['mylist_request'] = $_POST;
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['lists_enable_module'] != 1)
+if ($gSettingsManager->get('lists_enable_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

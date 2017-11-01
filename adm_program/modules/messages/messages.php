@@ -12,7 +12,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the call of the page was allowed
-if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1 && $gPreferences['enable_chat_module'] != 1)
+if ($gSettingsManager->get('enable_pm_module') != 1 && $gSettingsManager->get('enable_mail_module') != 1 && $gSettingsManager->get('enable_chat_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -58,7 +58,7 @@ $page->enableModal();
 // get module menu for emails
 $emailMenu = $page->getMenu();
 // link to write new email
-if ($gPreferences['enable_mail_module'] == 1)
+if ($gSettingsManager->get('enable_mail_module') == 1)
 {
     $emailMenu->addItem(
         'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
@@ -66,7 +66,7 @@ if ($gPreferences['enable_mail_module'] == 1)
     );
 }
 // link to write new PM
-if ($gPreferences['enable_pm_module'] == 1)
+if ($gSettingsManager->get('enable_pm_module') == 1)
 {
     $emailMenu->addItem(
         'admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM',
@@ -75,7 +75,7 @@ if ($gPreferences['enable_pm_module'] == 1)
 }
 
 // link to Chat
-if ($gPreferences['enable_chat_module'] == 1)
+if ($gSettingsManager->get('enable_chat_module') == 1)
 {
     $emailMenu->addItem(
         'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',

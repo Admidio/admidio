@@ -65,12 +65,12 @@ switch($getMode)
                         // => EXIT
                     }
 
-                    if(!isset($_POST['enable_auto_login']) && $gPreferences['enable_auto_login'] == 1)
+                    if(!isset($_POST['enable_auto_login']) && $gSettingsManager->get('enable_auto_login') == 1)
                     {
                         // if auto login was deactivated than delete all saved logins
                         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                         $gDb->queryPrepared($sql);
-                        $gPreferences[$key] = $value;
+                        $gSettingsManager->set($key, $value); // TODO check
                     }
                     break;
 
@@ -233,16 +233,16 @@ switch($getMode)
                     $text->setValue('txt_text', $value);
                     $text->save();
                 }
-                elseif($key === 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
+                elseif($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->get('enable_auto_login') == 1)
                 {
                     // if deactivate auto login than delete all saved logins
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                     $gDb->queryPrepared($sql);
-                    $gPreferences[$key] = $value;
+                    $gSettingsManager->set($key, $value);
                 }
                 else
                 {
-                    $gPreferences[$key] = $value;
+                    $gSettingsManager->set($key, $value);
                 }
             }
         }
@@ -250,12 +250,10 @@ switch($getMode)
         // now save all data
         $gCurrentOrganization->save();
 
-        $gCurrentOrganization->setPreferences($gPreferences);
-
         // refresh language if necessary
-        if($gL10n->getLanguage() !== $gPreferences['system_language'])
+        if($gL10n->getLanguage() !== $gSettingsManager->get('system_language'))
         {
-            $gL10n->setLanguage($gPreferences['system_language']);
+            $gL10n->setLanguage($gSettingsManager->get('system_language'));
         }
 
         // clean up
@@ -355,10 +353,11 @@ switch($getMode)
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
-        $defaultOrgPreferences['system_language']     = $gPreferences['system_language'];
+        $defaultOrgPreferences['system_language']     = $gSettingsManager->get('system_language');
 
         // create all necessary data for this organization
-        $newOrganization->setPreferences($defaultOrgPreferences, false);
+        $settingsManager =& $newOrganization->getSettingsManager();
+        $settingsManager->setMulti($defaultOrgPreferences, false);
         $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
 
         // if installation of second organization than show organization select at login

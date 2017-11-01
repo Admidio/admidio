@@ -17,9 +17,9 @@
   configuration and is easier than modifying securimage.php directly.
   Any class property from securimage.php can be used here.
 */
-global $gCookiePraefix, $gPreferences;
+global $gCookiePraefix, $gSettingsManager;
 
-switch ($gPreferences['captcha_type'])
+switch ($gSettingsManager->get('captcha_type'))
 {
     case 'pic':
         $captchaType = Securimage::SI_CAPTCHA_STRING;
@@ -37,26 +37,26 @@ switch ($gPreferences['captcha_type'])
 return array(
     /**** CAPTCHA Appearance Options ****/
     'captcha_type'     => $captchaType,
-    'image_width'      => $gPreferences['captcha_width'],       // width of captcha image in pixels
-    'image_height'     => round($gPreferences['captcha_width'] * 0.25),        // height of captcha image in pixels
+    'image_width'      => $gSettingsManager->get('captcha_width'),       // width of captcha image in pixels
+    'image_height'     => round($gSettingsManager->get('captcha_width') * 0.25),        // height of captcha image in pixels
     'code_length'      => mt_rand(4, 6),         // # of characters for captcha code
-    'image_bg_color'   => $gPreferences['captcha_background_color'], // hex color for image background
-    'text_color'       => $gPreferences['captcha_text_color'], // hex color for captcha text
-    'line_color'       => $gPreferences['captcha_line_color'], // hex color for lines over text
-    'num_lines'        => $gPreferences['captcha_lines_numbers'],         // # of lines to draw over text
-    'charset'          => $gPreferences['captcha_charset'], // hex color for lines over text
-    'perturbation'     => $gPreferences['captcha_perturbation'],
+    'image_bg_color'   => $gSettingsManager->get('captcha_background_color'), // hex color for image background
+    'text_color'       => $gSettingsManager->get('captcha_text_color'), // hex color for captcha text
+    'line_color'       => $gSettingsManager->get('captcha_line_color'), // hex color for lines over text
+    'num_lines'        => $gSettingsManager->get('captcha_lines_numbers'),         // # of lines to draw over text
+    'charset'          => $gSettingsManager->get('captcha_charset'), // hex color for lines over text
+    'perturbation'     => $gSettingsManager->get('captcha_perturbation'),
 
     'wordlist_file'    => 'words/words.txt', // text file for word captcha
     'use_wordlist'     => false,             // true to use word list
     'wordlist_file_encoding' => null,        // character encoding of word file if other than ASCII (e.g. UTF-8, GB2312)
 
-    'image_signature'  => $gPreferences['captcha_signature'],
+    'image_signature'  => $gSettingsManager->get('captcha_signature'),
 
     // example UTF-8 charset (TTF file must support symbols being used
     // 'charset'          => "абвгдeжзийклмнопрстуфхцчшщъьюяАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯ",
 
-    'ttf_file'         => '../../system/fonts/'.$gPreferences['captcha_fonts'],
+    'ttf_file'         => '../../system/fonts/'.$gSettingsManager->get('captcha_fonts'),
 
     /**** Code Storage & Database Options ****/
 

@@ -38,13 +38,13 @@ class FormValidation
      */
     public static function checkCaptcha($value)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $securimage = new Securimage();
 
         if ($securimage->check($value) === false)
         {
-            if ($gPreferences['captcha_type'] === 'calc')
+            if ($gSettingsManager->get('captcha_type') === 'calc')
             {
                 throw new AdmException('SYS_CAPTCHA_CALC_CODE_INVALID');
             }

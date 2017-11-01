@@ -21,7 +21,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
 
 // Check if RSS is active...
-if ($gPreferences['enable_rss'] != 1)
+if ($gSettingsManager->get('enable_rss') != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -29,14 +29,14 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if module is active or is public
-if ($gPreferences['enable_weblinks_module'] != 1)
+if ($gSettingsManager->get('enable_weblinks_module') != 1)
 {
     // disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if($gPreferences['system_show_create_edit'] == 1)
+if($gSettingsManager->get('system_show_create_edit') == 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';

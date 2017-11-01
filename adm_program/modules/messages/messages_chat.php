@@ -18,7 +18,7 @@ if (!$gValidLogin)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_chat_module'] != 1)
+if ($gSettingsManager->get('enable_chat_module') != 1)
 {
     // message if the Chat is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));

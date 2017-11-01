@@ -37,7 +37,7 @@ if(!$gCurrentUser->approveUsers())
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if($gPreferences['registration_enable_module'] == 0)
+if($gSettingsManager->get('registration_enable_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -96,7 +96,7 @@ if($getMode === 1 || $getMode === 3)
     $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($gPreferences['enable_system_mails'] == 1)
+    if($gSettingsManager->get('enable_system_mails') == 1)
     {
         try
         {

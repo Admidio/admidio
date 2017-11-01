@@ -152,10 +152,10 @@ if($getMode === 2)
 
     if(strlen($_POST['rol_start_date']) > 0)
     {
-        $validFromDate = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['rol_start_date']);
+        $validFromDate = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $_POST['rol_start_date']);
         if(!$validFromDate)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_FROM'), $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_FROM'), $gSettingsManager->get('system_date')));
             // => EXIT
         }
         else
@@ -167,10 +167,10 @@ if($getMode === 2)
 
     if(strlen($_POST['rol_end_date']) > 0)
     {
-        $validToDate = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['rol_end_date']);
+        $validToDate = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $_POST['rol_end_date']);
         if(!$validToDate)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_TO'), $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('ROL_VALID_TO'), $gSettingsManager->get('system_date')));
             // => EXIT
         }
         else
@@ -197,10 +197,10 @@ if($getMode === 2)
 
     if(strlen($_POST['rol_start_time']) > 0)
     {
-        $validFromTime = \DateTime::createFromFormat('Y-m-d '.$gPreferences['system_time'], DATE_NOW.' '.$_POST['rol_start_time']);
+        $validFromTime = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->get('system_time'), DATE_NOW.' '.$_POST['rol_start_time']);
         if(!$validFromTime)
         {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_FROM'), $gPreferences['system_time']));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_FROM'), $gSettingsManager->get('system_time')));
             // => EXIT
         }
         else
@@ -212,10 +212,10 @@ if($getMode === 2)
 
     if(strlen($_POST['rol_end_time']) > 0)
     {
-        $validToTime = \DateTime::createFromFormat('Y-m-d '.$gPreferences['system_time'], DATE_NOW.' '.$_POST['rol_end_time']);
+        $validToTime = \DateTime::createFromFormat('Y-m-d '.$gSettingsManager->get('system_time'), DATE_NOW.' '.$_POST['rol_end_time']);
         if(!$validToTime)
         {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_TO'), $gPreferences['system_time']));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('ROL_TIME_TO'), $gSettingsManager->get('system_time')));
             // => EXIT
         }
         else

@@ -43,8 +43,8 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
-   || ($gPreferences['enable_pm_module'] != 1 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
+if (($gSettingsManager->get('enable_mail_module') != 1 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+   || ($gSettingsManager->get('enable_pm_module') != 1 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -81,9 +81,9 @@ if ($getMsgId > 0)
 }
 
 $maxNumberRecipients = 1;
-if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+if ($gSettingsManager->get('mail_max_receiver') > 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 {
-    $maxNumberRecipients = $gPreferences['mail_max_receiver'];
+    $maxNumberRecipients = $gSettingsManager->get('mail_max_receiver');
 }
 
 $list = array();
@@ -373,7 +373,7 @@ elseif (!isset($messageStatement))
                 $role->setArray($roleArray);
                 $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')');
                 $listRoleIdsArray[] = $roleArray['rol_id'];
-                if($role->hasFormerMembers() > 0 && $gPreferences['mail_show_former'] == 1)
+                if($role->hasFormerMembers() > 0 && $gSettingsManager->get('mail_show_former') == 1)
                 {
                     // list role with former members
                     $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')');
@@ -444,7 +444,7 @@ elseif (!isset($messageStatement))
                         $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
                         $currentUserId = $usrId;
                     }
-                    elseif($gPreferences['mail_show_former'] == 1)
+                    elseif($gSettingsManager->get('mail_show_former') == 1)
                     {
                         $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
                         $currentUserId = $usrId;
@@ -571,7 +571,7 @@ elseif (!isset($messageStatement))
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($currUsrId > 0 && $gPreferences['mail_delivery_confirmation'] == 2) || $gPreferences['mail_delivery_confirmation'] == 1)
+    if (($currUsrId > 0 && $gSettingsManager->get('mail_delivery_confirmation') == 2) || $gSettingsManager->get('mail_delivery_confirmation') == 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
@@ -585,7 +585,7 @@ elseif (!isset($messageStatement))
     );
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
-    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIni::isFileUploadEnabled())
+    if ($gValidLogin && ($gSettingsManager->get('max_email_attachment_size') > 0) && PhpIni::isFileUploadEnabled())
     {
         $form->addFileUpload(
             'btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'),
@@ -600,7 +600,7 @@ elseif (!isset($messageStatement))
     }
 
     // add textfield or ckeditor to form
-    if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
+    if($gValidLogin && $gSettingsManager->get('mail_html_registered_users') == 1)
     {
         $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => HtmlForm::FIELD_REQUIRED));
     }
@@ -615,7 +615,7 @@ elseif (!isset($messageStatement))
     $form->closeGroupBox();
 
     // if captchas are enabled then visitors of the website must resolve this
-    if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+    if (!$gValidLogin && $gSettingsManager->get('enable_mail_captcha') == 1)
     {
         $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
         $form->addCaptcha('captcha_code');
@@ -669,7 +669,7 @@ if (isset($messageStatement))
                     <div class="col-sm-8">
                         <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
-                    <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
+                    <div class="col-sm-4 text-right">' . $date->format($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time')) .
                     '</div>
                 </div>
             </div>

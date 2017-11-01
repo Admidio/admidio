@@ -31,7 +31,7 @@ $template  = THEME_ADMIDIO_PATH. '/ecard_templates/';
 $headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_ecard_module'] != 1)
+if ($gSettingsManager->get('enable_ecard_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -103,7 +103,7 @@ if(isset($_SESSION['ecard_request']))
 }
 else
 {
-    $template   = $gPreferences['ecard_template'];
+    $template   = $gSettingsManager->get('ecard_template');
     $recipients = null;
     $message    = '';
 }
@@ -165,8 +165,8 @@ $form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'hidden'));
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
 $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
     <a data-toggle="lightbox" data-type="image" data-title="'.$gL10n->get('SYS_PREVIEW').'"
-        href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
-        src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'"
+        href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gSettingsManager->get('photo_show_width').'&amp;max_height='.$gSettingsManager->get('photo_show_height').'"><img
+        src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gSettingsManager->get('ecard_thumbs_scale').'&amp;max_height='.$gSettingsManager->get('ecard_thumbs_scale').'"
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
 $templates = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH.'/ecard_templates');

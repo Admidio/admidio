@@ -28,7 +28,7 @@ $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('d
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['lists_enable_module'] != 1)
+if ($gSettingsManager->get('lists_enable_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -599,7 +599,7 @@ foreach($configurations as $configuration)
         else
         {
             // now add configuration to array
-            $configurationsArray[] = array($configuration['lst_id'], $objListTimestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']), $actualGroup);
+            $configurationsArray[] = array($configuration['lst_id'], $objListTimestamp->format($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time')), $actualGroup);
         }
     }
     else
@@ -717,7 +717,7 @@ else
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 
-if ($gPreferences['members_enable_user_relations'] == 1)
+if ($gSettingsManager->get('members_enable_user_relations') == 1)
 {
     // select box showing all relation types
     $sql = 'SELECT urt_id, urt_name, urt_name

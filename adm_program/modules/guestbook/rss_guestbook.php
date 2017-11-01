@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gPreferences['enable_rss'] != 1)
+if ($gSettingsManager->get('enable_rss') != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -32,7 +32,7 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_guestbook_module'] != 1)
+if ($gSettingsManager->get('enable_guestbook_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

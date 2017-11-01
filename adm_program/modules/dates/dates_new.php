@@ -24,7 +24,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // check if module is active
-if($gPreferences['enable_dates_module'] == 0)
+if($gSettingsManager->get('enable_dates_module') == 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -72,9 +72,9 @@ if(isset($_SESSION['dates_request']))
     $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
     $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
 
-    $dateTimeBegin = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_begin']);
+    $dateTimeBegin = \DateTime::createFromFormat($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'), $_SESSION['dates_request']['dat_begin']);
     $_SESSION['dates_request']['dat_begin'] = $dateTimeBegin->format('Y-m-d H:i:s');
-    $dateTimeEnd = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_SESSION['dates_request']['dat_end']);
+    $dateTimeEnd = \DateTime::createFromFormat($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'), $_SESSION['dates_request']['dat_end']);
     $_SESSION['dates_request']['dat_end'] = $dateTimeEnd->format('Y-m-d H:i:s');
 
     $date->setArray($_SESSION['dates_request']);
@@ -193,8 +193,8 @@ $page->addJavascript('
      * Funktion belegt das Datum-bis entsprechend dem Datum-Von
      */
     function setDateTo() {
-        var dateFrom = Date.parseDate($("#date_from").val(), "'.$gPreferences['system_date'].'");
-        var dateTo   = Date.parseDate($("#date_to").val(), "'.$gPreferences['system_date'].'");
+        var dateFrom = Date.parseDate($("#date_from").val(), "'.$gSettingsManager->get('system_date').'");
+        var dateTo   = Date.parseDate($("#date_to").val(), "'.$gSettingsManager->get('system_date').'");
 
         if (dateFrom.getTime() > dateTo.getTime()) {
             $("#date_to").val($("#date_from").val());
@@ -262,7 +262,7 @@ $form->addInput(
 );
 
 // if a map link should be shown in the event then show help text and a field where the user could choose the country
-if($gPreferences['dates_show_map_link'] == true)
+if($gSettingsManager->get('dates_show_map_link') == true)
 {
     $form->addInput(
         'dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'),
@@ -271,7 +271,7 @@ if($gPreferences['dates_show_map_link'] == true)
 
     if($date->getValue('dat_country') === '' && $getDateId === 0)
     {
-        $date->setValue('dat_country', $gPreferences['default_country']);
+        $date->setValue('dat_country', $gSettingsManager->get('default_country'));
     }
     $form->addSelectBox(
         'dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(),
@@ -287,7 +287,7 @@ else
 }
 
 // if room selection is activated then show a selectbox with all rooms
-if($gPreferences['dates_show_rooms'] == true)
+if($gSettingsManager->get('dates_show_rooms') == true)
 {
     if($gDbType === Database::PDO_ENGINE_MYSQL)
     {
@@ -311,11 +311,11 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
 $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), (bool) $date->getValue('dat_all_day'));
 $form->addInput(
-    'date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']),
+    'date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time')),
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']),
+    'date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time')),
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
@@ -372,7 +372,7 @@ $form->addInput(
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS')
 );
 $form->addInput(
-    'date_deadline', $gL10n->get('DAT_DEADLINE'), $date->getValue('dat_deadline', $gPreferences['system_date'].' '.$gPreferences['system_time']),
+    'date_deadline', $gL10n->get('DAT_DEADLINE'), $date->getValue('dat_deadline', $gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time')),
     array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
 );
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_this_list_view'));

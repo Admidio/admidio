@@ -60,7 +60,7 @@ else
 
 if($getEvents)
 {
-    if($gPreferences['enable_dates_module'] == 0)
+    if($gSettingsManager->get('enable_dates_module') == 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -105,7 +105,7 @@ $rolesMenu->addItem(
     $activeRolesLinkDescription, $activeRolesImage
 );
 
-if($gPreferences['enable_dates_module'] > 0)
+if($gSettingsManager->get('enable_dates_module') > 0)
 {
     // if event module is enabled then define link to confirmation roles of event participations
     $rolesMenu->addItem(
@@ -179,38 +179,38 @@ while($row = $rolStatement->fetch())
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/profile.png"
                             alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />';
     }
-    if($role->getValue('rol_announcements') == 1 && $gPreferences['enable_announcements_module'] > 0)
+    if($role->getValue('rol_announcements') == 1 && $gSettingsManager->get('enable_announcements_module') > 0)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/announcements.png"
                             alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />';
     }
-    if($role->getValue('rol_dates') == 1 && $gPreferences['enable_dates_module'] > 0)
+    if($role->getValue('rol_dates') == 1 && $gSettingsManager->get('enable_dates_module') > 0)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/dates.png"
                             alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />';
     }
-    if($role->getValue('rol_photo') == 1 && $gPreferences['enable_photo_module'] > 0)
+    if($role->getValue('rol_photo') == 1 && $gSettingsManager->get('enable_photo_module') > 0)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/photo.png"
                             alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />';
     }
-    if($role->getValue('rol_download') == 1 && $gPreferences['enable_download_module'] > 0)
+    if($role->getValue('rol_download') == 1 && $gSettingsManager->get('enable_download_module') > 0)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/download.png"
                             alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />';
     }
-    if($role->getValue('rol_guestbook') == 1 && $gPreferences['enable_guestbook_module'] > 0)
+    if($role->getValue('rol_guestbook') == 1 && $gSettingsManager->get('enable_guestbook_module') > 0)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/guestbook.png"
                             alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />';
     }
     // If allowed to write anonymous guestbook entries, then we don´t need to set rights for the roles
-    if($role->getValue('rol_guestbook_comments') == 1  && $gPreferences['enable_guestbook_module'] > 0 && $gPreferences['enable_gbook_comments4all'] == false)
+    if($role->getValue('rol_guestbook_comments') == 1  && $gSettingsManager->get('enable_guestbook_module') > 0 && $gSettingsManager->get('enable_gbook_comments4all') == false)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/comment.png"
                             alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
     }
-    if($role->getValue('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)
+    if($role->getValue('rol_weblinks') == 1 && $gSettingsManager->get('enable_weblinks_module') > 0)
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/weblinks.png"
                             alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />';
@@ -236,17 +236,17 @@ while($row = $rolStatement->fetch())
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/list_key.png"
                         alt="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" title="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" />';
     }
-    if($role->getValue('rol_mail_this_role') == 1 && $gPreferences['enable_mail_module'] > 0)
+    if($role->getValue('rol_mail_this_role') == 1 && $gSettingsManager->get('enable_mail_module') > 0)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_role.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" title="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" />';
     }
-    if($role->getValue('rol_mail_this_role') == 2 && $gPreferences['enable_mail_module'] > 0)
+    if($role->getValue('rol_mail_this_role') == 2 && $gSettingsManager->get('enable_mail_module') > 0)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_key.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" title="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" />';
     }
-    if($role->getValue('rol_mail_this_role') == 3 && $gPreferences['enable_mail_module'] > 0)
+    if($role->getValue('rol_mail_this_role') == 3 && $gSettingsManager->get('enable_mail_module') > 0)
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" />';

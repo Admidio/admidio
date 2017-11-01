@@ -23,7 +23,7 @@ $getGbcId    = admFuncVariableIsValid($_GET, 'cid',      'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_guestbook_module'] == 0)
+if ($gSettingsManager->get('enable_guestbook_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -51,7 +51,7 @@ else
 }
 
 // Erst einmal die Rechte abklopfen...
-if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0) && $getGboId > 0)
+if(($gSettingsManager->get('enable_guestbook_module') == 2 || $gSettingsManager->get('enable_gbook_comments4all') == 0) && $getGboId > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
     require(__DIR__ . '/../../system/login_valid.php');
@@ -111,7 +111,7 @@ if($getGbcId === 0 && $gValidLogin)
     $gbComment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
 }
 
-if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
+if (!$gValidLogin && $gSettingsManager->get('flooding_protection_time') != 0)
 {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -120,14 +120,14 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK_COMMENTS.'
-             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
                AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_address\')';
-    $pdoStatement = $gDb->queryPrepared($sql, array($gPreferences['flooding_protection_time'], $gbComment->getValue('gbc_ip_address')));
+    $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->get('flooding_protection_time'), $gbComment->getValue('gbc_ip_address')));
 
     if($pdoStatement->fetchColumn() > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->get('flooding_protection_time')));
         // => EXIT
     }
 }
@@ -166,7 +166,7 @@ $form->addEditor(
 );
 
 // if captchas are enabled then visitors of the website must resolve this
-if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+if (!$gValidLogin && $gSettingsManager->get('enable_mail_captcha') == 1)
 {
     $form->openGroupBox('gb_confirmation_of_entry', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');

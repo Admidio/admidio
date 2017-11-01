@@ -23,7 +23,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_download_module'] != 1)
+if ($gSettingsManager->get('enable_download_module') != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -41,7 +41,7 @@ $_SESSION['download_request'] = $_POST;
 $myFilesDownload = new MyFiles('DOWNLOAD');
 if(!$myFilesDownload->checkSettings())
 {
-    $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+    $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gSettingsManager->get('email_administrator').'">', '</a>'));
     // => EXIT
 }
 
@@ -143,7 +143,7 @@ elseif ($getMode === 3)
             {
                 // der entsprechende Ordner konnte nicht angelegt werden
                 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php');
-                $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+                $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gSettingsManager->get('email_administrator').'">', '</a>'));
                 // => EXIT
             }
 

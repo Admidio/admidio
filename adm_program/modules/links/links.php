@@ -25,13 +25,13 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 $getLinkId   = admFuncVariableIsValid($_GET, 'id',       'int');
 
 // check if the module is enabled for use
-if ($gPreferences['enable_weblinks_module'] == 0)
+if ($gSettingsManager->get('enable_weblinks_module') == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gPreferences['enable_weblinks_module'] == 2)
+elseif($gSettingsManager->get('enable_weblinks_module') == 2)
 {
     // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
@@ -43,9 +43,9 @@ $weblinks->setParameter('cat_id', $getCatId);
 $weblinksCount = $weblinks->getDataSetCount();
 
 // number of weblinks per page
-if($gPreferences['weblinks_per_page'] > 0)
+if($gSettingsManager->get('weblinks_per_page') > 0)
 {
-    $weblinksPerPage = (int) $gPreferences['weblinks_per_page'];
+    $weblinksPerPage = (int) $gSettingsManager->get('weblinks_per_page');
 }
 else
 {
@@ -62,7 +62,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-if($gPreferences['enable_rss'] == 1)
+if($gSettingsManager->get('enable_rss') == 1)
 {
     $page->addRssFile(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
 }
@@ -172,7 +172,7 @@ else
 
                 // show weblink
                 $page->addHtml('
-                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php?lnk_id='.$lnkId.'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_URL. '/icons/weblinks.png"
+                <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php?lnk_id='.$lnkId.'" target="'. $gSettingsManager->get('weblinks_target'). '"><img src="'. THEME_URL. '/icons/weblinks.png"
                     alt="'.$gL10n->get('LNK_GO_TO', $lnkName).'" title="'.$gL10n->get('LNK_GO_TO', $lnkName).'" />'.$lnkName.'</a>');
 
                 // change and delete only users with rights

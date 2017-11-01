@@ -33,13 +33,13 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
 // check if module is enabled
-if ($gPreferences['enable_announcements_module'] == 0)
+if ($gSettingsManager->get('enable_announcements_module') == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gPreferences['enable_announcements_module'] == 2)
+elseif($gSettingsManager->get('enable_announcements_module') == 2)
 {
     // Access only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
@@ -62,15 +62,15 @@ $page = new HtmlPage($getHeadline);
 $page->enableModal();
 
 // add rss feed to announcements
-if($gPreferences['enable_rss'] == 1)
+if($gSettingsManager->get('enable_rss') == 1)
 {
     $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 }
 
 // number of announcements per page
-if($gPreferences['announcements_per_page'] > 0)
+if($gSettingsManager->get('announcements_per_page') > 0)
 {
-    $announcementsPerPage = (int) $gPreferences['announcements_per_page'];
+    $announcementsPerPage = (int) $gSettingsManager->get('announcements_per_page');
 }
 else
 {
@@ -155,7 +155,7 @@ else
                     <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/announcements.png" alt="'. $annHeadline. '" />'.
                     $annHeadline. '
                 </div>
-                <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));
+                <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->get('system_date')));
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())

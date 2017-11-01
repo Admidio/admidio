@@ -70,7 +70,7 @@ class SystemMail extends Email
      */
     public function getMailText($systemMailId, User $user)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         // create organization object of the organization the current user is assigned (at registration this can be every organization)
         if(!$this->smOrganization instanceof Organization || (int) $this->smOrganization->getValue('org_id') !== $user->getOrganization())
@@ -98,7 +98,7 @@ class SystemMail extends Email
             '/#user_last_name#/'          => $user->getValue('LAST_NAME', 'database'),
             '/#user_login_name#/'         => $user->getValue('usr_login_name'),
             '/#user_email#/'              => $user->getValue('EMAIL'),
-            '/#administrator_email#/'     => $gPreferences['email_administrator'],
+            '/#administrator_email#/'     => $gSettingsManager->get('email_administrator'),
             '/#organization_short_name#/' => $this->smOrganization->getValue('org_shortname'),
             '/#organization_long_name#/'  => $this->smOrganization->getValue('org_longname'),
             '/#organization_homepage#/'   => $this->smOrganization->getValue('org_homepage')
@@ -153,10 +153,10 @@ class SystemMail extends Email
      */
     public function sendSystemMail($systemMailId, User $user)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $this->getMailText($systemMailId, $user);
-        $this->setSender($gPreferences['email_administrator']);
+        $this->setSender($gSettingsManager->get('email_administrator'));
         $this->setSubject($this->smMailHeader);
         $this->setText($this->smMailText);
 

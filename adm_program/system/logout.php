@@ -18,7 +18,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 {
     // read organization of config file with their preferences
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
-    $gPreferences = $gCurrentOrganization->getPreferences();
+    $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
     // read new profile field structure for this organization
     $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
@@ -28,7 +28,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 $gCurrentUser->clear();
 
 // set homepage to logout page
-$gHomepage = ADMIDIO_URL . '/' . $gPreferences['homepage_logout'];
+$gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->get('homepage_logout');
 
 // message logout successful and go to homepage
 $gMessage->setForwardUrl($gHomepage, 2000);

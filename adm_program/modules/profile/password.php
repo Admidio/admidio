@@ -41,7 +41,7 @@ $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 if((int) $gCurrentUser->getValue('usr_id') !== $getUserId
 && (!isMember($getUserId)
 || (!$gCurrentUser->isAdministrator() && $currUsrId !== $getUserId)
-|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gPreferences['enable_system_mails'] == 1)))
+|| ($gCurrentUser->isAdministrator() && $user->getValue('EMAIL') !== '' && $gSettingsManager->get('enable_system_mails') == 1)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -69,7 +69,7 @@ if($getMode === 'change')
     {
         if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
         {
-            if (PasswordHashing::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gPreferences['password_min_strength'])
+            if (PasswordHashing::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->get('password_min_strength'))
             {
                 if ($newPassword === $newPasswordConfirm)
                 {
@@ -126,9 +126,9 @@ elseif($getMode === 'html')
     $zxcvbnUserInputs = json_encode($user->getPasswordUserData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
     $passwordStrengthLevel = 1;
-    if ($gPreferences['password_min_strength'])
+    if ($gSettingsManager->get('password_min_strength'))
     {
-        $passwordStrengthLevel = $gPreferences['password_min_strength'];
+        $passwordStrengthLevel = $gSettingsManager->get('password_min_strength');
     }
 
     echo '<script type="text/javascript">

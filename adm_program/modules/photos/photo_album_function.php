@@ -23,7 +23,7 @@ $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
 $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ($gSettingsManager->get('enable_photo_module') == 0)
 {
     // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -83,10 +83,10 @@ if ($getMode === 'new' || $getMode === 'change')
     // Beginn
     if (strlen($phoBegin) > 0)
     {
-        $startDate = \DateTime::createFromFormat($gPreferences['system_date'], $phoBegin);
+        $startDate = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $phoBegin);
         if ($startDate === false)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gSettingsManager->get('system_date')));
             // => EXIT
         }
         else
@@ -103,10 +103,10 @@ if ($getMode === 'new' || $getMode === 'change')
     // Ende
     if (strlen($phoEnd) > 0)
     {
-        $endDate = \DateTime::createFromFormat($gPreferences['system_date'], $phoEnd);
+        $endDate = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $phoEnd);
         if ($endDate === false)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gSettingsManager->get('system_date')));
             // => EXIT
         }
         else
@@ -154,7 +154,7 @@ if ($getMode === 'new' || $getMode === 'change')
 
             // der entsprechende Ordner konnte nicht angelegt werden
             $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-            $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+            $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gSettingsManager->get('email_administrator').'">', '</a>'));
             // => EXIT
         }
 
@@ -164,7 +164,7 @@ if ($getMode === 'new' || $getMode === 'change')
             $notification = new Email();
             try
             {
-                $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date']));
+                $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->get('system_date')));
                 $notification->adminNotification($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
             catch (AdmException $e)
@@ -190,7 +190,7 @@ if ($getMode === 'new' || $getMode === 'change')
             if (!$returnValue)
             {
                 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-                $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+                $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gSettingsManager->get('email_administrator').'">', '</a>'));
                 // => EXIT
             }
         }

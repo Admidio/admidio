@@ -26,7 +26,7 @@ while($rowTexts = $textsStatement->fetch())
 // Laenderbezeichnung durch ISOCODES ersetzen, damit die Laender sprachabhaengig angezeigt werden
 foreach($gL10n->getCountries() as $key => $value)
 {
-    if($gPreferences['default_country'] === $value)
+    if($gSettingsManager->get('default_country') === $value)
     {
         $sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \''.$key.'\'
                  WHERE prf_name  = \'default_country\'

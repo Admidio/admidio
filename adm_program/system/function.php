@@ -323,7 +323,7 @@ function admFuncProcessableImageSize()
  */
 function admFuncVariableIsValid(array $array, $variableName, $datatype, array $options = array())
 {
-    global $gL10n, $gMessage, $gPreferences;
+    global $gL10n, $gMessage, $gSettingsManager;
 
     // create array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
@@ -401,7 +401,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
         case 'date':
             // check if date is a valid Admidio date format
-            $objAdmidioDate = \DateTime::createFromFormat($gPreferences['system_date'], $value);
+            $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $value);
 
             if (!$objAdmidioDate)
             {
@@ -504,10 +504,10 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
  */
 function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = '')
 {
-    global $gDb, $gProfileFields, $gL10n, $gPreferences;
+    global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
     // only show info if system setting is activated
-    if ((int) $gPreferences['system_show_create_edit'] === 0)
+    if ((int) $gSettingsManager->get('system_show_create_edit') === 0)
     {
         return '';
     }
@@ -520,7 +520,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
         {
             $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
 
-            if ((int) $gPreferences['system_show_create_edit'] === 1)
+            if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
             {
                 $htmlCreateName = $userCreate->getValue('FIRST_NAME') . ' ' . $userCreate->getValue('LAST_NAME');
             }
@@ -543,7 +543,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
         {
             $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
 
-            if ((int) $gPreferences['system_show_create_edit'] === 1)
+            if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
             {
                 $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
             }
@@ -587,10 +587,10 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  */
 function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited, $timestampEdited, $userIdCreated = 0, $userIdEdited = 0)
 {
-    global $gL10n, $gValidLogin, $gPreferences;
+    global $gL10n, $gValidLogin, $gSettingsManager;
 
     // only show info if system setting is activated
-    if ((int) $gPreferences['system_show_create_edit'] === 0)
+    if ((int) $gSettingsManager->get('system_show_create_edit') === 0)
     {
         return '';
     }

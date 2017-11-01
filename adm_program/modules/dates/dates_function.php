@@ -43,14 +43,14 @@ $participationPossible  = true;
 $originalDateId         = 0;
 
 // check if module is active
-if($gPreferences['enable_dates_module'] == 0)
+if($gSettingsManager->get('enable_dates_module') == 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
+if($getMode !== 6 || $gSettingsManager->get('enable_dates_module') == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require(__DIR__ . '/../../system/login_valid.php');
@@ -138,9 +138,9 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     if(isset($_POST['dat_all_day']))
     {
         $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
-        $_POST['date_from_time']        = $midnightDateTime->format($gPreferences['system_time']);
-        $_POST['date_to_time']          = $midnightDateTime->format($gPreferences['system_time']);
-        $_POST['date_deadline_time']    = $midnightDateTime->format($gPreferences['system_time']);
+        $_POST['date_from_time']        = $midnightDateTime->format($gSettingsManager->get('system_time'));
+        $_POST['date_to_time']          = $midnightDateTime->format($gSettingsManager->get('system_time'));
+        $_POST['date_deadline_time']    = $midnightDateTime->format($gSettingsManager->get('system_time'));
         $date->setValue('dat_all_day', 1);
     }
     else
@@ -158,20 +158,20 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // Check valid format of date and time input
     // ------------------------------------------------
 
-    $startDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_from'].' '.$_POST['date_from_time']);
+    $startDateTime = \DateTime::createFromFormat($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'), $_POST['date_from'].' '.$_POST['date_from_time']);
     if(!$startDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
-        $startDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_from']);
+        $startDateTime = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $_POST['date_from']);
 
         if(!$startDateTime)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gSettingsManager->get('system_date')));
             // => EXIT
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gPreferences['system_time']));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'), $gSettingsManager->get('system_time')));
             // => EXIT
         }
     }
@@ -191,21 +191,21 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
 
-    $endDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_to'].' '.$_POST['date_to_time']);
+    $endDateTime = \DateTime::createFromFormat($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'), $_POST['date_to'].' '.$_POST['date_to_time']);
 
     if(!$endDateTime)
     {
         // Error: now check if date format or time format was wrong and show message
-        $endDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_to']);
+        $endDateTime = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $_POST['date_to']);
 
         if(!$endDateTime)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gSettingsManager->get('system_date')));
             // => EXIT
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gPreferences['system_time']));
+            $gMessage->show($gL10n->get('SYS_TIME_INVALID', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'), $gSettingsManager->get('system_time')));
             // => EXIT
         }
     }
@@ -265,13 +265,13 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         if(strlen($_POST['date_deadline_time']) === 0)
         {
             $midnightDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
-            $_POST['date_deadline_time'] = $midnightDateTime->format($gPreferences['system_time']);
+            $_POST['date_deadline_time'] = $midnightDateTime->format($gSettingsManager->get('system_time'));
         }
 
-        $deadlineDateTime = \DateTime::createFromFormat($gPreferences['system_date'].' '.$gPreferences['system_time'], $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
+        $deadlineDateTime = \DateTime::createFromFormat($gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'), $_POST['date_deadline'].' '.$_POST['date_deadline_time']);
         if(!$deadlineDateTime)
         {
-            $deadlineDateTime = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['date_deadline']);
+            $deadlineDateTime = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $_POST['date_deadline']);
         }
 
         if(!$deadlineDateTime || $deadlineDateTime > $startDateTime)
@@ -312,7 +312,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
     // ------------------------------------------------
 
-    if($gPreferences['dates_show_rooms'] == 1)
+    if($gSettingsManager->get('dates_show_rooms') == 1)
     {
         $datRoomId = (int) $_POST['dat_room_id'];
 
@@ -377,7 +377,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $rightEventParticipation->saveRoles(array_map('intval', $_POST['adm_event_participation_right']));
     }
 
-    if($returnCode === true && $gPreferences['enable_email_notification'] == 1)
+    if($returnCode === true && $gSettingsManager->get('enable_email_notification') == 1)
     {
         // Benachrichtigungs-Email für neue Einträge
 
@@ -437,7 +437,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date']));
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gSettingsManager->get('system_date')));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
@@ -445,7 +445,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar)
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', $ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gPreferences['system_date']));
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gSettingsManager->get('system_date')));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
@@ -670,7 +670,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                     break;
 
                 case 4:  // User cancel the event
-                    if (!$gPreferences['dates_save_all_confirmations'])
+                    if (!$gSettingsManager->get('dates_save_all_confirmations'))
                     {
                         // Delete entry
                         $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);

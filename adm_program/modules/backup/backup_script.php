@@ -38,7 +38,7 @@ if($gDbType !== Database::PDO_ENGINE_MYSQL)
 $gDb->queryPrepared('SET SQL_MODE = \'\'');
 
 // Some Defines
-define('ADMIN_EMAIL', $gPreferences['email_administrator']); // eg: admin@example.com
+define('ADMIN_EMAIL', $gSettingsManager->get('email_administrator')); // eg: admin@example.com
 
 define('BACKTICKCHAR',             '`');
 define('QUOTECHAR',                '\'');

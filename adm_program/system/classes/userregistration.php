@@ -75,7 +75,7 @@ class UserRegistration extends User
      */
     public function acceptRegistration()
     {
-        global $gMessage, $gL10n, $gPreferences;
+        global $gSettingsManager;
 
         $this->db->startTransaction();
 
@@ -92,7 +92,7 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // only send mail if systemmails are enabled
-        if($gPreferences['enable_system_mails'] == 1 && $this->sendEmail)
+        if($gSettingsManager->get('enable_system_mails') == 1 && $this->sendEmail)
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
@@ -111,7 +111,7 @@ class UserRegistration extends User
      */
     public function delete()
     {
-        global $gMessage, $gL10n, $gPreferences;
+        global $gSettingsManager;
 
         $userEmail     = $this->getValue('EMAIL');
         $userFirstName = $this->getValue('FIRST_NAME');
@@ -140,7 +140,7 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // only send mail if systemmails are enabled and user has email address
-        if($gPreferences['enable_system_mails'] == 1 && $this->sendEmail && $userEmail !== '')
+        if($gSettingsManager->get('enable_system_mails') == 1 && $this->sendEmail && $userEmail !== '')
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
@@ -169,7 +169,7 @@ class UserRegistration extends User
      */
     public function save($updateFingerPrint = true)
     {
-        global $gMessage, $gL10n, $gPreferences;
+        global $gSettingsManager;
 
         // if new registration is saved then set user not valid
         if($this->tableRegistration->isNewRecord())
@@ -190,7 +190,7 @@ class UserRegistration extends User
 
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated
-            if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1 && $this->sendEmail)
+            if($gSettingsManager->get('enable_system_mails') == 1 && $gSettingsManager->get('enable_registration_admin_mail') == 1 && $this->sendEmail)
             {
                 $sql = 'SELECT DISTINCT first_name.usd_value AS first_name, last_name.usd_value AS last_name, email.usd_value AS email
                           FROM '.TBL_MEMBERS.'

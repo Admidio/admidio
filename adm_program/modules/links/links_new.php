@@ -22,7 +22,7 @@ $getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id',   'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
 
 // check if the module is enabled for use
-if ($gPreferences['enable_weblinks_module'] == 0)
+if ($gSettingsManager->get('enable_weblinks_module') == 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));

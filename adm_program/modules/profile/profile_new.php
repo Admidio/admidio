@@ -109,7 +109,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_enable_module'] == 0)
+        if($gSettingsManager->get('registration_enable_module') == 0)
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -235,7 +235,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     );
 
                     // show selectbox with all organizations of database
-                    if($gPreferences['system_organization_select'] == 1)
+                    if($gSettingsManager->get('system_organization_select') == 1)
                     {
                         $sql = 'SELECT org_id, org_longname
                                   FROM '.TBL_ORGANIZATIONS.'
@@ -314,9 +314,9 @@ foreach($gProfileFields->getProfileFields() as $field)
                 $arrListValues = $gL10n->getCountries();
                 $defaultValue  = null;
 
-                if((int) $user->getValue('usr_id') === 0 && strlen($gPreferences['default_country']) > 0)
+                if((int) $user->getValue('usr_id') === 0 && strlen($gSettingsManager->get('default_country')) > 0)
                 {
-                    $defaultValue = $gPreferences['default_country'];
+                    $defaultValue = $gSettingsManager->get('default_country');
                 }
                 elseif($user->getValue('usr_id') > 0 && strlen($user->getValue($usfNameIntern)) > 0)
                 {
@@ -436,7 +436,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 $form->closeGroupBox();
 
 // if captchas are enabled then visitors of the website must resolve this
-if($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
+if($getNewUser === 2 && $gSettingsManager->get('enable_registration_captcha') == 1)
 {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');

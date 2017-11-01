@@ -22,12 +22,12 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_guestbook_module'] == 0)
+if ($gSettingsManager->get('enable_guestbook_module') == 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gPreferences['enable_guestbook_module'] == 2)
+elseif($gSettingsManager->get('enable_guestbook_module') == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -57,7 +57,7 @@ $page = new HtmlPage();
 $page->enableModal();
 
 // add rss feed to guestbook
-if($gPreferences['enable_rss'] == 1)
+if($gSettingsManager->get('enable_rss') == 1)
 {
     $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 }
@@ -124,7 +124,7 @@ if ($getGboId > 0)
     $queryParamsSpecial[] = $getGboId;
 }
 // pruefen ob das Modul Moderation aktiviert ist
-if ($gPreferences['enable_guestbook_moderation'] > 0)
+if ($gSettingsManager->get('enable_guestbook_moderation') > 0)
 {
     if($getModeration)
     {
@@ -149,9 +149,9 @@ $pdoStatement = $gDb->queryPrepared($sql, $queryParamsSpecial);
 $guestbookEntries = (int) $pdoStatement->fetchColumn();
 
 // Anzahl Gaestebucheintraege pro Seite
-if($gPreferences['guestbook_entries_per_page'] > 0)
+if($gSettingsManager->get('guestbook_entries_per_page') > 0)
 {
-    $guestbookEntriesPerPage = (int) $gPreferences['guestbook_entries_per_page'];
+    $guestbookEntriesPerPage = (int) $gSettingsManager->get('guestbook_entries_per_page');
 }
 else
 {
@@ -179,7 +179,7 @@ if($getGboId > 0 || $getModeration)
     );
 }
 
-if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
+if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gSettingsManager->get('enable_guestbook_moderation') > 0)
 {
     // show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT COUNT(*) AS count
@@ -309,7 +309,7 @@ else
                 }
 
                 // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-                if ($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
+                if ($gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
                 {
                     $conditions = ' AND gbc_locked = 1 ';
                 }
@@ -329,7 +329,7 @@ else
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
                 if ($getGboId === 0 && $commentStatement->rowCount() > 0)
                 {
-                    if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration)
+                    if($gSettingsManager->get('enable_intial_comments_loading') == 1 || $getModeration)
                     {
                         $displayShowComments = 'none';
                         $displayOthers       = 'block';
@@ -352,7 +352,7 @@ else
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     $page->addHtml('<div id="comments_'. $gboId. '" class="admidio-guestbook-comments">');
-                        if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration)
+                        if($gSettingsManager->get('enable_intial_comments_loading') == 1 || $getModeration)
                         {
                             // Get setzen da diese Datei eigentlich als Aufruf ueber Javascript gedacht ist
                             $_GET['cid'] = $gboId;
@@ -368,7 +368,7 @@ else
                 }
 
                 if ($getGboId === 0 && $commentStatement->rowCount() === 0
-                && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1)
+                && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->get('enable_gbook_comments4all') == 1)
                 && !$getModeration)
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...

@@ -27,7 +27,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gPreferences['enable_rss'] != 1)
+if ($gSettingsManager->get('enable_rss') != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -35,7 +35,7 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ($gPreferences['enable_announcements_module'] != 1)
+if ($gSettingsManager->get('enable_announcements_module') != 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
