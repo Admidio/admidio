@@ -77,7 +77,6 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
      * @var LanguageData $gLanguageData
      */
     $gLanguageData =& $gCurrentSession->getObject('gLanguageData');
-    $gL10n = new Language($gLanguageData);
     // read organization data from session object
     /**
      * @var Organization $gCurrentOrganization
@@ -120,12 +119,13 @@ else
 
     // create a language data object and assign it to the language object
     $gLanguageData = new LanguageData($gPreferences['system_language']);
-    $gL10n         = new Language($gLanguageData);
     $gCurrentSession->addObject('gLanguageData', $gLanguageData);
 
     // delete old entries in session table
     $gCurrentSession->tableCleanup((int) $gPreferences['logout_minutes']);
 }
+
+$gL10n = new Language($gLanguageData);
 
 $orgId    = (int) $gCurrentOrganization->getValue('org_id');
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
