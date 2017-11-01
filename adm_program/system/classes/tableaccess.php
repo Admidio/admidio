@@ -100,24 +100,6 @@ class TableAccess
     }
 
     /**
-     * Set the database object for communication with the database of this class.
-     * @param Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(Database $database)
-    {
-        $this->db =& $database;
-    }
-
-    /**
-     * Called on serialization of this object. The database object could not be serialized and should be ignored.
-     * @return string[] Returns all class variables that should be serialized.
-     */
-    public function __sleep()
-    {
-        return array_diff(array_keys(get_object_vars($this)), array('db'));
-    }
-
-    /**
      * Initializes all class parameters and deletes all read data.
      * Also the database structure of the associated table will be
      * read and stored in the arrays @b dbColumns and @b columnsInfos
