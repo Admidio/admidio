@@ -83,6 +83,7 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
      */
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
+    $gSettingsManager->setDatabase($gDb);
 }
 else
 {
