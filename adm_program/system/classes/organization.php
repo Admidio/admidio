@@ -17,9 +17,9 @@
  * database contains more then one organization.
  * @par Examples
  * @code // create object and read the value of the language preference
- * $organization = new Organization($gDb, $organizationId);
- * $preferences  = $organization->getPreferences();
- * $language     = $gPreferences['system_language'];
+ * $organization    = new Organization($gDb, $organizationId);
+ * $settingsManager =& $organization->getSettingsManager();
+ * $language        = $settingsManager->get('system_language');
  * // language = 'de' @endcode
  ***********************************************************************************************
  */
@@ -34,9 +34,9 @@ class Organization extends TableAccess
      */
     protected $childOrganizations = array();
     /**
-     * @var array<string,string> Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
+     * @var SettingsManager Manager for organization preferences
      */
-    protected $preferences = array();
+    protected $settingsManager;
     /**
      * @var int Number of all organizations in database
      */
@@ -62,6 +62,16 @@ class Organization extends TableAccess
         {
             $this->readDataByColumns(array('org_shortname' => $organization));
         }
+
+        $this->settingsManager = new SettingsManager($database, (int) $this->getValue('org_id'));
+    }
+
+    /**
+     * @return SettingsManager
+     */
+    public function &getSettingsManager()
+    {
+        return $this->settingsManager;
     }
 
     /**
@@ -74,7 +84,10 @@ class Organization extends TableAccess
 
         $this->bCheckChildOrganizations = false;
         $this->childOrganizations       = array();
-        $this->preferences              = array();
+        if ($this->settingsManager instanceof SettingsManager)
+        {
+            $this->settingsManager->clearAll();
+        }
     }
 
     /**
@@ -413,34 +426,6 @@ class Organization extends TableAccess
     }
 
     /**
-     * Reads all preferences of the current organization out of the database table adm_preferences.
-     * If the object has read the preferences than the method will return the stored values of the object.
-     * @param bool $update Should the preferences data be updated.
-     * @return array<string,string> Returns an array with all preferences of this organization.
-     *                              Array key is the column @b prf_name and array value is the column @b prf_value.
-     */
-    public function getPreferences($update = false)
-    {
-        if($update || count($this->preferences) === 0)
-        {
-            $sql = 'SELECT prf_name, prf_value
-                      FROM '.TBL_PREFERENCES.'
-                     WHERE prf_org_id = ? -- $this->getValue(\'org_id\')';
-            $preferencesStatement = $this->db->queryPrepared($sql, array($this->getValue('org_id')));
-
-            // clear old data
-            $this->preferences = array();
-
-            while($prfRow = $preferencesStatement->fetch())
-            {
-                $this->preferences[$prfRow['prf_name']] = $prfRow['prf_value'];
-            }
-        }
-
-        return $this->preferences;
-    }
-
-    /**
      * @return array<int,string> Returns an array with all child organizations
      */
     protected function getChildOrganizations()
@@ -471,47 +456,6 @@ class Organization extends TableAccess
     public function isParentOrganization()
     {
         return count($this->getChildOrganizations()) > 0;
-    }
-
-    /**
-     * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
-     * The method will only insert or update changed preferences.
-     * @param array<string,string> $preferences Array with all preferences that should be stored in database. array('name_of_preference' => 'value')
-     * @param bool                 $update      If set to @b false then no update will be done, only inserts
-     */
-    public function setPreferences(array $preferences, $update = true)
-    {
-        $this->db->startTransaction();
-        $this->getPreferences();
-
-        $orgId = $this->getValue('org_id');
-
-        foreach($preferences as $key => $value)
-        {
-            if(array_key_exists($key, $this->preferences))
-            {
-                if($update && $value != $this->preferences[$key])
-                {
-                    // Pref existiert in DB, aber Wert hat sich geaendert
-                    $sql = 'UPDATE '.TBL_PREFERENCES.'
-                               SET prf_value  = ? -- $value
-                             WHERE prf_org_id = ? -- $orgId
-                               AND prf_name   = ? -- $key';
-                    $this->db->queryPrepared($sql, array($value, $orgId, $key));
-                }
-            }
-            else
-            {
-                // Parameter existiert noch nicht in DB
-                $sql = 'INSERT INTO '.TBL_PREFERENCES.' (prf_org_id, prf_name, prf_value)
-                             VALUES (?, ?, ?) -- $orgId, $key, $value';
-                $this->db->queryPrepared($sql, array($orgId, $key, $value));
-            }
-        }
-
-        // Update the preferences cache
-        $this->getPreferences(true);
-        $this->db->endTransaction();
     }
 
     /**
@@ -548,5 +492,31 @@ class Organization extends TableAccess
     public function getDbColumns()
     {
         return $this->dbColumns;
+    }
+
+    /**
+     * Reads all preferences of the current organization out of the database table adm_preferences.
+     * If the object has read the preferences than the method will return the stored values of the object.
+     * @deprecated 3.3.0:4.0.0 Switch to new method "$this->getSettingsManager()->getAll()".
+     * @param bool $update Should the preferences data be updated.
+     * @return array<string,string> Returns an array with all preferences of this organization.
+     *                              Array key is the column @b prf_name and array value is the column @b prf_value.
+     */
+    public function getPreferences($update = false)
+    {
+        return $this->settingsManager->getAll($update);
+    }
+
+    /**
+     * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
+     * The method will only insert or update changed preferences.
+     * @deprecated 3.3.0:4.0.0 Switch to new method "$this->getSettingsManager()->setMulti()".
+     * @param array<string,string> $settings Array with all preferences that should be stored in database. array('name_of_preference' => 'value')
+     * @param bool                 $update   If set to @b false then no update will be done, only inserts
+     * @throws \UnexpectedValueException
+     */
+    public function setPreferences(array $settings, $update = true)
+    {
+        $this->settingsManager->setMulti($settings, $update);
     }
 }
