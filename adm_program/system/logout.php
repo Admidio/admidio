@@ -18,7 +18,6 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 {
     // read organization of config file with their preferences
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
-    $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
     // read new profile field structure for this organization
     $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));

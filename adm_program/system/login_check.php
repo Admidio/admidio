@@ -87,7 +87,6 @@ else
     {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataById($organizationId);
-        $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
         // read new profile field structure for this organization
         $gProfileFields->readProfileFields($organizationId);
