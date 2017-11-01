@@ -1864,6 +1864,9 @@ class HtmlForm extends HtmlFormBasic
             {
                 foreach ($parameters as &$parameter)
                 {
+                    // parameters should be strings
+                    $parameter = (string) $parameter;
+
                     // if parameter is a translation-id then translate it
                     if (admIsTranslationStrId($parameter))
                     {
