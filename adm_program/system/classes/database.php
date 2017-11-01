@@ -64,6 +64,10 @@ class Database
     /**
      * @var string
      */
+    protected $engine;
+    /**
+     * @var string
+     */
     protected $host;
     /**
      * @var int|null
@@ -133,14 +137,13 @@ class Database
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, array $options = array())
     {
-        global $gLogger;
-
         // for compatibility to old versions accept the string postgresql
         if ($engine === 'postgresql')
         {
             $engine = self::PDO_ENGINE_PGSQL;
         }
 
+        $this->engine   = $engine;
         $this->host     = $host;
         $this->port     = $port;
         $this->dbName   = $dbName;
@@ -148,32 +151,26 @@ class Database
         $this->password = $password;
         $this->options  = $options;
 
+        $this->connect();
+    }
+
+    protected function connect()
+    {
+        global $gLogger;
+
         try
         {
-            $availableDrivers = \PDO::getAvailableDrivers();
-
-            if (count($availableDrivers) === 0)
-            {
-                throw new \PDOException('PDO does not support any drivers');
-            }
-            if (!in_array($engine, $availableDrivers, true))
-            {
-                throw new \PDOException('The requested PDO driver ' . $engine . ' is not supported');
-            }
-
-            $this->setDSNString($engine);
+            $this->setDSNString();
 
             // needed to avoid leaking username, password, ... if a PDOException is thrown
             $this->pdo = new \PDO($this->dsn, $this->username, $this->password, $this->options);
-
-            $this->dbEngine = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
             $this->setConnectionOptions();
         }
         catch (\PDOException $e)
         {
             $logContext = array(
-                'engine'   => $engine,
+                'engine'   => $this->engine,
                 'host'     => $this->host,
                 'port'     => $this->port,
                 'dbName'   => $this->dbName,
@@ -190,12 +187,22 @@ class Database
     /**
      * Create a valid DSN string for the engine that was set through the constructor.
      * If no valid engine is set than an exception is thrown.
-     * @param string $engine The database type that is supported from Admidio. @b mysql and @b pgsql are valid values.
      * @throws \PDOException
      */
-    private function setDSNString($engine)
+    private function setDSNString()
     {
-        switch ($engine)
+        $availableDrivers = \PDO::getAvailableDrivers();
+
+        if (count($availableDrivers) === 0)
+        {
+            throw new \PDOException('PDO does not support any drivers');
+        }
+        if (!in_array($this->engine, $availableDrivers, true))
+        {
+            throw new \PDOException('The requested PDO driver ' . $this->engine . ' is not supported');
+        }
+
+        switch ($this->engine)
         {
             case self::PDO_ENGINE_MYSQL:
                 $port = '';
@@ -228,6 +235,8 @@ class Database
     private function setConnectionOptions()
     {
         global $gDebug;
+
+        $this->dbEngine = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         if ($gDebug)
         {
