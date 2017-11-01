@@ -154,6 +154,19 @@ class Database
         $this->connect();
     }
 
+    /**
+     * @return array<int,string>
+     */
+    public function __sleep()
+    {
+        return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
+    }
+
+    public function __wakeup()
+    {
+        $this->connect();
+    }
+
     protected function connect()
     {
         global $gLogger;
