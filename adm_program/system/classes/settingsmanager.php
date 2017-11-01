@@ -21,6 +21,10 @@ class SettingsManager
      * @var array<string,string>
      */
     private $settings = array();
+    /**
+     * @var bool
+     */
+    private $initFullLoad = false;
 
     /**
      * SettingsManager constructor.
@@ -131,6 +135,7 @@ class SettingsManager
     public function resetAll()
     {
         $this->settings = $this->loadAll();
+        $this->initFullLoad = true;
     }
 
     /**
@@ -169,7 +174,7 @@ class SettingsManager
      */
     public function getAll($update = false)
     {
-        if ($update || count($this->settings) === 0)
+        if ($update || !$this->initFullLoad)
         {
             $this->resetAll();
         }
@@ -317,7 +322,7 @@ class SettingsManager
 
         $this->db->endTransaction();
 
-        $this->settings = $this->loadAll();
+        $this->resetAll();
     }
 
     /**
