@@ -60,16 +60,28 @@ else
 if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization'))
 {
     // read session object from PHP session
+    /**
+     * @var Session $gCurrentSession
+     */
     $gCurrentSession = $_SESSION['gCurrentSession'];
     $gCurrentSession->setDatabase($gDb);
     // reload session data and if necessary the organization object
     $gCurrentSession->refreshSession();
     // read system component
+    /**
+     * @var Component $gSystemComponent
+     */
     $gSystemComponent =& $gCurrentSession->getObject('gSystemComponent');
     // read language data from session and assign them to the language object
+    /**
+     * @var LanguageData $gLanguageData
+     */
     $gLanguageData =& $gCurrentSession->getObject('gLanguageData');
     $gL10n = new Language($gLanguageData);
     // read organization data from session object
+    /**
+     * @var Organization $gCurrentOrganization
+     */
     $gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gPreferences = $gCurrentOrganization->getPreferences();
 }
@@ -121,8 +133,14 @@ $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 // now if auto login is done, read global user data
 if($gCurrentSession->hasObject('gCurrentUser'))
 {
+    /**
+     * @var ProfileFields $gProfileFields
+     */
     $gProfileFields =& $gCurrentSession->getObject('gProfileFields');
-    $gCurrentUser   =& $gCurrentSession->getObject('gCurrentUser');
+    /**
+     * @var User $gCurrentUser
+     */
+    $gCurrentUser =& $gCurrentSession->getObject('gCurrentUser');
     $gCurrentUser->setProfileFieldsDataDatabase($gDb);
 
     // checks if user in database session is the same as in php session
@@ -199,6 +217,9 @@ $gMessage = new Message();
 // Every URL will be stored in a stack and can be called if user want's to navigate back
 if($gCurrentSession->hasObject('gNavigation'))
 {
+    /**
+     * @var Navigation $gNavigation
+     */
     $gNavigation =& $gCurrentSession->getObject('gNavigation');
 }
 else
