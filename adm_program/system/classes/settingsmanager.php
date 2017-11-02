@@ -52,7 +52,7 @@ class SettingsManager
      */
     public function __sleep()
     {
-        return array_diff(array_keys(get_object_vars($this)), array('db'));
+        return array('orgId', 'settings', 'initFullLoad');
     }
 
     /**
@@ -61,7 +61,7 @@ class SettingsManager
      */
     private static function isValidName($name)
     {
-        return (bool) preg_match('/^[a-z][a-z_]*[a-z]$/', $name);
+        return (bool) preg_match('/^[a-z](_?[a-z])*$/', $name);
     }
 
     /**
