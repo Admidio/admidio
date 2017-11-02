@@ -95,10 +95,6 @@ class Database
      */
     protected $dsn;
     /**
-     * @var string
-     */
-    protected $dbEngine;
-    /**
      * @var \PDO The PDO object that handles the communication with the database.
      */
     protected $pdo;
@@ -249,8 +245,6 @@ class Database
     {
         global $gDebug;
 
-        $this->dbEngine = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
-
         if ($gDebug)
         {
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -265,7 +259,7 @@ class Database
         $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC); // maybe change in future to \PDO::FETCH_OBJ
         $this->pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
 
-        switch ($this->dbEngine)
+        switch ($this->engine)
         {
             case self::PDO_ENGINE_MYSQL:
                 // MySQL charset UTF-8 is set in DSN-string
@@ -287,7 +281,7 @@ class Database
     protected function getPropertyFromDatabaseConfig($property)
     {
         $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
-        $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->dbEngine . '"]/' . $property);
+        $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
         return (string) $node[0];
     }
 
@@ -326,7 +320,7 @@ class Database
         $versionStatement = $this->queryPrepared('SELECT version()');
         $version = $versionStatement->fetchColumn();
 
-        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
+        if ($this->engine === self::PDO_ENGINE_PGSQL)
         {
             // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
             $versionArray  = explode(',', $version);
@@ -495,7 +489,7 @@ class Database
      */
     public function lastInsertId()
     {
-        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
+        if ($this->engine === self::PDO_ENGINE_PGSQL)
         {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
             return $lastValStatement->fetchColumn();
@@ -558,7 +552,7 @@ class Database
     {
         global $gLogger;
 
-        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
+        if ($this->engine === self::PDO_ENGINE_PGSQL)
         {
             $sql = $this->preparePgSqlQuery($sql);
         }
@@ -607,7 +601,7 @@ class Database
     {
         global $gLogger;
 
-        if ($this->dbEngine === self::PDO_ENGINE_PGSQL)
+        if ($this->engine === self::PDO_ENGINE_PGSQL)
         {
             $sql = $this->preparePgSqlQuery($sql);
         }
@@ -705,7 +699,7 @@ class Database
     {
         $tableColumnsProperties = array();
 
-        if ($this->dbEngine === self::PDO_ENGINE_MYSQL)
+        if ($this->engine === self::PDO_ENGINE_MYSQL)
         {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $columnsStatement = $this->query($sql); // TODO add more params
@@ -741,7 +735,7 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         }
-        elseif ($this->dbEngine === self::PDO_ENGINE_PGSQL)
+        elseif ($this->engine === self::PDO_ENGINE_PGSQL)
         {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type
                       FROM information_schema.columns
