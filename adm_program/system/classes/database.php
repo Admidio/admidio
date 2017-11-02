@@ -355,15 +355,13 @@ class Database
 
     /**
      * Escapes special characters within the input string.
-     * In contrast to the <a href="https://secure.php.net/manual/en/pdo.quote.php">quote</a> method,
-     * the returned string has no quotes around the input string!
      * @param string $string The string to be quoted.
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
      * @see <a href="https://secure.php.net/manual/en/pdo.quote.php">PDO::quote</a>
      */
     public function escapeString($string)
     {
-        return trim($this->pdo->quote($string), "'");
+        return $this->pdo->quote($string);
     }
 
     /**

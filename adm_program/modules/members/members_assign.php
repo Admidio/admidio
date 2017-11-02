@@ -40,18 +40,18 @@ $getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('req
 if($gPreferences['system_search_similar'] == 1 && $gDbType === 'mysql')
 {
     $sql_similar_name =
-    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getLastname).'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getFirstname).'\'), 1, 4) )
-     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getFirstname).'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $gDb->escapeString($getLastname).'\'), 1, 4) ) )';
+    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX('. $gDb->escapeString($getLastname).'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX('. $gDb->escapeString($getFirstname).'), 1, 4) )
+     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX('. $gDb->escapeString($getFirstname).'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX('. $gDb->escapeString($getLastname).'), 1, 4) ) )';
 }
 else
 {
     $sql_similar_name =
-    '(  (   last_name.usd_value  LIKE \''. $gDb->escapeString($getLastname).'\'
-        AND first_name.usd_value LIKE \''. $gDb->escapeString($getFirstname).'\')
-     OR (   last_name.usd_value  LIKE \''. $gDb->escapeString($getFirstname).'\'
-        AND first_name.usd_value LIKE \''. $gDb->escapeString($getLastname).'\') )';
+    '(  (   last_name.usd_value  LIKE '. $gDb->escapeString($getLastname).'
+        AND first_name.usd_value LIKE '. $gDb->escapeString($getFirstname).')
+     OR (   last_name.usd_value  LIKE '. $gDb->escapeString($getFirstname).'
+        AND first_name.usd_value LIKE '. $gDb->escapeString($getLastname).') )';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
