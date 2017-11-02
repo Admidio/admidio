@@ -121,8 +121,8 @@ class SettingsManager
     private function insert($name, $value)
     {
         $sql = 'INSERT INTO '.TBL_PREFERENCES.'
-                            (prf_org_id, prf_name, prf_value)
-                     VALUES (?, ?, ?) -- $orgId, $name, $value';
+                       (prf_org_id, prf_name, prf_value)
+                VALUES (?, ?, ?) -- $orgId, $name, $value';
         $this->db->queryPrepared($sql, array($this->orgId, $name, $value));
     }
 
@@ -137,6 +137,17 @@ class SettingsManager
                  WHERE prf_org_id = ? -- $orgId
                    AND prf_name   = ? -- $name';
         $this->db->queryPrepared($sql, array($value, $this->orgId, $name));
+    }
+
+    /**
+     * @param string $name
+     */
+    private function delete($name)
+    {
+        $sql = 'DELETE FROM '.TBL_PREFERENCES.'
+                 WHERE prf_org_id = ? -- $orgId
+                   AND prf_name   = ? -- $name';
+        $this->db->queryPrepared($sql, array($this->orgId, $name));
     }
 
     /**
@@ -212,13 +223,12 @@ class SettingsManager
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-
-        if ($this->has($name, $update))
+        if (!$this->has($name, $update))
         {
-            return $this->settings[$name];
+            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
-        throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+        return $this->settings[$name];
     }
 
     /**
@@ -363,5 +373,24 @@ class SettingsManager
         $this->updateOrInsertSetting($name, (string) $value, $update);
 
         $this->settings[$name] = $this->load($name);
+    }
+
+    /**
+     * @param string $name
+     * @throws \UnexpectedValueException
+     */
+    public function del($name)
+    {
+        if (!self::isValidName($name))
+        {
+            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+        }
+
+        if (!$this->has($name))
+        {
+            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+        }
+
+        $this->delete($name);
     }
 }
