@@ -62,36 +62,36 @@ class Database
     const PDO_ENGINE_PGSQL = 'pgsql';
 
     /**
-     * @var string
+     * @var string The database engine ("mysql", "pgsql")
      */
     protected $engine;
     /**
-     * @var string
+     * @var string The host of the database server ("localhost", "127.0.0.1")
      */
     protected $host;
     /**
-     * @var int|null
+     * @var int|null The port of the database server. Set to "null" to use default. (Default: mysql=3306 , pgsql=5432)
      */
     protected $port;
     /**
-     * @var string
+     * @var string The name of the database
      */
     protected $dbName;
     /**
-     * @var string|null
+     * @var string|null The username to access the database
      */
     protected $username;
     /**
-     * @var string|null
+     * @var string|null The password to access the database
      */
     protected $password;
     /**
-     * @var array
+     * @var array Driver specific connection options
      */
     protected $options;
 
     /**
-     * @var string
+     * @var string The Data-Source-Name for the database connection
      */
     protected $dsn;
     /**
@@ -163,6 +163,9 @@ class Database
         $this->connect();
     }
 
+    /**
+     * @throws AdmException
+     */
     protected function connect()
     {
         global $gLogger;
