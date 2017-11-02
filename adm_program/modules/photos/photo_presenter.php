@@ -35,7 +35,6 @@ elseif ($gSettingsManager->get('enable_photo_module') == 2)
 if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
 {
     $photoAlbum =& $_SESSION['photo_album'];
-    $photoAlbum->setDatabase($gDb);
 }
 else
 {

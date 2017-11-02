@@ -147,7 +147,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                 $tablecounter = 1;
             }
             $SQLquery  = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR;
-            $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+            $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
             $countTablesStatement = $gDb->query($SQLquery);
             $row = $countTablesStatement->fetch();
             $rows[$t] = $row['num'];
@@ -190,7 +190,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             {
                 $structurelines = array();
                 $SQLquery  = 'SHOW FULL FIELDS';
-                $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
                 $showfieldsStatement = $gDb->query($SQLquery);
                 while ($row = $showfieldsStatement->fetch())
                 {
@@ -302,7 +302,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     $structurelines[] = $structureline;
                 }
 
-                $SQLquery  = 'SHOW TABLE STATUS = "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
+                $SQLquery  = 'SHOW TABLE STATUS = '.$gDb->escapeString($SelectedTables[$dbname][$t]);
                 $tablestatusStatement = $gDb->query($SQLquery);
                 if (!($TableStatusRow = $tablestatusStatement->fetch()))
                 {
@@ -352,7 +352,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
             {
                 $SQLquery  = 'SELECT *';
-                $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
                 $statement = $gDb->query($SQLquery);
                 $rows[$t] = $statement->rowCount();
                 if ($rows[$t] > 0)
@@ -372,7 +372,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                 }
                 unset($fieldnames);
-                $fieldnames = $gDb->getTableColumns($gDb->escapeString($SelectedTables[$dbname][$t]));
+                $fieldnames = $gDb->getTableColumns($SelectedTables[$dbname][$t]);
 
                 if ($_REQUEST['StartBackup'] === 'complete')
                 {
@@ -415,7 +415,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                     }
                                     else
                                     {
-                                        $valuevalues[] = QUOTECHAR.$gDb->escapeString($data).QUOTECHAR;
+                                        $valuevalues[] = $gDb->escapeString($data);
                                     }
                                     break;
 
@@ -429,7 +429,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                 case 'double':
                                 case 'decimal':
                                 case 'year':
-                                    $valuevalues[] = $gDb->escapeString($row[$key]);
+                                    $valuevalues[] = $row[$key];
                                     break;
 
                                 // value surrounded by quotes
@@ -446,7 +446,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                 case 'time':
                                 case 'timestamp':
                                 default:
-                                    $valuevalues[] = QUOTECHAR.$gDb->escapeString($row[$key]).QUOTECHAR;
+                                    $valuevalues[] = $gDb->escapeString($row[$key]);
                                     break;
                             }
 

@@ -64,7 +64,6 @@ if(array_key_exists('gCurrentSession', $_SESSION) && $_SESSION['gCurrentSession'
      * @var Session $gCurrentSession
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->setDatabase($gDb);
     // reload session data and if necessary the organization object
     $gCurrentSession->refreshSession();
     // read system component
@@ -145,7 +144,6 @@ if($gCurrentSession->hasObject('gCurrentUser'))
      * @var User $gCurrentUser
      */
     $gCurrentUser =& $gCurrentSession->getObject('gCurrentUser');
-    $gCurrentUser->setProfileFieldsDataDatabase($gDb);
 
     // checks if user in database session is the same as in php session
     if((int) $gCurrentUser->getValue('usr_id') !== $sesUsrId)

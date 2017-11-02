@@ -78,6 +78,16 @@ $img = new Securimage();
 if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
 
 
-$img->show();  // outputs the image and content headers to the browser
+// ***** START ADMIDIO CODE *****
+if($gPreferences['captcha_background_image'] !== '')
+{
+    $img->show(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/' . $gPreferences['captcha_background_image']);
+}
+else
+{
+    $img->show();  // outputs the image and content headers to the browser
+}
+// ***** END ADMIDIO CODE *****
+
 // alternate use:
 // $img->show('/path/to/background_image.jpg');
