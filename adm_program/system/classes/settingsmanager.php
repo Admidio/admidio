@@ -38,24 +38,6 @@ class SettingsManager
     }
 
     /**
-     * Set the database object for communication with the database of this class.
-     * @param Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(Database $database)
-    {
-        $this->db =& $database;
-    }
-
-    /**
-     * Called on serialization of this object. The database object could not be serialized and should be ignored.
-     * @return array<int,string> Returns all class variables that should be serialized.
-     */
-    public function __sleep()
-    {
-        return array('orgId', 'settings', 'initFullLoad');
-    }
-
-    /**
      * @param string $name
      * @return bool
      */
