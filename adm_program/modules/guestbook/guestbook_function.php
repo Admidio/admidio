@@ -188,7 +188,7 @@ if ($getMode === 1 || $getMode === 3)
                 // einen GB-Eintrag erzeugt hat...
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK.'
-                         WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
+                         WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                            AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_adress\')';
                 $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_adress'));
@@ -381,7 +381,7 @@ elseif ($getMode === 4 || $getMode === 8)
                 // einen GB-Eintrag/Kommentar erzeugt hat...
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
-                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
+                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                            AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_adress\')';
                 $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_adress')));
 

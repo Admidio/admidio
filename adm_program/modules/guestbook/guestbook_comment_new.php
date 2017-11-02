@@ -120,7 +120,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK_COMMENTS.'
-             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
+             WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_address\')';
     $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_address')));
 
