@@ -385,7 +385,6 @@ class SettingsManager
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
-
         if (!$this->has($name))
         {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
