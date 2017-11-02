@@ -91,21 +91,11 @@ class User extends TableAccess
         if ($userFields !== null)
         {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
-            $this->mProfileFieldsData->setDatabase($database);
         }
 
         $this->organizationId = (int) $gCurrentOrganization->getValue('org_id');
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
-    }
-
-    /**
-     * Set the database object for communication with the database of this class.
-     * @param Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setProfileFieldsDataDatabase(Database $database)
-    {
-        $this->mProfileFieldsData->setDatabase($database);
     }
 
     /**
