@@ -27,21 +27,21 @@
                     || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
-                            'announcements', FOLDER_MODULES . '/announcements/announcements.php',
+                            'announcements', ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
                             $gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements.png'
                         );
                     }
                     if($gPreferences['enable_download_module'] == 1)
                     {
                         $moduleMenu->addItem(
-                            'download', FOLDER_MODULES . '/downloads/downloads.php',
+                            'download', ADMIDIO_URL . FOLDER_MODULES . '/downloads/downloads.php',
                             $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png'
                         );
                     }
                     if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
                     {
                         $moduleMenu->addItem(
-                            'email', FOLDER_MODULES . '/messages/messages_write.php',
+                            'email', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php',
                             $gL10n->get('SYS_EMAIL'), '/icons/email.png'
                         );
                     }
@@ -59,7 +59,7 @@
                         }
 
                         $moduleMenu->addItem(
-                            'private_message', FOLDER_MODULES . '/messages/messages.php',
+                            'private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php',
                             $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png'
                         );
                     }
@@ -67,7 +67,7 @@
                     || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
-                            'photo', FOLDER_MODULES . '/photos/photos.php',
+                            'photo', ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php',
                             $gL10n->get('PHO_PHOTOS'), '/icons/photo.png'
                         );
                     }
@@ -75,7 +75,7 @@
                     || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
-                            'guestbk', FOLDER_MODULES . '/guestbook/guestbook.php',
+                            'guestbk', ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php',
                             $gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook.png'
                         );
                     }
@@ -83,11 +83,11 @@
                     if($gPreferences['lists_enable_module'] == 1 && $gValidLogin)
                     {
                         $moduleMenu->addItem(
-                            'lists', FOLDER_MODULES . '/lists/lists.php',
+                            'lists', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php',
                             $gL10n->get('LST_LISTS'), '/icons/lists.png'
                         );
                         $moduleMenu->addItem(
-                            'mylist', FOLDER_MODULES . '/lists/mylist.php',
+                            'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
                             $gL10n->get('LST_MY_LIST'), '/icons/mylist.png'
                         );
                     }
@@ -96,7 +96,7 @@
                     || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
-                            'dates', FOLDER_MODULES . '/dates/dates.php',
+                            'dates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php',
                             $gL10n->get('DAT_DATES'), '/icons/dates.png'
                         );
                     }
@@ -105,7 +105,7 @@
                     || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
-                            'links', FOLDER_MODULES . '/links/links.php',
+                            'links', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',
                             $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png'
                         );
                     }
@@ -121,32 +121,32 @@
                         if($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
                         {
                             $adminMenu->addItem(
-                                'newreg', FOLDER_MODULES . '/registration/registration.php',
+                                'newreg', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php',
                                 $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations.png'
                             );
                         }
                         if($gCurrentUser->editUsers())
                         {
                             $adminMenu->addItem(
-                                'usrmgt', FOLDER_MODULES . '/members/members.php',
+                                'usrmgt', ADMIDIO_URL . FOLDER_MODULES . '/members/members.php',
                                 $gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration.png'
                             );
                         }
                         if($gCurrentUser->manageRoles())
                         {
                             $adminMenu->addItem(
-                                'roladm', FOLDER_MODULES . '/roles/roles.php',
+                                'roladm', ADMIDIO_URL . FOLDER_MODULES . '/roles/roles.php',
                                 $gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles.png'
                             );
                         }
                         if($gCurrentUser->isAdministrator())
                         {
                             $adminMenu->addItem(
-                                'dbback', FOLDER_MODULES . '/backup/backup.php',
+                                'dbback', ADMIDIO_URL . FOLDER_MODULES . '/backup/backup.php',
                                 $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup.png'
                             );
                             $adminMenu->addItem(
-                                'orgprop', FOLDER_MODULES . '/preferences/preferences.php',
+                                'orgprop', ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php',
                                 $gL10n->get('SYS_SETTINGS'), '/icons/options.png'
                             );
                         }

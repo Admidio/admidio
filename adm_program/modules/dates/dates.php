@@ -201,7 +201,7 @@ if($getViewMode === 'html')
         {
             // if no calendar selectbox is shown, then show link to edit calendars
             $datesMenu->addItem(
-                'admMenuItemCategories', FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
+                'admMenuItemCategories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
                 $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras'
             );
         }

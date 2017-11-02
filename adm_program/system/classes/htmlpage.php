@@ -243,21 +243,21 @@ class HtmlPage
         if ($gPreferences['enable_announcements_module'] == 1 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
-                'menu_item_announcements', FOLDER_MODULES . '/announcements/announcements.php', $gL10n->get('ANN_ANNOUNCEMENTS'),
+                'menu_item_announcements', ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', $gL10n->get('ANN_ANNOUNCEMENTS'),
                 'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
         if ($gPreferences['enable_download_module'] == 1)
         {
             $this->menu->addItem(
-                'menu_item_download', FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
+                'menu_item_download', ADMIDIO_URL . FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
                 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
         if ($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
         {
             $this->menu->addItem(
-                'menu_item_email', FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
+                'menu_item_email', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
                 'email.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
@@ -275,32 +275,32 @@ class HtmlPage
             }
 
             $this->menu->addItem(
-                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $badge,
+                'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $badge,
                 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
         if ($gPreferences['enable_photo_module'] == 1 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
-                'menu_item_photo', FOLDER_MODULES . '/photos/photos.php', $gL10n->get('PHO_PHOTOS'),
+                'menu_item_photo', ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', $gL10n->get('PHO_PHOTOS'),
                 'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
         if ($gPreferences['enable_guestbook_module'] == 1 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
-                'menu_item_guestbook', FOLDER_MODULES . '/guestbook/guestbook.php', $gL10n->get('GBO_GUESTBOOK'),
+                'menu_item_guestbook', ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', $gL10n->get('GBO_GUESTBOOK'),
                 'guestbook.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
 
         $this->menu->addItem(
-            'menu_item_lists', FOLDER_MODULES . '/lists/lists.php', $gL10n->get('LST_LISTS'),
+            'menu_item_lists', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', $gL10n->get('LST_LISTS'),
             'lists.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
         if ($gValidLogin)
         {
             $this->menu->addItem(
-                'menu_item_mylist', FOLDER_MODULES . '/lists/mylist.php', $gL10n->get('LST_MY_LIST'),
+                'menu_item_mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', $gL10n->get('LST_MY_LIST'),
                 'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
@@ -308,7 +308,7 @@ class HtmlPage
         if ($gPreferences['enable_dates_module'] == 1 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
-                'menu_item_dates', FOLDER_MODULES . '/dates/dates.php', $gL10n->get('DAT_DATES'),
+                'menu_item_dates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', $gL10n->get('DAT_DATES'),
                 'dates.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
@@ -316,7 +316,7 @@ class HtmlPage
         if ($gPreferences['enable_weblinks_module'] == 1 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
         {
             $this->menu->addItem(
-                'menu_item_links', FOLDER_MODULES . '/links/links.php', $gL10n->get('LNK_WEBLINKS'),
+                'menu_item_links', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php', $gL10n->get('LNK_WEBLINKS'),
                 'weblinks.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
@@ -332,32 +332,32 @@ class HtmlPage
         if ($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
         {
             $this->menu->addItem(
-                'menu_item_registration', FOLDER_MODULES . '/registration/registration.php', $gL10n->get('NWU_NEW_REGISTRATIONS'),
+                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('NWU_NEW_REGISTRATIONS'),
                 'new_registrations.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
         if ($gCurrentUser->editUsers())
         {
             $this->menu->addItem(
-                'menu_item_members', FOLDER_MODULES . '/members/members.php', $gL10n->get('MEM_USER_MANAGEMENT'),
+                'menu_item_members', ADMIDIO_URL . FOLDER_MODULES . '/members/members.php', $gL10n->get('MEM_USER_MANAGEMENT'),
                 'user_administration.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
         if ($gCurrentUser->manageRoles())
         {
             $this->menu->addItem(
-                'menu_item_roles', FOLDER_MODULES . '/roles/roles.php', $gL10n->get('ROL_ROLE_ADMINISTRATION'),
+                'menu_item_roles', ADMIDIO_URL . FOLDER_MODULES . '/roles/roles.php', $gL10n->get('ROL_ROLE_ADMINISTRATION'),
                 'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
         if ($gCurrentUser->isAdministrator())
         {
             $this->menu->addItem(
-                'menu_item_backup', FOLDER_MODULES . '/backup/backup.php', $gL10n->get('BAC_DATABASE_BACKUP'),
+                'menu_item_backup', ADMIDIO_URL . FOLDER_MODULES . '/backup/backup.php', $gL10n->get('BAC_DATABASE_BACKUP'),
                 'backup.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
             $this->menu->addItem(
-                'menu_item_options', FOLDER_MODULES . '/preferences/preferences.php', $gL10n->get('SYS_SETTINGS'),
+                'menu_item_options', ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', $gL10n->get('SYS_SETTINGS'),
                 'options.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
             );
         }
@@ -366,7 +366,7 @@ class HtmlPage
         {
             // show link to own profile
             $this->menu->addItem(
-                'menu_item_my_profile', FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
+                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
                 'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
             );
             // show logout link
@@ -379,7 +379,7 @@ class HtmlPage
         {
             // show registration link
             $this->menu->addItem(
-                'menu_item_registration', FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
+                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
                 'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
             );
             // show login link
