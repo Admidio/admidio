@@ -28,7 +28,7 @@ function initLoginParams($prefix = '')
     $loginname = $_POST[$prefix.'usr_login_name'];
     $password  = $_POST[$prefix.'usr_password'];
 
-    if($gSettingsManager->get('enable_auto_login') == 1 && array_key_exists($prefix.'auto_login', $_POST) && $_POST[$prefix.'auto_login'] == 1)
+    if($gSettingsManager->getBool('enable_auto_login') && array_key_exists($prefix.'auto_login', $_POST) && $_POST[$prefix.'auto_login'] == 1)
     {
         $bAutoLogin = true;
     }

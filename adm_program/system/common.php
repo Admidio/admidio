@@ -117,11 +117,11 @@ else
     $gCurrentSession->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
 
     // create a language data object and assign it to the language object
-    $gLanguageData = new LanguageData($gSettingsManager->get('system_language'));
+    $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
     $gCurrentSession->addObject('gLanguageData', $gLanguageData);
 
     // delete old entries in session table
-    $gCurrentSession->tableCleanup((int) $gSettingsManager->get('logout_minutes'));
+    $gCurrentSession->tableCleanup($gSettingsManager->getInt('logout_minutes'));
 }
 
 $gL10n = new Language($gLanguageData);
@@ -206,8 +206,8 @@ if ($gSettingsManager->has('theme'))
     $gSettingsManager->set('theme', 'modern');
 }
 
-define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->get('theme')); // Will get "THEME_PATH" in v4.0
-define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gSettingsManager->get('theme'));
+define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme')); // Will get "THEME_PATH" in v4.0
+define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
 define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // TODO deprecated: Remove in Admidio 4.0
 define('THEME_PATH', THEME_URL); // TODO deprecated: Remove in Admidio 4.0
 
@@ -244,9 +244,9 @@ catch(AdmException $e)
 // set default homepage
 if($gValidLogin)
 {
-    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->get('homepage_login');
+    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_login');
 }
 else
 {
-    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->get('homepage_logout');
+    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }

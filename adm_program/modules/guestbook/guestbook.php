@@ -57,7 +57,7 @@ $page = new HtmlPage();
 $page->enableModal();
 
 // add rss feed to guestbook
-if($gSettingsManager->get('enable_rss') == 1)
+if($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 }
@@ -149,9 +149,9 @@ $pdoStatement = $gDb->queryPrepared($sql, $queryParamsSpecial);
 $guestbookEntries = (int) $pdoStatement->fetchColumn();
 
 // Anzahl Gaestebucheintraege pro Seite
-if($gSettingsManager->get('guestbook_entries_per_page') > 0)
+if($gSettingsManager->getInt('guestbook_entries_per_page') > 0)
 {
-    $guestbookEntriesPerPage = (int) $gSettingsManager->get('guestbook_entries_per_page');
+    $guestbookEntriesPerPage = $gSettingsManager->getInt('guestbook_entries_per_page');
 }
 else
 {
@@ -329,7 +329,7 @@ else
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
                 if ($getGboId === 0 && $commentStatement->rowCount() > 0)
                 {
-                    if($gSettingsManager->get('enable_intial_comments_loading') == 1 || $getModeration)
+                    if($gSettingsManager->getBool('enable_intial_comments_loading') || $getModeration)
                     {
                         $displayShowComments = 'none';
                         $displayOthers       = 'block';
@@ -352,7 +352,7 @@ else
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     $page->addHtml('<div id="comments_'. $gboId. '" class="admidio-guestbook-comments">');
-                        if($gSettingsManager->get('enable_intial_comments_loading') == 1 || $getModeration)
+                        if($gSettingsManager->getBool('enable_intial_comments_loading') || $getModeration)
                         {
                             // Get setzen da diese Datei eigentlich als Aufruf ueber Javascript gedacht ist
                             $_GET['cid'] = $gboId;
@@ -368,7 +368,7 @@ else
                 }
 
                 if ($getGboId === 0 && $commentStatement->rowCount() === 0
-                && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->get('enable_gbook_comments4all') == 1)
+                && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->getBool('enable_gbook_comments4all'))
                 && !$getModeration)
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...

@@ -71,7 +71,7 @@ if ($getGbcGboId > 0)
                     alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbcEmail).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbcEmail).'" /></a>';
             }
             echo '</div>
-            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->get('system_date').' '.$gSettingsManager->get('system_time'));
+            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
             if ($gCurrentUser->editGuestbookRight())
@@ -114,7 +114,7 @@ if ($getGbcGboId > 0)
             echo '</div>';
         }
 
-        if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->get('enable_gbook_comments4all') == 1))
+        if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->getBool('enable_gbook_comments4all')))
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '

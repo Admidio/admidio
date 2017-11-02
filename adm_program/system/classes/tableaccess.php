@@ -254,15 +254,15 @@ class TableAccess
                         {
                             if (admStrContains($this->columnsInfos[$columnName]['type'], 'timestamp'))
                             {
-                                $format = $gSettingsManager->get('system_date') . ' ' . $gSettingsManager->get('system_time');
+                                $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
                             }
                             elseif (admStrContains($this->columnsInfos[$columnName]['type'], 'date'))
                             {
-                                $format = $gSettingsManager->get('system_date');
+                                $format = $gSettingsManager->getString('system_date');
                             }
                             else
                             {
-                                $format = $gSettingsManager->get('system_time');
+                                $format = $gSettingsManager->getString('system_time');
                             }
                         }
 

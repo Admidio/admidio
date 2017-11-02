@@ -524,8 +524,8 @@ class HtmlTable extends HtmlTableBasic
         }
 
         $this->htmlPage->addJavascript('
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->get('system_date') . '"));
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->get('system_date') . ' ' . $gSettingsManager->get('system_time') . '"));
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . '"));
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
 
             var admidioTable = $("#' . $this->id . '").DataTable({' .
             implode(',', $this->datatablesInitParameters) .

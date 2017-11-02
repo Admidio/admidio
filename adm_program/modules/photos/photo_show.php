@@ -82,7 +82,7 @@ if ($getThumbnail)
 
         // Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         // Wenn nicht anlegen
-        if (!is_file($picThumbPath) || $thumbLength !== (int) $gSettingsManager->get('photo_thumbs_scale'))
+        if (!is_file($picThumbPath) || $thumbLength !== $gSettingsManager->getInt('photo_thumbs_scale'))
         {
             // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if (!is_dir($albumFolder . '/thumbnails'))
@@ -93,7 +93,7 @@ if ($getThumbnail)
 
             // nun das Thumbnail anlegen
             $image = new Image($picPath);
-            $image->scaleLargerSide($gSettingsManager->get('photo_thumbs_scale'));
+            $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
             $image->copyToFile(null, $picThumbPath);
         }
         else
@@ -106,7 +106,7 @@ if ($getThumbnail)
     {
         // kein Bild uebergeben, dann NoPix anzeigen
         $image = new Image(THEME_ADMIDIO_PATH . '/images/nopix.jpg');
-        $image->scaleLargerSide($gSettingsManager->get('photo_thumbs_scale'));
+        $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
     }
 }
 else
@@ -123,11 +123,11 @@ else
 if ($image !== null)
 {
     // insert copyright text into photo if photo size is larger than 200px
-    if (($getMaxWidth > 200) && $gSettingsManager->get('photo_image_text') !== '')
+    if (($getMaxWidth > 200) && $gSettingsManager->getString('photo_image_text') !== '')
     {
-        if ($gSettingsManager->get('photo_image_text_size') > 0)
+        if ($gSettingsManager->getInt('photo_image_text_size') > 0)
         {
-            $fontSize = $getMaxWidth / $gSettingsManager->get('photo_image_text_size');
+            $fontSize = $getMaxWidth / $gSettingsManager->getInt('photo_image_text_size');
         }
         else
         {
@@ -138,7 +138,7 @@ if ($image !== null)
         $fontY = $imageSize[0] - $fontSize;
         $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
         $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
-        $text = $gSettingsManager->get('photo_image_text');
+        $text = $gSettingsManager->getString('photo_image_text');
         imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 

@@ -27,7 +27,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 $gCurrentUser->clear();
 
 // set homepage to logout page
-$gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->get('homepage_logout');
+$gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 
 // message logout successful and go to homepage
 $gMessage->setForwardUrl($gHomepage, 2000);

@@ -83,7 +83,7 @@ if($getModule === 'photos')
 }
 elseif($getModule === 'downloads')
 {
-    if ($gSettingsManager->get('enable_download_module') != 1)
+    if (!$gSettingsManager->getBool('enable_download_module'))
     {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT
@@ -99,7 +99,7 @@ elseif($getModule === 'downloads')
     }
 
     // upload only possible if upload filesize > 0
-    if ($gSettingsManager->get('max_file_upload_size') == 0)
+    if ($gSettingsManager->getInt('max_file_upload_size') === 0)
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
         // => EXIT

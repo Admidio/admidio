@@ -62,15 +62,15 @@ $page = new HtmlPage($getHeadline);
 $page->enableModal();
 
 // add rss feed to announcements
-if($gSettingsManager->get('enable_rss') == 1)
+if($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 }
 
 // number of announcements per page
-if($gSettingsManager->get('announcements_per_page') > 0)
+if($gSettingsManager->getInt('announcements_per_page') > 0)
 {
-    $announcementsPerPage = (int) $gSettingsManager->get('announcements_per_page');
+    $announcementsPerPage = $gSettingsManager->getInt('announcements_per_page');
 }
 else
 {
@@ -155,7 +155,7 @@ else
                     <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/announcements.png" alt="'. $annHeadline. '" />'.
                     $annHeadline. '
                 </div>
-                <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->get('system_date')));
+                <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')));
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())

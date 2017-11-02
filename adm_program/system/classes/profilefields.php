@@ -168,7 +168,7 @@ class ProfileFields
                         $date = \DateTime::createFromFormat('Y-m-d', $value);
                         if ($date instanceof \DateTime)
                         {
-                            $htmlValue = $date->format($gSettingsManager->get('system_date'));
+                            $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
                     }
                     break;
@@ -176,7 +176,7 @@ class ProfileFields
                     // the value in db is only the position, now search for the text
                     if ($value !== '')
                     {
-                        if ($gSettingsManager->get('enable_mail_module') != 1)
+                        if (!$gSettingsManager->getBool('enable_mail_module'))
                         {
                             $emailLink = 'mailto:' . $value;
                         }
@@ -387,7 +387,7 @@ class ProfileFields
                             // if no format or html is set then show date format from Admidio settings
                             if ($format === '' || $format === 'html')
                             {
-                                $value = $date->format($gSettingsManager->get('system_date'));
+                                $value = $date->format($gSettingsManager->getString('system_date'));
                             }
                             else
                             {
@@ -558,7 +558,7 @@ class ProfileFields
                     break;
                 case 'DATE':
                     // Datum muss gueltig sein und formatiert werden
-                    $date = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $fieldValue);
+                    $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValue);
                     if ($date === false)
                     {
                         $date = \DateTime::createFromFormat('Y-m-d', $fieldValue);

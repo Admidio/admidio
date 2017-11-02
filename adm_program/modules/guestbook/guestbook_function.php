@@ -47,7 +47,7 @@ elseif ($gSettingsManager->get('enable_guestbook_module') == 2)
 if ($getMode === 4)
 {
     // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
-    if ($gSettingsManager->get('enable_gbook_comments4all') == 0)
+    if (!$gSettingsManager->getBool('enable_gbook_comments4all'))
     {
         require(__DIR__ . '/../../system/login_valid.php');
 
@@ -121,7 +121,7 @@ if ($getMode === 1 || $getMode === 3)
         }
 
         // if user is not logged in and captcha is activated then check captcha
-        if (!$gValidLogin && $gSettingsManager->get('enable_guestbook_captcha') == 1)
+        if (!$gValidLogin && $gSettingsManager->getBool('enable_guestbook_captcha'))
         {
             try
             {
@@ -181,7 +181,7 @@ if ($getMode === 1 || $getMode === 3)
         }
         else
         {
-            if ($gSettingsManager->get('flooding_protection_time') != 0)
+            if ($gSettingsManager->getInt('flooding_protection_time') > 0)
             {
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -191,13 +191,13 @@ if ($getMode === 1 || $getMode === 3)
                          WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
                            AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
                            AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_adress\')';
-                $queryParams = array($gSettingsManager->get('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_adress'));
+                $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_adress'));
                 $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($pdoStatement->fetchColumn() > 0)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->get('flooding_protection_time')));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->getInt('flooding_protection_time')));
                     // => EXIT
                 }
             }
@@ -236,13 +236,13 @@ if ($getMode === 1 || $getMode === 3)
             $senderName = $gboName;
             if (!strValidCharacters($gboEmail, 'email'))
             {
-                $gboEmail = $gSettingsManager->get('email_administrator');
+                $gboEmail = $gSettingsManager->getString('email_administrator');
                 $senderName = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             try
             {
                 $notification = new Email();
-                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gSettingsManager->get('system_date'))), $senderName, $gboEmail);
+                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gSettingsManager->getString('system_date'))), $senderName, $gboEmail);
             }
             catch (AdmException $e)
             {
@@ -314,7 +314,7 @@ elseif ($getMode === 4 || $getMode === 8)
         }
 
         // if user is not logged in and captcha is activated then check captcha
-        if (!$gValidLogin && $gSettingsManager->get('enable_guestbook_captcha') == 1)
+        if (!$gValidLogin && $gSettingsManager->getBool('enable_guestbook_captcha'))
         {
             try
             {
@@ -374,7 +374,7 @@ elseif ($getMode === 4 || $getMode === 8)
         }
         else
         {
-            if ($gSettingsManager->get('flooding_protection_time') != 0)
+            if ($gSettingsManager->getInt('flooding_protection_time') > 0)
             {
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -383,12 +383,12 @@ elseif ($getMode === 4 || $getMode === 8)
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
                          WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
                            AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_adress\')';
-                $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->get('flooding_protection_time'), $gbComment->getValue('gbc_ip_adress')));
+                $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_adress')));
 
                 if ($pdoStatement->fetchColumn() > 0)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->get('flooding_protection_time')));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->getInt('flooding_protection_time')));
                     // => EXIT
                 }
             }
@@ -425,7 +425,7 @@ elseif ($getMode === 4 || $getMode === 8)
             $senderName = $gbcName;
             if ($gbcEmail === '')
             {
-                $gbcEmail = $gSettingsManager->get('email_administrator');
+                $gbcEmail = $gSettingsManager->getString('email_administrator');
                 $senderName = 'Administrator ' . $gCurrentOrganization->getValue('org_homepage');
             }
             $message = $gL10n->get(
@@ -433,7 +433,7 @@ elseif ($getMode === 4 || $getMode === 8)
                 $gCurrentOrganization->getValue('org_longname'),
                 $gbComment->getValue('gbc_text'),
                 $gbcName,
-                date($gSettingsManager->get('system_date'))
+                date($gSettingsManager->getString('system_date'))
             );
             try
             {

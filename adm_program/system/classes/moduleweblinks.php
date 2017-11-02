@@ -114,7 +114,7 @@ class ModuleWeblinks extends Modules
         // Parameter
         if($limit === null)
         {
-            $limit = $gSettingsManager->get('weblinks_per_page');
+            $limit = $gSettingsManager->getInt('weblinks_per_page');
         }
 
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));

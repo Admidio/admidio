@@ -47,7 +47,7 @@ $previousImage = $getPhotoNr - 1;
 $nextImage     = $getPhotoNr + 1;
 $urlPreviousImage = '#';
 $urlNextImage     = '#';
-$urlCurrentImage  = ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gSettingsManager->get('photo_show_width').'&amp;max_height='.$gSettingsManager->get('photo_show_height');
+$urlCurrentImage  = ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gSettingsManager->getInt('photo_show_width').'&amp;max_height='.$gSettingsManager->getInt('photo_show_height');
 
 if ($previousImage > 0)
 {
@@ -125,12 +125,12 @@ if ($gSettingsManager->get('photo_show_mode') == 0)
 elseif ($gSettingsManager->get('photo_show_mode') == 2)
 {
     // if no popup mode then show additional album information
-    $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->get('system_date'));
+    $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
 
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')
     && strlen($photoAlbum->getValue('pho_end')) > 0)
     {
-        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->get('system_date'));
+        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
     }
 
     $page->addHtml('

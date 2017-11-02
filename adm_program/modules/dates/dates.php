@@ -44,7 +44,7 @@ $getShow     = admFuncVariableIsValid($_GET, 'show',      'string', array('defau
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
-$getView     = admFuncVariableIsValid($_GET, 'view',      'string', array('defaultValue' => $gSettingsManager->get('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
+$getView     = admFuncVariableIsValid($_GET, 'view',      'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
 $participateModalForm      = false;
 $participationPossible     = true;
 
@@ -85,9 +85,9 @@ if($getCatId > 0)
 }
 
 // Number of events each page for default view 'html' or 'compact' view
-if($gSettingsManager->get('dates_per_page') > 0 && $getViewMode === 'html')
+if($gSettingsManager->getInt('dates_per_page') > 0 && $getViewMode === 'html')
 {
-    $datesPerPage = (int) $gSettingsManager->get('dates_per_page');
+    $datesPerPage = $gSettingsManager->getInt('dates_per_page');
 }
 else
 {
@@ -114,7 +114,7 @@ if($getViewMode === 'html')
     $hoverRows  = true;
     $classTable = 'table';
 
-    if($gSettingsManager->get('enable_rss') == 1 && $gSettingsManager->get('enable_dates_module') == 1)
+    if($gSettingsManager->getBool('enable_rss') && $gSettingsManager->get('enable_dates_module') == 1)
     {
         $page->addRssFile(
             ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php?headline=' . $getHeadline,
@@ -155,7 +155,7 @@ if($getViewMode === 'html')
     if($getId === 0)
     {
         $form = new HtmlForm('navbar_change_view_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
-        if($gSettingsManager->get('dates_show_rooms'))
+        if($gSettingsManager->getBool('dates_show_rooms'))
         {
             $selectBoxEntries = array(
                 'detail'       => $gL10n->get('DAT_VIEW_MODE_DETAIL'),
@@ -183,13 +183,13 @@ if($getViewMode === 'html')
         // show print button
         $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
 
-        if($gSettingsManager->get('enable_dates_ical') == 1 || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
+        if($gSettingsManager->getBool('enable_dates_ical') || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
         {
             $datesMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
         }
 
         // ical Download
-        if($gSettingsManager->get('enable_dates_ical') == 1)
+        if($gSettingsManager->getBool('enable_dates_ical'))
         {
             $datesMenu->addItem(
                 'admMenuItemICal', ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php?headline=' . $getHeadline . '&amp;cat_id=' . $getCatId,
@@ -349,15 +349,15 @@ else
         }
 
         // set end date of event
-        if($date->getValue('dat_begin', $gSettingsManager->get('system_date')) !== $date->getValue('dat_end', $gSettingsManager->get('system_date')))
+        if($date->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $date->getValue('dat_end', $gSettingsManager->getString('system_date')))
         {
-            $outputEndDate = ' - ' . $date->getValue('dat_end', $gSettingsManager->get('system_date'));
+            $outputEndDate = ' - ' . $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
         }
 
         if($getViewMode === 'html')
         {
             // ical Download
-            if($gSettingsManager->get('enable_dates_ical') == 1)
+            if($gSettingsManager->getBool('enable_dates_ical'))
             {
                 $outputButtonIcal = '
                     <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php?dat_id=' . $dateId . '&amp;mode=6">
@@ -383,7 +383,7 @@ else
                     $outputButtonDelete = '
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                             href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_' . $dateId .
-                            '&amp;name=' . urlencode($date->getValue('dat_begin', $gSettingsManager->get('system_date')) . ' ' . $dateHeadline).
+                            '&amp;name=' . urlencode($date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline).
                             '&amp;database_id=' . $dateId . '">
                             <img src="'.THEME_URL.'/icons/delete.png" alt="' . $gL10n->get('SYS_DELETE') . '" title="' . $gL10n->get('SYS_DELETE') . '" /></a>';
                 }
@@ -404,7 +404,7 @@ else
                 }
             }
 
-            if($gSettingsManager->get('dates_show_map_link') && $countLocationWords > 1 && $getViewMode === 'html')
+            if($gSettingsManager->getBool('dates_show_map_link') && $countLocationWords > 1 && $getViewMode === 'html')
             {
                 $dateCountry = $date->getValue('dat_country');
 
@@ -490,11 +490,11 @@ else
             {
                 if ($date->getValue('dat_all_day') === 0)
                 {
-                     $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->get('system_date'). ' ' . $gSettingsManager->get('system_time'));
+                     $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
                 }
                 else
                 {
-                    $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->get('system_date'));
+                    $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'));
                 }
             }
 
@@ -701,9 +701,9 @@ else
             if (!$date->getValue('dat_all_day'))
             {
                 // Write start in array
-                $dateElements[] = array($gL10n->get('SYS_START'), '<strong>' . $date->getValue('dat_begin', $gSettingsManager->get('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                $dateElements[] = array($gL10n->get('SYS_START'), '<strong>' . $date->getValue('dat_begin', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
                 // Write end in array
-                $dateElements[] = array($gL10n->get('SYS_END'), '<strong>' . $date->getValue('dat_end', $gSettingsManager->get('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                $dateElements[] = array($gL10n->get('SYS_END'), '<strong>' . $date->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
             }
 
             $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>' . $date->getValue('cat_name') . '</strong>');
@@ -779,7 +779,7 @@ else
                     <div class="panel-heading">
                         <div class="pull-left">
                             <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="' . $dateHeadline . '" />' .
-                            $date->getValue('dat_begin', $gSettingsManager->get('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
+                            $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
                         </div>
                         <div class="pull-right text-right">' .
                             $outputButtonIcal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '
@@ -818,12 +818,12 @@ else
             }
 
             // date beginn
-            $dateBegin = $date->getValue('dat_begin', $gSettingsManager->get('system_date'));
-            $timeBegin = $date->getValue('dat_begin', $gSettingsManager->get('system_time'));
+            $dateBegin = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+            $timeBegin = $date->getValue('dat_begin', $gSettingsManager->getString('system_time'));
 
             // date beginn
-            $dateEnd = $date->getValue('dat_end', $gSettingsManager->get('system_date'));
-            $timeEnd = $date->getValue('dat_end', $gSettingsManager->get('system_time'));
+            $dateEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
+            $timeEnd = $date->getValue('dat_end', $gSettingsManager->getString('system_time'));
 
             $dateTimeValue = '';
 

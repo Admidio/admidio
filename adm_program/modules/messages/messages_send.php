@@ -77,14 +77,14 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 }
 
 // Stop if pm should be send pm module is disabled
-if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && (bool) $gSettingsManager->get('enable_pm_module') === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // Stop if mail should be send and mail module is disabled
-if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && (bool) $gSettingsManager->get('enable_mail_module') === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -111,7 +111,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // Check Captcha if enabled and user logged out
-    if (!$gValidLogin && (bool) $gSettingsManager->get('enable_mail_captcha'))
+    if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
     {
         try
         {
@@ -208,13 +208,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $gCurrentOrganization->getValue('org_id')
                 );
 
-                if ($group['status'] === 'former' && (bool) $gSettingsManager->get('mail_show_former'))
+                if ($group['status'] === 'former' && $gSettingsManager->getBool('mail_show_former'))
                 {
                     // only former members
                     $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
                     $queryParams[] = DATE_NOW;
                 }
-                elseif ($group['status'] === 'active_former' && (bool) $gSettingsManager->get('mail_show_former'))
+                elseif ($group['status'] === 'active_former' && $gSettingsManager->getBool('mail_show_former'))
                 {
                     // former members and active members
                     $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
@@ -277,7 +277,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2)
                     {
                         // fill recipient with administrators address to prevent problems with provider
-                        $email->addRecipient($gSettingsManager->get('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+                        $email->addRecipient($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
                     }
 
                     // all role members will be attached as BCC
@@ -402,7 +402,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // if possible send html mail
-    if ($gValidLogin && (bool) $gSettingsManager->get('mail_html_registered_users'))
+    if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
     {
         $email->sendDataAsHtml();
     }

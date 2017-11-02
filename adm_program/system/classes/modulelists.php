@@ -260,7 +260,7 @@ class ModuleLists extends Modules
         if($limit === null)
         {
             // Roles per page
-            $limit = $gSettingsManager->get('lists_roles_per_page');
+            $limit = $gSettingsManager->getInt('lists_roles_per_page');
         }
 
         // assemble conditions

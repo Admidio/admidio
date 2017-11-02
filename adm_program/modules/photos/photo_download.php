@@ -39,7 +39,7 @@ elseif ($gSettingsManager->get('enable_photo_module') == 2)
 }
 
 // check if download function is enabled
-if ($gSettingsManager->get('photo_download_enabled') == 0)
+if (!$gSettingsManager->getBool('photo_download_enabled'))
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('PHO_DOWNLOAD_DISABLED'));
@@ -74,7 +74,7 @@ if ((int) $photoAlbum->getValue('pho_quantity') === 0)
 
 // check whether to take original version instead of scaled one
 $takeOriginalsIfAvailable = false;
-if ($gSettingsManager->get('photo_keep_original') == 1)
+if ($gSettingsManager->getBool('photo_keep_original'))
 {
     $takeOriginalsIfAvailable = true;
 }

@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gSettingsManager->get('enable_rss') != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -127,11 +127,11 @@ while ($row = $statement->fetch())
     }
 
     // Inhalt zusammensetzen
-    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gSettingsManager->get('system_date'));
+    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
     // Enddatum nur wenn anders als startdatum
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin'))
     {
-        $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photoAlbum->getValue('pho_end', $gSettingsManager->get('system_date')));
+        $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date')));
     }
     $description .= '<br />'.$gL10n->get('PHO_PHOTOS').': '.$photoAlbum->countImages();
     $description .= '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photoAlbum->getValue('pho_photographers');

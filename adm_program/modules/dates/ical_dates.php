@@ -35,8 +35,8 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 
 // Daterange defined in preferences
 $now = new \DateTime();
-$dayOffsetPast   = new \DateInterval('P'.$gSettingsManager->get('dates_ical_days_past').'D');
-$dayOffsetFuture = new \DateInterval('P'.$gSettingsManager->get('dates_ical_days_future').'D');
+$dayOffsetPast   = new \DateInterval('P'.$gSettingsManager->getInt('dates_ical_days_past').'D');
+$dayOffsetFuture = new \DateInterval('P'.$gSettingsManager->getInt('dates_ical_days_future').'D');
 $startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
 $endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
 
@@ -54,7 +54,7 @@ elseif($gSettingsManager->get('enable_dates_module') == 2)
 }
 
 // If Ical enabled and module is public
-if ($gSettingsManager->get('enable_dates_ical') != 1)
+if (!$gSettingsManager->getBool('enable_dates_ical'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));

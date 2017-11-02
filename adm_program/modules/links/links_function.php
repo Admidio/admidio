@@ -110,7 +110,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     if($returnCode === true && $getMode === 1)
     {
         // Benachrichtigungs-Email für neue Einträge
-        $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->get('system_date')));
+        $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date')));
         try
         {
             $notification = new Email();

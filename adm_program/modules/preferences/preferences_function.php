@@ -65,7 +65,7 @@ switch($getMode)
                         // => EXIT
                     }
 
-                    if(!isset($_POST['enable_auto_login']) && $gSettingsManager->get('enable_auto_login') == 1)
+                    if(!isset($_POST['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login'))
                     {
                         // if auto login was deactivated than delete all saved logins
                         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
@@ -233,7 +233,7 @@ switch($getMode)
                     $text->setValue('txt_text', $value);
                     $text->save();
                 }
-                elseif($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->get('enable_auto_login') == 1)
+                elseif($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login'))
                 {
                     // if deactivate auto login than delete all saved logins
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
@@ -251,9 +251,9 @@ switch($getMode)
         $gCurrentOrganization->save();
 
         // refresh language if necessary
-        if($gL10n->getLanguage() !== $gSettingsManager->get('system_language'))
+        if($gL10n->getLanguage() !== $gSettingsManager->getString('system_language'))
         {
-            $gL10n->setLanguage($gSettingsManager->get('system_language'));
+            $gL10n->setLanguage($gSettingsManager->getString('system_language'));
         }
 
         // clean up
@@ -353,7 +353,7 @@ switch($getMode)
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
-        $defaultOrgPreferences['system_language']     = $gSettingsManager->get('system_language');
+        $defaultOrgPreferences['system_language']     = $gSettingsManager->getString('system_language');
 
         // create all necessary data for this organization
         $settingsManager =& $newOrganization->getSettingsManager();

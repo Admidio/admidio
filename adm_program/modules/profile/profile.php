@@ -199,7 +199,7 @@ $page->addJavascript('
 
     $("input[data-provide=\'datepicker\']").datepicker({
         language: "'.$gL10n->getLanguageIsoCode().'",
-        format: "'.DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->get('system_date')).'",
+        format: "'.DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')).'",
         todayHighlight: "true",
         autoclose: "true"
     });
@@ -237,7 +237,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
 {
     // Administrators can change or send password if login is configured and user is member of current organization
 
-    if(strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->get('enable_system_mails') == 1)
+    if(strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('enable_system_mails'))
     {
         // if email is set and systemmails are activated then administrator can send a new password to user
         $profileMenu->addItem(
@@ -256,7 +256,7 @@ elseif($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->ge
 }
 
 // show link to view profile field change history
-if($gSettingsManager->get('profile_log_edit_fields') == 1 && $gCurrentUser->hasRightEditProfile($user))
+if($gSettingsManager->getBool('profile_log_edit_fields') && $gCurrentUser->hasRightEditProfile($user))
 {
     $profileMenu->addItem(
         'menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php?usr_id='. $userId,
@@ -282,7 +282,7 @@ if($gCurrentUser->assignRoles())
 }
 
 // show link to create relations
-if($gSettingsManager->get('members_enable_user_relations') == 1 && $gCurrentUser->editUsers())
+if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
 {
     $profileMenu->addItem(
         'menu_item_maintain_user_relation_types', ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId,
@@ -331,7 +331,7 @@ $page->addHtml('
             // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
-                if ($userId !== $currUsrId && $gSettingsManager->get('enable_pm_module') == 1)
+                if ($userId !== $currUsrId && $gSettingsManager->getBool('enable_pm_module'))
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
                         '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
@@ -430,7 +430,7 @@ $page->addHtml('
                                 $htmlAddress .= $address;
 
                                 // show route or address link if function is enabled and user has filled address or city
-                                if($gSettingsManager->get('profile_show_map_link') && strlen($user->getValue('STREET')) > 0
+                                if($gSettingsManager->getBool('profile_show_map_link') && strlen($user->getValue('STREET')) > 0
                                 && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                 {
                                     $htmlAddress .= '
@@ -543,7 +543,7 @@ if($category !== '')
     $page->addHtml('</div></div>');
 }
 
-if($gSettingsManager->get('profile_show_roles') == 1)
+if($gSettingsManager->getBool('profile_show_roles'))
 {
     // *******************************************************************************
     // Authorizations block
@@ -674,7 +674,7 @@ if($gSettingsManager->get('profile_show_roles') == 1)
                 'icon'  => 'photo.png'
             );
         }
-        if($user->checkRolesRight('rol_download') && $gSettingsManager->get('enable_download_module') > 0)
+        if($user->checkRolesRight('rol_download') && $gSettingsManager->getBool('enable_download_module'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_download'],
@@ -780,7 +780,7 @@ if($gSettingsManager->get('profile_show_roles') == 1)
     </div>');
 }
 
-if($gSettingsManager->get('profile_show_former_roles') == 1)
+if($gSettingsManager->getBool('profile_show_former_roles'))
 {
     // *******************************************************************************
     // Ehemalige Rollen Block
@@ -810,7 +810,7 @@ if($gSettingsManager->get('profile_show_former_roles') == 1)
     </div>');
 }
 
-if($gSettingsManager->get('profile_show_extern_roles') == 1
+if($gSettingsManager->getBool('profile_show_extern_roles')
 && ($gCurrentOrganization->getValue('org_org_id_parent') > 0
     || $gCurrentOrganization->isParentOrganization()))
 {
@@ -883,7 +883,7 @@ if($gSettingsManager->get('profile_show_extern_roles') == 1
                         }
                         $page->addHtml('&nbsp;
                     </span>
-                    <span class="pull-right">'.$gL10n->get('SYS_SINCE', $startDate->format($gSettingsManager->get('system_date'))).'</span>
+                    <span class="pull-right">'.$gL10n->get('SYS_SINCE', $startDate->format($gSettingsManager->getString('system_date'))).'</span>
                 </li>');
             }
         }
@@ -897,7 +897,7 @@ if($gSettingsManager->get('profile_show_extern_roles') == 1
     }
 }
 
-if($gSettingsManager->get('members_enable_user_relations') == 1)
+if($gSettingsManager->getBool('members_enable_user_relations'))
 {
         // *******************************************************************************
         // user relations block
@@ -919,7 +919,7 @@ if($gSettingsManager->get('members_enable_user_relations') == 1)
         <div class="panel panel-default" id="profile_user_relations_box">
             <div class="panel-heading"><div class="pull-left">' . $gL10n->get('SYS_USER_RELATIONS') . '</div>');
                 // show link to create relations
-                if($gSettingsManager->get('members_enable_user_relations') == 1 && $gCurrentUser->editUsers())
+                if($gSettingsManager->getBool('members_enable_user_relations') && $gCurrentUser->editUsers())
                 {
                     $page->addHtml('<div class="pull-right text-right"><a class="admidio-icon-link" id="profile_relations_new_entry" href="'.ADMIDIO_URL .FOLDER_MODULES.'/userrelations/userrelations_new.php?usr_id=' . $userId.'"><img
                         src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('PRO_ADD_USER_RELATION').'" title="'.$gL10n->get('PRO_ADD_USER_RELATION').'" /></a></div>');

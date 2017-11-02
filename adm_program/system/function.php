@@ -401,7 +401,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
         case 'date':
             // check if date is a valid Admidio date format
-            $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $value);
+            $objAdmidioDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
 
             if (!$objAdmidioDate)
             {

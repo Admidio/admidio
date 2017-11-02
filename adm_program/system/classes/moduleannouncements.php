@@ -261,7 +261,7 @@ class ModuleAnnouncements extends Modules
 
         if (!$this->setDateRangeParams($dateRangeStart, 'Start', 'Y-m-d'))
         {
-            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gSettingsManager->get('system_date')))
+            if (!$this->setDateRangeParams($dateRangeStart, 'Start', $gSettingsManager->getString('system_date')))
             {
                 return false;
             }
@@ -269,7 +269,7 @@ class ModuleAnnouncements extends Modules
 
         if (!$this->setDateRangeParams($dateRangeEnd, 'End', 'Y-m-d'))
         {
-            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gSettingsManager->get('system_date')))
+            if (!$this->setDateRangeParams($dateRangeEnd, 'End', $gSettingsManager->getString('system_date')))
             {
                 return false;
             }
@@ -296,7 +296,7 @@ class ModuleAnnouncements extends Modules
         }
 
         $this->setParameter('date' . $dateRangePoint . 'FormatEnglish', $objDate->format('Y-m-d'));
-        $this->setParameter('date' . $dateRangePoint . 'FormatAdmidio', $objDate->format($gSettingsManager->get('system_date')));
+        $this->setParameter('date' . $dateRangePoint . 'FormatAdmidio', $objDate->format($gSettingsManager->getString('system_date')));
 
         return true;
     }

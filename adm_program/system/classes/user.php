@@ -157,7 +157,7 @@ class User extends TableAccess
     {
         global $gSettingsManager;
 
-        if ((int) $this->getValue('usr_id') === 0 || $gSettingsManager->get('members_enable_user_relations') == 0)
+        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('members_enable_user_relations'))
         {
             return false;
         }
@@ -616,7 +616,7 @@ class User extends TableAccess
         }
 
         // should the user stayed logged in automatically, than the cookie would expire in one year
-        if ($setAutoLogin && (int) $gSettingsManager->get('enable_auto_login') === 1)
+        if ($setAutoLogin && $gSettingsManager->getBool('enable_auto_login'))
         {
             $gCurrentSession->setAutoLogin();
         }
@@ -1528,7 +1528,7 @@ class User extends TableAccess
         $cost = 10;
         if (isset($gSettingsManager) && $gSettingsManager->has('system_hashing_cost'))
         {
-            $cost = (int) $gSettingsManager->get('system_hashing_cost');
+            $cost = (int) $gSettingsManager->getInt('system_hashing_cost');
         }
 
         $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
@@ -1827,7 +1827,7 @@ class User extends TableAccess
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE')
         {
-            $date = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $newValue);
+            $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $newValue);
 
             if($date !== false)
             {
@@ -1860,7 +1860,7 @@ class User extends TableAccess
         // Felder, die mit usr_ beginnen
         // Felder, die sich nicht geändert haben
         // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert)
-        if ($returnCode && $usrId > 0 && (int) $gSettingsManager->get('profile_log_edit_fields') === 1)
+        if ($returnCode && $usrId > 0 && $gSettingsManager->getBool('profile_log_edit_fields'))
         {
             $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
             $logEntry->setValue('usl_usr_id', $usrId);

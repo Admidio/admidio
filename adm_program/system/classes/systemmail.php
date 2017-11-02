@@ -98,7 +98,7 @@ class SystemMail extends Email
             '/#user_last_name#/'          => $user->getValue('LAST_NAME', 'database'),
             '/#user_login_name#/'         => $user->getValue('usr_login_name'),
             '/#user_email#/'              => $user->getValue('EMAIL'),
-            '/#administrator_email#/'     => $gSettingsManager->get('email_administrator'),
+            '/#administrator_email#/'     => $gSettingsManager->getString('email_administrator'),
             '/#organization_short_name#/' => $this->smOrganization->getValue('org_shortname'),
             '/#organization_long_name#/'  => $this->smOrganization->getValue('org_longname'),
             '/#organization_homepage#/'   => $this->smOrganization->getValue('org_homepage')
@@ -156,7 +156,7 @@ class SystemMail extends Email
         global $gSettingsManager;
 
         $this->getMailText($systemMailId, $user);
-        $this->setSender($gSettingsManager->get('email_administrator'));
+        $this->setSender($gSettingsManager->getString('email_administrator'));
         $this->setSubject($this->smMailHeader);
         $this->setText($this->smMailText);
 

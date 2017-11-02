@@ -186,7 +186,7 @@ class ConditionParser
         // validate date and return it in database format
         if ($date !== '')
         {
-            $dateObject = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $date);
+            $dateObject = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $date);
             if ($dateObject !== false)
             {
                 return $dateObject->format('Y-m-d');

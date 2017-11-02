@@ -247,14 +247,14 @@ class HtmlPage
                 'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if ($gSettingsManager->get('enable_download_module') == 1)
+        if ($gSettingsManager->getBool('enable_download_module'))
         {
             $this->menu->addItem(
                 'menu_item_download', ADMIDIO_URL . FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
                 'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
-        if ($gSettingsManager->get('enable_mail_module') == 1 && !$gValidLogin)
+        if ($gSettingsManager->getBool('enable_mail_module') && !$gValidLogin)
         {
             $this->menu->addItem(
                 'menu_item_email', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
@@ -262,7 +262,7 @@ class HtmlPage
             );
         }
 
-        if (($gSettingsManager->get('enable_pm_module') == 1 || $gSettingsManager->get('enable_mail_module') == 1) && $gValidLogin)
+        if (($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module')) && $gValidLogin)
         {
             // get number of unread messages for user
             $message = new TableMessage($gDb);
@@ -329,7 +329,7 @@ class HtmlPage
             );
 
         }
-        if ($gCurrentUser->approveUsers() && $gSettingsManager->get('registration_enable_module') == 1)
+        if ($gCurrentUser->approveUsers() && $gSettingsManager->getBool('registration_enable_module'))
         {
             $this->menu->addItem(
                 'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('NWU_NEW_REGISTRATIONS'),
@@ -525,7 +525,7 @@ class HtmlPage
             $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
-        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->get('system_browser_update_check') == 1)
+        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
         {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }

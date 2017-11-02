@@ -37,7 +37,7 @@ $getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'st
 $getFullScreen        = admFuncVariableIsValid($_GET, 'full_screen',         'bool');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('lists_enable_module') != 1)
+if (!$gSettingsManager->getBool('lists_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -146,18 +146,18 @@ $objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false)
 {
     // check if date_from  has system format
-    $objDateFrom = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $getDateFrom);
+    $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
 }
-$dateFrom = $objDateFrom->format($gSettingsManager->get('system_date'));
+$dateFrom = $objDateFrom->format($gSettingsManager->getString('system_date'));
 $startDateEnglishFormat = $objDateFrom->format('Y-m-d');
 
 $objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
 if ($objDateTo === false)
 {
     // check if date_from  has system format
-    $objDateTo = \DateTime::createFromFormat($gSettingsManager->get('system_date'), $getDateTo);
+    $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
 }
-$dateTo = $objDateTo->format($gSettingsManager->get('system_date'));
+$dateTo = $objDateTo->format($gSettingsManager->getString('system_date'));
 $endDateEnglishFormat = $objDateTo->format('Y-m-d');
 
 if($objDateFrom > $objDateTo)
@@ -513,7 +513,7 @@ if ($getMode !== 'csv')
         $listsMenu->addForm($form->show(false));
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-        $table->setDatatablesRowsPerPage((int) $gSettingsManager->get('lists_members_per_page'));
+        $table->setDatatablesRowsPerPage($gSettingsManager->getInt('lists_members_per_page'));
     }
     else
     {
@@ -777,7 +777,7 @@ foreach ($membersList as $member)
                 {
                     // date must be formated
                     $date = \DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
-                    $content = $date->format($gSettingsManager->get('system_date'));
+                    $content = $date->format($gSettingsManager->getString('system_date'));
                 }
             }
             elseif ($getMode === 'csv'
@@ -977,7 +977,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Period
             if (strlen($role->getValue('rol_start_date')) > 0)
             {
-                $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gSettingsManager->get('system_date')), $role->getValue('rol_end_date', $gSettingsManager->get('system_date'))));
+                $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date'))));
             }
 
             // Event
@@ -988,7 +988,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             }
             if (strlen($role->getValue('rol_start_time')) > 0)
             {
-                $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gSettingsManager->get('system_time')), $role->getValue('rol_end_time', $gSettingsManager->get('system_time')));
+                $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time')));
             }
             if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
             {
@@ -1004,7 +1004,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Member Fee
             if (strlen($role->getValue('rol_cost')) > 0)
             {
-                $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gSettingsManager->get('system_currency'));
+                $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency'));
             }
 
             // Fee period

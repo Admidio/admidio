@@ -21,7 +21,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
 
 // Check if RSS is active...
-if ($gSettingsManager->get('enable_rss') != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));

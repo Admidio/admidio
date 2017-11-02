@@ -86,7 +86,7 @@ if(isset($_SESSION['guestbook_entry_request']))
     unset($_SESSION['guestbook_entry_request']);
 }
 
-if (!$gValidLogin && $gSettingsManager->get('flooding_protection_time') != 0)
+if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -98,13 +98,13 @@ if (!$gValidLogin && $gSettingsManager->get('flooding_protection_time') != 0)
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->get(\'flooding_protection_time\')
                AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
-    $queryParams = array($gSettingsManager->get('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
+    $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
     $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     if($pdoStatement->fetchColumn() > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->get('flooding_protection_time')));
+        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->getInt('flooding_protection_time')));
         // => EXIT
     }
 }
@@ -157,7 +157,7 @@ $form->addEditor(
 );
 
 // if captchas are enabled then visitors of the website must resolve this
-if (!$gValidLogin && $gSettingsManager->get('enable_mail_captcha') == 1)
+if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
 {
     $form->openGroupBox('gb_confirmation_of_entry', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');

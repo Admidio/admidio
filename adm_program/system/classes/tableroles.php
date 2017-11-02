@@ -314,12 +314,12 @@ class TableRoles extends TableAccess
         if($this->getValue('cat_name_intern') === 'EVENTS')
         {
             // read system default list configuration for events
-            return (int) $gSettingsManager->get('dates_default_list_configuration');
+            return $gSettingsManager->getInt('dates_default_list_configuration');
         }
         else
         {
             // read system default list configuration
-            return (int) $gSettingsManager->get('lists_default_configuration');
+            return $gSettingsManager->getInt('lists_default_configuration');
         }
     }
 

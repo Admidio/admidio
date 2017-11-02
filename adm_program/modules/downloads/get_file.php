@@ -18,7 +18,7 @@ require(__DIR__ . '/../../system/common.php');
 $getFileId = admFuncVariableIsValid($_GET, 'file_id', 'int', array('requireValue' => true));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_download_module') != 1)
+if (!$gSettingsManager->getBool('enable_download_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

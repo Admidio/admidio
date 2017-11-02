@@ -50,13 +50,13 @@ $weblink->setValue('lnk_counter', (int) $weblink->getValue('lnk_counter') + 1);
 $weblink->save();
 
 // MR: Neue Prüfung für direkte Weiterleitung oder mit Anzeige
-if ($gSettingsManager->get('weblinks_redirect_seconds') > 0)
+if ($gSettingsManager->getInt('weblinks_redirect_seconds') > 0)
 {
     // create html page object
     $page = new HtmlPage($gL10n->get('LNK_REDIRECT'));
 
     // add special header for automatic redirection after x seconds
-    $page->addHeader('<meta http-equiv="refresh" content="'. $gSettingsManager->get('weblinks_redirect_seconds').'; url='.$lnkUrl.'">');
+    $page->addHeader('<meta http-equiv="refresh" content="'. $gSettingsManager->getInt('weblinks_redirect_seconds').'; url='.$lnkUrl.'">');
 
     // Counter zählt die sekunden bis zur Weiterleitung runter
     $page->addJavascript('
@@ -74,7 +74,7 @@ if ($gSettingsManager->get('weblinks_redirect_seconds') > 0)
     // Html des Modules ausgeben
     $page->addHtml('
     <p class="lead">'.$gL10n->get('LNK_REDIRECT_DESC', $gCurrentOrganization->getValue('org_longname'),
-        '<span id="counter">'.$gSettingsManager->get('weblinks_redirect_seconds').'</span>',
+        '<span id="counter">'.$gSettingsManager->getInt('weblinks_redirect_seconds').'</span>',
         '<strong>'.noHTML($weblink->getValue('lnk_name')).'</strong> ('.$lnkUrl.')',
         '<a href="'.$lnkUrl.'" target="_self">', '</a>').'
     </p>');

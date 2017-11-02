@@ -31,21 +31,21 @@
                             $gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements.png'
                         );
                     }
-                    if($gSettingsManager->get('enable_download_module') == 1)
+                    if($gSettingsManager->getBool('enable_download_module'))
                     {
                         $moduleMenu->addItem(
                             'download', ADMIDIO_URL . FOLDER_MODULES . '/downloads/downloads.php',
                             $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png'
                         );
                     }
-                    if($gSettingsManager->get('enable_mail_module') == 1 && !$gValidLogin)
+                    if($gSettingsManager->getBool('enable_mail_module') && !$gValidLogin)
                     {
                         $moduleMenu->addItem(
                             'email', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php',
                             $gL10n->get('SYS_EMAIL'), '/icons/email.png'
                         );
                     }
-                    if(($gSettingsManager->get('enable_pm_module') == 1 || $gSettingsManager->get('enable_mail_module') == 1) && $gValidLogin)
+                    if(($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module')) && $gValidLogin)
                     {
                         $unreadBadge = '';
 
@@ -80,7 +80,7 @@
                         );
                     }
 
-                    if($gSettingsManager->get('lists_enable_module') == 1 && $gValidLogin)
+                    if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
                     {
                         $moduleMenu->addItem(
                             'lists', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php',
@@ -118,7 +118,7 @@
                     {
                         $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
-                        if($gCurrentUser->approveUsers() && $gSettingsManager->get('registration_enable_module') == 1)
+                        if($gCurrentUser->approveUsers() && $gSettingsManager->getBool('registration_enable_module'))
                         {
                             $adminMenu->addItem(
                                 'newreg', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php',

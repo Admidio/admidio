@@ -160,7 +160,7 @@ if($gValidLogin)
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
     );
-    $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gSettingsManager->get('system_time')));
+    $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
     $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
     $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     $form->show();
@@ -202,7 +202,7 @@ else
     );
 
     // show selectbox with all organizations of database
-    if($gSettingsManager->get('system_organization_select') == 1)
+    if($gSettingsManager->getBool('system_organization_select'))
     {
         $sql = 'SELECT org_id, org_longname
                   FROM '.TBL_ORGANIZATIONS.'
@@ -213,7 +213,7 @@ else
         );
     }
 
-    if($gSettingsManager->get('enable_auto_login') == 1)
+    if($gSettingsManager->getBool('enable_auto_login'))
     {
         $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
     }
@@ -224,7 +224,7 @@ else
     echo '<div class="btn-group-vertical" role="group">';
 
     // show links for registration and help
-    if($plg_show_register_link && $gSettingsManager->get('registration_enable_module') == 1)
+    if($plg_show_register_link && $gSettingsManager->getBool('registration_enable_module'))
     {
         if($plg_show_icons)
         {
@@ -257,13 +257,13 @@ else
         $linkText = $gL10n->get('SYS_LOGIN_PROBLEMS');
 
         // Link bei Loginproblemen
-        if($gSettingsManager->get('enable_password_recovery') == 1 && $gSettingsManager->get('enable_system_mails') == 1)
+        if($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails'))
         {
             // neues Passwort zusenden
             $linkUrl  = ADMIDIO_URL.'/adm_program/system/lost_password.php';
             $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
         }
-        elseif($gSettingsManager->get('enable_mail_module') == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
+        elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
             // show link of message module to send mail to administrator role
             $linkUrl = ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php?rol_id='. $roleAdministrator->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
@@ -271,7 +271,7 @@ else
         else
         {
             // show link to send mail with local mail-client to administrator
-            $linkUrl = 'mailto:'. $gSettingsManager->get('email_administrator'). '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $linkUrl = 'mailto:'. $gSettingsManager->getString('email_administrator'). '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
 
         if($plg_show_icons)

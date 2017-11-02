@@ -97,7 +97,7 @@ if ($gSettingsManager->has('system_language'))
 {
     $gSettingsManager->set('system_language', 'de');
 }
-$gLanguageData = new LanguageData($gSettingsManager->get('system_language'));
+$gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
 
 // config.php exists at wrong place
@@ -142,8 +142,8 @@ if (!$gDb->queryPrepared($sql, array(), false))
     // in Admidio version 2 the database version was stored in preferences table
     if ($gSettingsManager->has('db_version'))
     {
-        $installedDbVersion     = $gSettingsManager->get('db_version');
-        $installedDbBetaVersion = $gSettingsManager->get('db_version_beta');
+        $installedDbVersion     = $gSettingsManager->getString('db_version');
+        $installedDbBetaVersion = $gSettingsManager->getInt('db_version_beta');
     }
 }
 else

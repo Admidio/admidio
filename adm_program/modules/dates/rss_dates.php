@@ -27,7 +27,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ($gSettingsManager->get('enable_rss') != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -71,8 +71,8 @@ if ($datesResult['numResults'] > 0)
         $date->setArray($row);
 
         $dateId       = (int) $date->getValue('dat_id');
-        $dateFrom     = $date->getValue('dat_begin', $gSettingsManager->get('system_date'));
-        $dateTo       = $date->getValue('dat_end', $gSettingsManager->get('system_date'));
+        $dateFrom     = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+        $dateTo       = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
         $dateLocation = $date->getValue('dat_location');
 
         // set data for attributes of this entry
@@ -90,13 +90,13 @@ if ($datesResult['numResults'] > 0)
 
         if ($date->getValue('dat_all_day') == 0)
         {
-            $descDateFrom .= ' ' . $date->getValue('dat_begin', $gSettingsManager->get('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
+            $descDateFrom .= ' ' . $date->getValue('dat_begin', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
 
             if ($dateFrom !== $dateTo)
             {
                 $descDateTo = $dateTo . ' ';
             }
-            $descDateTo  .= ' ' . $date->getValue('dat_end', $gSettingsManager->get('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
+            $descDateTo  .= ' ' . $date->getValue('dat_end', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
             $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $descDateTo);
         }
         else

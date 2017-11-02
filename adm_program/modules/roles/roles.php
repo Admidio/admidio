@@ -194,7 +194,7 @@ while($row = $rolStatement->fetch())
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/photo.png"
                             alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />';
     }
-    if($role->getValue('rol_download') == 1 && $gSettingsManager->get('enable_download_module') > 0)
+    if($role->getValue('rol_download') == 1 && $gSettingsManager->getBool('enable_download_module'))
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/download.png"
                             alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />';
@@ -205,7 +205,7 @@ while($row = $rolStatement->fetch())
                             alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />';
     }
     // If allowed to write anonymous guestbook entries, then we don´t need to set rights for the roles
-    if($role->getValue('rol_guestbook_comments') == 1  && $gSettingsManager->get('enable_guestbook_module') > 0 && $gSettingsManager->get('enable_gbook_comments4all') == false)
+    if($role->getValue('rol_guestbook_comments') == 1  && $gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all'))
     {
         $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/comment.png"
                             alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
@@ -236,17 +236,17 @@ while($row = $rolStatement->fetch())
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/list_key.png"
                         alt="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" title="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" />';
     }
-    if($role->getValue('rol_mail_this_role') == 1 && $gSettingsManager->get('enable_mail_module') > 0)
+    if($role->getValue('rol_mail_this_role') == 1 && $gSettingsManager->getBool('enable_mail_module'))
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_role.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" title="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" />';
     }
-    if($role->getValue('rol_mail_this_role') == 2 && $gSettingsManager->get('enable_mail_module') > 0)
+    if($role->getValue('rol_mail_this_role') == 2 && $gSettingsManager->getBool('enable_mail_module'))
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_key.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" title="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" />';
     }
-    if($role->getValue('rol_mail_this_role') == 3 && $gSettingsManager->get('enable_mail_module') > 0)
+    if($role->getValue('rol_mail_this_role') == 3 && $gSettingsManager->getBool('enable_mail_module'))
     {
         $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png"
                         alt="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" />';

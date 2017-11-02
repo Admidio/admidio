@@ -62,7 +62,7 @@ if(!isset($plg_show_upload_timestamp))
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // check if the module is enabled
-if ($gSettingsManager->get('enable_download_module') == 1)
+if ($gSettingsManager->getBool('enable_download_module'))
 {
     $countVisibleDownloads = 0;
     $sqlCondition          = '';
