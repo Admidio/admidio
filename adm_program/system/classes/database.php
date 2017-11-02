@@ -355,6 +355,7 @@ class Database
 
     /**
      * Escapes special characters within the input string.
+     * Note: This method will add a high comma at the beginning and the end of the $string.
      * @param string $string The string to be quoted.
      * @return string Returns a quoted string that is theoretically safe to pass into an SQL statement.
      * @see <a href="https://secure.php.net/manual/en/pdo.quote.php">PDO::quote</a>
