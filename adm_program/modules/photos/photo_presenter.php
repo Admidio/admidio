@@ -20,12 +20,12 @@ $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id',   'int', array('requireVal
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int', array('requireValue' => true));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_photo_module') == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gSettingsManager->get('enable_photo_module') == 2)
+elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -62,18 +62,18 @@ if ($nextImage <= $photoAlbum->getValue('pho_quantity'))
 $page = new HtmlPage($photoAlbum->getValue('pho_name'));
 
 // wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
-if ($gSettingsManager->get('photo_show_mode') == 0)
+if ((int) $gSettingsManager->get('photo_show_mode') === 0)
 {
     $page->hideThemeHtml();
 }
 
-if ($gSettingsManager->get('photo_show_mode') == 2)
+if ((int) $gSettingsManager->get('photo_show_mode') === 2)
 {
     // get module menu
     $photoPresenterMenu = $page->getMenu();
 
     // if you have no popup or colorbox then show a button back to the album
-    if ($gSettingsManager->get('photo_show_mode') == 2)
+    if ((int) $gSettingsManager->get('photo_show_mode') === 2)
     {
         $photoPresenterMenu->addItem(
             'menu_item_back_to_album', ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId,
@@ -109,7 +109,7 @@ else
     $page->addHtml('<div class="admidio-img-presenter"><img src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
 }
 
-if ($gSettingsManager->get('photo_show_mode') == 0)
+if ((int) $gSettingsManager->get('photo_show_mode') === 0)
 {
     // in popup mode show buttons for prev, next and close
     $page->addHtml('
@@ -122,7 +122,7 @@ if ($gSettingsManager->get('photo_show_mode') == 0)
             src="'. THEME_URL. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</button>
     </div>');
 }
-elseif ($gSettingsManager->get('photo_show_mode') == 2)
+elseif ((int) $gSettingsManager->get('photo_show_mode') === 2)
 {
     // if no popup mode then show additional album information
     $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));

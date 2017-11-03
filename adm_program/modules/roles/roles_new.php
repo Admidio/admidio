@@ -270,21 +270,21 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
         'rol_profile', $gL10n->get('ROL_RIGHT_PROFILE'), (bool) $role->getValue('rol_profile'),
         array('icon' => 'profile.png')
     );
-    if($gSettingsManager->get('enable_announcements_module') > 0)
+    if((int) $gSettingsManager->get('enable_announcements_module') > 0)
     {
         $form->addCheckbox(
             'rol_announcements', $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
             array('icon' => 'announcements.png')
         );
     }
-    if($gSettingsManager->get('enable_dates_module') > 0)
+    if((int) $gSettingsManager->get('enable_dates_module') > 0)
     {
         $form->addCheckbox(
             'rol_dates', $gL10n->get('ROL_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
             array('icon' => 'dates.png')
         );
     }
-    if($gSettingsManager->get('enable_photo_module') > 0)
+    if((int) $gSettingsManager->get('enable_photo_module') > 0)
     {
         $form->addCheckbox(
             'rol_photo', $gL10n->get('ROL_RIGHT_PHOTO'), (bool) $role->getValue('rol_photo'),
@@ -298,7 +298,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
             array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'download.png')
         );
     }
-    if($gSettingsManager->get('enable_guestbook_module') > 0)
+    if((int) $gSettingsManager->get('enable_guestbook_module') > 0)
     {
         $form->addCheckbox(
             'rol_guestbook', $gL10n->get('ROL_RIGHT_GUESTBOOK'), (bool) $role->getValue('rol_guestbook'),
@@ -313,7 +313,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
             );
         }
     }
-    if($gSettingsManager->get('enable_weblinks_module') > 0)
+    if((int) $gSettingsManager->get('enable_weblinks_module') > 0)
     {
         $form->addCheckbox(
             'rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),

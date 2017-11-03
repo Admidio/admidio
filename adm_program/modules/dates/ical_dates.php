@@ -41,13 +41,13 @@ $startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
 $endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
 
 // Message if module is disabled
-if($gSettingsManager->get('enable_dates_module') == 0)
+if((int) $gSettingsManager->get('enable_dates_module') === 0)
 {
     // Module disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gSettingsManager->get('enable_dates_module') == 2)
+elseif((int) $gSettingsManager->get('enable_dates_module') === 2)
 {
     // only with valid login
     require(__DIR__ . '/../../system/login_valid.php');

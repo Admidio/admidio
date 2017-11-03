@@ -35,7 +35,7 @@ if (!$gSettingsManager->getBool('enable_rss'))
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_dates_module') != 1)
+if ((int) $gSettingsManager->get('enable_dates_module') !== 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

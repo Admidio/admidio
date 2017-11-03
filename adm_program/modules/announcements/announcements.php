@@ -33,13 +33,13 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
 // check if module is enabled
-if ($gSettingsManager->get('enable_announcements_module') == 0)
+if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gSettingsManager->get('enable_announcements_module') == 2)
+elseif((int) $gSettingsManager->get('enable_announcements_module') === 2)
 {
     // Access only with valid login
     require(__DIR__ . '/../../system/login_valid.php');

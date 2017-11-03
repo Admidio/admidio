@@ -24,7 +24,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
 // check if module is active
-if($gSettingsManager->get('enable_dates_module') == 0)
+if((int) $gSettingsManager->get('enable_dates_module') === 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));

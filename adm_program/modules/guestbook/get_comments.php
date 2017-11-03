@@ -23,7 +23,7 @@ $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 if ($getGbcGboId > 0)
 {
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-    if($gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
+    if((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
     {
         $conditions = ' AND gbc_locked = 1 ';
     }

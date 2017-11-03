@@ -25,13 +25,13 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 $getLinkId   = admFuncVariableIsValid($_GET, 'id',       'int');
 
 // check if the module is enabled for use
-if ($gSettingsManager->get('enable_weblinks_module') == 0)
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gSettingsManager->get('enable_weblinks_module') == 2)
+elseif((int) $gSettingsManager->get('enable_weblinks_module') === 2)
 {
     // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');

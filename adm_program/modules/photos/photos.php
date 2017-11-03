@@ -24,12 +24,12 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_photo_module') == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gSettingsManager->get('enable_photo_module') == 2)
+elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -141,7 +141,7 @@ if ($gCurrentUser->editPhotoRight())
 }
 
 // integrate bootstrap ekko lightbox addon
-if ($gSettingsManager->get('photo_show_mode') == 1)
+if ((int) $gSettingsManager->get('photo_show_mode') === 1)
 {
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.js');
@@ -279,7 +279,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
             $photoThumbnailTable .= '<div class="col-sm-6 col-md-3 admidio-album-thumbnail" id="div_image_'.$actThumbnail.'">';
 
                 // Popup window
-                if ($gSettingsManager->get('photo_show_mode') == 0)
+                if ((int) $gSettingsManager->get('photo_show_mode') === 0)
                 {
                     $photoThumbnailTable .= '
                         <img class="thumbnail center-block" id="img_'.$actThumbnail.'" style="cursor: pointer"
@@ -288,7 +288,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 }
 
                 // Bootstrap modal with lightbox
-                elseif ($gSettingsManager->get('photo_show_mode') == 1)
+                elseif ((int) $gSettingsManager->get('photo_show_mode') === 1)
                 {
                     $photoThumbnailTable .= '
                         <a data-gallery="admidio-gallery" data-type="image" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'"
@@ -297,7 +297,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 }
 
                 // Same window
-                elseif ($gSettingsManager->get('photo_show_mode') == 2)
+                elseif ((int) $gSettingsManager->get('photo_show_mode') === 2)
                 {
                     $photoThumbnailTable .= '
                         <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'"><img
@@ -349,7 +349,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 
     // the lightbox should be able to go through the whole album, therefore we must
     // integrate links to the photos of the album pages to this page and container but hidden
-    if ($gSettingsManager->get('photo_show_mode') == 1)
+    if ((int) $gSettingsManager->get('photo_show_mode') === 1)
     {
         $photoThumbnailTableShown = false;
 

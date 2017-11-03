@@ -360,7 +360,7 @@ class ModuleDates extends Modules
     {
         global $gSettingsManager, $gProfileFields;
 
-        if ($gSettingsManager->get('system_show_create_edit') == 1)
+        if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
         {
             $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
             $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');

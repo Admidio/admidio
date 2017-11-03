@@ -48,7 +48,7 @@ if(!$gCurrentUser->hasRightEditProfile($user))
 }
 
 // bei Ordnerspeicherung pruefen ob der Unterordner in adm_my_files mit entsprechenden Rechten existiert
-if($gSettingsManager->get('profile_photo_storage') == 1)
+if((int) $gSettingsManager->get('profile_photo_storage') === 1)
 {
     // ggf. Ordner für Userfotos in adm_my_files anlegen
     $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
@@ -69,7 +69,7 @@ if($getMode === 'save')
 {
     /*****************************Foto speichern*************************************/
 
-    if($gSettingsManager->get('profile_photo_storage') == 1)
+    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         // Foto im Dateisystem speichern
 
@@ -113,7 +113,7 @@ elseif($getMode === 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
     // Ordnerspeicherung
-    if($gSettingsManager->get('profile_photo_storage') == 1)
+    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
         if(is_file($file))
@@ -136,7 +136,7 @@ elseif($getMode === 'delete')
 {
     /***************************** Foto loeschen *************************************/
     // Ordnerspeicherung, Datei löschen
-    if($gSettingsManager->get('profile_photo_storage') == 1)
+    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         unlink(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
     }
@@ -231,7 +231,7 @@ elseif($getMode === 'upload')
     $userImage->scale(130, 170);
 
     // Ordnerspeicherung
-    if($gSettingsManager->get('profile_photo_storage') == 1)
+    if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         $userImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg');
     }

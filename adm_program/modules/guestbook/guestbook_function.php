@@ -32,12 +32,12 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getHeadline = urlencode($getHeadline);
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_guestbook_module') == 0)
+if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gSettingsManager->get('enable_guestbook_module') == 2)
+elseif ((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -204,8 +204,8 @@ if ($getMode === 1 || $getMode === 3)
         }
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if (($gSettingsManager->get('enable_guestbook_moderation') == 1 && !$gValidLogin)
-        ||  ($gSettingsManager->get('enable_guestbook_moderation') == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $guestbook->setValue('gbo_locked', '1');
         }
@@ -257,8 +257,8 @@ if ($getMode === 1 || $getMode === 3)
         $url = ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php?headline=' . $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if (($gSettingsManager->get('enable_guestbook_moderation') == 1 && !$gValidLogin)
-        ||  ($gSettingsManager->get('enable_guestbook_moderation') == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
@@ -395,8 +395,8 @@ elseif ($getMode === 4 || $getMode === 8)
         }
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if (($gSettingsManager->get('enable_guestbook_moderation') == 1 && !$gValidLogin)
-        ||  ($gSettingsManager->get('enable_guestbook_moderation') == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gbComment->setValue('gbc_locked', '1');
         }
@@ -453,8 +453,8 @@ elseif ($getMode === 4 || $getMode === 8)
         $url = ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?id=' . $gbComment->getValue('gbc_gbo_id') . '&headline=' . $getHeadline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if (($gSettingsManager->get('enable_guestbook_moderation') == 1 && !$gValidLogin)
-        ||  ($gSettingsManager->get('enable_guestbook_moderation') == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));

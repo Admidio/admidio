@@ -39,7 +39,7 @@ $iconUploadPath          = '';
 if($getModule === 'photos')
 {
     // check if the module is activated
-    if ($gSettingsManager->get('enable_photo_module') == 0)
+    if ((int) $gSettingsManager->get('enable_photo_module') === 0)
     {
         $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         // => EXIT

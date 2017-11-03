@@ -29,14 +29,14 @@ if (!$gSettingsManager->getBool('enable_rss'))
 }
 
 // check if module is active or is public
-if ($gSettingsManager->get('enable_weblinks_module') != 1)
+if ((int) $gSettingsManager->get('enable_weblinks_module') !== 1)
 {
     // disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if($gSettingsManager->get('system_show_create_edit') == 1)
+if((int) $gSettingsManager->get('system_show_create_edit') === 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';

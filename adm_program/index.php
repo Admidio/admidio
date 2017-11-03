@@ -63,8 +63,8 @@ else
 // menu with links to all modules of Admidio
 $moduleMenu = new Menu('index_modules', $gL10n->get('SYS_MODULES'));
 
-if($gSettingsManager->get('enable_announcements_module') == 1
-|| ($gSettingsManager->get('enable_announcements_module') == 2 && $gValidLogin))
+if((int) $gSettingsManager->get('enable_announcements_module') === 1
+|| ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
 {
     $moduleMenu->addItem(
         'announcements', ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
@@ -103,16 +103,16 @@ if(($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool
         $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages_big.png', $gL10n->get('MAI_EMAIL_DESC')
     );
 }
-if($gSettingsManager->get('enable_photo_module') == 1
-|| ($gSettingsManager->get('enable_photo_module') == 2 && $gValidLogin))
+if((int) $gSettingsManager->get('enable_photo_module') === 1
+|| ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
 {
     $moduleMenu->addItem(
         'photo', ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php',
         $gL10n->get('PHO_PHOTOS'), '/icons/photo_big.png', $gL10n->get('PHO_PHOTOS_DESC')
     );
 }
-if($gSettingsManager->get('enable_guestbook_module') == 1
-|| ($gSettingsManager->get('enable_guestbook_module') == 2 && $gValidLogin))
+if((int) $gSettingsManager->get('enable_guestbook_module') === 1
+|| ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
 {
     $moduleMenu->addItem(
         'guestbk', ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php',
@@ -134,8 +134,8 @@ if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
         $gL10n->get('ROL_INACTIV_ROLE')
     );
 }
-if($gSettingsManager->get('enable_dates_module') == 1
-|| ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin))
+if((int) $gSettingsManager->get('enable_dates_module') === 1
+|| ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
 {
     $moduleMenu->addItem(
         'dates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php',
@@ -146,8 +146,8 @@ if($gSettingsManager->get('enable_dates_module') == 1
         $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES'))
     );
 }
-if($gSettingsManager->get('enable_weblinks_module') == 1
-|| ($gSettingsManager->get('enable_weblinks_module') == 2 && $gValidLogin))
+if((int) $gSettingsManager->get('enable_weblinks_module') === 1
+|| ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
 {
     $moduleMenu->addItem(
         'links', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',

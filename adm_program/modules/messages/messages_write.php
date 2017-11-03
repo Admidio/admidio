@@ -571,7 +571,7 @@ elseif (!isset($messageStatement))
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($currUsrId > 0 && $gSettingsManager->get('mail_delivery_confirmation') == 2) || $gSettingsManager->get('mail_delivery_confirmation') == 1)
+    if (($currUsrId > 0 && $gSettingsManager->get('mail_delivery_confirmation') === 2) || $gSettingsManager->get('mail_delivery_confirmation') === 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }

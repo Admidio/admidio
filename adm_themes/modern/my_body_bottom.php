@@ -23,8 +23,8 @@
                         $gL10n->get('SYS_OVERVIEW'), '/icons/home.png'
                     );
 
-                    if($gSettingsManager->get('enable_announcements_module') == 1
-                    || ($gSettingsManager->get('enable_announcements_module') == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_announcements_module') === 1
+                    || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'announcements', ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
@@ -63,16 +63,16 @@
                             $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png'
                         );
                     }
-                    if($gSettingsManager->get('enable_photo_module') == 1
-                    || ($gSettingsManager->get('enable_photo_module') == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_photo_module') === 1
+                    || ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'photo', ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php',
                             $gL10n->get('PHO_PHOTOS'), '/icons/photo.png'
                         );
                     }
-                    if($gSettingsManager->get('enable_guestbook_module') == 1
-                    || ($gSettingsManager->get('enable_guestbook_module') == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_guestbook_module') === 1
+                    || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'guestbk', ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php',
@@ -92,8 +92,8 @@
                         );
                     }
 
-                    if($gSettingsManager->get('enable_dates_module') == 1
-                    || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_dates_module') === 1
+                    || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'dates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php',
@@ -101,8 +101,8 @@
                         );
                     }
 
-                    if($gSettingsManager->get('enable_weblinks_module') == 1
-                    || ($gSettingsManager->get('enable_weblinks_module') == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_weblinks_module') === 1
+                    || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'links', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',

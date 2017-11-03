@@ -23,7 +23,7 @@ $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
 $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_photo_module') == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));

@@ -32,12 +32,12 @@ if (!$gSettingsManager->getBool('enable_rss'))
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_photo_module') == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gSettingsManager->get('enable_photo_module') == 2)
+elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -46,7 +46,7 @@ elseif ($gSettingsManager->get('enable_photo_module') == 2)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
 
-if ($gSettingsManager->get('system_show_create_edit') == 1)
+if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';

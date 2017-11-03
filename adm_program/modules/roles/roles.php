@@ -60,7 +60,7 @@ else
 
 if($getEvents)
 {
-    if($gSettingsManager->get('enable_dates_module') == 0)
+    if((int) $gSettingsManager->get('enable_dates_module') === 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -105,7 +105,7 @@ $rolesMenu->addItem(
     $activeRolesLinkDescription, $activeRolesImage
 );
 
-if($gSettingsManager->get('enable_dates_module') > 0)
+if((int) $gSettingsManager->get('enable_dates_module') > 0)
 {
     // if event module is enabled then define link to confirmation roles of event participations
     $rolesMenu->addItem(

@@ -476,8 +476,8 @@ $page->addHtml('
                     <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php?usr_id='.$userId.'"><img
                         src="'.THEME_URL.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                if((strlen($user->getValue('usr_photo')) > 0 && $gSettingsManager->get('profile_photo_storage') == 0)
-                    || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && $gSettingsManager->get('profile_photo_storage') == 1)
+                if((strlen($user->getValue('usr_photo')) > 0 && $gSettingsManager->get('profile_photo_storage') === 0)
+                    || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && $gSettingsManager->get('profile_photo_storage') === 1)
                 {
                     $page->addHtml('<a id="btn_delete_photo" class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
@@ -986,12 +986,12 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
              }
 
             // only show info if system setting is activated
-            if($gSettingsManager->get('system_show_create_edit') > 0)
+            if((int) $gSettingsManager->get('system_show_create_edit') > 0)
             {
                   $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:void(0)"><img src="'.THEME_URL.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>');
             }
             $page->addHtml('</span></div>');
-            if($gSettingsManager->get('system_show_create_edit') > 0)
+            if((int) $gSettingsManager->get('system_show_create_edit') > 0)
             {
                 $page->addHtml(
                     '<div id="relation_info_'.$relation->getValue('ure_id').'_Content" style="display: none;">'.

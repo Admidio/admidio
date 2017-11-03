@@ -22,12 +22,12 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['guestbook_entry_request'], $_SESSION['guestbook_comment_request']);
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gSettingsManager->get('enable_guestbook_module') == 0)
+if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gSettingsManager->get('enable_guestbook_module') == 2)
+elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -124,7 +124,7 @@ if ($getGboId > 0)
     $queryParamsSpecial[] = $getGboId;
 }
 // pruefen ob das Modul Moderation aktiviert ist
-if ($gSettingsManager->get('enable_guestbook_moderation') > 0)
+if ((int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
 {
     if($getModeration)
     {
@@ -309,7 +309,7 @@ else
                 }
 
                 // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-                if ($gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
+                if ((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
                 {
                     $conditions = ' AND gbc_locked = 1 ';
                 }

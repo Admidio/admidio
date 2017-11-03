@@ -22,13 +22,13 @@ require_once(__DIR__ . '/../../system/common.php');
 $getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'int', array('requireValue' => true));
 
 // check if the module is enabled for use
-if ($gSettingsManager->get('enable_weblinks_module') == 0)
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-if($gSettingsManager->get('enable_weblinks_module') == 2)
+if((int) $gSettingsManager->get('enable_weblinks_module') === 2)
 {
     // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');

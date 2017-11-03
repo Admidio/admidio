@@ -43,14 +43,14 @@ $participationPossible  = true;
 $originalDateId         = 0;
 
 // check if module is active
-if($gSettingsManager->get('enable_dates_module') == 0)
+if((int) $gSettingsManager->get('enable_dates_module') === 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if($getMode !== 6 || $gSettingsManager->get('enable_dates_module') == 2)
+if($getMode !== 6 || $gSettingsManager->get('enable_dates_module') === 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require(__DIR__ . '/../../system/login_valid.php');

@@ -49,13 +49,13 @@ $participateModalForm      = false;
 $participationPossible     = true;
 
 // check if module is active
-if($gSettingsManager->get('enable_dates_module') == 0)
+if((int) $gSettingsManager->get('enable_dates_module') === 0)
 {
     // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gSettingsManager->get('enable_dates_module') == 2)
+elseif((int) $gSettingsManager->get('enable_dates_module') === 2)
 {
     // module only for valid Users
     require(__DIR__ . '/../../system/login_valid.php');
@@ -114,7 +114,7 @@ if($getViewMode === 'html')
     $hoverRows  = true;
     $classTable = 'table';
 
-    if($gSettingsManager->getBool('enable_rss') && $gSettingsManager->get('enable_dates_module') == 1)
+    if($gSettingsManager->getBool('enable_rss') && $gSettingsManager->get('enable_dates_module') === 1)
     {
         $page->addRssFile(
             ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php?headline=' . $getHeadline,

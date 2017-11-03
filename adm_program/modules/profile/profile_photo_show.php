@@ -41,7 +41,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
 else
 {
     // show photo from folder adm_my_files
-    if($gSettingsManager->get('profile_photo_storage') == 1 && !$getNewPhoto)
+    if((int) $gSettingsManager->get('profile_photo_storage') === 1 && !$getNewPhoto)
     {
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
         if(file_exists($file))
@@ -51,7 +51,7 @@ else
         $image = new Image($picPath);
     }
     // show photo from database
-    elseif($gSettingsManager->get('profile_photo_storage') == 0 && !$getNewPhoto)
+    elseif((int) $gSettingsManager->get('profile_photo_storage') === 0 && !$getNewPhoto)
     {
         if(strlen($user->getValue('usr_photo')) != null)
         {
@@ -64,13 +64,13 @@ else
         }
     }
     // show temporary saved new photo from upload in filesystem
-    elseif($gSettingsManager->get('profile_photo_storage') == 1 && $getNewPhoto)
+    elseif((int) $gSettingsManager->get('profile_photo_storage') === 1 && $getNewPhoto)
     {
         $picPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
         $image = new Image($picPath);
     }
     // show temporary saved new photo from upload in database
-    elseif($gSettingsManager->get('profile_photo_storage') == 0 && $getNewPhoto)
+    elseif((int) $gSettingsManager->get('profile_photo_storage') === 0 && $getNewPhoto)
     {
         $image = new Image();
         $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
