@@ -143,7 +143,7 @@ if ($gPreferences['enable_download_module'] == 1)
                     // Vorname und Nachname abfragen (Upload der Datei)
                     $user = new User($gDb, $gProfileFields, $rowFile->fil_usr_id);
 
-                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile->fil_timestamp);
+                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile->fil_timestamp));
                 }
 
                 echo '

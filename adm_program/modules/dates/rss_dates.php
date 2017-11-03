@@ -97,13 +97,13 @@ if ($datesResult['numResults'] > 0)
                 $descDateTo = $dateTo . ' ';
             }
             $descDateTo  .= ' ' . $date->getValue('dat_end', $gPreferences['system_time']) . ' ' . $gL10n->get('SYS_CLOCK');
-            $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $descDateTo);
+            $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $descDateTo));
         }
         else
         {
             if ($dateFrom !== $dateTo)
             {
-                $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $dateTo);
+                $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $dateTo));
             }
         }
 

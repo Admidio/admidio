@@ -340,7 +340,7 @@ if ($getMode !== 'csv')
             }
             else
             {
-                $htmlSubHeadline .= ' - '.$gL10n->get('LST_MEMBERS_BETWEEN_PERIOD', $dateFrom, $dateTo);
+                $htmlSubHeadline .= ' - '.$gL10n->get('LST_MEMBERS_BETWEEN_PERIOD', array($dateFrom, $dateTo));
             }
         }
     }
@@ -977,7 +977,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Period
             if (strlen($role->getValue('rol_start_date')) > 0)
             {
-                $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
+                $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date']))));
             }
 
             // Event
@@ -988,7 +988,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             }
             if (strlen($role->getValue('rol_start_time')) > 0)
             {
-                $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+                $value = $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time'])));
             }
             if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
             {
