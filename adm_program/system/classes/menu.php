@@ -81,7 +81,6 @@ class Menu
             'text'     => $text,
             'icon'     => $icon,
             'desc'     => $desc,
-            'code'     => $code,
             'subitems' => array()
         );
     }
