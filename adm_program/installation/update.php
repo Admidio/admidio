@@ -260,8 +260,8 @@ if ($getMode === 1)
                 <strong>' . $gL10n->get('SYS_ERROR') . '</strong>
                 <p>' .
                     $gL10n->get(
-                        'SYS_FILESYSTEM_VERSION_INVALID', $installedDbVersion,
-                        ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'
+                        'SYS_FILESYSTEM_VERSION_INVALID', array($installedDbVersion,
+                        ADMIDIO_VERSION_TEXT, '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>')
                     ) . '
                 </p>
             </div>';

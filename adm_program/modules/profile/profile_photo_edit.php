@@ -54,7 +54,7 @@ if($gPreferences['profile_photo_storage'] == 1)
     $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
     if(!$myFilesProfilePhotos->checkSettings())
     {
-        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, array($myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>')));
         // => EXIT
     }
 }

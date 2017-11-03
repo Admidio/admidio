@@ -163,7 +163,7 @@ echo '
 </div>
 <div class="modal-body row">
     <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_URL.'/icons/error_big.png" alt="Icon" /></div>
-    <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $getName, '').'</div>
+    <div id="message_text" class="col-xs-10">'.$gL10n->get($text, array($getName, '')).'</div>
 </div>
 <div class="modal-footer">
     <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">

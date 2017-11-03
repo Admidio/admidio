@@ -154,7 +154,7 @@ if ($getMode === 'new' || $getMode === 'change')
 
             // der entsprechende Ordner konnte nicht angelegt werden
             $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-            $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+            $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>')));
             // => EXIT
         }
 
