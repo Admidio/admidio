@@ -430,10 +430,10 @@ elseif ($getMode === 4 || $getMode === 8)
             }
             $message = $gL10n->get(
                 'GBO_EMAIL_NOTIFICATION_GBC_MESSAGE',
-                $gCurrentOrganization->getValue('org_longname'),
+                array($gCurrentOrganization->getValue('org_longname'),
                 $gbComment->getValue('gbc_text'),
                 $gbcName,
-                date($gPreferences['system_date'])
+                date($gPreferences['system_date']))
             );
             try
             {
