@@ -1517,7 +1517,7 @@ class HtmlForm extends HtmlFormBasic
                 // translate category name
                 if (admIsTranslationStrId($row[2]))
                 {
-                    $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get(admStrToUpper($row[2])));
+                    $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get($row[2]));
                 }
                 else
                 {
@@ -1755,7 +1755,7 @@ class HtmlForm extends HtmlFormBasic
             // if text is a translation-id then translate it
             if (admIsTranslationStrId($row['cat_name']))
             {
-                $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+                $categoriesArray[$row['cat_id']] = $gL10n->get($row['cat_name']);
             }
             else
             {

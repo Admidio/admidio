@@ -229,7 +229,7 @@ class ProfileFields
                             // if text is a translation-id then translate it
                             if (admIsTranslationStrId($listValueText))
                             {
-                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                $listValueText = $gL10n->get($listValueText);
                             }
 
                             try
@@ -254,7 +254,7 @@ class ProfileFields
                         // if text is a translation-id then translate it
                         if (admIsTranslationStrId($listValue))
                         {
-                            $listValue = $gL10n->get(admStrToUpper($listValue));
+                            $listValue = $gL10n->get($listValue);
                         }
 
                         // save values in new array that starts with key = 1

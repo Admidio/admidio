@@ -100,7 +100,7 @@ class TableAnnouncement extends TableAccess
             // if text is a translation-id then translate it
             if ($format !== 'database' && admIsTranslationStrId($value))
             {
-                $value = $gL10n->get(admStrToUpper($value));
+                $value = $gL10n->get($value);
             }
         }
 
