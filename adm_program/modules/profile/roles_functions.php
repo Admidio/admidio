@@ -166,7 +166,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                         <span class="pull-right text-right">';
                             if($showRoleEndDate)
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', $member->getValue('mem_begin', $gPreferences['system_date']), $member->getValue('mem_end', $gPreferences['system_date']));
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gPreferences['system_date']), $member->getValue('mem_end', $gPreferences['system_date'])));
                             }
                             elseif($futureMembership)
                             {

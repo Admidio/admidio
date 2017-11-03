@@ -14,7 +14,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'install_step_.php')
 }
 
 // create the text that should be shown in the form
-$message = $gL10n->get('INS_WELCOME_TEXT', '<a href="https://www.admidio.org/forum">', '</a>');
+$message = $gL10n->get('INS_WELCOME_TEXT', array('<a href="https://www.admidio.org/forum">', '</a>'));
 $messageWarning = '';
 
 // if this is a beta version then show a notice to the user
