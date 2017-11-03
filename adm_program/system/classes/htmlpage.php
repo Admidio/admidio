@@ -623,33 +623,6 @@ class HtmlPage
     }
 
     /**
-     * Returns the menu object of this html page.
-     * @return HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-
-    /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
-     * @return string Returns the headline of the current Admidio page.
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Returns the title of the html page.
-     * @return string Returns the title of the html page.
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * Set the h1 headline of the current html page. If the title of the page
      * was not set until now than this will also be the title.
      * @param string $headline A string that contains the headline for the page.
