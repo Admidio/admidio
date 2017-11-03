@@ -57,7 +57,7 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="380">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_group)</step>
+    <step id="380">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_parent_id)</step>
     <step id="390">ComponentUpdate::updateStepMigrateToStandartMenu</step>
 
     <step>stop</step>
