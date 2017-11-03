@@ -293,30 +293,36 @@ class Image
     }
 
     /**
-     * Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
-     * die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
-     * @param int $newMaxSize
-     * @return bool
+     * Scales the longer side of the image to the passed pixel value. The other side 
+     * is then calculated back according to the page ratio. If the image is already 
+     * smaller than the new max size nothing is done.
+     * @param int $newMaxSize New maximum size in pixel to which the image should be scaled.
+     * @return bool Return true if the image was scaled otherwise false.
      */
     public function scaleLargerSide($newMaxSize)
     {
-        // calc aspect ratio
-        $aspectRatio = $this->imageWidth / $this->imageHeight;
-
-        if ($this->imageWidth > $this->imageHeight)
+        if($newMaxSize < $this->imageWidth || $newMaxSize < $this->imageHeight)
         {
-            // x-Seite soll scalliert werden
-            $newXSize = $newMaxSize;
-            $newYSize = round($newMaxSize / $aspectRatio);
-        }
-        else
-        {
-            // y-Seite soll scalliert werden
-            $newXSize = round($newMaxSize * $aspectRatio);
-            $newYSize = $newMaxSize;
+            // calc aspect ratio
+            $aspectRatio = $this->imageWidth / $this->imageHeight;
+    
+            if($this->imageWidth > $this->imageHeight)
+            {
+                // Scale the x-side
+                $newXSize = $newMaxSize;
+                $newYSize = round($newMaxSize / $aspectRatio);
+            }
+            else
+            {
+                // Scale the y-side
+                $newXSize = round($newMaxSize * $aspectRatio);
+                $newYSize = $newMaxSize;
+            }
+    
+            return $this->scale($newXSize, $newYSize, false);
         }
 
-        return $this->scale($newXSize, $newYSize, false);
+        return false;
     }
 
     /**
@@ -326,7 +332,7 @@ class Image
      * @param int  $newYSize            The new vertical height in pixel. The image will be scaled to this size.
      * @param bool $maintainAspectRatio If this is set to true, the image will be within the given size
      *                                  but maybe one side will be smaller than set with the parameters.
-     * @return bool
+     * @return bool Return true if the image was scaled otherwise false.
      */
     public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
     {

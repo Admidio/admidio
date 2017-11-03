@@ -79,12 +79,15 @@ $newfullfilename = $backupabsolutepath.$fullbackupfilename;
 unset($SelectedTables, $tables);
 
 // create a list with all tables with configured table prefix
-$sql = 'SHOW TABLES LIKE ?';
-$statement = $gDb->queryPrepared($sql, array($g_tbl_praefix . '\_%'));
+$sql = 'SELECT table_name
+          FROM information_schema.tables
+         WHERE table_schema = ?
+           AND table_name LIKE ?';
+$statement = $gDb->queryPrepared($sql, array($g_adm_db, $g_tbl_praefix . '_%'));
 $tables = array();
-while($table = $statement->fetch())
+while($tableName = $statement->fetchColumn())
 {
-    $tables[] = $table[0];
+    $tables[] = $tableName;
 }
 
 $SelectedTables[$g_adm_db] = $tables;
@@ -147,7 +150,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                 $tablecounter = 1;
             }
             $SQLquery  = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR;
-            $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+            $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
             $countTablesStatement = $gDb->query($SQLquery);
             $row = $countTablesStatement->fetch();
             $rows[$t] = $row['num'];
@@ -190,7 +193,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             {
                 $structurelines = array();
                 $SQLquery  = 'SHOW FULL FIELDS';
-                $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
                 $showfieldsStatement = $gDb->query($SQLquery);
                 while ($row = $showfieldsStatement->fetch())
                 {
@@ -302,7 +305,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     $structurelines[] = $structureline;
                 }
 
-                $SQLquery  = 'SHOW TABLE STATUS = "'.$gDb->escapeString($SelectedTables[$dbname][$t]).'"';
+                $SQLquery  = 'SHOW TABLE STATUS = '.$gDb->escapeString($SelectedTables[$dbname][$t]);
                 $tablestatusStatement = $gDb->query($SQLquery);
                 if (!($TableStatusRow = $tablestatusStatement->fetch()))
                 {
@@ -352,7 +355,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
             for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
             {
                 $SQLquery  = 'SELECT *';
-                $SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escapeString($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+                $SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
                 $statement = $gDb->query($SQLquery);
                 $rows[$t] = $statement->rowCount();
                 if ($rows[$t] > 0)
@@ -372,7 +375,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                 }
                 unset($fieldnames);
-                $fieldnames = $gDb->getTableColumns($gDb->escapeString($SelectedTables[$dbname][$t]));
+                $fieldnames = $gDb->getTableColumns($SelectedTables[$dbname][$t]);
 
                 if ($_REQUEST['StartBackup'] === 'complete')
                 {
@@ -384,7 +387,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                 }
                 $currentrow       = 0;
                 $thistableinserts = '';
-                while ($row = $statement->fetch())
+                while ($row = $statement->fetch(\PDO::FETCH_NUM))
                 {
                     unset($valuevalues);
                     foreach ($fieldnames as $key => $val)
@@ -415,7 +418,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                     }
                                     else
                                     {
-                                        $valuevalues[] = QUOTECHAR.$gDb->escapeString($data).QUOTECHAR;
+                                        $valuevalues[] = $gDb->escapeString($data);
                                     }
                                     break;
 
@@ -429,7 +432,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                 case 'double':
                                 case 'decimal':
                                 case 'year':
-                                    $valuevalues[] = $gDb->escapeString($row[$key]);
+                                    $valuevalues[] = $row[$key];
                                     break;
 
                                 // value surrounded by quotes
@@ -446,7 +449,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                                 case 'time':
                                 case 'timestamp':
                                 default:
-                                    $valuevalues[] = QUOTECHAR.$gDb->escapeString($row[$key]).QUOTECHAR;
+                                    $valuevalues[] = $gDb->escapeString($row[$key]);
                                     break;
                             }
 

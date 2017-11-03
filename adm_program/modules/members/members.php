@@ -80,7 +80,7 @@ if($gPreferences['members_show_all_users'] == 1)
     $membersAdministrationMenu->addForm($navbarForm->show(false));
 }
 
-$membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+$membersAdministrationMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
 
 // show link to import users
 $membersAdministrationMenu->addItem(
@@ -135,7 +135,7 @@ $membersTable->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/members/memb
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage($gPreferences['members_users_per_page']);
+$membersTable->setDatatablesRowsPerPage((int) $gPreferences['members_users_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $page->addHtml($membersTable->show());

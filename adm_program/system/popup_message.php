@@ -25,10 +25,12 @@ $getDatabaseId  = admFuncVariableIsValid($_GET, 'database_id',   'string', array
 $getDatabaseId2 = admFuncVariableIsValid($_GET, 'database_id_2', 'string');
 $getName        = admFuncVariableIsValid($_GET, 'name',          'string');
 
-if ($getType !== 'bac') {
+if ($getType !== 'bac')
+{
     $getDatabaseId = (int) $getDatabaseId;
 }
-if ($getType !== 'cat') {
+if ($getType !== 'cat')
+{
     $getDatabaseId2 = (int) $getDatabaseId2;
 }
 

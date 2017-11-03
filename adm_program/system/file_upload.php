@@ -56,7 +56,6 @@ if($getModule === 'photos')
     if (isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getId)
     {
         $photoAlbum =& $_SESSION['photo_album'];
-        $photoAlbum->setDatabase($gDb);
     }
     else
     {

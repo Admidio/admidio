@@ -208,7 +208,8 @@ echo '</div>';
  * @param string $html The html string to parse.
  * @return string Returns the parsed html string with all tags closed.
  */
-function pluginDatesCloseTags($html) {
+function pluginDatesCloseTags($html)
+{
     preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
     $openedtags = $result[1];
     preg_match_all('#</([a-z]+)>#iU', $html, $result);
