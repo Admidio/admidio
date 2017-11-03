@@ -82,7 +82,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
 $menuMenu->addItem('admMenuItemNew', $g_root_path.'/adm_program/modules/menu/menu_new.php',
-                         $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_MENU')), 'add.png');
+                         $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU'))), 'add.png');
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);
@@ -91,7 +91,7 @@ $menuOverview = new HtmlTable('tbl_menues', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     'Order',
-    'need to enable in menu <img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />',
+    'need to enable in menu <img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" />',
     'Standart Menu',
     '&nbsp;'
 );
@@ -138,21 +138,21 @@ while ($main_men = $main_men_statement->fetchObject())
             $naming = $gL10n->get($menu_row->men_translate_name);
 
             $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu_row->men_id.')"><img
-                                    src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $headline).'" title="'.$gL10n->get('CAT_MOVE_UP', $headline).'" /></a>
+                                    src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" /></a>
                                <a class="admidio-icon-link" href="javascript:moveMenu(\'down\', '.$menu_row->men_id.')"><img
-                                    src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $headline).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $headline).'" /></a>';
+                                    src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" /></a>';
 
 
             $htmlEnabledMenu = '&nbsp;';
             if($menu_row->men_need_enable == 1)
             {
-                $htmlEnabledMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
+                $htmlEnabledMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" />';
             }
 
             $htmlStandartMenu = '&nbsp;';
             if($menu_row->men_standart == 1)
             {
-                $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', $headline).'" />';
+                $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" />';
             }
 
             $menuAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu_row->men_id. '"><img

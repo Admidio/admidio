@@ -383,7 +383,7 @@ class HtmlPage
                         || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
                         {
                             $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
-                                                    $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
+                                                    $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
                         }
                     }
                 }

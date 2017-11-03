@@ -34,7 +34,7 @@ $plugin_folder = '/adm_plugins/calendar/calendar.php';
 $standart = 0;
 
 // set module headline
-$headline = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('SYS_MENU'));
+$headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
 
 // create html page object
 $page = new HtmlPage($headline);

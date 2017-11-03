@@ -34,14 +34,14 @@ $headline = $gL10n->get('SYS_MENU');
 // set headline of the script
 if($getMenId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', $headline);
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($headline));
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $headline);
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($headline));
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->addUrl(CURRENT_URL, array($headline));
 
 $menuArray = array(0 => 'MAIN');
 
