@@ -209,7 +209,7 @@ function readAndExecuteSQLFromFile($filename, &$database)
                     // search for the exact value as a separate word and replace it with the translation
                     // in l10n the single quote is transformed in html entity, but we need the original sql escaped
                     $escapedText = $database->escapeString(str_replace('&rsquo;', '\'', $convertedText));
-                    $sql = preg_replace('/\b'.$value.'\b/', substr($escapedText, 1, strlen($escapedText) - 1), $sql);
+                    $sql = preg_replace('/\b'.$value.'\b/', substr($escapedText, 1, strlen($escapedText) - 2), $sql);
                 }
             }
 
