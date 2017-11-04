@@ -149,8 +149,8 @@ class Language
      * Reads a text string out of a language xml file that is identified
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
-     * @param string                   $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @param array<int,string>|string $params Optional parameter for language string of translation id
+     * @param string            $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @param array<int,string> $params Optional parameter for language string of translation id
      *
      * param  string $param1,$param2... The function accepts an undefined number of values which will be used
      *                                  to replace the placeholder in the text.
@@ -178,7 +178,11 @@ class Language
         }
 
         // unify different formats into one
-        if (func_num_args() > 2)
+        if (is_array($params))
+        {
+            $paramsArray = $params;
+        }
+        else
         {
             // TODO deprecated: Remove in Admidio 4.0
             $paramsArray = func_get_args();
@@ -189,10 +193,6 @@ class Language
                 'DEPRECATED: "$gL10n->get(' . $txtId . ', ' . $paramsString . ')" is deprecated, use "$gL10n->get(' . $txtId . ', array(' . $paramsString . ')" instead!',
                 array('textId' => $textId, 'params' => $params, 'allParams' => func_get_args())
             );
-        }
-        else
-        {
-            $paramsArray = (array) $params;
         }
 
         // replace placeholder with value of parameters
