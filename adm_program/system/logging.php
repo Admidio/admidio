@@ -38,6 +38,7 @@ if ($gDebug)
 $inspectionProcessor = new IntrospectionProcessor($logLevel);
 $gLogger->pushProcessor($inspectionProcessor);
 
+// Params: format, dateFormat, allowInlineLineBreaks, ignoreEmptyContextAndExtra
 $formatter = new LineFormatter(null, null, false, true);
 $streamHandler = new RotatingFileHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', 0, $logLevel, true, 0666);
 $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
@@ -48,9 +49,9 @@ $errorLogHandler->setFormatter($formatter);
 $gLogger->pushHandler($streamHandler);
 $gLogger->pushHandler($errorLogHandler);
 
-$gLogger->notice('#################################################################################################');
-$gLogger->notice('URL: ' . CURRENT_URL);
-$gLogger->notice('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KiB');
+$gLogger->info('#################################################################################################');
+$gLogger->info('URL: ' . CURRENT_URL);
+$gLogger->info('MEMORY USAGE: ' . round(memory_get_usage() / 1024, 1) . ' KiB');
 
 // Log Constants
 $constants = array(

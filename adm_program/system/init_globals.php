@@ -16,7 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'init_globals.php')
 // if there is no debug flag in config.php than set debug to false
 if(!isset($gDebug) || !$gDebug)
 {
-    $gDebug = 0;
+    $gDebug = false;
 }
 
 // create database object and establish connection to database
