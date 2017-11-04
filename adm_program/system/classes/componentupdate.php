@@ -640,7 +640,7 @@ class ComponentUpdate extends Component
                         , (17, 2, 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
                         , (18, 2, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
                         , (19, 2, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
-        $db->query($sql);
+        $this->db->query($sql);
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'men_display\' ';
