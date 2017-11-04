@@ -185,7 +185,7 @@ class TableCategory extends TableAccess
         // if text is a translation-id then translate it
         if ($columnName === 'cat_name' && $format !== 'database' && admIsTranslationStrId($value))
         {
-            $value = $gL10n->get(admStrToUpper($value));
+            $value = $gL10n->get($value);
         }
 
         return $value;

@@ -84,7 +84,7 @@ if($userId === $currUsrId)
 }
 else
 {
-    $headline = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+    $headline = $gL10n->get('PRO_PROFILE_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 }
 
 // if user id was not set and own profile should be shown then initialize navigation

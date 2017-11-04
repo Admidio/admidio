@@ -204,7 +204,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                         // => EXIT
                         break;
                     case 'DATE':
-                        $gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gSettingsManager->getString('system_date')));
+                        $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($field->getValue('usf_name'), $gSettingsManager->getString('system_date'))));
                         // => EXIT
                         break;
                     case 'EMAIL':

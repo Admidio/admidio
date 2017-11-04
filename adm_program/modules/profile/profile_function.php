@@ -162,7 +162,7 @@ elseif($getMode === 7)
     $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getMembershipStart);
     if($startDate === false)
     {
-        exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gSettingsManager->getString('system_date')));
+        exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
     }
     else
     {
@@ -176,7 +176,7 @@ elseif($getMode === 7)
         $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getMembershipEnd);
         if($endDate === false)
         {
-            exit($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gSettingsManager->getString('system_date')));
+            exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
         }
         else
         {

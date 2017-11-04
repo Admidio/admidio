@@ -260,7 +260,7 @@ foreach($listsResult['recordset'] as $row)
 
                 if(strlen($role->getValue('rol_start_date')) > 0)
                 {
-                    $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date'))));
+                    $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
                 }
 
                 if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
@@ -271,7 +271,7 @@ foreach($listsResult['recordset'] as $row)
                     }
                     if(strlen($role->getValue('rol_start_time')) > 0)
                     {
-                        $html = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time')));
+                        $html = $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
                     }
                     $form->addStaticControl('list_date', $gL10n->get('DAT_DATE'), $html);
                 }

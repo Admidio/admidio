@@ -140,7 +140,7 @@ elseif($getMode === 2)
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')));
+    $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
     // => EXIT
 }
 elseif($getMode === 3)
@@ -232,7 +232,7 @@ elseif($getMode === 6)
     {
         // User kann nur aus dieser Orga entfernt werden
         $gMessage->setForwardYesNo(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='. $getUserId. '&mode=2');
-        $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')), $gL10n->get('SYS_REMOVE'));
+        $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
         // => EXIT
     }
 }

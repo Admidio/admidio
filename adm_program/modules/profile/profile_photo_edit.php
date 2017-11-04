@@ -54,7 +54,7 @@ if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
     if(!$myFilesProfilePhotos->checkSettings())
     {
-        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>'));
+        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, array($myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
         // => EXIT
     }
 }
@@ -163,7 +163,7 @@ if($getMode === 'choose')
     }
     else
     {
-        $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+        $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -257,7 +257,7 @@ elseif($getMode === 'upload')
     }
     else
     {
-        $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+        $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
     // create html page object

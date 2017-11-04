@@ -315,7 +315,7 @@ class Email extends PHPMailer
     {
         global $gL10n, $gValidLogin, $gCurrentOrganization;
 
-        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', $senderName, $gCurrentOrganization->getValue('org_homepage'), $receivers);
+        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_RECEIVER', array($senderName, $gCurrentOrganization->getValue('org_homepage'), $receivers));
 
         if (!$gValidLogin)
         {

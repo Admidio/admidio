@@ -1510,7 +1510,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // create array from sql result
-        while ($row = $pdoStatement->fetch(\PDO::FETCH_BOTH))
+        while ($row = $pdoStatement->fetch(\PDO::FETCH_NUM))
         {
             // if result has 3 columns then create a array in array
             if(array_key_exists(2, $row))
@@ -1518,7 +1518,7 @@ class HtmlForm extends HtmlFormBasic
                 // translate category name
                 if (admIsTranslationStrId($row[2]))
                 {
-                    $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get(admStrToUpper($row[2])));
+                    $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get($row[2]));
                 }
                 else
                 {
@@ -1756,7 +1756,7 @@ class HtmlForm extends HtmlFormBasic
             // if text is a translation-id then translate it
             if (admIsTranslationStrId($row['cat_name']))
             {
-                $categoriesArray[$row['cat_id']] = $gL10n->get(admStrToUpper($row['cat_name']));
+                $categoriesArray[$row['cat_id']] = $gL10n->get($row['cat_name']);
             }
             else
             {
@@ -1849,13 +1849,21 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function closeControlStructure($helpTextId = '', array $parameters = array())
     {
-        global $gL10n;
+        global $gL10n, $gLogger;
 
         // backwards compatibility
         if (is_array($helpTextId))
         {
+            // TODO deprecated: Remove in Admidio 4.0
+            $helpTextIds = '\'' . implode('\', \'', $helpTextId) . '\'';
             $parameters = $helpTextId;
             $helpTextId = array_shift($parameters);
+            $paramsString = '\'' . implode('\', \'', $parameters) . '\'';
+
+            $gLogger->warning(
+                'DEPRECATED: "$htmlForm->closeControlStructure(' . $helpTextIds . ')" is deprecated, use "$htmlForm->closeControlStructure(\'' . $helpTextId . '\', array(' . $paramsString . ')" instead!',
+                array('helpTextId' => $helpTextId, 'parameters' => $parameters)
+            );
         }
 
         if ($helpTextId !== '')

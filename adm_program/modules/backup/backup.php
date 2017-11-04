@@ -45,7 +45,7 @@ if($gDbType !== Database::PDO_ENGINE_MYSQL)
 $myFilesBackup = new MyFiles('BACKUP');
 if(!$myFilesBackup->checkSettings())
 {
-    $gMessage->show($gL10n->get($myFilesBackup->errorText, $myFilesBackup->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>'));
+    $gMessage->show($gL10n->get($myFilesBackup->errorText, array($myFilesBackup->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
     // => EXIT
 }
 

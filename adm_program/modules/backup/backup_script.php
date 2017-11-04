@@ -79,12 +79,15 @@ $newfullfilename = $backupabsolutepath.$fullbackupfilename;
 unset($SelectedTables, $tables);
 
 // create a list with all tables with configured table prefix
-$sql = 'SHOW TABLES LIKE ?';
-$statement = $gDb->queryPrepared($sql, array($g_tbl_praefix . '\_%'));
+$sql = 'SELECT table_name
+          FROM information_schema.tables
+         WHERE table_schema = ?
+           AND table_name LIKE ?';
+$statement = $gDb->queryPrepared($sql, array($g_adm_db, $g_tbl_praefix . '_%'));
 $tables = array();
-while($table = $statement->fetch())
+while($tableName = $statement->fetchColumn())
 {
-    $tables[] = $table[0];
+    $tables[] = $tableName;
 }
 
 $SelectedTables[$g_adm_db] = $tables;
@@ -114,7 +117,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 {
 
     $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (https://www.admidio.org)'.LINE_TERMINATOR;
-    $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
+    $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', array(date('d.m.Y'), date('G:i:s'))).LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
@@ -384,7 +387,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                 }
                 $currentrow       = 0;
                 $thistableinserts = '';
-                while ($row = $statement->fetch())
+                while ($row = $statement->fetch(\PDO::FETCH_NUM))
                 {
                     unset($valuevalues);
                     foreach ($fieldnames as $key => $val)

@@ -131,7 +131,7 @@ while ($row = $statement->fetch())
     // Enddatum nur wenn anders als startdatum
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin'))
     {
-        $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date')));
+        $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
     $description .= '<br />'.$gL10n->get('PHO_PHOTOS').': '.$photoAlbum->countImages();
     $description .= '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photoAlbum->getValue('pho_photographers');

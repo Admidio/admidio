@@ -8,6 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
+{
+    exit('This page may not be called directly!');
+}
 
 /**
  * Function checks if the user is a member of the role.
@@ -614,7 +618,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
                                 $userIdCreated . '">' . $userNameCreated . '</a>';
         }
 
-        $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY', $userNameCreated, $timestampCreate) . '</span>';
+        $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY', array($userNameCreated, $timestampCreate)) . '</span>';
     }
 
     // compose name of user who edit the recordset
@@ -634,7 +638,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
                                $userIdEdited . '">' . $userNameEdited . '</a>';
         }
 
-        $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', $userNameEdited, $timestampEdited) . '</span>';
+        $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', array($userNameEdited, $timestampEdited)) . '</span>';
     }
 
     if ($html === '')
