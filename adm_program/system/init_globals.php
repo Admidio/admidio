@@ -8,6 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'init_globals.php')
+{
+    exit('This page may not be called directly!');
+}
 
 // if there is no debug flag in config.php than set debug to false
 if(!isset($gDebug) || !$gDebug)

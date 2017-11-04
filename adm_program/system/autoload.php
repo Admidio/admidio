@@ -8,6 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'autoload.php')
+{
+    exit('This page may not be called directly!');
+}
 
 /**
  * Autoloading function of class files. This function will be later registered
