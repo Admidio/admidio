@@ -596,12 +596,12 @@ class User extends TableAccess
 
         if (!$this->isMemberOfOrganization($orgLongname))
         {
-            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $orgLongname);
+            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname));
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongname))
         {
-            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $orgLongname);
+            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname));
         }
 
         if ($updateHash)

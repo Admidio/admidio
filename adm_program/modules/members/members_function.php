@@ -82,7 +82,7 @@ if($getMode === 1)
             <img src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />
             '.$gL10n->get('MEM_MAKE_FORMER').'<br /><br />
             <img src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
-            '.$gL10n->get('MEM_REMOVE_USER_DESC', $gL10n->get('SYS_DELETE')).'
+            '.$gL10n->get('MEM_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'
         </p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
@@ -208,7 +208,7 @@ elseif($getMode === 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
     $gMessage->setForwardYesNo(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='. $getUserId. '&mode=4');
-    $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')));
+    $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
     // => EXIT
 }
 elseif($getMode === 6)
@@ -225,7 +225,7 @@ elseif($getMode === 6)
         // only administrators are allowed to do this
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $gMessage->setForwardYesNo(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='. $getUserId. '&mode=3');
-        $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')), $gL10n->get('SYS_DELETE'));
+        $gMessage->show($gL10n->get('MEM_USER_DELETE', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
         // => EXIT
     }
     else

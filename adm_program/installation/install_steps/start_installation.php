@@ -17,7 +17,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
 if (!is_file($pathConfigFile))
 {
     showNotice(
-        $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'),
+        $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
         'installation.php?step=create_config',
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
@@ -42,7 +42,7 @@ if (isset($_SESSION['prefix'])
     || $g_organization !== $_SESSION['orga_shortname']))
 {
     showNotice(
-        $gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'),
+        $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
         'installation.php?step=create_config',
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
@@ -242,7 +242,7 @@ if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
     $text = $text.'
         <div class="alert alert-warning alert-small" role="alert">
             <span class="glyphicon glyphicon-warning-sign"></span>
-            '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files').'
+            '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files')).'
         </div>';
 }
 

@@ -147,7 +147,7 @@ try
 }
 catch(AdmException $e)
 {
-    exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()));
+    exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())));
 }
 
 if($gDbType === Database::PDO_ENGINE_MYSQL)

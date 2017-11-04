@@ -38,7 +38,7 @@ $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->ge
 // show link to create new room
 $roomsMenu->addItem(
     'menu_item_new_room', ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php?headline='.$textRoom,
-    $gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png'
+    $gL10n->get('SYS_CREATE_VAR', array($textRoom)), 'add.png'
 );
 
 if($gPreferences['system_show_create_edit'] == 1)

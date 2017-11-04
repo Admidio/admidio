@@ -161,17 +161,17 @@ function FormattedTimeRemaining($seconds, $precision = 1)
 
     if ($seconds > 86400)
     {
-        return $gL10n->get('BAC_DAYS_VAR', number_format($seconds / 86400, $precision));
+        return $gL10n->get('BAC_DAYS_VAR', array(number_format($seconds / 86400, $precision)));
     }
     elseif ($seconds > 3600)
     {
-        return $gL10n->get('BAC_HOURS_VAR', number_format($seconds / 3600, $precision));
+        return $gL10n->get('BAC_HOURS_VAR', array(number_format($seconds / 3600, $precision)));
     }
     elseif ($seconds > 60)
     {
-        return $gL10n->get('BAC_MINUTES_VAR', number_format($seconds / 60, $precision));
+        return $gL10n->get('BAC_MINUTES_VAR', array(number_format($seconds / 60, $precision)));
     }
-    return $gL10n->get('BAC_SECONDS_VAR', number_format($seconds, $precision));
+    return $gL10n->get('BAC_SECONDS_VAR', array(number_format($seconds, $precision)));
 }
 // Ende : MFA
 

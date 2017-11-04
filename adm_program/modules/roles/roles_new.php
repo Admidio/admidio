@@ -336,7 +336,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     {
         $roleName = $gL10n->get('SYS_ROLE').' <strong>'.$role->getValue('rol_name').'</strong>';
     }
-    $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $roleName).'</p>');
+    $form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', array($roleName)).'</p>');
 
     //  list all roles that the user is allowed to see
     $sqlData['query'] = 'SELECT rol_id, rol_name, cat_name

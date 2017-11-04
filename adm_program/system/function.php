@@ -410,7 +410,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
                 if (!$objEnglishDate)
                 {
-                    $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
+                    $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', array($variableName));
                 }
             }
             break;

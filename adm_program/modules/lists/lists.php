@@ -218,8 +218,8 @@ foreach($listsResult['recordset'] as $row)
                 {
                     $page->addHtml('<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=8&amp;rol_id='. $rolId.'"><img
                                     src="'. THEME_URL. '/icons/vcard.png"
-                                    alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
-                                    title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
+                                    alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"
+                                    title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'" /></a>');
                 }
 
                 // link to assign or remove members if you are allowed to do it
@@ -287,7 +287,7 @@ foreach($listsResult['recordset'] as $row)
 
                 if($role->getValue('rol_max_members') > 0)
                 {
-                    $html .= '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
+                    $html .= '&nbsp;'.$gL10n->get('LST_MAX', array($role->getValue('rol_max_members')));
                 }
                 if($gCurrentUser->hasRightViewFormerRolesMembers($rolId) && $getActiveRole && $row['num_former'] > 0)
                 {

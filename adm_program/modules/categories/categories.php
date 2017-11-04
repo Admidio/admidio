@@ -66,19 +66,19 @@ if($getTitle === '')
 {
     if($getType === 'ROL')
     {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('SYS_ROLES'));
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
     }
     elseif($getType === 'LNK')
     {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('LNK_WEBLINKS'));
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('LNK_WEBLINKS')));
     }
     elseif($getType === 'ANN')
     {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('ANN_ANNOUNCEMENTS'));
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
     }
     elseif($getType === 'USF')
     {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', $gL10n->get('ORG_PROFILE_FIELDS'));
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
     }
     else
     {
@@ -161,7 +161,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 // define link to create new category
 $categoriesMenu->addItem(
     'admMenuItemNewCategory', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
-    $gL10n->get('SYS_CREATE_VAR', $addButtonText), 'add.png'
+    $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 'add.png'
 );
 
 // Create table object
@@ -180,7 +180,7 @@ else
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />',
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" />',
     $visibleHeadline,
     '&nbsp;'
 );
@@ -235,15 +235,15 @@ while($catRow = $categoryStatement->fetch())
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$catId.')"><img
-                                src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_UP', $addButtonText).'" /></a>
+                                src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" /></a>
                            <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$catId.')"><img
-                                src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $addButtonText).'" /></a>';
+                                src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" /></a>';
     }
 
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
-        $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $addButtonText).'" />';
+        $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" />';
     }
 
     if($getType === 'ROL')

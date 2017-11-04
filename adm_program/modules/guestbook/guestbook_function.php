@@ -148,12 +148,12 @@ if ($getMode === 1 || $getMode === 3)
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
                 if ($key === 'gbo_email')
                 {
-                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))));
                     // => EXIT
                 }
                 elseif ($key === 'gbo_homepage')
                 {
-                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
+                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_WEBSITE'))));
                     // => EXIT
                 }
             }
@@ -162,12 +162,12 @@ if ($getMode === 1 || $getMode === 3)
 
     if ($guestbook->getValue('gbo_name') === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
     elseif ($guestbook->getValue('gbo_text') === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEXT'))));
         // => EXIT
     }
     else
@@ -197,7 +197,7 @@ if ($getMode === 1 || $getMode === 3)
                 if ($pdoStatement->fetchColumn() > 0)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gPreferences['flooding_protection_time'])));
                     // => EXIT
                 }
             }
@@ -341,7 +341,7 @@ elseif ($getMode === 4 || $getMode === 8)
                 // Daten wurden nicht uebernommen, Hinweis ausgeben
                 if ($key === 'gbc_email')
                 {
-                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))));
                     // => EXIT
                 }
             }
@@ -355,12 +355,12 @@ elseif ($getMode === 4 || $getMode === 8)
 
     if ($gbComment->getValue('gbc_name') !== '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
     elseif ($gbComment->getValue('gbc_text') !== '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_COMMENT')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COMMENT'))));
         // => EXIT
     }
     else
@@ -388,7 +388,7 @@ elseif ($getMode === 4 || $getMode === 8)
                 if ($pdoStatement->fetchColumn() > 0)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gPreferences['flooding_protection_time'])));
                     // => EXIT
                 }
             }
