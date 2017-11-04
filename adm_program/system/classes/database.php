@@ -133,9 +133,13 @@ class Database
      */
     public function __construct($engine, $host, $port = null, $dbName, $username = null, $password = null, array $options = array())
     {
+        global $gLogger;
+
         // for compatibility to old versions accept the string postgresql
         if ($engine === 'postgresql')
         {
+            $gLogger->warning('DEPRECATED: Deprecated database engine type used!', array('engine' => $engine));
+
             $engine = self::PDO_ENGINE_PGSQL;
         }
 
@@ -148,6 +152,8 @@ class Database
         $this->options  = $options;
 
         $this->connect();
+
+        $gLogger->debug('DATABASE: connected!');
     }
 
     /**
@@ -155,12 +161,22 @@ class Database
      */
     public function __sleep()
     {
+        global $gLogger;
+
+        $gLogger->debug('DATABASE: sleep/serialize!');
+
         return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
     }
 
     public function __wakeup()
     {
+        global $gLogger;
+
+        $gLogger->debug('DATABASE: wakeup/unserialize!');
+
         $this->connect();
+
+        $gLogger->debug('DATABASE: reconnected!');
     }
 
     /**
@@ -190,7 +206,7 @@ class Database
                 'password' => '******',
                 'options'  => $this->options
             );
-            $gLogger->alert('Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
+            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
 
             throw new AdmException($e->getMessage());
         }
@@ -203,6 +219,8 @@ class Database
      */
     private function setDSNString()
     {
+        global $gLogger;
+
         $availableDrivers = \PDO::getAvailableDrivers();
 
         if (count($availableDrivers) === 0)
@@ -238,6 +256,8 @@ class Database
             default:
                 throw new \PDOException('Engine is not supported by Admidio');
         }
+
+        $gLogger->debug('DATABASE: DSN-String: "' . $this->dsn . '"!');
     }
 
     /**
@@ -285,6 +305,7 @@ class Database
     {
         $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
         $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
+
         return (string) $node[0];
     }
 
@@ -298,6 +319,7 @@ class Database
         {
             $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
         }
+
         return $this->databaseName;
     }
 
@@ -311,6 +333,7 @@ class Database
         {
             $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
         }
+
         return $this->minRequiredVersion;
     }
 
@@ -346,7 +369,7 @@ class Database
         global $gLogger;
 
         // If we are within a transaction we will not open another one,
-        // but enclose the current one to not loose data (prevening auto commit)
+        // but enclose the current one to not loose data (preventing auto commit)
         if ($this->transactions > 0)
         {
             ++$this->transactions;
@@ -365,6 +388,7 @@ class Database
         }
 
         $this->transactions = 1;
+
         return $result;
     }
 
@@ -391,6 +415,7 @@ class Database
         if ($this->transactions > 1)
         {
             --$this->transactions;
+
             return true;
         }
 
@@ -406,6 +431,7 @@ class Database
         }
 
         $this->transactions = 0;
+
         return $result;
     }
 
@@ -494,6 +520,7 @@ class Database
         if ($this->engine === self::PDO_ENGINE_PGSQL)
         {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
+
             return $lastValStatement->fetchColumn();
         }
 
@@ -539,6 +566,16 @@ class Database
     }
 
     /**
+     * Prepares SQL statements in a log-able format
+     * @param string $sql
+     * @return string
+     */
+    private static function prepareSqlForLog($sql)
+    {
+        return preg_replace('/\s+/', ' ', trim($sql));
+    }
+
+    /**
      * Send a sql statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a @b SELECT statement
      * then also the number of rows will be logged. If an error occurred the script will
@@ -560,7 +597,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        $gLogger->info('SQL: ' . preg_replace('/\s+/', ' ', $sql));
+        $gLogger->info('SQL: ' . self::prepareSqlForLog($sql));
 
         try
         {
@@ -609,7 +646,7 @@ class Database
         }
 
         // if debug mode then log all sql statements
-        $gLogger->info('SQL: ' . preg_replace('/\s+/', ' ', $sql), $params);
+        $gLogger->info('SQL: ' . self::prepareSqlForLog($sql), $params);
 
         try
         {

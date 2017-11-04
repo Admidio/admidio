@@ -1848,13 +1848,21 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function closeControlStructure($helpTextId = '', array $parameters = array())
     {
-        global $gL10n;
+        global $gL10n, $gLogger;
 
         // backwards compatibility
         if (is_array($helpTextId))
         {
+            // TODO deprecated: Remove in Admidio 4.0
+            $helpTextIds = '\'' . implode('\', \'', $helpTextId) . '\'';
             $parameters = $helpTextId;
             $helpTextId = array_shift($parameters);
+            $paramsString = '\'' . implode('\', \'', $parameters) . '\'';
+
+            $gLogger->warning(
+                'DEPRECATED: "$htmlForm->closeControlStructure(' . $helpTextIds . ')" is deprecated, use "$htmlForm->closeControlStructure(\'' . $helpTextId . '\', array(' . $paramsString . ')" instead!',
+                array('helpTextId' => $helpTextId, 'parameters' => $parameters)
+            );
         }
 
         if ($helpTextId !== '')
