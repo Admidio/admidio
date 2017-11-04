@@ -48,10 +48,10 @@ if($gPreferences['system_search_similar'] == 1 && $gDbType === Database::PDO_ENG
 else
 {
     $sqlSimilarName = '
-        (  (   last_name.usd_value  = ?    -- $gDb->escapeString($getLastname)
-           AND first_name.usd_value = ?)   -- $gDb->escapeString($getFirstname)
-        OR (   last_name.usd_value  = ?    -- $gDb->escapeString($getFirstname)
-           AND first_name.usd_value = ?) ) -- $gDb->escapeString($getLastname)';
+        (  (   last_name.usd_value  = ?    -- $getLastname
+           AND first_name.usd_value = ?)   -- $getFirstname
+        OR (   last_name.usd_value  = ?    -- $getFirstname
+           AND first_name.usd_value = ?) ) -- $getLastname';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
@@ -87,10 +87,10 @@ $queryParams = array(
     $gProfileFields->getProperty('POSTCODE', 'usf_id'),
     $gProfileFields->getProperty('CITY', 'usf_id'),
     $gProfileFields->getProperty('EMAIL', 'usf_id'),
-    $gDb->escapeString($getLastname),
-    $gDb->escapeString($getFirstname),
-    $gDb->escapeString($getFirstname),
-    $gDb->escapeString($getLastname)
+    $getLastname,
+    $getFirstname,
+    $getFirstname,
+    $getLastname
 );
 $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 $memberCount = $usrStatement->rowCount();

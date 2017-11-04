@@ -191,7 +191,7 @@ class TableUserField extends TableAccess
                     // if text is a translation-id then translate it
                     if (admIsTranslationStrId($value))
                     {
-                        $value = $gL10n->get(admStrToUpper($value));
+                        $value = $gL10n->get($value);
                     }
 
                     break;
@@ -227,7 +227,7 @@ class TableUserField extends TableAccess
                                     // if text is a translation-id then translate it
                                     if (admIsTranslationStrId($listValueText))
                                     {
-                                        $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                        $listValueText = $gL10n->get($listValueText);
                                     }
 
                                     if ($format === 'text')
@@ -268,7 +268,7 @@ class TableUserField extends TableAccess
                             // if text is a translation-id then translate it
                             if (admIsTranslationStrId($listValue))
                             {
-                                $listValue = $gL10n->get(admStrToUpper($listValue));
+                                $listValue = $gL10n->get($listValue);
                             }
 
                             // save values in new array that starts with key = 1

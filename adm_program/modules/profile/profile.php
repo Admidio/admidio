@@ -84,7 +84,7 @@ if($userId === $currUsrId)
 }
 else
 {
-    $headline = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+    $headline = $gL10n->get('PRO_PROFILE_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 }
 
 // if user id was not set and own profile should be shown then initialize navigation
@@ -264,7 +264,7 @@ if($gPreferences['profile_log_edit_fields'] == 1 && $gCurrentUser->hasRightEditP
     );
 }
 
-$profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+$profileMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
 
 // show link to export the profile as vCard
 $profileMenu->addItem(

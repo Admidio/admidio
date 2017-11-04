@@ -56,15 +56,6 @@ class ProfileFields
     }
 
     /**
-     * Called on serialization of this object. The database object could not be serialized and should be ignored.
-     * @return string[] Returns all class variables that should be serialized.
-     */
-    public function __sleep()
-    {
-        return array_diff(array_keys(get_object_vars($this)), array('db'));
-    }
-
-    /**
      * user data of all profile fields will be initialized
      * the fields array will not be renewed
      */
@@ -238,7 +229,7 @@ class ProfileFields
                             // if text is a translation-id then translate it
                             if (admIsTranslationStrId($listValueText))
                             {
-                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
+                                $listValueText = $gL10n->get($listValueText);
                             }
 
                             try
@@ -263,7 +254,7 @@ class ProfileFields
                         // if text is a translation-id then translate it
                         if (admIsTranslationStrId($listValue))
                         {
-                            $listValue = $gL10n->get(admStrToUpper($listValue));
+                            $listValue = $gL10n->get($listValue);
                         }
 
                         // save values in new array that starts with key = 1
@@ -537,15 +528,6 @@ class ProfileFields
         $this->mUserId = (int) $userId;
 
         $this->db->endTransaction();
-    }
-
-    /**
-     * Set the database object for communication with the database of this class.
-     * @param Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(Database $database)
-    {
-        $this->db =& $database;
     }
 
     /**

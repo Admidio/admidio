@@ -112,8 +112,7 @@ class Session extends TableAccess
     }
 
     /**
-     * Returns a reference of an object that is stored in the session. If the stored object
-     * has a database object than this could be renewed if the object has a method @b setDatabase.
+     * Returns a reference of an object that is stored in the session.
      * This is necessary because the old database connection is not longer valid.
      * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
      * @return object|false Returns the reference to the object or false if the object was not found.
@@ -125,12 +124,6 @@ class Session extends TableAccess
             // use parameter because we return a reference so only value will return an error
             $returnValue = false;
             return $returnValue;
-        }
-
-        // if object has database connection add database object
-        if (method_exists($this->mObjectArray[$objectName], 'setDatabase'))
-        {
-            $this->mObjectArray[$objectName]->setDatabase($this->db);
         }
 
         // return reference of object
@@ -458,20 +451,6 @@ class Session extends TableAccess
         $gLogger->info('Set Cookie!', array('name' => $name, 'value' => $value, 'expire' => $expire, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly));
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
-    }
-
-    /**
-     * Set the database object for communication with the database of this class.
-     * @param Database $database An object of the class Database. This should be the global $gDb object.
-     */
-    public function setDatabase(Database $database)
-    {
-        parent::setDatabase($database);
-
-        if ($this->mAutoLogin instanceof AutoLogin)
-        {
-            $this->mAutoLogin->setDatabase($database);
-        }
     }
 
     /**

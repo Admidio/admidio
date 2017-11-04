@@ -58,8 +58,8 @@ function checkDatabaseVersion(Database $database)
     if (version_compare($database->getVersion(), $database->getMinimumRequiredVersion(), '<'))
     {
         $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
-                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
+                   $gL10n->get('INS_WRONG_MYSQL_VERSION', array(ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
+                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
     }
 
     return $message;
@@ -79,8 +79,8 @@ function checkPhpVersion()
     if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
     {
         $message = $gL10n->get('SYS_PHP_VERSION') . ': <strong>' . PHP_VERSION . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
-                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
+                   $gL10n->get('INS_WRONG_PHP_VERSION', array(ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
+                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
     }
 
     return $message;
@@ -101,7 +101,7 @@ function querySqlFile(Database $db, $sqlFileName)
 
     if (!is_file($sqlFilePath))
     {
-        return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', $sqlFileName, $sqlPath);
+        return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', array($sqlFileName, $sqlPath));
     }
 
     $fileHandler = fopen($sqlFilePath, 'rb');

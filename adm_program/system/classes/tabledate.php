@@ -311,7 +311,7 @@ class TableDate extends TableAccess
                 // if text is a translation-id then translate it
                 if (admIsTranslationStrId($value))
                 {
-                    $value = $gL10n->get(admStrToUpper($value));
+                    $value = $gL10n->get($value);
                 }
             }
         }

@@ -185,7 +185,7 @@ if($getViewMode === 'html')
 
         if($gPreferences['enable_dates_ical'] == 1 || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
         {
-            $datesMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+            $datesMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'), '', 'right');
         }
 
         // ical Download
@@ -201,7 +201,7 @@ if($getViewMode === 'html')
         {
             // if no calendar selectbox is shown, then show link to edit calendars
             $datesMenu->addItem(
-                'admMenuItemCategories', FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
+                'admMenuItemCategories', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=DAT&title=' . $gL10n->get('DAT_CALENDAR'),
                 $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras'
             );
         }
@@ -249,7 +249,7 @@ else // $getViewMode = 'print'
 
     if($getId === 0)
     {
-        $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', $dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio')) . '</h3>');
+        $page->addHtml('<h3>' . $gL10n->get('DAT_PERIOD_FROM_TO', array($dates->getParameter('dateStartFormatAdmidio'), $dates->getParameter('dateEndFormatAdmidio'))) . '</h3>');
     }
 }
 
