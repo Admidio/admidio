@@ -51,11 +51,11 @@ $page->addHtml(
     '<p class="lead">' .
         $gL10n->get(
             'LNK_REDIRECT_DESC',
-            $gCurrentOrganization->getValue('org_longname'),
+            array($gCurrentOrganization->getValue('org_longname'),
             '<span id="counter">' . $gPreferences['weblinks_redirect_seconds'] . '</span>',
             '<strong>' . $getUrl . '</strong>',
             '<a href="' . $getUrl . '" target="_self">',
-            '</a>'
+            '</a>')
         ) .
     '</p>'
 );

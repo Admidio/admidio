@@ -42,7 +42,7 @@ if(!$gCurrentUser->assignRoles())
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // set headline of the script
-$headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+$headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 
 if(!$getInline)
 {
