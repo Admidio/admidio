@@ -118,7 +118,7 @@ if($getViewMode === 'html')
     {
         $page->addRssFile(
             ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php?headline=' . $getHeadline,
-            $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname') . ' - ' . $getHeadline)
+            $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $getHeadline))
         );
     }
 
@@ -148,7 +148,7 @@ if($getViewMode === 'html')
     {
         $datesMenu->addItem(
             'admMenuItemAdd', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php?headline=' . $getHeadline,
-            $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png'
+            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'add.png'
         );
     }
 

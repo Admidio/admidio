@@ -69,7 +69,7 @@ $page = new HtmlPage($headline);
 $folderNewMenu = $page->getMenu();
 $folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-$page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName).'</p>');
+$page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 
 // show form
 $form = new HtmlForm('new_folder_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId, $page);

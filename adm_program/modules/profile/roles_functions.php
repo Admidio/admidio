@@ -170,11 +170,11 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                             }
                             elseif($futureMembership)
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_FROM', $member->getValue('mem_begin', $gPreferences['system_date']));
+                                $roleMemHTML .= $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gPreferences['system_date'])));
                             }
                             else
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_SINCE', $member->getValue('mem_begin', $gPreferences['system_date']));
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gPreferences['system_date'])));
                             }
 
                             if($role->allowedToAssignMembers($gCurrentUser))

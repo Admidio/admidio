@@ -139,6 +139,11 @@ define('TBL_MENU',                $g_tbl_praefix . '_menu');
 // ###  OTHER STUFF  ###
 // #####################
 
+// create an installation unique cookie prefix and remove special characters
+$cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
+$cookiePrefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $cookiePrefix);
+define('COOKIE_PREFIX', $cookiePrefix);
+
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);
 define('ROLE_LEADER_MEMBERS_ASSIGN', 1);
@@ -156,6 +161,8 @@ define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN
 
 // TODO deprecated: Remove in Admidio 4.0
 define('SERVER_PATH', ADMIDIO_PATH);
+
+$gCookiePraefix = COOKIE_PREFIX;
 
 // Define Constants for PHP 5.3
 if (!defined('JSON_UNESCAPED_SLASHES'))

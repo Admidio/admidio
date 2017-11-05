@@ -223,11 +223,11 @@ if($numberBirthdays > 0)
                 {
                     if ($row['gender'] > 1)
                     {
-                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row['last_name']);
+                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', array($row['last_name']));
                     }
                     else
                     {
-                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', $row['last_name']);
+                        $plgShowName = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', array($row['last_name']));
                     }
                 }
 
@@ -311,7 +311,7 @@ if($numberBirthdays > 0)
         }
         else
         {
-            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', $numberBirthdays).'</p>';
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', array($numberBirthdays)).'</p>';
         }
     }
 }

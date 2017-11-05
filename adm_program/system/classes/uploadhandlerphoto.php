@@ -58,7 +58,7 @@ class UploadHandlerPhoto extends UploadHandler
 
                     if(is_array($error))
                     {
-                        $file->error = $gL10n->get($error['text'], $error['path']);
+                        $file->error = $gL10n->get($error['text'], array($error['path']));
                         return $file;
                     }
                 }
