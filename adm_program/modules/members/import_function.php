@@ -28,18 +28,18 @@ if(!$gCurrentUser->editUsers())
 
 if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_FILE'))));
     // => EXIT
 }
 elseif($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
 {
     // Dateigroesse ueberpruefen Servereinstellungen
-    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gSettingsManager->getInt('max_file_upload_size')));
+    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size'))));
     // => EXIT
 }
 elseif($postRoleId === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
     // => EXIT
 }
 
@@ -50,7 +50,7 @@ $role = new TableRoles($gDb, $postRoleId);
 if(!$gCurrentUser->hasRightViewRole($role->getValue('rol_id'))
 || (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
 {
-    $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
+    $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', array($role->getValue('rol_name'))));
     // => EXIT
 }
 

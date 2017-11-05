@@ -97,13 +97,13 @@ if($getNewUser === 2)
 {
     if($_POST['usr_login_name'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME'))));
         // => EXIT
     }
 
     if($_POST['usr_password'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_PASSWORD'))));
         // => EXIT
     }
 
@@ -158,7 +158,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             if((strlen($_POST[$postId]) === 0 && $field->getValue('usf_mandatory') == 1)
             || (strlen($_POST[$postId]) === 0 && $field->getValue('usf_name_intern') === 'EMAIL' && $getNewUser === 2))
             {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($field->getValue('usf_name'))));
                 // => EXIT
             }
 
@@ -208,20 +208,20 @@ foreach($gProfileFields->getProfileFields() as $field)
                         // => EXIT
                         break;
                     case 'EMAIL':
-                        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
+                        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($field->getValue('usf_name'))));
                         // => EXIT
                         break;
                     case 'NUMBER':
                     case 'DECIMAL':
-                        $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
+                        $gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', array($field->getValue('usf_name'))));
                         // => EXIT
                         break;
                     case 'PHONE':
-                        $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', $field->getValue('usf_name')));
+                        $gMessage->show($gL10n->get('SYS_PHONE_INVALID_CHAR', array($field->getValue('usf_name'))));
                         // => EXIT
                         break;
                     case 'URL':
-                        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+                        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($field->getValue('usf_name'))));
                         // => EXIT
                         break;
                 }
@@ -236,7 +236,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             }
             elseif($field->getValue('usf_mandatory') == 1)
             {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($field->getValue('usf_name'))));
                 // => EXIT
             }
         }
@@ -268,7 +268,7 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
 
         if(!$user->setValue('usr_login_name', $_POST['usr_login_name']))
         {
-            $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));
+            $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))));
             // => EXIT
         }
     }

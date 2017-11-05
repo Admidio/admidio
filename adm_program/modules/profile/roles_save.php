@@ -154,12 +154,12 @@ foreach($rolesList as $row)
             {
                 if(!$getInline)
                 {
-                    $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
+                    $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($row['rol_name'])));
                     // => EXIT
                 }
                 else
                 {
-                    echo $gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']);
+                    echo $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($row['rol_name']));
                 }
             }
         }

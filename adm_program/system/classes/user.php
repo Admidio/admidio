@@ -571,7 +571,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gLogger, $gSettingsManager, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
+        global $gLogger, $gSettingsManager, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
 
         if ($this->hasMaxInvalidLogins())
         {
@@ -596,12 +596,12 @@ class User extends TableAccess
 
         if (!$this->isMemberOfOrganization($orgLongname))
         {
-            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', $orgLongname);
+            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname));
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongname))
         {
-            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', $orgLongname);
+            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname));
         }
 
         if ($updateHash)
@@ -628,7 +628,7 @@ class User extends TableAccess
         if ($updateSessionCookies)
         {
             // set cookie for session id
-            Session::setCookie($gCookiePraefix . '_ID', $gSessionId);
+            Session::setCookie(COOKIE_PREFIX . '_ID', $gSessionId);
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();

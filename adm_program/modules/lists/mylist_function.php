@@ -36,7 +36,7 @@ if (!$gSettingsManager->getBool('lists_enable_module'))
 // Mindestens ein Feld sollte zugeordnet sein
 if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', '1. '.$gL10n->get('LST_COLUMN')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array('1. '.$gL10n->get('LST_COLUMN'))));
     // => EXIT
 }
 
@@ -44,7 +44,7 @@ if(!isset($_POST['column1']) || strlen($_POST['column1']) === 0)
 if($getMode === 2
 && (!isset($_POST['sel_roles_ids']) || (int) $_POST['sel_roles_ids'] === 0 || !is_array($_POST['sel_roles_ids'])))
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROLE'))));
     // => EXIT
 }
 

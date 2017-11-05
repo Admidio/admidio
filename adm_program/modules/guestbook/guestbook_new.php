@@ -35,11 +35,11 @@ elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 // set headline of the script
 if ($getGboId > 0)
 {
-    $headline = $gL10n->get('GBO_EDIT_ENTRY', $getHeadline);
+    $headline = $gL10n->get('GBO_EDIT_ENTRY', array($getHeadline));
 }
 else
 {
-    $headline = $gL10n->get('GBO_CREATE_VAR_ENTRY', $getHeadline);
+    $headline = $gL10n->get('GBO_CREATE_VAR_ENTRY', array($getHeadline));
 }
 
 // add current url to navigation stack
@@ -104,7 +104,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
     if($pdoStatement->fetchColumn() > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->getInt('flooding_protection_time')));
+        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time'))));
         // => EXIT
     }
 }

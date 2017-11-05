@@ -228,7 +228,7 @@ class ModuleDates extends Modules
         ||    ($this->getParameter('dateStartFormatEnglish') < DATE_NOW
             && $this->getParameter('dateEndFormatEnglish')   < DATE_NOW))
         {
-            $headline = $gL10n->get('DAT_PREVIOUS_DATES', '') . $headline;
+            $headline = $gL10n->get('DAT_PREVIOUS_DATES', array('')) . $headline;
         }
 
         if ($this->getParameter('view_mode') === 'print')

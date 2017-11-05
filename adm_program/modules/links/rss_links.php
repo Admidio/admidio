@@ -82,7 +82,7 @@ $orgLongname = $gCurrentOrganization->getValue('org_longname');
 $rss = new RSSfeed(
     $orgLongname.' - '.$getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('LNK_LINKS_FROM', $orgLongname),
+    $gL10n->get('LNK_LINKS_FROM', array($orgLongname)),
     $orgLongname
 );
 

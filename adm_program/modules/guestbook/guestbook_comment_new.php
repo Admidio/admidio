@@ -127,7 +127,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
     if($pdoStatement->fetchColumn() > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gSettingsManager->getInt('flooding_protection_time')));
+        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time'))));
         // => EXIT
     }
 }

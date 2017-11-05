@@ -55,7 +55,7 @@ $orgLongname = $gCurrentOrganization->getValue('org_longname');
 $rss  = new RSSfeed(
     $orgLongname . ' - ' . $getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
-    $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $orgLongname),
+    $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
 $date = new TableDate($gDb);

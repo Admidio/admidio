@@ -20,7 +20,7 @@ $gMessage->showInModalWindow();
 
 if(strlen($_POST['ecard_template']) === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ECA_TEMPLATE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ECA_TEMPLATE'))));
     // => EXIT
 }
 

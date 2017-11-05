@@ -64,7 +64,7 @@ $page->enableModal();
 
 if($gSettingsManager->getBool('enable_rss'))
 {
-    $page->addRssFile(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
+    $page->addRssFile(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline)));
 }
 
 $page->addHtml('<div id="links_overview">');
@@ -173,7 +173,7 @@ else
                 // show weblink
                 $page->addHtml('
                 <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php?lnk_id='.$lnkId.'" target="'. $gSettingsManager->getString('weblinks_target'). '"><img src="'. THEME_URL. '/icons/weblinks.png"
-                    alt="'.$gL10n->get('LNK_GO_TO', $lnkName).'" title="'.$gL10n->get('LNK_GO_TO', $lnkName).'" />'.$lnkName.'</a>');
+                    alt="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" title="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" />'.$lnkName.'</a>');
 
                 // change and delete only users with rights
                 if ($gCurrentUser->editWeblinksRight())

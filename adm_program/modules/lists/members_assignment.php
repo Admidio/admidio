@@ -118,7 +118,7 @@ if($getMode === 'assign')
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
+            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name'))));
             // => EXIT
         }
     }
@@ -277,8 +277,8 @@ else
     // create array with all column heading values
     $columnHeading = array(
         '<img class="admidio-icon-info"
-            src="'. THEME_URL. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-            title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
+            src="'. THEME_URL. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"
+            title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'" />',
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 

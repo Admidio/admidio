@@ -23,12 +23,12 @@ if (!$gCurrentUser->editUsers())
 
 if(strlen($_POST['lastname']) === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LASTNAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LASTNAME'))));
     // => EXIT
 }
 if(strlen($_POST['firstname']) === 0)
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FIRSTNAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_FIRSTNAME'))));
     // => EXIT
 }
 
@@ -104,7 +104,7 @@ if($memberCount === 0)
 
 // html output
 echo '
-<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $getFirstname. ' '. $getLastname).'</p>
+<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($getFirstname. ' '. $getLastname)).'</p>
 
 <div class="panel panel-default">
     <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
@@ -157,7 +157,7 @@ echo '
                 $link = ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$row['usr_id'];
 
                 // KEINE Logindaten vorhanden
-                echo '<p>'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
+                echo '<p>'.$gL10n->get('MEM_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
                 <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_URL. '/icons/new_registrations.png"
                     alt="'.$gL10n->get('MEM_ASSIGN_ROLES').'" />'.$gL10n->get('MEM_ASSIGN_ROLES').'</button>';

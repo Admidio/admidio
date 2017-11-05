@@ -131,7 +131,7 @@ $page = new HtmlPage($headline);
 $folderConfigMenu = $page->getMenu();
 $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
-$page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', $folder->getValue('fol_name')).'</p>');
+$page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
 // show form
 $form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);

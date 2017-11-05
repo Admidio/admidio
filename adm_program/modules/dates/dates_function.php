@@ -100,38 +100,38 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     && (!isset($_POST['adm_event_participation_right']) || array_count_values($_POST['adm_event_participation_right']) == 0))
     {
         $_SESSION['dates_request']['adm_event_participation_right'] = '';
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_REGISTRATION_POSSIBLE_FOR'))));
         // => EXIT
     }
 
     if(strlen($_POST['dat_headline']) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TITLE')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TITLE'))));
         // => EXIT
     }
     if(strlen($_POST['date_from']) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_START'))));
         // => EXIT
     }
     if(strlen($_POST['date_to']) === 0 && $_POST['dat_repeat_type'] == 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_END')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_END'))));
         // => EXIT
     }
     if(strlen($_POST['date_from_time']) === 0 && !isset($_POST['dat_all_day']))
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START'))));
         // => EXIT
     }
     if(strlen($_POST['date_to_time']) === 0 && !isset($_POST['dat_all_day']))
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END'))));
         // => EXIT
     }
     if(strlen($_POST['dat_cat_id']) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_CALENDAR')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
         // => EXIT
     }
 
@@ -300,7 +300,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         if(count($rightCategoryView->getRolesIds()) > 0
         && count(array_intersect(array_map('intval', $_POST['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($_POST['adm_event_participation_right']))
         {
-            $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', implode(', ', $rightCategoryView->getRolesNames())));
+            $gMessage->show($gL10n->get('DAT_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames()))));
             // => EXIT
         }
     }
@@ -437,7 +437,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gSettingsManager->getString('system_date')));
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
@@ -445,7 +445,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
             {
                 $message = $gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1', array($gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum.' ('.$zeit.')', $calendar))
                           .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2', array($ort, $raum, $participants, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')))
-                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', date($gSettingsManager->getString('system_date')));
+                          .$gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3', array(date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('DAT_EMAIL_NOTIFICATION_CHANGE_TITLE'), $message,
                     $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
@@ -635,7 +635,7 @@ if (in_array($getMode, array(3, 4, 7), true))
                 $participationPossible = false;
             }
 
-            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', $date->getValue('dat_headline'));
+            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($date->getValue('dat_headline')));
 
             if ($date->getValue('dat_max_members') === (int) $totalMembers
                 && !$participants->isMemberOfEvent($getUserId))

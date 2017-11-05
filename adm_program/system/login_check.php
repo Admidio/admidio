@@ -51,20 +51,20 @@ if(array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'
 
 if($loginname === '')
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_USERNAME'))));
     // => EXIT
 }
 
 if($password === '')
 {
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_PASSWORD'))));
     // => EXIT
 }
 
 // TODO Future: check Password min/max Length
 //if(strlen($password) < PASSWORD_MIN_LENGTH)
 //{
-//    $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH', $gL10n->get('SYS_PASSWORD')));
+//    $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH', array($gL10n->get('SYS_PASSWORD'))));
 //}
 
 // Search for username
@@ -109,9 +109,9 @@ else
     else
     {
         // check if browser can set cookies and throw error if not
-        if (!array_key_exists($gCookiePraefix.'_PHP_SESSION_ID', $_COOKIE))
+        if (!array_key_exists(COOKIE_PREFIX.'_PHP_SESSION_ID', $_COOKIE))
         {
-            $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', DOMAIN));
+            $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
             // => EXIT
         }
 

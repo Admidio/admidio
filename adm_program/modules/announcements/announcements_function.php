@@ -57,12 +57,12 @@ if($getMode === 1)
 {
     if(strlen($_POST['ann_headline']) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_HEADLINE')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_HEADLINE'))));
         // => EXIT
     }
     if(strlen($_POST['ann_description']) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEXT'))));
         // => EXIT
     }
 

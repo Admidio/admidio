@@ -590,7 +590,7 @@ $formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LA
 
 if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
-    $html = '<span class="text-danger"><strong>'.PHP_VERSION.'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
+    $html = '<span class="text-danger"><strong>'.PHP_VERSION.'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
 }
 else
 {
@@ -600,7 +600,7 @@ $formSystemInformation->addStaticControl('php_version', $gL10n->get('SYS_PHP_VER
 
 if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
 {
-    $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinimumRequiredVersion());
+    $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion()));
 }
 else
 {
@@ -984,12 +984,12 @@ $formLists->addSelectBoxFromSql(
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_NOBODY'),
-    '1' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES')),
-    '2' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_EDIT_USER'))
+    '1' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_ASSIGN_ROLES'))),
+    '2' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER')))
 );
 $formLists->addSelectBox(
     'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', $gL10n->get('ROL_RIGHT_EDIT_USER'))))
+    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER')))))
 );
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ROL"><img
             src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

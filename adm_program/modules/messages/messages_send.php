@@ -45,21 +45,21 @@ if (isset($_POST['msg_to']))
 else
 {
     // message when no receiver is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TO'))));
     // => EXIT
 }
 
 if ($postSubjectSQL === '')
 {
     // message when no subject is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_SUBJECT'))));
     // => EXIT
 }
 
 if ($postBodySQL === '')
 {
     // message when no subject is given
-    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_MESSAGE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_MESSAGE'))));
     // => EXIT
 }
 
@@ -138,12 +138,12 @@ else
 {
     if ($postName === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_YOUR_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_YOUR_NAME'))));
         // => EXIT
     }
     if (!strValidCharacters($postFrom, 'email'))
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_YOUR_EMAIL')));
+        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_YOUR_EMAIL'))));
         // => EXIT
     }
 }
@@ -322,7 +322,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     // check if name is given
     if ($postName === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
 
@@ -391,13 +391,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('MAI_SUBJECT'))));
             // => EXIT
         }
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
+        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))));
         // => EXIT
     }
 
@@ -497,7 +497,7 @@ else
     // check if receiver of message has valid login
     if ($user->getValue('usr_login_name') === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TO')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TO'))));
         // => EXIT
     }
 
@@ -568,7 +568,7 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
 
     if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     {
-        $gMessage->show($gL10n->get('MSG_PM_SEND', $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
+        $gMessage->show($gL10n->get('MSG_PM_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
         // => EXIT
     }
     else

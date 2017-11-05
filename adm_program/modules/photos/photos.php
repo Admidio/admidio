@@ -118,7 +118,7 @@ if ($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(
         ADMIDIO_URL.FOLDER_MODULES.'/photos/rss_photos.php?headline='.$getHeadline,
-        $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline)
+        $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline))
     );
 }
 
