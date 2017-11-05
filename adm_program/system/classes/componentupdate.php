@@ -647,11 +647,7 @@ class ComponentUpdate extends Component
         $menuRightsStatement = $this->db->query($sql);
         $menuRightId = $menuRightsStatement->fetchColumn();
 
-        if($menuRightId === false)
-        {
-
-        }
-        else
+        if($menuRightId !== false)
         {
             $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
                     SELECT '.$menuRightId.', 1, men_id
