@@ -643,24 +643,32 @@ class ComponentUpdate extends Component
         $this->db->query($sql);
 
         // migrate adm_folder_roles to adm_roles_rights
-        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'men_display\' ';
+        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'menu_view\' ';
         $menuRightsStatement = $this->db->query($sql);
         $menuRightId = $menuRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.TBL_MENU.' where men_modul_name = \'mail\'';
-        $this->db->query($sql);
+        if($menuRightId === false)
+        {
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.TBL_MENU.' where men_modul_name = \'dbback\'';
-        $this->db->query($sql);
+        }
+        else
+        {
+            $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
+                    SELECT '.$menuRightId.', 1, men_id
+                      FROM '.TBL_MENU.' where men_modul_name = \'mail\'';
+            $this->db->query($sql);
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
-                SELECT '.$menuRightId.', 1, men_id
-                  FROM '.TBL_MENU.' where men_modul_name = \'orgprop\'';
-        $this->db->query($sql);
+            $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
+                    SELECT '.$menuRightId.', 1, men_id
+                      FROM '.TBL_MENU.' where men_modul_name = \'dbback\'';
+            $this->db->query($sql);
+
+            $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id)
+                    SELECT '.$menuRightId.', 1, men_id
+                      FROM '.TBL_MENU.' where men_modul_name = \'orgprop\'';
+            $this->db->query($sql);
+        }
+
     }
 
     /**

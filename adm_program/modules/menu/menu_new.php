@@ -130,7 +130,7 @@ if($getMenId > 0)
     $standart = $menu->getValue('men_standart');
 
     // Read current roles rights of the menu
-    $display = new RolesRights($gDb, 'men_display', $getMenId);
+    $display = new RolesRights($gDb, 'menu_view', $getMenId);
     $roleViewSet = $display->getRolesIds();
 }
 
@@ -147,7 +147,7 @@ $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_
 
 $form->addCheckbox('men_need_enable', 'need to be enabled in config', $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
 
-$form->addSelectBox('men_display', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
+$form->addSelectBox('menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
                                                                                               'defaultValue' => $roleViewSet,
                                                                                               'multiselect'  => true));
 

@@ -267,7 +267,7 @@ class HtmlPage
                         $last = $row->men_parent_id;
                     }
 
-                    $men_display = true;
+                    $menu_view = true;
                     $desc = '';
 
                     if(strlen($row->men_translate_desc) > 2)
@@ -280,18 +280,18 @@ class HtmlPage
                     }
 
                     // Read current roles rights of the menu
-                    $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
+                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
                     $rolesDisplay = $displayMenu->getRolesIds();
 
                     if($row->men_need_enable == 1)
                     {
                         if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
                         {
-                            $men_display = true;
+                            $menu_view = true;
                         }
                         else
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
@@ -330,17 +330,17 @@ class HtmlPage
                         // check for rigth to show the menue
                         if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
                     // special check for "newreg"
                     if($row->men_modul_name === 'newreg')
                     {
-                        $men_display = false;
+                        $menu_view = false;
                         if($gCurrentUser->getValue('usr_id') === 0 && $gPreferences['registration_enable_module'] > 0)
                         {
-                            $men_display = true;
+                            $menu_view = true;
                         }
                     }
 
@@ -349,7 +349,7 @@ class HtmlPage
                     {
                         if(!$gCurrentUser->editUsers())
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
@@ -358,11 +358,11 @@ class HtmlPage
                     {
                         if(!$gCurrentUser->manageRoles())
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
-                    if($men_display == true)
+                    if($menu_view == true)
                     {
                         $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
                     }
@@ -435,7 +435,7 @@ class HtmlPage
                         $last = $row->men_parent_id;
                     }
 
-                    $men_display = true;
+                    $menu_view = true;
                     $desc = '';
 
                     if(strlen($row->men_translate_desc) > 2)
@@ -444,18 +444,18 @@ class HtmlPage
                     }
 
                     // Read current roles rights of the menu
-                    $displayMenu = new RolesRights($gDb, 'men_display', $row->men_id);
+                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
                     $rolesDisplayRight = $displayMenu->getRolesIds();
 
                     if($row->men_need_enable == 1)
                     {
                         if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
                         {
-                            $men_display = true;
+                            $menu_view = true;
                         }
                         else
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
@@ -487,17 +487,17 @@ class HtmlPage
                         // check for rigth to show the menue
                         if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
                     // special check for "newreg"
                     if($row->men_modul_name === 'newreg')
                     {
-                        $men_display = false;
+                        $menu_view = false;
                         if($gCurrentUser->getValue('usr_id') === 0 && $gPreferences['registration_enable_module'] > 0)
                         {
-                            $men_display = true;
+                            $menu_view = true;
                         }
                     }
 
@@ -506,7 +506,7 @@ class HtmlPage
                     {
                         if(!$gCurrentUser->editUsers())
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
@@ -515,11 +515,11 @@ class HtmlPage
                     {
                         if(!$gCurrentUser->manageRoles())
                         {
-                            $men_display = false;
+                            $menu_view = false;
                         }
                     }
 
-                    if($men_display == true)
+                    if($menu_view == true)
                     {
                         $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$main_men->men_modul_name, 'admidio-default-menu-item');
                     }

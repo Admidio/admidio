@@ -198,7 +198,7 @@ $db->query($sql);
 
 // Menu security
 $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
-          VALUES (\'men_display\', \''.$g_tbl_praefix.'_menu\')';
+          VALUES (\'menu_view\', \''.$g_tbl_praefix.'_menu\')';
 $db->query($sql);
 
 // Menu security data

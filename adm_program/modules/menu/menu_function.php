@@ -81,10 +81,10 @@ if($getMode === 1)
         }
 
         // Read current roles of the menu
-        $displayMenu = new RolesRights($gDb, 'men_display', $getMenId);
+        $displayMenu = new RolesRights($gDb, 'menu_view', $getMenId);
         $rolesDisplayRight = $displayMenu->getRolesIds();
 
-        if(!is_array($_POST['men_display']))
+        if(!is_array($_POST['menu_view']))
         {
             // remove all entries, so it is allowed without login
             $displayMenu->removeRoles($rolesDisplayRight);
@@ -92,7 +92,7 @@ if($getMode === 1)
         else
         {
             // add new or update roles
-            $displayMenu->addRoles($_POST['men_display']);
+            $displayMenu->addRoles($_POST['menu_view']);
         }
 
         if($gNavigation->count() > 1)
