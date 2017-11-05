@@ -13,6 +13,8 @@
  * mode - new    : create a new photo album
  *      - change : edit a photo album
  *      - delete : delete a photo album
+ *      - lock   : lock a photo album
+ *      - unlock : unlock a photo album
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -20,7 +22,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
-$getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete')));
+$getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete', 'lock', 'unlock')));
 
 // check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_photo_module'] == 0)
@@ -206,12 +208,32 @@ if ($getMode === 'new' || $getMode === 'change')
 
 /**************************************************************************/
 
+// delete photo album
 elseif ($getMode === 'delete')
 {
-    // Album loeschen
     if ($photoAlbum->delete())
     {
         echo 'done';
     }
     exit();
+}
+
+// lock photo album
+elseif ($getMode === 'lock')
+{
+    $photoAlbum->setValue('pho_locked', 1);
+    $photoAlbum->save();
+
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
+}
+
+// unlock photo album
+elseif ($getMode === 'unlock')
+{
+    $photoAlbum->setValue('pho_locked', 0);
+    $photoAlbum->save();
+
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }

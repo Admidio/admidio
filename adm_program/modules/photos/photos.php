@@ -17,7 +17,6 @@
  *             (Default) PHO_PHOTO_ALBUMS
  * start_thumbnail : Number of the thumbnail which is the first that should be shown
  * start     : Position of query recordset where the visual output should start
- * locked    : das Album soll freigegeben/gesperrt werden
  *
  *****************************************************************************/
 
@@ -40,7 +39,6 @@ $getPhotoId        = admFuncVariableIsValid($_GET, 'pho_id',          'int');
 $getHeadline       = admFuncVariableIsValid($_GET, 'headline',        'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
 $getStart          = admFuncVariableIsValid($_GET, 'start',           'int');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
-$getLocked         = admFuncVariableIsValid($_GET, 'locked',          'int', array('defaultValue' => -1));
 $getPhotoNr        = admFuncVariableIsValid($_GET, 'photo_nr',        'int');
 
 unset($_SESSION['photo_album_request'], $_SESSION['ecard_request']);
@@ -87,24 +85,6 @@ if ($getPhotoId === 0)
 
 // URL auf Navigationstack ablegen
 $gNavigation->addUrl(CURRENT_URL, $headline);
-
-// change the locked status of the current photo album
-if ($getPhotoId > 0 && ($getLocked === 0 || $getLocked === 1))
-{
-    // check if the user is allowed to edit this photo album
-    if (!$photoAlbum->editable())
-    {
-        $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
-        // => EXIT
-    }
-
-    $photoAlbum->setValue('pho_locked', $getLocked);
-    $photoAlbum->save();
-
-    // Zurueck zum Elternalbum
-    $getPhotoId = $photoAlbum->getValue('pho_pho_id_parent');
-    $photoAlbum->readDataById($getPhotoId);
-}
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -557,30 +537,28 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
         // if user has admin rights for photo module then show some functions
         if ($gCurrentUser->editPhotoRight())
         {
+            if ($childPhotoAlbum->getValue('pho_locked') == 1)
+            {
+                $lockBtnName = $gL10n->get('PHO_ALBUM_UNLOCK');
+                $lockMode    = 'unlock';
+            }
+            else
+            {
+                $lockBtnName = $gL10n->get('PHO_ALBUM_LOCK');                
+                $lockMode    = 'lock';
+            }
+
             $page->addHtml('
                 <div class="btn-group" role="group" style="width: 100%;">
                     <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;"
                         data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal"><img
                         src="'. THEME_URL. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
                     </button>
+                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode='.$lockMode.'\'"><img
+                        src="'. THEME_URL. '/icons/key.png"  alt="'.$lockBtnName.'" />'.$lockBtnName.'
+                    </button>
+                </div>
             ');
-
-            if ($childPhotoAlbum->getValue('pho_locked') == 1)
-            {
-                $page->addHtml('
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0\'"><img
-                        src="'. THEME_URL. '/icons/key.png"  alt="'.$gL10n->get('PHO_ALBUM_UNLOCK').'" />'.$gL10n->get('PHO_ALBUM_UNLOCK').'</button>
-                ');
-            }
-            elseif ($childPhotoAlbum->getValue('pho_locked') == 0)
-            {
-                $page->addHtml('
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1\'"><img
-                        src="'. THEME_URL. '/icons/key.png" alt="'.$gL10n->get('PHO_ALBUM_LOCK').'" />'.$gL10n->get('PHO_ALBUM_LOCK').'</button>
-                ');
-            }
-
-            $page->addHtml('</div>');
         }
 
         $page->addHtml('</div></div></div>');

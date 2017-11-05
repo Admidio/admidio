@@ -298,14 +298,14 @@ class TablePhotos extends TableAccess
         global $gCurrentOrganization, $gCurrentUser;
 
         // current photo album must belong to current organization
-        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
+        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
         {
-            return true;
+            return false;
         }
         // locked photo album could only be viewed by module administrators
-        elseif((int) $this->getValue('pho_locked') === 0 || ((int) $this->getValue('pho_locked') === 1 && $gCurrentUser->editPhotoRight()))
+        elseif((int) $this->getValue('pho_locked') === 1 && !$gCurrentUser->editPhotoRight())
         {
-            return true;
+            return false;
         }
 
         return false;
