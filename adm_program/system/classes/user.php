@@ -571,7 +571,7 @@ class User extends TableAccess
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
-        global $gLogger, $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
+        global $gLogger, $gPreferences, $gCurrentSession, $gSessionId, $installedDbVersion, $gL10n;
 
         if ($this->hasMaxInvalidLogins())
         {
@@ -628,7 +628,7 @@ class User extends TableAccess
         if ($updateSessionCookies)
         {
             // set cookie for session id
-            Session::setCookie($gCookiePraefix . '_ID', $gSessionId);
+            Session::setCookie(COOKIE_PREFIX . '_ID', $gSessionId);
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();

@@ -479,13 +479,9 @@ elseif ($getMode === 2)
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';
     $gDb->queryPrepared($sql);
 
-    // create an installation unique cookie prefix and remove special characters
-    $gCookiePraefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-    $gCookiePraefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $gCookiePraefix);
-
     // start php session and remove session object with all data, so that
     // all data will be read after the update
-    Session::start($gCookiePraefix);
+    Session::start(COOKIE_PREFIX);
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful
