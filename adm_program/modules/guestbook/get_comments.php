@@ -61,14 +61,14 @@ if ($getGbcGboId > 0)
             <div class="panel panel-info admidio-panel-comment" id="gbc_'.$gbcId.'">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/comment.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
-                        $gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
+                        <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/comment.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))).'" />&nbsp;'.
+                        $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name')));
 
             // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
             if(strlen($gbcEmail) > 0)
             {
                 echo '<a class="admidio-icon-link" href="mailto:'.$gbcEmail.'"><img src="'. THEME_URL. '/icons/email.png"
-                    alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbcEmail).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbcEmail).'" /></a>';
+                    alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'" /></a>';
             }
             echo '</div>
             <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
@@ -81,7 +81,7 @@ if ($getGbcGboId > 0)
                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                     href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
-                    $gbcId.'&amp;database_id='.$gbcId.'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'))).'"><img
+                    $gbcId.'&amp;database_id='.$gbcId.'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name')))).'"><img
                     src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
             echo '</div>

@@ -49,7 +49,7 @@ elseif($getDateId > 0)
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', $array($getHeadline));
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
     $mode = 1;
 }
 

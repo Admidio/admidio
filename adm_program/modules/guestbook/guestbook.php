@@ -59,7 +59,7 @@ $page->enableModal();
 // add rss feed to guestbook
 if($gPreferences['enable_rss'] == 1)
 {
-    $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
+    $page->addRssFile(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline)));
 }
 
 $page->addJavascript('
@@ -103,7 +103,7 @@ $page->addJavascript('
 // add headline and title of module
 if($getModeration)
 {
-    $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', $getHeadline));
+    $page->setHeadline($gL10n->get('GBO_MODERATE_VAR', array($getHeadline)));
 }
 else
 {
@@ -274,7 +274,7 @@ else
                     {
                         $page->addHtml('
                         <a class="admidio-icon-link" href="mailto:'.$gboEmail.'"><img src="'. THEME_URL. '/icons/email.png"
-                            alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gboEmail).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gboEmail).'" /></a>');
+                            alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gboEmail)).'" /></a>');
                     }
                 $page->addHtml('</div>
                 <div class="pull-right text-right">'. $guestbook->getValue('gbo_timestamp_create'));
@@ -348,7 +348,7 @@ else
                     // this link will be invisible when comments where loaded
                     $page->addHtml('
                     <a id="admCommentsInvisible_'. $gboId. '" class="btn" href="javascript:void(0)" onclick="toggleComments('. $gboId. ')" style="display: '. $displayShowComments. ';"><img
-                        src="'. THEME_URL. '/icons/comment.png" alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $commentStatement->rowCount()).'</a>');
+                        src="'. THEME_URL. '/icons/comment.png" alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', array($commentStatement->rowCount())).'</a>');
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     $page->addHtml('<div id="comments_'. $gboId. '" class="admidio-guestbook-comments">');

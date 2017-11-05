@@ -61,7 +61,7 @@ switch($getMode)
 
                     if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'))));
                         // => EXIT
                     }
 
@@ -79,7 +79,7 @@ switch($getMode)
 
                     if($_POST['org_longname'] === '')
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
                         // => EXIT
                     }
                     break;
@@ -88,19 +88,19 @@ switch($getMode)
                     if(!admStrIsValidFileName($_POST['system_language'])
                     || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $_POST['system_language'] . '.xml'))
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_LANGUAGE'))));
                         // => EXIT
                     }
 
                     if($_POST['system_date'] === '')
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATE_FORMAT')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_DATE_FORMAT'))));
                         // => EXIT
                     }
 
                     if($_POST['system_time'] === '')
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_TIME_FORMAT'))));
                         // => EXIT
                     }
                     break;
@@ -117,7 +117,7 @@ switch($getMode)
                         $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
                         if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                         {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_SENDER_EMAIL'))));
                             // => EXIT
                         }
                     }
@@ -128,7 +128,7 @@ switch($getMode)
 
                     if($_POST['email_administrator'] === '')
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'))));
                         // => EXIT
                     }
                     else
@@ -136,7 +136,7 @@ switch($getMode)
                         $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
                         if(!strValidCharacters($_POST['email_administrator'], 'email'))
                         {
-                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'))));
                             // => EXIT
                         }
                     }
@@ -190,7 +190,7 @@ switch($getMode)
                 case 'links':
                     if(!is_numeric($_POST['weblinks_redirect_seconds']) || $_POST['weblinks_redirect_seconds'] < 0)
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('LNK_DISPLAY_REDIRECT'))));
                         // => EXIT
                     }
                     break;
@@ -333,7 +333,7 @@ switch($getMode)
         $organization = new Organization($gDb, $_POST['orgaShortName']);
         if($organization->getValue('org_id') > 0)
         {
-            $gMessage->show($gL10n->get('INS_ORGA_SHORTNAME_EXISTS', $_POST['orgaShortName']));
+            $gMessage->show($gL10n->get('INS_ORGA_SHORTNAME_EXISTS', array($_POST['orgaShortName'])));
             // => EXIT
         }
 
@@ -375,7 +375,7 @@ switch($getMode)
         // create html page object
         $page = new HtmlPage($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
 
-        $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
+        $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', array($_POST['orgaLongName'])).'</p>');
 
         // show form
         $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', $page);

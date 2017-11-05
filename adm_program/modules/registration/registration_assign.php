@@ -121,7 +121,7 @@ $registrationAssignMenu = $page->getMenu();
 $registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 $page->addHtml('
-    <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME')).'</p>
+    <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
     <div class="panel panel-default">
         <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
         <div class="panel-body">'
@@ -192,7 +192,7 @@ while($row = $usrStatement->fetchObject())
         if($row->usr_login_name !== '')
         {
             // Logindaten sind bereits vorhanden
-            $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'</p>
+            $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
             <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_URL.'/icons/new_registrations.png"
                 alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
@@ -200,7 +200,7 @@ while($row = $usrStatement->fetchObject())
         else
         {
             // KEINE Logindaten vorhanden
-            $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $gCurrentOrganization->getValue('org_shortname')).'</p>
+            $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
             <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_URL. '/icons/new_registrations.png"
                 alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');

@@ -8,6 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'bootstrap.php')
+{
+    exit('This page may not be called directly!');
+}
 
 // embed config and constants file
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));

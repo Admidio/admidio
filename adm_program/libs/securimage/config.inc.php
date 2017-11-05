@@ -17,7 +17,7 @@
   configuration and is easier than modifying securimage.php directly.
   Any class property from securimage.php can be used here.
 */
-global $gCookiePraefix, $gPreferences;
+global $gPreferences;
 
 switch ($gPreferences['captcha_type'])
 {
@@ -65,7 +65,7 @@ return array(
 
     // the PHP session name to use (null for default PHP session name)
     // do not change unless you know what you are doing
-    'session_name'     => $gCookiePraefix . '_PHP_ID',
+    'session_name'     => COOKIE_PREFIX . '_PHP_ID',
 
     // change to true to store codes in a database
     'use_database'     => false,

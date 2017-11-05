@@ -8,6 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
+{
+    exit('This page may not be called directly!');
+}
 
 /**
  * Function checks if the user is a member of the role.
@@ -410,7 +414,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
                 if (!$objEnglishDate)
                 {
-                    $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
+                    $errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', array($variableName));
                 }
             }
             break;

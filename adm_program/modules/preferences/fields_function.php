@@ -67,32 +67,32 @@ if($getMode === 1)
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
 
     if($userField->getValue('usf_system') == 0 && $_POST['usf_type'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_DATATYPE'))));
         // => EXIT
     }
 
     if($userField->getValue('usf_system') == 0 && (int) $_POST['usf_cat_id'] === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
 
     if(($_POST['usf_type'] === 'DROPDOWN' || $_POST['usf_type'] === 'RADIO_BUTTON')
     && $_POST['usf_value_list'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_VALUE_LIST'))));
         // => EXIT
     }
 
     if($_POST['usf_icon'] !== '' && admStrStartsWith($_POST['usf_icon'], 'http') && !strValidCharacters($_POST['usf_icon'], 'url'))
     {
-        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_ICON')));
+        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_ICON'))));
         // => EXIT
     }
     elseif($_POST['usf_icon'] !== '' && !admStrStartsWith($_POST['usf_icon'], 'http'))
@@ -110,7 +110,7 @@ if($getMode === 1)
 
     if($_POST['usf_url'] !== '' && !strValidCharacters($_POST['usf_url'], 'url'))
     {
-        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
+        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('ORG_URL'))));
         // => EXIT
     }
 

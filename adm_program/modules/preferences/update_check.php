@@ -152,7 +152,7 @@ if ($getMode === 2)
     elseif ($versionUpdate === 99)
     {
         $admidioLink = '<a href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">Admidio</a>';
-        $versionsText = $gL10n->get('UPD_CONNECTION_ERROR', $admidioLink);
+        $versionsText = $gL10n->get('UPD_CONNECTION_ERROR', array($admidioLink));
     }
     else
     {
@@ -162,7 +162,7 @@ if ($getMode === 2)
             $versionsTextBeta = 'Beta ';
         }
 
-        $versionsText = $gL10n->get('UPD_NO_NEW', $versionsTextBeta);
+        $versionsText = $gL10n->get('UPD_NO_NEW', array($versionsTextBeta));
     }
 
     echo '

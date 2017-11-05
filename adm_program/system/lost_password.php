@@ -104,7 +104,7 @@ if(!empty($_POST['recipient_email']))
         // show error if more than one user found
         if($count > 1)
         {
-            $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));
+            $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', array($_POST['recipient_email'])));
             // => EXIT
         }
         elseif($count === 1)
@@ -134,12 +134,12 @@ if(!empty($_POST['recipient_email']))
 
         if(strValidCharacters($_POST['recipient_email'], 'email'))
         {
-            $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_EMAIL', $_POST['recipient_email']));
+            $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_EMAIL', array($_POST['recipient_email'])));
             // => EXIT
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_USERNAME', $_POST['recipient_email']));
+            $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_USERNAME', array($_POST['recipient_email'])));
             // => EXIT
         }
     }

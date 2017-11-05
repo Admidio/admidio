@@ -121,8 +121,8 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile.png"
-        alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName).'"
-        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName).'" />',
+        alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)).'"
+        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)).'" />',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
     '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_URL.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',

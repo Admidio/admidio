@@ -8,6 +8,10 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'polyfill.php')
+{
+    exit('This page may not be called directly!');
+}
 
 // provide forward compatibility with the password_* functions that ship with PHP 5.5
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/password_compat/password.php');
