@@ -143,7 +143,7 @@ if($gPreferences['enable_dates_module'] == 1
     );
     $moduleMenu->addSubItem(
         'dates', 'olddates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?mode=old',
-        $gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES'))
+        $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES')))
     );
 }
 if($gPreferences['enable_weblinks_module'] == 1

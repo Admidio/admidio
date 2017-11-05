@@ -76,7 +76,7 @@ if ($getMode === 'new' || $getMode === 'change')
     // Album
     if (strlen($_POST['pho_name']) === 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('PHO_ALBUM'))));
         // => EXIT
     }
 
@@ -96,7 +96,7 @@ if ($getMode === 'new' || $getMode === 'change')
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_START'))));
         // => EXIT
     }
 

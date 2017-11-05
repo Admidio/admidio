@@ -39,7 +39,7 @@ $getCopy     = admFuncVariableIsValid($_GET, 'copy',     'bool');
 // set headline of the script
 if($getCopy)
 {
-    $headline = $gL10n->get('SYS_COPY_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_COPY_VAR', array($getHeadline));
 }
 elseif($getAnnId > 0)
 {

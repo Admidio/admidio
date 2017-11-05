@@ -40,12 +40,12 @@ if ($getMode === 1)
 
     if (!array_key_exists('room_name', $_POST) || $_POST['room_name'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROOM')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_ROOM'))));
         // => EXIT
     }
     if (!array_key_exists('room_capacity', $_POST) || $_POST['room_capacity'] === '')
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROO_CAPACITY')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ROO_CAPACITY'))));
         // => EXIT
     }
 

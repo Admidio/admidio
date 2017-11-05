@@ -33,7 +33,7 @@
  * $language->addLanguageData($session->getObject('languageData'));
  *
  * // read and display a language specific text with placeholders for individual content
- * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Administrator');@endcode
+ * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));@endcode
  */
 class Language
 {
@@ -162,7 +162,7 @@ class Language
      *                echo $gL10n->get('SYS_NUMBER');
      *
      * // display a text with placeholders for individual content
-     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', ['John Doe', 'Demo-Organization', 'Administrator']);
+     * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
      * @endcode
      */
     public function get($textId, $params = array())
@@ -177,31 +177,32 @@ class Language
             return '#' . $textId . '#';
         }
 
-        // replace placeholder with value of parameters
-
+        // unify different formats into one
         if (is_array($params))
         {
-            array_unshift($params, null);
-            $paramsCount = count($params);
             $paramsArray = $params;
         }
         else
         {
             // TODO deprecated: Remove in Admidio 4.0
-            $paramsCount = func_num_args();
             $paramsArray = func_get_args();
+            $txtId = '\'' . array_shift($paramsArray) . '\'';
+            $paramsString = '\'' . implode('\', \'', $paramsArray) . '\'';
 
             $gLogger->warning(
-                'DEPRECATED: "$gL10n->get(\'XXX\', 1, 2)" is deprecated, use "$gL10n->get(\'XXX\', array(1, 2))" instead!',
-                array('textId' => $textId, 'params' => $params, 'paramsArray' => $paramsArray)
+                'DEPRECATED: "$gL10n->get(' . $txtId . ', ' . $paramsString . ')" is deprecated, use "$gL10n->get(' . $txtId . ', array(' . $paramsString . ')" instead!',
+                array('textId' => $textId, 'params' => $params, 'allParams' => func_get_args())
             );
         }
 
-        for ($paramNumber = 1; $paramNumber < $paramsCount; ++$paramNumber)
+        // replace placeholder with value of parameters
+        foreach ($paramsArray as $index => $param)
         {
+            $paramNr = $index + 1;
+
             $replaceArray = array(
-                '#VAR' . $paramNumber . '#'      => $paramsArray[$paramNumber],
-                '#VAR' . $paramNumber . '_BOLD#' => '<strong>' . $paramsArray[$paramNumber] . '</strong>'
+                '#VAR' . $paramNr . '#'      => $param,
+                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
             );
             $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
         }

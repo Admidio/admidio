@@ -106,8 +106,8 @@ $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
 
 $page->addJavascript('
     var profileJS = new ProfileJS(gRootPath);
-    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', '[rol_name]').'";
-    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', '[rol_name]').'";
+    profileJS.deleteRole_ConfirmText  = "'.$gL10n->get('ROL_MEMBERSHIP_DEL', array('[rol_name]')).'";
+    profileJS.deleteFRole_ConfirmText = "'.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL', array('[rol_name]')).'";
     profileJS.userId                  = '.$userId.';
 
     /**
@@ -883,7 +883,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
                         }
                         $page->addHtml('&nbsp;
                     </span>
-                    <span class="pull-right">'.$gL10n->get('SYS_SINCE', $startDate->format($gPreferences['system_date'])).'</span>
+                    <span class="pull-right">'.$gL10n->get('SYS_SINCE', array($startDate->format($gPreferences['system_date']))).'</span>
                 </li>');
             }
         }

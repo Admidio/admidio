@@ -104,7 +104,7 @@ if($getMode === 1)
 
     if((!array_key_exists('cat_name', $_POST) || $_POST['cat_name'] === '') && $category->getValue('cat_system') == 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
 
@@ -112,7 +112,7 @@ if($getMode === 1)
     && ((bool) $category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
     && !isset($_POST['adm_categories_view_right']))
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_VISIBLE_FOR')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_VISIBLE_FOR'))));
         // => EXIT
     }
 

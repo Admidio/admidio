@@ -259,12 +259,12 @@ while($row = $mglStatement->fetch())
     if($memberOfThisOrganization)
     {
         $icon = 'profile.png';
-        $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $orgName);
+        $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
     }
     else
     {
         $icon = 'no_profile.png';
-        $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $orgName);
+        $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
 
     $columnValues[] = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usr_id'].'"><img
@@ -346,7 +346,7 @@ while($row = $mglStatement->fetch())
             $mailLink = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'];
         }
         $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_URL.'/icons/email.png"
-                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
+                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])).'" /></a>';
     }
 
     $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$row['usr_id'].'&amp;copy=1"><img

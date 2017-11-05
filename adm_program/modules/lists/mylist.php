@@ -662,7 +662,7 @@ if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 if(strlen($list->getValue('lst_name')) > 0)
 {
     $form->addButton(
-        'btn_copy', $gL10n->get('SYS_COPY_VAR', $gL10n->get('LST_CONFIGURATION')),
+        'btn_copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('LST_CONFIGURATION'))),
         array('icon' => THEME_URL.'/icons/application_double.png')
     );
 }
