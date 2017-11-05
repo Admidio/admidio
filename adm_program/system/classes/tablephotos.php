@@ -175,6 +175,24 @@ class TablePhotos extends TableAccess
     }
 
     /**
+     * This method checks if the current user is allowed to edit this photo album. Therefore
+     * the photo album must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage photo albums.
+     * @return bool Return true if the current user is allowed to edit this photo album
+     */
+    public function editable()
+    {
+        global $gCurrentUser;
+
+        if(($this->visible() || (int) $this->getValue('pho_id') === 0) && $gCurrentUser->editPhotoRight())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if this album has one or more child albums.
      * @return bool Return @b true if child albums exists.
      */
@@ -267,5 +285,29 @@ class TablePhotos extends TableAccess
         }
 
         return $shuffleImage;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view this photo album. Therefore
+     * the album must be from the current organization and should not be locked or the user
+     * is a module administrator.
+     * @return bool Return true if the current user is allowed to view this photo album
+     */
+    public function visible()
+    {
+        global $gCurrentOrganization, $gCurrentUser;
+
+        // current photo album must belong to current organization
+        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
+        {
+            return true;
+        }
+        // locked photo album could only be viewed by module administrators
+        elseif((int) $this->getValue('pho_locked') === 0 || ((int) $this->getValue('pho_locked') === 1 && $gCurrentUser->editPhotoRight()))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

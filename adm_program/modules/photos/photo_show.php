@@ -56,6 +56,13 @@ else
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
+// check if the current user could view this photo album
+if(!$photoAlbum->visible())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+
 // Bildpfad zusammensetzten
 $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $getPhotoId;
 $picPath      = $albumFolder . '/' . $getPhotoNr . '.jpg';

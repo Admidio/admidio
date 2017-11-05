@@ -65,6 +65,13 @@ else
 // set headline of module
 if ($getPhotoId > 0)
 {
+    // check if the current user could view this photo album
+    if(!$photoAlbum->visible())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+
     $headline = $photoAlbum->getValue('pho_name');
 }
 else
@@ -81,19 +88,11 @@ if ($getPhotoId === 0)
 // URL auf Navigationstack ablegen
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// pruefen, ob Album zur aktuellen Organisation gehoert
-if ($getPhotoId > 0 && (int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+// change the locked status of the current photo album
+if ($getPhotoId > 0 && ($getLocked === 0 || $getLocked === 1))
 {
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    // => EXIT
-}
-
-/*********************LOCKED************************************/
-// Falls gefordert und Foto-edit-rechte, aendern der Freigabe
-if ($getLocked === 0 || $getLocked === 1)
-{
-    // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-    if (!$gCurrentUser->editPhotoRight())
+    // check if the user is allowed to edit this photo album
+    if (!$photoAlbum->editable())
     {
         $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
         // => EXIT
@@ -107,13 +106,11 @@ if ($getLocked === 0 || $getLocked === 1)
     $photoAlbum->readDataById($getPhotoId);
 }
 
-/*********************HTML_PART*******************************/
-
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-// add rss feed to announcements
+// add rss feed to photos
 if ($gPreferences['enable_rss'] == 1)
 {
     $page->addRssFile(
@@ -122,7 +119,7 @@ if ($gPreferences['enable_rss'] == 1)
     );
 }
 
-if ($gCurrentUser->editPhotoRight())
+if ($photoAlbum->editable())
 {
     $page->addJavascript('
         /**
