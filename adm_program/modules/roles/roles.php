@@ -271,8 +271,8 @@ while($row = $rolStatement->fetch())
 
     $linkAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=8&amp;rol_id='. $rolId.'"><img
                 src="'. THEME_URL. '/icons/vcard.png"
-                alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $rolName).'"
-                title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $rolName).'"/></a>';
+                alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"
+                title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"/></a>';
 
     if($getInactive)
     {

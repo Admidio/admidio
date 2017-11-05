@@ -139,7 +139,7 @@ if($onlineUsersStatement->rowCount() > 0)
 
     if($plg_show_visitors && $countVisitors > 0)
     {
-        echo $gL10n->get('PLG_ONLINE_VAR_NUM_VISITORS', $countVisitors);
+        echo $gL10n->get('PLG_ONLINE_VAR_NUM_VISITORS', array($countVisitors));
     }
 }
 else

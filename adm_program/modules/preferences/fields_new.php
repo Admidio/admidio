@@ -203,7 +203,7 @@ $form->addCheckbox(
     array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png')
 );
 $form->addCheckbox(
-    'usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), (bool) $userField->getValue('usf_disabled'),
+    'usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('ROL_RIGHT_EDIT_USER'))), (bool) $userField->getValue('usf_disabled'),
     array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png')
 );
 

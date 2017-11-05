@@ -34,7 +34,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // set headline of the script
 if($getUserId > 0)
 {
-    $headline = $gL10n->get('MEM_CHANGE_HISTORY_OF', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
+    $headline = $gL10n->get('MEM_CHANGE_HISTORY_OF', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
 }
 else
 {
@@ -145,7 +145,7 @@ if($fieldHistoryStatement->rowCount() === 0)
     // show message if there were no changes for users
     if($getUserId > 0)
     {
-        $gMessage->show($gL10n->get('MEM_NO_CHANGES_PROFIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $gMessage->show($gL10n->get('MEM_NO_CHANGES_PROFIL', array($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))));
         // => EXIT
     }
     else

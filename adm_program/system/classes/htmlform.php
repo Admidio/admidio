@@ -1069,7 +1069,7 @@ class HtmlForm extends HtmlFormBasic
             // if max field length is set and field is not hidden then show a counter how many characters still available
             $this->addHtml('
                 <small class="characters-count">('
-                    .$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="' . $id . '_counter" class="">255</span>').
+                    .$gL10n->get('SYS_STILL_X_CHARACTERS', array('<span id="' . $id . '_counter" class="">255</span>')).
                 ')</small>'
             );
         }
@@ -1663,7 +1663,7 @@ class HtmlForm extends HtmlFormBasic
 
         if($gCurrentOrganization->countAllRecords() > 1 && $selectBoxModus === 'EDIT_CATEGORIES')
         {
-            $optionsAll['infoAlert'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true)));
+            $optionsAll['infoAlert'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
 
             $this->addJavascriptCode('
                 $("#'.$id.'").change(function() {
@@ -2048,7 +2048,7 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-                $text = $gL10n->get($textId, $parameter);
+                $text = $gL10n->get($textId, array($parameter));
             }
         }
 

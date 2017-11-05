@@ -106,7 +106,7 @@ if (is_file($pathConfigFile))
     catch (AdmException $e)
     {
         showNotice(
-            $gL10n->get('SYS_DATABASE_NO_LOGIN', $e->getText()),
+            $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
             'installation.php?step=connect_database',
             $gL10n->get('SYS_BACK'),
             'layout/back.png'

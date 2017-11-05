@@ -61,13 +61,13 @@ if($getMode === 2)
     if(!array_key_exists('rol_name', $_POST) || $_POST['rol_name'] === '')
     {
         // es sind nicht alle Felder gefuellt
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
     if((int) $_POST['rol_cat_id'] === 0)
     {
         // es sind nicht alle Felder gefuellt
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
 
@@ -234,7 +234,7 @@ if($getMode === 2)
 
         if($numFreePlaces < 0)
         {
-            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $rolName));
+            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', array($rolName)));
             // => EXIT
         }
     }
@@ -249,7 +249,7 @@ if($getMode === 2)
             // at least one role must have this flag otherwise show error
             if(!$returnCode && $key === 'rol_default_registration')
             {
-                $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
+                $gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', array($gL10n->get('ROL_DEFAULT_REGISTRATION'))));
                 // => EXIT
             }
         }

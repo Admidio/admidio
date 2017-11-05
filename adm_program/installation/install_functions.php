@@ -108,7 +108,7 @@ function querySqlFile(Database $db, $sqlFileName)
 
     if ($fileHandler === false)
     {
-        return $gL10n->get('INS_ERROR_OPEN_FILE', $sqlFilePath);
+        return $gL10n->get('INS_ERROR_OPEN_FILE', array($sqlFilePath));
     }
 
     $content = fread($fileHandler, filesize($sqlFilePath));
