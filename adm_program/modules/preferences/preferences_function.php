@@ -70,7 +70,6 @@ switch($getMode)
                         // if auto login was deactivated than delete all saved logins
                         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                         $gDb->queryPrepared($sql);
-                        $gSettingsManager->set($key, $value); // TODO check
                     }
                     break;
 

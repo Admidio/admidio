@@ -53,13 +53,13 @@ require_once(ADMIDIO_PATH . '/adm_program/system/polyfill.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
 // Enable Logging
 require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
-// Remove HTML & PHP-Code and escape all quotes from all request parameters
-// If debug is on and change is made, log it
-require_once(ADMIDIO_PATH . '/adm_program/system/global_request_params.php');
 // Add some common functions
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
+// Remove HTML & PHP-Code and escape all quotes from all request parameters
+// If debug is on and change is made, log it
+require_once(ADMIDIO_PATH . '/adm_program/system/global_request_params.php');
 
 // Force permanent HTTPS redirect
 if ($gForceHTTPS && !HTTPS)
