@@ -21,7 +21,7 @@ $organizationId = (int) $gCurrentOrganization->getValue('org_id');
 /**
  * @param string $prefix
  */
-function initLoginParams($prefix = '')
+function initLoginParams($prefix)
 {
     global $bAutoLogin, $loginname, $password, $organizationId, $gPreferences;
 
