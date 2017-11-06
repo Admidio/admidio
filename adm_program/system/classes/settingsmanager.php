@@ -52,7 +52,7 @@ class SettingsManager
      */
     private static function isValidValue($value)
     {
-        return is_string($value) || is_numeric($value) || is_bool($value);
+        return is_scalar($value);
     }
 
     /**
