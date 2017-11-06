@@ -190,7 +190,7 @@ class Language
             $paramsString = '\'' . implode('\', \'', $paramsArray) . '\'';
 
             $gLogger->warning(
-                'DEPRECATED: "$gL10n->get(' . $txtId . ', ' . $paramsString . ')" is deprecated, use "$gL10n->get(' . $txtId . ', array(' . $paramsString . ')" instead!',
+                'DEPRECATED: "$gL10n->get(' . $txtId . ', ' . $paramsString . ')" is deprecated, use "$gL10n->get(' . $txtId . ', array(' . $paramsString . '))" instead!',
                 array('textId' => $textId, 'params' => $params, 'allParams' => func_get_args())
             );
         }
