@@ -49,9 +49,8 @@ $errorLogHandler->setFormatter($formatter);
 $gLogger->pushHandler($streamHandler);
 $gLogger->pushHandler($errorLogHandler);
 
-$gLogger->info('#################################################################################################');
+$gLogger->info('#####################################################################################################');
 $gLogger->info('URL: ' . CURRENT_URL);
-$gLogger->info('MEMORY USAGE: ' . round(memory_get_peak_usage(true) / 1024, 1) . ' KiB');
 
 // Log Constants
 $constants = array(
