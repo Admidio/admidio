@@ -293,8 +293,8 @@ class Image
     }
 
     /**
-     * Scales the longer side of the image to the passed pixel value. The other side 
-     * is then calculated back according to the page ratio. If the image is already 
+     * Scales the longer side of the image to the passed pixel value. The other side
+     * is then calculated back according to the page ratio. If the image is already
      * smaller than the new max size nothing is done.
      * @param int $newMaxSize New maximum size in pixel to which the image should be scaled.
      * @return bool Return true if the image was scaled otherwise false.
@@ -305,7 +305,7 @@ class Image
         {
             // calc aspect ratio
             $aspectRatio = $this->imageWidth / $this->imageHeight;
-    
+
             if($this->imageWidth > $this->imageHeight)
             {
                 // Scale the x-side
@@ -318,7 +318,7 @@ class Image
                 $newXSize = round($newMaxSize * $aspectRatio);
                 $newYSize = $newMaxSize;
             }
-    
+
             return $this->scale($newXSize, $newYSize, false);
         }
 
