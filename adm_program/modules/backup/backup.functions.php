@@ -109,7 +109,7 @@ function SafeExec($command)
 // end: (from phpthumb.functions.php)
 
 /**
- * @return bool|null
+ * @return bool|null|string
  */
 function MySQLdumpVersion()
 {
@@ -127,7 +127,7 @@ function MySQLdumpVersion()
 }
 
 /**
- * @return bool|null
+ * @return bool|null|string
  */
 function gzipVersion()
 {
