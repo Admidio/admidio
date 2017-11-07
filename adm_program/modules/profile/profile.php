@@ -38,7 +38,7 @@ if(!$gCurrentUser->hasRightViewProfile($user))
  */
 function getFieldCode($fieldNameIntern, User $user)
 {
-    global $gPreferences, $gCurrentUser, $gProfileFields, $gL10n;
+    global $gCurrentUser, $gProfileFields, $gL10n;
 
     if(!$gCurrentUser->allowedViewProfileField($user, $fieldNameIntern))
     {

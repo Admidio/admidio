@@ -280,8 +280,6 @@ class ModuleMenu
      */
     public function show()
     {
-        global $gL10n;
-
         if (count($this->items) === 0)
         {
             return false;
