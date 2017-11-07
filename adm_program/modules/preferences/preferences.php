@@ -588,9 +588,13 @@ $component = new ComponentUpdate($gDb);
 $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
 $formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step') . ' / ' . $component->getMaxUpdateStep());
 
-if(version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
+if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
-    $html = '<span class="text-danger"><strong>'.PHP_VERSION.'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
+    $html = '<span class="text-danger"><strong>'.PHP_VERSION.'</strong> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)).'</span>';
+}
+elseif (version_compare(PHP_VERSION, '5.6', '<'))
+{
+    $html = '<span class="text-warning"><strong>'.PHP_VERSION.'</strong> &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://secure.php.net/supported-versions.php" target="_blank">Supported Versions</a>')).'</span>';
 }
 else
 {
