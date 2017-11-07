@@ -168,8 +168,8 @@ function bzip2Version()
 
 // MFA Anpassungen
 /**
- * @param int $seconds
- * @param int $precision
+ * @param float $seconds
+ * @param int   $precision
  * @return string
  */
 function FormattedTimeRemaining($seconds, $precision = 1)
