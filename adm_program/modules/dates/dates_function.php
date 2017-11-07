@@ -558,7 +558,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $member->startMembership((int) $role->getValue('rol_id'), (int) $getUserId, true, 2);
     }
     elseif(!isset($_POST['date_current_user_assigned'])
-    && $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')))
+    && $gCurrentUser->isMemberOfRole((int) $date->getValue('dat_rol_id')))
     {
         // user does't want to participate as leader -> remove his participation as leader from the event,
         // dont remove the participation itself!

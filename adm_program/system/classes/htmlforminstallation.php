@@ -108,8 +108,6 @@ class HtmlFormInstallation extends HtmlForm
      */
     public function show($directOutput = true)
     {
-        global $gL10n;
-
         // if no modus set then set installation modus
         if ($this->title === '')
         {

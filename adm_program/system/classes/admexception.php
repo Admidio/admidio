@@ -70,6 +70,11 @@ class AdmException extends Exception
             {
                 $this->params[] = $paramArray[$paramNumber];
             }
+
+            $gLogger->warning(
+                'DEPRECATED: "new AdmException(' . $message . ', ' . $params . ')" is deprecated, use "new AdmException(' . $message . ', array(' . $params . '))" instead!',
+                array('message' => $message, 'params' => $params, 'allParams' => $paramArray)
+            );
         }
 
         $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => $this->params));
@@ -103,6 +108,8 @@ class AdmException extends Exception
      */
     public function setNewMessage($message, $params = array())
     {
+        global $gLogger;
+
         $this->message = $message;
 
         if (is_array($params))
@@ -121,6 +128,11 @@ class AdmException extends Exception
             {
                 $this->params[] = $paramArray[$paramNumber];
             }
+
+            $gLogger->warning(
+                'DEPRECATED: "$e->setNewMessage(' . $message . ', ' . $params . ')" is deprecated, use "$e->setNewMessage(' . $message . ', array(' . $params . '))" instead!',
+                array('message' => $message, 'params' => $params, 'allParams' => $paramArray)
+            );
         }
     }
 

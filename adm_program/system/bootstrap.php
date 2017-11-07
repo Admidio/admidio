@@ -53,6 +53,8 @@ require_once(ADMIDIO_PATH . '/adm_program/system/polyfill.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
 // Enable Logging
 require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
+// Add shutdown function
+require_once(ADMIDIO_PATH . '/adm_program/system/shutdown.php');
 // Add some common functions
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmlawed/htmlawed.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/function.php');

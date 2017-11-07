@@ -225,11 +225,11 @@ class Database
 
         if (count($availableDrivers) === 0)
         {
-            throw new \PDOException('PDO does not support any drivers');
+            throw new \PDOException('PDO does not support any drivers'); // TODO: change exception class
         }
         if (!in_array($this->engine, $availableDrivers, true))
         {
-            throw new \PDOException('The requested PDO driver ' . $this->engine . ' is not supported');
+            throw new \PDOException('The requested PDO driver ' . $this->engine . ' is not supported'); // TODO: change exception class
         }
 
         switch ($this->engine)
@@ -254,7 +254,7 @@ class Database
                 break;
 
             default:
-                throw new \PDOException('Engine is not supported by Admidio');
+                throw new \PDOException('Engine is not supported by Admidio'); // TODO: change exception class
         }
 
         $gLogger->debug('DATABASE: DSN-String: "' . $this->dsn . '"!');

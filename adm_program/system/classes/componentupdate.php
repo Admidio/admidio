@@ -482,7 +482,7 @@ class ComponentUpdate extends Component
      */
     public function updateStepMigrateDatesRightsToFolderRights()
     {
-        global $g_tbl_praefix, $g_organization, $gCurrentUser;
+        global $g_tbl_praefix, $gCurrentUser;
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id

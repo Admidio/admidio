@@ -24,40 +24,42 @@ $getlangCode        = admFuncVariableIsValid($_GET, 'langCode',        'string',
 $htmlUrl = '';
 $message = '';
 
+// checks if the server settings for file_upload are set to ON
+if (!PhpIni::isFileUploadEnabled())
+{
+    $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
+}
+
+// if necessary create the module folders in adm_my_files
+switch ($getCKEditor)
+{
+    case 'ann_description':
+        $folderName = 'announcements';
+        break;
+    case 'dat_description':
+        $folderName = 'dates';
+        break;
+    case 'lnk_description':
+        $folderName = 'weblinks';
+        break;
+    case 'msg_body':
+        $folderName = 'mail';
+        break;
+    case 'plugin_CKEditor':
+        $folderName = 'plugins';
+        break;
+    case 'room_description':
+        $folderName = 'rooms';
+        break;
+    case 'usf_description':
+        $folderName = 'user_fields';
+        break;
+    default:
+        // TODO
+}
+
 try
 {
-    // checks if the server settings for file_upload are set to ON
-    if (!PhpIni::isFileUploadEnabled())
-    {
-        $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
-    }
-
-    // if necessary create the module folders in adm_my_files
-    switch ($getCKEditor)
-    {
-        case 'ann_description':
-            $folderName = 'announcements';
-            break;
-        case 'dat_description':
-            $folderName = 'dates';
-            break;
-        case 'lnk_description':
-            $folderName = 'weblinks';
-            break;
-        case 'msg_body':
-            $folderName = 'mail';
-            break;
-        case 'plugin_CKEditor':
-            $folderName = 'plugins';
-            break;
-        case 'room_description':
-            $folderName = 'rooms';
-            break;
-        case 'usf_description':
-            $folderName = 'user_fields';
-            break;
-    }
-
     // set path to module folder in adm_my_files
     $myFilesProfilePhotos = new MyFiles($folderName);
     // upload photo to images folder of module folder
