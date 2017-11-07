@@ -197,11 +197,11 @@ $formCommon->addCheckbox(
 );
 $formCommon->addInput(
     'logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', 'SYS_REMEMBER_ME'))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
 );
 $formCommon->addCheckbox(
     'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
-    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', 'ORG_ACTIVATE_SYSTEM_MAILS'))
+    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
 );
 $formCommon->addCheckbox(
     'system_search_similar', $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'), (bool) $formValues['system_search_similar'],
@@ -218,7 +218,7 @@ $formCommon->addCheckbox(
 );
 $formCommon->addInput(
     'system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $formValues['system_js_editor_color'],
-    array('maxLength' => 10, 'helpTextIdInline' => array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', 'SYS_REMEMBER_ME'), 'class' => 'form-control-small')
+    array('maxLength' => 10, 'helpTextIdInline' => array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', array('SYS_REMEMBER_ME')), 'class' => 'form-control-small')
 );
 $selectBoxEntries = array(
     0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
@@ -318,11 +318,11 @@ $formRegionalSettings->addSelectBox(
 );
 $formRegionalSettings->addInput(
     'system_date', $gL10n->get('ORG_DATE_FORMAT'), $formValues['system_date'],
-    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', '<a href="https://secure.php.net/manual/en/function.date.php">date()</a>'), 'class' => 'form-control-small')
+    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://secure.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
 );
 $formRegionalSettings->addInput(
     'system_time', $gL10n->get('ORG_TIME_FORMAT'), $formValues['system_time'],
-    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', '<a href="https://secure.php.net/manual/en/function.date.php">date()</a>'), 'class' => 'form-control-small')
+    array('maxLength' => 20, 'helpTextIdInline' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://secure.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
 );
 $formRegionalSettings->addInput(
     'system_currency', $gL10n->get('ORG_CURRENCY'), $formValues['system_currency'],
@@ -352,7 +352,7 @@ $formRegistration->addCheckbox(
 );
 $formRegistration->addCheckbox(
     'enable_registration_admin_mail', $gL10n->get('ORG_EMAIL_ALERTS'), (bool) $formValues['enable_registration_admin_mail'],
-    array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', 'ROL_RIGHT_APPROVE_USERS'))
+    array('helpTextIdInline' => array('ORG_EMAIL_ALERTS_DESC', array('ROL_RIGHT_APPROVE_USERS')))
 );
 $formRegistration->addSubmitButton(
     'btn_save_registration', $gL10n->get('SYS_SAVE'),
@@ -375,7 +375,7 @@ $formEmailDispatch->addSelectBox(
 );
 $formEmailDispatch->addInput(
     'mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $formValues['mail_sendmail_address'],
-    array('maxLength' => 50, 'helpTextIdInline' => array('MAI_SENDER_EMAIL_ADDRESS_DESC', DOMAIN))
+    array('maxLength' => 50, 'helpTextIdInline' => array('MAI_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
 );
 $formEmailDispatch->addInput(
     'mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $formValues['mail_sendmail_name'],
@@ -457,7 +457,7 @@ $formSystemNotification->addInput(
 );
 $formSystemNotification->addCheckbox(
     'enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), (bool) $formValues['enable_email_notification'],
-    array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<em>'.$gPreferences['email_administrator'].'</em>'))
+    array('helpTextIdInline' => array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', array('<em>'.$gPreferences['email_administrator'].'</em>')))
 );
 $formSystemNotification->addCustomContent($gL10n->get('SYS_SYSTEM_MAILS'),
     '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
@@ -545,7 +545,7 @@ $formCaptcha->addInput(
     array('maxLength' => 7, 'class' => 'form-control-small'));
 $formCaptcha->addInput(
     'captcha_line_color', $gL10n->get('ORG_CAPTCHA_LINE_COLOR'), $formValues['captcha_line_color'],
-    array('maxLength' => 7, 'helpTextIdInline' => array('ORG_CAPTCHA_COLOR_DESC', '<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>'), 'class' => 'form-control-small'));
+    array('maxLength' => 7, 'helpTextIdInline' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small'));
 $formCaptcha->addInput(
     'captcha_charset', $gL10n->get('ORG_CAPTCHA_SIGNS'), $formValues['captcha_charset'],
     array('maxLength' => 80, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNS_TEXT')
@@ -708,7 +708,7 @@ $formAnnouncements->addSelectBox(
 );
 $formAnnouncements->addInput(
     'announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['announcements_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ANN"><img
             src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
@@ -804,7 +804,7 @@ $formPhotos->addSelectBox(
 );
 $formPhotos->addInput(
     'photo_albums_per_page', $gL10n->get('PHO_NUMBER_OF_ALBUMS_PER_PAGE'), $formValues['photo_albums_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formPhotos->addInput(
     'photo_thumbs_page', $gL10n->get('PHO_THUMBNAILS_PER_PAGE'), $formValues['photo_thumbs_page'],
@@ -828,7 +828,7 @@ $formPhotos->addInput(
 );
 $formPhotos->addInput(
     'photo_image_text', $gL10n->get('PHO_SHOW_CAPTION'), $formValues['photo_image_text'],
-    array('maxLength' => 60, 'helpTextIdInline' => array('PHO_SHOW_CAPTION_DESC', DOMAIN))
+    array('maxLength' => 60, 'helpTextIdInline' => array('PHO_SHOW_CAPTION_DESC', array(DOMAIN)))
 );
 $formPhotos->addInput(
     'photo_image_text_size', $gL10n->get('PHO_CAPTION_SIZE'), $formValues['photo_image_text_size'],
@@ -836,11 +836,11 @@ $formPhotos->addInput(
 );
 $formPhotos->addCheckbox(
     'photo_download_enabled', $gL10n->get('PHO_DOWNLOAD_ENABLED'), (bool) $formValues['photo_download_enabled'],
-    array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL')))
+    array('helpTextIdInline' => array('PHO_DOWNLOAD_ENABLED_DESC', array($gL10n->get('PHO_KEEP_ORIGINAL'))))
 );
 $formPhotos->addCheckbox(
     'photo_keep_original', $gL10n->get('PHO_KEEP_ORIGINAL'), (bool) $formValues['photo_keep_original'],
-    array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')))
+    array('helpTextIdInline' => array('PHO_KEEP_ORIGINAL_DESC', array($gL10n->get('PHO_DOWNLOAD_ENABLED'))))
 );
 $formPhotos->addSubmitButton(
     'btn_save_photos', $gL10n->get('SYS_SAVE'),
@@ -867,7 +867,7 @@ $formGuestbook->addSelectBox(
 );
 $formGuestbook->addInput(
     'guestbook_entries_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['guestbook_entries_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formGuestbook->addCheckbox(
     'enable_guestbook_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), (bool) $formValues['enable_guestbook_captcha'],
@@ -959,7 +959,7 @@ $formLists->addCheckbox(
 );
 $formLists->addInput(
     'lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $formValues['lists_roles_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
 $formLists->addSelectBox(
@@ -989,7 +989,7 @@ $selectBoxEntries = array(
 );
 $formLists->addSelectBox(
     'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
-    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER')))))
+    array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER'))))))
 );
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php?type=ROL"><img
             src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
@@ -1146,11 +1146,11 @@ else
 }
 $formEvents->addSelectBox(
     'dates_view', $gL10n->get('DAT_VIEW_MODE'), $selectBoxEntries,
-    array('defaultValue' => $formValues['dates_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', 'DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT'))
+    array('defaultValue' => $formValues['dates_view'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('DAT_VIEW_MODE_DESC', array('DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT')))
 );
 $formEvents->addInput(
     'dates_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['dates_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 10))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
 $formEvents->addCheckbox(
     'enable_dates_ical', $gL10n->get('DAT_ENABLE_ICAL'), (bool) $formValues['enable_dates_ical'],
@@ -1220,7 +1220,7 @@ $formWeblinks->addSelectBox(
 );
 $formWeblinks->addInput(
     'weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['weblinks_per_page'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', 0))
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
 );
 $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
 $formWeblinks->addSelectBox(
