@@ -387,9 +387,4 @@ switch($getMode)
         // clean up
         unset($_SESSION['add_organization_request']);
         break;
-
-    case 4:
-        // show php info page
-        echo phpinfo();
-        break;
 }
