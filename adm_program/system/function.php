@@ -697,6 +697,48 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 }
 
 /**
+ * Gets the total, free and used disk space.
+ * @param string $path Path of the filesystem
+ * @return array<string,int>
+ */
+function admGetDiskSpace($path = '/')
+{
+    $total = disk_total_space($path);
+    $free = disk_free_space($path);
+    $used = $total - $free;
+
+    return array('total' => $total, 'free' => $free, 'used' => $used);
+}
+
+/**
+ * Returns a human readable size with unit
+ * @param int  $size The size in bytes
+ * @param bool $si   Use SI or binary unit. Set true for SI units
+ * @return string
+ */
+function admGetHumanReadableSize($size, $si = false)
+{
+    $divider = 1024;
+    $units = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'YiB');
+    if ($si)
+    {
+        $divider = 1000;
+        $units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'YB');
+    }
+
+    $iteration = 0;
+    while ($size >= $divider)
+    {
+        ++$iteration;
+        $size /= $divider;
+    }
+
+    $unit = $units[$iteration];
+
+    return round($size, 1) . ' ' . $unit;
+}
+
+/**
  * Prefix url with "http://" if no protocol is defined and check if is valid url
  * @param $url string
  * @return false|string
