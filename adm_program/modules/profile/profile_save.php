@@ -49,7 +49,7 @@ if($getNewUser === 2 || $getNewUser === 3)
 {
     // create user registration object and set requested organization
     $user = new UserRegistration($gDb, $gProfileFields, $getUserId);
-    $user->setOrganization($_POST['reg_org_id']);
+    $user->setOrganization((int) $_POST['reg_org_id']);
 }
 else
 {
