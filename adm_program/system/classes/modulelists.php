@@ -181,6 +181,7 @@ class ModuleLists extends Modules
     public function __construct()
     {
         global $gL10n;
+
         // define constant for headline
         define('HEADLINE', $gL10n->get('LST_ACTIVE_ROLES'));
 

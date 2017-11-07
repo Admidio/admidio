@@ -609,6 +609,7 @@ class HtmlForm extends HtmlFormBasic
     public function addFileUpload($id, $label, array $options = array())
     {
         global $gPreferences;
+
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
 
