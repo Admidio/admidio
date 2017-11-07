@@ -478,16 +478,16 @@ $formSystemNotification->addMultilineTextInput('SYSMAIL_REGISTRATION_USER', $gL1
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $orgId));
 $formSystemNotification->addMultilineTextInput('SYSMAIL_REFUSE_REGISTRATION', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $orgId));
+$htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
 $formSystemNotification->addMultilineTextInput(
     'SYSMAIL_NEW_PASSWORD', $gL10n->get('ORG_SEND_NEW_PASSWORD'), $text->getValue('txt_text'), 7,
-    array('helpTextIdInline' => $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD'))
+    array('helpTextIdInline' => $htmlDesc)
 );
 $text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $orgId));
+$htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br /><strong>#variable2#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
 $formSystemNotification->addMultilineTextInput(
     'SYSMAIL_ACTIVATION_LINK', $gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK'), $text->getValue('txt_text'), 7,
-    array('helpTextIdInline' => $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
-    <strong>#variable1#</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
-    <strong>#variable2#</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK'))
+    array('helpTextIdInline' => $htmlDesc)
 );
 
 $formSystemNotification->addSubmitButton(
@@ -672,7 +672,7 @@ $formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->g
 $html = '<a href="preferences_function.php?mode=4" target="_blank">phpinfo()</a>';
 $formSystemInformation->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
 
-if(isset($gDebug) && $gDebug)
+if($gDebug)
 {
     $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
 }

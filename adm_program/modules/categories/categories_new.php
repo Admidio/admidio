@@ -158,8 +158,8 @@ else
 
 // create html page object
 $page = new HtmlPage($headline);
-$roleViewDescription = '';
 
+$roleViewDescription = '';
 if($getType === 'USF')
 {
     $roleViewDescription = 'CAT_PROFILE_FIELDS_VISIBILITY';
