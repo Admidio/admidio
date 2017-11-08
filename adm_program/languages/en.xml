@@ -1282,6 +1282,7 @@
   <string name="SYS_PHP_INFO">All PHP settings</string>
   <string name="SYS_PHP_VERSION">PHP version</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
+  <string name="SYS_PHP_VERSION_EOL">PHP version is no longer officially supported by PHP (End of Life). (#VAR1#)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
   <string name="SYS_PM">Private message</string>

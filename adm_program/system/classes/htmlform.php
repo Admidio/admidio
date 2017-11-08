@@ -609,6 +609,7 @@ class HtmlForm extends HtmlFormBasic
     public function addFileUpload($id, $label, array $options = array())
     {
         global $gPreferences;
+
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
 
@@ -1842,27 +1843,35 @@ class HtmlForm extends HtmlFormBasic
 
     /**
      * Closes a field structure that was added with the method openControlStructure.
-     * @param string|string[]   $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     *                                      If set the complete text will be shown after the form element.
-     * @param array<int,string> $parameters If you need an additional parameter for the text you can set this array.
+     * @param string|array $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
+     *                                 If set the complete text will be shown after the form element.
      */
-    protected function closeControlStructure($helpTextId = '', array $parameters = array())
+    protected function closeControlStructure($helpTextId = '')
     {
         global $gL10n, $gLogger;
 
-        // backwards compatibility
+        $parameters = array();
         if (is_array($helpTextId))
         {
-            // TODO deprecated: Remove in Admidio 4.0
-            $helpTextIds = '\'' . implode('\', \'', $helpTextId) . '\'';
-            $parameters = $helpTextId;
-            $helpTextId = array_shift($parameters);
-            $paramsString = '\'' . implode('\', \'', $parameters) . '\'';
+            if (is_array($helpTextId[1]))
+            {
+                $parameters = $helpTextId[1];
+                $helpTextId = $helpTextId[0];
+            }
+            // backwards compatibility
+            else
+            {
+                // TODO deprecated: Remove in Admidio 4.0
+                $helpTextIds = '\'' . implode('\', \'', $helpTextId) . '\'';
+                $parameters = $helpTextId;
+                $helpTextId = array_shift($parameters);
+                $paramsString = '\'' . implode('\', \'', $parameters) . '\'';
 
-            $gLogger->warning(
-                'DEPRECATED: "$htmlForm->closeControlStructure(' . $helpTextIds . ')" is deprecated, use "$htmlForm->closeControlStructure(\'' . $helpTextId . '\', array(' . $paramsString . ')" instead!',
-                array('helpTextId' => $helpTextId, 'parameters' => $parameters)
-            );
+                $gLogger->warning(
+                    'DEPRECATED: "$htmlForm->closeControlStructure(' . $helpTextIds . ')" is deprecated, use "$htmlForm->closeControlStructure(\'' . $helpTextId . '\', array(' . $paramsString . ')" instead!',
+                    array('helpTextId' => $helpTextId, 'parameters' => $parameters)
+                );
+            }
         }
 
         if ($helpTextId !== '')
