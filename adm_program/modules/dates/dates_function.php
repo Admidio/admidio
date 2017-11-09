@@ -322,7 +322,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
                       FROM '.TBL_DATES.'
                      WHERE dat_begin  <= ? -- $endDateTime->format(\'Y-m-d H:i:s\')
                        AND dat_end    >= ? -- $startDateTime->format(\'Y-m-d H:i:s\')
-                       AND dat_room_id = ? -- $_POST[\'dat_room_id\']
+                       AND dat_room_id = ? -- $datRoomId
                        AND dat_id     <> ? -- $getDateId';
             $queryParams = array(
                 $endDateTime->format('Y-m-d H:i:s'),

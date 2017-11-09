@@ -15,8 +15,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'logging.php')
 
 use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Processor\IntrospectionProcessor;
 
 // check log folder in "adm_my_files" and create if necessary
@@ -35,18 +35,19 @@ if ($gDebug)
 }
 
 // Append line/file/class/function where the log message came from
-$inspectionProcessor = new IntrospectionProcessor($logLevel);
+$inspectionProcessor = new IntrospectionProcessor();
 $gLogger->pushProcessor($inspectionProcessor);
 
 // Params: format, dateFormat, allowInlineLineBreaks, ignoreEmptyContextAndExtra
 $formatter = new LineFormatter(null, 'Y-m-d H:i:s.u', false, true);
-$streamHandler = new RotatingFileHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', 0, $logLevel, true, 0666);
+
+$rotatingFileHandler = new RotatingFileHandler(ADMIDIO_PATH . FOLDER_DATA . '/logs/admidio.log', 0, $logLevel, true, 0666);
 $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
 
-$streamHandler->setFormatter($formatter);
+$rotatingFileHandler->setFormatter($formatter);
 $errorLogHandler->setFormatter($formatter);
 
-$gLogger->pushHandler($streamHandler);
+$gLogger->pushHandler($rotatingFileHandler);
 $gLogger->pushHandler($errorLogHandler);
 
 $gLogger->info('#####################################################################################################');

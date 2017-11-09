@@ -118,24 +118,25 @@ if($getMode === 'show_list')
 
     foreach($existingBackupFiles as $key => $oldBackupFile)
     {
+        $fileSize = filesize($backupAbsolutePath.$oldBackupFile);
+        $backupSizeSum += $fileSize;
+
         // create array with all column values
         $columnValues = array(
             '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php?job=get_file&amp;filename='. $oldBackupFile. '"><img
                 src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'. $oldBackupFile. '" title="'. $oldBackupFile. '" />'. $oldBackupFile. '</a>',
             date($gPreferences['system_date'].' '.$gPreferences['system_time'], filemtime($backupAbsolutePath.$oldBackupFile)),
-            round(filesize($backupAbsolutePath.$oldBackupFile) / 1024). ' kB',
+            round($fileSize / 1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($oldBackupFile).'&amp;database_id='.$oldBackupFile.'"><img
                 src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
-
-        $backupSizeSum += round(filesize($backupAbsolutePath.$oldBackupFile) / 1024);
     }
 
     if(count($existingBackupFiles) > 0)
     {
-        $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), $backupSizeSum .' kB', '&nbsp;');
+        $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), round($backupSizeSum / 1024) .' kB', '&nbsp;');
         $table->addRowByArray($columnValues);
     }
 

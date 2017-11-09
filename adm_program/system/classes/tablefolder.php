@@ -114,7 +114,7 @@ class TableFolder extends TableAccess
                     {
                         $completeFolder['additionalFiles'][] = array(
                             'fil_name' => $entry,
-                            'fil_size' => round(filesize($entryFolderPath) / 1024)
+                            'fil_size' => filesize($entryFolderPath)
                         );
                     }
                 }
@@ -394,7 +394,7 @@ class TableFolder extends TableAccess
             $fileSize = 0;
             if ($fileExists)
             {
-                $fileSize = round(filesize($filePath) / 1024);
+                $fileSize = filesize($filePath);
             }
 
             $addToArray = false;
