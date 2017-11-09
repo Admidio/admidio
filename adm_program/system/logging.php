@@ -54,6 +54,10 @@ $gLogger->info('URL: ' . CURRENT_URL);
 
 // Log Constants
 $constants = array(
+    'VERSIONS' => array(
+        'ADMIDIO' => ADMIDIO_VERSION_TEXT,
+        'PHP'     => PHP_VERSION
+    ),
     'ADMIDIO_HOMEPAGE' => ADMIDIO_HOMEPAGE,
     'HTTPS'            => HTTPS,
     'PORT'             => PORT,
