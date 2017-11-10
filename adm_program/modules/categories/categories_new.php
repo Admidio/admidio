@@ -108,7 +108,6 @@ if(isset($_SESSION['categories_request']))
 
     if(isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
-        $gLogger->warning('test');
         $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
     unset($_SESSION['categories_request']);
@@ -154,8 +153,7 @@ if($getType === 'USF')
 if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 {
     $page->addJavascript('
-        function showHideViewRightControl()
-        {
+        function showHideViewRightControl() {
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
             } else {
@@ -287,9 +285,9 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
     $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
 
     $adminRoles = array();
-    while($row = $statementAdminRoles->fetch())
+    while($roleName = $statementAdminRoles->fetchColumn())
     {
-        $adminRoles[] = $row['rol_name'];
+        $adminRoles[] = $roleName;
     }
 
     $form->addStaticControl(

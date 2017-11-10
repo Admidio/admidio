@@ -220,18 +220,18 @@ class TableRoles extends TableAccess
 
             if ((int) $countRolesStatement->fetchColumn() === 0)
             {
-                throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
+                throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', array($this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION')));
             }
         }
 
         // users are not allowed to delete system roles
         if ((int) $this->getValue('rol_system') === 1)
         {
-            throw new AdmException('ROL_DELETE_SYSTEM_ROLE', $this->getValue('rol_name'));
+            throw new AdmException('ROL_DELETE_SYSTEM_ROLE', array($this->getValue('rol_name')));
         }
         if ((int) $this->getValue('rol_administrator') === 1)
         {
-            throw new AdmException('ROL_DELETE_ROLE', $gL10n->get('SYS_ADMINISTRATOR'));
+            throw new AdmException('ROL_DELETE_ROLE', array($gL10n->get('SYS_ADMINISTRATOR')));
         }
 
         $this->db->startTransaction();
@@ -445,7 +445,7 @@ class TableRoles extends TableAccess
 
             if ((int) $pdoStatement->fetchColumn() === 0)
             {
-                throw new AdmException('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION'));
+                throw new AdmException('ROL_NO_DEFAULT_ROLE', array($gL10n->get('ROL_DEFAULT_REGISTRATION')));
             }
         }
 

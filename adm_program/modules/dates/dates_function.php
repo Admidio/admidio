@@ -71,7 +71,7 @@ if($getDateId > 0)
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if(!$date->editable()
-    && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
+    && !in_array($getMode, array(3, 4, 6, 7)))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -81,7 +81,7 @@ else
 {
     // check if the user has the right to edit at least one category
     if(count($gCurrentUser->getAllEditableCategories('DAT')) === 0
-    && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
+    && !in_array($getMode, array(3, 4, 6, 7)))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

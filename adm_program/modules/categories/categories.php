@@ -68,33 +68,35 @@ $visibleHeadline   = $gL10n->get('SYS_VISIBLE_FOR');
 $editableHeadline  = '';
 $rolesRightsColumn = '';
 
-if($getType === 'ROL')
+switch ($getType)
 {
-    $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
-    $visibleHeadline = '';
-}
-elseif($getType === 'ANN')
-{
-    $rolesRightsColumn = 'rol_announcements';
-    $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
-    $editableHeadline = $gL10n->get('ANN_EDIT_ANNOUNCEMENTS');
-}
-elseif($getType === 'DAT')
-{
-    $rolesRightsColumn = 'rol_dates';
-    $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
-}
-elseif($getType === 'LNK')
-{
-    $rolesRightsColumn = 'rol_weblinks';
-    $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('LNK_WEBLINKS')));
-    $editableHeadline = $gL10n->get('LNK_EDIT_WEBLINKS');
-}
-elseif($getType === 'USF')
-{
-    $rolesRightsColumn = 'rol_edit_user';
-    $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
-    $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
+    case 'ROL':
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
+        $visibleHeadline = '';
+        break;
+
+    case 'ANN':
+        $rolesRightsColumn = 'rol_announcements';
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
+        $editableHeadline = $gL10n->get('ANN_EDIT_ANNOUNCEMENTS');
+        break;
+
+    case 'DAT':
+        $rolesRightsColumn = 'rol_dates';
+        $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
+        break;
+
+    case 'LNK':
+        $rolesRightsColumn = 'rol_weblinks';
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('LNK_WEBLINKS')));
+        $editableHeadline = $gL10n->get('LNK_EDIT_WEBLINKS');
+        break;
+
+    case 'USF':
+        $rolesRightsColumn = 'rol_edit_user';
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
+        $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
+        break;
 }
 
 if($getTitle !== '')
@@ -116,9 +118,9 @@ $sqlAdminRoles = 'SELECT rol_name
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
 
 $adminRoles = array();
-while($row = $statementAdminRoles->fetch())
+while($roleName = $statementAdminRoles->fetchColumn())
 {
-    $adminRoles[] = $row['rol_name'];
+    $adminRoles[] = $roleName;
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
