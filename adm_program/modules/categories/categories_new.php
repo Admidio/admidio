@@ -32,40 +32,42 @@ $roleViewSet = array(0);
 $roleEditSet = array(0);
 
 // set text strings for the different modules
-if($getType === 'ANN')
+switch ($getType)
 {
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
-    $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
-    $rolesRightsColumn = 'rol_announcements';
-    $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
-}
-elseif($getType === 'DAT')
-{
-    $rolesRightEditName = 'DAT_EDIT_EVENTS';
-    $rolesRightsColumn = 'rol_dates';
-    $rolesRightsName   = 'ROL_RIGHT_DATES';
-}
-elseif($getType === 'LNK')
-{
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
-    $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
-    $rolesRightsColumn = 'rol_weblinks';
-    $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
-}
-elseif($getType === 'USF')
-{
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
-    $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
-    $rolesRightsColumn = 'rol_edit_user';
-    $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
-}
-elseif($getType === 'ROL')
-{
-    $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ROLES')));
-}
-else
-{
-    $headline = $gL10n->get('SYS_CATEGORY');
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
+        $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
+        $rolesRightsColumn = 'rol_announcements';
+        $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
+        break;
+
+    case 'ANN':
+        $rolesRightEditName = 'DAT_EDIT_EVENTS';
+        $rolesRightsColumn = 'rol_dates';
+        $rolesRightsName   = 'ROL_RIGHT_DATES';
+        break;
+
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
+        $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
+        $rolesRightsColumn = 'rol_weblinks';
+        $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
+        break;
+
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
+        $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
+        $rolesRightsColumn = 'rol_edit_user';
+        $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
+        break;
+
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ROLES')));
+        break;
+
+    default:
+        $headline = $gL10n->get('SYS_CATEGORY');
+        break;
 }
 
 // set module headline and other strings
