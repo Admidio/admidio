@@ -697,9 +697,9 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 }
 
 /**
- * Gets the total, free and used disk space.
+ * Gets the total, free and used disk space in bytes.
  * @param string $path Path of the filesystem
- * @return array<string,int>
+ * @return array<string,int> Return format: array("total" => $total, "free" => $free, "used" => $used)
  */
 function admGetDiskSpace($path = '/')
 {
@@ -714,7 +714,7 @@ function admGetDiskSpace($path = '/')
  * Returns a human readable size with unit
  * @param int  $size The size in bytes
  * @param bool $si   Use SI or binary unit. Set true for SI units
- * @return string
+ * @return string Return format: "[value] [unit]" (e.g: 34.5 MiB)
  */
 function admGetHumanReadableSize($size, $si = false)
 {
