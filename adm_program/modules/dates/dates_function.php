@@ -56,13 +56,6 @@ if($getMode !== 6 || $gPreferences['enable_dates_module'] == 2)
     require(__DIR__ . '/../../system/login_valid.php');
 }
 
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editDates() && $getMode !== 3 && $getMode !== 4 && $getMode !== 6 && $getMode !== 7)
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 if($getCopy)
 {
     $originalDateId = $getDateId;
@@ -72,15 +65,27 @@ if($getCopy)
 // Terminobjekt anlegen
 $date = new TableDate($gDb);
 
-if($getDateId > 0)
+if (in_array($getMode, array(1, 2, 5), true))
 {
-    $date->readDataById($getDateId);
-
-    // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if(!$date->editable())
+    if ($getDateId > 0)
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
+        $date->readDataById($getDateId);
+
+        // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
+        if (!$date->editable())
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+    }
+    else
+    {
+        // check if the user has the right to edit at least one category
+        if (count($gCurrentUser->getAllEditableCategories('DAT')) === 0)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
     }
 }
 
@@ -132,6 +137,12 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     if(strlen($_POST['dat_cat_id']) === 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('DAT_CALENDAR'))));
+        // => EXIT
+    }
+    // check if the current user is allowed to use the selected category
+    if(!in_array((int) $_POST['dat_cat_id'], $gCurrentUser->getAllEditableCategories('DAT'), true))
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
@@ -354,13 +365,20 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
     }
 
-    // write all POST parameters into the date object
-    foreach($_POST as $key => $value) // TODO possible security issue
+    try
     {
-        if(admStrStartsWith($key, 'dat_'))
+        // write all POST parameters into the date object
+        foreach($_POST as $key => $value) // TODO possible security issue
         {
-            $date->setValue($key, $value);
+            if(admStrStartsWith($key, 'dat_'))
+            {
+                $date->setValue($key, $value);
+            }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     $gDb->startTransaction();
@@ -576,17 +594,13 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     admRedirect($gNavigation->getUrl());
     // => EXIT
 }
-elseif($getMode === 2)  // Delete the event
+elseif($getMode === 2)
 {
-    // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
-    if((int) $date->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-    {
-        // member bzw. Teilnahme/Rolle löschen
-        $date->delete();
+    // delete current announcements, right checks were done before
+    $date->delete();
 
-        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-        echo 'done';
-    }
+    // Delete successful -> Return for XMLHttpRequest
+    echo 'done';
 }
 
 elseif($getMode === 6)  // export event in ical format

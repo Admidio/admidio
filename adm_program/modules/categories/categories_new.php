@@ -6,9 +6,6 @@
  * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
 /******************************************************************************
  * Parameters:
  *
@@ -31,62 +28,51 @@ $getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
 $getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title',  'string');
 
-// Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
+$roleViewSet = array(0);
+$roleEditSet = array(0);
+
+// set text strings for the different modules
+switch ($getType)
 {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
+        $rolesRightEditName = 'ANN_EDIT_ANNOUNCEMENTS';
+        $rolesRightsColumn = 'rol_announcements';
+        $rolesRightsName   = 'ROL_RIGHT_ANNOUNCEMENTS';
+        break;
+
+    case 'ANN':
+        $rolesRightEditName = 'DAT_EDIT_EVENTS';
+        $rolesRightsColumn = 'rol_dates';
+        $rolesRightsName   = 'ROL_RIGHT_DATES';
+        break;
+
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
+        $rolesRightEditName = 'LNK_EDIT_WEBLINKS';
+        $rolesRightsColumn = 'rol_weblinks';
+        $rolesRightsName   = 'ROL_RIGHT_WEBLINKS';
+        break;
+
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
+        $rolesRightEditName = 'PRO_EDIT_PROFILE_FIELDS';
+        $rolesRightsColumn = 'rol_edit_user';
+        $rolesRightsName   = 'ROL_RIGHT_EDIT_USER';
+        break;
+
+    case 'ANN':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ROLES')));
+        break;
+
+    default:
+        $headline = $gL10n->get('SYS_CATEGORY');
+        break;
 }
 
 // set module headline and other strings
 if($getTitle === '')
 {
-    if($getType === 'ROL')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('SYS_ROLES')));
-    }
-    elseif($getType === 'LNK')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('LNK_WEBLINKS')));
-    }
-    elseif($getType === 'ANN')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
-    }
-    elseif($getType === 'USF')
-    {
-        $headline = $gL10n->get('SYS_CATEGORY_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
-    }
-    else
-    {
-        $headline = $gL10n->get('SYS_CATEGORY');
-    }
-
     $addButtonText = $gL10n->get('SYS_CATEGORY');
 }
 else
@@ -117,9 +103,12 @@ if(isset($_SESSION['categories_request']))
     $category->setArray($_SESSION['categories_request']);
 
     // get the selected roles for visibility
-    $roleViewSet = $_SESSION['categories_request']['adm_categories_view_right'];
+    if(isset($_SESSION['categories_request']['adm_categories_view_right']))
+    {
+        $roleViewSet = $_SESSION['categories_request']['adm_categories_view_right'];
+    }
 
-    if(!isset($_SESSION['categories_request']['show_in_several_organizations']))
+    if(isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
         $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     }
@@ -134,26 +123,24 @@ else
         // get assigned roles of this category
         $categoryViewRolesObject = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
-
-        // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-        if($category->getValue('cat_org_id') > 0
-        && (int) $category->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-            // => EXIT
-        }
+        $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
+        $roleEditSet = $categoryEditRolesObject->getRolesIds();
     }
     else
     {
-        // a new category will be visible for all users per default
-        $roleViewSet = array(0);
-
         // profile fields should be organization independent all other categories should be organization dependent as default
         if($getType !== 'USF')
         {
             $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
         }
     }
+}
+
+// check if this category is editable by the current user and current organization
+if(!$category->editable())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 // create html page object
@@ -168,14 +155,19 @@ if($getType === 'USF')
 if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 {
     $page->addJavascript('
-        $("#show_in_several_organizations").click(function() {
+        function showHideViewRightControl() {
             if ($("#show_in_several_organizations").is(":checked")) {
                 $("#adm_categories_view_right_group").hide();
             } else {
                 $("#adm_categories_view_right_group").show("slow");
             }
+        }
+
+        $("#show_in_several_organizations").click(function() {
+            showHideViewRightControl();
         });
-        $("#show_in_several_organizations").trigger("click");',
+
+        showHideViewRightControl();',
         true
     );
 }
@@ -225,6 +217,12 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
         $roleViewSet[] = 0;
     }
 
+    // if no roles are assigned then set nothing as default
+    if(count($roleEditSet) === 0)
+    {
+        $roleEditSet[] = '';
+    }
+
     // show selectbox with all assigned roles
     $form->addSelectBoxFromSql(
         'adm_categories_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
@@ -236,6 +234,20 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
             'helpTextIdInline' => $roleViewDescription
         )
     );
+
+    // until now we don't use edit rights for profile fields
+    if($getType !== 'USF')
+    {
+        $form->addSelectBoxFromSql(
+            'adm_categories_edit_right', $gL10n->get($rolesRightEditName), $gDb, $sqlDataView,
+            array(
+                'property'     => FIELD_REQUIRED,
+                'defaultValue' => $roleEditSet,
+                'multiselect'  => true,
+                'placeholder'  => $gL10n->get('DOW_NO_ADDITIONAL_PERMISSIONS_SET')
+            )
+        );
+    }
 }
 
 // if current organization has a parent organization or is child organizations then show option to set this category to global
@@ -254,13 +266,36 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
-            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
+            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', array($organizations));
         }
         else
         {
-            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
+            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', array($organizations));
         }
     }
+
+    // read all administrator roles
+
+    $sqlAdminRoles = 'SELECT rol_name
+                        FROM '.TBL_ROLES.'
+                  INNER JOIN '.TBL_CATEGORIES.'
+                          ON cat_id = rol_cat_id
+                       WHERE rol_valid    = 1
+                         AND '. $rolesRightsColumn .' = 1
+                         AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                    ORDER BY cat_sequence, rol_name';
+    $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
+
+    $adminRoles = array();
+    while($roleName = $statementAdminRoles->fetchColumn())
+    {
+        $adminRoles[] = $roleName;
+    }
+
+    $form->addStaticControl(
+        'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
+        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', array($gL10n->get($rolesRightsName))))
+    );
 
     $checked = false;
     if((int) $category->getValue('cat_org_id') === 0)

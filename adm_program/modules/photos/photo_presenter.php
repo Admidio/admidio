@@ -42,6 +42,13 @@ else
     $_SESSION['photo_album'] = $photoAlbum;
 }
 
+// check if the current user could view this photo album
+if(!$photoAlbum->visible())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
+}
+
 // Naechstes und Letztes Bild
 $previousImage = $getPhotoNr - 1;
 $nextImage     = $getPhotoNr + 1;
