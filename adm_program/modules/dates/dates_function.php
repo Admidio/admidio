@@ -65,28 +65,28 @@ if($getCopy)
 // Terminobjekt anlegen
 $date = new TableDate($gDb);
 
-if($getDateId > 0)
+if (in_array($getMode, array(1, 2, 5), true))
 {
-    $date->readDataById($getDateId);
-
-    // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if(!$date->editable()
-    && !in_array($getMode, array(3, 4, 6, 7)))
+    if ($getDateId > 0)
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-}
-else
-{
-    // check if the user has the right to edit at least one category
-    if(count($gCurrentUser->getAllEditableCategories('DAT')) === 0
-    && !in_array($getMode, array(3, 4, 6, 7)))
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+        $date->readDataById($getDateId);
 
+        // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
+        if (!$date->editable())
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+    }
+    else
+    {
+        // check if the user has the right to edit at least one category
+        if (count($gCurrentUser->getAllEditableCategories('DAT')) === 0)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+    }
 }
 
 if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing event
@@ -141,7 +141,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     }
     // check if the current user is allowed to use the selected category
     if(!in_array((int) $_POST['dat_cat_id'], $gCurrentUser->getAllEditableCategories('DAT'), true))
-    {        
+    {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
