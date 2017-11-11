@@ -1685,6 +1685,7 @@ class HtmlForm extends HtmlFormBasic
         // create sql conditions if category must have child elements
         if ($selectBoxModus === 'FILTER_CATEGORIES')
         {
+            $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
             $optionsAll['showContextDependentFirstEntry'] = false;
 
             switch ($categoryType)
@@ -1702,29 +1703,40 @@ class HtmlForm extends HtmlFormBasic
                     break;
             }
         }
+        else
+        {
+            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));                        
+        }
 
         if (!$optionsAll['showSystemCategory'])
         {
             $sqlConditions .= ' AND cat_system = 0 ';
         }
 
-        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
+        // within edit dialogs child organizations are not allowed to assign categories of all organizations
+        if($selectBoxModus === 'EDIT_CATEGORIES' && $gCurrentOrganization->isChildOrganization())
+        {
+            $sqlConditions .= ' AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\') ';
+        }
+        else
+        {
+            $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                                    OR cat_org_id IS NULL ) ';            
+        }
 
         // the sql statement which returns all found categories
         $sql = 'SELECT DISTINCT cat_id, cat_org_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
                  WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
-                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                       OR cat_org_id IS NULL )
                    AND cat_type = ? -- $categoryType
                        ' . $sqlConditions . '
               ORDER BY cat_sequence ASC';
         $queryParams = array_merge(
             $catIdParams,
             array(
-                (int) $gCurrentOrganization->getValue('org_id'),
-                $categoryType
+                $categoryType,
+                (int) $gCurrentOrganization->getValue('org_id')
             )
         );
         $pdoStatement = $database->queryPrepared($sql, $queryParams);

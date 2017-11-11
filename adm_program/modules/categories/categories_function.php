@@ -7,9 +7,6 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
- */
-
-/******************************************************************************
  * Parameters:
  *
  * cat_id: Id of the category that should be edited
@@ -36,38 +33,6 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requir
 $getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
-// Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // create category object
 $category = new TableCategory($gDb);
 $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
@@ -75,13 +40,6 @@ $currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 if($getCatId > 0)
 {
     $category->readDataById($getCatId);
-
-    // check if category belongs to actual organization
-    if($category->getValue('cat_org_id') > 0 && (int) $category->getValue('cat_org_id') !== $currOrgId)
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
 
     // if system category then set cat_name to default
     if($category->getValue('cat_system') == 1)
@@ -94,6 +52,13 @@ else
     // create a new category
     $category->setValue('cat_org_id', $currOrgId);
     $category->setValue('cat_type', $getType);
+}
+
+// check if this category is editable by the current user and current organization
+if(!$category->editable())
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    // => EXIT
 }
 
 if($getMode === 1)
@@ -114,6 +79,13 @@ if($getMode === 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_VISIBLE_FOR'))));
         // => EXIT
+    }
+
+    if(!isset($_POST['adm_categories_edit_right']))
+    {
+        // edit right need not to be set because module administrators still have the right,
+        // so initialize the parameter
+        $_POST['adm_categories_edit_right'] = array();
     }
 
     // set a global category if its not a role category and the flag was set,
@@ -183,20 +155,30 @@ if($getMode === 1)
         // => EXIT
     }
 
-    $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
-    // roles have their own preferences for visibility, so only allow this for other types
-    // until now we do not support visibility for categories that belong to several organizations
-    if ($getType !== 'ROL'
-    && ($category->getValue('cat_org_id') > 0
-    || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1)))
+    if ($getType !== 'ROL')
     {
-        // save changed roles rights of the category
-        $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
-    }
-    else
-    {
-        // delete existing roles rights of the category
-        $rightCategoryView->delete();
+        $rightCategoryView = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
+
+        // roles have their own preferences for visibility, so only allow this for other types
+        // until now we do not support visibility for categories that belong to several organizations
+        if ($category->getValue('cat_org_id') > 0
+        || ((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->countAllRecords() === 1))
+        {
+            // save changed roles rights of the category
+            $rightCategoryView->saveRoles(array_map('intval', $_POST['adm_categories_view_right']));
+        }
+        else
+        {
+            // delete existing roles rights of the category
+            $rightCategoryView->delete();
+        }
+
+        // until now we don't use edit rights for profile fields
+        if ($getType !== 'USF')
+        {
+            $rightCategoryEdit = new RolesRights($gDb, 'category_edit', (int) $category->getValue('cat_id'));
+            $rightCategoryEdit->saveRoles(array_map('intval', $_POST['adm_categories_edit_right']));
+        }
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,

@@ -540,6 +540,7 @@ create table %PREFIX%_roles_rights
     ror_id                      integer unsigned    not null    AUTO_INCREMENT,
     ror_name_intern             varchar(50)         not null,
     ror_table                   varchar(50)         not null,
+    ror_ror_id_parent           integer unsigned,
     primary key (ror_id)
 )
 engine = InnoDB
@@ -903,6 +904,9 @@ alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CREATE foreign key
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key (rol_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_roles_rights add constraint %PREFIX%_FK_ROR_ROR_PARENT foreign key (ror_ror_id_parent)
+      references %PREFIX%_roles_rights (ror_id) on delete set null on update restrict;
 
 alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
       references %PREFIX%_roles_rights (ror_id) on delete restrict on update restrict;

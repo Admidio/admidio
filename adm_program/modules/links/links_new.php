@@ -29,13 +29,6 @@ if ($gPreferences['enable_weblinks_module'] == 0)
     // => EXIT
 }
 
-// Ist ueberhaupt das Recht vorhanden?
-if (!$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // create weblink object
 $link = new TableWeblink($gDb);
 
@@ -45,6 +38,15 @@ if($getLinkId > 0)
 
     // check if the current user could edit this weblink
     if(!$link->editable())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+}
+else
+{
+    // check if the user has the right to edit at least one category
+    if(count($gCurrentUser->getAllEditableCategories('LNK')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
