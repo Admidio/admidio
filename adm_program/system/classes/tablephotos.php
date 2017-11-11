@@ -308,6 +308,6 @@ class TablePhotos extends TableAccess
             return false;
         }
 
-        return false;
+        return true;
     }
 }

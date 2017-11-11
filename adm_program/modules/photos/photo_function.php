@@ -84,7 +84,8 @@ function tryRename($path, $newPath)
 }
 
 /**
- * Loeschen eines Bildes
+ * Delete the photo from the filesystem and update number of photos in database.
+ * @param TablePhotos $photoAlbum
  * @param int $phoId
  * @param int $picNr
  */
