@@ -541,10 +541,11 @@ class Email extends PHPMailer
 
     /**
      * Returns the maximum size of an attachment
-     * @param string $sizeUnit 'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
+     * @param string $sizeUnit  'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
+     * @param int    $precision The number of decimal digits to round to
      * @return float The maximum attachment size in the given size-unit
      */
-    public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE)
+    public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE, $precision = 1)
     {
         global $gPreferences;
 
@@ -566,7 +567,7 @@ class Email extends PHPMailer
             default:
         }
 
-        return round($attachmentSize, 1);
+        return round($attachmentSize, $precision);
     }
 
     /**

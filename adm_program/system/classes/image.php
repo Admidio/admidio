@@ -310,12 +310,12 @@ class Image
             {
                 // Scale the x-side
                 $newXSize = $newMaxSize;
-                $newYSize = round($newMaxSize / $aspectRatio);
+                $newYSize = (int) round($newMaxSize / $aspectRatio);
             }
             else
             {
                 // Scale the y-side
-                $newXSize = round($newMaxSize * $aspectRatio);
+                $newXSize = (int) round($newMaxSize * $aspectRatio);
                 $newYSize = $newMaxSize;
             }
 
@@ -350,12 +350,12 @@ class Image
             {
                 // scale to maximum width
                 $newWidth = $newXSize;
-                $newHeight = round($newXSize / $aspectRatio);
+                $newHeight = (int) round($newXSize / $aspectRatio);
             }
             else
             {
                 // scale to maximum height
-                $newWidth = round($newYSize * $aspectRatio);
+                $newWidth = (int) round($newYSize * $aspectRatio);
                 $newHeight = $newYSize;
             }
 

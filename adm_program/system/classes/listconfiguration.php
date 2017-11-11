@@ -23,7 +23,7 @@
  * deleteColumn($number, $all = false)
  *                       - entfernt die entsprechende Spalte aus der Konfiguration
  * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
- * getSQL($roleIds, $showFormerMembers = 0)
+ * getSQL($roleIds, $showFormerMembers = false)
  *                       - gibt das passende SQL-Statement zu der Liste zurueck
  */
 class ListConfiguration extends TableLists
@@ -177,14 +177,14 @@ class ListConfiguration extends TableLists
     /**
      * prepare SQL to list configuration
      * @param array<int,int> $roleIds           Array with all roles, which members are shown
-     * @param int            $showFormerMembers 0 - Only active members of a role
-     *                                          1 - Only former members
+     * @param bool           $showFormerMembers false - Only active members of a role
+     *                                          true  - Only former members
      * @param string         $startDate
      * @param string         $endDate
      * @param array<int,int> $relationtypeIds
      * @return string
      */
-    public function getSQL(array $roleIds, $showFormerMembers = 0, $startDate = null, $endDate = null, array $relationtypeIds = array())
+    public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationtypeIds = array())
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
 
