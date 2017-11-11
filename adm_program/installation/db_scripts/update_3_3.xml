@@ -39,7 +39,7 @@
     <step id="340">DROP TABLE IF EXISTS %PREFIX%_invent_fields CASCADE</step>
     <step id="350">DROP TABLE IF EXISTS %PREFIX%_invent_data CASCADE</step>
     <step id="360">DROP TABLE IF EXISTS %PREFIX%_invent CASCADE</step>
-    <step id="370">CREATE TABLE %PREFIX%_menu
+    <step id="400">CREATE TABLE %PREFIX%_menu
                 (
                     men_id                         integer       unsigned not null AUTO_INCREMENT,
                     men_parent_id                  integer,
@@ -57,8 +57,8 @@
                 auto_increment = 1
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
-    <step id="380">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_parent_id)</step>
-    <step id="390">ComponentUpdate::updateStepMigrateToStandartMenu</step>
+    <step id="410">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_parent_id)</step>
+    <step id="420">ComponentUpdate::updateStepMigrateToStandartMenu</step>
 
     <step>stop</step>
 </update>
