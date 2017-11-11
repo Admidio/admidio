@@ -858,16 +858,25 @@ class User extends TableAccess
      */
     public function getAllEditableCategories($categoryType)
     {
-        $arrEditableCategories = array();
-        $flagAdministrator     = 0;
-        $rolIdParams           = array_merge(array(0), $this->getRoleMemberships());
+        $queryParams = array($categoryType, $this->organizationId);
+        $condition = '';
 
         if(($categoryType === 'ANN' && $this->editAnnouncements())
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers()))
         {
-            $flagAdministrator = 1;
+            $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+            $queryParams = array_merge($queryParams, $rolIdParams);
+            $condition = '
+                AND ( EXISTS (SELECT 1
+                                  FROM ' . TBL_ROLES_RIGHTS . '
+                            INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                    ON rrd_ror_id = ror_id
+                                 WHERE ror_name_intern = \'category_edit\'
+                                   AND rrd_object_id   = cat_id
+                                   AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                    )';
         }
 
         $sql = 'SELECT cat_id
@@ -875,29 +884,10 @@ class User extends TableAccess
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
                        OR cat_org_id = ? ) -- $this->organizationId
-                   AND ( EXISTS (SELECT 1
-                                     FROM ' . TBL_ROLES_RIGHTS . '
-                               INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
-                                       ON rrd_ror_id = ror_id
-                                    WHERE ror_name_intern = \'category_edit\'
-                                      AND rrd_object_id   = cat_id
-                                      AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
-                        OR 1 = ' . $flagAdministrator . '
-                        )';
-        $queryParams = array_merge(
-            array(
-                $categoryType,
-                $this->organizationId
-            ),
-            $rolIdParams
-        );
+                       ' . $condition;
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
-        if ($pdoStatement->rowCount() === 0)
-        {
-            return array();
-        }
-
+        $arrEditableCategories = array();
         while ($catId = $pdoStatement->fetchColumn())
         {
             $arrEditableCategories[] = (int) $catId;
@@ -943,53 +933,42 @@ class User extends TableAccess
      */
     public function getAllVisibleCategories($categoryType)
     {
-        $arrVisibleCategories = array();
-        $flagAdministrator    = 0;
-        $rolIdParams          = array_merge(array(0), $this->getRoleMemberships());
+        $queryParams = array($categoryType, $this->organizationId);
+        $condition = '';
 
         if(($categoryType === 'ANN' && $this->editAnnouncements())
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers()))
         {
-            $flagAdministrator = 1;
+            $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+            $queryParams = array_merge($queryParams, $rolIdParams);
+            $condition = '
+                AND ( EXISTS (SELECT 1
+                                FROM ' . TBL_ROLES_RIGHTS . '
+                          INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                  ON rrd_ror_id = ror_id
+                               WHERE ror_name_intern = \'category_edit\'
+                                 AND rrd_object_id   = cat_id
+                                 AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                      OR NOT EXISTS (SELECT 1
+                                       FROM ' . TBL_ROLES_RIGHTS . '
+                                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                         ON rrd_ror_id = ror_id
+                                      WHERE ror_name_intern = \'category_view\'
+                                        AND rrd_object_id   = cat_id )
+                    )';
         }
-
 
         $sql = 'SELECT cat_id
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
                        OR cat_org_id = ? ) -- $this->organizationId
-                   AND ( NOT EXISTS (SELECT 1
-                                       FROM ' . TBL_ROLES_RIGHTS . '
-                                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
-                                         ON rrd_ror_id = ror_id
-                                      WHERE ror_name_intern = \'category_view\'
-                                        AND rrd_object_id   = cat_id )
-                        OR EXISTS (SELECT 1
-                                     FROM ' . TBL_ROLES_RIGHTS . '
-                               INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
-                                       ON rrd_ror_id = ror_id
-                                    WHERE ror_name_intern = \'category_view\'
-                                      AND rrd_object_id   = cat_id
-                                      AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
-                        OR 1 = ' . $flagAdministrator . '
-                        )';
-        $queryParams = array_merge(
-            array(
-                $categoryType,
-                $this->organizationId
-            ),
-            $rolIdParams
-        );
+                       ' . $condition;
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
-        if ($pdoStatement->rowCount() === 0)
-        {
-            return array();
-        }
-
+        $arrVisibleCategories = array();
         while ($catId = $pdoStatement->fetchColumn())
         {
             $arrVisibleCategories[] = (int) $catId;
