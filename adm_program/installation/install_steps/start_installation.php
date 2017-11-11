@@ -173,41 +173,6 @@ $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
 
-// Menu entries for the standart installation
-$sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_parent_id, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
-           VALUES (1, NULL, 1, 1, NULL, NULL, \'\', \'SYS_MODULES\', \'\', 0)
-                , (2, NULL, 2, 1, NULL, NULL, \'\', \'SYS_ADMINISTRATION\', \'\', 1)
-                , (3, NULL, 3, 1, NULL, NULL, \'\', \'MEN_PLUGIN\', \'\', 1)
-                , (4, 1, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\', 0)
-                , (5, 1, 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1)
-                , (6, 1, 7, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\', 0)
-                , (7, 1, 8, 1, \'mylist\', \'/adm_program/modules/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'\', 0)
-                , (8, 1, 2, 1, \'announcements\', \'/adm_program/modules/announcements/announcements.php\', \'announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\', 1)
-                , (9, 1, 5, 1, \'photo\', \'/adm_program/modules/photos/photos.php\', \'photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\', 1)
-                , (10, 1, 6, 1, \'guestbook\', \'/adm_program/modules/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\', 1)
-                , (11, 1, 8, 1, \'dates\', \'/adm_program/modules/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\', 1)
-                , (12, 1, 9, 1, \'weblinks\', \'/adm_program/modules/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\', 1)
-                , (13, 2, 4, 1, \'dbback\', \'/adm_program/modules/backup/backup.php\', \'backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\', 0)
-                , (14, 2, 5, 1, \'orgprop\', \'/adm_program/modules/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\', 0)
-                , (15, 1, 4, 1, \'mail\', \'/adm_program/modules/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\', 0)
-                , (16, 2, 1, 1, \'newreg\', \'/adm_program/modules/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\', 0)
-                , (17, 2, 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
-                , (18, 2, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
-                , (19, 2, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
-$db->query($sql);
-
-// Menu security
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
-          VALUES (\'menu_view\', \''.$g_tbl_praefix.'_menu\')';
-$db->query($sql);
-
-// Menu security data
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-          VALUES (3, 1, 11, 1, \''. DATETIME_NOW.'\'),
-                 (3, 1, 12, 1, \''. DATETIME_NOW.'\'),
-                 (3, 1, 17, 1, \''. DATETIME_NOW.'\')';
-$db->query($sql);
-
 disableSoundexSearchIfPgsql($db);
 
 // create new organization
@@ -266,6 +231,44 @@ $systemUser->save(false); // no registered user -> UserIdCreate couldn't be fill
 
 // now set current user to system user
 $gCurrentUser->readDataById($currUsrId);
+
+// Menu entries for the standart installation
+$sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_parent_id, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
+           VALUES (1, NULL, 1, 1, NULL, NULL, \'\', \'SYS_MODULES\', \'\', 0)
+                , (2, NULL, 2, 1, NULL, NULL, \'\', \'SYS_ADMINISTRATION\', \'\', 1)
+                , (3, NULL, 3, 1, NULL, NULL, \'\', \'MEN_PLUGIN\', \'\', 1)
+                , (4, 1, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\', 0)
+                , (5, 1, 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\', 1)
+                , (6, 1, 7, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\', 0)
+                , (7, 1, 8, 1, \'mylist\', \'/adm_program/modules/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'\', 0)
+                , (8, 1, 2, 1, \'announcements\', \'/adm_program/modules/announcements/announcements.php\', \'announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\', 1)
+                , (9, 1, 5, 1, \'photo\', \'/adm_program/modules/photos/photos.php\', \'photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\', 1)
+                , (10, 1, 6, 1, \'guestbook\', \'/adm_program/modules/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\', 1)
+                , (11, 1, 8, 1, \'dates\', \'/adm_program/modules/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\', 1)
+                , (12, 1, 9, 1, \'weblinks\', \'/adm_program/modules/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\', 1)
+                , (13, 2, 4, 1, \'dbback\', \'/adm_program/modules/backup/backup.php\', \'backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\', 0)
+                , (14, 2, 5, 1, \'orgprop\', \'/adm_program/modules/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\', 0)
+                , (15, 1, 4, 1, \'mail\', \'/adm_program/modules/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\', 0)
+                , (16, 2, 1, 1, \'newreg\', \'/adm_program/modules/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\', 0)
+                , (17, 2, 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
+                , (18, 2, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
+                , (19, 2, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
+$db->query($sql);
+
+// Menu security
+$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
+          VALUES (\'menu_view\', \''.$g_tbl_praefix.'_menu\')';
+$db->query($sql);
+
+// Menu security data
+$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+          VALUES (3, 1, 13, 1, \''. DATETIME_NOW.'\'),
+                 (3, 1, 14, 1, \''. DATETIME_NOW.'\'),
+                 (3, 1, 16, 1, \''. DATETIME_NOW.'\'),
+                 (3, 1, 17, 1, \''. DATETIME_NOW.'\'),
+                 (3, 1, 18, 1, \''. DATETIME_NOW.'\'),
+                 (3, 1, 19, 1, \''. DATETIME_NOW.'\')';
+$db->query($sql);
 
 // delete session data
 session_unset();
