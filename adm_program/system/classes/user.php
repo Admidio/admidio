@@ -859,12 +859,15 @@ class User extends TableAccess
     public function getAllEditableCategories($categoryType)
     {
         $queryParams = array($categoryType, $this->organizationId);
-        $condition = '';
 
         if(($categoryType === 'ANN' && $this->editAnnouncements())
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers()))
+        {
+            $condition = '';
+        }
+        else
         {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
             $queryParams = array_merge($queryParams, $rolIdParams);
@@ -934,12 +937,15 @@ class User extends TableAccess
     public function getAllVisibleCategories($categoryType)
     {
         $queryParams = array($categoryType, $this->organizationId);
-        $condition = '';
 
         if(($categoryType === 'ANN' && $this->editAnnouncements())
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
         || ($categoryType === 'USF' && $this->editUsers()))
+        {
+            $condition = '';
+        }
+        else
         {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
             $queryParams = array_merge($queryParams, $rolIdParams);
