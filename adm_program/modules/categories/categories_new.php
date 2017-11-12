@@ -17,9 +17,7 @@
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
  * title : Parameter for the synonym of the categorie
- *
  ****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 

@@ -20,9 +20,7 @@
  *         2 - Delete category
  *         4 - Change sequence for parameter cat_id
  * sequence: New sequence for the parameter cat_id
- *
  *****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 

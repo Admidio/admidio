@@ -544,7 +544,7 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
             }
             else
             {
-                $lockBtnName = $gL10n->get('PHO_ALBUM_LOCK');                
+                $lockBtnName = $gL10n->get('PHO_ALBUM_LOCK');
                 $lockMode    = 'lock';
             }
 

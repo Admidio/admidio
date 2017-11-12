@@ -1705,7 +1705,7 @@ class HtmlForm extends HtmlFormBasic
         }
         else
         {
-            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));                        
+            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));
         }
 
         if (!$optionsAll['showSystemCategory'])
@@ -1721,7 +1721,7 @@ class HtmlForm extends HtmlFormBasic
         else
         {
             $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                                    OR cat_org_id IS NULL ) ';            
+                                    OR cat_org_id IS NULL ) ';
         }
 
         // the sql statement which returns all found categories
