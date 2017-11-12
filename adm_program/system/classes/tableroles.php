@@ -414,11 +414,12 @@ class TableRoles extends TableAccess
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue The new value that should be stored in the database field
      * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @throws AdmException
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentOrganization;
+        global $gCurrentOrganization, $gL10n;
 
         if($columnName === 'rol_cat_id')
         {
