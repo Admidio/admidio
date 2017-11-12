@@ -30,13 +30,6 @@ if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
     // => EXIT
 }
 
-// erst pruefen, ob der User auch die entsprechenden Rechte hat
-if (!$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // create weblink object
 $link = new TableWeblink($gDb);
 
@@ -46,6 +39,15 @@ if($getLinkId > 0)
 
     // check if the current user could edit this weblink
     if(!$link->editable())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+}
+else
+{
+    // check if the user has the right to edit at least one category
+    if(count($gCurrentUser->getAllEditableCategories('LNK')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -71,25 +73,30 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_CATEGORY'))));
         // => EXIT
     }
+    // check if the current user is allowed to use the selected category
+    if(!in_array((int) $_POST['lnk_cat_id'], $gCurrentUser->getAllEditableCategories('LNK'), true))
+    {        
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
 
     // make html in description secure
     $_POST['lnk_description'] = admFuncVariableIsValid($_POST, 'lnk_description', 'html');
 
-    // POST Variablen in das Ankuendigungs-Objekt schreiben
-    foreach($_POST as $key => $value) // TODO possible security issue
+    try
     {
-        if(admStrStartsWith($key, 'lnk_'))
+        // POST Variablen in das Ankuendigungs-Objekt schreiben
+        foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(!$link->setValue($key, $value))
+            if(admStrStartsWith($key, 'lnk_'))
             {
-                // Daten wurden nicht uebernommen, Hinweis ausgeben
-                if($key === 'lnk_url')
-                {
-                    $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_WEBSITE'))));
-                    // => EXIT
-                }
+                $link->setValue($key, $value);
             }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     // Link-Counter auf 0 setzen
@@ -130,10 +137,10 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
 }
 elseif ($getMode === 2 && $getLinkId > 0)
 {
-    // Loeschen von Weblinks...
+    // delete current announcements, right checks were done before
     $link->delete();
 
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Delete successful -> Return for XMLHttpRequest
     echo 'done';
 }
 else

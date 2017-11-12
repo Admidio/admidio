@@ -42,7 +42,8 @@ class TableWeblink extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser;
 
-        if($this->visible() && $gCurrentUser->editDates())
+        if($gCurrentUser->editDates()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true))
         {
             if ($gCurrentOrganization->countAllRecords() === 1)
             {
@@ -114,9 +115,21 @@ class TableWeblink extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
+        global $gL10n;
+
         if ($columnName === 'lnk_description')
         {
             return parent::setValue($columnName, $newValue, false);
+        }
+        elseif($columnName === 'lnk_cat_id')
+        {
+            $category = new TableCategory($this->db, $newValue);
+
+            if(!$category->visible() || $category->getValue('cat_type') !== 'LNK')
+            {
+                throw new AdmException('Category of the weblink '. $this->getValue('lnk_name'). ' could not be set
+                    because the category is not visible to the current user and current organization.');
+            }
         }
 
         if ($columnName === 'lnk_url' && $newValue !== '')
@@ -125,7 +138,7 @@ class TableWeblink extends TableAccess
 
             if ($newValue === false)
             {
-                return false;
+                throw new AdmException('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE'));
             }
         }
 

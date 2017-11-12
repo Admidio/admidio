@@ -13,6 +13,8 @@
  * mode - new    : create a new photo album
  *      - change : edit a photo album
  *      - delete : delete a photo album
+ *      - lock   : lock a photo album
+ *      - unlock : unlock a photo album
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
@@ -20,7 +22,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
-$getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete')));
+$getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete', 'lock', 'unlock')));
 
 // check if the module is enabled and disallow access if it's disabled
 if ((int) $gSettingsManager->get('enable_photo_module') === 0)
@@ -30,38 +32,28 @@ if ((int) $gSettingsManager->get('enable_photo_module') === 0)
     // => EXIT
 }
 
-// check if current user has right to upload photos
-if (!$gCurrentUser->editPhotoRight())
-{
-    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
-    // => EXIT
-}
-
 // Gepostete Variablen in Session speichern
 $_SESSION['photo_album_request'] = $_POST;
 
-// Fotoalbumobjekt anlegen
+// create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
 if ($getMode !== 'new' && $getPhotoId > 0)
 {
     $photoAlbum->readDataById($getPhotoId);
+}
 
-    // check whether album belongs to the current organization
-    if ((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
+// check if the user is allowed to edit this photo album
+if (!$photoAlbum->editable())
+{
+    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    // => EXIT
 }
 
 $phoId = (int) $photoAlbum->getValue('pho_id');
 
 // Speicherort mit dem Pfad aus der Datenbank
 $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $phoId;
-
-$phoBegin = $_POST['pho_begin'];
-$phoEnd   = $_POST['pho_end'];
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if ($getMode === 'new' || $getMode === 'change')
@@ -81,9 +73,9 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 
     // Beginn
-    if (strlen($phoBegin) > 0)
+    if (strlen($_POST['pho_begin']) > 0)
     {
-        $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $phoBegin);
+        $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['pho_begin']);
         if ($startDate === false)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
@@ -91,7 +83,7 @@ if ($getMode === 'new' || $getMode === 'change')
         }
         else
         {
-            $phoBegin = $startDate->format('Y-m-d');
+            $_POST['pho_begin'] = $startDate->format('Y-m-d');
         }
     }
     else
@@ -101,9 +93,9 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 
     // Ende
-    if (strlen($phoEnd) > 0)
+    if (strlen($_POST['pho_end']) > 0)
     {
-        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $phoEnd);
+        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['pho_end']);
         if ($endDate === false)
         {
             $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
@@ -111,16 +103,16 @@ if ($getMode === 'new' || $getMode === 'change')
         }
         else
         {
-            $phoEnd = $endDate->format('Y-m-d');
+            $_POST['pho_end'] = $endDate->format('Y-m-d');
         }
     }
     else
     {
-        $phoEnd = $phoBegin;
+        $_POST['pho_end'] = $_POST['pho_begin'];
     }
 
     // Anfang muss vor oder gleich Ende sein
-    if (strlen($phoEnd) > 0 && $phoEnd < $phoBegin)
+    if (strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
         // => EXIT
@@ -178,9 +170,9 @@ if ($getMode === 'new' || $getMode === 'change')
     else
     {
         // if begin date changed than the folder must also be changed
-        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $phoBegin . '_' . $getPhotoId)
+        if ($albumPath !== ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $getPhotoId)
         {
-            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $phoBegin . '_' . $phoId;
+            $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $phoId;
 
             // das komplette Album in den neuen Ordner kopieren
             $albumFolder = new Folder($albumPath);
@@ -216,12 +208,32 @@ if ($getMode === 'new' || $getMode === 'change')
 
 /**************************************************************************/
 
+// delete photo album
 elseif ($getMode === 'delete')
 {
-    // Album loeschen
     if ($photoAlbum->delete())
     {
         echo 'done';
     }
     exit();
+}
+
+// lock photo album
+elseif ($getMode === 'lock')
+{
+    $photoAlbum->setValue('pho_locked', 1);
+    $photoAlbum->save();
+
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
+}
+
+// unlock photo album
+elseif ($getMode === 'unlock')
+{
+    $photoAlbum->setValue('pho_locked', 0);
+    $photoAlbum->save();
+
+    admRedirect($gNavigation->getUrl());
+    // => EXIT
 }

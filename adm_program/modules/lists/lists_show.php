@@ -136,7 +136,7 @@ else
 // if user should not view former roles members then disallow it
 if(!$hasRightViewFormerMembers)
 {
-    $getShowFormerMembers = 0;
+    $getShowFormerMembers = false;
     $getDateFrom = DATE_NOW;
     $getDateTo   = DATE_NOW;
 }

@@ -4,6 +4,7 @@
     <string name="ANN_ANNOUNCEMENT">Ankündigung</string>
     <string name="ANN_ANNOUNCEMENTS">Ankündigungen</string>
     <string name="ANN_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
+    <string name="ANN_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
     <string name="ANN_EMAIL_NOTIFICATION_TITLE">Eine neue Ankündigung wurde angelegt</string>
     <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Es wurde eine neue Ankündigung bei #VAR1# angelegt.\n\nTitel: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Neueste Ankündigungen der Organisation #VAR1#</string>
@@ -26,6 +27,8 @@
     <string name="BAC_SUM">Summe</string>
     <string name="BAC_SECONDS_VAR">#VAR1# Sekunden</string>
     <!-- Phrases only in Category-Administration -->
+    <string name="CAT_ADMINISTRATORS_DESC">Diese Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten. Eine Rolle kann zum Administrator gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+    <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
     <string name="CAT_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
     <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
     <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
@@ -36,6 +39,7 @@
     <string name="CAT_MOVE_UP">#VAR1# nach oben verschieben</string>
     <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Diese Einstellung kann nur von der Mutterorganisation gesetzt werden.</string>
     <string name="CAT_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
+    <string name="CAT_ONLY_PARENT_ORGANIZATION">Diese Kategorie ist für alle Organisationen sichtbar und darf aus diesem Grund nur von der Elternorganisation bearbeitet werden.</string>
     <!-- Phrases only in Datesmodule -->
     <string name="DAT_ADD_DATE_TO_CALENDAR">Termin in den Kalender übernehmen</string>
     <string name="DAT_ALL_DAY">Ganztägig</string>
@@ -60,6 +64,7 @@
     <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
     <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
     <string name="DAT_EDIT_CALENDAR_DESC">Hier können Kalender angelegt und bearbeitet werden.</string>
+    <string name="DAT_EDIT_EVENTS">Termine bearbeiten</string>
     <string name="DAT_EDIT_ROOMS">Räume bearbeiten</string>
     <string name="DAT_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
     <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Ein Termin wurde geändert</string>
@@ -347,6 +352,7 @@
     <string name="LNK_CREATE_LINK">Link anlegen</string>
     <string name="LNK_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
     <string name="LNK_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)</string>
+    <string name="LNK_EDIT_WEBLINKS">Weblinks bearbeiten</string>
     <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
     <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="LNK_GO_TO">Gehe zu #VAR1#</string>
@@ -878,6 +884,7 @@
     <string name="PRO_EDIT_MY_PROFILE_PICTURE">Mein Profilfoto bearbeiten</string>
     <string name="PRO_EDIT_PASSWORD">Passwort bearbeiten</string>
     <string name="PRO_EDIT_PROFILE">Profil bearbeiten</string>
+    <string name="PRO_EDIT_PROFILE_FIELDS">Profilfelder im Profil bearbeiten</string>
     <string name="PRO_EDIT_PROFILE_PIC_FROM">Profilfoto von #VAR1# #VAR2# bearbeiten</string>
     <string name="PRO_EXPORT_VCARD">vCard exportieren</string>
     <string name="PRO_EXPORT_VCARD_FROM_VAR">vCard von #VAR1# exportieren</string>
@@ -974,6 +981,7 @@
     <string name="ROL_LINK_MEMBERSHIP_DEL">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich entfernen?</string>
     <string name="ROL_MEETINGS">Treffen</string>
     <string name="ROL_MEMBERSHIP_DEL">Willst du die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
+    <string name="ROL_MODULE_ADMINISTRATORS_DESC">Mitglieder dieser Rolle sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten.</string>
     <string name="ROL_MONTHLY">Monatlich</string>
     <string name="ROL_NEW_ROLE">Neue Rolle</string>
     <string name="ROL_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
@@ -983,11 +991,11 @@
     <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für #VAR1# #VAR2#</string>
     <string name="ROL_QUARTERLY">Vierteljährlich</string>
     <string name="ROL_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
-    <string name="ROL_RIGHT_ANNOUNCEMENTS">Ankündigungen anlegen und bearbeiten</string>
+    <string name="ROL_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
     <string name="ROL_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>
     <string name="ROL_RIGHT_ASSIGN_ROLES">Rollen verwalten und zuordnen</string>
     <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.</string>
-    <string name="ROL_RIGHT_DATES">Termine anlegen und bearbeiten</string>
+    <string name="ROL_RIGHT_DATES">Termine verwalten</string>
     <string name="ROL_RIGHT_DOWNLOAD">Downloads verwalten</string>
     <string name="ROL_RIGHT_DOWNLOAD_DESC">Rollen mit dieser Berechtigung können im Downloadmodul die Rechte vergeben, welche Rollen welche Ordner sehen oder Dateien hochladen dürfen.</string>
     <string name="ROL_RIGHT_EDIT_USER">Profildaten aller Benutzer bearbeiten</string>
@@ -999,7 +1007,7 @@
     <string name="ROL_RIGHT_PHOTO">Fotos hochladen und bearbeiten</string>
     <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
     <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
-    <string name="ROL_RIGHT_WEBLINKS">Weblinks anlegen und bearbeiten</string>
+    <string name="ROL_RIGHT_WEBLINKS">Weblinks verwalten</string>
     <string name="ROL_ROLE_ADMINISTRATION">Rollenverwaltung</string>
     <string name="ROL_ROLE_ADMINISTRATION_DESC">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</string>
     <string name="ROL_ROLE_DELETE">Rolle löschen</string>
@@ -1122,6 +1130,7 @@
     <string name="SYS_DELETED_USER">Gelöschte Person</string>
     <string name="SYS_DESCRIPTION">Beschreibung</string>
     <string name="SYS_DESIGNATION">Bezeichnung</string>
+    <string name="SYS_DISK_SPACE">Speicherplatz</string>
     <string name="SYS_DONATE">Spenden</string>
     <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
     <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>

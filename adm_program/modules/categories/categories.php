@@ -62,35 +62,65 @@ elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
 }
 
 // set module headline
-if($getTitle === '')
-{
-    if($getType === 'ROL')
-    {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
-    }
-    elseif($getType === 'LNK')
-    {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('LNK_WEBLINKS')));
-    }
-    elseif($getType === 'ANN')
-    {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
-    }
-    elseif($getType === 'USF')
-    {
-        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
-    }
-    else
-    {
-        $headline = $gL10n->get('SYS_CATEGORIES');
-    }
+$headline          = $gL10n->get('SYS_CATEGORIES');
+$addButtonText     = $gL10n->get('SYS_CATEGORY');
+$visibleHeadline   = $gL10n->get('SYS_VISIBLE_FOR');
+$editableHeadline  = '';
+$rolesRightsColumn = '';
 
-    $addButtonText = $gL10n->get('SYS_CATEGORY');
+switch ($getType)
+{
+    case 'ROL':
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
+        $visibleHeadline = '';
+        break;
+
+    case 'ANN':
+        $rolesRightsColumn = 'rol_announcements';
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ANN_ANNOUNCEMENTS')));
+        $editableHeadline = $gL10n->get('ANN_EDIT_ANNOUNCEMENTS');
+        break;
+
+    case 'DAT':
+        $rolesRightsColumn = 'rol_dates';
+        $editableHeadline = $gL10n->get('DAT_EDIT_EVENTS');
+        break;
+
+    case 'LNK':
+        $rolesRightsColumn = 'rol_weblinks';
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('LNK_WEBLINKS')));
+        $editableHeadline = $gL10n->get('LNK_EDIT_WEBLINKS');
+        break;
+
+    case 'USF':
+        $rolesRightsColumn = 'rol_edit_user';
+        $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
+        $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
+        break;
 }
-else
+
+if($getTitle !== '')
 {
     $headline      = $getTitle;
     $addButtonText = $getTitle;
+}
+
+// read all administrator roles
+
+$sqlAdminRoles = 'SELECT rol_name
+                    FROM '.TBL_ROLES.'
+              INNER JOIN '.TBL_CATEGORIES.'
+                      ON cat_id = rol_cat_id
+                   WHERE rol_valid    = 1
+                     AND '. $rolesRightsColumn .' = 1
+                     AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                ORDER BY cat_sequence, rol_name';
+$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
+
+$adminRoles = array();
+while($roleName = $statementAdminRoles->fetchColumn())
+{
+    $adminRoles[] = $roleName;
 }
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -167,24 +197,16 @@ $categoriesMenu->addItem(
 // Create table object
 $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 
-if($getType === 'ROL')
-{
-    $visibleHeadline = '';
-}
-else
-{
-    $visibleHeadline = $gL10n->get('SYS_VISIBLE_FOR');
-}
-
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" />',
     $visibleHeadline,
+    $editableHeadline,
     '&nbsp;'
 );
-$categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$categoriesOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
 $categoriesOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
@@ -246,9 +268,10 @@ while($catRow = $categoryStatement->fetch())
         $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" />';
     }
 
+    // create list with all roles that could view the category
     if($getType === 'ROL')
     {
-        $htmlRolesNames = '';
+        $htmlViewRolesNames = '';
     }
     else
     {
@@ -257,7 +280,7 @@ while($catRow = $categoryStatement->fetch())
 
         if(count($arrRolesIds) > 0)
         {
-            $htmlRolesNames = implode(', ', $rightCategoryView->getRolesNames());
+            $htmlViewRolesNames = implode(', ', array_merge($rightCategoryView->getRolesNames(), $adminRoles));
         }
         else
         {
@@ -265,32 +288,64 @@ while($catRow = $categoryStatement->fetch())
             {
                 if((int) $category->getValue('cat_org_id') === 0)
                 {
-                    $htmlRolesNames = $gL10n->get('SYS_ALL_ORGANIZATIONS').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                    $htmlViewRolesNames = $gL10n->get('SYS_ALL_ORGANIZATIONS');
                 }
                 else
                 {
-                    $htmlRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                    $htmlViewRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION');
+                }
+
+                if($getType !== 'USF')
+                {
+                    $htmlViewRolesNames .= ' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
                 }
             }
             else
             {
-                $htmlRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                $htmlViewRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
             }
         }
     }
 
-    $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $catId. '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
-                                    src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-    if($category->getValue('cat_system') == 1)
+    // create list with all roles that could edit the category
+    if($getType === 'ROL')
     {
-        $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $htmlEditRolesNames = '';
     }
     else
     {
-        $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
-                                        $catId.'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$catId.'&amp;database_id_2='.$getType.'"><img
-                                           src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+
+        if((int) $category->getValue('cat_org_id') === 0 && $gCurrentOrganization->isChildOrganization())
+        {
+            $htmlEditRolesNames = $gL10n->get('CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA');
+        }
+        else
+        {
+            $rightCategoryEdit  = new RolesRights($gDb, 'category_edit', $catId);
+            $htmlEditRolesNames = implode(', ', array_merge($rightCategoryEdit->getRolesNames(), $adminRoles));
+        }
+    }
+
+    if($category->editable())
+    {
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $catId. '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+                                        src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+
+        if($category->getValue('cat_system') == 1)
+        {
+            $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        }
+        else
+        {
+            $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
+                                            $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$catId.'&amp;database_id_2='.$getType.'"><img
+                                               src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+        }
+    }
+    else
+    {
+        $categoryAdministration = '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" /><img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
     }
 
     // create array with all column values
@@ -298,7 +353,8 @@ while($catRow = $categoryStatement->fetch())
         '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php?cat_id='. $catId. '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlDefaultCategory,
-        $htmlRolesNames,
+        $htmlViewRolesNames,
+        $htmlEditRolesNames,
         $categoryAdministration
     );
     $categoriesOverview->addRowByArray($columnValues, 'row_'. $catId);

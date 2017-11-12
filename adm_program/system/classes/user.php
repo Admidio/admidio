@@ -852,6 +852,54 @@ class User extends TableAccess
     }
 
     /**
+     * Creates an array with all categories of one type where the user has the right to edit them
+     * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @return array<int,int> Array with categories ids where user has the right to edit them
+     */
+    public function getAllEditableCategories($categoryType)
+    {
+        $queryParams = array($categoryType, $this->organizationId);
+
+        if(($categoryType === 'ANN' && $this->editAnnouncements())
+        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'LNK' && $this->editWeblinksRight())
+        || ($categoryType === 'USF' && $this->editUsers()))
+        {
+            $condition = '';
+        }
+        else
+        {
+            $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+            $queryParams = array_merge($queryParams, $rolIdParams);
+            $condition = '
+                AND ( EXISTS (SELECT 1
+                                  FROM ' . TBL_ROLES_RIGHTS . '
+                            INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                    ON rrd_ror_id = ror_id
+                                 WHERE ror_name_intern = \'category_edit\'
+                                   AND rrd_object_id   = cat_id
+                                   AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                    )';
+        }
+
+        $sql = 'SELECT cat_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = ? -- $categoryType
+                   AND (  cat_org_id IS NULL
+                       OR cat_org_id = ? ) -- $this->organizationId
+                       ' . $condition;
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        $arrEditableCategories = array();
+        while ($catId = $pdoStatement->fetchColumn())
+        {
+            $arrEditableCategories[] = (int) $catId;
+        }
+
+        return $arrEditableCategories;
+    }
+
+    /**
      * @param array<int,bool> $rightsList
      * @return array<int,int>
      */
@@ -888,40 +936,43 @@ class User extends TableAccess
      */
     public function getAllVisibleCategories($categoryType)
     {
-        $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+        $queryParams = array($categoryType, $this->organizationId);
+
+        if(($categoryType === 'ANN' && $this->editAnnouncements())
+        || ($categoryType === 'DAT' && $this->editDates())
+        || ($categoryType === 'LNK' && $this->editWeblinksRight())
+        || ($categoryType === 'USF' && $this->editUsers()))
+        {
+            $condition = '';
+        }
+        else
+        {
+            $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
+            $queryParams = array_merge($queryParams, $rolIdParams);
+            $condition = '
+                AND ( EXISTS (SELECT 1
+                                FROM ' . TBL_ROLES_RIGHTS . '
+                          INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                  ON rrd_ror_id = ror_id
+                               WHERE ror_name_intern = \'category_edit\'
+                                 AND rrd_object_id   = cat_id
+                                 AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                      OR NOT EXISTS (SELECT 1
+                                       FROM ' . TBL_ROLES_RIGHTS . '
+                                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
+                                         ON rrd_ror_id = ror_id
+                                      WHERE ror_name_intern = \'category_view\'
+                                        AND rrd_object_id   = cat_id )
+                    )';
+        }
 
         $sql = 'SELECT cat_id
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
                        OR cat_org_id = ? ) -- $this->organizationId
-                   AND ( NOT EXISTS (SELECT 1
-                                       FROM ' . TBL_ROLES_RIGHTS . '
-                                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
-                                         ON rrd_ror_id = ror_id
-                                      WHERE ror_name_intern = \'category_view\'
-                                        AND rrd_object_id   = cat_id )
-                        OR EXISTS (SELECT 1
-                                     FROM ' . TBL_ROLES_RIGHTS . '
-                               INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '
-                                       ON rrd_ror_id = ror_id
-                                    WHERE ror_name_intern = \'category_view\'
-                                      AND rrd_object_id   = cat_id
-                                      AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
-                        )';
-        $queryParams = array_merge(
-            array(
-                $categoryType,
-                $this->organizationId
-            ),
-            $rolIdParams
-        );
+                       ' . $condition;
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
-
-        if ($pdoStatement->rowCount() === 0)
-        {
-            return array();
-        }
 
         $arrVisibleCategories = array();
         while ($catId = $pdoStatement->fetchColumn())

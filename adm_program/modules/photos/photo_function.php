@@ -84,17 +84,13 @@ function tryRename($path, $newPath)
 }
 
 /**
- * Loeschen eines Bildes
+ * Delete the photo from the filesystem and update number of photos in database.
+ * @param TablePhotos $photoAlbum
  * @param int $phoId
  * @param int $picNr
  */
-function deletePhoto($phoId, $picNr)
+function deletePhoto(TablePhotos $photoAlbum, $phoId, $picNr)
 {
-    global $gDb;
-
-    // einlesen des Albums
-    $photoAlbum = new TablePhotos($gDb, $phoId);
-
     // Speicherort
     $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
@@ -136,15 +132,22 @@ function deletePhoto($phoId, $picNr)
     $photoAlbum->save();
 }
 
-// Foto um 90° drehen
+// create photo album object
+$photoAlbum = new TablePhotos($gDb, $getPhotoId);
+
+// check if the user is allowed to edit this photo album
+if (!$photoAlbum->editable())
+{
+    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
+    // => EXIT
+}
+
+// Rotate the photo by 90°
 if ($getJob === 'rotate')
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
     if ($getDirection !== '')
     {
-        // Aufruf des ggf. uebergebenen Albums
-        $photoAlbum = new TablePhotos($gDb, $getPhotoId);
-
         // Thumbnail loeschen
         deleteThumbnail($photoAlbum, $getPhotoNr);
 
@@ -157,17 +160,10 @@ if ($getJob === 'rotate')
         $image->delete();
     }
 }
+// delete photo from filesystem and update photo album
 elseif ($getJob === 'delete')
 {
-    // das entsprechende Bild wird physikalisch und in der DB geloescht
-    deletePhoto($getPhotoId, $getPhotoNr);
-
-    // Neu laden der Albumdaten
-    $photoAlbum = new TablePhotos($gDb);
-    if ($getPhotoId > 0)
-    {
-        $photoAlbum->readDataById($getPhotoId);
-    }
+    deletePhoto($photoAlbum, $getPhotoId, $getPhotoNr);
 
     $_SESSION['photo_album'] = $photoAlbum;
 

@@ -46,23 +46,16 @@ if (!$gSettingsManager->getBool('photo_download_enabled'))
     // => EXIT
 }
 
-// Fotoalbumobjekt anlegen
+// create photo album object
 $photoAlbum = new TablePhotos($gDb);
 
 // get id of album
 $photoAlbum->readDataById($getPhotoId);
 
-// check whether album belongs to the current organization
-if ((int) $photoAlbum->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+// check if the current user could view this photo album
+if(!$photoAlbum->visible())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
-// check whether album is locked
-if ($photoAlbum->getValue('pho_locked') == 1 && !$gCurrentUser->editPhotoRight())
-{
-    $gMessage->show($gL10n->get('PHO_ALBUM_NOT_APPROVED'));
     // => EXIT
 }
 

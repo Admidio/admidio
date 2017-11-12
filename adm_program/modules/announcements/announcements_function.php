@@ -25,13 +25,6 @@ if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
     // => EXIT
 }
 
-// pruefen, ob der User auch die entsprechenden Rechte hat
-if(!$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-
 // Initialize and check the parameters
 $getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'int');
 $getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
@@ -43,8 +36,17 @@ if($getAnnId > 0)
 {
     $announcement->readDataById($getAnnId);
 
-    // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
+    // check if the user has the right to edit this announcement
     if(!$announcement->editable())
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
+}
+else
+{
+    // check if the user has the right to edit at least one category
+    if(count($gCurrentUser->getAllEditableCategories('ANN')) === 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -65,43 +67,49 @@ if($getMode === 1)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TEXT'))));
         // => EXIT
     }
-
-    // make html in description secure
-    $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
-
-    // POST Variablen in das Ankuendigungs-Objekt schreiben
-    foreach($_POST as $key => $value) // TODO possible security issue
-    {
-        if(admStrStartsWith($key, 'ann_'))
-        {
-            $announcement->setValue($key, $value);
-        }
-    }
-
-    // Daten in Datenbank schreiben
-    $returnValue = $announcement->save();
-
-    if($returnValue === false)
+    // check if the current user is allowed to use the selected category
+    if(!in_array((int) $_POST['ann_cat_id'], $gCurrentUser->getAllEditableCategories('ANN'), true))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
-    else
-    {
-        if($getAnnId === 0)
-        {
-            $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
 
-            try
+    // make html in description secure
+    $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
+
+    try
+    {
+        // POST Variablen in das Ankuendigungs-Objekt schreiben
+        foreach($_POST as $key => $value) // TODO possible security issue
+        {
+            if(admStrStartsWith($key, 'ann_'))
             {
+                $announcement->setValue($key, $value);
+            }
+        }
+
+        // Daten in Datenbank schreiben
+        $returnValue = $announcement->save();
+
+        if($returnValue === false)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
+        else
+        {
+            if($getAnnId === 0)
+            {
+                $message = $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'])));
+
                 $notification = new Email();
                 $notification->adminNotification($gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
-            catch(AdmException $e)
-            {
-                $e->showHtml();
-            }
         }
+    }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
     }
 
     unset($_SESSION['announcements_request']);
@@ -112,12 +120,9 @@ if($getMode === 1)
 }
 elseif($getMode === 2)
 {
-    // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
-    if((int) $announcement->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-    {
-        $announcement->delete();
+    // delete current announcements, right checks were done before
+    $announcement->delete();
 
-        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-        echo 'done';
-    }
+    // Delete successful -> Return for XMLHttpRequest
+    echo 'done';
 }

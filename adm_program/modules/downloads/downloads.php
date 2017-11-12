@@ -220,7 +220,7 @@ if (isset($folderContent['files']))
                 <img src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
             '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
             $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
-            $nextFile['fil_size']. ' kB&nbsp;',
+            round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
             ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : '0'
         );
 
@@ -316,7 +316,7 @@ if ($gCurrentUser->editDownloadRight())
                 $columnValues = array(
                     '<img src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
                     $nextFile['fil_name'],
-                    $nextFile['fil_size']. ' kB&nbsp;',
+                    round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
                     '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
                         <img src="'. THEME_URL. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" />
                     </a>'

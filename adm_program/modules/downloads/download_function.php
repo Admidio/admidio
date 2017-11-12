@@ -416,6 +416,9 @@ elseif ($getMode === 7)
 
     try
     {
+        $postIntRolesViewRight   = array_map('intval', $_POST['adm_roles_view_right']);
+        $postIntRolesUploadRight = array_map('intval', $_POST['adm_roles_upload_right']);
+
         // get recordset of current folder from database
         $folder->getFolderForDownload($getFolderId);
 
@@ -435,10 +438,10 @@ elseif ($getMode === 7)
         $rolesFolderUpload = $rightFolderUpload->getRolesIds();
 
         // get new roles and removed roles
-        $addUploadRoles = array_diff($_POST['adm_roles_upload_right'], $rolesFolderUpload);
-        $removeUploadRoles = array_diff($rolesFolderUpload, $_POST['adm_roles_upload_right']);
+        $addUploadRoles = array_diff($postIntRolesUploadRight, $rolesFolderUpload);
+        $removeUploadRoles = array_diff($rolesFolderUpload, $postIntRolesUploadRight);
 
-        if(in_array('0', $_POST['adm_roles_view_right'], true))
+        if(in_array(0, $postIntRolesViewRight, true))
         {
             // set flag public for this folder and all child folders
             $folder->editPublicFlagOnFolder(true);
@@ -451,8 +454,8 @@ elseif ($getMode === 7)
             $folder->editPublicFlagOnFolder(false);
 
             // get new roles and removed roles
-            $addViewRoles = array_merge(array_diff($_POST['adm_roles_view_right'], $rolesFolderView), $_POST['adm_roles_upload_right'], $rolesFolderUpload);
-            $removeViewRoles = array_diff($rolesFolderView, $_POST['adm_roles_view_right']);
+            $addViewRoles = array_unique(array_merge(array_diff($postIntRolesViewRight, $rolesFolderView), $postIntRolesUploadRight, $rolesFolderUpload));
+            $removeViewRoles = array_diff($rolesFolderView, $postIntRolesViewRight);
 
             $folder->addRolesOnFolder('folder_view', $addViewRoles);
             $folder->removeRolesOnFolder('folder_view', $removeViewRoles);
