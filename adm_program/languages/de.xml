@@ -1122,7 +1122,7 @@
     <string name="SYS_DELETED_USER">Gelöschte Person</string>
     <string name="SYS_DESCRIPTION">Beschreibung</string>
     <string name="SYS_DESIGNATION">Bezeichnung</string>
-    <string name="SYS_DISK_SPACE">Speicherplatz-Belegung</string>
+    <string name="SYS_DISK_SPACE">Speicherplatz</string>
     <string name="SYS_DONATE">Spenden</string>
     <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
     <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
