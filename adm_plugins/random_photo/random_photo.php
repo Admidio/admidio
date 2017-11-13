@@ -157,14 +157,14 @@ else
 
 // Ausgabe
 $phoId = (int) $album->getValue('pho_id');
-echo '<a class="'.$plg_link_class.'" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$phoId.'&amp;photo_nr='.$picNr.'" target="'. $plg_link_target. '"><img
+echo '<a class="'.$plg_link_class.'" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId, 'photo_nr' => $picNr)).'" target="'. $plg_link_target. '"><img
     class="thumbnail" alt="'.$linkText.'" title="'.$linkText.'"
-    src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$phoId.'&amp;photo_nr='.$picNr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'" /></a>';
+    src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $picNr, 'pho_begin' => $album->getValue('pho_begin', 'Y-m-d'), 'max_width' => $plg_photos_max_width, 'max_height' => $plg_photos_max_height)).'" /></a>';
 
 // Link zum Album
 if($plg_photos_show_link)
 {
-    echo '<a class="'.$plg_link_class.'" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$phoId.'" target="'.$plg_link_target.'">'.$linkText.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $phoId)).'" target="'.$plg_link_target.'">'.$linkText.'</a>';
 }
 
 echo '</div>';
