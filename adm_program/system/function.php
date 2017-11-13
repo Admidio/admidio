@@ -762,6 +762,62 @@ function admFuncCheckUrl($url)
 }
 
 /**
+ * Escape all HTML, JavaScript, and CSS
+ * @param string $input    The input string
+ * @param string $encoding Define character encoding tue use
+ * @return string Escaped string
+ */
+function noHTML($input, $encoding = 'UTF-8')
+{
+    // backwards compatibility for PHP-Version < 5.4
+    if (!defined('ENT_HTML5'))
+    {
+        return htmlentities($input, ENT_QUOTES, $encoding);
+    }
+
+    return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+}
+
+/**
+ * @param string              $path
+ * @param array<string,mixed> $params
+ * @param string              $anchor
+ * @param bool                $escape
+ * @return string
+ */
+function safeUrl($path, array $params = array(), $anchor = '', $escape = true)
+{
+    $paramsText = '';
+    if (count($params) > 0)
+    {
+        // backwards compatibility for PHP-Version < 5.4
+        if (defined('ENT_HTML5'))
+        {
+            $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+        }
+        else
+        {
+            $paramsText = '?' . http_build_query($params, '', '&');
+        }
+    }
+
+    $anchorText = '';
+    if ($anchor !== '')
+    {
+        $anchorText = '#' . rawurlencode($anchor);
+    }
+
+    $url = $path . $paramsText . $anchorText;
+
+    if ($escape)
+    {
+        return noHTML($url);
+    }
+
+    return $url;
+}
+
+/**
  * This is a safe method for redirecting.
  * @param string $url        The URL where redirecting to. Must be a absolute URL. (www.example.org)
  * @param int    $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
@@ -812,23 +868,6 @@ function admRedirect($url, $statusCode = 303)
 
     header('Location: ' . $redirectUrl, true, $statusCode);
     exit();
-}
-
-/**
- * Escape all HTML, JavaScript, and CSS
- * @param string $input    The input string
- * @param string $encoding Define character encoding tue use
- * @return string Escaped string
- */
-function noHTML($input, $encoding = 'UTF-8')
-{
-    // backwards compatibility for PHP-Version < 5.4
-    if (!defined('ENT_HTML5'))
-    {
-        return htmlentities($input, ENT_QUOTES, $encoding);
-    }
-
-    return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
 }
 
 /**
