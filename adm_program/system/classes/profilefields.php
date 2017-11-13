@@ -188,7 +188,7 @@ class ProfileFields
                                 $value2 = $this->mUserId;
                             }
 
-                            $emailLink = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php?usr_id=' . $value2;
+                            $emailLink = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('usr_id' => $value2));
                         }
                         if (strlen($value) > 30)
                         {
@@ -300,7 +300,7 @@ class ProfileFields
                 {
                     // facebook has two different profile urls (id and facebook name),
                     // we could only store one way in database (facebook name) and the other (id) is defined here
-                    $htmlValue = '<a href="https://www.facebook.com/profile.php?id=' . $value . '" target="_blank">' . $htmlValue . '</a>';
+                    $htmlValue = '<a href="' . safeUrl('https://www.facebook.com/profile.php', array('id' => $value)) . '" target="_blank">' . $htmlValue . '</a>';
                 }
                 else
                 {

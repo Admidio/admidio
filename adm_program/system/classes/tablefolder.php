@@ -544,8 +544,8 @@ class TableFolder extends TableAccess
 
             if ($currentFolderRow->fol_fol_id_parent)
             {
-                $currentNavigation = '<li><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php?folder_id='.
-                    $currentFolderRow->fol_id.'">'.$currentFolderRow->fol_name.'</a></li>'.$currentNavigation;
+                $currentNavigation = '<li><a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $currentFolderRow->fol_id)).
+                    '">'.$currentFolderRow->fol_name.'</a></li>'.$currentNavigation;
 
                 // Next call with parent folder
                 return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
@@ -576,7 +576,7 @@ class TableFolder extends TableAccess
         $link = '
             <ol class="breadcrumb">
                 <li>
-                    <a class="btn" href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php?folder_id='.$rootFolderId.'"><img
+                    <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $rootFolderId)).'"><img
                     src="'.THEME_URL.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a>
                 </li>'.
                 $currentNavigation.

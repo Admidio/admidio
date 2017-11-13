@@ -614,8 +614,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameCreated = '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php?user_id=' .
-                                $userIdCreated . '">' . $userNameCreated . '</a>';
+            $userNameCreated = '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdCreated)) .
+                               '">' . $userNameCreated . '</a>';
         }
 
         $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY', array($userNameCreated, $timestampCreate)) . '</span>';
@@ -634,8 +634,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameEdited = '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php?user_id=' .
-                               $userIdEdited . '">' . $userNameEdited . '</a>';
+            $userNameEdited = '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdEdited)) .
+                              '">' . $userNameEdited . '</a>';
         }
 
         $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', array($userNameEdited, $timestampEdited)) . '</span>';
@@ -863,7 +863,7 @@ function admRedirect($url, $statusCode = 303)
     {
         $gLogger->notice('REDIRECT: Redirecting to external URL!', $loggerObject);
 
-        $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
+        $redirectUrl = safeUrl(ADMIDIO_URL . '/adm_program/system/redirect.php', array('url' => $url));
     }
 
     header('Location: ' . $redirectUrl, true, $statusCode);

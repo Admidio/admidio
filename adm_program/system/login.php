@@ -87,12 +87,12 @@ if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_syste
 elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
 {
     // show link of message module to send mail to administrator role
-    $forgotPasswordLink = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?rol_id='.$roleAdministrator->getValue('rol_id').'&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+    $forgotPasswordLink = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
 }
 else
 {
     // show link to send mail with local mail-client to administrator
-    $forgotPasswordLink = 'mailto:'.$gPreferences['email_administrator'].'?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+    $forgotPasswordLink = safeUrl('mailto:'.$gPreferences['email_administrator'], array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
 }
 
 $page->addHtml('
