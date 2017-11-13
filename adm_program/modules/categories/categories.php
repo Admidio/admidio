@@ -42,15 +42,15 @@ if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
 }
 
 // set module headline
-$headline          = $gL10n->get('SYS_CATEGORIES');
-$addButtonText     = $gL10n->get('SYS_CATEGORY');
-$visibleHeadline   = $gL10n->get('SYS_VISIBLE_FOR');
-$editableHeadline  = '';
-$rolesRightsColumn = '';
+$headline         = $gL10n->get('SYS_CATEGORIES');
+$addButtonText    = $gL10n->get('SYS_CATEGORY');
+$visibleHeadline  = $gL10n->get('SYS_VISIBLE_FOR');
+$editableHeadline = '';
 
 switch ($getType)
 {
     case 'ROL':
+        $rolesRightsColumn = 'rol_assign_roles';
         $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
         $visibleHeadline = '';
         break;
@@ -77,6 +77,10 @@ switch ($getType)
         $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
         $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
         break;
+
+    default:
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
 }
 
 if($getTitle !== '')
