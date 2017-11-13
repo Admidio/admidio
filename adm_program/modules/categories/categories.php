@@ -30,32 +30,12 @@ $getType  = admFuncVariableIsValid($_GET, 'type',  'string', array('requireValue
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
+if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
+||  ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
+||  ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
+||  ($getType === 'USF' && !$gCurrentUser->editUsers())
+||  ($getType === 'DAT' && !$gCurrentUser->editDates())
+||  ($getType === 'AWA' && !$gCurrentUser->editUsers()))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
@@ -111,9 +91,9 @@ $sqlAdminRoles = 'SELECT rol_name
                     FROM '.TBL_ROLES.'
               INNER JOIN '.TBL_CATEGORIES.'
                       ON cat_id = rol_cat_id
-                   WHERE rol_valid    = 1
+                   WHERE rol_valid  = 1
                      AND '. $rolesRightsColumn .' = 1
-                     AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                     AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                 ORDER BY cat_sequence, rol_name';
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
 
