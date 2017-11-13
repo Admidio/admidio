@@ -422,8 +422,8 @@ $page->addHtml('
                                     ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
                                     ',%20'. urlencode($gCurrentUser->getValue('CITY')).
                                     ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
-                                $mapUrl   = 'https://www.google.com/maps?q=';
-                                $routeUrl = 'https://www.google.com/maps?f=d&amp;saddr=' . $origin . '&amp;daddr=' . $urlParam;
+                                $mapUrl   = 'https://www.google.com/maps/search/?api=1&amp;query=' . $urlParam;
+                                $routeUrl = 'https://www.google.com/maps/dir/?api=1&amp;origin=' . $origin . '&amp;destination=' . $urlParam;
 
                                 // show route or address link if function is enabled and user has filled address or city
                                 if($gPreferences['profile_show_map_link'] && strlen($street) > 0
