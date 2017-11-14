@@ -10,18 +10,19 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-
-// check if the call of the page was allowed
-if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1 && $gPreferences['enable_chat_module'] != 1)
-{
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-    // => EXIT
-}
+require_once(__DIR__ . '/messages_functions.php');
 
 // check for valid login
 if (!$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // => EXIT
+}
+
+// check if the call of the page was allowed
+if ($gPreferences['enable_pm_module'] == 0 && $gPreferences['enable_mail_module'] == 0 && $gPreferences['enable_chat_module'] == 0)
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
@@ -55,12 +56,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-// get module menu for emails
-$emailMenu = $page->getMenu();
+// get module menu for messages
+$messagesMenu = $page->getMenu();
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1)
 {
-    $emailMenu->addItem(
+    $messagesMenu->addItem(
         'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
         $gL10n->get('MAI_SEND_EMAIL'), '/email.png'
     );
@@ -68,7 +69,7 @@ if ($gPreferences['enable_mail_module'] == 1)
 // link to write new PM
 if ($gPreferences['enable_pm_module'] == 1)
 {
-    $emailMenu->addItem(
+    $messagesMenu->addItem(
         'admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM',
         $gL10n->get('PMS_SEND_PM'), '/pm.png'
     );
@@ -77,15 +78,15 @@ if ($gPreferences['enable_pm_module'] == 1)
 // link to Chat
 if ($gPreferences['enable_chat_module'] == 1)
 {
-    $emailMenu->addItem(
+    $messagesMenu->addItem(
         'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',
         $gL10n->get('MSG_CHAT'), '/chat.png'
     );
 }
 
-if($gCurrentUser->isAdministrator())
+if ($gCurrentUser->isAdministrator())
 {
-    $emailMenu->addItem(
+    $messagesMenu->addItem(
         'admMenuItemPreferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=messages',
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
@@ -103,116 +104,74 @@ $table->addRowHeadingByArray(array(
     ''
 ));
 $table->disableDatatablesColumnsSort(array(5));
-$key = 0;
-$part1 = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_';
-$part2 = '"><img src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('MSG_REMOVE').'" title="'.$gL10n->get('MSG_REMOVE').'" /></a>';
-$href  = 'href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_id=';
 
 // open some additional functions for messages
 $moduleMessages = new ModuleMessages();
-
 $usrId = (int) $gCurrentUser->getValue('usr_id');
+$rowIndex = 0;
 
 // find all own Email messages
-$statement = $moduleMessages->msgGetUserEmails($usrId);
-if(isset($statement))
+$allEmailsStatement = $moduleMessages->msgGetUserEmails($usrId);
+while ($row = $allEmailsStatement->fetch())
 {
-    require_once(__DIR__ . '/messages_functions.php');
+    ++$rowIndex;
+    $msgId = (int) $row['msg_id'];
+    $message = new TableMessage($gDb, $msgId);
+    $msgSubject = $message->getValue('msg_subject');
 
-    while ($row = $statement->fetch())
-    {
-        $receiverName = prepareReceivers($row['user']);
-
-        $message = new TableMessage($gDb, $row['msg_id']);
-        ++$key;
-
-        $messageAdministration = $part1 . $key . '&amp;name='.urlencode($message->getValue('msg_subject')).'&amp;database_id=' . $message->getValue('msg_id') . $part2;
-
-        $table->addRowByArray(
-            array(
-                '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') .'">
-                    <img class="admidio-icon-info" src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />
-                </a>',
-                '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $receiverName,
-                $message->getValue('msg_timestamp'),
-                $messageAdministration
-            ),
-            'row_message_'.$key
-        );
-    }
+    $table->addRowByArray(
+        array(
+            getMessageIcon($msgId, 'email.png', $gL10n->get('SYS_EMAIL')),
+            getMessageLink($msgId, $msgSubject),
+            prepareReceivers($row['user']),
+            $message->getValue('msg_timestamp'),
+            getAdministrationLink($rowIndex, $msgId, $msgSubject)
+        ),
+        'row_message_'.$rowIndex
+    );
 }
 
 // find all unread PM messages
-$statement = $moduleMessages->msgGetUserUnread($usrId);
-if(isset($statement))
+$pmUnreadStatement = $moduleMessages->msgGetUserUnread($usrId);
+while ($row = $pmUnreadStatement->fetch())
 {
-    while ($row = $statement->fetch())
-    {
-        if((int) $row['msg_usr_id_sender'] === $usrId)
-        {
-            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
-        }
-        else
-        {
-            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
-        }
-        $receiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-        $message = new TableMessage($gDb, $row['msg_id']);
-        ++$key;
+    ++$rowIndex;
+    $msgId = (int) $row['msg_id'];
+    $message = new TableMessage($gDb, $msgId);
+    $msgSubject = $message->getValue('msg_subject');
 
-        $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
-
-        $table->addRowByArray(
-            array(
-                '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
-                    <img class="admidio-icon-info" src="'. THEME_URL. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
-                </a>',
-                '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $receiverName,
-                $message->getValue('msg_timestamp'),
-                $messageAdministration
-            ),
-            'row_message_'.$key,
-            array('style' => 'font-weight: bold')
-        );
-    }
+    $table->addRowByArray(
+        array(
+            getMessageIcon($msgId, 'pm.png', $gL10n->get('PMS_MESSAGE')),
+            getMessageLink($msgId, $msgSubject),
+            getReceiverName($row, $usrId),
+            $message->getValue('msg_timestamp'),
+            getAdministrationLink($rowIndex, $msgId, $msgSubject)
+        ),
+        'row_message_'.$rowIndex,
+        array('style' => 'font-weight: bold')
+    );
 }
 
 // find all read or own PM messages
-$statement = $moduleMessages->msgGetUser($usrId);
-if(isset($statement))
+$pwReadOrOwnStatement = $moduleMessages->msgGetUser($usrId);
+while ($row = $pwReadOrOwnStatement->fetch())
 {
-    while ($row = $statement->fetch())
-    {
-        if((int) $row['msg_usr_id_sender'] === $usrId)
-        {
-            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
-        }
-        else
-        {
-            $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
-        }
+    ++$rowIndex;
+    $msgId = (int) $row['msg_id'];
+    $message = new TableMessage($gDb, $msgId);
+    $msgSubject = $message->getValue('msg_subject');
 
-        $receiverName = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-        $message = new TableMessage($gDb, $row['msg_id']);
-        ++$key;
-
-        $messageAdministration = $part1 . $key . '&amp;name=' . urlencode($message->getValue('msg_subject')) . '&amp;database_id=' . $message->getValue('msg_id') . $part2;
-
-        $table->addRowByArray(
-            array(
-                '<a class="admidio-icon-link" '. $href . $message->getValue('msg_id') . '">
-                    <img class="admidio-icon-info" src="'. THEME_URL. '/icons/pm.png" alt="'.$gL10n->get('PMS_MESSAGE').'" title="'.$gL10n->get('PMS_MESSAGE').'" />
-                </a>',
-                '<a '. $href .$message->getValue('msg_id').'">'.$message->getValue('msg_subject').'</a>',
-                $receiverName,
-                $message->getValue('msg_timestamp'),
-                $messageAdministration
-            ),
-            'row_message_'.$key
-        );
-    }
+    $table->addRowByArray(
+        array(
+            getMessageIcon($msgId, 'pm.png', $gL10n->get('PMS_MESSAGE')),
+            getMessageLink($msgId, $msgSubject),
+            getReceiverName($row, $usrId),
+            $message->getValue('msg_timestamp'),
+            getAdministrationLink($rowIndex, $msgId, $msgSubject)
+        ),
+        'row_message_'.$rowIndex
+    );
 }
 
 // special settings for the table

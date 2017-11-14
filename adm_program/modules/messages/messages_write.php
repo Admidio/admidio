@@ -24,12 +24,12 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMsgType     = admFuncVariableIsValid($_GET, 'msg_type',     'string');
-$getUserId      = admFuncVariableIsValid($_GET, 'usr_id',       'int');
-$getSubject     = admFuncVariableIsValid($_GET, 'subject',      'html');
-$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id',       'int');
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id',       'int');
-$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy',  'bool', array('defaultValue' => false));
+$getMsgType    = admFuncVariableIsValid($_GET, 'msg_type',    'string');
+$getUserId     = admFuncVariableIsValid($_GET, 'usr_id',      'int');
+$getSubject    = admFuncVariableIsValid($_GET, 'subject',     'html');
+$getMsgId      = admFuncVariableIsValid($_GET, 'msg_id',      'int');
+$getRoleId     = admFuncVariableIsValid($_GET, 'rol_id',      'int');
+$getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
 $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
 
 // Check form values
@@ -43,8 +43,8 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if (($gPreferences['enable_mail_module'] != 1 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
-   || ($gPreferences['enable_pm_module'] != 1 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
+if (($gPreferences['enable_mail_module'] == 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+   || ($gPreferences['enable_pm_module'] == 0 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -81,7 +81,7 @@ if ($getMsgId > 0)
 }
 
 $maxNumberRecipients = 1;
-if ($gPreferences['mail_max_receiver'] > 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gPreferences['mail_max_receiver'] > 0)
 {
     $maxNumberRecipients = $gPreferences['mail_max_receiver'];
 }
@@ -459,22 +459,21 @@ elseif (!isset($messageStatement))
     {
         $maxNumberRecipients = 1;
         // list all roles where guests could send mails to
-        $sql = 'SELECT rol_id, rol_name, cat_name
+        $sql = 'SELECT rol_id, rol_name
                   FROM '.TBL_ROLES.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = rol_cat_id
                    AND (  cat_org_id = ? -- $currOrgId
                        OR cat_org_id IS NULL)
                  WHERE rol_mail_this_role = 3
-                   AND rol_valid  = 1
-              ORDER BY cat_sequence, rol_name ';
+                   AND rol_valid = 1
+              ORDER BY cat_sequence, rol_name';
 
         $statement = $gDb->queryPrepared($sql, array($currOrgId));
         while ($row = $statement->fetch())
         {
             $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
         }
-
     }
 
     if($postListId > 0)
