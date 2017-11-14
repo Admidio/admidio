@@ -396,16 +396,15 @@ else
 
             if($gPreferences['dates_show_map_link'] && $countLocationWords > 1 && $getViewMode === 'html')
             {
+                $urlParam = $dateLocation;
+
                 $dateCountry = $date->getValue('dat_country');
-
-                // Create Google-Maps-Link for location
-                $locationUrl = 'https://www.google.com/maps?q='.$dateLocation;
-
                 if($dateCountry !== '')
                 {
                     // Better results with additional country information
-                    $locationUrl .= ',%20'.$dateCountry;
+                    $urlParam .= ', ' . $dateCountry;
                 }
+                $locationUrl = safeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => $urlParam));
 
                 $outputLinkLocation = '
                     <a href="' . $locationUrl . '" target="_blank" title="' . $gL10n->get('DAT_SHOW_ON_MAP') . '"/>
@@ -416,28 +415,22 @@ else
                 if($gValidLogin && $gCurrentUser->getValue('STREET') !== ''
                 && ($gCurrentUser->getValue('POSTCODE') !== '' || $gCurrentUser->getValue('CITY') !== ''))
                 {
-                    $routeUrl = 'https://www.google.com/maps?f=d&amp;saddr=' . urlencode($gCurrentUser->getValue('STREET'));
+                    $routeOriginParam = array($gCurrentUser->getValue('STREET'));
 
                     if($gCurrentUser->getValue('POSTCODE') !== '')
                     {
-                        $routeUrl .= ',%20' . urlencode($gCurrentUser->getValue('POSTCODE'));
+                        $routeOriginParam[] = $gCurrentUser->getValue('POSTCODE');
                     }
                     if($gCurrentUser->getValue('CITY') !== '')
                     {
-                        $routeUrl .= ',%20' . urlencode($gCurrentUser->getValue('CITY'));
+                        $routeOriginParam[] = $gCurrentUser->getValue('CITY');
                     }
                     if($gCurrentUser->getValue('COUNTRY') !== '')
                     {
-                        $routeUrl .= ',%20' . urlencode($gCurrentUser->getValue('COUNTRY'));
+                        $routeOriginParam[] = $gCurrentUser->getValue('COUNTRY');
                     }
 
-                    $routeUrl .= '&amp;daddr=' . urlencode($dateLocation);
-
-                    if($dateCountry !== '')
-                    {
-                        // With information about country Google finds the location much better
-                        $routeUrl .= ',%20' . $dateCountry;
-                    }
+                    $routeUrl = safeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(', ', $routeOriginParam), 'destination' => $urlParam));
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="' . $routeUrl . '" target="_blank">
