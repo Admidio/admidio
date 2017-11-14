@@ -703,8 +703,8 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
  */
 function admGetDiskSpace($path = '/')
 {
-    $total = disk_total_space($path);
-    $free = disk_free_space($path);
+    $total = (int) disk_total_space($path);
+    $free = (int) disk_free_space($path);
     $used = $total - $free;
 
     return array('total' => $total, 'free' => $free, 'used' => $used);
