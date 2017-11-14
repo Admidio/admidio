@@ -29,8 +29,6 @@ $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
-$getHeadline = urlencode($getHeadline);
-
 // check if the module is enabled and disallow access if it's disabled
 if ($gPreferences['enable_guestbook_module'] == 0)
 {
