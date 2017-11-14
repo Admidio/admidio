@@ -239,7 +239,7 @@ class RolesRights extends TableAccess
             if((int) $this->getValue('ror_ror_id_parent') > 0)
             {
                 $parentRight      = new TableAccess($this->db, TBL_ROLES_RIGHTS, 'ror', $this->getValue('ror_ror_id_parent'));
-                $parentRolesRight = new RolesRights($this->db, $parentRight->getValue('ror_name_intern'), $this->objectId);
+                $parentRolesRight = new self($this->db, $parentRight->getValue('ror_name_intern'), $this->objectId);
                 $parentRolesRight->saveRolesOfChildRight($roleIds);
             }
         }

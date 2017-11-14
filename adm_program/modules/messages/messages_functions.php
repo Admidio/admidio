@@ -11,6 +11,30 @@
  */
 
 /**
+ * @param int    $msgId
+ * @param string $icon
+ * @param string $title
+ * @return string
+ */
+function getMessageIcon($msgId, $icon, $title)
+{
+    return '
+        <a class="admidio-icon-link" href="' . ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php?msg_id=' . $msgId . '">
+            <img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $icon . '" alt="' . $title . '" title="' . $title . '" />
+        </a>';
+}
+
+/**
+ * @param int    $msgId
+ * @param string $msgSubject
+ * @return string
+ */
+function getMessageLink($msgId, $msgSubject)
+{
+    return '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php?msg_id=' . $msgId . '">' . $msgSubject . '</a>';
+}
+
+/**
  * @param string $receiversString
  * @return string
  */
@@ -39,4 +63,42 @@ function prepareReceivers($receiversString)
     }
 
     return substr($receiverNames, 2);
+}
+
+/**
+ * @param array<string,mixed> $row
+ * @param int                 $usrId
+ * @return string
+ */
+function getReceiverName($row, $usrId)
+{
+    global $gDb, $gProfileFields;
+
+    if ((int) $row['msg_usr_id_sender'] === $usrId)
+    {
+        $user = new User($gDb, $gProfileFields, $row['msg_usr_id_receiver']);
+    }
+    else
+    {
+        $user = new User($gDb, $gProfileFields, $row['msg_usr_id_sender']);
+    }
+
+    return $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+}
+
+/**
+ * @param int    $rowIndex
+ * @param int    $msgId
+ * @param string $msgSubject
+ * @return string
+ */
+function getAdministrationLink($rowIndex, $msgId, $msgSubject)
+{
+    global $gL10n;
+
+    return '
+        <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+            href="' . ADMIDIO_URL . '/adm_program/system/popup_message.php?type=msg&amp;element_id=row_message_' . $rowIndex . '&amp;name=' . urlencode($msgSubject) . '&amp;database_id=' . $msgId . '">
+            <img src="' . THEME_URL . '/icons/delete.png" alt="' . $gL10n->get('MSG_REMOVE') . '" title="' . $gL10n->get('MSG_REMOVE') . '" />
+        </a>';
 }
