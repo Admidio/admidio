@@ -377,60 +377,63 @@ $page->addHtml('
                             && (strlen($street) > 0 || strlen($postcode) > 0 || strlen($city) > 0 || strlen($country) > 0))
                             {
                                 $bAddressOutput = true;
-                                $urlParam = '';
-                                $address  = '';
+                                $urlParam = array();
+                                $address  = array();
 
                                 if(strlen($street) > 0 && $gCurrentUser->allowedViewProfileField($user, 'STREET'))
                                 {
-                                    $urlParam .= urlencode($street);
-                                    $address  .= $street. '<br />';
+                                    $urlParam[] = $street;
+                                    $address[] = $street;
                                 }
 
                                 // City and postcode should be shown in one line
                                 if(strlen($postcode) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE'))
                                 {
-                                    $urlParam .= ',%20' . urlencode($postcode);
+                                    $urlParam[] = $postcode;
 
                                     if(strlen($city) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                     {
-                                        $urlParam .= ',%20' . urlencode($city);
+                                        $urlParam[] = $city;
 
                                         // some countries have the order postcode city others have city postcode
                                         if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
                                         {
-                                            $address .= $postcode. ' '. $city. '<br />';
+                                            $address[] = $postcode. ' '. $city;
                                         }
                                         else
                                         {
-                                            $address .= $city. ' '. $postcode. '<br />';
+                                            $address[] = $city. ' '. $postcode;
                                         }
                                     }
                                 }
                                 elseif(strlen($city) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                 {
-                                    $urlParam .= ',%20' . urlencode($city);
-                                    $address  .= $city. '<br />';
+                                    $urlParam[] = $city;
+                                    $address[] = $city;
                                 }
 
                                 if(strlen($country) > 0 && $gCurrentUser->allowedViewProfileField($user, 'COUNTRY'))
                                 {
-                                    $urlParam .= ',%20' . urlencode($country);
-                                    $address  .= $country. '<br />';
+                                    $urlParam[] = $country;
+                                    $address[] = $country;
                                 }
 
-                                $origin = urlencode($gCurrentUser->getValue('STREET')).
-                                    ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
-                                    ',%20'. urlencode($gCurrentUser->getValue('CITY')).
-                                    ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
-                                $mapUrl   = 'https://www.google.com/maps/search/?api=1&amp;query=' . $urlParam;
-                                $routeUrl = 'https://www.google.com/maps/dir/?api=1&amp;origin=' . $origin . '&amp;destination=' . $urlParam;
+                                $urlParam = implode(', ', $urlParam);
+                                $origin = implode(', ', array(
+                                    $gCurrentUser->getValue('STREET'), $gCurrentUser->getValue('POSTCODE'),
+                                    $gCurrentUser->getValue('CITY'), $gCurrentUser->getValue('COUNTRY')
+                                ));
+                                $mapUrl   = safeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => $urlParam));
+                                $routeUrl = safeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => $origin, 'destination' => $urlParam));
+
+                                $address = implode('<br />', $address) . '<br />';
 
                                 // show route or address link if function is enabled and user has filled address or city
                                 if($gPreferences['profile_show_map_link'] && strlen($street) > 0
                                 && (strlen($postcode) > 0 || strlen($city) > 0))
                                 {
                                     $address .= '
-                                    <a class="btn" href="'. $mapUrl. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
+                                        <a class="btn" href="'. $mapUrl. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
