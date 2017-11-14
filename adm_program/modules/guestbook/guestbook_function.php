@@ -254,7 +254,7 @@ if ($getMode === 1 || $getMode === 3)
         unset($_SESSION['guestbook_entry_request']);
         $gNavigation->deleteLastUrl();
 
-        $url = ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php?headline=' . $getHeadline;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline));
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if (($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
@@ -450,7 +450,7 @@ elseif ($getMode === 4 || $getMode === 8)
         unset($_SESSION['guestbook_comment_request']);
         $gNavigation->deleteLastUrl();
 
-        $url = ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?id=' . $gbComment->getValue('gbc_gbo_id') . '&headline=' . $getHeadline;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $gbComment->getValue('gbc_gbo_id'), 'headline' => $getHeadline));
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if (($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)

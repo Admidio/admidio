@@ -101,7 +101,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $weblink->getValue('lnk_name'),
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
-        ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. (int) $weblink->getValue('lnk_id'),
+        safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => $weblink->getValue('lnk_id'))),
         $row['create_name'],
         \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create'))->format('r')
     );

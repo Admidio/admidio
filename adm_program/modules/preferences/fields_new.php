@@ -109,8 +109,7 @@ $profileFieldsEditMenu = $page->getMenu();
 $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('profile_fields_edit_form',
-                     ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
+$form = new HtmlForm('profile_fields_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_function.php', array('usf_id' => $getUsfId, 'mode' => '1')), $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
 if($userField->getValue('usf_system') == 1)
 {

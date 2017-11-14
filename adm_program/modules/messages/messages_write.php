@@ -211,16 +211,14 @@ $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
-
-    $formParam = 'msg_type=PM';
-
+    $formParams = array('msg_type' => 'PM');
     if ($getMsgId > 0)
     {
-        $formParam .= '&'.'msg_id='.$getMsgId;
+        $formParams['msg_id'] = $getMsgId;
     }
 
     // show form
-    $form = new HtmlForm('pm_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
@@ -300,16 +298,16 @@ elseif (!isset($messageStatement))
         $rollenName = $role->getValue('rol_name');
     }
 
-    $formParam = '';
+    $formParams = array();
 
     // if subject was set as param then send this subject to next script
     if ($getSubject !== '')
     {
-        $formParam .= 'subject='.$getSubject.'&';
+        $formParams['subject'] = $getSubject;
     }
 
     // show form
-    $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sqlRoleIds = array();

@@ -134,7 +134,7 @@ $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
 // show form
-$form = new HtmlForm('folder_rights_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page);
+$form = new HtmlForm('folder_rights_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '7', 'folder_id' => $getFolderId)), $page);
 $form->addSelectBoxFromSql(
     'adm_roles_view_right', $gL10n->get('SYS_VISIBLE_FOR'), $gDb, $sqlDataView,
     array(

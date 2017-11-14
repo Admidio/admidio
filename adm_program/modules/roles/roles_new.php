@@ -142,7 +142,7 @@ $rolesEditMenu = $page->getMenu();
 $rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('roles_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=2', $page);
+$form = new HtmlForm('roles_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 if($role->getValue('rol_administrator') == 1)
 {

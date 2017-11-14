@@ -70,7 +70,7 @@ if ($gPreferences['enable_mail_module'] == 1)
 if ($gPreferences['enable_pm_module'] == 1)
 {
     $messagesMenu->addItem(
-        'admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM',
+        'admMenuItemNewPm', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
         $gL10n->get('PMS_SEND_PM'), '/pm.png'
     );
 }
@@ -87,7 +87,7 @@ if ($gPreferences['enable_chat_module'] == 1)
 if ($gCurrentUser->isAdministrator())
 {
     $messagesMenu->addItem(
-        'admMenuItemPreferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=messages',
+        'admMenuItemPreferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'messages')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }
