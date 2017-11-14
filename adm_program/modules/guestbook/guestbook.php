@@ -71,7 +71,7 @@ $page->addJavascript('
      */
     function getComments(commentId) {
         // RequestObjekt abschicken und Kommentar laden
-        $.get("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php', array('moderation' => (int) $getModeration)), '&cid=" + commentId, function(data) {
+        $.get("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/get_comments.php', array('moderation' => (int) $getModeration)).'&cid=" + commentId, function(data) {
             $("#comments_" + commentId).html(data);
         });
     }
