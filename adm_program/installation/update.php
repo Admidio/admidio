@@ -16,7 +16,7 @@
  */
 
 // embed config and constants file
-$configPath = '../../adm_my_files/config.php';
+$configPath    = '../../adm_my_files/config.php';
 $configPathOld = '../../config.php';
 if (is_file($configPath))
 {
