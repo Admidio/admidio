@@ -21,10 +21,17 @@
  */
 
 // if config file already exists then load file with their variables
-$configFile = '../../adm_my_files/config.php';
+$configFile    = '../../adm_my_files/config.php';
+$configPathOld = '../../config.php';
 if (is_file($configFile))
 {
     require_once($configFile);
+}
+elseif (is_file($configPathOld))
+{
+    // Config file found at location of version 2. Then go to update
+    header('Location: update.php');
+    exit();
 }
 else
 {
@@ -139,12 +146,6 @@ if (is_file($pathConfigFile))
         admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?mode=4');
         // => EXIT
     }
-}
-elseif (is_file('../../config.php'))
-{
-    // Config file found at location of version 2. Then go to update
-    admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
-    // => EXIT
 }
 
 if ($getMode === 1) // (Default) Choose language
