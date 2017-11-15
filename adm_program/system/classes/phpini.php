@@ -12,7 +12,7 @@
 /**
  * @class PhpIni
  */
-class PhpIni
+final class PhpIni
 {
     const BYTES_UNIT_FACTOR_1024 = 1024;
     const BYTES_UNIT_FACTOR_1000 = 1000;
