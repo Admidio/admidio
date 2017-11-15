@@ -54,9 +54,9 @@ final class PasswordHashing
      * Prepares the cost value
      * @param string              $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'BCRYPT' or 'SHA512'.
      * @param array<string,mixed> $options   The hash-options array
-     * @return array<string,mixed>
+     * @return int
      */
-    private static function getCost($algorithm, $options)
+    private static function getPreparedCost($algorithm, $options)
     {
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {
@@ -78,7 +78,7 @@ final class PasswordHashing
             $options['cost'] = $minCost;
         }
 
-        return $options;
+        return $options['cost'];
     }
 
     /**
@@ -91,7 +91,7 @@ final class PasswordHashing
      */
     public static function hash($password, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {
-        $options = self::getCost($algorithm, $options);
+        $options['cost'] = self::getPreparedCost($algorithm, $options);
 
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {
@@ -152,7 +152,7 @@ final class PasswordHashing
      */
     public static function needsRehash($hash, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {
-        $options = self::getCost($algorithm, $options);
+        $options['cost'] = self::getPreparedCost($algorithm, $options);
         $hashLength = strlen($hash);
 
         if ($algorithm === self::HASH_ALGORITHM_SHA512 && $hashLength >= self::HASH_LENGTH_SHA512 && admStrStartsWith($hash, self::HASH_INDICATOR_SHA512))
@@ -359,7 +359,7 @@ final class PasswordHashing
     {
         global $gLogger;
 
-        $options = self::getCost($algorithm, $options);
+        $options['cost'] = self::getPreparedCost($algorithm, $options);
 
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {
