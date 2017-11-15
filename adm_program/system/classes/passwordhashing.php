@@ -346,6 +346,7 @@ final class PasswordHashing
     {
         $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
         $strength = $zxcvbn->passwordStrength($password, $userData);
+
         return $strength['score'];
     }
 
@@ -372,7 +373,7 @@ final class PasswordHashing
             {
                 $cost = self::HASH_COST_SHA512_DEFAULT;
             }
-            if ($cost < self::HASH_COST_SHA512_MIN)
+            elseif ($cost < self::HASH_COST_SHA512_MIN)
             {
                 $cost = self::HASH_COST_SHA512_MIN;
             }
@@ -386,7 +387,7 @@ final class PasswordHashing
             {
                 $cost = self::HASH_COST_BCRYPT_DEFAULT;
             }
-            if ($cost < self::HASH_COST_BCRYPT_MIN)
+            elseif ($cost < self::HASH_COST_BCRYPT_MIN)
             {
                 $cost = self::HASH_COST_BCRYPT_MIN;
             }
