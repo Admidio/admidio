@@ -21,8 +21,8 @@
  */
 
 // if config file already exists then load file with their variables
-$configFile    = '../../adm_my_files/config.php';
-$configPathOld = '../../config.php';
+$configFile    = __DIR__ . '/../../adm_my_files/config.php';
+$configPathOld = __DIR__ . '/../../config.php';
 if (is_file($configFile))
 {
     require_once($configFile);
@@ -125,7 +125,7 @@ if (is_file($pathConfigFile))
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->queryPrepared($sql, array(), false);
 
-    // Check the query for results in case installation is runnnig at this time and the config file is already created but database is not installed so far
+    // Check the query for results in case installation is running at this time and the config file is already created but database is not installed so far
     if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)
     {
         // valid installation exists -> exit installation

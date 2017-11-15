@@ -8,9 +8,9 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+// if config file doesn't exists, than show installation dialog
 if (!is_file(__DIR__ . '/adm_my_files/config.php'))
 {
-    // config file doesn't exists then show installation wizard
     header('Location: adm_program/installation/index.php');
     exit();
 }

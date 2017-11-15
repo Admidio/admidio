@@ -16,8 +16,8 @@
  */
 
 // embed config and constants file
-$configPath    = '../../adm_my_files/config.php';
-$configPathOld = '../../config.php';
+$configPath    = __DIR__ . '/../../adm_my_files/config.php';
+$configPathOld = __DIR__ . '/../../config.php';
 if (is_file($configPath))
 {
     require_once($configPath);
