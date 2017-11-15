@@ -584,7 +584,7 @@ elseif (!isset($messageStatement))
     );
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
-    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIni::isFileUploadEnabled())
+    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIniUtils::isFileUploadEnabled())
     {
         $form->addFileUpload(
             'btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'),
