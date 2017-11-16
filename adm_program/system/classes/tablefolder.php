@@ -608,7 +608,7 @@ class TableFolder extends TableAccess
      * Return \PDOStatement with all subfolders of a parent folder id
      * @param int               $folderId Folder ID
      * @param array<int,string> $columns  The columns that should be in the statement
-     * @return \PDOStatement SubfolderStatement with fol_id column
+     * @return false|\PDOStatement SubfolderStatement with fol_id column
      */
     private function getSubfolderStatement($folderId, array $columns = array('fol_id'))
     {
