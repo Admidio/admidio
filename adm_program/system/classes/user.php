@@ -1266,12 +1266,7 @@ class User extends TableAccess
         }
 
         // check if user has the right to view this role
-        if (array_key_exists($roleId, $rightsList) && $rightsList[$roleId])
-        {
-            return true;
-        }
-
-        return false;
+        return array_key_exists($roleId, $rightsList) && $rightsList[$roleId];
     }
 
     /**
