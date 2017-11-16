@@ -9,8 +9,7 @@
  *
  * Parameters:
  *
- * step = choose_language      : (Default) Choose language
- *        welcome              : Welcome to installation
+ * step = welcome              : (Default) Welcome to installation
  *        connect_database     : Enter database access information
  *        create_organization  : Creating organization
  *        create_administrator : Creating administrator
@@ -139,7 +138,7 @@ if (is_file($pathConfigFile))
     }
 
     // if config exists then take parameters out of this file
-    if ($step === 'choose_language' || $step === 'welcome')
+    if ($step === 'welcome')
     {
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;

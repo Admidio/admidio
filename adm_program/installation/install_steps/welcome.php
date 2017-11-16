@@ -8,13 +8,11 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-if (basename($_SERVER['SCRIPT_FILENAME']) === 'install_step_.php')
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php')
 {
     exit('This page may not be called directly!');
 }
 
-// create the text that should be shown in the form
-$message = $gL10n->get('INS_WELCOME_TEXT', array('<a href="https://www.admidio.org/forum">', '</a>'));
 $messageWarning = '';
 
 // if this is a beta version then show a notice to the user
@@ -33,6 +31,7 @@ if (ADMIDIO_VERSION_BETA > 0)
 if (PhpIniUtils::isSafeModeEnabled())
 {
     $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
+
     $messageWarning .= '
         <div class="alert alert-warning alert-small" role="alert">
             <span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_SAFE_MODE').'
@@ -42,14 +41,23 @@ if (PhpIniUtils::isSafeModeEnabled())
 // create a page with the notice that the installation must be configured on the next pages
 // create form with selectbox where user can select a language
 $form = new HtmlFormInstallation('installation-form', 'installation.php?step=connect_database');
-$form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
+
+$form->setFormDescription(
+    $gL10n->get('INS_WELCOME_TEXT', array('<a href="https://www.admidio.org/forum">', '</a>')),
+    $gL10n->get('INS_WELCOME_TO_INSTALLATION')
+);
 
 // the possible languages will be read from a xml file
 $form->addSelectBoxFromXml(
     'system_language', $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'), ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml',
     'isocode', 'name', array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
 );
-$form->addDescription($messageWarning);
+
+if ($messageWarning !== '')
+{
+    $form->addDescription($messageWarning);
+}
 
 $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
+
 echo $form->show();

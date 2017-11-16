@@ -20,7 +20,7 @@ if (!isset($_SESSION['language']))
     {
         showNotice(
             $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
-            'installation.php?step=choose_language',
+            'installation.php?step=welcome',
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
         );
