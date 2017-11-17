@@ -153,6 +153,8 @@ class Language
         // read all countries from xml file
         $countriesXml = new \SimpleXMLElement($file, 0, true);
 
+        $countries = array();
+
         /**
          * @var \SimpleXMLElement $xmlNode
          */
