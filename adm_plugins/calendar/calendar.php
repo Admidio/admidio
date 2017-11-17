@@ -118,7 +118,7 @@ else
 }
 
 // Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
+$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // Nun noch einige Variablen initialisieren
 

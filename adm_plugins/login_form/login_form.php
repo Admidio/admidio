@@ -33,7 +33,7 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 
 // Sprachdatei des Plugins einbinden
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
+$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 

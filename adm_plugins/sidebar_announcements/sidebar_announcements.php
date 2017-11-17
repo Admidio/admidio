@@ -29,7 +29,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
 // integrate language file of plugin to Admidio language object
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
+$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
