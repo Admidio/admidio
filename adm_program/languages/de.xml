@@ -245,6 +245,7 @@
     <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Die Datenbank Parameter wurden nicht vollständig eingegeben!</string>
     <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich</string>
     <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# konnte nicht im Verzeichnis #VAR2_BOLD# gefunden werden.</string>
+    <string name="INS_DATABASE_HOST_INFO">Gib an dieser Stelle den Namen des Datenbankservers an. Dies kann eine URL sein oder aber auch localhost, wenn die Datenbank auf demselben Rechner läuft, wie die Webseite.  </string>
     <string name="INS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell</string>
     <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
     <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
