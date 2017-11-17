@@ -320,7 +320,7 @@ class Language
         if (!array_key_exists($languageFolderPath, $xmlLanguageObjects))
         {
             $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
-            if (is_file($languageFilePath))
+            if (!is_file($languageFilePath))
             {
                 $gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
 
