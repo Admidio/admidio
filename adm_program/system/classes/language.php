@@ -129,30 +129,38 @@ class Language
     }
 
     /**
-     * Returns an array with all countries and their ISO codes
+     * Returns the path of a country file.
      * @throws \UnexpectedValueException
-     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * @return string
      */
-    private function loadCountries()
+    private function getCountryFile()
     {
         $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage() . '.xml';
         $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
 
         if (is_file($langFile))
         {
-            $file = $langFile;
+            return $langFile;
         }
-        elseif (is_file($langFileRef))
+        if (is_file($langFileRef))
         {
-            $file = $langFileRef;
-        }
-        else
-        {
-            throw new \UnexpectedValueException('Country files not found!');
+            return $langFileRef;
         }
 
+        throw new \UnexpectedValueException('Country files not found!');
+    }
+
+    /**
+     * Returns an array with all countries and their ISO codes
+     * @throws \UnexpectedValueException
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     */
+    private function loadCountries()
+    {
+        $countryFile = $this->getCountryFile();
+
         // read all countries from xml file
-        $countriesXml = new \SimpleXMLElement($file, 0, true);
+        $countriesXml = new \SimpleXMLElement($countryFile, 0, true);
 
         $countries = array();
 
