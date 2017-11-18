@@ -528,17 +528,29 @@ class Language
 
         $gLogger->warning('DEPRECATED: "$gL10n->addLanguagePath()" is deprecated, use "$gL10n->addLanguageFolderPath()" instead!');
 
-        return $this->languageData->addLanguagePath($languageFolderPath);
+        try
+        {
+            return $this->addLanguageFolderPath($languageFolderPath);
+        }
+        catch (\UnexpectedValueException $exception)
+        {
+            return false;
+        }
     }
 
     /**
      * Returns the name of the country in the language of this object. The country will be
      * identified by the ISO code (ISO 3166 ALPHA-3) e.g. 'DEU' or 'GBR' ...
      * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
+     * @deprecated 3.3.0:4.0.0 "$gL10n->getCountryByCode()" is deprecated, use "$gL10n->getCountryName()" instead.
      * @return string|false Return the name of the country in the language of this object.
      */
     public function getCountryByCode($countryIsoCode)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$gL10n->getCountryByCode()" is deprecated, use "$gL10n->getCountryName()" instead!');
+
         try
         {
             return $this->getCountryName($countryIsoCode);
@@ -553,10 +565,15 @@ class Language
      * Returns the three digits ISO code (ISO 3166 ALPHA-3) of the country. The country will be identified
      * by the name in the language of this object
      * @param string $countryName The name of the country in the language of this object.
+     * @deprecated 3.3.0:4.0.0 "$gL10n->getCountryByName()" is deprecated, use "$gL10n->getCountryIsoCode()" instead.
      * @return string|false Return the three digits ISO code (ISO 3166 ALPHA-3) of the country or false if country not found.
      */
     public function getCountryByName($countryName)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$gL10n->getCountryByName()" is deprecated, use "$gL10n->getCountryIsoCode()" instead!');
+
         try
         {
             return $this->getCountryIsoCode($countryName);
