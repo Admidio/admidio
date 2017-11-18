@@ -26,51 +26,31 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getType  = admFuncVariableIsValid($_GET, 'type',  'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'INF', 'AWA')));
+$getType  = admFuncVariableIsValid($_GET, 'type',  'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'ANN', 'USF', 'DAT', 'AWA')));
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string');
 
 // Modus und Rechte pruefen
-if($getType === 'ROL' && !$gCurrentUser->manageRoles())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'USF' && !$gCurrentUser->editUsers())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'DAT' && !$gCurrentUser->editDates())
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
-elseif($getType === 'AWA' && !$gCurrentUser->editUsers())
+if (($getType === 'ROL' && !$gCurrentUser->manageRoles())
+||  ($getType === 'LNK' && !$gCurrentUser->editWeblinksRight())
+||  ($getType === 'ANN' && !$gCurrentUser->editAnnouncements())
+||  ($getType === 'USF' && !$gCurrentUser->editUsers())
+||  ($getType === 'DAT' && !$gCurrentUser->editDates())
+||  ($getType === 'AWA' && !$gCurrentUser->editUsers()))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
 // set module headline
-$headline          = $gL10n->get('SYS_CATEGORIES');
-$addButtonText     = $gL10n->get('SYS_CATEGORY');
-$visibleHeadline   = $gL10n->get('SYS_VISIBLE_FOR');
-$editableHeadline  = '';
-$rolesRightsColumn = '';
+$headline         = $gL10n->get('SYS_CATEGORIES');
+$addButtonText    = $gL10n->get('SYS_CATEGORY');
+$visibleHeadline  = $gL10n->get('SYS_VISIBLE_FOR');
+$editableHeadline = '';
 
 switch ($getType)
 {
     case 'ROL':
+        $rolesRightsColumn = 'rol_assign_roles';
         $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('SYS_ROLES')));
         $visibleHeadline = '';
         break;
@@ -97,6 +77,10 @@ switch ($getType)
         $headline = $gL10n->get('SYS_CATEGORIES_VAR', array($gL10n->get('ORG_PROFILE_FIELDS')));
         $editableHeadline = $gL10n->get('PRO_EDIT_PROFILE_FIELDS');
         break;
+
+    default:
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // => EXIT
 }
 
 if($getTitle !== '')
@@ -111,9 +95,9 @@ $sqlAdminRoles = 'SELECT rol_name
                     FROM '.TBL_ROLES.'
               INNER JOIN '.TBL_CATEGORIES.'
                       ON cat_id = rol_cat_id
-                   WHERE rol_valid    = 1
+                   WHERE rol_valid  = 1
                      AND '. $rolesRightsColumn .' = 1
-                     AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                     AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                 ORDER BY cat_sequence, rol_name';
 $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
 

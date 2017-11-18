@@ -1583,19 +1583,20 @@ class HtmlForm extends HtmlFormBasic
         $selectBoxEntries = array();
 
         $xmlRootNode = new \SimpleXMLElement($xmlFile, 0, true);
+
+        /**
+         * @var \SimpleXMLElement $xmlChildNode
+         */
         foreach ($xmlRootNode->children() as $xmlChildNode)
         {
             $key   = '';
             $value = '';
 
             /**
-             * @var \SimpleXMLElement $xmlChildNode
+             * @var \SimpleXMLElement $xmlChildChildNode
              */
             foreach ($xmlChildNode->children() as $xmlChildChildNode)
             {
-                /**
-                 * @var \SimpleXMLElement $xmlChildChildNode
-                 */
                 if ($xmlChildChildNode->getName() === $xmlValueTag)
                 {
                     $key = (string) $xmlChildChildNode;
@@ -1705,7 +1706,7 @@ class HtmlForm extends HtmlFormBasic
         }
         else
         {
-            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));                        
+            $catIdParams = array_merge(array(0), $gCurrentUser->getAllEditableCategories($categoryType));
         }
 
         if (!$optionsAll['showSystemCategory'])
@@ -1721,7 +1722,7 @@ class HtmlForm extends HtmlFormBasic
         else
         {
             $sqlConditions .= ' AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                                    OR cat_org_id IS NULL ) ';            
+                                    OR cat_org_id IS NULL ) ';
         }
 
         // the sql statement which returns all found categories

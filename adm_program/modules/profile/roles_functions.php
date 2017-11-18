@@ -93,11 +93,11 @@ function getFormerRolesFromDatabase($userId)
  * @param string        $htmlListId
  * @param User          $user
  * @param \PDOStatement $roleStatement
- * @param int           $countRole
- * @param bool          $directOutput
+ * @param int           $countRole     deprecated
+ * @param bool          $directOutput  deprecated
  * @return string
  */
-function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatement, $countRole, $directOutput)
+function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatement, $countRole = 0, $directOutput = false)
 {
     global $gDb, $gL10n, $gCurrentUser, $gPreferences;
 
@@ -252,13 +252,12 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
         $roleMemHTML .= '</ul>';
     }
 
+    // deprecated
     if($directOutput)
     {
         echo $roleMemHTML;
         return '';
     }
-    else
-    {
-        return $roleMemHTML;
-    }
+
+    return $roleMemHTML;
 }

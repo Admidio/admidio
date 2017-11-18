@@ -69,7 +69,7 @@ if($getMode === 1)
     }
     // check if the current user is allowed to use the selected category
     if(!in_array((int) $_POST['ann_cat_id'], $gCurrentUser->getAllEditableCategories('ANN'), true))
-    {        
+    {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }

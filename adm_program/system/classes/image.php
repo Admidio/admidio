@@ -363,7 +363,7 @@ class Image
         }
 
         // check current memory limit and set this to 50MB if the current value is lower
-        if (PhpIni::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
+        if (PhpIniUtils::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
         {
             @ini_set('memory_limit', '50M');
         }

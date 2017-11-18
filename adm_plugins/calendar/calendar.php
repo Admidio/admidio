@@ -661,12 +661,12 @@ echo '</table>';
 if($currentMonth.$currentYear !== date('mY'))
 {
     echo '<div id="plgCalendarReset"><a href="#" onclick="$.get({
-            url: "' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/calendar.php",
+            url: \'' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/calendar.php\',
             cache: false,
-            data: "ajax_change&amp;date_id='.date('mY').'",
+            data: \'ajax_change&amp;date_id='.date('mY').'\',
             success: function(html) {
-                $("#plgCalendarContent").replaceWith(html);
-                $(".admidio-calendar-link").popover();
+                $(\'#plgCalendarContent\').replaceWith(html);
+                $(\'.admidio-calendar-link\').popover();
             }
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }

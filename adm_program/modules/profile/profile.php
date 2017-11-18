@@ -368,83 +368,79 @@ $page->addHtml('
                         case 'POSTCODE':
                         case 'CITY':
                         case 'COUNTRY':
+                            $street   = $user->getValue('STREET');
+                            $postcode = $user->getValue('POSTCODE');
+                            $city     = $user->getValue('CITY');
+                            $country  = $user->getValue('COUNTRY');
+
                             if(!$bAddressOutput // output of address only once
-                            && (strlen($user->getValue('STREET')) > 0 || strlen($user->getValue('POSTCODE')) > 0
-                               || strlen($user->getValue('CITY')) > 0 || strlen($user->getValue('COUNTRY')) > 0))
+                            && (strlen($street) > 0 || strlen($postcode) > 0 || strlen($city) > 0 || strlen($country) > 0))
                             {
                                 $bAddressOutput = true;
-                                $htmlAddress    = '';
-                                $address        = '';
-                                $mapUrl         = 'https://www.google.com/maps?q=';
-                                $routeUrl       = 'https://www.google.com/maps?f=d&amp;saddr='.
-                                    urlencode($gCurrentUser->getValue('STREET')).
-                                    ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
-                                    ',%20'. urlencode($gCurrentUser->getValue('CITY')).
-                                    ',%20'. urlencode($gCurrentUser->getValue('COUNTRY')).
-                                    '&amp;daddr=';
+                                $urlParam = '';
+                                $address  = '';
 
-                                if(strlen($user->getValue('STREET')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'STREET'))
+                                if(strlen($street) > 0 && $gCurrentUser->allowedViewProfileField($user, 'STREET'))
                                 {
-                                    $address  .= $user->getValue('STREET'). '<br />';
-                                    $mapUrl   .= urlencode($user->getValue('STREET'));
-                                    $routeUrl .= urlencode($user->getValue('STREET'));
+                                    $urlParam .= urlencode($street);
+                                    $address  .= $street. '<br />';
                                 }
 
                                 // City and postcode should be shown in one line
-                                if(strlen($user->getValue('POSTCODE')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE'))
+                                if(strlen($postcode) > 0 && $gCurrentUser->allowedViewProfileField($user, 'POSTCODE'))
                                 {
-                                    $mapUrl   .= ',%20'. urlencode($user->getValue('POSTCODE'));
-                                    $routeUrl .= ',%20'. urlencode($user->getValue('POSTCODE'));
+                                    $urlParam .= ',%20' . urlencode($postcode);
 
-                                    if(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
+                                    if(strlen($city) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                     {
-                                        $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
-                                        $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
+                                        $urlParam .= ',%20' . urlencode($city);
 
                                         // some countries have the order postcode city others have city postcode
                                         if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
                                         {
-                                            $address .= $user->getValue('POSTCODE'). ' '. $user->getValue('CITY'). '<br />';
+                                            $address .= $postcode. ' '. $city. '<br />';
                                         }
                                         else
                                         {
-                                            $address .= $user->getValue('CITY'). ' '. $user->getValue('POSTCODE'). '<br />';
+                                            $address .= $city. ' '. $postcode. '<br />';
                                         }
                                     }
                                 }
-                                elseif(strlen($user->getValue('CITY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
+                                elseif(strlen($city) > 0 && $gCurrentUser->allowedViewProfileField($user, 'CITY'))
                                 {
-                                    $address   .= $user->getValue('CITY'). '<br />';
-                                    $mapUrl   .= ',%20'. urlencode($user->getValue('CITY'));
-                                    $routeUrl .= ',%20'. urlencode($user->getValue('CITY'));
+                                    $urlParam .= ',%20' . urlencode($city);
+                                    $address  .= $city. '<br />';
                                 }
 
-                                if(strlen($user->getValue('COUNTRY')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'COUNTRY'))
+                                if(strlen($country) > 0 && $gCurrentUser->allowedViewProfileField($user, 'COUNTRY'))
                                 {
-                                    $country   = $user->getValue('COUNTRY');
+                                    $urlParam .= ',%20' . urlencode($country);
                                     $address  .= $country. '<br />';
-                                    $mapUrl   .= ',%20'. urlencode($country);
-                                    $routeUrl .= ',%20'. urlencode($country);
                                 }
 
-                                $htmlAddress .= $address;
+                                $origin = urlencode($gCurrentUser->getValue('STREET')).
+                                    ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
+                                    ',%20'. urlencode($gCurrentUser->getValue('CITY')).
+                                    ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
+                                $mapUrl   = 'https://www.google.com/maps/search/?api=1&amp;query=' . $urlParam;
+                                $routeUrl = 'https://www.google.com/maps/dir/?api=1&amp;origin=' . $origin . '&amp;destination=' . $urlParam;
 
                                 // show route or address link if function is enabled and user has filled address or city
-                                if($gPreferences['profile_show_map_link'] && strlen($user->getValue('STREET')) > 0
-                                && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
+                                if($gPreferences['profile_show_map_link'] && strlen($street) > 0
+                                && (strlen($postcode) > 0 || strlen($city) > 0))
                                 {
-                                    $htmlAddress .= '
+                                    $address .= '
                                     <a class="btn" href="'. $mapUrl. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
                                     if($userId !== $currUsrId)
                                     {
-                                        $htmlAddress .= ' - <a href="'.$routeUrl.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
+                                        $address .= ' - <a href="'.$routeUrl.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
                                 }
 
-                                $form->addStaticControl('address', $gL10n->get('SYS_ADDRESS'), $htmlAddress);
+                                $form->addStaticControl('address', $gL10n->get('SYS_ADDRESS'), $address);
                             }
                             break;
 
@@ -750,7 +746,7 @@ if($gPreferences['profile_show_roles'] == 1)
             }
         $page->addHtml('</div>
         <div class="panel-body" id="profile_roles_box_body">
-            '.getRoleMemberships('role_list', $user, $roleStatement, $countRole, false).'
+            '.getRoleMemberships('role_list', $user, $roleStatement).'
         </div>
     </div>');
 
@@ -775,7 +771,7 @@ if($gPreferences['profile_show_roles'] == 1)
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_future_roles_box_body">
-            '.getRoleMemberships('future_role_list', $user, $roleStatement, $countRole, false).'
+            '.getRoleMemberships('future_role_list', $user, $roleStatement).'
         </div>
     </div>');
 }
@@ -805,7 +801,7 @@ if($gPreferences['profile_show_former_roles'] == 1)
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_former_roles_box_body">
-            '.getRoleMemberships('former_role_list', $user, $roleStatement, $countRole, false).'
+            '.getRoleMemberships('former_role_list', $user, $roleStatement).'
         </div>
     </div>');
 }

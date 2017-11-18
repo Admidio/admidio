@@ -177,7 +177,7 @@ abstract class Modules
 
     /**
      * Return parameter set as Array
-     * @return array<string,mixed> Returns an Array with all needed parameters as Key/Value pair
+     * @return array<string,bool|int|string|array> Returns an Array with all needed parameters as Key/Value pair
      */
     public function getParameters()
     {

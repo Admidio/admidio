@@ -613,7 +613,7 @@ else
 $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
 // TODO deprecated: Remove if PHP 5.3 dropped
-if(PhpIni::isSafeModeEnabled())
+if(PhpIniUtils::isSafeModeEnabled())
 {
     $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
     $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
@@ -635,25 +635,25 @@ catch (AdmException $e)
 }
 $formSystemInformation->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
 
-if(PhpIni::getPostMaxSize() === -1)
+if(PhpIniUtils::getPostMaxSize() === -1)
 {
-    $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), PhpIni::getPostMaxSize());
+    $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), PhpIniUtils::getPostMaxSize());
 }
 else
 {
     $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $gL10n->get('SYS_NOT_SET'));
 }
 
-if(PhpIni::getMemoryLimit() === -1)
+if(PhpIniUtils::getMemoryLimit() === -1)
 {
-    $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), PhpIni::getMemoryLimit());
+    $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), PhpIniUtils::getMemoryLimit());
 }
 else
 {
     $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $gL10n->get('SYS_NOT_SET'));
 }
 
-if(PhpIni::isFileUploadEnabled())
+if(PhpIniUtils::isFileUploadEnabled())
 {
     $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
 }
@@ -663,9 +663,9 @@ else
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-if(PhpIni::getFileUploadMaxFileSize() === -1)
+if(PhpIniUtils::getFileUploadMaxFileSize() === -1)
 {
-    $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), PhpIni::getFileUploadMaxFileSize());
+    $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), PhpIniUtils::getFileUploadMaxFileSize());
 }
 else
 {
@@ -685,6 +685,26 @@ else
     $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
 }
 $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
+
+$diskSpace = admGetDiskSpace();
+$diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
+$progressBarClass = '';
+if ($diskUsagePercent > 90)
+{
+    $progressBarClass = ' progress-bar-danger';
+}
+elseif ($diskUsagePercent > 70)
+{
+    $progressBarClass = ' progress-bar-warning';
+}
+$text = admGetHumanReadableSize($diskSpace['used']) . ' / ' .  admGetHumanReadableSize($diskSpace['total']);
+$html = '
+<div class="progress">
+  <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
+    ' . $text . '
+  </div>
+</div>';
+$formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
 $page->addHtml(getPreferencePanel('system_informations', $gL10n->get('ORG_SYSTEM_INFORMATIONS'), 'info.png', $formSystemInformation->show(false)));
 

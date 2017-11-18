@@ -20,15 +20,13 @@
  *         2 - Delete category
  *         4 - Change sequence for parameter cat_id
  * sequence: New sequence for the parameter cat_id
- *
  *****************************************************************************/
-
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'INF', 'AWA')));
+$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
 $getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));

@@ -131,17 +131,16 @@ if($getViewMode === 'html')
             window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?view_mode=print&view=' . $getView . '&mode=' . $getMode . '&headline=' . $getHeadline . '&cat_id=' . $getCatId . '&id=' . $getId . '&date_from=' . $dates->getParameter('dateStartFormatEnglish') . '&date_to=' . $dates->getParameter('dateEndFormatEnglish') . '", "_blank");
         });', true);
 
+    // get module menu
+    $datesMenu = $page->getMenu();
+
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if($getId > 0)
     {
         // add back link to module menu
-        $datesMenu = $page->getMenu();
         $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
         $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
     }
-
-    // get module menu
-    $datesMenu = $page->getMenu();
 
     // Add new event
     if(count($gCurrentUser->getAllEditableCategories('DAT')) > 0 && $getId === 0)
@@ -862,7 +861,7 @@ else
 
             if($getViewMode === 'html')
             {
-                if (strlen($date->getValue('dat_deadline') > 0))
+                if (strlen($date->getValue('dat_deadline')) > 0)
                 {
                     $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?id=' . $dateId . '&amp;view_mode=html&view=detail&amp;headline=' . $dateHeadline . '">' . $dateHeadline . '<br />' . $gL10n->get('DAT_DEADLINE') . ': ' . $outputDeadline . '</a>';
                 }

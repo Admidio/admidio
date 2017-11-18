@@ -163,10 +163,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             }
 
             // if social network then extract username from url
-            if($field->getValue('usf_name_intern') === 'FACEBOOK'
-            || $field->getValue('usf_name_intern') === 'GOOGLE_PLUS'
-            || $field->getValue('usf_name_intern') === 'TWITTER'
-            || $field->getValue('usf_name_intern') === 'XING')
+            if(in_array($field->getValue('usf_name_intern'), array('FACEBOOK', 'GOOGLE_PLUS', 'TWITTER', 'XING'), true))
             {
                 if(strValidCharacters($_POST[$postId], 'url') && admStrContains($_POST[$postId], '/'))
                 {

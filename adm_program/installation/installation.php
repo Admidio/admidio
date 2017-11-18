@@ -9,8 +9,7 @@
  *
  * Parameters:
  *
- * step = choose_language      : (Default) Choose language
- *        welcome              : Welcome to installation
+ * step = welcome              : (Default) Welcome to installation
  *        connect_database     : Enter database access information
  *        create_organization  : Creating organization
  *        create_administrator : Creating administrator
@@ -21,10 +20,17 @@
  */
 
 // if config file already exists then load file with their variables
-$configFile = '../../adm_my_files/config.php';
+$configFile    = __DIR__ . '/../../adm_my_files/config.php';
+$configPathOld = __DIR__ . '/../../config.php';
 if (is_file($configFile))
 {
     require_once($configFile);
+}
+elseif (is_file($configPathOld))
+{
+    // Config file found at location of version 2. Then go to update
+    header('Location: update.php');
+    exit();
 }
 else
 {
@@ -118,7 +124,7 @@ if (is_file($pathConfigFile))
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->queryPrepared($sql, array(), false);
 
-    // Check the query for results in case installation is runnnig at this time and the config file is already created but database is not installed so far
+    // Check the query for results in case installation is running at this time and the config file is already created but database is not installed so far
     if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)
     {
         // valid installation exists -> exit installation
@@ -132,7 +138,7 @@ if (is_file($pathConfigFile))
     }
 
     // if config exists then take parameters out of this file
-    if ($step === 'choose_language' || $step === 'welcome')
+    if ($step === 'welcome')
     {
         // save database parameters of config.php in session variables
         $_SESSION['db_type']     = $gDbType;
@@ -146,12 +152,6 @@ if (is_file($pathConfigFile))
         admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?step=create_organization');
         // => EXIT
     }
-}
-elseif (is_file('../../config.php'))
-{
-    // Config file found at location of version 2. Then go to update
-    admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
-    // => EXIT
 }
 
 switch ($step)

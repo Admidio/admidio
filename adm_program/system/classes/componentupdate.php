@@ -175,11 +175,12 @@ class ComponentUpdate extends Component
             {
                 if((string) $updateStep !== self::UPDATE_STEP_STOP)
                 {
-                    $maxUpdateStep = $updateStep['id'];
+                    $maxUpdateStep = (int) $updateStep['id'];
                 }
             }
         }
-        return (int) $maxUpdateStep;
+
+        return $maxUpdateStep;
     }
 
     /**

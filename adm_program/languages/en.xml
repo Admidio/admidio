@@ -1119,6 +1119,7 @@
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DESCRIPTION">Description</string>
   <string name="SYS_DESIGNATION">Name</string>
+  <string name="SYS_DISK_SPACE">Disk-Space</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>

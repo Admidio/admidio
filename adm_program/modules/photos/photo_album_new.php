@@ -133,7 +133,7 @@ $form->addInput(
     'pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)
 );
-subfolder(null, '', $photoAlbum, $getPhotoId);
+subfolder(0, '', $photoAlbum, $getPhotoId);
 $form->addSelectBox(
     'pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray,
     array(
