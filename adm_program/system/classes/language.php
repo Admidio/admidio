@@ -130,6 +130,7 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes
+     * @throws \UnexpectedValueException
      * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     private function loadCountries()
@@ -147,7 +148,7 @@ class Language
         }
         else
         {
-            return array(); // TODO
+            throw new \UnexpectedValueException('Country files not found!');
         }
 
         // read all countries from xml file
@@ -170,6 +171,7 @@ class Language
 
     /**
      * Returns an array with all countries and their ISO codes (ISO 3166 ALPHA-3)
+     * @throws \UnexpectedValueException
      * @return array<string,string> Array with all countries and their ISO codes (ISO 3166 ALPHA-3) e.g.: array('DEU' => 'Germany' ...)
      */
     public function getCountries()
