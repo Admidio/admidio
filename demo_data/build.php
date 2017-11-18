@@ -117,7 +117,7 @@ echo 'Start with installation ...<br />';
 // create language and language data object to handle translations
 $gLanguageData = new LanguageData($getLanguage);
 $gL10n = new Language($gLanguageData);
-$gL10n->addLanguagePath(ADMIDIO_PATH . '/demo_data/languages');
+$gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
 $srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
