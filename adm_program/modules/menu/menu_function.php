@@ -52,10 +52,14 @@ if($getMode === 1)
 
     try
     {
+        // get the name of the icon to save it.
+        $array_icon = array_slice(scandir(THEME_ADMIDIO_PATH . '/icons'), 2);
+        $icon = $array_icon[$postIcon];
+
         $menu->setValue('men_parent_id', $_POST['men_parent_id']);
         $menu->setValue('men_modul_name', $postModuleName);
         $menu->setValue('men_url',  $_POST['men_url']);
-        $menu->setValue('men_icon', $postIcon);
+        $menu->setValue('men_icon', $icon);
         $menu->setValue('men_translate_name', $postTranslateName);
         $menu->setValue('men_translate_desc', $postTranslateDesc);
 

@@ -143,9 +143,9 @@ $form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, ar
     )
 );
 
-$form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_modul_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyStandart));
+$form->addInput('men_modul_name', $gL10n->get('SYS_NAME_ABBREVIATION'), $menu->getValue('men_modul_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyStandart));
 
-$form->addCheckbox('men_need_enable', 'need to be enabled in config', $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
+$form->addCheckbox('men_need_enable', $gL10n->get('MNU_NEED_ENABLED'), $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
 
 $form->addSelectBox('menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
                                                                                               'defaultValue' => $roleViewSet,
@@ -154,12 +154,15 @@ $form->addSelectBox('menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleView
 $form->addInput('men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), array('maxLength' => 100));
 
 $array_icon = array_slice(scandir(THEME_ADMIDIO_PATH . '/icons'), 2);
-$form->addSelectBox('men_icon', $gL10n->get('SYS_ICON'), $array_icon, array('defaultValue' => $menu->getValue('men_icon', 'database'),
+$def_icon = array_search($menu->getValue('men_icon', 'database'), $array_icon);
+$form->addSelectBox('men_icon', $gL10n->get('SYS_ICON'), $array_icon, array('defaultValue' => $def_icon,
                                                                             'showContextDependentFirstEntry' => true));
 
-$form->addInput('men_translate_name', 'Translation '.$gL10n->get('SYS_NAME'), $menu->getValue('men_translate_name', 'database'), array('maxLength' => 100));
+$form->addInput('men_translate_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_translate_name', 'database'), array('maxLength' => 100,
+                                                                                                                        'helpTextIdLabel' => array('MNU_NAME_DESC')));
 
-$form->addInput('men_translate_desc', 'Translation '.$gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_translate_desc', 'database'), array('maxLength' => 100));
+$form->addInput('men_translate_desc', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_translate_desc', 'database'), array('maxLength'       => 100,
+                                                                                                                               'helpTextIdLabel' => array('MNU_NAME_DESC_DESC')));
 
 if($fieldPropertyStandart == FIELD_DISABLED)
 {

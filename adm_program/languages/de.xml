@@ -621,6 +621,10 @@
     <string name="PMS_SEND_PM">Private Nachricht senden</string>
     <string name="PMS_WAS_SENT_TO">Nachricht wurde gesendet an:</string>
     <string name="PMS_WAS_NOT_SENT_TO">Fehler - Nachricht wurde nicht gesendet an:</string>
+    <!-- Phrases only in Menü -->
+    <string name="MNU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+    <string name="MNU_NAME_DESC_DESC">Eine Beschreibung die in der Übersicht angezeigt werden soll. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+    <string name="MNU_NEED_ENABLED">Muss auch über die Einstellungen erlaubt werden</string>
     <!-- Phrases only in New-User-Registration -->
     <string name="NWU_ASSIGN_LOGIN">Zugangsdaten zuordnen</string>
     <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Die Anmeldedaten wurden erfolgreich zugeordnet.</string>

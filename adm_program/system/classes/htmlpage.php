@@ -338,7 +338,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $menu_view = false;
-                        if($gCurrentUser->getValue('usr_id') === 0 && $gPreferences['registration_enable_module'] > 0)
+                        if($gPreferences['registration_enable_module'] > 0)
                         {
                             $menu_view = true;
                         }
@@ -495,7 +495,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $menu_view = false;
-                        if($gCurrentUser->getValue('usr_id') === 0 && $gPreferences['registration_enable_module'] > 0)
+                        if($gPreferences['registration_enable_module'] > 0)
                         {
                             $menu_view = true;
                         }

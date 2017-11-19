@@ -82,7 +82,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
 $menuMenu->addItem('admMenuItemNew', $g_root_path.'/adm_program/modules/menu/menu_new.php',
-                         $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU'))), 'add.png');
+                         $gL10n->get('GBO_CREATE_VAR_ENTRY', array($gL10n->get('SYS_MENU'))), 'add.png');
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);
@@ -169,7 +169,7 @@ while ($main_men = $main_men_statement->fetchObject())
 
             // create array with all column values
             $columnValues = array(
-                $naming,
+                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$gL10n->get($menu_row->men_translate_desc).'">'.$naming.'</a>',
                 $htmlMoveRow,
                 $htmlEnabledMenu,
                 $htmlStandartMenu,
