@@ -19,7 +19,7 @@ if(!$gCurrentUser->editUsers())
 }
 
 // pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
-if (!PhpIni::isFileUploadEnabled())
+if (!PhpIniUtils::isFileUploadEnabled())
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
     // => EXIT

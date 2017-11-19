@@ -274,7 +274,7 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
  */
 function admFuncProcessableImageSize()
 {
-    $memoryLimit = PhpIni::getMemoryLimit();
+    $memoryLimit = PhpIniUtils::getMemoryLimit();
     // if memory_limit is disabled in php.ini
     if ($memoryLimit === -1)
     {
@@ -703,8 +703,8 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
  */
 function admGetDiskSpace($path = '/')
 {
-    $total = disk_total_space($path);
-    $free = disk_free_space($path);
+    $total = (int) disk_total_space($path);
+    $free = (int) disk_free_space($path);
     $used = $total - $free;
 
     return array('total' => $total, 'free' => $free, 'used' => $used);
@@ -843,16 +843,16 @@ function replaceValuesArrWithQM(array $valuesArray)
 
 /**
  * Berechnung der Maximalerlaubten Dateiuploadgröße in Byte
- * @deprecated 3.3.0:4.0.0 "admFuncMaxUploadSize()" is a typo. Use "PhpIni::getUploadMaxSize()" instead.
+ * @deprecated 3.3.0:4.0.0 "admFuncMaxUploadSize()" is a typo. Use "PhpIniUtils::getUploadMaxSize()" instead.
  * @return int
  */
 function admFuncMaxUploadSize()
 {
     global $gLogger;
 
-    $gLogger->warning('DEPRECATED: "admFuncMaxUploadSize()" is deprecated, use "PhpIni::getUploadMaxSize()" instead!');
+    $gLogger->warning('DEPRECATED: "admFuncMaxUploadSize()" is deprecated, use "PhpIniUtils::getUploadMaxSize()" instead!');
 
-    return PhpIni::getUploadMaxSize();
+    return PhpIniUtils::getUploadMaxSize();
 }
 
 /**

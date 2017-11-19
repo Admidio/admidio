@@ -613,7 +613,7 @@ else
 $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
 // TODO deprecated: Remove if PHP 5.3 dropped
-if(PhpIni::isSafeModeEnabled())
+if(PhpIniUtils::isSafeModeEnabled())
 {
     $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
     $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
@@ -635,25 +635,25 @@ catch (AdmException $e)
 }
 $formSystemInformation->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
 
-if(PhpIni::getPostMaxSize() === -1)
+if(PhpIniUtils::getPostMaxSize() === -1)
 {
-    $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), PhpIni::getPostMaxSize());
+    $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), PhpIniUtils::getPostMaxSize());
 }
 else
 {
     $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $gL10n->get('SYS_NOT_SET'));
 }
 
-if(PhpIni::getMemoryLimit() === -1)
+if(PhpIniUtils::getMemoryLimit() === -1)
 {
-    $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), PhpIni::getMemoryLimit());
+    $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), PhpIniUtils::getMemoryLimit());
 }
 else
 {
     $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $gL10n->get('SYS_NOT_SET'));
 }
 
-if(PhpIni::isFileUploadEnabled())
+if(PhpIniUtils::isFileUploadEnabled())
 {
     $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
 }
@@ -663,9 +663,9 @@ else
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-if(PhpIni::getFileUploadMaxFileSize() === -1)
+if(PhpIniUtils::getFileUploadMaxFileSize() === -1)
 {
-    $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), PhpIni::getFileUploadMaxFileSize());
+    $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), PhpIniUtils::getFileUploadMaxFileSize());
 }
 else
 {

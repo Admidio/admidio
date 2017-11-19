@@ -1266,12 +1266,7 @@ class User extends TableAccess
         }
 
         // check if user has the right to view this role
-        if (array_key_exists($roleId, $rightsList) && $rightsList[$roleId])
-        {
-            return true;
-        }
-
-        return false;
+        return array_key_exists($roleId, $rightsList) && $rightsList[$roleId];
     }
 
     /**
@@ -1572,7 +1567,7 @@ class User extends TableAccess
 
         if (!$doHashing)
         {
-            return parent::setValue($columnName, $newPassword, false);
+            return $this->setValue($columnName, $newPassword, false);
         }
 
         // get the saved cost value that fits your server performance best and rehash your password
@@ -1589,7 +1584,7 @@ class User extends TableAccess
             return false;
         }
 
-        return parent::setValue($columnName, $newPasswordHash, false);
+        return $this->setValue($columnName, $newPasswordHash, false);
     }
 
     /**

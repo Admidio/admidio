@@ -746,7 +746,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
             }
         $page->addHtml('</div>
         <div class="panel-body" id="profile_roles_box_body">
-            '.getRoleMemberships('role_list', $user, $roleStatement, $countRole, false).'
+            '.getRoleMemberships('role_list', $user, $roleStatement).'
         </div>
     </div>');
 
@@ -771,7 +771,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
     <div class="panel panel-default" id="profile_future_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_future_roles_box_body">
-            '.getRoleMemberships('future_role_list', $user, $roleStatement, $countRole, false).'
+            '.getRoleMemberships('future_role_list', $user, $roleStatement).'
         </div>
     </div>');
 }
@@ -801,7 +801,7 @@ if($gSettingsManager->getBool('profile_show_former_roles'))
     <div class="panel panel-default" id="profile_former_roles_box" '.$visible.'>
         <div class="panel-heading">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'</div>
         <div class="panel-body" id="profile_former_roles_box_body">
-            '.getRoleMemberships('former_role_list', $user, $roleStatement, $countRole, false).'
+            '.getRoleMemberships('former_role_list', $user, $roleStatement).'
         </div>
     </div>');
 }

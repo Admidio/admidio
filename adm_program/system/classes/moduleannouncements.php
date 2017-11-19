@@ -205,7 +205,7 @@ class ModuleAnnouncements extends Modules
     /**
      * Add several conditions to an SQL string that could later be used
      * as additional conditions in other SQL queries.
-     * @return array<string,mixed> Returns an array of a SQL string with additional conditions and it's query params.
+     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions and it's query params.
      */
     private function getSqlConditions()
     {

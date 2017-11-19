@@ -25,7 +25,7 @@ $htmlUrl = '';
 $message = '';
 
 // checks if the server settings for file_upload are set to ON
-if (!PhpIni::isFileUploadEnabled())
+if (!PhpIniUtils::isFileUploadEnabled())
 {
     $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
 }
