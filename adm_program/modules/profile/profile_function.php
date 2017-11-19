@@ -106,14 +106,14 @@ elseif($getMode === 4)
     // reload role memberships
     $roleStatement  = getRolesFromDatabase($getUserId);
     $countRole      = $roleStatement->rowCount();
-    getRoleMemberships('role_list', $user, $roleStatement, $countRole, true);
+    echo getRoleMemberships('role_list', $user, $roleStatement);
 }
 elseif($getMode === 5)
 {
     // reload former role memberships
     $roleStatement  = getFormerRolesFromDatabase($getUserId);
     $countRole      = $roleStatement->rowCount();
-    getRoleMemberships('former_role_list', $user, $roleStatement, $countRole, true);
+    echo getRoleMemberships('former_role_list', $user, $roleStatement);
 
     if($countRole === 0)
     {
@@ -129,7 +129,7 @@ elseif($getMode === 6)
     // reload future role memberships
     $roleStatement  = getFutureRolesFromDatabase($getUserId);
     $countRole      = $roleStatement->rowCount();
-    getRoleMemberships('future_role_list', $user, $roleStatement, $countRole, true);
+    echo getRoleMemberships('future_role_list', $user, $roleStatement);
 
     if($countRole === 0)
     {

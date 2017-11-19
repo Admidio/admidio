@@ -197,7 +197,7 @@ else
 }
 
 // create array with possible PHP timezones
-$allTimezones = DateTimeZone::listIdentifiers();
+$allTimezones = \DateTimeZone::listIdentifiers();
 $timezones = array();
 foreach ($allTimezones as $timezone)
 {

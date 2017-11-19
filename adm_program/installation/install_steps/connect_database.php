@@ -20,7 +20,7 @@ if (!isset($_SESSION['language']))
     {
         showNotice(
             $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
-            safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'choose_language')),
+            safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'welcome')),
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
         );

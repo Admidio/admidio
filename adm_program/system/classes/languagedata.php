@@ -17,31 +17,32 @@
  * object itself couldn't be stored in a Session because it uses PHP objects
  * which couldn't stored in a PHP session.
  * @par Examples
- * @code // show how to use this class with the language class and sessions
+ * @code
+ * // show how to use this class with the language class and sessions
  * script_a.php
  * // create a language data object and assign it to the language object
- * $language = new Language();
  * $languageData = new LanguageData('de');
- * $language->addLanguageData($languageData);
+ * $language = new Language($languageData);
  * $session->addObject('languageData', $languageData);
  *
  * script_b.php
  * // read language data from session and add it to language object
- * $language = new Language();
- * $language->addLanguageData($session->getObject('languageData')); @endcode
+ * $languageData = $session->getObject('languageData')
+ * $language = new Language($languageData);
+ * @endcode
  */
 class LanguageData
 {
     const REFERENCE_LANGUAGE = 'en'; // The ISO code of the default language that should be read if in the current language the text id is not translated
 
     /**
-     * @var array<int,string> Array with all relevant language files
-     */
-    private $languageFilePath = array();
-    /**
      * @var string The ISO code of the language that should be read in this object
      */
-    private $language = '';
+    private $language;
+    /**
+     * @var array<int,string> Array with all relevant language files
+     */
+    private $languageFolderPaths = array();
     /**
      * @var array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
@@ -54,42 +55,147 @@ class LanguageData
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
      * Therefore the language must be set and optional a path where the language files are stored.
-     * @param string $language     The ISO code of the language for which the texts should be read e.g. @b 'de'
-     *                             If no language is set than the browser language will be determined.
-     * @param string $languagePath Optional a server path to the language files. If no path is set
-     *                             than the default Admidio language path @b adm_program/languages will be set.
+     * @param string $language           The ISO code of the language for which the texts should be read e.g. @b 'de'
+     *                                   If no language is set than the browser language will be determined.
+     * @param string $languageFolderPath Optional a server path to the language files. If no path is set
+     *                                   than the default Admidio language path @b adm_program/languages will be set.
+     * @throws \UnexpectedValueException
      */
-    public function __construct($language = '', $languagePath = '')
+    public function __construct($language = '', $languageFolderPath = '')
     {
-        if ($languagePath === '')
-        {
-            $this->addLanguagePath(ADMIDIO_PATH . FOLDER_LANGUAGES);
-        }
-        else
-        {
-            $this->addLanguagePath($languagePath);
-        }
-
         if ($language === '')
         {
             // get browser language and set this language as default
             $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
         }
+        $this->language = $language;
 
-        $this->setLanguage($language);
+        if ($languageFolderPath === '')
+        {
+            $languageFolderPath = ADMIDIO_PATH . FOLDER_LANGUAGES;
+        }
+        if (!is_dir($languageFolderPath))
+        {
+            throw new \UnexpectedValueException('Invalid folder path!');
+        }
+        $this->languageFolderPaths[] = $languageFolderPath;
+    }
+
+    /**
+     * Returns the language code of the language of this object. This is the code that is set within
+     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
+     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
+     * @return string Returns the language code of the language of this object or the reference language.
+     */
+    public function getLanguage($referenceLanguage = false)
+    {
+        global $gLogger;
+
+        if ($referenceLanguage)
+        {
+            $gLogger->warning('DEPRECATED: "$languageData->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
+            return self::REFERENCE_LANGUAGE;
+        }
+
+        return $this->language;
+    }
+
+    /**
+     * Set a language to this object. If there was a language before than initialize the cache
+     * @param string $language ISO code of the language that should be set to this object.
+     * @return bool Returns true if language changed.
+     */
+    public function setLanguage($language)
+    {
+        if ($language === $this->language)
+        {
+            return false;
+        }
+
+        // initialize all parameters
+        $this->countries = array();
+        $this->textCache = array();
+
+        $this->language = $language;
+
+        return true;
     }
 
     /**
      * Adds a new path of language files to the array with all language paths
      * where Admidio should search for language files.
-     * @param string $path Server path where Admidio should search for language files.
+     * @param string $languageFolderPath Server path where Admidio should search for language files.
+     * @throws \UnexpectedValueException
+     * @return bool Returns true if language path is added.
      */
-    public function addLanguagePath($path)
+    public function addLanguageFolderPath($languageFolderPath)
     {
-        if ($path !== '' && !in_array($path, $this->languageFilePath, true))
+        if ($languageFolderPath === '' || !is_dir($languageFolderPath))
         {
-            $this->languageFilePath[] = $path;
+            throw new \UnexpectedValueException('Invalid folder path!');
         }
+
+        if (in_array($languageFolderPath, $this->languageFolderPaths, true))
+        {
+            return false;
+        }
+
+        $this->languageFolderPaths[] = $languageFolderPath;
+
+        return true;
+    }
+
+    /**
+     * Returns an array with all language paths that were set.
+     * @return array<int,string> with all language paths that were set.
+     */
+    public function getLanguageFolderPaths()
+    {
+        return $this->languageFolderPaths;
+    }
+
+    /**
+     * Returns an array with all countries and their ISO codes
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     */
+    public function getCountries()
+    {
+        return $this->countries;
+    }
+
+    /**
+     * Save the array with all countries and their ISO codes in an internal parameter for later use
+     * @param array<string,string> $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     */
+    public function setCountries(array $countries)
+    {
+        $this->countries = $countries;
+    }
+
+    /**
+     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
+     * @throws \OutOfBoundsException
+     * @return string Returns the cached text or empty string if text id isn't found
+     */
+    public function getTextCache($textId)
+    {
+        if (!array_key_exists($textId, $this->textCache))
+        {
+            throw new \OutOfBoundsException('Text-id is not cached!');
+        }
+
+        return $this->textCache[$textId];
+    }
+
+    /**
+     * Sets a new text into the text-cache
+     * @param string $textId Unique text id where to set the text e.g. SYS_COMMON
+     * @param string $text   The text to cache
+     */
+    public function setTextCache($textId, $text)
+    {
+        $this->textCache[$textId] = $text;
     }
 
     /**
@@ -134,89 +240,67 @@ class LanguageData
     }
 
     /**
-     * Returns an array with all countries and their ISO codes
-     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * Adds a new path of language files to the array with all language paths
+     * where Admidio should search for language files.
+     * @deprecated 3.3.0:4.0.0 "addLanguagePath()" is deprecated. Use "addLanguageFolderPath()" instead.
+     * @param string $languageFolderPath Server path where Admidio should search for language files.
+     * @return bool Returns true if language path is added.
      */
-    public function getCountriesArray()
-    {
-        return $this->countries;
-    }
-
-    /**
-     * Returns the language code of the language of this object. This is the code that is set within
-     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
-     * @return string Returns the language code of the language of this object or the reference language.
-     */
-    public function getLanguage($referenceLanguage = false)
+    public function addLanguagePath($languageFolderPath)
     {
         global $gLogger;
 
-        if ($referenceLanguage)
+        $gLogger->warning('DEPRECATED: "addLanguagePath()" is deprecated. Use "addLanguageFolderPath()" instead!');
+
+        try
         {
-            $gLogger->warning('DEPRECATED: "$languageData->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
-
-            return self::REFERENCE_LANGUAGE;
+            return $this->addLanguageFolderPath($languageFolderPath);
         }
-
-        return $this->language;
+        catch (\UnexpectedValueException $exception)
+        {
+            return false;
+        }
     }
 
     /**
      * Returns an array with all language paths that were set.
+     * @deprecated 3.3.0:4.0.0 "getLanguagePaths()" is deprecated. Use "getLanguageFolderPaths()" instead.
      * @return array<int,string> with all language paths that were set.
      */
     public function getLanguagePaths()
     {
-        return $this->languageFilePath;
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "getLanguagePaths()" is deprecated. Use "getLanguageFolderPaths()" instead!');
+
+        return $this->getLanguageFolderPaths();
     }
 
     /**
-     * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @return string Returns the cached text or empty string if text id isn't found
+     * Returns an array with all countries and their ISO codes
+     * @deprecated 3.3.0:4.0.0 "getCountriesArray()" is deprecated. Use "getCountries()" instead.
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
-    public function getTextCache($textId)
+    public function getCountriesArray()
     {
-        if (array_key_exists($textId, $this->textCache))
-        {
-            return $this->textCache[$textId];
-        }
+        global $gLogger;
 
-        return '';
+        $gLogger->warning('DEPRECATED: "getCountriesArray()" is deprecated. Use "getCountries()" instead!');
+
+        return $this->getCountries();
     }
 
     /**
      * Save the array with all countries and their ISO codes in an internal parameter for later use
+     * @deprecated 3.3.0:4.0.0 "setCountriesArray()" is deprecated. Use "setCountries()" instead.
      * @param array<string,string> $countries Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
      */
     public function setCountriesArray(array $countries)
     {
-        $this->countries = $countries;
-    }
+        global $gLogger;
 
-    /**
-     * Set a language to this object. If there was a language before than initialize the cache
-     * @param string $language ISO code of the language that should be set to this object.
-     */
-    public function setLanguage($language)
-    {
-        if ($language !== $this->language)
-        {
-            // initialize all parameters
-            $this->textCache = array();
-            $this->countries = array();
+        $gLogger->warning('DEPRECATED: "setCountriesArray()" is deprecated. Use "setCountries()" instead!');
 
-            $this->language = $language;
-        }
-    }
-
-    /**
-     * Sets a new text into the text-cache
-     * @param string $textId Unique text id where to set the text e.g. SYS_COMMON
-     * @param string $text   The text to cache
-     */
-    public function setTextCache($textId, $text)
-    {
-        $this->textCache[$textId] = $text;
+        $this->setCountries($countries);
     }
 }

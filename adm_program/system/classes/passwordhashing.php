@@ -26,7 +26,7 @@
  * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
-class PasswordHashing
+final class PasswordHashing
 {
     const HASH_ALGORITHM_DEFAULT = 'DEFAULT';
     const HASH_ALGORITHM_BCRYPT = 'BCRYPT';
@@ -51,6 +51,37 @@ class PasswordHashing
     const HASH_INDICATOR_PORTABLE = '$P$';
 
     /**
+     * Prepares the cost value
+     * @param string              $algorithm The hash-algorithm method. Possible values are 'DEFAULT', 'BCRYPT' or 'SHA512'.
+     * @param array<string,mixed> $options   The hash-options array
+     * @return int
+     */
+    private static function getPreparedCost($algorithm, $options)
+    {
+        if ($algorithm === self::HASH_ALGORITHM_SHA512)
+        {
+            $defaultCost = self::HASH_COST_SHA512_DEFAULT;
+            $minCost     = self::HASH_COST_SHA512_MIN;
+        }
+        else
+        {
+            $defaultCost = self::HASH_COST_BCRYPT_DEFAULT;
+            $minCost     = self::HASH_COST_BCRYPT_MIN;
+        }
+
+        if (!array_key_exists('cost', $options) || !is_int($options['cost']))
+        {
+            $options['cost'] = $defaultCost;
+        }
+        elseif ($options['cost'] < $minCost) // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
+        {
+            $options['cost'] = $minCost;
+        }
+
+        return $options['cost'];
+    }
+
+    /**
      * Hash the given password with the given options. The default algorithm uses the password_* methods,
      * otherwise the builtin helper for SHA-512 crypt hashes from the operating system. Minimum cost is 10.
      * @param string              $password  The password string
@@ -60,17 +91,10 @@ class PasswordHashing
      */
     public static function hash($password, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {
+        $options['cost'] = self::getPreparedCost($algorithm, $options);
+
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {
-            if (!array_key_exists('cost', $options))
-            {
-                $options['cost'] = self::HASH_COST_SHA512_DEFAULT;
-            }
-            if ($options['cost'] < self::HASH_COST_SHA512_MIN)
-            {
-                $options['cost'] = self::HASH_COST_SHA512_MIN;
-            }
-
             $salt = self::genRandomPassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
             return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
         }
@@ -81,16 +105,6 @@ class PasswordHashing
         else
         {
             $algorithmPhpConstant = PASSWORD_DEFAULT;
-        }
-
-        if (!array_key_exists('cost', $options))
-        {
-            $options['cost'] = self::HASH_COST_BCRYPT_DEFAULT;
-        }
-        // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
-        if ($options['cost'] < self::HASH_COST_BCRYPT_MIN)
-        {
-            $options['cost'] = self::HASH_COST_BCRYPT_MIN;
         }
 
         return password_hash($password, $algorithmPhpConstant, $options);
@@ -138,18 +152,11 @@ class PasswordHashing
      */
     public static function needsRehash($hash, $algorithm = self::HASH_ALGORITHM_DEFAULT, array $options = array())
     {
+        $options['cost'] = self::getPreparedCost($algorithm, $options);
         $hashLength = strlen($hash);
+
         if ($algorithm === self::HASH_ALGORITHM_SHA512 && $hashLength >= self::HASH_LENGTH_SHA512 && admStrStartsWith($hash, self::HASH_INDICATOR_SHA512))
         {
-            if (!array_key_exists('cost', $options))
-            {
-                $options['cost'] = self::HASH_COST_SHA512_DEFAULT;
-            }
-            if ($options['cost'] < self::HASH_COST_SHA512_MIN)
-            {
-                $options['cost'] = self::HASH_COST_SHA512_MIN;
-            }
-
             $hashParts = explode('$', $hash);
             $cost = (int) substr($hashParts[2], 7);
 
@@ -166,16 +173,6 @@ class PasswordHashing
         else
         {
             return true; // TODO
-        }
-
-        if (!array_key_exists('cost', $options))
-        {
-            $options['cost'] = self::HASH_COST_BCRYPT_DEFAULT;
-        }
-        // https://paragonie.com/blog/2016/02/how-safely-store-password-in-2016
-        if ($options['cost'] < self::HASH_COST_BCRYPT_MIN)
-        {
-            $options['cost'] = self::HASH_COST_BCRYPT_MIN;
         }
 
         return password_needs_rehash($hash, $algorithmPhpConstant, $options);
@@ -346,6 +343,7 @@ class PasswordHashing
     {
         $zxcvbn = new \ZxcvbnPhp\Zxcvbn();
         $strength = $zxcvbn->passwordStrength($password, $userData);
+
         return $strength['score'];
     }
 
@@ -361,35 +359,17 @@ class PasswordHashing
     {
         global $gLogger;
 
-        $cost = $options['cost'];
+        $options['cost'] = self::getPreparedCost($algorithm, $options);
 
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {
-            $maxCost = self::HASH_COST_SHA512_MAX;
+            $maxCost       = self::HASH_COST_SHA512_MAX;
             $costIncrement = self::HASH_COST_SHA512_INCREMENT;
-
-            if (!is_int($cost))
-            {
-                $cost = self::HASH_COST_SHA512_DEFAULT;
-            }
-            if ($cost < self::HASH_COST_SHA512_MIN)
-            {
-                $cost = self::HASH_COST_SHA512_MIN;
-            }
         }
         else
         {
-            $maxCost = self::HASH_COST_BCRYPT_MAX;
+            $maxCost       = self::HASH_COST_BCRYPT_MAX;
             $costIncrement = self::HASH_COST_BCRYPT_INCREMENT;
-
-            if (!is_int($cost))
-            {
-                $cost = self::HASH_COST_BCRYPT_DEFAULT;
-            }
-            if ($cost < self::HASH_COST_BCRYPT_MIN)
-            {
-                $cost = self::HASH_COST_BCRYPT_MIN;
-            }
         }
 
         $results = null;
@@ -397,8 +377,6 @@ class PasswordHashing
         // loop through the cost value until the needed hashing time reaches the maximum set time
         do
         {
-            $options['cost'] = $cost;
-
             $start = microtime(true);
             self::hash($password, $algorithm, $options);
             $end = microtime(true);
@@ -407,11 +385,11 @@ class PasswordHashing
 
             if ($results === null || $time <= $maxTime)
             {
-                $results = array('cost' => $cost, 'time' => $time);
+                $results = array('cost' => $options['cost'], 'time' => $time);
             }
-            $cost += $costIncrement;
+            $options['cost'] += $costIncrement;
         }
-        while ($time <= $maxTime && $cost <= $maxCost);
+        while ($time <= $maxTime && $options['cost'] <= $maxCost);
 
         $gLogger->notice('Benchmark: Password-hashing results.', $results);
 

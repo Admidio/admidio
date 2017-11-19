@@ -184,12 +184,7 @@ class TablePhotos extends TableAccess
     {
         global $gCurrentUser;
 
-        if(($this->visible() || (int) $this->getValue('pho_id') === 0) && $gCurrentUser->editPhotoRight())
-        {
-            return true;
-        }
-
-        return false;
+        return $gCurrentUser->editPhotoRight() && ($this->visible() || (int) $this->getValue('pho_id') === 0);
     }
 
     /**
