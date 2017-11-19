@@ -785,7 +785,7 @@ function noHTML($input, $encoding = 'UTF-8')
  * @param bool                $escape
  * @return string
  */
-function safeUrl($path, array $params = array(), $anchor = '', $escape = true)
+function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
 {
     $paramsText = '';
     if (count($params) > 0)
