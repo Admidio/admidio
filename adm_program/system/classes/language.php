@@ -19,21 +19,22 @@
  * should be assigned to this class that stored all necessary data and can be
  * stored in a session.
  * @par Examples
- * @code // show how to use this class with the language data class and sessions
+ * @code
+ * // show how to use this class with the language data class and sessions
  * script_a.php
  * // create a language data object and assign it to the language object
- * $language = new Language();
  * $languageData = new LanguageData('de');
- * $language->addLanguageData($languageData);
+ * $language = new Language($languageData);
  * $session->addObject('languageData', $languageData);
  *
  * script_b.php
  * // read language data from session and add it to language object
+ * $languageData = $session->getObject('languageData')
  * $language = new Language();
- * $language->addLanguageData($session->getObject('languageData'));
  *
  * // read and display a language specific text with placeholders for individual content
- * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));@endcode
+ * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
+ * @endcode
  */
 class Language
 {
@@ -60,89 +61,399 @@ class Language
      */
     public function __construct(LanguageData $languageDataObject = null)
     {
+        global $gPreferences;
+
+        if ($languageDataObject === null)
+        {
+            $languageDataObject = new LanguageData($gPreferences['system_language']);
+        }
         $this->languageData =& $languageDataObject;
     }
 
     /**
-     * Adds a language data object to this class. The object contains all necessary
-     * language data that is stored in the PHP session.
-     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
+     * Returns the language code of the language of this object. This is the code that is set within
+     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
+     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
+     * @return string Returns the language code of the language of this object or the reference language.
      */
-    public function addLanguageData(LanguageData $languageDataObject)
+    public function getLanguage($referenceLanguage = false)
     {
-        $this->languageData =& $languageDataObject;
+        global $gLogger;
+
+        if ($referenceLanguage)
+        {
+            $gLogger->warning('DEPRECATED: "$gL10n->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+
+            return LanguageData::REFERENCE_LANGUAGE;
+        }
+
+        return $this->languageData->getLanguage();
+    }
+
+    /**
+     * Set a language to this object. If there was a language before than initialize the cache
+     * @param string $language ISO code of the language that should be set to this object.
+     * @return bool Returns true if language changed.
+     */
+    public function setLanguage($language)
+    {
+        if ($language === $this->languageData->getLanguage())
+        {
+            return false;
+        }
+
+        // initialize data
+        $this->xmlLanguageObjects    = array();
+        $this->xmlRefLanguageObjects = array();
+
+        $this->languageData->setLanguage($language);
+
+        return true;
+    }
+
+    /**
+     * Returns the ISO code of the language of this object.
+     * @param bool $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
+     * @return string Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
+     */
+    public function getLanguageIsoCode($referenceLanguage = false)
+    {
+        $language = $this->getLanguage($referenceLanguage);
+
+        if ($language === 'de_sie')
+        {
+            return 'de';
+        }
+
+        return $language;
+    }
+
+    /**
+     * Returns the path of a country file.
+     * @throws \UnexpectedValueException
+     * @return string
+     */
+    private function getCountryFile()
+    {
+        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage() . '.xml';
+        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
+
+        if (is_file($langFile))
+        {
+            return $langFile;
+        }
+        if (is_file($langFileRef))
+        {
+            return $langFileRef;
+        }
+
+        throw new \UnexpectedValueException('Country files not found!');
+    }
+
+    /**
+     * Returns an array with all countries and their ISO codes
+     * @throws \UnexpectedValueException
+     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     */
+    private function loadCountries()
+    {
+        $countryFile = $this->getCountryFile();
+
+        // read all countries from xml file
+        $countriesXml = new \SimpleXMLElement($countryFile, 0, true);
+
+        $countries = array();
+
+        /**
+         * @var \SimpleXMLElement $xmlNode
+         */
+        foreach ($countriesXml->children() as $xmlNode)
+        {
+            $countries[(string) $xmlNode['name']] = (string) $xmlNode;
+        }
+
+        asort($countries, SORT_LOCALE_STRING);
+
+        return $countries;
+    }
+
+    /**
+     * Returns an array with all countries and their ISO codes (ISO 3166 ALPHA-3)
+     * @throws \UnexpectedValueException
+     * @return array<string,string> Array with all countries and their ISO codes (ISO 3166 ALPHA-3) e.g.: array('DEU' => 'Germany' ...)
+     */
+    public function getCountries()
+    {
+        $countries = $this->languageData->getCountries();
+
+        if (count($countries) === 0)
+        {
+            $countries = $this->loadCountries();
+            $this->languageData->setCountries($countries);
+        }
+
+        return $countries;
+    }
+
+    /**
+     * Returns the name of the country in the language of this object. The country will be
+     * identified by the ISO code (ISO 3166 ALPHA-3) e.g. 'DEU' or 'GBR' ...
+     * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
+     * @throws \UnexpectedValueException
+     * @throws \OutOfBoundsException
+     * @return string Return the name of the country in the language of this object.
+     */
+    public function getCountryName($countryIsoCode)
+    {
+        if (preg_match('/^[A-Z]{3}$/', $countryIsoCode))
+        {
+            throw new \UnexpectedValueException('Invalid country-iso-code!');
+        }
+
+        $countries = $this->getCountries();
+
+        if (!array_key_exists($countryIsoCode, $countries))
+        {
+            throw new \OutOfBoundsException('Country-iso-code does not exist!');
+        }
+
+        return $countries[$countryIsoCode];
+    }
+
+    /**
+     * Returns the three digits ISO code (ISO 3166 ALPHA-3) of the country. The country will be identified
+     * by the name in the language of this object
+     * @param string $countryName The name of the country in the language of this object.
+     * @throws \UnexpectedValueException
+     * @throws \OutOfBoundsException
+     * @return string|false Return the three digits ISO code (ISO 3166 ALPHA-3) of the country or false if country not found.
+     */
+    public function getCountryIsoCode($countryName)
+    {
+        if ($countryName === '')
+        {
+            throw new \UnexpectedValueException('Invalid country-name!');
+        }
+
+        $countries = $this->getCountries();
+
+        $result = array_search($countryName, $countries, true);
+        if ($result === false)
+        {
+            throw new \OutOfBoundsException('Country-name does not exist!');
+        }
+
+        return $result;
     }
 
     /**
      * Adds a new path of language files to the array with all language paths where Admidio
      * should search for language files.
-     * @param string $path Server path where Admidio should search for language files.
+     * @param string $languageFolderPath Server path where Admidio should search for language files.
+     * @throws \UnexpectedValueException
+     * @return bool Returns true if language path is added.
      */
-    public function addLanguagePath($path)
+    public function addLanguageFolderPath($languageFolderPath)
     {
-        $this->languageData->addLanguagePath($path);
+        return $this->languageData->addLanguageFolderPath($languageFolderPath);
+    }
+
+    /**
+     * Creates an array with all languages that are possible in Admidio.
+     * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
+     * @return array<string,string>
+     */
+    private static function loadAvailableLanguages()
+    {
+        $languagesXml = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', 0, true);
+
+        $languages = array();
+
+        /**
+         * @var \SimpleXMLElement $xmlNode
+         */
+        foreach ($languagesXml->children() as $xmlNode)
+        {
+            $xmlChildNodes = $xmlNode->children();
+            $languages[(string) $xmlChildNodes->isocode] = (string) $xmlChildNodes->name;
+        }
+
+        return $languages;
+    }
+
+    /**
+     * Gets an array with all languages that are possible in Admidio.
+     * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
+     * @return array<string,string> Return an array with all available languages.
+     */
+    public function getAvailableLanguages()
+    {
+        if (count($this->languages) === 0)
+        {
+            $this->languages = self::loadAvailableLanguages();
+        }
+
+        return $this->languages;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    private static function prepareXmlText($text)
+    {
+        // set line break with html
+        // Within Android string resource all apostrophe are escaped so we must remove the escape char
+        // replace highly comma, so there are no problems in the code later
+        $replaceArray = array(
+            '\\n'  => '<br />',
+            '\\\'' => '\'',
+            '\''   => '&rsquo;'
+        );
+        return str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
+    }
+
+    /**
+     * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
+     * @param array<string,\SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
+     * @param string                          $languageFolderPath The path in which the different language xml files are.
+     * @param string                          $language           The ISO code of the language in which the text will be searched
+     * @param string                          $textId             The id of the text that will be searched in the file.
+     * @throws \UnexpectedValueException
+     * @throws \OutOfBoundsException
+     * @return string Return the text in the language or nothing if text id wasn't found.
+     */
+    public function searchLanguageText(array &$xmlLanguageObjects, $languageFolderPath, $language, $textId)
+    {
+        global $gLogger;
+
+        // if not exists create a \SimpleXMLElement of the language file in the language path
+        // and add it to the array of language objects
+        if (!array_key_exists($languageFolderPath, $xmlLanguageObjects))
+        {
+            $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
+            if (!is_file($languageFilePath))
+            {
+                $gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
+
+                throw new \UnexpectedValueException('Language file does not exist!');
+            }
+
+            $xmlLanguageObjects[$languageFolderPath] = new \SimpleXMLElement($languageFilePath, 0, true);
+        }
+
+        // text not in cache -> read from xml file in "Android Resource String" format
+        $xmlNodes = $xmlLanguageObjects[$languageFolderPath]->xpath('/resources/string[@name="'.$textId.'"]');
+
+        if ($xmlNodes === false || count($xmlNodes) === 0)
+        {
+            // fallback for old Admidio language format prior to version 3.1
+            $xmlNodes = $xmlLanguageObjects[$languageFolderPath]->xpath('/language/version/text[@id="'.$textId.'"]');
+
+            if ($xmlNodes === false || count($xmlNodes) === 0)
+            {
+                throw new \OutOfBoundsException('Could not found text-id!');
+            }
+        }
+
+        $text = self::prepareXmlText($xmlNodes[0]);
+
+        $this->languageData->setTextCache($textId, $text);
+
+        return $text;
     }
 
     /**
      * @param array<string,\SimpleXMLElement> $xmlLanguageObjects SimpleXMLElement array of each language path is stored
      * @param string                          $language           Language code
      * @param string                          $textId             Unique text id of the text that should be read e.g. SYS_COMMON
-     * @return string Returns the text string of the text id or empty string if not found.
+     * @throws \OutOfBoundsException
+     * @throws \UnexpectedValueException
+     * @return string Returns the text string of the text id.
      */
     private function searchTextIdInLangObject(array $xmlLanguageObjects, $language, $textId)
     {
-        foreach ($this->languageData->getLanguagePaths() as $languagePath)
-        {
-            $text = $this->searchLanguageText($xmlLanguageObjects, $languagePath, $language, $textId);
+        global $gLogger;
 
-            if ($text !== '')
+        $languageFolderPaths = $this->languageData->getLanguageFolderPaths();
+        foreach ($languageFolderPaths as $languageFolderPath)
+        {
+            try
             {
-                return $text;
+                return $this->searchLanguageText($xmlLanguageObjects, $languageFolderPath, $language, $textId);
+            }
+            catch (\OutOfBoundsException $exception)
+            {
+                // continue searching
+                $gLogger->debug(
+                    'L10N: ' . $exception->getMessage(),
+                    array('languageFolderPath' => $languageFolderPath, 'language' => $language, 'textId' => $textId)
+                );
             }
         }
 
-        return '';
+        throw new \OutOfBoundsException('Could not found text-id!');
     }
 
     /**
      * Reads a text string out of a language xml file that is identified with a unique text id e.g. SYS_COMMON.
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @return string Returns the text string of the text id or empty string if not found.
+     * @throws \OutOfBoundsException
+     * @throws \UnexpectedValueException
+     * @return string Returns the text string of the text id.
      */
     private function getTextFromTextId($textId)
     {
-        global $gLogger;
-
-        if (!$this->languageData instanceof LanguageData)
-        {
-            $gLogger->critical('$this->languageData is not an instance of LanguageData!', array('languageData' => $this->languageData));
-
-            return '';
-        }
-
         // first search text id in text-cache
-        $text = $this->languageData->getTextCache($textId);
-
-        // if text id wasn't found than search for it in language
-        if ($text === '')
+        try
         {
-            // search for text id in every \SimpleXMLElement (language file) of the object array
-            $text = $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+            return $this->languageData->getTextCache($textId);
+        }
+        catch (\OutOfBoundsException $exception)
+        {
+            // if text id wasn't found than search for it in language
+            try
+            {
+                // search for text id in every \SimpleXMLElement (language file) of the object array
+                return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->languageData->getLanguage(), $textId);
+            }
+            catch (\OutOfBoundsException $exception)
+            {
+                // if text id wasn't found than search for it in reference language
+                try
+                {
+                    // search for text id in every \SimpleXMLElement (language file) of the object array
+                    return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
+                }
+                catch (\OutOfBoundsException $exception)
+                {
+                    throw new \OutOfBoundsException($exception->getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string            $text
+     * @param array<int,string> $params
+     * @return string
+     */
+    private static function prepareTextPlaceholders($text, array $params)
+    {
+        // replace placeholder with value of parameters
+        foreach ($params as $index => $param)
+        {
+            $paramNr = $index + 1;
+
+            $replaceArray = array(
+                '#VAR' . $paramNr . '#'      => $param,
+                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
+            );
+            $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
         }
 
-        // if text id wasn't found than search for it in reference language
-        if ($text === '')
-        {
-            // search for text id in every \SimpleXMLElement (language file) of the object array
-            $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, LanguageData::REFERENCE_LANGUAGE, $textId);
-        }
-
-        if ($text === '')
-        {
-            $gLogger->error('L10n: Could not found translation id!', array('textId' => $textId));
-        }
-
-        return $text;
+        // replace square brackets with html tags
+        return strtr($text, '[]', '<>');
     }
 
     /**
@@ -150,17 +461,14 @@ class Language
      * with a unique text id e.g. SYS_COMMON. If the text contains placeholders
      * than you must set more parameters to replace them.
      * @param string            $textId Unique text id of the text that should be read e.g. SYS_COMMON
-     * @param array<int,string> $params Optional parameter for language string of translation id
-     *
-     * param  string $param1,$param2... The function accepts an undefined number of values which will be used
-     *                                  to replace the placeholder in the text.
-     *                                  $param1 will replace @b #VAR1# or @b #VAR1_BOLD#,
-     *                                  $param2 will replace @b #VAR2# or @b #VAR2_BOLD# etc.
+     * @param array<int,string> $params Optional parameter to replace placeholders in the text.
+     *                                  $params[0] will replace @b #VAR1# or @b #VAR1_BOLD#,
+     *                                  $params[1] will replace @b #VAR2# or @b #VAR2_BOLD# etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      * @par Examples
-     * @code // display a text without placeholders
-     *                echo $gL10n->get('SYS_NUMBER');
-     *
+     * @code
+     * // display a text without placeholders
+     * echo $gL10n->get('SYS_NUMBER');
      * // display a text with placeholders for individual content
      * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
      * @endcode
@@ -169,11 +477,15 @@ class Language
     {
         global $gLogger;
 
-        $text = $this->getTextFromTextId($textId);
-
-        // no text found then write #undefined text#
-        if ($text === '')
+        try
         {
+            $text = $this->getTextFromTextId($textId);
+        }
+        catch (\RuntimeException $exception)
+        {
+            $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
+
+            // no text found then write #undefined text#
             return '#' . $textId . '#';
         }
 
@@ -195,234 +507,90 @@ class Language
             );
         }
 
-        // replace placeholder with value of parameters
-        foreach ($paramsArray as $index => $param)
-        {
-            $paramNr = $index + 1;
-
-            $replaceArray = array(
-                '#VAR' . $paramNr . '#'      => $param,
-                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
-            );
-            $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
-        }
-
-        // replace square brackets with html tags
-        $text = strtr($text, '[]', '<>');
-
-        return $text;
+        return self::prepareTextPlaceholders($text, $paramsArray);
     }
 
     /**
-     * Returns an array with all countries and their ISO codes
-     * @return array<string,string> Array with all countries and their ISO codes e.g.: array('DEU' => 'Germany' ...)
+     * Adds a language data object to this class. The object contains all necessary
+     * language data that is stored in the PHP session.
+     * @deprecated 3.3.0:4.0.0 "$gL10n->addLanguageData($languageData)" is deprecated. Use "$gL10n = new Language($languageData)" instead.
+     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
      */
-    public function getCountries()
+    public function addLanguageData(LanguageData $languageDataObject)
     {
-        $countries = $this->languageData->getCountriesArray();
+        global $gLogger;
 
-        if (count($countries) > 0)
+        $gLogger->warning('DEPRECATED: "$gL10n->addLanguageData($languageData)" is deprecated, use "$gL10n = new Language($languageData)" instead!');
+
+        $this->languageData =& $languageDataObject;
+    }
+
+    /**
+     * Adds a new path of language files to the array with all language paths where Admidio
+     * should search for language files.
+     * @deprecated 3.3.0:4.0.0 "$gL10n->addLanguagePath()" is deprecated, use "$gL10n->addLanguageFolderPath()" instead.
+     * @param string $languageFolderPath Server path where Admidio should search for language files.
+     * @return bool Returns true if language path is added.
+     */
+    public function addLanguagePath($languageFolderPath)
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$gL10n->addLanguagePath()" is deprecated, use "$gL10n->addLanguageFolderPath()" instead!');
+
+        try
         {
-            return $countries;
+            return $this->addLanguageFolderPath($languageFolderPath);
         }
-
-        $langFile    = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . $this->languageData->getLanguage() . '.xml';
-        $langFileRef = ADMIDIO_PATH . FOLDER_LANGUAGES . '/countries_' . LanguageData::REFERENCE_LANGUAGE   . '.xml';
-        if (is_file($langFile))
+        catch (\UnexpectedValueException $exception)
         {
-            $file = $langFile;
+            return false;
         }
-        elseif (is_file($langFileRef))
-        {
-            $file = $langFileRef;
-        }
-        else
-        {
-            return array();
-        }
-
-        // read all countries from xml file
-        $countriesXml = new \SimpleXMLElement($file, 0, true);
-
-        foreach ($countriesXml->children() as $stringNode)
-        {
-            $attributes = $stringNode->attributes();
-            $countries[(string) $attributes->name] = (string) $stringNode;
-        }
-
-        asort($countries, SORT_LOCALE_STRING);
-        $this->languageData->setCountriesArray($countries);
-
-        return $this->languageData->getCountriesArray();
     }
 
     /**
      * Returns the name of the country in the language of this object. The country will be
-     * identified by the ISO code e.g. 'DEU' or 'GBR' ...
-     * @param string $isoCode The three digits ISO code of the country where the name should be returned.
-     * @return string Return the name of the country in the language of this object.
+     * identified by the ISO code (ISO 3166 ALPHA-3) e.g. 'DEU' or 'GBR' ...
+     * @param string $countryIsoCode The three digits ISO code (ISO 3166 ALPHA-3) of the country where the name should be returned.
+     * @deprecated 3.3.0:4.0.0 "$gL10n->getCountryByCode()" is deprecated, use "$gL10n->getCountryName()" instead.
+     * @return string|false Return the name of the country in the language of this object.
      */
-    public function getCountryByCode($isoCode)
+    public function getCountryByCode($countryIsoCode)
     {
-        if($isoCode === '')
-        {
-            return '';
-        }
+        global $gLogger;
 
-        $countries = $this->languageData->getCountriesArray();
+        $gLogger->warning('DEPRECATED: "$gL10n->getCountryByCode()" is deprecated, use "$gL10n->getCountryName()" instead!');
 
-        if(count($countries) === 0)
+        try
         {
-            $countries = $this->getCountries();
+            return $this->getCountryName($countryIsoCode);
         }
-        return $countries[$isoCode];
+        catch (\RuntimeException $exception)
+        {
+            return false;
+        }
     }
 
     /**
-     * Returns the three digits ISO code of the country. The country will be identified
+     * Returns the three digits ISO code (ISO 3166 ALPHA-3) of the country. The country will be identified
      * by the name in the language of this object
-     * @param string $country The name of the country in the language of this object.
-     * @return string|false Return the three digits ISO code of the country or false if country not found.
+     * @param string $countryName The name of the country in the language of this object.
+     * @deprecated 3.3.0:4.0.0 "$gL10n->getCountryByName()" is deprecated, use "$gL10n->getCountryIsoCode()" instead.
+     * @return string|false Return the three digits ISO code (ISO 3166 ALPHA-3) of the country or false if country not found.
      */
-    public function getCountryByName($country)
-    {
-        $countries = $this->languageData->getCountriesArray();
-
-        if(count($countries) === 0)
-        {
-            $countries = $this->getCountries();
-        }
-        return array_search($country, $countries, true);
-    }
-
-    /**
-     * Returns the ISO code of the language of this object.
-     * @param bool $referenceLanguage If set to @b true than the ISO code of the reference language will returned.
-     * @return string Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
-     */
-    public function getLanguageIsoCode($referenceLanguage = false)
+    public function getCountryByName($countryName)
     {
         global $gLogger;
 
-        if ($referenceLanguage)
-        {
-            $gLogger->warning('DEPRECATED: "$language->getLanguageIsoCode(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
+        $gLogger->warning('DEPRECATED: "$gL10n->getCountryByName()" is deprecated, use "$gL10n->getCountryIsoCode()" instead!');
 
-            return LanguageData::REFERENCE_LANGUAGE;
+        try
+        {
+            return $this->getCountryIsoCode($countryName);
         }
-
-        $language = $this->languageData->getLanguage();
-
-        if($language === 'de_sie')
+        catch (\RuntimeException $exception)
         {
-            return 'de';
-        }
-
-        return $language;
-    }
-
-    /**
-     * Returns the language code of the language of this object. This is the code that is set within
-     * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
-     * @return string Returns the language code of the language of this object or the reference language.
-     */
-    public function getLanguage($referenceLanguage = false)
-    {
-        global $gLogger;
-
-        if ($referenceLanguage)
-        {
-            $gLogger->warning('DEPRECATED: "$language->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
-
-            return LanguageData::REFERENCE_LANGUAGE;
-        }
-
-        return $this->languageData->getLanguage();
-    }
-
-    /**
-     * Creates an array with all languages that are possible in Admidio.
-     * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-     * @return array<string,string> Return an array with all available languages.
-     */
-    public function getAvailableLanguages()
-    {
-        if(count($this->languages) === 0)
-        {
-            $languagesXml = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.xml', 0, true);
-
-            foreach($languagesXml->children() as $stringNode)
-            {
-                $attributes = $stringNode->children();
-                $this->languages[(string) $attributes->isocode] = (string) $attributes->name;
-            }
-        }
-
-        return $this->languages;
-    }
-
-    /**
-     * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
-     * @param array<string,\SimpleXMLElement> $objectArray  The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param string                          $languagePath The path in which the different language xml files are.
-     * @param string                          $language     The ISO code of the language in which the text will be searched
-     * @param string                          $textId       The id of the text that will be searched in the file.
-     * @return string Return the text in the language or nothing if text id wasn't found.
-     */
-    public function searchLanguageText(array &$objectArray, $languagePath, $language, $textId)
-    {
-        // if not exists create a \SimpleXMLElement of the language file in the language path
-        // and add it to the array of language objects
-        if(!array_key_exists($languagePath, $objectArray))
-        {
-            $languageFile = $languagePath.'/'.$language.'.xml';
-
-            if(is_file($languageFile))
-            {
-                $objectArray[$languagePath] = new \SimpleXMLElement($languageFile, 0, true);
-            }
-        }
-
-        if($objectArray[$languagePath] instanceof \SimpleXMLElement)
-        {
-            // text not in cache -> read from xml file in "Android Resource String" format
-            $node = $objectArray[$languagePath]->xpath('/resources/string[@name="'.$textId.'"]');
-
-            if($node == false)
-            {
-                // fallback for old Admidio language format prior to version 3.1
-                $node = $objectArray[$languagePath]->xpath('/language/version/text[@id="'.$textId.'"]');
-            }
-
-            if($node != false)
-            {
-                // set line break with html
-                // Within Android string resource all apostrophe are escaped so we must remove the escape char
-                // replace highly comma, so there are no problems in the code later
-                $text = str_replace(array('\\n', '\\\'', '\''), array('<br />', '\'', '&rsquo;'), $node[0]);
-                $this->languageData->setTextCache($textId, $text);
-
-                return $text;
-            }
-        }
-
-        return '';
-    }
-
-    /**
-     * Set a language to this object. If there was a language before than initialize the cache
-     * @param string $language ISO code of the language that should be set to this object.
-     */
-    public function setLanguage($language)
-    {
-        if($language !== $this->languageData->getLanguage())
-        {
-            // initialize data
-            $this->xmlLanguageObjects    = array();
-            $this->xmlRefLanguageObjects = array();
-
-            $this->languageData->setLanguage($language);
+            return false;
         }
     }
 }
