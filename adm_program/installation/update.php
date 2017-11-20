@@ -220,7 +220,7 @@ if ($getMode === 1)
         {
             $gLogger->notice('UPDATE: This is a BETA release!');
 
-            $form->addDescription('
+            $form->addHtml('
                 <div class="alert alert-warning alert-small" role="alert">
                     <span class="glyphicon glyphicon-warning-sign"></span>
                     ' . $gL10n->get('INS_WARNING_BETA_VERSION') . '

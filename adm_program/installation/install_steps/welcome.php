@@ -53,10 +53,7 @@ $form->addSelectBoxFromXml(
     'isocode', 'name', array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
 );
 
-if ($messageWarning !== '')
-{
-    $form->addDescription($messageWarning);
-}
+$form->addHtml($messageWarning);
 
 $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
 
