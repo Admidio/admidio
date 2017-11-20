@@ -737,7 +737,7 @@ foreach ($membersList as $member)
             /*****************************************************************/
             if ($usfId > 0 && $usfId === (int) $gProfileFields->getProperty('COUNTRY', 'usf_id'))
             {
-                $content = $gL10n->getCountryByCode($member[$sqlColumnNumber]);
+                $content = $gL10n->getCountryName($member[$sqlColumnNumber]);
             }
             elseif ($column->getValue('lsc_special_field') === 'usr_photo')
             {
