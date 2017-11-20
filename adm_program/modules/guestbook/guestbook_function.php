@@ -190,8 +190,8 @@ if ($getMode === 1 || $getMode === 3)
                           FROM '.TBL_GUESTBOOK.'
                          WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
                            AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                           AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_adress\')';
-                $queryParams = array($gPreferences['flooding_protection_time'], $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_adress'));
+                           AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
+                $queryParams = array($gPreferences['flooding_protection_time'], $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
                 $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($pdoStatement->fetchColumn() > 0)
