@@ -163,7 +163,7 @@ $form->addMultilineTextInput(
     array('maxLength' => 4000)
 );
 $form->addSelectBoxForCategories(
-    'rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES',
+    'rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id'))
 );
 $form->closeGroupBox();
