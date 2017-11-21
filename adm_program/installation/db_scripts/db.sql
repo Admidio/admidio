@@ -898,7 +898,7 @@ create unique index %PREFIX%_IDX_URE_URT_USR on %PREFIX%_user_relations (ure_urt
 /* Constraints                                                  */
 /*==============================================================*/
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_CAT foreign key (ann_cat_id)
-      references %PREFIX%_categories (cat_id) on delete restrict on update restrict
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
