@@ -292,12 +292,12 @@ $gDb->query($sql);
 
 // 3. alte Mailrechte Übertragen
 // 3.1 eingeloggte konnten bisher eine Mail an diese Rolle schreiben
-$sql = 'UPDATE '.TBL_ROLES.' SET rol_mail_this_role = \'2\'
+$sql = 'UPDATE '.TBL_ROLES.' SET rol_mail_this_role = 2
          WHERE rol_mail_login = 1';
 $gDb->query($sql);
 
 // 3.2 ausgeloggte konnten bisher eine Mail an diese Rolle schreiben
-$sql = 'UPDATE '.TBL_ROLES.' SET rol_mail_this_role = \'3\'
+$sql = 'UPDATE '.TBL_ROLES.' SET rol_mail_this_role = 3
          WHERE rol_mail_logout = 1';
 $gDb->query($sql);
 

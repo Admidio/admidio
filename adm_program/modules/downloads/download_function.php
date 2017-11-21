@@ -349,7 +349,7 @@ elseif ($getMode === 6)
         $newFile->setValue('fil_fol_id', $folId);
         $newFile->setValue('fil_name', $getName);
         $newFile->setValue('fil_locked', $folder->getValue('fol_locked'));
-        $newFile->setValue('fil_counter', '0');
+        $newFile->setValue('fil_counter', 0);
         $newFile->save();
 
         // Zurueck zur letzten Seite

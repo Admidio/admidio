@@ -86,7 +86,7 @@ class TableMessage extends TableAccess
     public function setReadValue($usrId)
     {
         $sql = 'UPDATE '.TBL_MESSAGES.'
-                   SET msg_read = \'0\'
+                   SET msg_read = 0
                  WHERE msg_id   = ? -- $this->msgId
                    AND msg_usr_id_receiver = ? -- $usrId';
 

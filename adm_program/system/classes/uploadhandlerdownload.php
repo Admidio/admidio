@@ -64,7 +64,7 @@ class UploadHandlerDownload extends UploadHandler
                 $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
                 $newFile->setValue('fil_name', $file->name);
                 $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
-                $newFile->setValue('fil_counter', '0');
+                $newFile->setValue('fil_counter', 0);
                 $newFile->save();
 
                 // Benachrichtigungs-Email für neue Einträge
