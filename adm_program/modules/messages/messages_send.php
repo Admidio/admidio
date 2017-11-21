@@ -509,7 +509,7 @@ else
         $pmId = 1;
 
         $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', \''.$currUsrId.'\', \''.$postTo[0].'\', CURRENT_TIMESTAMP, \'1\')';
+                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$currUsrId.', \''.$postTo[0].'\', CURRENT_TIMESTAMP, 1)';
 
         $gDb->query($sql); // TODO add more params
         $getMsgId = $gDb->lastInsertId();
@@ -519,14 +519,14 @@ else
         $pmId = $message->countMessageParts() + 1;
 
         $sql = 'UPDATE '. TBL_MESSAGES. '
-                   SET msg_read = \'1\', msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = \''.$currUsrId.'\', msg_usr_id_receiver = \''.$postTo[0].'\'
+                   SET msg_read = 1, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '.$currUsrId.', msg_usr_id_receiver = \''.$postTo[0].'\'
                  WHERE msg_id = '.$getMsgId;
 
         $gDb->query($sql); // TODO add more params
     }
 
     $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES (\''.$getMsgId.'\', \''.$pmId.'\', \''.$currUsrId.'\', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
+            VALUES ('.$getMsgId.', '.$pmId.', '.$currUsrId.', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
 
     if ($gDb->query($sql)) // TODO add more params
     {

@@ -152,14 +152,12 @@ class HtmlNavbar
      */
     public function addItem($id, $url, $text, $icon = '', $orientation = 'left', $parentItem = 'navbar', $class = '')
     {
-        global $g_root_path;
-
-        $urlStartRegex = '/^(http(s?):)?\/\//';
+        $urlStartRegex = '/^(https?:)?\/\//i';
 
         // add root path to link unless the full URL is given
         if ($url !== '' && $url !== '#' && preg_match($urlStartRegex, $url) === 0)
         {
-            $url = $g_root_path . $url;
+            $url = ADMIDIO_URL . '/' . $url;
         }
 
         // add THEME_PATH to images unless the full URL is given

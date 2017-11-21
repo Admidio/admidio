@@ -109,7 +109,7 @@ if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
 $navbarForm = new HtmlForm('navbar_cat_id_form', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php?active_role='.$getActiveRole, $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories(
-    'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES',
+    'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId)
 );
 $listsMenu->addForm($navbarForm->show(false));

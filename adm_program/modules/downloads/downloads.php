@@ -221,7 +221,7 @@ if (isset($folderContent['files']))
             '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
             $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
             round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
-            ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : '0'
+            ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : 0
         );
 
         if ($currentFolder->hasUploadRight())

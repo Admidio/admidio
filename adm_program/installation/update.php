@@ -220,7 +220,7 @@ if ($getMode === 1)
         {
             $gLogger->notice('UPDATE: This is a BETA release!');
 
-            $form->addDescription('
+            $form->addHtml('
                 <div class="alert alert-warning alert-small" role="alert">
                     <span class="glyphicon glyphicon-warning-sign"></span>
                     ' . $gL10n->get('INS_WARNING_BETA_VERSION') . '
@@ -498,7 +498,7 @@ elseif ($getMode === 2)
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
     $form->addButton(
         'main_page', $gL10n->get('SYS_LATER'),
-        array('icon' => 'layout/application_view_list.png', 'link' => '../index.php')
+        array('icon' => 'layout/application_view_list.png', 'link' => ADMIDIO_URL . '/adm_program/index.php')
     );
     $form->closeButtonGroup();
     echo $form->show();

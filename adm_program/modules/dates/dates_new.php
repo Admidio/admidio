@@ -320,7 +320,7 @@ $form->addInput(
     array('type' => 'datetime', 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
-    'dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES',
+    'dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id'))
 );
 $form->closeGroupBox();

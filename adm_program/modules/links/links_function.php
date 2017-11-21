@@ -102,7 +102,7 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     // Link-Counter auf 0 setzen
     if ($getMode === 1)
     {
-        $link->setValue('lnk_counter', '0');
+        $link->setValue('lnk_counter', 0);
     }
 
     // Daten in Datenbank schreiben

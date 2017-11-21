@@ -35,7 +35,7 @@ elseif (is_file($configPathOld))
 else
 {
     $g_organization = '';
-    $g_root_path    = '';
+    $g_root_path    = '../..';
 }
 
 if (!isset($_SESSION['create_config_file']))

@@ -147,7 +147,7 @@ if($userField->getValue('usf_system') == 1)
 else
 {
     $form->addSelectBoxForCategories(
-        'usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', 'EDIT_CATEGORIES',
+        'usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', HtmlForm::SELECT_BOX_MODUS_EDIT,
         array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_cat_id'))
     );
 }
