@@ -43,7 +43,7 @@ class SettingsManager
      */
     private static function isValidName($name)
     {
-        return (bool) preg_match('/^[a-z](_?[a-z])*$/', $name);
+        return (bool) preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
     }
 
     /**
