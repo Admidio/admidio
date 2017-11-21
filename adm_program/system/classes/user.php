@@ -1567,7 +1567,7 @@ class User extends TableAccess
 
         if (!$doHashing)
         {
-            return $this->setValue($columnName, $newPassword, false);
+            return parent::setValue($columnName, $newPassword, false);
         }
 
         // get the saved cost value that fits your server performance best and rehash your password
@@ -1584,7 +1584,7 @@ class User extends TableAccess
             return false;
         }
 
-        return $this->setValue($columnName, $newPasswordHash, false);
+        return parent::setValue($columnName, $newPasswordHash, false);
     }
 
     /**

@@ -219,7 +219,7 @@ if($getViewMode === 'html')
     $filterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
     $form = new HtmlForm('navbar_filter_form', ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php?headline=' . $getHeadline . '&view=' . $getView, $page, array('type' => 'navbar', 'setFocus' => false));
     $form->addSelectBoxForCategories(
-        'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES',
+        'cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $dates->getParameter('cat_id'))
     );
     $form->addInput(

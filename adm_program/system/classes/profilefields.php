@@ -367,7 +367,7 @@ class ProfileFields
                 if ($value !== '')
                 {
                     // read the language name of the country
-                    $value = $gL10n->getCountryByCode($value);
+                    $value = $gL10n->getCountryName($value);
                 }
             }
             else

@@ -304,7 +304,7 @@ class TableDate extends TableAccess
             if ($columnName === 'dat_country' && $value !== '')
             {
                 // beim Land die sprachabhaengige Bezeichnung auslesen
-                $value = $gL10n->getCountryByCode($value);
+                $value = $gL10n->getCountryName($value);
             }
             elseif ($columnName === 'cat_name')
             {

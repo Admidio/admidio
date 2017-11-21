@@ -36,6 +36,9 @@ class HtmlForm extends HtmlFormBasic
     const FIELD_READONLY = 3;
     const FIELD_HIDDEN   = 4;
 
+    const SELECT_BOX_MODUS_EDIT = 'EDIT_CATEGORIES';
+    const SELECT_BOX_MODUS_FILTER = 'FILTER_CATEGORIES';
+
     /**
      * @var bool Flag if this form has required fields. Then a notice must be written at the end of the form
      */
@@ -1663,7 +1666,7 @@ class HtmlForm extends HtmlFormBasic
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        if($gCurrentOrganization->countAllRecords() > 1 && $selectBoxModus === 'EDIT_CATEGORIES')
+        if($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->countAllRecords() > 1)
         {
             $optionsAll['infoAlert'] = $gL10n->get('SYS_ALL_ORGANIZATIONS_DESC', array(implode(', ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true))));
 
@@ -1684,7 +1687,7 @@ class HtmlForm extends HtmlFormBasic
         $sqlConditions = '';
 
         // create sql conditions if category must have child elements
-        if ($selectBoxModus === 'FILTER_CATEGORIES')
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER)
         {
             $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories($categoryType));
             $optionsAll['showContextDependentFirstEntry'] = false;
@@ -1715,7 +1718,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // within edit dialogs child organizations are not allowed to assign categories of all organizations
-        if($selectBoxModus === 'EDIT_CATEGORIES' && $gCurrentOrganization->isChildOrganization())
+        if($selectBoxModus === self::SELECT_BOX_MODUS_EDIT && $gCurrentOrganization->isChildOrganization())
         {
             $sqlConditions .= ' AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\') ';
         }
@@ -1744,7 +1747,7 @@ class HtmlForm extends HtmlFormBasic
         $countCategories = $pdoStatement->rowCount();
 
         // if no or only one category exist and in filter modus, than don't show category
-        if (($countCategories === 0 || $countCategories === 1) && $selectBoxModus === 'FILTER_CATEGORIES')
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && ($countCategories === 0 || $countCategories === 1))
         {
             return;
         }
@@ -1752,7 +1755,7 @@ class HtmlForm extends HtmlFormBasic
         $categoriesArray = array();
         $optionsAll['valueAttributes'] = array();
 
-        if ($countCategories > 1 && $selectBoxModus === 'FILTER_CATEGORIES')
+        if ($selectBoxModus === self::SELECT_BOX_MODUS_FILTER && $countCategories > 1)
         {
             $categoriesArray[0] = $gL10n->get('SYS_ALL');
             $optionsAll['valueAttributes'][0] = array('data-global' => 0);
