@@ -14,7 +14,7 @@
  */
 
 // embed config file
-if(is_file('../adm_my_files/config.php'))
+if(is_file(__DIR__ . '/../adm_my_files/config.php'))
 {
     // search in path of version 3.x
     require_once(__DIR__ . '/../adm_my_files/config.php');
@@ -32,7 +32,7 @@ else
 require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
 
 // import of demo data must be enabled in config.php
-if(!isset($gImportDemoData) || $gImportDemoData != 1)
+if(!isset($gImportDemoData) || !$gImportDemoData)
 {
     exit('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
@@ -160,16 +160,17 @@ function readAndExecuteSQLFromFile($filename, Database $database)
 {
     global $g_tbl_praefix, $gL10n;
 
-    $file = fopen($filename, 'rb');
+    $filePath = __DIR__ . '/' . $filename;
+    $file = fopen($filePath, 'rb');
     if ($file === false)
     {
         exit('<p style="color: #cc0000;">File <strong>data.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
     }
-    $content  = fread($file, filesize($filename));
+    $content  = fread($file, filesize($filePath));
     $sqlArray = explode(';', $content);
     fclose($file);
 
-    echo 'Read file '.$filename.' ...<br />';
+    echo 'Read file '.$filePath.' ...<br />';
 
     foreach($sqlArray as $sql)
     {
