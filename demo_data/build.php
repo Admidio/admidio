@@ -231,7 +231,7 @@ if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for 
 }
 
 // set parameter lang to default language for this installation
-$sql = 'UPDATE '.$g_tbl_praefix.'_preferences
+$sql = 'UPDATE '.TBL_PREFERENCES.'
            SET prf_value = ? -- $getLanguage
          WHERE prf_name = \'system_language\'';
 $db->queryPrepared($sql, array($getLanguage));

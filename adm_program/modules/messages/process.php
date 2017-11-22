@@ -118,7 +118,8 @@ switch($postFunction)
 
         if($msgId === 0)
         {
-            $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
+            $sql = 'INSERT INTO '. TBL_MESSAGES. '
+                           (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
                     VALUES (\'CHAT\', \'DUMMY\', 1, ?, CURRENT_TIMESTAMP, 0) -- $msgId';
             $gDb->queryPrepared($sql, array($msgId));
             $msgId = $moduleMessages->msgGetChatId();
@@ -126,7 +127,8 @@ switch($postFunction)
 
         ++$msgId;
 
-        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
+        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
+                       (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
                 VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $msgId, $msgId, $gCurrentUser->getValue(\'usr_id\'), $postMessage';
         $gDb->queryPrepared($sql, array($msgId, $msgId, (int) $gCurrentUser->getValue('usr_id'), $postMessage));
 

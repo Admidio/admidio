@@ -504,8 +504,9 @@ class Organization extends TableAccess
             else
             {
                 // Parameter existiert noch nicht in DB
-                $sql = 'INSERT INTO '.TBL_PREFERENCES.' (prf_org_id, prf_name, prf_value)
-                             VALUES (?, ?, ?) -- $orgId, $key, $value';
+                $sql = 'INSERT INTO '.TBL_PREFERENCES.'
+                               (prf_org_id, prf_name, prf_value)
+                        VALUES (?, ?, ?) -- $orgId, $key, $value';
                 $this->db->queryPrepared($sql, array($orgId, $key, $value));
             }
         }
