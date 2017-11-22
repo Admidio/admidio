@@ -147,7 +147,7 @@ $page->addJavascript('
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if (direction === "up") {
+        if (direction === "UP") {
             if (prevNode !== null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
@@ -240,9 +240,9 @@ while($catRow = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'up\', '.$catId.')"><img
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$catId.')"><img
                                 src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" /></a>
-                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\'down\', '.$catId.')"><img
+                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$catId.')"><img
                                 src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" /></a>';
     }
 
