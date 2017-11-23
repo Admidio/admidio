@@ -14,15 +14,17 @@
  */
 
 // embed config file
-if(is_file(__DIR__ . '/../adm_my_files/config.php'))
+$configPath    = __DIR__ . '/../adm_my_files/config.php';
+$configPathOld = __DIR__ . '/../config.php';
+if(is_file($configPath))
 {
     // search in path of version 3.x
-    require_once(__DIR__ . '/../adm_my_files/config.php');
+    require_once($configPath);
 }
-elseif(is_file('../config.php'))
+elseif(is_file($configPathOld))
 {
     // search in path of version 1.x and 2.x
-    require_once(__DIR__ . '/../config.php');
+    require_once($configPathOld);
 }
 else
 {
@@ -100,6 +102,21 @@ function getBacktrace()
     return $output;
 }
 
+/**
+ * @param bool $enable
+ */
+function toggleForeignKeyChecks($enable)
+{
+    global $gDbType, $db;
+
+    if ($gDbType === Database::PDO_ENGINE_MYSQL)
+    {
+        // disable foreign key checks for mysql, so tables can easily deleted
+        $sql = 'SET foreign_key_checks = ' . (int) $enable;
+        $db->queryPrepared($sql);
+    }
+}
+
 // Initialize and check the parameters
 $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
 
@@ -146,11 +163,8 @@ catch(AdmException $e)
     exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())));
 }
 
-if($gDbType === Database::PDO_ENGINE_MYSQL)
-{
-    // disable foreign key checks for mysql, so tables can easily deleted
-    $db->queryPrepared('SET foreign_key_checks = 0');
-}
+// disable foreign key checks for mysql, so tables can easily deleted
+toggleForeignKeyChecks(false);
 
 /**
  * @param string   $filename The SQL filename (db.sql, data.sql)
@@ -164,7 +178,7 @@ function readAndExecuteSQLFromFile($filename, Database $database)
     $file = fopen($filePath, 'rb');
     if ($file === false)
     {
-        exit('<p style="color: #cc0000;">File <strong>data.sql</strong> could not be found in folder <strong>demo_data</strong>.</p>');
+        exit('<p style="color: #cc0000;">File <strong>'.$filename.'</strong> could not be found in folder <strong>demo_data</strong>.</p>');
     }
     $content  = fread($file, filesize($filePath));
     $sqlArray = explode(';', $content);
@@ -204,7 +218,7 @@ function readAndExecuteSQLFromFile($filename, Database $database)
                 }
             }
 
-            $database->query($sql); // TODO add more params
+            $database->queryPrepared($sql);
         }
     }
 }
@@ -222,9 +236,9 @@ if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for 
     $sql = 'SELECT relname
               FROM pg_class
              WHERE relkind = \'S\'';
-    $sqlStatement = $db->queryPrepared($sql);
+    $pdoStatement = $db->queryPrepared($sql);
 
-    while($relname = $sqlStatement->fetchColumn())
+    while($relname = $pdoStatement->fetchColumn())
     {
         $sql = 'SELECT setval(\'' . $relname . '\', 1000000)';
         $db->queryPrepared($sql);
@@ -237,31 +251,28 @@ $sql = 'UPDATE '.TBL_PREFERENCES.'
          WHERE prf_name = \'system_language\'';
 $db->queryPrepared($sql, array($getLanguage));
 
-if($gDbType === Database::PDO_ENGINE_MYSQL)
-{
-    // activate foreign key checks, so database is consistent
-    $db->queryPrepared('SET foreign_key_checks = 1');
-}
+// activate foreign key checks, so database is consistent
+toggleForeignKeyChecks(true);
 
 echo 'Installation successful !<br />';
 
 // read installed database version
 $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
-if(!$db->queryPrepared($sql, array(), false))
-{
-    // in Admidio version 2 the database version was stored in preferences table
-    $sql = 'SELECT prf_value
-              FROM ' . $g_tbl_praefix . '_preferences
-             WHERE prf_name   = \'db_version\'
-               AND prf_org_id = 1';
-    $pdoStatement = $db->queryPrepared($sql);
-    $databaseVersion = $pdoStatement->fetchColumn();
-}
-else
+if($db->queryPrepared($sql, array(), false))
 {
     $systemComponent = new Component($db);
     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
     $databaseVersion = $systemComponent->getValue('com_version');
+}
+else
+{
+    // in Admidio version 2 the database version was stored in preferences table
+    $sql = 'SELECT prf_value
+              FROM ' . TBL_PREFERENCES . '
+             WHERE prf_name   = \'db_version\'
+               AND prf_org_id = 1';
+    $pdoStatement = $db->queryPrepared($sql);
+    $databaseVersion = $pdoStatement->fetchColumn();
 }
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
