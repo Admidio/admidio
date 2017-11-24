@@ -38,6 +38,14 @@ class SettingsManager
     }
 
     /**
+     * @return array<int,string>
+     */
+    public function __sleep()
+    {
+        return array('db', 'orgId');
+    }
+
+    /**
      * @param string $name
      * @return bool
      */
@@ -288,6 +296,7 @@ class SettingsManager
      * @param string $name
      * @param string $value
      * @param bool   $update
+     * @throws \UnexpectedValueException
      */
     private function updateOrInsertSetting($name, $value, $update = true)
     {
