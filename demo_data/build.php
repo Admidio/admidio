@@ -16,12 +16,12 @@
 // embed config file
 $configPath    = __DIR__ . '/../adm_my_files/config.php';
 $configPathOld = __DIR__ . '/../config.php';
-if(is_file($configPath))
+if (is_file($configPath))
 {
     // search in path of version 3.x
     require_once($configPath);
 }
-elseif(is_file($configPathOld))
+elseif (is_file($configPathOld))
 {
     // search in path of version 1.x and 2.x
     require_once($configPathOld);
@@ -31,15 +31,15 @@ else
     exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
 }
 
-require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
-
 // import of demo data must be enabled in config.php
-if(!isset($gImportDemoData) || !$gImportDemoData)
+if (!isset($gImportDemoData) || !$gImportDemoData)
 {
     exit('<p style="color: #cc0000;">Error: Demo data could not be imported because you have
     not set the preference <strong>gImportDemoData</strong> in your configuration file.</p>
-    <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = 1;</em></p>');
+    <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = true;</em></p>');
 }
+
+require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
 
 /**
  * parts of this function are from get_backtrace out of phpBB3
@@ -103,18 +103,249 @@ function getBacktrace()
 }
 
 /**
+ * @return bool
+ */
+function prepareAdmidioDataFolder()
+{
+    $srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
+    $myFilesFolder = new Folder($srcFolder);
+
+    $newFolder = ADMIDIO_PATH . FOLDER_DATA;
+    $myFilesFolder->delete($newFolder . '/backup');
+    $myFilesFolder->delete($newFolder . '/download');
+    $myFilesFolder->delete($newFolder . '/photos');
+
+    return $myFilesFolder->copy($newFolder);
+}
+
+/**
  * @param bool $enable
  */
 function toggleForeignKeyChecks($enable)
 {
-    global $gDbType, $db;
+    global $gDbType, $gDb;
 
     if ($gDbType === Database::PDO_ENGINE_MYSQL)
     {
         // disable foreign key checks for mysql, so tables can easily deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
-        $db->queryPrepared($sql);
+        $gDb->queryPrepared($sql);
     }
+}
+
+/**
+ * @param string $filePath
+ * @throws \RuntimeException
+ * @throws \UnexpectedValueException
+ * @return string
+ */
+function readFileContent($filePath)
+{
+    if (!is_file($filePath))
+    {
+        throw new \UnexpectedValueException('File not found!');
+    }
+    if (!is_readable($filePath))
+    {
+        throw new \UnexpectedValueException('File not readable!');
+    }
+
+    // r = readonly; pointer on beginning of the file
+    // b = binary mode
+    $handle = fopen($filePath, 'rb');
+    if ($handle === false)
+    {
+        throw new \RuntimeException('File opening not possible!');
+    }
+
+    $content = fread($handle, filesize($filePath));
+
+    fclose($handle);
+
+    if ($content === false)
+    {
+        throw new \RuntimeException('File reading not possible!');
+    }
+
+    return $content;
+}
+
+/**
+ * @param string $fileContent
+ * @return array<int,string>
+ */
+function prepareFileContent($fileContent)
+{
+    global $g_tbl_praefix;
+
+    $sqlArray = explode(';', $fileContent);
+
+    $sqlStatements = array();
+    foreach ($sqlArray as $sql)
+    {
+        $sql = trim($sql);
+        if ($sql !== '')
+        {
+            // set prefix for all tables and execute sql statement
+            $sqlStatements[] = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+        }
+    }
+
+    return $sqlStatements;
+}
+
+/**
+ * @param array<int,string> $sqlStatements
+ * @param string $filename
+ */
+function executeSqlStatements(array $sqlStatements, $filename)
+{
+    global $gDb, $gL10n;
+
+    foreach ($sqlStatements as $sqlStatement)
+    {
+        if ($filename === 'data.sql')
+        {
+            // search for translation strings with the prefix DEMO or SYS and try replace them
+            preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
+
+            foreach ($results[0] as $value)
+            {
+                // if it's a string of a systemmail then html linefeeds must be replaced
+                if (admStrStartsWith($value, 'SYS_SYSMAIL_'))
+                {
+                    // convert <br /> to a normal line feed
+                    $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
+                }
+                else
+                {
+                    $convertedText = $gL10n->get($value);
+                }
+
+                // search for the exact value as a separate word and replace it with the translation
+                // in l10n the single quote is transformed in html entity, but we need the original sql escaped
+                $escapedText = $gDb->escapeString(str_replace('&rsquo;', '\'', $convertedText));
+                $sqlStatement = preg_replace('/\b'.$value.'\b/', substr($escapedText, 1, strlen($escapedText) - 2), $sqlStatement);
+            }
+        }
+
+        $gDb->queryPrepared($sqlStatement);
+    }
+}
+
+/**
+ * @param string $filename The SQL filename (db.sql, data.sql)
+ */
+function readAndExecuteSQLFromFile($filename)
+{
+    $filePath = __DIR__ . '/' . $filename;
+
+    echo 'Reading file "'.$filename.'" ...<br />';
+
+    try
+    {
+        $fileContent = readFileContent($filePath);
+    }
+    catch (\RuntimeException $exception)
+    {
+        exit('<p style="color: #cc0000;">' . $exception->getMessage() . ' File-Path: ' . $filePath . '</p>');
+    }
+
+    $sqlStatements = prepareFileContent($fileContent);
+
+    echo 'Read file "'.$filename.'" finished!<br />';
+    echo 'Executing "'.$filename.'" SQL-Statements ...<br />';
+
+    executeSqlStatements($sqlStatements, $filename);
+
+    echo 'Executing "'.$filename.'" SQL-Statements finished!<br />';
+}
+
+function resetPostgresSequences()
+{
+    global $gDb, $gDbType;
+
+    if ($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+    {
+        $sql = 'SELECT relname
+                  FROM pg_class
+                 WHERE relkind = \'S\'';
+        $pdoStatement = $gDb->queryPrepared($sql);
+
+        while ($relname = $pdoStatement->fetchColumn())
+        {
+            $sql = 'SELECT setval(\'' . $relname . '\', 1000000)';
+            $gDb->queryPrepared($sql);
+        }
+    }
+}
+
+/**
+ * @param string $language
+ */
+function setInstallationLanguage($language)
+{
+    global $gDb;
+
+    $sql = 'UPDATE '.TBL_PREFERENCES.'
+               SET prf_value = ? -- $language
+             WHERE prf_name = \'system_language\'';
+    $gDb->queryPrepared($sql, array($language));
+}
+
+/**
+ * @return string
+ */
+function getInstalledDbVersion()
+{
+    global $gDb;
+
+    $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
+    $pdoStatement = $gDb->queryPrepared($sql, array(), false);
+
+    if ($pdoStatement === false)
+    {
+        // in Admidio version 2 the database version was stored in preferences table
+        $sql = 'SELECT prf_value
+                  FROM ' . TBL_PREFERENCES . '
+                 WHERE prf_name   = \'db_version\'
+                   AND prf_org_id = 1';
+        $pdoStatement = $gDb->queryPrepared($sql);
+
+        return $pdoStatement->fetchColumn();
+    }
+
+    $systemComponent = new Component($gDb);
+    $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+
+    return $systemComponent->getValue('com_version');
+}
+
+/**
+ * @param string $language
+ */
+function doInstallation($language)
+{
+    global $gDb, $gL10n; // necessary for "data_edit.php"
+
+    // disable foreign key checks for mysql, so tables can easily deleted
+    toggleForeignKeyChecks(false);
+
+    readAndExecuteSQLFromFile('db.sql');
+    readAndExecuteSQLFromFile('data.sql');
+
+    // manipulate some dates so that it's suitable to the current date
+    echo 'Edit data of database ...<br />';
+    include_once(__DIR__ . '/data_edit.php');
+
+    // in postgresql all sequences must get a new start value because our inserts have given ids
+    resetPostgresSequences();
+
+    // set parameter lang to default language for this installation
+    setInstallationLanguage($language);
+
+    // activate foreign key checks, so database is consistent
+    toggleForeignKeyChecks(true);
 }
 
 // Initialize and check the parameters
@@ -129,23 +360,14 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 Session::start(COOKIE_PREFIX);
 unset($_SESSION['gCurrentSession']);
 
-echo 'Start with installation ...<br />';
-
 // create language and language data object to handle translations
 $gLanguageData = new LanguageData($getLanguage);
 $gL10n = new Language($gLanguageData);
 $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-$srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
-$newFolder = ADMIDIO_PATH . FOLDER_DATA;
-
-$myFilesFolder = new Folder($srcFolder);
-$myFilesFolder->delete($newFolder.'/backup');
-$myFilesFolder->delete($newFolder.'/download');
-$myFilesFolder->delete($newFolder.'/photos');
-$returnValue = $myFilesFolder->copy($newFolder);
-if(!$returnValue)
+$copySuccessful = prepareAdmidioDataFolder();
+if (!$copySuccessful)
 {
     echo '<p style="color: #cc0000;">Folder <strong>adm_my_files</strong> is not writable.<br />
     No files could be copied to that folder.</p>';
@@ -156,124 +378,21 @@ echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 // connect to database
 try
 {
-    $db = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
 }
-catch(AdmException $e)
+catch (AdmException $e)
 {
     exit('<br />'.$gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())));
 }
 
-// disable foreign key checks for mysql, so tables can easily deleted
-toggleForeignKeyChecks(false);
+echo 'Start installing ...<br />';
 
-/**
- * @param string   $filename The SQL filename (db.sql, data.sql)
- * @param Database $database
- */
-function readAndExecuteSQLFromFile($filename, Database $database)
-{
-    global $g_tbl_praefix, $gL10n;
+doInstallation($getLanguage);
 
-    $filePath = __DIR__ . '/' . $filename;
-    $file = fopen($filePath, 'rb');
-    if ($file === false)
-    {
-        exit('<p style="color: #cc0000;">File <strong>'.$filename.'</strong> could not be found in folder <strong>demo_data</strong>.</p>');
-    }
-    $content  = fread($file, filesize($filePath));
-    $sqlArray = explode(';', $content);
-    fclose($file);
-
-    echo 'Read file '.$filePath.' ...<br />';
-
-    foreach($sqlArray as $sql)
-    {
-        if(trim($sql) !== '')
-        {
-            // set prefix for all tables and execute sql statement
-            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-
-            if ($filename === 'data.sql')
-            {
-                // search for translation strings with the prefix DEMO or SYS and try replace them
-                preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sql, $results);
-
-                foreach($results[0] as $value)
-                {
-                    // if it's a string of a systemmail then html linefeeds must be replaced
-                    if(admStrStartsWith($value, 'SYS_SYSMAIL_'))
-                    {
-                        // convert <br /> to a normal line feed
-                        $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
-                    }
-                    else
-                    {
-                        $convertedText = $gL10n->get($value);
-                    }
-
-                    // search for the exact value as a separate word and replace it with the translation
-                    // in l10n the single quote is transformed in html entity, but we need the original sql escaped
-                    $escapedText = $database->escapeString(str_replace('&rsquo;', '\'', $convertedText));
-                    $sql = preg_replace('/\b'.$value.'\b/', substr($escapedText, 1, strlen($escapedText) - 2), $sql);
-                }
-            }
-
-            $database->queryPrepared($sql);
-        }
-    }
-}
-
-readAndExecuteSQLFromFile('db.sql', $db);
-readAndExecuteSQLFromFile('data.sql', $db);
-
-// manipulate some dates so that it's suitable to the current date
-echo 'Edit data of database ...<br />';
-include_once(__DIR__ . '/data_edit.php');
-
-// in postgresql all sequences must get a new start value because our inserts have given ids
-if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
-{
-    $sql = 'SELECT relname
-              FROM pg_class
-             WHERE relkind = \'S\'';
-    $pdoStatement = $db->queryPrepared($sql);
-
-    while($relname = $pdoStatement->fetchColumn())
-    {
-        $sql = 'SELECT setval(\'' . $relname . '\', 1000000)';
-        $db->queryPrepared($sql);
-    }
-}
-
-// set parameter lang to default language for this installation
-$sql = 'UPDATE '.TBL_PREFERENCES.'
-           SET prf_value = ? -- $getLanguage
-         WHERE prf_name = \'system_language\'';
-$db->queryPrepared($sql, array($getLanguage));
-
-// activate foreign key checks, so database is consistent
-toggleForeignKeyChecks(true);
-
-echo 'Installation successful !<br />';
+echo 'Installation successful!<br />';
 
 // read installed database version
-$sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
-if($db->queryPrepared($sql, array(), false))
-{
-    $systemComponent = new Component($db);
-    $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-    $databaseVersion = $systemComponent->getValue('com_version');
-}
-else
-{
-    // in Admidio version 2 the database version was stored in preferences table
-    $sql = 'SELECT prf_value
-              FROM ' . TBL_PREFERENCES . '
-             WHERE prf_name   = \'db_version\'
-               AND prf_org_id = 1';
-    $pdoStatement = $db->queryPrepared($sql);
-    $databaseVersion = $pdoStatement->fetchColumn();
-}
+$databaseVersion = getInstalledDbVersion();
 
 echo '<p>Database and test-data have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />

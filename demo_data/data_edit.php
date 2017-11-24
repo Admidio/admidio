@@ -177,5 +177,5 @@ $sqlQueries[] = 'UPDATE '.TBL_LINKS.'
 
 foreach ($sqlQueries as $sqlQuery)
 {
-    $db->queryPrepared($sqlQuery);
+    $gDb->queryPrepared($sqlQuery);
 }
