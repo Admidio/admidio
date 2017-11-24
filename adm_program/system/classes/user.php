@@ -787,7 +787,8 @@ class User extends TableAccess
         $sqlQueries[] = 'DELETE FROM '.TBL_IDS.'
                           WHERE ids_usr_id = '.$currUsrId;
 
-        $sqlQueries[] = 'INSERT INTO '.TBL_IDS.' (ids_usr_id, ids_reference_id)
+        $sqlQueries[] = 'INSERT INTO '.TBL_IDS.'
+                                (ids_usr_id, ids_reference_id)
                          SELECT '.$currUsrId.', msc_msg_id
                            FROM '.TBL_MESSAGES_CONTENT.'
                           WHERE msc_usr_id = '.$usrId;

@@ -124,7 +124,7 @@ function querySqlFile(Database $db, $sqlFileName)
             // replace prefix with installation specific table prefix
             $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
             // now execute update sql
-            $db->query($sql); // TODO add more params
+            $db->queryPrepared($sql);
         }
     }
 

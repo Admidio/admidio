@@ -153,7 +153,10 @@ class Database
 
         $this->connect();
 
-        $gLogger->debug('DATABASE: connected!');
+        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        {
+            $gLogger->debug('DATABASE: connected!');
+        }
     }
 
     /**
@@ -163,7 +166,10 @@ class Database
     {
         global $gLogger;
 
-        $gLogger->debug('DATABASE: sleep/serialize!');
+        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        {
+            $gLogger->debug('DATABASE: sleep/serialize!');
+        }
 
         return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
     }
@@ -172,11 +178,17 @@ class Database
     {
         global $gLogger;
 
-        $gLogger->debug('DATABASE: wakeup/unserialize!');
+        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        {
+            $gLogger->debug('DATABASE: wakeup/unserialize!');
+        }
 
         $this->connect();
 
-        $gLogger->debug('DATABASE: reconnected!');
+        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        {
+            $gLogger->debug('DATABASE: reconnected!');
+        }
     }
 
     /**

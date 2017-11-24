@@ -537,7 +537,7 @@ class TableAccess
         else
         {
             $sql = 'UPDATE '.$this->tableName.'
-                       SET '.implode(',', $sqlSetArray).'
+                       SET '.implode(', ', $sqlSetArray).'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
             $queryParams[] = $this->dbColumns[$this->keyColumnName];
             $this->db->queryPrepared($sql, $queryParams);

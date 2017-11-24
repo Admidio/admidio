@@ -26,7 +26,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getUsfId    = admFuncVariableIsValid($_GET, 'usf_id',   'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableUserField::MOVE_UP, TableUserField::MOVE_DOWN)));
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isAdministrator())

@@ -163,10 +163,10 @@ class TableMessage extends TableAccess
             }
 
             $sql = 'UPDATE '.TBL_MESSAGES.'
-                       SET msg_read = 2,
-                           msg_usr_id_sender   = ?, -- $currUsrId
-                           msg_usr_id_receiver = ?, -- $other
-                           msg_timestamp = CURRENT_TIMESTAMP
+                       SET msg_read = 2
+                         , msg_usr_id_sender   = ? -- $currUsrId
+                         , msg_usr_id_receiver = ? -- $other
+                         , msg_timestamp = CURRENT_TIMESTAMP
                      WHERE msg_id = ? -- $msgId';
             $this->db->queryPrepared($sql, array($currUsrId, $other, $msgId));
         }

@@ -20,6 +20,9 @@
  */
 class TableUserField extends TableAccess
 {
+    const MOVE_UP   = 'UP';
+    const MOVE_DOWN = 'DOWN';
+
     /**
      * @var bool|null Flag if the current user could view this user
      */
@@ -321,7 +324,6 @@ class TableUserField extends TableAccess
      */
     public function moveSequence($mode)
     {
-        $mode = admStrToUpper($mode);
         $usfSequence = (int) $this->getValue('usf_sequence');
         $usfCatId    = (int) $this->getValue('usf_cat_id');
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
@@ -330,17 +332,17 @@ class TableUserField extends TableAccess
                    AND usf_sequence = ? -- $usfSequence -/+ 1';
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if ($mode === 'UP')
+        if ($mode === self::MOVE_UP)
         {
-            $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence - 1));
             --$usfSequence;
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif ($mode === 'DOWN')
+        elseif ($mode === self::MOVE_DOWN)
         {
-            $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence + 1));
             ++$usfSequence;
         }
+
+        $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence));
 
         $this->setValue('usf_sequence', $usfSequence);
         $this->save();
