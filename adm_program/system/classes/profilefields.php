@@ -212,7 +212,7 @@ class ProfileFields
                     {
                         // if value is imagefile or imageurl then show image
                         if ($usfType === 'RADIO_BUTTON'
-                        && (admStrEndsWith(admStrToLower($listValue), '.png') || admStrEndsWith(admStrToLower($listValue), '.jpg')))
+                        && (admStrContains(admStrToLower($listValue), '.png') || admStrContains(admStrToLower($listValue), '.jpg')))
                         {
                             // if there is imagefile and text separated by | then explode them
                             if (strpos($listValue, '|') > 0)

@@ -284,7 +284,7 @@ class TableUserField extends TableAccess
                     break;
                 case 'usf_icon':
                     // if value is imagefile or imageurl then show image
-                    if(admStrEndsWith(admStrToLower($value), '.png') || admStrEndsWith(admStrToLower($value), '.jpg'))
+                    if(admStrContains(admStrToLower($value), '.png') || admStrContains(admStrToLower($value), '.jpg'))
                     {
                         try
                         {
