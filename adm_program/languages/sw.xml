@@ -63,7 +63,6 @@
   <string name="DAT_MANAGE_CALENDARS">Tawala kalenda</string>
   <string name="DAT_MAX_MEMBERS">Punguza idadi ya washiriki katika tukio hili. Tafadhali acha kisanduku wazi kwa idadi ya washiriki isiyo na kikomo.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Jiunge kwenye tukio kama mratibu</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Utakuwa mratibu wa tukio na utaruhusiwa kuongeza/kupunguza washiriki zaidi au kuwafanya kuwa waratibu wa ziada.</string>
   <string name="DAT_PERIOD_FROM_TO">Kipindi cha muda kuanzia #VAR1# hadi #VAR2# </string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Iliyopita #VAR1#</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Usajili umefungwa.</string>
@@ -72,7 +71,6 @@
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Washiriki wanaweza kuona orodha ya washiriki</string>
   <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Washiriki wanaweza kutuma barua pepe kwa washiriki wote</string>
   <string name="DAT_ROOM_INFORMATIONS">Taarifa za chumba</string>
-  <string name="DAT_ROOM_OVERHANG">Iwapo kuna nafasi yoyote ya ziada (Mf. nafasi za ziada za kukaa, chumba cha kusimama), idadi ya nafasi za ziada zinaweza kubainishwa hapa.</string>
   <string name="DAT_ROOM_RESERVED">Chumba kilichochaguliwa kinatumika kwa sasa.</string>
   <string name="DAT_ROOM_SELECTABLE">Chumba kipo</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Kisanduku cha uchaguzi kwa vyumba vilivyopo kipo. Chagua chumba na tengeneza tukio kwa chumba kilichochaguliwa. (jibu la kiwangogezi: hapana)</string>
@@ -83,20 +81,90 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Hamia kwenye usimamizi wa kalenda</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Fungua usimamizi wa chumba</string>
   <string name="DAT_VIEW_MODE">Mwonekano-msingi</string>
+  <string name="DAT_USER_ATTEND">Ninachukua sehemu</string>
+  <string name="DAT_USER_TENTATIVE">Ninaweza kuchukua sehemu</string>
+  <string name="DAT_USER_INVITED">Karibishwa</string>
+  <string name="DAT_USER_REFUSED">Ushiriki umesitishwa</string>
+  <string name="DAT_USER_WILL_ATTEND">Shiriki/Chukua sehemu</string>
+  <string name="DAT_VIEW_MODE_DETAIL">Kwa kina</string>
+  <string name="DAT_VIEW_MODE_COMPACT">Kwa uchache</string>
+  <string name="DAT_VISIBILITY">Mwonekano</string>
   <!--Phrases only in Downloadsmodule-->
+  <string name="DOW_ADD_TO_DATABASE">Ongeza kwenye hazinadata</string>
+  <string name="DOW_ADDITIONAL_FILES">Orodha hii inalenga kuonesha mafaili na mafolda ambayo bado hayajaingizwa kwenye hazinadata. Yanaweza kuongezwa kwenye hazinadata. Ruhusa ya kuona itanakiliwa kutoka kwenye folda lililochaguliwa.</string>
+  <string name="DOW_ADMINISTRATORS_DESC">Nyadhifa hizi ni wasimamizi wa moduli ya upakuaji na wana ruhusa kwenye mafolda yote na mafaili. Unaweza kupakia, kupakua na kupangilia ruhusa za kuona. Wadhifa unaweza kuwekwa kama msimamizi mkuu kwa kuweka ruhusa #VAR1_BOLD#</string>
+  <string name="DOW_COUNTER">Kihesabuji</string>
   <string name="DOW_CREATE_FOLDER">Tengeneza folda</string>
   <string name="DOW_CREATE_FOLDER_DESC">Folda jipya litatengenezwa kwenye folda #VAR1_BOLD#.</string>
   <string name="DOW_DOWNLOADS">Vipakuliwa</string>
+  <string name="DOW_DOWNLOADS_DESC">Mafaili tofautitofauti ya data na aina za mafaili zinaweza kutolewa kwa ajii ya kupakuliwa. Pakuzi hizi zinaweza kugawanywa katika mafolda yenye viwango tofauti nya ruhusa.</string>
   <string name="DOW_EDIT_FILE">Hariri faili</string>
   <string name="DOW_EDIT_FOLDER">Hariri folda</string>
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">Faili jipya limepakiwa</string>
   <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Faili jipya limepakiwa kwenye#VAR1#\n\nFaili: #VAR2#\nLimepakiwa na: #VAR3#\nLimepakiwa: #VAR4# </string>
   <string name="DOW_ENABLE_DOWNLOAD_MODULE">Inawezesha moduli ya kupakua</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Moduli ya kupakua inaweza kuzimwa hapa. Baada ya kuzimwa haitatokeza tena kama moduli kwenye muonekano wa jumla. (chaguo-msingi: ndiyo)</string>
+  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Moduli ya upakuaji inaweza kuwezeshwa au kuzimwa kupitia mipangilio hii. (Chaguo-msingi: ndiyo)</string>
   <string name="DOW_FILE_EXIST">Faili #VAR1# tayari lipo!\n\nTafadhali chagua jina tofauti la faili.</string>
   <string name="DOW_FILE_EXTENSION_INVALID">Aina ya faili hairuhusiwi kwenye seva hii.</string>
+  <string name="DOW_FILE_NAME_RULES">Jina la faili ni lazima lioneshe yaliyomo katika faili. Jina la faili linaathiri mpangilio wa uorodheshaji. Mf. Jina la faili lenye mashauri lazima lianze na tarehe mwaka-mwezi-tarehe (m-m-t).</string>
+  <string name="DOW_FILE_NOT_EXISTS">Faili hili halipo tena kwenye seva. Huenda litakuwa limefutwa kutoka kwenye hazinadata.</string>
+  <string name="DOW_FILE_RENAME">Faili #VAR1# limebadilishwa jina</string>
+  <string name="DOW_FILE_RENAME_ERROR">Tatizo limetokea wakati wa kubadili jina la faili #VAR1#.</string>
+  <string name="DOW_FILE_TO_LARGE">Ukubwa wa faili lililopakiwa ni mkubwa kuliko ulioruhusiwa (Kiwango cha juu ni: #VAR1# MB)</string>
+  <string name="DOW_FILE_TYPE">Aina ya faili</string>
+  <string name="DOW_FILE_UPLOADED">Faili #VAR1_BOLD# limepakiwa.</string>
+  <string name="DOW_FILES_UPLOAD_SUCCESSFUL">Mafaili yote yamepakiwa kikamilifu.\n\nKisanduku kinaweza kufungwa.</string>
+  <string name="DOW_FILES_UPLOAD_NOT_SUCCESSFUL">Siyo mafaili yote yamepakiwa kikamilifu.</string>
+  <string name="DOW_FILES_UPLOAD_DESC">Tafadhali chagua faili la kupakia kwenye folda #VAR1_BOLD#</string>
+  <string name="DOW_FILES_UPLOADED">Mafaili #VAR1# yamepakiwa kikamilifu.</string>
+  <string name="DOW_FOLDER_CREATED">Folda #VAR1_BOLD# limetengenezwa.</string>
+  <string name="DOW_FOLDER_EXISTS">Folda #VAR1# tayari lipo!\n\nTafadhali chagua jina lingine la folda.</string>
+  <string name="DOW_FOLDER_NAME_INVALID">Jina la folda lina herufi/alama zisizoruhusiwa!\n\nTafadhali chagua jina lingine la folda.</string>
+  <string name="DOW_FOLDER_NO_FILES">Folda halina mafaili.</string>
+  <string name="DOW_FOLDER_NO_RIGHTS">Hauruhusiwi kuonesha folda lililochaguliwa.</string>
+  <string name="DOW_FOLDER_NOT_EXISTS">Folda halipo tena kwenye seva. Huenda litakuwa limefutwa kwenye hazinadata.</string>
+  <string name="DOW_FOLDER_NOT_FOUND">Folda (ID #VAR1#) halijapatikana.</string>
+  <string name="DOW_FOLDER_RENAME">Folda #VAR1# limebadilishwa jina.</string>
+  <string name="DOW_FOLDER_RENAME_ERROR">Hitilafu imetokea wakati folda #VAR1# likibadilishwa jina.</string>
+  <string name="DOW_MAXIMUM_FILE_SIZE">Kiwango cha juu cha ukubwa wa faili</string>
+  <string name="DOW_MAXIMUM_FILE_SIZE_DESC">Watumiaji wanaruhusiwa kupakia mafaili madogo kuliko yaliyooneshwa hapa. Ikiwa ni 0 basi upakiaji umezuiliwa. (chaguo-msingi: 3MB)</string>
+  <string name="DOW_NEW_FILE_NAME">Jina jipya la faili</string>
+  <string name="DOW_NEW_NAME">Jina jipya</string>
+  <string name="DOW_NO_ADDITIONAL_PERMISSIONS_SET">Hakuna ruhusa za ziada zilizowekwa</string>
+  <string name="DOW_PREVIOUS_NAME">Jina la awali</string>
+  <string name="DOW_ROLE_ACCESS_PERMISSIONS_DESC">Katika ukurasa huu unaweza kupanga ni nani anaweza kuona folda #VAR1_BOLD#, kupakua au kupakia mafaili. Ruhusa inarithiwa na mafolda yote yaliyoko chini yake, na ruhusa zilizopo zinaondolewa. Waidhinishwa wenye ruhusa na folda mama/kuu ndiyo huchaguliwa. Wasimamizi wakuu wana ruhusa zote kwenye folda.</string>
+  <string name="DOW_SELECT_FILES">Chagua mafaili</string>
+  <string name="DOW_SET_FOLDER_PERMISSIONS">Weka ruhusa za folda</string>
+  <string name="DOW_UNMANAGED_FILES">Mafaili yasiyotawaliwa</string>
+  <string name="DOW_UPLOAD_FILE_TO_FOLDER">Pakia mafaili kwenye folda #VAR1_BOLD#</string>
+  <string name="DOW_UPLOAD_FILES">Pakia mafaili</string>
   <!--Phrases only in Ecardsmodule-->
+  <string name="ECA_A_ECARD_FROM">Kadi ya salamu imetumwa na</string>
+  <string name="ECA_ACTIVATE_GREETING_CARDS">Wezesha moduli ya kadi ya salamu</string>
+  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">Moduli ya kadi ya salamu inaweza kuwashwa au kuzimwa  kwa kupitia mpangilio huu. Kama seva hairuhusu barua pepe inatakiwa iwe imezimwa. Kimsingi moduli hii inapatikana tu kwa watumiaji waliosajiliwa. (Chaguo-msingi: ndiyo)</string>
+  <string name="ECA_GREETING_CARD">Kadi ya salamu</string>
+  <string name="ECA_GREETING_CARDS">Kadi za salamu</string>
+  <string name="ECA_GREETING_CARD_EDIT">Hariri kadi ya salamu</string>
+  <string name="ECA_LAYOUT">Mwonekano</string>
+  <string name="ECA_MAX_PHOTO_SIZE_DESC">Kiwango kilichobainishwa kinaonesha kiwango cha juu cha ukubwa wa picha katika kadi ya salamu (Wastani: Pikseli 400 x 250)</string>
+  <string name="ECA_NEW_MESSAGE_RECEIVED">Ujumbe mpya umepokelewa</string>
+  <string name="ECA_NOT_SUCCESSFULLY_SEND">Kadi yako ya salamu haiwezi kutumwa!</string>
+  <string name="ECA_RECIPIENT_EMAIL">Mpokeaji wa barua pepe</string>
+  <string name="ECA_RECIPIENT_NAME">Jina la mpokeaji</string>
+  <string name="ECA_SCALE_THUMBNAILS_DESC">Hapa unaweza kubainisha upande mrefu wa kijipicha utakavyowekwa kwa (Chaguo-msingi: 250px)</string>
+  <string name="ECA_SUCCESSFULLY_SEND">Kadi yako ya salamu imetumwa.</string>
+  <string name="ECA_TEMPLATE">Kiolezo</string>
+  <string name="ECA_TEMPLATE_DESC">Hapa unaweza kuchagua kiolezo cha msingi (chaguo-msingi: postikadi).</string>
+  <string name="ECA_VIEW_PICTURE_FULL_SIZED">Onesha picha nzima</string>
+  <string name="ECA_TEMPLATE_FOLDER_OPEN">Folda la kiolezo haliwezi kufunguliwa/kusomwa.</string>
   <!--Phrases only in Guestbookmodule-->
+  <string name="GBO_BACK_TO_GUESTBOOK">Rudi kwenye kitabu cha wageni</string>
+  <string name="GBO_CREATE_COMMENT">Toa maoni</string>
+  <string name="GBO_CREATE_ENTRY">Acha ingizo</string>
+  <string name="GBO_CREATE_VAR_ENTRY">Acha ingizo la #VAR1#</string>
+  <string name="GBO_EDIT_COMMENT">Hariri maoni</string>
+  <string name="GBO_EDIT_ENTRY">Hariri ingizo la #VAR1#</string>
+  <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Oni jipya la kitabu cha wageni limetengenezwa</string>
   <!--Phrases only in Installation-->
   <!--Phrases only in Linkmodule-->
   <!--Phrases only in Listsmodule-->

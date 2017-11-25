@@ -27,23 +27,35 @@
   <string name="BAC_SECONDS_VAR">#VAR1# segundos</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">Já existe uma categoria com esse nome nesta organização.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Se esta opção estiver ativada, os campos de perfil nesta categoria e também no perfil das seguintes organizações podem ser editados:\n\n#VAR1_BOLD#\n\n Pretende apenas os dados na sua organização, então esta opção deverá ser desativada.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Esta opção fará com que os campos de perfil desta categoria apareçam para visualização e edição na exibição de perfil das seguintes organizações:#VAR1#\n\n Desative se deseja que estes campos apareçam somente na sua organização.</string>
   <string name="CAT_DEFAULT_VAR">Predefinição #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Deseja eliminar a categoria #VAR1_BOLD#?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Não foi possível eliminar a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
   <string name="CAT_MOVE_DOWN">Mover #VAR1# para baixo</string>
   <string name="CAT_MOVE_UP">Mover #VAR1# para cima</string>
+  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta configuração só poder ser modificada pela organização pai </string>
+  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Os campos de perfil nessa categoria podem ser ocultados para outros usuários, mas ainda continuarão visíveis e editáveis a partir de seus próprios perfis.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Adicionar evento ao calendário</string>
   <string name="DAT_ALL_DAY">Tempo integral</string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Participantes podem registrar convidados anônimos </string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Participantes podem adicionar assentos aos seus registros, que serão subtraídos do número máximo de participantes e da quantidade de assentos livres remanescentes. Isto é útil se, por exemplo, um participante puder trazer mais visitantes e portanto precisa de assentos livres.</string>
+  <string name="DAT_ALLOW_USER_COMMENTS">Permitir comentários na participação</string>
+  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Participantes podem comentar em sua participação. Os comentários podem ser vistos via lista de participantes</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">Adicionar participantes</string>
   <string name="DAT_ATTEND">Participar</string>
+  <string name="DAT_ATTEND_DATE">Você se inscreveu para o evento #VAR1_BOLD# em #VAR2#.</string>
+  <string name="DAT_ATTEND_POSSIBLY">Você tentou se inscrever para o evento #VAR1_BOLD# em #VAR2#. </string>
   <string name="DAT_CALENDAR">Calendário</string>
   <string name="DAT_CANCEL">Cancelar</string>
+  <string name="DAT_CANCEL_DATE">Você cancelou sua participação para o evento #VAR1_BOLD# em #VAR2#.</string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Eventos atuais da organização #VAR1#</string>
   <string name="DAT_DATE">Evento</string>
   <string name="DAT_DATES">Eventos</string>
   <string name="DAT_DATES_DESC">Os eventos podem ser criados e editados aqui. Os utilizadores podem inscrever-se nestes eventos.</string>
+  <string name="DAT_DEADLINE">Data limite</string>
+  <string name="DAT_DEADLINE_ATTENTION">Teu registro não pode ser mudado porque o prazo para registros já foi encerrado. Contate um organizador do evento ou administrador!</string>
+  <string name="DAT_DEADLINE_DESC">Participantes tem até essa data para se inscreverem no evento. Líderes e usuários com permissão para editar eventos ainda podem atribuir participantes. Se nenhum valor é definido, o dia de início será assumido por padrão.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Configuração predefinida da Lista de Participantes</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Uma das configurações predefinidas pode ser definida aqui como predefinição para a lista de participantes dos eventos desta organização. Os eventos dos participantes serão exibidos com esta configuração.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Aqui, pode criar e editar os seus calendários.</string>
@@ -73,7 +85,6 @@
   <string name="DAT_MAX_MEMBERS">Aqui podes estabelecer um número máximo de participantes. Deixe em branco para permitir um número ilimitado de participantes.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Número limitado de participantes</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Participar do evento como organizador</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Serás o organizador do evento e poderás adicionar ou remover participantes ou nomeá-los como organizadores adicionais.</string>
   <string name="DAT_PERIOD_FROM_TO">Período entre #VAR1# e #VAR2#</string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">#VAR1# anterior</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">As inscrições estão encerradas.</string>
@@ -82,7 +93,6 @@
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Participantes podem ver a lista de participantes</string>
   <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Participantes podem enviar mensagens aos participantes</string>
   <string name="DAT_ROOM_INFORMATIONS">Informações da sala</string>
-  <string name="DAT_ROOM_OVERHANG">Caso futuramente haja novas vagas disponíveis, como assentos adicionais e salas de espera, o número de vagas adicionais pode ser definido aqui.</string>
   <string name="DAT_ROOM_RESERVED">A sala selecionada já está em uso no momento.</string>
   <string name="DAT_ROOM_SELECTABLE">A sala está disponível</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Caixa de seleção para salas disponíveis está disponível. Selecione a sala e crie um evento para ela. (resposta-padrão: não)</string>
@@ -93,11 +103,8 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Alternar para gestão de calendários</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Abrir sala de administração</string>
   <string name="DAT_VIEW_MODE">Exibição padrão</string>
-  <string name="DAT_VIEW_MODE_DESC">Tipo de exibição de eventos. No modo #VAR1_BOLD# todos os detalhes serão exibidos dentro de uma caixa. No modo #VAR2_BOLD# os detalhes mais importantes serão exibidos numa lista compacta. (Padrão: Detalhado)</string>
-  <string name="DAT_VIEW_MODE_DETAIL">Detalhado</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compacto</string>
   <string name="DAT_VISIBILITY">Visibilidade</string>
-  <string name="SYS_VISIBLE_FOR">Visível para</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Adicionar à base de dados</string>
   <string name="DOW_ADDITIONAL_FILES">Esta lista tem a intenção de oferecer uma visão geral dos ficheiros e pastas ainda não importados para a base de dados. Eles podem adicionados à base. Permissões de acesso serão copiadas da pasta selecionada.</string>
@@ -111,7 +118,6 @@
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">Um novo ficheiro foi enviado</string>
   <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Um novo ficheiro foi enviado para #VAR1#\n\nFicheiro: #VAR2#\nEnviado por: #VAR3#Enviado às #VAR4#</string>
   <string name="DOW_ENABLE_DOWNLOAD_MODULE">A ativar módulo de transferência</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">O módulo de transferência pode ser desativado aqui. Depois da desativação, ele não mais aparecerá como módulo na visão geral. (padrão: sim)</string>
   <string name="DOW_FILE_EXIST">O ficheiro #VAR1# já existe!\n\nPor favor, escolha um nome diferente.</string>
   <string name="DOW_FILE_EXTENSION_INVALID">O tipo do ficheiro não é permitido neste servidor</string>
   <string name="DOW_FILE_NAME_RULES">O nome do ficheiro deve indicar seu conteúdo. O nome afeta a ordenação da lista, por exemplo, nomes de ficheiros em diretórios com precedência devem começar com data (aaaa-mm-dd).</string>
@@ -147,7 +153,6 @@
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Cartão enviado por</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">A ativar módulo de cartões</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">O módulo de cartões pode ser desativado e reativado através destas opções. Se o servidor não estiver enviando correios eletrônicos, por favor, desative o módulo. O módulo é acessível apenas para usuários em sessão. (padrão: sim)</string>
   <string name="ECA_GREETING_CARD">Cartão</string>
   <string name="ECA_GREETING_CARDS">Cartões</string>
   <string name="ECA_GREETING_CARD_EDIT">Editar cartão</string>
@@ -157,7 +162,6 @@
   <string name="ECA_NOT_SUCCESSFULLY_SEND">Teu cartão não pôde ser enviado!</string>
   <string name="ECA_RECIPIENT_EMAIL">E-mail do destinatário</string>
   <string name="ECA_RECIPIENT_NAME">Nome do destinatário</string>
-  <string name="ECA_SCALE_THUMBNAILS_DESC">Este valor indica o tamanho para o qual o maior lado de uma miniatura deve ser escalado (padrão: 250px).</string>
   <string name="ECA_SUCCESSFULLY_SEND">Teu cartão foi enviado.</string>
   <string name="ECA_TEMPLATE">Modelo</string>
   <string name="ECA_TEMPLATE_DESC">Defina aqui o modelo padrão. (Sugestão: Cartão-postal)</string>
@@ -165,10 +169,8 @@
   <string name="ECA_TEMPLATE_FOLDER_OPEN">O diretório de modelos não pode ser aberto/lido.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Voltar ao livro de visitantes</string>
-  <string name="GBO_CAPTCHA_DESC">Se ativo, usuários que não estejam em sessão receberão uma imagem com um código CAPTCHA ou um cálculo simples. É necessário que eles preencham o código ou resultado correto para guardar. O CAPTCHA é parte de um sistema anti-spam no Admidio. (padrão: sim)</string>
   <string name="GBO_COMMENT_BY">Comentário de #VAR1#</string>
   <string name="GBO_COMMENTS4ALL">Permitir comentários anônimos</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Ao ativar esta opção, usuários não registrados poderão comentar no livro de visitas. Todas as outras permissões definidas no painel de administração serão ignoradas. (padrão: não)</string>
   <string name="GBO_CREATE_COMMENT">Comentar</string>
   <string name="GBO_CREATE_ENTRY">Deixar entrada</string>
   <string name="GBO_CREATE_VAR_ENTRY">Deixar #VAR1# entrada</string>
@@ -181,7 +183,6 @@
   <string name="GBO_ENTRY_QUEUED">Entrada guardada. Ela será exibida após avaliação.</string>
   <string name="GBO_FLOODING_PROTECTION">Tua última entrada foi criada há menos de #VAR1# segundos.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Intervalo de Proteção contra Flooding</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Entradas de usuários não registrados serão analisadas. Muitas entradas dentro de um intervalo de tempo não são permitidas. Esta opção permite ter controle sobre entradas indesejadas. Se o intervalo é 0, nenhuma análise será feita. (padrão: 60 segundos)</string>
   <string name="GBO_GUESTBOOK">Livro de visitas</string>
   <string name="GBO_GUESTBOOK_DESC">Visitantes e usuários podem deixar cumprimentos e comentários, e podem comentar outras entradas.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Moderação ativada para</string>
@@ -205,7 +206,6 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Uma atualização da base de dados só pode ser feita por um administrador. Por favor, insira adiante as credenciais de um administrador.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Mensageiro Instantâneo</string>
   <string name="INS_BOARD">Quadro de associações</string>
-  <string name="INS_CONFERENCE_ROOM">Sala de conferências</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">O ficheiro #VAR1_BOLD# não pôde ser encontrado no diretório principal do Admidio!\n\nPor favor transfira o ficheiro para o teu computador novamente e copie-o para o diretório mencionado.</string>
   <string name="INS_CONTINUE_INSTALLATION">Continuar instalação</string>
   <string name="INS_COURSES">Cursos</string>
@@ -301,8 +301,6 @@
   <string name="INS_SUBORDINATE">Subordinado(a)</string>
   <string name="INS_SUBORDINATE_MALE">Subordinado</string>
   <string name="INS_SUBORDINATE_FEMALE">Subordinada</string>
-  <string name="INS_SUPERIOR">Superior</string>
-  <string name="INS_SUPERIOR_MALE">Superior</string>
   <string name="INS_SUPERIOR_FEMALE">Superior</string>
   <string name="INS_SIBLING">Irmã(o)</string>
   <string name="INS_SISTER">Irmã</string>
@@ -408,7 +406,6 @@
   <string name="LST_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
   <string name="LST_SEARCH_TELEFON_DESC">Buscando por usuários cujo número de telefone inclui 241 e termina com 54</string>
   <string name="LST_SEARCH_YES_NO_FIELD">campo Sim/Não</string>
-  <string name="LST_SEARCH_YES_NO_FIELD_DESC">Buscando por usuários marcados</string>
   <string name="LST_SELECT_CONFIGURATION">Selecionar configuração</string>
   <string name="LST_SELECT_MEMBERS">Selecionar membros</string>
   <string name="LST_SHOW_LIST">Exibir lista</string>
@@ -423,13 +420,10 @@
   <string name="LST_Z_TO_A">Z à A</string>
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">A ativar o módulo de e-mail</string>
-  <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">O módulo de e-mail pode ser desativado ao desmarcar a caixa de seleção. Após a desativação, o módulo estará indisponível no painel de visão geral dos módulos. Se o servidor não suportar o envio de e-mails, desative o módulo. (padrão: ativo)</string>
   <string name="MAI_ADD_ATTACHEMENT">Anexar ficheiro</string>
   <string name="MAI_ATTACHEMENT">Anexo</string>
   <string name="MAI_ATTACHMENT_SIZE">Tamanho máximo dos anexos de e-mail</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Tamanho máximo permitido para anexos. Quando o valor é 0, os anexos não serão permitidos. (padrão: 1MB)</string>
   <string name="MAI_ATTACHMENT_TO_LARGE">Erro ao carregar ficheiro como anexo.\nProvavelmente, ele excede o tamanho máximo permitido!</string>
-  <string name="MAI_CAPTCHA_DESC">Quando esta opção está ativa, usuários em sessão receberão uma imagem com um código CAPTCHA ou um cálculo simples. É necessário preencher o código ou o resultado do cálculo para enviar o e-mail. O CAPTCHA é parte de uma solução anti-spam no Admidio. (padrão: sim)</string>
   <string name="MAI_CARBON_COPY">Cópia carbono (CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Codificação de caracteres</string>
   <string name="MAI_CHARACTER_ENCODING_DESC">Codificação de caracteres usada nos e-mails enviados pelo Admidio. Nem todos os clientes de e-mail suportam UTF-8. Portanto ISO-8859-1 pode ser definido alternativamente.</string>
@@ -461,14 +455,9 @@
   <string name="MAI_SEND_EMAIL">Enviar e-mail</string>
   <string name="MAI_SEND_MAIL_TO_ROLE">Teu e-mail será enviado para todos os membros do cargo ou para todos os e-mails da lista.\n\nSe estiver em sessão, mais cargos e destinatários estarão disponíveis.</string>
   <string name="MAI_SEND_METHOD">Enviar via</string>
-  <string name="MAI_SEND_METHOD_DESC">A função mail() do PHP está limitada por alguns hospedeiros e algumas vezes resulta em suspeita de spam. É recomendado enviar e-mails via servidor SMTP. As configurações de SMTP podem ser definidas abaixo. (padrão: PHP mail())</string>
   <string name="MAI_SENDER">Remetente</string>
-  <string name="MAI_SENDER_EMAIL">E-mail do remetente</string>
-  <string name="MAI_SENDER_EMAIL_ADDRESS_DESC">Alguns provedores não permitem informações de envio sem identificação. Por isso, é necessário que informes um e-mail para servir como remetente padrão para o módulo de e-mail (exemplo: outbox@#VAR1#).\nSe este campo ficar em branco, o e-mail registrado do usuário que enviar será usado para as informações de envio. (padrão: vazio)</string>
   <string name="MAI_SENDER_NAME">Nome do remetente</string>
-  <string name="MAI_SENDER_NAME_DESC">Nome do remetente do endereço de e-mail. Este campo deve ser apenas preenchido, se também for mantido um endereço de e-mail do remetente. (Predefinição: vazio)</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(O remetente não pôde ser identificado. Confira as credenciais.)</string>
-  <string name="MAI_SHOW_CAPTCHA_DESC">Quando esta opção está ativa, usuários em sessão receberão uma imagem com um código CAPTCHA ou um cálculo simples. É necessário preencher o código ou o resultado do cálculo para enviar o e-mail. O CAPTCHA é parte de uma solução anti-spam no Admidio. (padrão: sim)</string>
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">autenticação SMTP</string>
   <string name="MAI_SMTP_AUTH_DESC">Se o servidor SMTP requer autenticação, então o nome de usuário e a senha são necessários. (padrão: Sim)</string>
@@ -533,7 +522,6 @@
   <string name="MEM_REMOVE_USER_DESC">Ao selecionar #VAR1_BOLD#, todas as suas informações serão removidas e não estarão mais disponíveis.</string>
   <string name="MEM_REPLACE">Substituir</string>
   <string name="MEM_ROLE_SELECT_RIGHT">Não tens permissão para selecionar o cargo #VAR1#.\nSelecione outro.</string>
-  <string name="MEM_SEND_NEW_LOGIN">Enviar para #VAR1_BOLD# um e-mail com o atual nome de usuário e uma nova senha?</string>
   <string name="MEM_SEND_USERNAME_PASSWORD">Enviar e-mail com nome de usuário e senha.</string>
   <string name="MEM_SHOW_ALL_USERS">Exibir todos os usuários</string>
   <string name="MEM_SHOW_USERS_DESC">Se não estiver definida, apenas os membros ativos desta organização serão listados. Caso contrário todos os membros serão listados.</string>
@@ -546,9 +534,7 @@
   <string name="MEM_USERS_PER_PAGE_DESC">Número de usuários listados em cada página. (padrão: 25)</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Ativar bate-papo</string>
-  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Ativar módulo de bate-papo. As mensagens serão carregadas dinamicamente a cada 3 segundos. Apenas 99 mensagens serão guardadas na base de dados. Assim que a 100ª mensagem for guardada, as 50 primeiras serão removidas.</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Ativar mensagens privadas</string>
-  <string name="MSG_ACTIVATE_PM_MODULE_DESC">Esta opção permite desativar mensagens privadas. O módulo não será utilizável nem exibido na visão geral. (Padrão: Ativado)</string>
   <string name="MSG_ACTIVE_FORMER_SHORT">Ativo e ex</string>
   <string name="MSG_CHAT">Bate-papo</string>
   <string name="MSG_DELETE_DESC">Remover mensagem #VAR1_BOLD# ?</string>
@@ -569,19 +555,13 @@
   <string name="PMS_WAS_NOT_SENT_TO">Erro - a mensagem não foi enviada para: </string>
   <!--Phrases only in New-User-Registration-->
   <string name="NWU_ASSIGN_LOGIN">A atribuir informação de sessão</string>
-  <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">A informação de sessão foi atribuída com sucesso.</string>
-  <string name="NWU_ASSIGN_LOGIN_EMAIL">A informação de sessão foi atribuída com sucesso e o usuário foi notificado via e-mail.</string>
   <string name="NWU_ASSIGN_MEMBERSHIP">Atribuir filiação</string>
-  <string name="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN">A atribuir filiação e informação de sessão para o usuário selecionado.</string>
   <string name="NWU_ASSIGN_REGISTRATION">Atribuir registro</string>
   <string name="NWU_DELETE_REGISTRATION">A remover registro</string>
   <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">Novos registros de visitantes podem ser listados, aprovados ou recusados aqui.</string>
   <string name="NWU_NEW_REGISTRATIONS">Novos registros</string>
-  <string name="NWU_NO_MEMBERSHIP">O usuário não é membro da organização #VAR1# mas já possui informação de sessão atribuída.</string>
-  <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">O usuário não é membro da organização #VAR1# e não possui informação de sessão atribuída.</string>
   <string name="NWU_NO_REGISTRATIONS">Nenhum novo registro disponível.</string>
   <string name="NWU_REGISTERED_ON">Registrado em #VAR1#</string>
-  <string name="NWU_REMINDER_SEND_LOGIN">Lembrar usuários das credenciais de acesso?</string>
   <string name="NWU_SEND_LOGIN">Enviar informação de sessão</string>
   <string name="NWU_USER_NO_VALID_LOGIN">O usuário ainda não tem um nome de usuário.\nAtribuir informação do registro selecionado para o usuário?</string>
   <string name="NWU_USER_VALID_LOGIN">O usuários já tem informações de sessão válidas.</string>
@@ -594,7 +574,6 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Variáveis adicionais</string>
   <string name="ORG_ADMIDIO_THEME">Tema do Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Selecione um leiaute para Admidio. Todos os temas guardados no diretório adm_themes estão a ser mostrados. (padrão: moderno)</string>
-  <string name="ORG_ADVANCED_REGISTRATION">Registro avançado</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Encerrar sessão após </string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Define o tempo em que o sistema automaticamente encerrará a sessão de um usuário inativo. Um usuário é dado como inativo quando nenhuma página é carregada por um certo tempo. Esta configuração será ignorada quando o usuário selecionar #VAR1_BOLD#. (padrão: 20 minutos)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Atualizar mensagem para navegadores obsoletos</string>
@@ -616,7 +595,6 @@
   <string name="ORG_CAPTCHA_SIGNATURE">Sub-título do CAPTCHA</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Preencha o sub-título para o CAPTCHA. O tipo de fonte padrão do tema atual será usado.</string>
   <string name="ORG_CAPTCHA_SIGNS">Caracteres válidos</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Aqui, podes definir quais caracteres podem ser usados pelo CAPTCHA. Evite caracteres parecidos como i maiúsculo e L minúscula ( I e l ). </string>
   <string name="ORG_CAPTCHA_TYPE">Tipo de CAPTCHA</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Cálculo</string>
   <string name="ORG_CAPTCHA_TYPE_PIC">Caractere aleatório</string>
@@ -638,7 +616,6 @@
   <string name="ORG_ENABLE_CAPTCHA">Ativar CAPTCHA</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Ativar feed web</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio pode fornecer feeds web para vários módulos (anúncios, compromissos, livros de visita, galeria de fotos e links web) na página de visão geral de cada módulo. A inscrição é feita pelo navegador ou leitor de feed. (padrão: sim)</string>
-  <string name="ORG_FAST_REGISTRATION">Registro rápido</string>
   <string name="ORG_FIELD_DESCRIPTION">Definir ilimitados campos adicionais. Os campos serão exibidos no perfil e podem ser editados. Estes campos estarão disponíveis nas listas próprias também.</string>
   <string name="ORG_FIELD_DISABLED">Campo editável apenas para usuários com permissão #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">Um campo de perfil bloqueado não pode mais ser editado pelo usuário em seu próprio perfil. Poderá apenas ser editado por usuários com permissão adequada. Os líderes de um cargo com permissões para editar os perfis dos membros também podem alterar este campo.</string>
@@ -646,18 +623,17 @@
   <string name="ORG_FIELD_EXIST">Já existe um campo com esse nome nessa categoria.</string>
   <string name="ORG_FIELD_HIDDEN">Campo visível apenas para usuários autorizados (próprio perfil &amp; autorização de cargo)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Geralmente um campo é visível para todos que possuem permissão para ver o perfil. Se esta opção estiver desmarcada, apenas usuários que podem editar o perfil podem ver o campo.</string>
-  <string name="ORG_FIELD_REQUIRED">Os campos obrigatórios precisam ser preenchidos.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Campos marcados são de preenchimento obrigatório. Esta regra se aplica aos registros e para alterações em perfis comuns realizadas por usuários.</string>
   <string name="ORG_FIELD_NOT_DISABLED">O campo pode ser editado pelos próprios usuários.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Campo visível para todos os usuários.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">O campo é obrigatório e deve ser preenchido.</string>
+  <string name="ORG_FIELD_REQUIRED">Os campos obrigatórios precisam ser preenchidos.</string>
+  <string name="ORG_FIELD_REQUIRED_DESC">Campos marcados são de preenchimento obrigatório. Esta regra se aplica aos registros e para alterações em perfis comuns realizadas por usuários.</string>
   <string name="ORG_FIELD_UP">Mover campo para cima</string>
   <string name="ORG_FIELD_URL_DESC">A URL inserida redirecionará para o conteúdo que o usuário indicar neste campo. Opcionalmente, até o mesmo o coringa #user_content# pode ser definido na URL. Este é o conteúdo que o usuário inseriu no campo.\n\nExemplo:\nURL: https://www.google.pt/search?q=#user_content#\nValor do campo: Admidio\nLink no perfil: https://www.google.pt/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Esta página aparece quando um usuário inicia sessão. Um endereço deve ser fornecido como caminho relativo para o diretório principal do Admidio.\n(ex: amd_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Esta é a página padrão do Admidio para visitantes. Um endereço deve ser fornecido como caminho relativo para o diretório principal do Admidio.\n(ex.: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Não foi encontrado nenhum tema válido.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Cor do editor JavaScript</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Defina a cor do editor JavaScript. O valor pode estar em hexadecimal, como #FFA500 ou em RGB como (255, 185, 0).</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Usar o editor JavaScript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Um editor JavaScript completo está a ser usado por vários módulos do Admidio. Eventos, anúncios, e outros podem ser editados pelo usuário confortavelmente. Se o editor estiver desativado, um simples campo de texto multi-linha está a ser exibido.</string>
   <string name="ORG_LAST_UPDATE_STEP">Última etapa da atualização</string>
@@ -688,7 +664,6 @@
   <string name="ORG_REFUSE_REGISTRATION">Notificação de registo recusado</string>
   <string name="ORG_REGIONAL_SETTINGS">Configurações regionais</string>
   <string name="ORG_REGISTERED_USERS">Usuário em sessão</string>
-  <string name="ORG_REGISTRATION_MODE">Defina critérios de registo ou desative-o. Registo rápido permite aos usuários registrar preenchendo apenas campos obrigatórios. Um registo completo fornece todos os campos do perfil. (padrão: registo rápido)</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Buscar por nomes similares</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Durante o registo e atribuição de registos, o Admidio buscará por nomes e sobrenomes similares a fim de evitar entradas duplicadas. Desativar esta opção implicará na busca apenas por nomes idênticos. (padrão: sim)</string>
   <string name="ORG_SECONDS">segundos</string>
@@ -701,10 +676,8 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Exibir seleção de organização</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
   <string name="ORG_SYSTEM_INFORMATIONS">Informação do sistema</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">Endereço de e-mail</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Este campo deve conter um endereço de e-mail de um administrador, para que seja usado como remetente nas notificações do sistema, como por exemplo, as confirmações de registo.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificação de novas entradas</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Esta função é usada para ativar as notificações do sistema para novas entradas dentro dos módulos. É usada como uma função de monitoramento dentro do Admidio. Assim, o administrador pode ser notificado por e-mail quando novas entradas forem adicionadas dentro de um módulo (apenas novas entradas serão consideradas). As notificações do sistema serão enviadas para o endereço de e-mail #VAR1#. (padrão: não)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Aqui, podes justificar o texto de cada notificação de sistema. Os textos estão divididos em 2 partes (assunto e conteúdo) e são identificados por #subject# e #content#. A ser seguido pelo respetivo conteúdo para esta seção.\n\nEm cada envio os seguintes coringas serão usados. Eles serão substituídos pelos conteúdos correspondentes durante a execução.</string>
   <string name="ORG_THEME_FOLDER_OPEN">O diretório de temas não pode ser aberto/lido.</string>
   <string name="ORG_TIME_FORMAT">Formato de hora</string>
@@ -715,15 +688,11 @@
   <string name="ORG_VALUE_LIST">Lista de valores</string>
   <string name="ORG_VALUE_LIST_DESC">Neste campo, podes inserir entradas para o menu suspenso ou botões de rádio. Cada linha será considerada uma entrada diferente. Os perfis não guardam o texto propriamente dito, mas a sua posição na lista. Se mudares o texto numa linha, todos os usuários atribuídos receberão o novo texto em seus perfis, mas se moveres uma entrada para outra linha, os usuários podem receber outro entrada ao invés. Com um campo opcional, um ícone pode ser exibido ao invés de um texto. Podem ser especificados o nome de um ícone do diretório do tema (ex: ok.png) ou o url de uma imagem externa (ex: www.exemplo.com/exemplo.jpg). Legendas podem ser definidas através de uma barra vertical (ex: female.png | mulher).</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Link de ativação para a nova palavra-passe</string>
-  <string name="ORG_VARIABLE_EMAIL">Endereço de e-mail do usuário</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Endereço de e-mail do sistema da organização</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">Nome do usuário</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Sobrenome do usuário</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Nome da organização</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nova palavra-passe</string>
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Abreviação/Sigla da organização</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Endereço para o sítio web da organização</string>
-  <string name="ORG_VARIABLE_USERNAME">Nome de usuário</string>
   <!--Phrases only in Updatecheck-->
   <string name="UPD_ADMIDIO">Ir para a página de atualizações do Admidio</string>
   <string name="UPD_BETA_VERSION">Beta disponível</string>
@@ -744,14 +713,12 @@
   <string name="PHO_ALBUM_WRITE_SUCCESS">O álbum foi criado / modificado com sucesso.</string>
   <string name="PHO_BACK_TO_ALBUM">voltar ao álbum</string>
   <string name="PHO_CAPTION_SIZE">Tamanho das legendas</string>
-  <string name="PHO_CAPTION_SIZE_DESC">O tamanho da fonte da legenda é proporcional ao tamanho da imagem, calculado pela fórmula \"Tamanho da imagem / divisor\". Incrementar o divisor reduzirá o tamanho da fonte. (padrão: 40)</string>
   <string name="PHO_CREATE_ALBUM">Criar álbum</string>
   <string name="PHO_DISPLAY_PHOTOS">Visualização de fotos</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Defina como as imagens serão exibidas no módulo de fotografias. Isto pode ser feito com uma janela modal que será aberta em uma nova aba do navegador. A pré-visualização de imagem permanecerá ativa no segundo plano. Se a imagem for exibida na mesma aba, a pré-visualização atual será fechada. A terceira opção permite exibir a imagem numa janela pop-up que pode ser usada junto com a pré-visualização. (padrão: Janela modal)</string>
   <string name="PHO_DOWNLOAD_PHOTOS">Transferir fotografias</string>
   <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Guardar fotografia</string>
   <string name="PHO_DOWNLOAD_ENABLED">Ativar transferências</string>
-  <string name="PHO_DOWNLOAD_ENABLED_DESC">Permite transferir fotos individuais ou álbuns completos como um ficheiro compactado. Um link será exibido para cada foto ou álbum. Se a opção #VAR1_BOLD# estiver ativa, apenas fotografias originais serão transferidas.</string>
   <string name="PHO_EDIT_ALBUM">Editar álbum</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Um novo álbum de fotografias foi criado</string>
   <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Um novo álbum de fotografias em #VAR1# foi criado.\n\nTítulo: #VAR2#\nCriado por: #VAR3#\nCriado em: #VAR4#</string>
@@ -759,7 +726,6 @@
   <string name="PHO_FOLDER_NOT_FOUND">O diretório não pôde ser encontrado. Caso o diretório tenha sido removido por FTP ou esteja inacessível, remova o diretório no Admidio.\nVisitantes sem permissão de gestão de fotografias não poderão ver o álbum selecionado.</string>
   <string name="PHO_KEEP_ORIGINAL">Guardar ficheiros originais adicionalmente</string>
   <string name="PHO_KEEP_ORIGINAL_DESC">Guardar cada foto não apenas com a resolução selecionada mas também com o tamanho original. Se a opção #VAR1_BOLD# estiver ativa, todas as fotos originais serão transferidas. Esta opção requer uma quantidade de espaço significativamente maior e deve ser ativada apenas se há espaço disponível suficiente.</string>
-  <string name="PHO_MAX_PHOTO_SIZE_DESC">Os valores definem o tamanho máximo de uma foto exibida por um usuário. O tamanho da janela popup e da Caixa de cor serão automaticamente ajustados. O tamanho ideal deve corresponder ao tamanho original da imagem a fim de evitar redimensionamento. (padrão: 640 x 400 pixels)</string>
   <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Altura máxima da imagem</string>
   <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Largura máxima da imagem</string>
   <string name="PHO_MODAL_WINDOW">Janela modal</string>
@@ -767,7 +733,6 @@
   <string name="PHO_NO_ALBUM_CONTENT">Não há fotografias neste álbum.</string>
   <string name="PHO_NO_FILES_OR_TO_LARGE">Local chamado incorretamente ou o ficheiro não pode ser carregado.\nPossivelmente, o ficheiro excede o tamanho máximo de carregamento do servidor, que é de #VAR1#B.</string>
   <string name="PHO_NO_FILES_SELECTED">Nenhuma fotografia selecionada para adição.</string>
-  <string name="PHO_NO_RIGHTS">Não tens permissão para realizar esta ação.\n\nApenas usuários em sessão com permissão de gestão de fotografias podem gerenciá-las.</string>
   <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Número de álbuns por página</string>
   <string name="PHO_PARENT_ALBUM">Álbum pai</string>
   <string name="PHO_PARENT_ALBUM_DESC">Um álbum pode ser parte de outro. Selecione um álbum pai na lista. Se queres exibir o álbum no nível mais alto, então selecione #VAR1_BOLD#.</string>
@@ -796,13 +761,10 @@
   <string name="PHO_SAVE_ORIGINALS_DESC">Imagens podem ser arquivadas ou serem postas disponíveis para transferência, contanto que haja espaço disponível suficiente.</string>
   <string name="PHO_SCALE_AT_UPLOAD">Redimensionamento no envio</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">As fotografias serão ser redimensionadas durante o envio. O valor de pixel define o maior lado dos formatos retrato e paisagem. O outro lado permanece proporcional ao maior lado. (padrão: 640 pixels)</string>
-  <string name="PHO_SCALE_THUMBNAILS">Redimensionamento de miniatura</string>
-  <string name="PHO_SCALE_THUMBNAILS_DESC">Defina o lado maior das miniaturas. Atenção: não defina um valor para largura muito alto para evitar conflitos com as preferências de linha e coluna da miniatura. Ou então modifique as preferências. (padrão: 160 pixels)</string>
   <string name="PHO_SELECT_FOTOS">Selecionar imagem</string>
   <string name="PHO_SHOW_CAPTION">Exibir marca d\'água</string>
   <string name="PHO_SHOW_CAPTION_DESC">O texto será exibido em todas as fotografias com o lado maior superior a 200 pixels. (padrão: © #VAR1#)</string>
   <string name="PHO_SHOWN_ON_READY">As fotografias terão sido carregadas com sucesso se elas aparecerem nesta página.</string>
-  <string name="PHO_THUMBNAILS_PER_PAGE">Miniaturas por página</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">Esta opção define quantas miniaturas serão exibidas em cada página. Se há mais imagens neste álbum, uma barra de navegação de página será automaticamente adicionada. (padrão: 16)</string>
   <string name="PHO_UPLOAD_MORE">Enviar mais fotos</string>
   <string name="PHO_UPLOAD_PHOTOS">Enviar fotos</string>
@@ -926,23 +888,19 @@
   <string name="ROL_ROLE_ASSIGNMENT">Atribuição de cargo para #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Trimestralmente</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Exibir todas as listas de filiação de todos os cargos</string>
-  <string name="ROL_RIGHT_ANNOUNCEMENTS">Criar e editar anúncios</string>
   <string name="ROL_RIGHT_APPROVE_USERS">Organizar e atribuir registos</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organizar e atribuir cargos</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Os usuários deste cargo possuem acesso para o gerenciamento de cargo e podem criar novos cargos, gerenciar e atribuir cargos para outros usuários.</string>
-  <string name="ROL_RIGHT_DATES">Criar e editar evento</string>
   <string name="ROL_RIGHT_DOWNLOAD">Gerenciar transferências</string>
   <string name="ROL_RIGHT_DOWNLOAD_DESC">Cargos com esta permissão podem gerenciar as permissões para o módulo de transferência, inclusive quem pode ver os diretórios e carregar ficheiros.</string>
   <string name="ROL_RIGHT_EDIT_USER">Editar perfil de todos os usuários</string>
   <string name="ROL_RIGHT_EDIT_USER_DESC">Cargos com esta permissão podem alterar os dados de outros usuários (exceto palavras passe).\n Adicionalmente, também possuem acesso à Administração de usuários e podem adicionar/remover usuários.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Editar e apagar entradas no livro de visitas</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Criar comentários nas entradas do livro de visitas</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Defina quem pode enviar mensagens para este cargo usando o módulo de e-mail. A permissão de cargo #VAR1_BOLD# é configuração pai do nível de permissão em questão.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">Enviar e-mail para todos os cargos</string>
   <string name="ROL_RIGHT_PHOTO">Enviar e editar fotos</string>
   <string name="ROL_RIGHT_PROFILE">Editar o meu perfil</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Defina quais usuários podem ver várias listas e determinados perfis de usuário de membros do cargo atual. A permissão de cargo #VAR1_BOLD# é configuração pai do nível de permissão em questão.</string>
-  <string name="ROL_RIGHT_WEBLINKS">Criar e editar links web</string>
   <string name="ROL_ROLE_ADMINISTRATION">Administração de cargo</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Cargos baseados em certos grupos, cursos e departamentos podem ser gerenciados aqui. As permissões de cargo podem ser definidas aqui também.</string>
   <string name="ROL_ROLE_DELETE">A remover cargo</string>
@@ -954,7 +912,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Exibir filiações de cargo</string>
   <string name="ROL_SEMIYEARLY">Semestralmente</string>
   <string name="ROL_SEND_MAIL_GUESTS">Todos os visitantes podem enviar e-mails para o cargo atual.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Usuários em sessão podem enviar e-mails para o cargo atual.</string>
   <string name="ROL_SEND_MAIL_ROLE">Os membros deste cargo podem enviar e-mails somente para o cargo atual.</string>
   <string name="ROL_SEND_MAILS">Enviar e-mails</string>
   <string name="ROL_SHOW_MEMBERS">Exibir membros</string>
@@ -1044,7 +1001,6 @@
   <string name="SYS_DATE">Data</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">A data de término é antes da data de início.</string>
   <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# a #VAR2#</string>
-  <string name="SYS_DATA_GLOBAL">Quando ativo, todas as datas aparecem nos websites das seguintes organizações, onde elas podem ser editadas por usuários autorizados:\n\n#VAR1_BOLD#</string>
   <string name="SYS_DATE_INVALID">Data inválida no campo #VAR1_BOLD#.\n\nA data precisa corresponder com este formato:
 #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Data da alteração</string>
@@ -1073,7 +1029,6 @@
   <string name="SYS_EMAIL_NOT_SEND">Não foi possível enviar o e-mail para #VAR1_BOLD#.\n\nDetalhes:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">O e-mail foi enviado com sucesso</string>
   <string name="SYS_EMPTY">Vazio</string>
-  <string name="SYS_ENTRY_MULTI_ORGA">Entrada visível para várias organizações</string>
   <string name="SYS_END" description="End of a date">Fim</string>
   <string name="SYS_ERROR">Erro</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Não foi possível acessar a base de dados:\n\n#VAR1#</string>
@@ -1259,7 +1214,6 @@
   <string name="SYS_SAVE">Guardar</string>
   <string name="SYS_SAVE_DATA">Os dados foram guardados</string>
   <string name="SYS_SECONDS">segundos</string>
-  <string name="SYS_SECURITY_ERROR">Erro de segurança</string>
   <string name="SYS_SELECT_FROM_LIST">Selecionar da lista</string>
   <string name="SYS_SEND">Enviar</string>
   <string name="SYS_SEND_EMAIL_TO">Enviar e-mail para #VAR1#</string>
@@ -1278,13 +1232,11 @@
   <string name="SYS_SIZE">Tamanho</string>
   <string name="SYS_SOCIAL_NETWORKS">Redes sociais</string>
   <string name="SYS_START" description="Start of a date">Início</string>
-  <string name="SYS_STATUS_CODE_INVALID">Código de status inválido!</string>
   <string name="SYS_STILL_X_CHARACTERS">ainda #VAR1# caracteres</string>
   <string name="SYS_STOP">Parar</string>
   <string name="SYS_SUNDAY">Domingo</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Alternar para administração de categoria</string>
   <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Solicitaste uma palavra passe para #organization_short_name# website\n#content# Olá #user_first_name#,\n\nsolicitaste uma nova palavra passe!\n\nTuas credenciais de acesso são:\nNome de usuário: #user_login_name#\nPalavra passe: #variable1#\n\nPara ativar a palavra passe, clique neste link:\n\n#variable2#\n\nA palavra passe foi gerada automaticamente,\npor isso é recomendado que inicie tua sessão em #organization_homepage# e altere-a no ecrã \"Meu perfil\".\n\nSaudações,\nOs Administradores</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Detalhes de acesso para #organization_homepage#\n#content# Olá #user_first_name#,\n\nteus novos detalhes de acesso para o sítio web de #organization_long_name#:\n:Nome de usuário #user_login_name#\nPalavra passe: #variable1#\n\nA palavra passe foi gerada automaticamente,\npor isso é recomendado que inicie tua sessão em #organization_homepage# e altere-a no ecrã \"Meu perfil\".\n\nSaudações,\nOs Administradores</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# teu registro em #organization_long_name# foi rejeitado.\n#content#Olá #user_first_name# Tua solicitação em #organization_homepage# foi rejeitada.\n\nRegistros são geralmente aceitos pelos nossos usuários. Se és um membro e teu registro ainda assim foi rejeitado, talvez seja porque não esteja sendo identificado corretamente.\nPara esclarecer os motivos da rejeição, contate o webmaster #webmaster_email# da #organization_homepage#.\n\nSaudações,\nOs Administradores</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registro no sítio web de #organization_long_name# aprovado\n#content# Olá #user_first_name#,\n\nteu registro em #organization_homepage# foi aprovado.\n\nAgora podes iniciar uma sessão com as credenciais: #user_login_name#\ne tua palavra passe.\n\nEm caso de dúvidas, não hesite em contatar o webmaster via email #webmaster_email# .\n\nSaudações,\nOs Administradores</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Novo registo no sítio web #organization_long_name#\n#content# Um novo usuário registou a si mesmo em #organization_homepage#.\n\nSobrenome: #user_last_name#\nPrimeiro nome: #user_first_name#\nE-mail: #user_email#\n\n\nEsta mensagem foi gerada automaticamente.</string>
@@ -1321,7 +1273,6 @@
   <string name="SYS_VERSION">Versão</string>
   <string name="SYS_VIEW">Visualização</string>
   <string name="SYS_VISIBLE">Visível</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# visível apenas para usuários em sessão.</string>
   <string name="SYS_VISITORS">Visitantes</string>
   <string name="SYS_WANT_REGISTER">Quero me registar!</string>
   <string name="SYS_WARNING">Aviso</string>
