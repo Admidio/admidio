@@ -214,7 +214,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                         if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DATE')
                         {
                             // the date must be formated
-                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, $gPreferences['system_date']));
+                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, $gSettingsManager->getString('system_date')));
                         }
                         elseif($fieldNameIntern === 'COUNTRY')
                         {

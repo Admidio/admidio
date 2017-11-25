@@ -255,13 +255,13 @@ class ModuleLists extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gDb;
+        global $gCurrentOrganization, $gSettingsManager, $gDb;
 
         // Parameter
         if($limit === null)
         {
             // Roles per page
-            $limit = $gPreferences['lists_roles_per_page'];
+            $limit = $gSettingsManager->getInt('lists_roles_per_page');
         }
 
         // assemble conditions

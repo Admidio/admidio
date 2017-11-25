@@ -23,29 +23,29 @@
                         $gL10n->get('SYS_OVERVIEW'), '/icons/home.png'
                     );
 
-                    if($gPreferences['enable_announcements_module'] == 1
-                    || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_announcements_module') === 1
+                    || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'announcements', ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php',
                             $gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements.png'
                         );
                     }
-                    if($gPreferences['enable_download_module'] == 1)
+                    if($gSettingsManager->getBool('enable_download_module'))
                     {
                         $moduleMenu->addItem(
                             'download', ADMIDIO_URL . FOLDER_MODULES . '/downloads/downloads.php',
                             $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png'
                         );
                     }
-                    if($gPreferences['enable_mail_module'] == 1 && !$gValidLogin)
+                    if($gSettingsManager->getBool('enable_mail_module') && !$gValidLogin)
                     {
                         $moduleMenu->addItem(
                             'email', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php',
                             $gL10n->get('SYS_EMAIL'), '/icons/email.png'
                         );
                     }
-                    if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
+                    if(($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module')) && $gValidLogin)
                     {
                         $unreadBadge = '';
 
@@ -63,16 +63,16 @@
                             $gL10n->get('SYS_MESSAGES') . $unreadBadge, '/icons/messages.png'
                         );
                     }
-                    if($gPreferences['enable_photo_module'] == 1
-                    || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_photo_module') === 1
+                    || ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'photo', ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php',
                             $gL10n->get('PHO_PHOTOS'), '/icons/photo.png'
                         );
                     }
-                    if($gPreferences['enable_guestbook_module'] == 1
-                    || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_guestbook_module') === 1
+                    || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'guestbk', ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php',
@@ -80,7 +80,7 @@
                         );
                     }
 
-                    if($gPreferences['lists_enable_module'] == 1 && $gValidLogin)
+                    if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
                     {
                         $moduleMenu->addItem(
                             'lists', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php',
@@ -92,8 +92,8 @@
                         );
                     }
 
-                    if($gPreferences['enable_dates_module'] == 1
-                    || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_dates_module') === 1
+                    || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'dates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php',
@@ -101,8 +101,8 @@
                         );
                     }
 
-                    if($gPreferences['enable_weblinks_module'] == 1
-                    || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
+                    if((int) $gSettingsManager->get('enable_weblinks_module') === 1
+                    || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
                     {
                         $moduleMenu->addItem(
                             'links', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php',
@@ -118,7 +118,7 @@
                     {
                         $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 
-                        if($gCurrentUser->approveUsers() && $gPreferences['registration_enable_module'] == 1)
+                        if($gCurrentUser->approveUsers() && $gSettingsManager->getBool('registration_enable_module'))
                         {
                             $adminMenu->addItem(
                                 'newreg', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php',
