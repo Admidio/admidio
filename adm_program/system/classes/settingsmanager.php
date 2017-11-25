@@ -1,6 +1,8 @@
 <?php
 /**
  ***********************************************************************************************
+ * Class the manage the settings of an organization
+ *
  * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -10,19 +12,19 @@
 class SettingsManager
 {
     /**
-     * @var Database
+     * @var Database The Database object
      */
     private $db;
     /**
-     * @var int
+     * @var int The organization id
      */
     private $orgId;
     /**
-     * @var array<string,string>
+     * @var array<string,string> An array with the settings with name and value
      */
     private $settings = array();
     /**
-     * @var bool
+     * @var bool Indicator if settings was already full loaded
      */
     private $initFullLoad = false;
 
@@ -38,7 +40,8 @@ class SettingsManager
     }
 
     /**
-     * @return array<int,string>
+     * Only safe db and orgId on serialization
+     * @return array<int,string> Returns the properties that should be serialized
      */
     public function __sleep()
     {
@@ -46,8 +49,9 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @return bool
+     * Checks if the settings name is valid
+     * @param string $name The settings name
+     * @return bool Returns true if the settings name is valid
      */
     private static function isValidName($name)
     {
@@ -55,8 +59,9 @@ class SettingsManager
     }
 
     /**
-     * @param mixed $value
-     * @return bool
+     * Checks if the settings value is a valid type (bool, string, int, float)
+     * @param mixed $value The settings value
+     * @return bool Returns true if the settings value is true
      */
     private static function isValidValue($value)
     {
@@ -64,7 +69,8 @@ class SettingsManager
     }
 
     /**
-     * @return array<string,string>
+     * Loads all settings from the database
+     * @return array<string,string> An array with all settings from the database
      */
     private function loadAll()
     {
@@ -84,9 +90,10 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @throws \UnexpectedValueException
-     * @return mixed
+     * Loads a specific setting from the database
+     * @param string $name The setting name from the wanted value
+     * @throws \UnexpectedValueException Throws if there is no setting to the given name found
+     * @return mixed Returns the setting value
      */
     private function load($name)
     {
@@ -105,8 +112,9 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * Inserts a new setting into the database
+     * @param string $name  The chosen setting name
+     * @param string $value The chosen setting value
      */
     private function insert($name, $value)
     {
@@ -117,8 +125,9 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * Updates an already available setting in the database
+     * @param string $name  The chosen setting name
+     * @param string $value The chosen new setting value
      */
     private function update($name, $value)
     {
@@ -130,7 +139,8 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
+     * Deletes a selected setting out of the database
+     * @param string $name The chosen setting name
      */
     private function delete($name)
     {
@@ -141,7 +151,7 @@ class SettingsManager
     }
 
     /**
-     *
+     * Clears the loaded settings
      */
     public function clearAll()
     {
@@ -149,7 +159,7 @@ class SettingsManager
     }
 
     /**
-     *
+     * Clears and reload all settings
      */
     public function resetAll()
     {
@@ -158,10 +168,11 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param bool   $update
-     * @throws \UnexpectedValueException
-     * @return bool
+     * Checks if a setting exists
+     * @param string $name   The chosen setting name
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the settings name is invalid
+     * @return bool Returns true if the setting exists
      */
     public function has($name, $update = false)
     {
@@ -188,8 +199,9 @@ class SettingsManager
     }
 
     /**
-     * @param bool $update
-     * @return array<string,string>
+     * Get all settings from the database
+     * @param bool $update Set true to make a force reload of all settings from the database
+     * @return array<string,string> Returns all settings
      */
     public function getAll($update = false)
     {
@@ -202,10 +214,11 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param bool   $update
-     * @throws \UnexpectedValueException
-     * @return string
+     * Get a chosen setting from the database
+     * @param string $name   The chosen setting name
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @return string Returns the chosen setting value
      */
     public function get($name, $update = false)
     {
@@ -222,11 +235,12 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param bool   $update
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
-     * @return bool
+     * Get a chosen boolean setting from the database
+     * @param string $name   The chosen setting name
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @throws \InvalidArgumentException Throws if the chosen setting value is not of type bool
+     * @return bool Returns the chosen boolean setting value
      */
     public function getBool($name, $update = false)
     {
@@ -242,11 +256,12 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param bool   $update
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
-     * @return int
+     * Get a chosen integer setting from the database
+     * @param string $name   The chosen setting name
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @throws \InvalidArgumentException Throws if the chosen setting value is not of type int
+     * @return int Returns the chosen integer setting value
      */
     public function getInt($name, $update = false)
     {
@@ -262,11 +277,12 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param bool   $update
-     * @throws \UnexpectedValueException
-     * @throws \InvalidArgumentException
-     * @return float
+     * Get a chosen float setting from the database
+     * @param string $name   The chosen setting name
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @throws \InvalidArgumentException Throws if the chosen setting value is not of type float
+     * @return float Returns the chosen float setting value
      */
     public function getFloat($name, $update = false)
     {
@@ -282,10 +298,11 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param bool   $update
-     * @throws \UnexpectedValueException
-     * @return string
+     * Get a chosen string setting from the database
+     * @param string $name   The chosen setting name
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
+     * @return string Returns the chosen string setting value
      */
     public function getString($name, $update = false)
     {
@@ -293,10 +310,11 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param string $value
-     * @param bool   $update
-     * @throws \UnexpectedValueException
+     * Checks if the setting already exists and then inserts or updates this setting
+     * @param string $name  The chosen setting name
+     * @param string $value The chosen setting value
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid
      */
     private function updateOrInsertSetting($name, $value, $update = true)
     {
@@ -314,9 +332,10 @@ class SettingsManager
     }
 
     /**
-     * @param array<string,mixed> $settings
-     * @param bool                $update
-     * @throws \UnexpectedValueException
+     * Sets multiple settings in the database
+     * @param array<string,mixed> $settings The settings to set
+     * @param bool                $update   Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if one or more of the setting names are invalid or do not exist
      */
     public function setMulti(array $settings, $update = true)
     {
@@ -345,10 +364,11 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
-     * @param bool   $update
-     * @throws \UnexpectedValueException
+     * Sets a chosen setting in the database
+     * @param string $name   The chosen setting name
+     * @param mixed  $value  The chosen setting value
+     * @param bool   $update Set true to make a force reload of this setting from the database
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
      */
     public function set($name, $value, $update = true)
     {
@@ -367,8 +387,9 @@ class SettingsManager
     }
 
     /**
-     * @param string $name
-     * @throws \UnexpectedValueException
+     * Deletes a chosen setting out of the database
+     * @param string $name The chosen setting name
+     * @throws \UnexpectedValueException Throws if the setting name is invalid or does not exist
      */
     public function del($name)
     {
