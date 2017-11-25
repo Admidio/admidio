@@ -19,7 +19,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_announcements_module'] == 0)
+if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -98,7 +98,7 @@ $form->addInput(
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
-    'ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', 'EDIT_CATEGORIES',
+    'ann_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $announcement->getValue('ann_cat_id'))
 );
 $form->addEditor(

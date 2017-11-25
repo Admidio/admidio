@@ -163,7 +163,7 @@ if (isset($_POST['db_host']))
             // valid installation exists -> exit installation
             showNotice(
                 $gL10n->get('INS_INSTALLATION_EXISTS'),
-                '../index.php',
+                ADMIDIO_URL . '/adm_program/index.php',
                 $gL10n->get('SYS_OVERVIEW'),
                 'layout/application_view_list.png'
             );

@@ -4,6 +4,7 @@
   <string name="ANN_ANNOUNCEMENT">Announcement</string>
   <string name="ANN_ANNOUNCEMENTS">Announcements</string>
   <string name="ANN_ANNOUNCEMENTS_DESC">Display or edit announcements, news and other information.</string>
+  <string name="ANN_EDIT_ANNOUNCEMENTS">Edit announcements</string>
   <string name="ANN_EMAIL_NOTIFICATION_TITLE">A new announcement was created</string>
   <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">A new announcement at #VAR1# was created\n\nTitle: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
@@ -26,14 +27,19 @@
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# seconds</string>
   <!--Phrases only in Category-Administration-->
+  <string name="CAT_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
+  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
+  <string name="CAT_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="CAT_CATEGORY_EXIST">Category name already exists in selected organization.</string>
-  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:\n\n#VAR1_BOLD#\n\n Please deactivate, if fields should only be shown in your organization.</string>
+  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\n Please deactivate, if fields should only be shown in your organization. </string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
   <string name="CAT_MOVE_DOWN">Move down #VAR1#</string>
   <string name="CAT_MOVE_UP">Move up #VAR1#</string>
+  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
   <string name="CAT_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
+  <string name="CAT_ONLY_PARENT_ORGANIZATION">This category is visible to all organizations and for this reason may only be edited by the parent organization.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Add event to calendar</string>
   <string name="DAT_ALL_DAY">Full time</string>
@@ -58,6 +64,7 @@
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Default configuration of participants list</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">One of the configurations given here can be set as standard configuration for the participant list on events of this organization. Participants of events are viewed with this configuration.</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Here you can create and edit calendars.</string>
+  <string name="DAT_EDIT_EVENTS">Edit events</string>
   <string name="DAT_EDIT_ROOMS">Edit rooms</string>
   <string name="DAT_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
   <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">An event was changed</string>
@@ -238,6 +245,7 @@
   <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">The database parameters have not been entered completely!</string>
   <string name="INS_DATABASE_DOESNOT_NEED_UPDATED">Database update is not required</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
+  <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server here. This can be a URL or localhost if the database is running on the same machine as the webpage.</string>
   <string name="INS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date</string>
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
@@ -345,6 +353,7 @@
   <string name="LNK_CREATE_LINK">Create new link</string>
   <string name="LNK_DISPLAY_REDIRECT">Show redirect</string>
   <string name="LNK_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
+  <string name="LNK_EDIT_WEBLINKS">Edit web links</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">A new weblink was created</string>
   <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">A new weblink at #VAR1# was created.\n\nLink address: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="LNK_GO_TO">Go to #VAR1#</string>
@@ -791,7 +800,7 @@
   <string name="PHO_ALBUM_WRITE_SUCCESS">Album has been successfully created / changed.</string>
   <string name="PHO_BACK_TO_ALBUM">back to album</string>
   <string name="PHO_CAPTION_SIZE">Caption size</string>
-  <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor,  the font size will be reduced. (Default: 40)</string>
+  <string name="PHO_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
   <string name="PHO_CREATE_ALBUM">Create album</string>
   <string name="PHO_DISPLAY_PHOTOS">Photo display</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
@@ -876,6 +885,7 @@
   <string name="PRO_EDIT_MY_PROFILE_PICTURE">Edit own profile picture</string>
   <string name="PRO_EDIT_PASSWORD">Edit password</string>
   <string name="PRO_EDIT_PROFILE">Edit profile</string>
+  <string name="PRO_EDIT_PROFILE_FIELDS">Edit profile fields in the profile</string>
   <string name="PRO_EDIT_PROFILE_PIC_FROM">Edit profile picture of #VAR1# #VAR2#</string>
   <string name="PRO_EXPORT_VCARD">Export vCard</string>
   <string name="PRO_EXPORT_VCARD_FROM_VAR">Export vCard of #VAR1#</string>
@@ -972,6 +982,7 @@
   <string name="ROL_LINK_MEMBERSHIP_DEL">Would you like to move back role #VAR1_BOLD# to current roles?</string>
   <string name="ROL_MEETINGS">Meetings</string>
   <string name="ROL_MEMBERSHIP_DEL">Would you like to end membership in role #VAR1_BOLD#?</string>
+  <string name="ROL_MODULE_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights.</string>
   <string name="ROL_MONTHLY">Monthly</string>
   <string name="ROL_NEW_ROLE">New role</string>
   <string name="ROL_NO_ADDITIONAL_RIGHTS">No additional rights</string>
@@ -981,11 +992,11 @@
   <string name="ROL_ROLE_ASSIGNMENT">Role assignment for #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Quarterly</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">View membership lists of all roles</string>
-  <string name="ROL_RIGHT_ANNOUNCEMENTS">Create and edit announcements</string>
+  <string name="ROL_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="ROL_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organize and assign roles</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Users of this role have access to the role management and can create new roles, manage and assign roles to other users.</string>
-  <string name="ROL_RIGHT_DATES">Create and edit event</string>
+  <string name="ROL_RIGHT_DATES">Manage events</string>
   <string name="ROL_RIGHT_DOWNLOAD">Manage downloads</string>
   <string name="ROL_RIGHT_DOWNLOAD_DESC">Roles having this permission can manage the rights for the download module. This includes who can see folders and can upload files.</string>
   <string name="ROL_RIGHT_EDIT_USER">Edit profile of all users</string>
@@ -997,7 +1008,7 @@
   <string name="ROL_RIGHT_PHOTO">Upload and edit photos</string>
   <string name="ROL_RIGHT_PROFILE">Edit own profile</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Define which user should be able to see several lists and certain user profiles of members of the current role. Role permission #VAR1_BOLD# is parent configuration is the current permission level.</string>
-  <string name="ROL_RIGHT_WEBLINKS">Create and edit web links</string>
+  <string name="ROL_RIGHT_WEBLINKS">Manage web links</string>
   <string name="ROL_ROLE_ADMINISTRATION">Role administration</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</string>
   <string name="ROL_ROLE_DELETE">Deleting role</string>
@@ -1043,6 +1054,8 @@
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
   <string name="SYS_ALL">All</string>
+  <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
+  <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, weblink, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_ASSIGN_MEMBERS">Assigning members</string>
@@ -1093,9 +1106,8 @@
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
-  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data in this category will also appear on the websites of the following organizations and can be edited by users with appropriate rights:\n\n#VAR1_BOLD#</string>
+  <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD# </string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
-  <string name="SYS_DATA_GLOBAL">When active, all dates appear on the websites of following organizations where they can be edited by authorised users:\n\n#VAR1_BOLD#</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
@@ -1119,7 +1131,7 @@
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DESCRIPTION">Description</string>
   <string name="SYS_DESIGNATION">Name</string>
-  <string name="SYS_DISK_SPACE">Disk-Space</string>
+  <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
@@ -1133,7 +1145,6 @@
   <string name="SYS_EMAIL_NOT_SEND">The email could not be sent to #VAR1_BOLD#.\n\nThe following error occurred:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">Mail has been send successfully</string>
   <string name="SYS_EMPTY">Empty</string>
-  <string name="SYS_ENTRY_MULTI_ORGA">Entry visible for multiple organizations</string>
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>

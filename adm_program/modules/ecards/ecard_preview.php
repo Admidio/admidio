@@ -37,7 +37,7 @@ if(isset($_POST['ecard_message']))
     $ecardMessage = $_POST['ecard_message'];
 }
 
-$imageUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $postPhotoId, 'photo_nr' => $postPhotoNr, 'max_width' => $gPreferences['ecard_thumbs_scale'], 'max_height' => $gPreferences['ecard_thumbs_scale']));
+$imageUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $postPhotoId, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale')));
 
 $funcClass = new FunctionClass($gL10n);
 

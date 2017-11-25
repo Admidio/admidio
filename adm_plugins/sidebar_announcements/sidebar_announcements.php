@@ -159,7 +159,7 @@ else
             echo '<div>'.$textPrev.'</div>';
         }
 
-        echo '<div><em>('. $plgAnnouncement->getValue('ann_timestamp_create', $gPreferences['system_date']). ')</em></div>';
+        echo '<div><em>('. $plgAnnouncement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')). ')</em></div>';
 
         echo '<hr />';
 

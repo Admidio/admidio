@@ -18,13 +18,13 @@ $postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',       'int',  arr
 
 $funcClass       = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);
-$imageUrl        = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $postPhotoId, 'photo_nr' => $postPhotoNr, 'max_width' => $gPreferences['ecard_card_picture_width'], 'max_height' => $gPreferences['ecard_card_picture_height']));
+$imageUrl        = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $postPhotoId, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_card_picture_width'), 'max_height' => $gSettingsManager->getInt('ecard_card_picture_height')));
 $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$postPhotoId.'/'.$postPhotoNr.'.jpg';
 
 $_SESSION['ecard_request'] = $_POST;
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_ecard_module'] != 1)
+if (!$gSettingsManager->getBool('enable_ecard_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT

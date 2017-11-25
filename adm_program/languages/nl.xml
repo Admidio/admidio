@@ -27,7 +27,6 @@
   <string name="BAC_SECONDS_VAR">#VAR1# seconden</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zullen profielvelden van categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties:\n\n#VAR1_BOLD#\n\n Deactiveer als velden alleen in uw eigen organisatie getoond moeten worden.</string>
   <string name="CAT_DEFAULT_VAR">Standaard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Bent u zeker dat u categorie #VAR1_BOLD# wenst te verwijderen?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Kon categorie #VAR1_BOLD# niet verwijderen vermits #VAR2# ervan afhankelijk is.</string>
@@ -71,7 +70,6 @@
   <string name="DAT_MAX_MEMBERS">Beperk aantal deelnemers aan dit evenement. Laat veld leeg voor onbeperkt aantal deelnemers.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Beperk aantal deelnemers</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Neem deel als organisator aan het event</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">U wordt de organisator van het evenement en kan deelnemers toevoegen/verwijderen. Tevens kunt u extra personen toevoegen als organisator.</string>
   <string name="DAT_PERIOD_FROM_TO">Periode van #VAR1# tot #VAR2#</string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Eerdere #VAR1#</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Registratie is gesloten.</string>
@@ -80,7 +78,6 @@
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Deelnemers mogen de deelnemerslijst tonen.</string>
   <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Deelnemers mogen alle andere deelnemers berichten sturen.</string>
   <string name="DAT_ROOM_INFORMATIONS">Zaal informatie</string>
-  <string name="DAT_ROOM_OVERHANG">Als er verder nog ruimte beschikbaar is (b.v. extra stoelen of staanplaaten), kunnen deze extra plaatsen hier worden opgegeven.</string>
   <string name="DAT_ROOM_RESERVED">Geselecteerde zaal is in dit tijdvlak al in gebruik.</string>
   <string name="DAT_ROOM_SELECTABLE">Zaal is beschikbaar</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Selectiebox beschikbaar voor beschikbare vergaderzalen. Selecteer zaal en maak evenement voor deze zaal. (standaard: nee)</string>
@@ -91,11 +88,8 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Wissel naar kalenderbeheer</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Vergaderzaal administratie</string>
   <string name="DAT_VIEW_MODE">Standaard weergave</string>
-  <string name="DAT_VIEW_MODE_DESC">Weergave modus voor evenementen. Met modus #VAR1_BOLD# zal alle evenement informatie worden weergegeven in een container. Met modus #VAR2_BOLD# zal de belangrijkste evenement gegevens worden weergegeven in een compacte lijst. (Standaard: Uitgebreid)</string>
-  <string name="DAT_VIEW_MODE_DETAIL">Uitgebreid</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Zichtbaarheid</string>
-  <string name="SYS_VISIBLE_FOR">Zichtbaar voor</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Voeg toe in database</string>
   <string name="DOW_ADDITIONAL_FILES">Deze lijst geeft u een overzicht van alle bestanden en mappen die nog niet in de database zijn geimporteerd. Voeg ze hier toe. Toegangsrechten zullen van geselecteerde map gekopieerd worden.</string>
@@ -109,7 +103,6 @@
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">Nieuw bestand geupload</string>
   <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Nieuw bestand geupload op #VAR1#\n\nBestand: #VAR2#\nGeupload door: #VAR3#\nGeupload op: #VAR4#</string>
   <string name="DOW_ENABLE_DOWNLOAD_MODULE">Activeer download module</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Download module kan hier gedeactiveerd worden. Na deactivering zal module niet meer in overzicht getoond worden. (standaard: ja)</string>
   <string name="DOW_FILE_EXIST">Bestand #VAR1# bestaat al!\n\nKies svp andere bestandsnaam.</string>
   <string name="DOW_FILE_EXTENSION_INVALID">Type bestand is niet toegestaan op deze server.</string>
   <string name="DOW_FILE_NAME_RULES">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jaar-maand-dag).</string>
@@ -145,7 +138,6 @@
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Ecard gestuurd door</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Ecard module activeren</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">De Ecard module kan gedeactiveerd en geactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, svp deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (standaard: ja)</string>
   <string name="ECA_GREETING_CARD">Ecard </string>
   <string name="ECA_GREETING_CARDS">Ecards</string>
   <string name="ECA_GREETING_CARD_EDIT">Bewerk Ecard</string>
@@ -155,7 +147,6 @@
   <string name="ECA_NOT_SUCCESSFULLY_SEND">Uw Ecard kon niet verzonden worden!</string>
   <string name="ECA_RECIPIENT_EMAIL">E-mail ontvanger</string>
   <string name="ECA_RECIPIENT_NAME">Naam ontvanger</string>
-  <string name="ECA_SCALE_THUMBNAILS_DESC">Bepaal grootte van de lange zijde van thumbnails. (Standaard: 250 pixels)</string>
   <string name="ECA_SUCCESSFULLY_SEND">Uw Ecard is verzonden.</string>
   <string name="ECA_TEMPLATE">Template</string>
   <string name="ECA_TEMPLATE_DESC">Stel standaard template in. (standaard: Postcard)</string>
@@ -163,10 +154,8 @@
   <string name="ECA_TEMPLATE_FOLDER_OPEN">De Template map kan niet geopend en/of gelezen worden.</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
-  <string name="GBO_CAPTCHA_DESC">Als deze optie is geactiveerd zullen niet ingelogde bezoekers een afbeelding zien met captcha code of een simpele rekensom. Het is noodzakelijk om de juiste code of oplossing in te vullen. Captcha is onderdeel van antispam oplossing van Admidio. (standaard: ja)</string>
   <string name="GBO_COMMENT_BY">Reactie van #VAR1#</string>
   <string name="GBO_COMMENTS4ALL">Anonieme reacties toestaan</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Als u deze optie activeert kunnen niet-geregistreerde bezoekers reacties plaatsen in gastenboek. Alle andere rechten in het rollen beheersysteem zullen genegeerd worden. (standaard: nee)</string>
   <string name="GBO_CREATE_COMMENT">Plaats reactie</string>
   <string name="GBO_CREATE_ENTRY">Plaats bericht</string>
   <string name="GBO_CREATE_VAR_ENTRY">Plaats #VAR1# bericht</string>
@@ -179,7 +168,6 @@
   <string name="GBO_ENTRY_QUEUED">Bericht opgeslagen. Het wordt getoond na goedkeuring.</string>
   <string name="GBO_FLOODING_PROTECTION">Uw laatste bericht is minder dan #VAR1# seconden aangemaakt.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Interval berichten</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Berichten van niet-geregistreerde gebruikers worden gechecked. Te veel berichten tijdens de gegeven tijdsinterval zijn niet toegestaan. Deze optie geeft u controle over ongewenste berichten. Als interval op 0 staat: geen controle. (standaard: 60 seconden)</string>
   <string name="GBO_GUESTBOOK">Gastenboek</string>
   <string name="GBO_GUESTBOOK_DESC">Gasten en gebruikers kunnen berichten en reacties in het gastenboek plaatsen.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Goedkeuring geactiveerd voor</string>
@@ -203,7 +191,6 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Een update aan de database kan alleen door een webmaster doorgevoerd worden. Log hier aub als webmaster in.</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Bestuur</string>
-  <string name="INS_CONFERENCE_ROOM">Vergaderzaal</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Bestand #VAR1_BOLD# niet gevonden in hoofd directory van Admidio!\n\nDownload het bestand svp opnieuw en plaats het in de vermelde directory.</string>
   <string name="INS_CONTINUE_INSTALLATION">Installatie voortzetten</string>
   <string name="INS_COURSES">Opleidingen</string>
@@ -401,7 +388,6 @@
   <string name="LST_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
   <string name="LST_SEARCH_TELEFON_DESC">Leden zoeken met telefoonnummer waarin 241 voorkomt en die eindigt met 54</string>
   <string name="LST_SEARCH_YES_NO_FIELD">Ja/nee veld</string>
-  <string name="LST_SEARCH_YES_NO_FIELD_DESC">Leden zoeken waarbij Ja aangevinkt is</string>
   <string name="LST_SELECT_CONFIGURATION">Configuratie kiezen</string>
   <string name="LST_SELECT_MEMBERS">Leden kiezen</string>
   <string name="LST_SHOW_LIST">Toon lijst</string>
@@ -415,13 +401,10 @@
   <string name="LST_Z_TO_A">Z tot A</string>
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">E-mail module activeren</string>
-  <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">E-mail module kan gedeactiveerd worden door deze selectiebox uit te vinken. Na deactivatie is de module niet beschikbaar in het module overzicht. Als de server geen e-mails ondersteund, deactiveer de module dan svp. (standaard: actief)</string>
   <string name="MAI_ADD_ATTACHEMENT">Attach bestand</string>
   <string name="MAI_ATTACHEMENT">Attachment:</string>
   <string name="MAI_ATTACHMENT_SIZE">Max. grootte e-mail attachments</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, kunnen attachments niet verzonden worden. (standaard: 1MB)</string>
   <string name="MAI_ATTACHMENT_TO_LARGE">Foutmelding uploaden E-mail attachment.\nWaarschijnlijk is grootte van bestand te groot!</string>
-  <string name="MAI_CAPTCHA_DESC">Als deze optie is geactiveerd zullen niet ingelogde bezoekers een afbeelding zien met captcha code of een simpele som. Het is noodzakelijk om de juiste code of oplossing in te vullen. Captcha is onderdeel van antispam oplossing van Admidio. (standaard: ja)</string>
   <string name="MAI_CARBON_COPY">Carbon copy (CC)</string>
   <string name="MAI_CHARACTER_ENCODING">Karakter codering</string>
   <string name="MAI_CHARACTER_ENCODING_DESC">Er wordt codering van karakters gebruikt bij het versturen van Admidio e-mails. Niet alle e-mail clients ondersteunen UTF-8. ISO-8859-1 kan als alternatief gebruikt worden.</string>
@@ -451,12 +434,9 @@
   <string name="MAI_SEND_COPY">Stuur kopie naar mijn e-mail adres</string>
   <string name="MAI_SEND_EMAIL">Stuur e-mail</string>
   <string name="MAI_SEND_METHOD">Stuur via</string>
-  <string name="MAI_SEND_METHOD_DESC">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</string>
   <string name="MAI_SENDER">Afzender</string>
-  <string name="MAI_SENDER_EMAIL">E-mail adres afzender</string>
   <string name="MAI_SENDER_NAME">Afzender</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</string>
-  <string name="MAI_SHOW_CAPTCHA_DESC">Als gebruikers uitgelogd zijn zal bij het contactformulier een captcha verschijnen als deze module is geactiveerd. Dit is tegen misbruik van spammers. (standaard: ja)</string>
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">SMTP authenticatie</string>
   <string name="MAI_SMTP_AUTH_DESC">Indien de SMTP server authenticatie vereist, zijn de gebruikersnaam en wachtwoordvelden ook vereist. (Standaard: Ja)</string>
@@ -519,7 +499,6 @@
   <string name="MEM_REMOVE_USER_DESC">Door #VAR1_BOLD# te kiezen, zullen alle gegevens verwijderd worden. Deze informatie zal niet langer beschikbaar zijn.</string>
   <string name="MEM_REPLACE">Herplaats</string>
   <string name="MEM_ROLE_SELECT_RIGHT">U heeft geen toestemming om rol #VAR1# te selecteren.\nKies svp een andere rol.</string>
-  <string name="MEM_SEND_NEW_LOGIN">Wenst u #VAR1_BOLD# een e-mail te versturen met de huidige gebruikersnaam en een nieuw wachtwoord?</string>
   <string name="MEM_SEND_USERNAME_PASSWORD">Verstuur e-mail met gebruikersnaam en wachtwoord.</string>
   <string name="MEM_SHOW_ALL_USERS">Toon alle gebruikers</string>
   <string name="MEM_SHOW_USERS_DESC">Is deze instelling niet gekozen worden enkel actieve leden van deze organisatie weergegeven. Is deze instelling gekozen dan worden alle gebruikers in de database weergegeven.</string>
@@ -532,9 +511,7 @@
   <string name="MEM_USERS_PER_PAGE_DESC">Aantal gebruikers die op een pagina in een lijst weergegeven worden. Zijn er meer gebruikers, dan kan er gebladerd worden. (Standaard: 25)</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Chat activeren</string>
-  <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Chat module activeren welke de gegevens dynamisch elke 3 seconden uit de database haalt. In de database worden maximaal 99 berichten opgeslagen, bij het 100ste bericht worden de eerste 50 weer verwijderd.</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Privé berichten activeren</string>
-  <string name="MSG_ACTIVATE_PM_MODULE_DESC">Privéberichten kunnen hier gedeactiveerd worden. Na deactivering zal de module niet meer in overzicht getoond worden. (standaard: geactiveerd)</string>
   <string name="MSG_ACTIVE_FORMER_SHORT">Actieve en voormalige</string>
   <string name="MSG_CHAT">Chat</string>
   <string name="MSG_DELETE_DESC">Bericht #VAR1_BOLD# verwijderen?</string>
@@ -554,19 +531,13 @@
   <string name="PMS_WAS_NOT_SENT_TO">Fout - Bericht is niet verstuurd naar:</string>
   <!--Phrases only in New-User-Registration-->
   <string name="NWU_ASSIGN_LOGIN">Inlog informatie toewijzen</string>
-  <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Inlog informatie succesvol toegewezen.</string>
-  <string name="NWU_ASSIGN_LOGIN_EMAIL">Inlog informatie is succesvol toegewezen en gebruiker is geinformeerd via e-mail.</string>
   <string name="NWU_ASSIGN_MEMBERSHIP">Lidmaatschap toewijzen</string>
-  <string name="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN">Lidmaatschap en inlog informatie toewijzen aan geselecteerde gebruiker.</string>
   <string name="NWU_ASSIGN_REGISTRATION">Registratie toewijzen</string>
   <string name="NWU_DELETE_REGISTRATION">Registratie verwijderen</string>
   <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">Hier kunt u nieuwe registraties beheren, goedkeuren of afkeuren.</string>
   <string name="NWU_NEW_REGISTRATIONS">Nieuwe registraties</string>
-  <string name="NWU_NO_MEMBERSHIP">Gebruiker is geen lid van organisatie #VAR1# maar er is al inlog informatie toegewezen.</string>
-  <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">Gebruiker is geen lid van organisatie #VAR1# en er is geen inlog informatie toegewezen.</string>
   <string name="NWU_NO_REGISTRATIONS">Geen nieuwe registraties beschikbaar.</string>
   <string name="NWU_REGISTERED_ON">Geregistreerd op #VAR1#</string>
-  <string name="NWU_REMINDER_SEND_LOGIN">Wilt u gebruikers inlog infomatie en wachtwoord doorgeven?</string>
   <string name="NWU_SEND_LOGIN">Verstuur inlog informatie</string>
   <string name="NWU_USER_NO_VALID_LOGIN">Gebruiker heeft nog geen inlog gegevens.\nWilt u de informatie over deze registratie toewijzen aan de gebruiker?</string>
   <string name="NWU_USER_VALID_LOGIN">Gebruiker heeft al geldige inlog informatie.</string>
@@ -577,7 +548,6 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Extra variabelen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Thema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Kies layout van Admidio. Alle thema\'s die opgeslagen zijn in map adm_themes worden getoond. (standaard: modern)</string>
-  <string name="ORG_ADVANCED_REGISTRATION">Uitgebreide registratie</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatisch uitloggen na</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (standaard: 20 minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>
@@ -612,24 +582,22 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha activatie</string>
   <string name="ORG_ENABLE_RSS_FEEDS">Activeer Web-Feeds</string>
   <string name="ORG_ENABLE_RSS_FEEDS_DESC">Admidio kan eenn RSS-feed voor meerdere modules (mededelingen, afspraken, gastenboek, foto galerij en links) op de overzichtspagina van elke module plaatsen. Inschrijven is mogelijk via browser of feed reader. (standaard: ja)</string>
-  <string name="ORG_FAST_REGISTRATION">Snelle registratie</string>
   <string name="ORG_FIELD_DESCRIPTION">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</string>
   <string name="ORG_FIELD_DISABLED">Veld is alleen te bewerken door gebruiker met recht #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DOWN">Verplaats profielveld naar beneden</string>
   <string name="ORG_FIELD_EXIST">Er bestaat in deze categorie al een veld met dezelfde naam.</string>
   <string name="ORG_FIELD_HIDDEN">Veld is alleen zichtbaar voor geautoriseerde gebruikers (eigen prfiel &amp; rol autorisatie)</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Een veld is normaal voor alle gebruikers die het profiel mogen zien zichtbaar. Is deze instelling niet gekozen, dan kunnen enkel de gebruikers die het profiel mogen bewerken dit veld zien.</string>
-  <string name="ORG_FIELD_REQUIRED">Verplichte velden moeten altijd ingevuld worden.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Veld kan door gebruiker zelf bewerkt worden.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Veld is zichtbaar voor alle gebruikers.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Veld is verplicht. Het moet ingevuld worden.</string>
+  <string name="ORG_FIELD_REQUIRED">Verplichte velden moeten altijd ingevuld worden.</string>
+  <string name="ORG_FIELD_REQUIRED_DESC">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</string>
   <string name="ORG_FIELD_UP">Verplaats profielveld naar boven</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Deze pagina verschijnt als gebruiker ingelogd is. Pad moet in relatie staan tot de hoofdmap van Admidio. (voorbeeld: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Deze pagina is de standaard Admidio pagina voor bezoekers. Pad moet in relatie staan tot de hoofdmap van Admidio. (voorbeeld: adm_program/index.php)</string>
   <string name="ORG_INVALID_THEME">Er is geen geldig theme gekozen.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Kleur van de JavaScript editor</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Bepaal hier de achtergrond kleur van de JavaScript editor. Deze waarde kan een hexadecimale kleur zijn zoals #ffa500 of een RGB waarde zoals (255, 185, 0).</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">JavaScript editor gebruiken</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Een full-featured JavaScript editor wordt in veel modules van Admidio gebruikt. Afspraken, mededelingen etc. kunnen in een comfortabele manier bewerkt worden door gebruiker. Als de editor gedeactiveerd is, wordt een eenvoudig tekstvlak getoond.</string>
   <string name="ORG_LAST_UPDATE_STEP">Laatste update-stap</string>
@@ -658,7 +626,6 @@
   <string name="ORG_REFUSE_REGISTRATION">Berichtgeving van registratie weigering</string>
   <string name="ORG_REGIONAL_SETTINGS">Regionale instellingen</string>
   <string name="ORG_REGISTERED_USERS">Ingelogde gebruiker</string>
-  <string name="ORG_REGISTRATION_MODE">Bepaal type registratie of deactiveer dit. Bij snelle registratie kunnen gebruikers alleen de verplichte velden invullen. Bij uitgebreide registratie kunnen gebruikers alle velden invullen.  (standaard: snelle registratie)</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Zoek naar dezelfde namen</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Tijdens registratie zoekt Admidio naar dezelfde voor- en achternamen om dubbele registraties te voorkomen. (standaard: ja)</string>
   <string name="ORG_SECONDS">Seconden</string>
@@ -671,10 +638,8 @@
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Toon selectie van organisatie</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een selectiebox getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker moet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</string>
   <string name="ORG_SYSTEM_INFORMATIONS">Systeem informatie</string>
-  <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mail adres</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Meldingen van nieuwe inzendingen</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kunnen systeem waarschuwingen worden ingeschakeld voor nieuwe vermeldingen in de modules. Het wordt gebruikt als een controlerende functie binnen Admidio. De beheerder heeft de mogelijkheid om te worden geïnformeerd over nieuwe vermeldingen in de modules via e-mail (alleen nieuwe items worden in aanmerking genomen). Een systeem waarschuwing zal worden verstuurd naar het e-mailadres #VAR1#. (Standaard: Nee)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier kunnen alle systeem berichten aangepast worden. De berichten zijn onderverdeeld in 2 stukken (onderwerp en inhoud) en worden geïndentificeerd bij #subject# en #content#. Deze worden gevolgd door de inhoud van deze velden.\n\nDe volgende wildcards kunnen worden gebruikt in elke e-mail. Zij zullen worden vervangen door de desbetreffende inhoud bij het uitvoeren</string>
   <string name="ORG_TIME_FORMAT">Formaat tijd</string>
   <string name="ORG_TIME_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (standaard: H:i)</string>
@@ -683,15 +648,11 @@
   <string name="ORG_URL">URL</string>
   <string name="ORG_VALUE_LIST">Lijst met waarden</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activatie link voor nieuw wachtwoord</string>
-  <string name="ORG_VARIABLE_EMAIL">E-mail adres gebruiker</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Systeem e-mail adres van organisatie</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">Voornaam van gebruiker</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Achternaam van gebruiker</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Naam van de organisatie</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nieuw wachtwoord gebruiker</string>
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Afkorting van organisatie</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL van de organisatie</string>
-  <string name="ORG_VARIABLE_USERNAME">Gebruikersnaam van gebruiker</string>
   <!--Phrases only in Updatecheck-->
   <string name="UPD_ADMIDIO">Ga naar Admidio update pagina</string>
   <string name="UPD_BETA_VERSION">Beschikbaar Beta</string>
@@ -716,7 +677,6 @@
   <string name="PHO_DOWNLOAD_PHOTOS">Foto\'s downloaden</string>
   <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto opslaan</string>
   <string name="PHO_DOWNLOAD_ENABLED">Download toestaan</string>
-  <string name="PHO_DOWNLOAD_ENABLED_DESC">Sta toe op foto per foto of volledige albums als zip bestand te downloaden. Een hyperlink zal worden weergegeven voor elke foto of album. Indien optie #VAR1_BOLD# actief is, zullen alle de originele foto\'s worden gedownload.</string>
   <string name="PHO_EDIT_ALBUM">Bewerk album</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Nieuw foto album is gemaakt</string>
   <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Nieuw foto album op #VAR1# is gemaakt.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
@@ -724,7 +684,6 @@
   <string name="PHO_FOLDER_NOT_FOUND">Map is niet gevonden. Als map via FTP is verwijderd of als het niet toegankelijk is, verwijder map dan in Admidio.\nGebruikers zonder foto rechten mogen het geselecteerde album niet bekijken.</string>
   <string name="PHO_KEEP_ORIGINAL">Bewaar bovendien de originele foto\'s</string>
   <string name="PHO_KEEP_ORIGINAL_DESC">Bewaar elke foto, niet alleen in de opgegeven resolutie maar ook de originelen. Indien optie #VAR1_BOLD# actief is zullen alle originele foto\'s worden gedownload. Deze optie vereist beduidend meer website ruimte en dient daarom alleen geseleceteerd te worden indien je over voldoende ruimte beschikt.</string>
-  <string name="PHO_MAX_PHOTO_SIZE_DESC">Waarden om de maximale grootte te bepalen van een foto die door gebruiker getoond wordt. Grootte van popup en ColorBox venster wordt automatisch bijgesteld. Ideale grootte is in verhouding tot de originele grootte. (standaard: 640 x 400 pixels)</string>
   <string name="PHO_MAX_PHOTO_SIZE_HEIGHT">Max. weergaveformaat (Hoogte)</string>
   <string name="PHO_MAX_PHOTO_SIZE_WIDTH">Max. weergaveformaat (Breedte)</string>
   <string name="PHO_MODAL_WINDOW">Gemiddeld venster</string>
@@ -732,7 +691,6 @@
   <string name="PHO_NO_ALBUM_CONTENT">Geen foto\'s in album.</string>
   <string name="PHO_NO_FILES_OR_TO_LARGE">Ongeldige pagina weergave of het bestand kon niet geupload worden.\nMogelijk is bestand groter dan de vooraf ingestelde #VAR1#B!</string>
   <string name="PHO_NO_FILES_SELECTED">Geen foto\'s geselecteerd die toegevoegd moeten worden.</string>
-  <string name="PHO_NO_RIGHTS">U heeft geen rechten om dit te doen.\n\nAlleen ingelogde gebruikers met foto rechten mogen foto\'s beheren.</string>
   <string name="PHO_NUMBER_OF_ALBUMS_PER_PAGE">Aantal albums per pagina</string>
   <string name="PHO_PARENT_ALBUM">Hoofd album</string>
   <string name="PHO_PARENT_ALBUM_DESC">Een album kan aan een ander album toegewezen worden. Kies daarvoor uit de lijst het ouderalbum voor het actuele album. Wil je het album op het bovenste niveau tonen, kies dan voor #VAR1_BOLD#.</string>
@@ -761,13 +719,10 @@
   <string name="PHO_SAVE_ORIGINALS_DESC">Mits genoeg opslagruimte ter beschikking staat, kunnen geüploade afbeeldingen op de server gearchiveerd en bijvoorbeeld als download ter beschikking gesteld worden.</string>
   <string name="PHO_SCALE_AT_UPLOAD">Upload schalen</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Foto\'s worden herschaald tijdens upload. Opgegeven pixels betreft de lange zijde van de foto. De korte zijde blijft in verhouding gelijk aan de lange zijde. (standaard: 640 pixels)</string>
-  <string name="PHO_SCALE_THUMBNAILS">Thumbnail schalen</string>
-  <string name="PHO_SCALE_THUMBNAILS_DESC">Bepaal grootte van de lange zijde van thumbnails. Attentie: maak breedte niet te groot om problemen met thumbnail kolommen te voorkomen. Of probeer thumbnail instellingen (rij en kolom) aan te passen. (standaard: 160 pixels)</string>
   <string name="PHO_SELECT_FOTOS">Foto\'s kiezen</string>
   <string name="PHO_SHOW_CAPTION">Toon watermerk</string>
   <string name="PHO_SHOW_CAPTION_DESC">Tekst wordt getoond in alle foto\'s die breder zijn dan 200 pixels. (standaard: © #VAR1#)</string>
   <string name="PHO_SHOWN_ON_READY">Foto\'s zijn succesvol toegevoegd aan album als ze op deze pagina getoond worden. </string>
-  <string name="PHO_THUMBNAILS_PER_PAGE">Thumbnails per pagina</string>
   <string name="PHO_THUMBNAILS_PER_PAGE_DESC">De ingevoerde waarde bepaalt hoeveel thumbnails op een pagina te zien zijn. Als een album meer foto\'s heeft dan wordt er automatisch een paginanavigatie toegevoegd. (Standaard: 16)</string>
   <string name="PHO_UPLOAD_MORE">Meer foto\'s uploaden</string>
   <string name="PHO_UPLOAD_PHOTOS">Upload foto\'s</string>
@@ -880,20 +835,16 @@
   <string name="ROL_ROLE_ASSIGNMENT">Roltoewijzing</string>
   <string name="ROL_QUARTERLY">Driemaandelijks</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Lijsten van alle leden/groepen bekijken</string>
-  <string name="ROL_RIGHT_ANNOUNCEMENTS">Maken en bewerken mededelingen</string>
   <string name="ROL_RIGHT_APPROVE_USERS">Registraties toewijzen en bewerken</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES">Rollen bewerken en toewijzen</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Leden met rol waarvan deze optie geactiveerd is mogen rollen maken/beheren en leden een rol toewijzen.</string>
-  <string name="ROL_RIGHT_DATES">Maken en bewerken evenementen</string>
   <string name="ROL_RIGHT_EDIT_USER">Profiel van alle leden bewerken</string>
   <string name="ROL_RIGHT_GUESTBOOK">Berichten gastenboek bewerken en verwijderen</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Reacties plaatsen in gastenboek</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Bepaal wie berichten kan versturen naar deze rol via de e-mail module. Rol met rechten #VAR1_BOLD# staat boven deze instelling.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">E-mail naar alle leden sturen</string>
   <string name="ROL_RIGHT_PHOTO">Foto\'s uploaden en bewerken</string>
   <string name="ROL_RIGHT_PROFILE">Bewerk eigen profiel</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Bepaal wie lijsten en gebruikersprofielen kan zien van leden van huidige rol. Rol met rechten #VAR1_BOLD# staat boven deze instelling.</string>
-  <string name="ROL_RIGHT_WEBLINKS">Links maken en bewerken</string>
   <string name="ROL_ROLE_ADMINISTRATION">Beheer rol en categorie</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Hier kunt u een rol (functie) en categorie beheren. Ook kunt u rechten beheren die aan een rol gekoppeld zijn.</string>
   <string name="ROL_ROLE_DELETE">Rol verwijderen</string>
@@ -905,7 +856,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Toon rol lidmaatschap</string>
   <string name="ROL_SEMIYEARLY">Tweemaal per jaar</string>
   <string name="ROL_SEND_MAIL_GUESTS">Alle gebruikers mogen e-mails naar huidige rol sturen.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Ingelogde gebruikers mogen e-mails naar huidige rol sturen.</string>
   <string name="ROL_SEND_MAIL_ROLE">Alleen leden van deze rol mogen e-mails naar huidige rol sturen.</string>
   <string name="ROL_SEND_MAILS">Stuur e-mails</string>
   <string name="ROL_SHOW_MEMBERS">Toon leden</string>
@@ -993,7 +943,6 @@
   <string name="SYS_DATE">Datum</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">Einddatum ligt voor startdatum.</string>
   <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# tot #VAR2#</string>
-  <string name="SYS_DATA_GLOBAL">Indien actief zullen alle data zichtbaar zijn op de websites van de volgende organisaties, waar ze bewerkt kunnen worden door geautoriseerde gebruikers:\n\n#VAR1_BOLD#</string>
   <string name="SYS_DATE_INVALID">Ongeldige datum in veld #VAR1_BOLD#.\n\nDatum moet dit formaat hebben: #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Aangepast op datum</string>
   <string name="SYS_DATE_TO">tot</string>
@@ -1021,7 +970,6 @@
   <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar #VAR1_BOLD#.\n\nDe volgende fout trad op:\n#VAR2#</string>
   <string name="SYS_EMAIL_SEND">De e-mail is verstuurd</string>
   <string name="SYS_EMPTY">Leeg</string>
-  <string name="SYS_ENTRY_MULTI_ORGA">Bericht zichtbaar voor meerdere organisaties</string>
   <string name="SYS_END" description="End of a date">Tot</string>
   <string name="SYS_ERROR">Foutmelding</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Foutmelding toegang database:\n\n#VAR1#</string>
@@ -1197,7 +1145,6 @@
   <string name="SYS_SAVE">Opslaan</string>
   <string name="SYS_SAVE_DATA">Gegevens opgeslagen.</string>
   <string name="SYS_SECONDS">Seconden</string>
-  <string name="SYS_SECURITY_ERROR">Veiligheidsfout</string>
   <string name="SYS_SELECT_FROM_LIST">Uit lijst kiezen</string>
   <string name="SYS_SEND">Verstuur</string>
   <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar #VAR1#</string>
@@ -1216,7 +1163,6 @@
   <string name="SYS_SIZE">Formaat</string>
   <string name="SYS_SOCIAL_NETWORKS">Social media</string>
   <string name="SYS_START" description="Start of a date">Vanaf</string>
-  <string name="SYS_STATUS_CODE_INVALID">Ongeldige status-code</string>
   <string name="SYS_STILL_X_CHARACTERS">nog #VAR1# tekens</string>
   <string name="SYS_STOP">Stop</string>
   <string name="SYS_SUNDAY">Zondag</string>
@@ -1250,7 +1196,6 @@
   <string name="SYS_VERSION">Versie</string>
   <string name="SYS_VIEW">Aanzicht</string>
   <string name="SYS_VISIBLE">Zichtbaar</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# is alleen zichtbaar voor ingelogde gebruikers</string>
   <string name="SYS_VISITORS">Bezoekers</string>
   <string name="SYS_WANT_REGISTER">Ik wil me inschrijven!</string>
   <string name="SYS_WARNING">Waarschuwing</string>

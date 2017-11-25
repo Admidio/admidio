@@ -356,7 +356,7 @@ while($user = $userStatement->fetch())
         if(strlen($user['birthday']) > 0)
         {
             $birthdayDate = \DateTime::createFromFormat('Y-m-d', $user['birthday']);
-            $arrContent[] = $birthdayDate->format($gPreferences['system_date']);
+            $arrContent[] = $birthdayDate->format($gSettingsManager->getString('system_date'));
         }
         else
         {

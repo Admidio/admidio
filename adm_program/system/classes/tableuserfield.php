@@ -20,6 +20,9 @@
  */
 class TableUserField extends TableAccess
 {
+    const MOVE_UP   = 'UP';
+    const MOVE_DOWN = 'DOWN';
+
     /**
      * @var bool|null Flag if the current user could view this user
      */
@@ -209,7 +212,7 @@ class TableUserField extends TableAccess
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
                             {
                                 // if value is imagefile or imageurl then show image
-                                if (admStrEndsWith(admStrToLower($listValue), '.png') || admStrEndsWith(admStrToLower($listValue), '.jpg'))
+                                if (admStrContains(admStrToLower($listValue), '.png') || admStrContains(admStrToLower($listValue), '.jpg'))
                                 {
                                     // if there is imagefile and text separated by | then explode them
                                     $listValues = explode('|', $listValue);
@@ -321,7 +324,6 @@ class TableUserField extends TableAccess
      */
     public function moveSequence($mode)
     {
-        $mode = admStrToUpper($mode);
         $usfSequence = (int) $this->getValue('usf_sequence');
         $usfCatId    = (int) $this->getValue('usf_cat_id');
         $sql = 'UPDATE '.TBL_USER_FIELDS.'
@@ -330,17 +332,17 @@ class TableUserField extends TableAccess
                    AND usf_sequence = ? -- $usfSequence -/+ 1';
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if ($mode === 'UP')
+        if ($mode === self::MOVE_UP)
         {
-            $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence - 1));
             --$usfSequence;
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif ($mode === 'DOWN')
+        elseif ($mode === self::MOVE_DOWN)
         {
-            $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence + 1));
             ++$usfSequence;
         }
+
+        $this->db->queryPrepared($sql, array($usfSequence, $usfCatId, $usfSequence));
 
         $this->setValue('usf_sequence', $usfSequence);
         $this->save();

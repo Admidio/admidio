@@ -22,7 +22,7 @@ $getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id',   'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
 
 // check if the module is enabled for use
-if ($gPreferences['enable_weblinks_module'] == 0)
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -102,7 +102,7 @@ $form->addInput(
     array('maxLength' => 2000, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addSelectBoxForCategories(
-    'lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'EDIT_CATEGORIES',
+    'lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', HtmlForm::SELECT_BOX_MODUS_EDIT,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $link->getValue('lnk_cat_id'))
 );
 $form->addEditor(

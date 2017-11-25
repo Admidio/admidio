@@ -97,7 +97,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 
                 if($field->getValue('usf_name_intern') === 'COUNTRY')
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($columnValue));
+                    $user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryIsoCode($columnValue));
                 }
                 else
                 {
@@ -214,12 +214,12 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                         if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DATE')
                         {
                             // the date must be formated
-                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, $gPreferences['system_date']));
+                            $duplicateUser->setValue($fieldNameIntern, $user->getValue($fieldNameIntern, $gSettingsManager->getString('system_date')));
                         }
                         elseif($fieldNameIntern === 'COUNTRY')
                         {
                             // we need the iso-code and not the name of the country
-                            $duplicateUser->setValue($fieldNameIntern, $gL10n->getCountryByName($user->getValue($fieldNameIntern)));
+                            $duplicateUser->setValue($fieldNameIntern, $gL10n->getCountryIsoCode($user->getValue($fieldNameIntern)));
                         }
                         elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'DROPDOWN'
                             || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'RADIO_BUTTON')

@@ -21,7 +21,7 @@ unset($_SESSION['download_request']);
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int');
 
 // Check if module is activated
-if ($gPreferences['enable_download_module'] != 1)
+if (!$gSettingsManager->getBool('enable_download_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -81,7 +81,7 @@ $downloadsMenu = $page->getMenu();
 if ($currentFolder->hasUploadRight())
 {
     // upload only possible if upload filesize > 0
-    if ($gPreferences['max_file_upload_size'] > 0)
+    if ($gSettingsManager->getInt('max_file_upload_size') > 0)
     {
         // show links for upload, create folder and folder configuration
         $downloadsMenu->addItem(
@@ -219,9 +219,9 @@ if (isset($folderContent['files']))
             '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/get_file.php', array('file_id' => $nextFile['fil_id'])). '">
                 <img src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
             '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/get_file.php', array('file_id' => $nextFile['fil_id'])). '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
-            $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
+            $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
             round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
-            ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : '0'
+            ($nextFile['fil_counter'] !== '') ? $nextFile['fil_counter'] : 0
         );
 
         if ($currentFolder->hasUploadRight())

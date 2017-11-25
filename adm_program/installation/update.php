@@ -88,16 +88,16 @@ if ($currOrgId === 0)
 }
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
-$gPreferences = $gCurrentOrganization->getPreferences();
+$gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
 $gProfileFields = new ProfileFields($gDb, $currOrgId);
 
 // create language and language data object to handle translations
-if (!isset($gPreferences['system_language']))
+if ($gSettingsManager->has('system_language'))
 {
-    $gPreferences['system_language'] = 'de';
+    $gSettingsManager->set('system_language', 'de');
 }
-$gLanguageData = new LanguageData($gPreferences['system_language']);
+$gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
 
 // config.php exists at wrong place
@@ -140,10 +140,10 @@ $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
 if (!$gDb->queryPrepared($sql, array(), false))
 {
     // in Admidio version 2 the database version was stored in preferences table
-    if (isset($gPreferences['db_version']))
+    if ($gSettingsManager->has('db_version'))
     {
-        $installedDbVersion     = $gPreferences['db_version'];
-        $installedDbBetaVersion = $gPreferences['db_version_beta'];
+        $installedDbVersion     = $gSettingsManager->getString('db_version');
+        $installedDbBetaVersion = $gSettingsManager->getInt('db_version_beta');
     }
 }
 else
@@ -220,7 +220,7 @@ if ($getMode === 1)
         {
             $gLogger->notice('UPDATE: This is a BETA release!');
 
-            $form->addDescription('
+            $form->addHtml('
                 <div class="alert alert-warning alert-small" role="alert">
                     <span class="glyphicon glyphicon-warning-sign"></span>
                     ' . $gL10n->get('INS_WARNING_BETA_VERSION') . '
@@ -356,8 +356,9 @@ elseif ($getMode === 2)
     while($orgId = $orgaStatement->fetchColumn())
     {
         $organization = new Organization($gDb, $orgId);
-        $organization->setPreferences($defaultOrgPreferences, false);
-        $organization->setPreferences($updateOrgPreferences, true);
+        $settingsManager =& $gCurrentOrganization->getSettingsManager();
+        $settingsManager->setMulti($defaultOrgPreferences, false);
+        $settingsManager->setMulti($updateOrgPreferences);
     }
 
     if ($gDbType === Database::PDO_ENGINE_MYSQL)
@@ -498,7 +499,7 @@ elseif ($getMode === 2)
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
     $form->addButton(
         'main_page', $gL10n->get('SYS_LATER'),
-        array('icon' => 'layout/application_view_list.png', 'link' => '../index.php')
+        array('icon' => 'layout/application_view_list.png', 'link' => ADMIDIO_URL . '/adm_program/index.php')
     );
     $form->closeButtonGroup();
     echo $form->show();

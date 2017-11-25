@@ -45,7 +45,7 @@ if($gDbType !== Database::PDO_ENGINE_MYSQL)
 $myFilesBackup = new MyFiles('BACKUP');
 if(!$myFilesBackup->checkSettings())
 {
-    $gMessage->show($gL10n->get($myFilesBackup->errorText, array($myFilesBackup->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>')));
+    $gMessage->show($gL10n->get($myFilesBackup->errorText, array($myFilesBackup->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
     // => EXIT
 }
 
@@ -125,7 +125,7 @@ if($getMode === 'show_list')
         $columnValues = array(
             '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => $oldBackupFile)). '"><img
                 src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'. $oldBackupFile. '" title="'. $oldBackupFile. '" />'. $oldBackupFile. '</a>',
-            date($gPreferences['system_date'].' '.$gPreferences['system_time'], filemtime($backupAbsolutePath.$oldBackupFile)),
+            date($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), filemtime($backupAbsolutePath.$oldBackupFile)),
             round($fileSize / 1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                 href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'"><img

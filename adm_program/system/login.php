@@ -50,7 +50,7 @@ $form->addInput(
 );
 
 // show selectbox with all organizations of database
-if($gPreferences['system_organization_select'] == 1)
+if($gSettingsManager->getBool('system_organization_select'))
 {
     $sql = 'SELECT org_id, org_longname
               FROM '.TBL_ORGANIZATIONS.'
@@ -61,14 +61,14 @@ if($gPreferences['system_organization_select'] == 1)
     );
 }
 
-if($gPreferences['enable_auto_login'] == 1)
+if($gSettingsManager->getBool('enable_auto_login'))
 {
     $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
 }
 $form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => THEME_URL.'/icons/key.png'));
 $page->addHtml($form->show(false));
 
-if($gPreferences['registration_enable_module'] == 1)
+if($gSettingsManager->getBool('registration_enable_module'))
 {
     $page->addHtml('
         <div id="login_registration_link">
@@ -79,12 +79,12 @@ if($gPreferences['registration_enable_module'] == 1)
 }
 
 // Link bei Loginproblemen
-if($gPreferences['enable_password_recovery'] == 1 && $gPreferences['enable_system_mails'] == 1)
+if($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('enable_system_mails'))
 {
     // neues Passwort zusenden
     $forgotPasswordLink = ADMIDIO_URL.'/adm_program/system/lost_password.php';
 }
-elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3)
+elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
 {
     // show link of message module to send mail to administrator role
     $forgotPasswordLink = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
@@ -92,7 +92,7 @@ elseif($gPreferences['enable_mail_module'] == 1 && $roleAdministrator->getValue(
 else
 {
     // show link to send mail with local mail-client to administrator
-    $forgotPasswordLink = safeUrl('mailto:'.$gPreferences['email_administrator'], array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+    $forgotPasswordLink = safeUrl('mailto:'.$gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
 }
 
 $page->addHtml('

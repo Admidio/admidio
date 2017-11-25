@@ -24,6 +24,8 @@
   <string name="BAC_SUM">Total</string>
   <string name="BAC_SECONDS_VAR">#VAR1# sekunder</string>
   <!--Phrases only in Category-Administration-->
+  <string name="CAT_ALL_THIS_ORGANIZATION">Alle medlemmer av denne organisasjonen</string>
+  <string name="CAT_CATEGORY_EXIST">Det er allerede en kategori i denne organisasjonen med dette navnet.</string>
   <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="CAT_MOVE_DOWN">Flytt ned #VAR1\"</string>
   <string name="CAT_MOVE_UP">Flytt opp #VAR1#</string>
@@ -36,19 +38,23 @@
   <string name="DAT_CANCEL">Avbryt</string>
   <string name="DAT_DATE">Hendelse</string>
   <string name="DAT_DATES">Hendelser</string>
+  <string name="DAT_DEADLINE_ATTENTION">Din registrering kan ikke endres fordi den oppgitte sluttdatoen for registreringer er oppnådd eller datoen er tidligere. Ta kontakt med sjefen eller en administrator!</string>
   <string name="DAT_EDIT_CALENDAR_DESC">Her kan du opprette og endre kalendere.</string>
   <string name="DAT_LOCATION">By</string>
   <string name="DAT_MANAGE_CALENDARS">Administrer kalendere</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_DOWNLOADS">Nedlastninger</string>
   <!--Phrases only in Ecardsmodule-->
+  <string name="ECA_VIEW_PICTURE_FULL_SIZED">Vis bilde i full størrelse</string>
+  <string name="ECA_TEMPLATE_FOLDER_OPEN">Mal-mappen kunne ikke leses/åpnes.</string>
   <!--Phrases only in Guestbookmodule-->
+  <string name="GBO_BACK_TO_GUESTBOOK">Tilbake til gjesteboken</string>
+  <string name="GBO_COMMENTS4ALL">Tillat anonyme kommentarer</string>
   <!--Phrases only in Installation-->
   <string name="INS_ADD_ORGANIZATION">Legg til organisasjon</string>
   <string name="INS_ADDIDIONAL_DATA">Tilleggsinformasjon</string>
   <string name="INS_ADDRESS_LIST">Adresseliste</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
-  <string name="INS_CONFERENCE_ROOM">Konferanserom</string>
   <string name="INS_CONTINUE_INSTALLATION">Fortsett installesjon</string>
   <string name="INS_COURSES">Kurs</string>
   <string name="INS_CREATE_ADMINISTRATOR">Opprett en administrator</string>
@@ -170,8 +176,6 @@
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
   <string name="ORG_TIMEZONE">Tidssone</string>
   <string name="ORG_URL">URL</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">Brukers fornavn</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Brukers etternavn</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Organisasjonsnavn</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nytt brukerpassord</string>
   <!--Phrases only in Updatecheck-->
@@ -378,7 +382,6 @@
   <string name="SYS_SAVE">Lagre</string>
   <string name="SYS_SAVE_DATA">Dataene ble lagret.</string>
   <string name="SYS_SECONDS">Sekunder</string>
-  <string name="SYS_SECURITY_ERROR">Sikkerhetsfeil</string>
   <string name="SYS_SELECT_FROM_LIST">Velg fra liste</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_EMAIL_TO">Send epost til #VAR1#</string>
@@ -422,7 +425,6 @@
   <string name="SYS_VERSION">Versjon</string>
   <string name="SYS_VIEW">Visning</string>
   <string name="SYS_VISIBLE">Synlig</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# er synlig bare for innloggede brukere.</string>
   <string name="SYS_VISITORS">Gjester</string>
   <string name="SYS_WANT_REGISTER">Jeg vil registrere meg!</string>
   <string name="SYS_WARNING">Advarsel</string>

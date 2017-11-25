@@ -295,7 +295,8 @@ class ComponentUpdate extends Component
         {
             $rowId = (int) $row['org_id'];
 
-            $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+            $sql = 'INSERT INTO '.TBL_CATEGORIES.'
+                           (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                     VALUES (?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    0, 1, 0, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW
                          , (?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', 0, 0, 0, 2, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
             $params = array(
@@ -337,8 +338,9 @@ class ComponentUpdate extends Component
             $rowId = (int) $row['org_id'];
 
             // Add new list configuration
-            $sql = 'INSERT INTO '.TBL_LISTS.' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global)
-                    VALUES (?, ?, ?, ?, 1)'; // $rowId, $systemUserId, $gL10n->get('SYS_PARTICIPANTS'), DATETIME_NOW
+            $sql = 'INSERT INTO '.TBL_LISTS.'
+                           (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global)
+                    VALUES (?, ?, ?, ?, 1) -- $rowId, $systemUserId, $gL10n->get(\'SYS_PARTICIPANTS\'), DATETIME_NOW';
             $params = array(
                 $rowId,
                 $systemUserId,
@@ -355,7 +357,8 @@ class ComponentUpdate extends Component
             $listStatement = $this->db->queryPrepared($sql, array($gL10n->get('SYS_PARTICIPANTS'), $rowId));
             $listId = (int) $listStatement->fetchColumn();
 
-            $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter)
+            $sql = 'INSERT INTO '.TBL_LIST_COLUMNS.'
+                           (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter)
                     VALUES (?, 1, 1,    NULL,                 \'ASC\', NULL) -- $listId
                          , (?, 2, 2,    NULL,                 NULL,    NULL) -- $listId
                          , (?, 3, NULL, \'mem_approved\',     NULL,    NULL) -- $listId
@@ -492,7 +495,8 @@ class ComponentUpdate extends Component
         $rolesRightsStatement = $this->db->queryPrepared($sql);
         $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
+                       (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
                 SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
                   FROM '.$g_tbl_praefix.'_date_role
                  WHERE dtr_rol_id IS NOT NULL';
@@ -514,7 +518,8 @@ class ComponentUpdate extends Component
         $rolesRightsStatement = $this->db->queryPrepared($sql);
         $rolesRightId = (int) $rolesRightsStatement->fetchColumn();
 
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
+                       (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
                 SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
                   FROM '.$g_tbl_praefix.'_folder_roles ';
         $this->db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
@@ -600,7 +605,8 @@ class ComponentUpdate extends Component
             }
             else
             {
-                $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
+                $sql = 'INSERT INTO '.TBL_FOLDERS.'
+                               (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
                         VALUES (?, \'DOWNLOAD\', ?, ?, 0, 1, ?) -- $rowId, TableFolder::getRootFolderName(), FOLDER_DATA, DATETIME_NOW';
                 $params = array(
                     $rowId,
@@ -731,7 +737,8 @@ class ComponentUpdate extends Component
 
         $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
-        $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
+        $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.'
+                       (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
                 VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',             2, '.$currUsrId.', \''.DATETIME_NOW.'\')
                      , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$currUsrId.', \''.DATETIME_NOW.'\')
                      , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$currUsrId.', \''.DATETIME_NOW.'\')

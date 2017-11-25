@@ -159,10 +159,10 @@ elseif($getMode === 7)
     $formatedEndDate   = '';
 
     // Check das Beginn Datum
-    $startDate = \DateTime::createFromFormat($gPreferences['system_date'], $getMembershipStart);
+    $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getMembershipStart);
     if($startDate === false)
     {
-        exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gPreferences['system_date'])));
+        exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
     }
     else
     {
@@ -173,10 +173,10 @@ elseif($getMode === 7)
     // Falls gesetzt wird das Enddatum gecheckt
     if($getMembershipEnd !== '')
     {
-        $endDate = \DateTime::createFromFormat($gPreferences['system_date'], $getMembershipEnd);
+        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getMembershipEnd);
         if($endDate === false)
         {
-            exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gPreferences['system_date'])));
+            exit($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
         }
         else
         {

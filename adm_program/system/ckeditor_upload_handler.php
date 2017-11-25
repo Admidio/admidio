@@ -84,7 +84,7 @@ try
         $message = strStripTags($gL10n->get(
             $myFilesProfilePhotos->errorText,
             array($myFilesProfilePhotos->errorPath,
-            '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>')
+            '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')
         ));
     }
 

@@ -80,7 +80,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_enable_module'] == 0)
+        if(!$gSettingsManager->getBool('registration_enable_module'))
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -121,7 +121,7 @@ if($getNewUser === 2)
         // => EXIT
     }
 
-    if(PasswordHashing::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gPreferences['password_min_strength'])
+    if(PasswordHashing::passwordStrength($_POST['usr_password'], $user->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength'))
     {
         $gMessage->show($gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'));
         // => EXIT
@@ -201,7 +201,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                         // => EXIT
                         break;
                     case 'DATE':
-                        $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($field->getValue('usf_name'), $gPreferences['system_date'])));
+                        $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($field->getValue('usf_name'), $gSettingsManager->getString('system_date'))));
                         // => EXIT
                         break;
                     case 'EMAIL':
@@ -277,7 +277,7 @@ if($getNewUser === 2)
     $user->setPassword($_POST['usr_password']);
 
     // At user registration with activated captcha check the captcha input
-    if ($gPreferences['enable_registration_captcha'] == 1)
+    if ($gSettingsManager->getBool('enable_registration_captcha'))
     {
         try
         {

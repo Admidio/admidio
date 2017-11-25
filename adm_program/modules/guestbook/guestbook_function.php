@@ -30,12 +30,12 @@ $getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requir
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_guestbook_module'] == 0)
+if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gPreferences['enable_guestbook_module'] == 2)
+elseif ((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -45,7 +45,7 @@ elseif ($gPreferences['enable_guestbook_module'] == 2)
 if ($getMode === 4)
 {
     // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
-    if ($gPreferences['enable_gbook_comments4all'] == 0)
+    if (!$gSettingsManager->getBool('enable_gbook_comments4all'))
     {
         require(__DIR__ . '/../../system/login_valid.php');
 
@@ -119,7 +119,7 @@ if ($getMode === 1 || $getMode === 3)
         }
 
         // if user is not logged in and captcha is activated then check captcha
-        if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
+        if (!$gValidLogin && $gSettingsManager->getBool('enable_guestbook_captcha'))
         {
             try
             {
@@ -179,31 +179,31 @@ if ($getMode === 1 || $getMode === 3)
         }
         else
         {
-            if ($gPreferences['flooding_protection_time'] != 0)
+            if ($gSettingsManager->getInt('flooding_protection_time') > 0)
             {
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag erzeugt hat...
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK.'
-                         WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+                         WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                            AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
-                           AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_adress\')';
-                $queryParams = array($gPreferences['flooding_protection_time'], $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_adress'));
+                           AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
+                $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
                 $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
                 if ($pdoStatement->fetchColumn() > 0)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gPreferences['flooding_protection_time'])));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time'))));
                     // => EXIT
                 }
             }
         }
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if (($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        ||  ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $guestbook->setValue('gbo_locked', '1');
         }
@@ -234,13 +234,13 @@ if ($getMode === 1 || $getMode === 3)
             $senderName = $gboName;
             if (!strValidCharacters($gboEmail, 'email'))
             {
-                $gboEmail = $gPreferences['email_administrator'];
+                $gboEmail = $gSettingsManager->getString('email_administrator');
                 $senderName = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
             }
             try
             {
                 $notification = new Email();
-                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gPreferences['system_date']))), $senderName, $gboEmail);
+                $notification->adminNotification($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $gboText, $gboName, date($gSettingsManager->getString('system_date')))), $senderName, $gboEmail);
             }
             catch (AdmException $e)
             {
@@ -255,8 +255,8 @@ if ($getMode === 1 || $getMode === 3)
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline));
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if (($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        ||  ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
@@ -312,7 +312,7 @@ elseif ($getMode === 4 || $getMode === 8)
         }
 
         // if user is not logged in and captcha is activated then check captcha
-        if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
+        if (!$gValidLogin && $gSettingsManager->getBool('enable_guestbook_captcha'))
         {
             try
             {
@@ -372,29 +372,29 @@ elseif ($getMode === 4 || $getMode === 8)
         }
         else
         {
-            if ($gPreferences['flooding_protection_time'] != 0)
+            if ($gSettingsManager->getInt('flooding_protection_time') > 0)
             {
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag/Kommentar erzeugt hat...
                 $sql = 'SELECT COUNT(*) AS count
                           FROM '.TBL_GUESTBOOK_COMMENTS.'
-                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                            AND gbc_ip_address = ? -- $gbComment->getValue(\'gbc_ip_adress\')';
-                $pdoStatement = $gDb->queryPrepared($sql, array($gPreferences['flooding_protection_time'], $gbComment->getValue('gbc_ip_adress')));
+                $pdoStatement = $gDb->queryPrepared($sql, array($gSettingsManager->getInt('flooding_protection_time'), $gbComment->getValue('gbc_ip_adress')));
 
                 if ($pdoStatement->fetchColumn() > 0)
                 {
                     // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gPreferences['flooding_protection_time'])));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time'))));
                     // => EXIT
                 }
             }
         }
 
         // Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if (($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        ||  ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gbComment->setValue('gbc_locked', '1');
         }
@@ -423,7 +423,7 @@ elseif ($getMode === 4 || $getMode === 8)
             $senderName = $gbcName;
             if ($gbcEmail === '')
             {
-                $gbcEmail = $gPreferences['email_administrator'];
+                $gbcEmail = $gSettingsManager->getString('email_administrator');
                 $senderName = 'Administrator ' . $gCurrentOrganization->getValue('org_homepage');
             }
             $message = $gL10n->get(
@@ -431,7 +431,7 @@ elseif ($getMode === 4 || $getMode === 8)
                 array($gCurrentOrganization->getValue('org_longname'),
                 $gbComment->getValue('gbc_text'),
                 $gbcName,
-                date($gPreferences['system_date']))
+                date($gSettingsManager->getString('system_date')))
             );
             try
             {
@@ -451,8 +451,8 @@ elseif ($getMode === 4 || $getMode === 8)
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $gbComment->getValue('gbc_gbo_id'), 'headline' => $getHeadline));
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if (($gPreferences['enable_guestbook_moderation'] == 1 && !$gValidLogin)
-        ||  ($gPreferences['enable_guestbook_moderation'] == 2 && !$gCurrentUser->editGuestbookRight()))
+        if (((int) $gSettingsManager->get('enable_guestbook_moderation') === 1 && !$gValidLogin)
+        ||  ((int) $gSettingsManager->get('enable_guestbook_moderation') === 2 && !$gCurrentUser->editGuestbookRight()))
         {
             $gMessage->setForwardUrl($url);
             $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));

@@ -207,7 +207,7 @@ class TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $columnValue = '';
 
@@ -250,19 +250,19 @@ class TableAccess
                 case 'time':
                     if ($columnValue !== '' && $columnValue !== null)
                     {
-                        if ($format === '' && isset($gPreferences))
+                        if ($format === '' && isset($gSettingsManager))
                         {
                             if (admStrContains($this->columnsInfos[$columnName]['type'], 'timestamp'))
                             {
-                                $format = $gPreferences['system_date'] . ' ' . $gPreferences['system_time'];
+                                $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
                             }
                             elseif (admStrContains($this->columnsInfos[$columnName]['type'], 'date'))
                             {
-                                $format = $gPreferences['system_date'];
+                                $format = $gSettingsManager->getString('system_date');
                             }
                             else
                             {
-                                $format = $gPreferences['system_time'];
+                                $format = $gSettingsManager->getString('system_time');
                             }
                         }
 
@@ -537,7 +537,7 @@ class TableAccess
         else
         {
             $sql = 'UPDATE '.$this->tableName.'
-                       SET '.implode(',', $sqlSetArray).'
+                       SET '.implode(', ', $sqlSetArray).'
                      WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
             $queryParams[] = $this->dbColumns[$this->keyColumnName];
             $this->db->queryPrepared($sql, $queryParams);

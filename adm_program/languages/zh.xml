@@ -27,7 +27,6 @@
   <string name="BAC_SECONDS_VAR">#VAR1# 秒</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">类别名称已存在于所选机构中。</string>
-  <string name="CAT_CATEGORY_GLOBAL">如果激活该选项, 将显示此类别的配置文件字段并且可以在以下机构的配置文件视图中编辑:\n\n#VAR1_BOLD#\n\n 如果只在您的类别显示，请取消此选项。</string>
   <string name="CAT_DEFAULT_VAR">标准 #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
@@ -67,14 +66,12 @@
   <string name="DAT_MAX_MEMBERS">减少此项目的参与者人数。字段留空为不限制参与者。</string>
   <string name="DAT_PARTICIPANTS_LIMIT">参与人数有限</string>
   <string name="DAT_PARTICIPATE_AT_DATE">作为组织者加入项目</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">您将是项目组织者，可以添加/删除其他参与者或将其命名为其他组织者。</string>
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">已关闭注册。</string>
   <string name="DAT_REGISTRATION_POSSIBLE">启用此项目的注册。</string>
   <string name="DAT_REMOVE_APPLICATION">您要移除这个项目吗？所有参与者将被删除。</string>
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">参与者可以查看参与者列表</string>
   <string name="DAT_RIGHT_MAIL_PARTICIPANTS">参与者可以向所有参与者发送电子邮件</string>
   <string name="DAT_ROOM_INFORMATIONS">房间信息</string>
-  <string name="DAT_ROOM_OVERHANG">在存在任何其他可用空间（例如附加座位，站立室）的情况下，可以在此定义附加空间的数量。</string>
   <string name="DAT_ROOM_RESERVED">所选房间目前已在使用。</string>
   <string name="DAT_ROOM_SELECTABLE">房间可用</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">酒店提供可用客房的选择箱。选择房间并为所选房间创建活动。（标准答案：否）</string>
@@ -91,10 +88,8 @@
   <string name="DAT_USER_INVITED">邀请</string>
   <string name="DAT_USER_REFUSED">折扣</string>
   <string name="DAT_USER_WILL_ATTEND">参与</string>
-  <string name="DAT_VIEW_MODE_DETAIL">详细信息</string>
   <string name="DAT_VIEW_MODE_COMPACT">紧凑</string>
   <string name="DAT_VISIBILITY">可见度</string>
-  <string name="DAT_VISIBLE_TO">可见</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">添加到数据库</string>
   <string name="DOW_ADDITIONAL_FILES">此列表旨在提供未导入数据库的文件和文件夹的概述。它们可以添加到数据库中。将从选定的文件夹复制访问权限。</string>
@@ -106,7 +101,6 @@
   <string name="DOW_EDIT_FOLDER">编辑文件夹</string>
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">上传了一个新文件</string>
   <string name="DOW_ENABLE_DOWNLOAD_MODULE">激活下载模块</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">可以在这里停用下载模块。停用后，它不再显示为概述中的模块。(默认值：是)</string>
   <string name="DOW_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
   <string name="DOW_FILE_NAME_RULES">文件名应表示文件内容。文件名影响列表的顺序。例如，包含程序的文件夹中的文件名应以日期(yyyy-mm-tt)开头。</string>
   <string name="DOW_FILE_NOT_EXISTS">该文件在服务器上不再可用，应该从数据库中删除。</string>
@@ -240,7 +234,6 @@
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">视图</string>
   <string name="SYS_VISIBLE">可见</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# 仅对登录用户可见。</string>
   <string name="SYS_VISITORS"> 访客</string>
   <string name="SYS_WANT_REGISTER">我想要注册！</string>
   <string name="SYS_WARNING">警告</string>

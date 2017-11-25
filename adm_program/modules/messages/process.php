@@ -24,7 +24,7 @@ if (!$gValidLogin)
 }
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_chat_module'] != 1)
+if (!$gSettingsManager->getBool('enable_chat_module'))
 {
     // message if the Chat is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -98,7 +98,7 @@ switch($postFunction)
             {
                 $user = new User($gDb, $gProfileFields, $row['msc_usr_id']);
                 $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row['msc_timestamp']);
-                $text[] = '<time>'.$date->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
+                $text[] = '<time>'.$date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')).'</time><span>'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'</span>'.$row['msc_message'];
             }
 
             $log['state'] = $msgId;
@@ -118,15 +118,17 @@ switch($postFunction)
 
         if($msgId === 0)
         {
-            $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                    VALUES (\'CHAT\', \'DUMMY\', \'1\', ?, CURRENT_TIMESTAMP, \'0\') -- $msgId';
+            $sql = 'INSERT INTO '. TBL_MESSAGES. '
+                           (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
+                    VALUES (\'CHAT\', \'DUMMY\', 1, ?, CURRENT_TIMESTAMP, 0) -- $msgId';
             $gDb->queryPrepared($sql, array($msgId));
             $msgId = $moduleMessages->msgGetChatId();
         }
 
         ++$msgId;
 
-        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
+        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
+                       (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
                 VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $msgId, $msgId, $gCurrentUser->getValue(\'usr_id\'), $postMessage';
         $gDb->queryPrepared($sql, array($msgId, $msgId, (int) $gCurrentUser->getValue('usr_id'), $postMessage));
 

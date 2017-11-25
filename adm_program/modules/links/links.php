@@ -25,13 +25,13 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
 $getLinkId   = admFuncVariableIsValid($_GET, 'id',       'int');
 
 // check if the module is enabled for use
-if ($gPreferences['enable_weblinks_module'] == 0)
+if ((int) $gSettingsManager->get('enable_weblinks_module') === 0)
 {
     // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gPreferences['enable_weblinks_module'] == 2)
+elseif((int) $gSettingsManager->get('enable_weblinks_module') === 2)
 {
     // available only with valid login
     require(__DIR__ . '/../../system/login_valid.php');
@@ -43,9 +43,9 @@ $weblinks->setParameter('cat_id', $getCatId);
 $weblinksCount = $weblinks->getDataSetCount();
 
 // number of weblinks per page
-if($gPreferences['weblinks_per_page'] > 0)
+if($gSettingsManager->getInt('weblinks_per_page') > 0)
 {
-    $weblinksPerPage = (int) $gPreferences['weblinks_per_page'];
+    $weblinksPerPage = $gSettingsManager->getInt('weblinks_per_page');
 }
 else
 {
@@ -62,7 +62,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-if($gPreferences['enable_rss'] == 1)
+if($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(
         safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/rss_links.php', array('headline' => $getHeadline)),
@@ -115,7 +115,7 @@ if($weblinks->getId() === 0)
 
     $navbarForm = new HtmlForm('navbar_cat_id_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links.php', array('headline' => $getHeadline)), $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addSelectBoxForCategories(
-        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES',
+        'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', HtmlForm::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $getCatId)
     );
     $linksMenu->addForm($navbarForm->show(false));
@@ -175,7 +175,7 @@ else
 
                 // show weblink
                 $page->addHtml('
-                <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_URL. '/icons/weblinks.png"
+                <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '"><img src="'. THEME_URL. '/icons/weblinks.png"
                     alt="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" title="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" />'.$lnkName.'</a>');
 
                 // change and delete only users with rights

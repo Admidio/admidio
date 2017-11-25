@@ -37,7 +37,7 @@
 require_once dirname(__FILE__) . '/securimage.php';
 
 // ***** START ADMIDIO CODE *****
-require_once('../../system/common.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/common.php');
 // ***** END ADMIDIO CODE *****
 
 // if using database, adjust these options as necessary and change $img = new Securimage(); to $img = new Securimage($options);

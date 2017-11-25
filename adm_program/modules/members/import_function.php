@@ -34,7 +34,7 @@ if(strlen($_FILES['userfile']['tmp_name'][0]) === 0)
 elseif($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE)
 {
     // Dateigroesse ueberpruefen Servereinstellungen
-    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gPreferences['max_file_upload_size'])));
+    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('max_file_upload_size'))));
     // => EXIT
 }
 elseif($postRoleId === 0)
