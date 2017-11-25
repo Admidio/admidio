@@ -16,11 +16,13 @@
  *
  * Parameters:
  *
- * headline - Headline für Ics-Feed
- *            (Default) Events
- * mode   1 - Textausgabe
- *        2 - Download
- * cat_id   - show all dates of calendar with this id
+ * headline  - Headline für Ics-Feed
+ *             (Default) Events
+ * cat_id    - show all dates of calendar with this id
+ * date_from - set the minimum date of the events that should be shown
+ *             if this parameter is not set than the actual date is set
+ * date_to   - set the maximum date of the events that should be shown
+ *             if this parameter is not set than this date is set to 31.12.9999
  *
  *****************************************************************************/
 
@@ -29,16 +31,20 @@ require_once('../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
+$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 
 // Daterange defined in preferences
-$now = new DateTime();
-$dayOffsetPast   = new DateInterval('P'.$gPreferences['dates_ical_days_past'].'D');
-$dayOffsetFuture = new DateInterval('P'.$gPreferences['dates_ical_days_future'].'D');
-$startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
-$endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
+if($getDateFrom == '')
+{
+    $now = new DateTime();
+    $dayOffsetPast   = new DateInterval('P'.$gPreferences['dates_ical_days_past'].'D');
+    $dayOffsetFuture = new DateInterval('P'.$gPreferences['dates_ical_days_future'].'D');
+    $getDateFrom = $now->sub($dayOffsetPast)->format('Y-m-d');
+    $getDateTo   = $now->add($dayOffsetFuture)->format('Y-m-d');
+}
 
 // Message if module is disabled
 if($gPreferences['enable_dates_module'] == 0)
@@ -66,7 +72,7 @@ $dates = new ModuleDates();
 // set mode, viewmode, calendar, startdate and enddate manually
 $dates->setParameter('view_mode', 'period');
 $dates->setParameter('cat_id', $getCatId);
-$dates->setDateRange($startDate, $endDate);
+$dates->setDateRange($getDateFrom, $getDateTo);
 // read events for output
 $datesResult = $dates->getDataSet(0, 0);
 // get parameters fom $_GET Array stored in class

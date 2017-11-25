@@ -20,10 +20,10 @@
  * show      - all               : (Default) show all events
  *           - maybe_participate : Show only events where the current user participates or could participate
  *           - only_participate  : Show only events where the current user participates
- * date_from - is set to actual date,
- *             if no date information is delivered
- * date_to   - is set to 31.12.9999,
- *             if no date information is delivered
+ * date_from - set the minimum date of the events that should be shown
+ *             if this parameter is not set than the actual date is set
+ * date_to   - set the maximum date of the events that should be shown
+ *             if this parameter is not set than this date is set to 31.12.9999
  * view_mode - Content output in 'html' or 'print' view
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
@@ -170,7 +170,7 @@ if($getViewMode === 'html')
         if($gPreferences['enable_dates_ical'] == 1)
         {
             $DatesMenu->addItem('admMenuItemICal',
-                                ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
+                                ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'&amp;date_from='.$getDateFrom.'&amp;date_to='.$getDateTo,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras');
         }
 
