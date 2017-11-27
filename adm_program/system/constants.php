@@ -140,7 +140,7 @@ define('TBL_USER_RELATION_TYPES', $g_tbl_praefix . '_user_relation_types');
 
 // create an installation unique cookie prefix and remove special characters
 $cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-$cookiePrefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $cookiePrefix);
+$cookiePrefix = preg_replace('/\W/', '_', $cookiePrefix);
 define('COOKIE_PREFIX', $cookiePrefix);
 
 // constants for column rol_leader_rights
