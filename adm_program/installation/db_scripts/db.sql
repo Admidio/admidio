@@ -335,7 +335,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX IDX_%PREFIX%_MEM_ROL_USR_ID ON %PREFIX%_members (mem_rol_id, mem_usr_id);
+CREATE INDEX idx_%PREFIX%_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
 
 /*==============================================================*/
 /* Table: adm_messages                                          */
@@ -372,7 +372,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX IDX_%PREFIX%_MSC_PART_ID ON %PREFIX%_messages_content (msc_part_id);
+CREATE INDEX idx_%PREFIX%_msc_part_id ON %PREFIX%_messages_content (msc_part_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -431,7 +431,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX IDX_%PREFIX%_PRF_ORG_ID_NAME ON %PREFIX%_preferences (prf_org_id, prf_name);
+CREATE UNIQUE INDEX idx_%PREFIX%_prf_org_id_name ON %PREFIX%_preferences (prf_org_id, prf_name);
 
 /*==============================================================*/
 /* Table: adm_registrations                                     */
@@ -545,7 +545,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX IDX_%PREFIX%_RRD_ROR_ROL_OBJECT_ID ON %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id);
+CREATE UNIQUE INDEX idx_%PREFIX%_rrd_ror_rol_object_id ON %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id);
 
 /*==============================================================*/
 /* Table: adm_rooms                                             */
@@ -587,7 +587,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX IDX_%PREFIX%_SESSION_ID ON %PREFIX%_sessions (ses_session_id);
+CREATE INDEX idx_%PREFIX%_session_id ON %PREFIX%_sessions (ses_session_id);
 
 /*==============================================================*/
 /* Table: adm_texts                                             */
@@ -634,7 +634,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX IDX_%PREFIX%_USF_NAME_INTERN ON %PREFIX%_user_fields (usf_name_intern);
+CREATE UNIQUE INDEX idx_%PREFIX%_usf_name_intern ON %PREFIX%_user_fields (usf_name_intern);
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
@@ -651,7 +651,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX IDX_%PREFIX%_USD_USR_USF_ID ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
+CREATE UNIQUE INDEX idx_%PREFIX%_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
 /*==============================================================*/
 /* Table: adm_user_log                                          */
@@ -700,7 +700,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX IDX_%PREFIX%_USR_LOGIN_NAME ON %PREFIX%_users (usr_login_name);
+CREATE UNIQUE INDEX idx_%PREFIX%_usr_login_name ON %PREFIX%_users (usr_login_name);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */
@@ -723,7 +723,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_IDX_URE_URT_NAME ON %PREFIX%_user_relation_types (urt_name);
+CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_name ON %PREFIX%_user_relation_types (urt_name);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */
@@ -752,146 +752,146 @@ CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt
 /* Foreign Key Constraints                                      */
 /*==============================================================*/
 ALTER TABLE %PREFIX%_announcements ADD
-    CONSTRAINT %PREFIX%_FK_ANN_CAT         FOREIGN KEY (ann_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_ANN_USR_CREATE  FOREIGN KEY (ann_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_ANN_USR_CHANGE  FOREIGN KEY (ann_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_ann_cat         FOREIGN KEY (ann_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ann_usr_create  FOREIGN KEY (ann_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ann_usr_change  FOREIGN KEY (ann_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_auto_login ADD
-    CONSTRAINT %PREFIX%_FK_ATL_USR         FOREIGN KEY (atl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_ATL_ORG         FOREIGN KEY (atl_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_atl_usr         FOREIGN KEY (atl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_atl_org         FOREIGN KEY (atl_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_categories ADD
-    CONSTRAINT %PREFIX%_FK_CAT_ORG         FOREIGN KEY (cat_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_CAT_USR_CREATE  FOREIGN KEY (cat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_CAT_USR_CHANGE  FOREIGN KEY (cat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_cat_org         FOREIGN KEY (cat_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_cat_usr_create  FOREIGN KEY (cat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_cat_usr_change  FOREIGN KEY (cat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_dates ADD
-    CONSTRAINT %PREFIX%_FK_DAT_CAT         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_DAT_ROL         FOREIGN KEY (dat_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_DAT_ROOM        FOREIGN KEY (dat_room_id)        REFERENCES %PREFIX%_rooms (room_id)              ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_DAT_USR_CREATE  FOREIGN KEY (dat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_DAT_USR_CHANGE  FOREIGN KEY (dat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_dat_rol         FOREIGN KEY (dat_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_dat_room        FOREIGN KEY (dat_room_id)        REFERENCES %PREFIX%_rooms (room_id)              ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_dat_usr_create  FOREIGN KEY (dat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_dat_usr_change  FOREIGN KEY (dat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_files ADD
-    CONSTRAINT %PREFIX%_FK_FIL_FOL         FOREIGN KEY (fil_fol_id)         REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_FIL_USR         FOREIGN KEY (fil_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_fil_fol         FOREIGN KEY (fil_fol_id)         REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_fil_usr         FOREIGN KEY (fil_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_folders ADD
-    CONSTRAINT %PREFIX%_FK_FOL_ORG         FOREIGN KEY (fol_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_FOL_FOL_PARENT  FOREIGN KEY (fol_fol_id_parent)  REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_FOL_USR         FOREIGN KEY (fol_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_fol_org         FOREIGN KEY (fol_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_fol_fol_parent  FOREIGN KEY (fol_fol_id_parent)  REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_fol_usr         FOREIGN KEY (fol_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_guestbook ADD
-    CONSTRAINT %PREFIX%_FK_GBO_ORG         FOREIGN KEY (gbo_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_GBO_USR_CREATE  FOREIGN KEY (gbo_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_GBO_USR_CHANGE  FOREIGN KEY (gbo_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_gbo_org         FOREIGN KEY (gbo_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_gbo_usr_create  FOREIGN KEY (gbo_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_gbo_usr_change  FOREIGN KEY (gbo_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_guestbook_comments ADD
-    CONSTRAINT %PREFIX%_FK_GBC_GBO         FOREIGN KEY (gbc_gbo_id)         REFERENCES %PREFIX%_guestbook (gbo_id)           ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_GBC_USR_CREATE  FOREIGN KEY (gbc_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_GBC_USR_CHANGE  FOREIGN KEY (gbc_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_gbc_gbo         FOREIGN KEY (gbc_gbo_id)         REFERENCES %PREFIX%_guestbook (gbo_id)           ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_gbc_usr_create  FOREIGN KEY (gbc_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_gbc_usr_change  FOREIGN KEY (gbc_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_ids ADD
-    CONSTRAINT %PREFIX%_FK_IDS_USR_ID      FOREIGN KEY (ids_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_ids_usr_id      FOREIGN KEY (ids_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_links ADD
-    CONSTRAINT %PREFIX%_FK_LNK_CAT         FOREIGN KEY (lnk_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_LNK_USR_CREATE  FOREIGN KEY (lnk_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_LNK_USR_CHANGE  FOREIGN KEY (lnk_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_lnk_cat         FOREIGN KEY (lnk_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_lnk_usr_create  FOREIGN KEY (lnk_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_lnk_usr_change  FOREIGN KEY (lnk_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_lists ADD
-    CONSTRAINT %PREFIX%_FK_LST_USR         FOREIGN KEY (lst_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_LST_ORG         FOREIGN KEY (lst_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_lst_usr         FOREIGN KEY (lst_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_lst_org         FOREIGN KEY (lst_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_list_columns ADD
-    CONSTRAINT %PREFIX%_FK_LSC_LST         FOREIGN KEY (lsc_lst_id)         REFERENCES %PREFIX%_lists (lst_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_LSC_USF         FOREIGN KEY (lsc_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_lsc_lst         FOREIGN KEY (lsc_lst_id)         REFERENCES %PREFIX%_lists (lst_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_lsc_usf         FOREIGN KEY (lsc_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_members ADD
-    CONSTRAINT %PREFIX%_FK_MEM_ROL         FOREIGN KEY (mem_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_MEM_USR         FOREIGN KEY (mem_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_MEM_USR_CREATE  FOREIGN KEY (mem_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_MEM_USR_CHANGE  FOREIGN KEY (mem_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_mem_rol         FOREIGN KEY (mem_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_mem_usr         FOREIGN KEY (mem_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_mem_usr_create  FOREIGN KEY (mem_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_mem_usr_change  FOREIGN KEY (mem_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_messages ADD
-    CONSTRAINT %PREFIX%_FK_MSG_USR_SENDER  FOREIGN KEY (msg_usr_id_sender)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_msg_usr_sender  FOREIGN KEY (msg_usr_id_sender)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_messages_content ADD
-    CONSTRAINT %PREFIX%_FK_MSC_MSG_ID      FOREIGN KEY (msc_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_MSC_USR_ID      FOREIGN KEY (msc_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_msc_msg_id      FOREIGN KEY (msc_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_msc_usr_id      FOREIGN KEY (msc_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_organizations ADD
-    CONSTRAINT %PREFIX%_FK_ORG_ORG_PARENT  FOREIGN KEY (org_org_id_parent)  REFERENCES %PREFIX%_organizations (org_id)       ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_org_org_parent  FOREIGN KEY (org_org_id_parent)  REFERENCES %PREFIX%_organizations (org_id)       ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_photos ADD
-    CONSTRAINT %PREFIX%_FK_PHO_PHO_PARENT  FOREIGN KEY (pho_pho_id_parent)  REFERENCES %PREFIX%_photos (pho_id)              ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_PHO_ORG         FOREIGN KEY (pho_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_PHO_USR_CREATE  FOREIGN KEY (pho_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_PHO_USR_CHANGE  FOREIGN KEY (pho_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_pho_pho_parent  FOREIGN KEY (pho_pho_id_parent)  REFERENCES %PREFIX%_photos (pho_id)              ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_pho_org         FOREIGN KEY (pho_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_pho_usr_create  FOREIGN KEY (pho_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_pho_usr_change  FOREIGN KEY (pho_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_preferences ADD
-    CONSTRAINT %PREFIX%_FK_PRF_ORG         FOREIGN KEY (prf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_prf_org         FOREIGN KEY (prf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_registrations ADD
-    CONSTRAINT %PREFIX%_FK_REG_ORG         FOREIGN KEY (reg_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_REG_USR         FOREIGN KEY (reg_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_reg_org         FOREIGN KEY (reg_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_reg_usr         FOREIGN KEY (reg_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_role_dependencies ADD
-    CONSTRAINT %PREFIX%_FK_RLD_ROL_CHILD   FOREIGN KEY (rld_rol_id_child)   REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_RLD_ROL_PARENT  FOREIGN KEY (rld_rol_id_parent)  REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_RLD_USR         FOREIGN KEY (rld_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_rld_rol_child   FOREIGN KEY (rld_rol_id_child)   REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_rld_rol_parent  FOREIGN KEY (rld_rol_id_parent)  REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_rld_usr         FOREIGN KEY (rld_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_roles ADD
-    CONSTRAINT %PREFIX%_FK_ROL_CAT         FOREIGN KEY (rol_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_ROL_LST_ID      FOREIGN KEY (rol_lst_id)         REFERENCES %PREFIX%_lists (lst_id)               ON DELETE SET NULL ON UPDATE SET NULL
-    CONSTRAINT %PREFIX%_FK_ROL_USR_CREATE  FOREIGN KEY (rol_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_ROL_USR_CHANGE  FOREIGN KEY (rol_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_rol_cat         FOREIGN KEY (rol_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_rol_lst_id      FOREIGN KEY (rol_lst_id)         REFERENCES %PREFIX%_lists (lst_id)               ON DELETE SET NULL ON UPDATE SET NULL
+    CONSTRAINT %PREFIX%_fk_rol_usr_create  FOREIGN KEY (rol_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_rol_usr_change  FOREIGN KEY (rol_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_roles_rights ADD
-    CONSTRAINT %PREFIX%_FK_ROR_ROR_PARENT  FOREIGN KEY (ror_ror_id_parent)  REFERENCES %PREFIX%_roles_rights (ror_id)        ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_ror_ror_parent  FOREIGN KEY (ror_ror_id_parent)  REFERENCES %PREFIX%_roles_rights (ror_id)        ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_roles_rights_data ADD
-    CONSTRAINT %PREFIX%_FK_RRD_ROR         FOREIGN KEY (rrd_ror_id)         REFERENCES %PREFIX%_roles_rights (ror_id)        ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_RRD_ROL         FOREIGN KEY (rrd_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_RRD_USR_CREATE  FOREIGN KEY (rrd_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_rrd_ror         FOREIGN KEY (rrd_ror_id)         REFERENCES %PREFIX%_roles_rights (ror_id)        ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_rrd_rol         FOREIGN KEY (rrd_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_rrd_usr_create  FOREIGN KEY (rrd_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_rooms ADD
-    CONSTRAINT %PREFIX%_FK_ROOM_USR_CREATE FOREIGN KEY (room_usr_id_create) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_ROOM_USR_CHANGE FOREIGN KEY (room_usr_id_change) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_room_usr_create FOREIGN KEY (room_usr_id_create) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_room_usr_change FOREIGN KEY (room_usr_id_change) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_sessions ADD
-    CONSTRAINT %PREFIX%_FK_SES_ORG         FOREIGN KEY (ses_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_SES_USR         FOREIGN KEY (ses_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_ses_org         FOREIGN KEY (ses_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ses_usr         FOREIGN KEY (ses_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_texts ADD
-    CONSTRAINT %PREFIX%_FK_TXT_ORG         FOREIGN KEY (txt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_txt_org         FOREIGN KEY (txt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_user_fields ADD
-    CONSTRAINT %PREFIX%_FK_USF_CAT         FOREIGN KEY (usf_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_USF_USR_CREATE  FOREIGN KEY (usf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_USF_USR_CHANGE  FOREIGN KEY (usf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_usf_cat         FOREIGN KEY (usf_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_usf_usr_create  FOREIGN KEY (usf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_usf_usr_change  FOREIGN KEY (usf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_user_data ADD
-    CONSTRAINT %PREFIX%_FK_USD_USF         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_USD_USR         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_user_log ADD
-    CONSTRAINT %PREFIX%_FK_USER_LOG_1      FOREIGN KEY (usl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_USER_LOG_2      FOREIGN KEY (usl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_USER_LOG_3      FOREIGN KEY (usl_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_user_log_1      FOREIGN KEY (usl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_user_log_2      FOREIGN KEY (usl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_user_log_3      FOREIGN KEY (usl_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_users ADD
-    CONSTRAINT %PREFIX%_FK_USR_USR_CREATE  FOREIGN KEY (usr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_USR_USR_CHANGE  FOREIGN KEY (usr_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_usr_usr_create  FOREIGN KEY (usr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_usr_usr_change  FOREIGN KEY (usr_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_user_relation_types ADD
-    CONSTRAINT %PREFIX%_FK_URT_ID_INVERSE  FOREIGN KEY (urt_id_inverse)     REFERENCES %PREFIX%_user_relation_types (urt_id) ON DELETE CASCADE  ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_URT_USR_CHANGE  FOREIGN KEY (urt_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_URT_USR_CREATE  FOREIGN KEY (urt_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_urt_id_inverse  FOREIGN KEY (urt_id_inverse)     REFERENCES %PREFIX%_user_relation_types (urt_id) ON DELETE CASCADE  ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_urt_usr_change  FOREIGN KEY (urt_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_urt_usr_create  FOREIGN KEY (urt_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_user_relations ADD
-    CONSTRAINT %PREFIX%_FK_URE_URT         FOREIGN KEY (ure_urt_id)         REFERENCES %PREFIX%_user_relation_types (urt_id) ON DELETE CASCADE  ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_URE_USR1        FOREIGN KEY (ure_usr_id1)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_URE_USR2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_URE_USR_CHANGE  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
-    CONSTRAINT %PREFIX%_FK_URE_USR_CREATE  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+    CONSTRAINT %PREFIX%_fk_ure_urt         FOREIGN KEY (ure_urt_id)         REFERENCES %PREFIX%_user_relation_types (urt_id) ON DELETE CASCADE  ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ure_usr1        FOREIGN KEY (ure_usr_id1)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ure_usr2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT
+    CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
