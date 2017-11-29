@@ -242,7 +242,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     // Wenn Bild übergeben wurde richtige Albenseite öffnen
     if ($getPhotoNr > 0)
     {
-        $firstPhotoNr = (round(($getPhotoNr - 1) / $gSettingsManager->getInt('photo_thumbs_page'), 0) * $gSettingsManager->getInt('photo_thumbs_page')) + 1;
+        $firstPhotoNr = (round(($getPhotoNr - 1) / $gSettingsManager->getInt('photo_thumbs_page')) * $gSettingsManager->getInt('photo_thumbs_page')) + 1;
         $lastPhotoNr  = $firstPhotoNr + $gSettingsManager->getInt('photo_thumbs_page') - 1;
     }
 

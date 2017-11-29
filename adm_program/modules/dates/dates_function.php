@@ -419,8 +419,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
 
         $sqlCal = 'SELECT cat_name
-                      FROM '.TBL_CATEGORIES.'
-                     WHERE cat_id = ?';
+                     FROM '.TBL_CATEGORIES.'
+                    WHERE cat_id = ?';
         $pdoStatement = $gDb->queryPrepared($sqlCal, array((int) $_POST['dat_cat_id']));
         $calendar = $pdoStatement->fetchColumn();
 
