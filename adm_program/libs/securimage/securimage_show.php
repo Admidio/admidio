@@ -50,7 +50,7 @@
 require_once dirname(__FILE__) . '/securimage.php';
 
 // ***** START ADMIDIO CODE *****
-require_once(__DIR__ . '../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 // ***** END ADMIDIO CODE *****
 
 $img = new Securimage();
