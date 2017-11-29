@@ -182,7 +182,7 @@ elseif($getMode === 'html')
     </div>
     <div class="modal-body">';
         // show form
-        $form = new HtmlForm('password_form', ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
+        $form = new HtmlForm('password_form', safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId, 'mode' => 'change')));
         if($currUsrId === $getUserId)
         {
             // to change own password user must enter the valid old password for verification

@@ -124,7 +124,7 @@ $downloadRenameMenu = $page->getMenu();
 $downloadRenameMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // create html form
-$form = new HtmlForm('edit_download_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId, $page);
+$form = new HtmlForm('edit_download_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '4', 'folder_id' => $getFolderId, 'file_id' => $getFileId)), $page);
 if ($getFileId)
 {
     $form->addInput(

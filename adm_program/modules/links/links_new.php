@@ -92,7 +92,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('weblinks_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate, $page);
+$form = new HtmlForm('weblinks_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_function.php', array('lnk_id' => $getLinkId, 'headline' => $getHeadline, 'mode' => $modeEditOrCreate)), $page);
 $form->addInput(
     'lnk_name', $gL10n->get('LNK_LINK_NAME'), noHTML($link->getValue('lnk_name')),
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED)

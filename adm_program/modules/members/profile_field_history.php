@@ -201,7 +201,7 @@ while($row = $fieldHistoryStatement->fetch())
 
     if($getUserId === 0)
     {
-        $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usl_usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>';
+        $columnValues[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usl_usr_id'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>';
     }
 
     $columnValues[] = $gProfileFields->getPropertyById((int) $row['usl_usf_id'], 'usf_name');
@@ -225,7 +225,7 @@ while($row = $fieldHistoryStatement->fetch())
         $columnValues[] = '&nbsp;';
     }
 
-    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usl_usr_id_create'].'">'.$row['create_last_name'].', '.$row['create_first_name'].'</a>';
+    $columnValues[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usl_usr_id_create'])).'">'.$row['create_last_name'].', '.$row['create_first_name'].'</a>';
     $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
     $table->addRowByArray($columnValues);
 }

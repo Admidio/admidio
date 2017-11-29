@@ -42,13 +42,13 @@ $callbackFunction = '';
 switch ($getType)
 {
     case 'ann':
-        $url = 'announcements_function.php?mode=2&ann_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements_function.php', array('mode' => 2, 'ann_id' => $getDatabaseId));
         break;
     case 'bac':
-        $url = 'backup_file_function.php?job=delete&filename='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
         break;
     case 'cat':
-        $url = 'categories_function.php?cat_id='.$getDatabaseId.'&mode=2&type='.$getDatabaseId2;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories_function.php', array('cat_id' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
 
         // get special message for calendars
         if($getDatabaseId2 === 'DAT')
@@ -61,81 +61,81 @@ switch ($getType)
         }
         break;
     case 'dat':
-        $url = 'dates_function.php?mode=2&dat_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php', array('mode' => 2, 'dat_id' => $getDatabaseId));
         break;
     case 'fil':
-        $url = 'download_function.php?mode=2&file_id='.$getDatabaseId.'&folder_id='.$getDatabaseId2;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/downloads/download_function.php', array('mode' => 2, 'file_id' => $getDatabaseId, 'folder_id' => $getDatabaseId2));
         break;
     case 'fol':
-        $url = 'download_function.php?mode=5&folder_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/downloads/download_function.php', array('mode' => 5, 'folder_id' => $getDatabaseId));
         break;
     case 'gbo':
-        $url = 'guestbook_function.php?mode=2&id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 2, 'id' => $getDatabaseId));
         break;
     case 'gbc':
-        $url = 'guestbook_function.php?mode=5&id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook_function.php', array('mode' => 5, 'id' => $getDatabaseId));
         break;
     case 'lnk':
-        $url = 'links_function.php?mode=2&lnk_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 2, 'lnk_id' => $getDatabaseId));
         break;
     case 'nwu':
-        $url = 'registration_function.php?mode=4&new_user_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_id' => $getDatabaseId));
         break;
     case 'pho':
-        $url  = 'photo_function.php?job=delete&pho_id='.$getDatabaseId2.'&photo_nr='.$getDatabaseId;
+        $url  = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('job' => 'delete', 'pho_id' => $getDatabaseId2, 'photo_nr' => $getDatabaseId));
         $text = 'PHO_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
-        $url = 'photo_album_function.php?mode=delete&pho_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'pho_id' => $getDatabaseId));
         break;
     case 'pro_pho':
-        $url  = 'profile_photo_edit.php?mode=delete&usr_id='.$getDatabaseId;
+        $url  = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'usr_id' => $getDatabaseId));
         $text = 'PRO_WANT_DELETE_PHOTO';
         $callbackFunction = 'callbackProfilePhoto';
         break;
     case 'pro_role':
-        $url  = 'profile_function.php?mode=2&mem_id='.$getDatabaseId;
+        $url  = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 2, 'mem_id' => $getDatabaseId));
         $text = 'ROL_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackRoles';
         break;
     case 'pro_future':
-        $url  = 'profile_function.php?mode=3&mem_id='.$getDatabaseId;
+        $url  = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'mem_id' => $getDatabaseId));
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackFutureRoles';
         break;
     case 'pro_former':
-        $url  = 'profile_function.php?mode=3&mem_id='.$getDatabaseId;
+        $url  = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 3, 'mem_id' => $getDatabaseId));
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         $callbackFunction = 'callbackFormerRoles';
         break;
     case 'rol':
-        $url = 'roles_function.php?mode=4&rol_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles_function.php', array('mode' => 4, 'rol_id' => $getDatabaseId));
         $text = 'ROL_ROLE_DELETE_DESC';
         break;
     case 'rol_enable':
-        $url = 'roles_function.php?mode=5&rol_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles_function.php', array('mode' => 5, 'rol_id' => $getDatabaseId));
         $text = 'ROL_ENABLE_ROLE_DESC';
         break;
     case 'rol_disable':
-        $url = 'roles_function.php?mode=3&rol_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles_function.php', array('mode' => 3, 'rol_id' => $getDatabaseId));
         $text = 'ROL_DISABLE_ROLE_DESC';
         break;
     case 'room':
-        $url = 'rooms_function.php?mode=2&room_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 2, 'room_id' => $getDatabaseId));
         break;
     case 'usf':
-        $url = 'fields_function.php?mode=2&usf_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 2, 'usf_id' => $getDatabaseId));
         break;
     case 'msg':
-        $url = 'messages.php?msg_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_id' => $getDatabaseId));
         $text = 'MSG_DELETE_DESC';
         break;
     case 'urt':
-        $url = 'relationtypes_function.php?mode=2&urt_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_id' => $getDatabaseId));
         $text = 'REL_USER_RELATION_TYPE_DEL';
         break;
     case 'ure':
-        $url = ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?mode=2&ure_id='.$getDatabaseId;
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 2, 'ure_id' => $getDatabaseId));
         break;
     default:
         $url = '';

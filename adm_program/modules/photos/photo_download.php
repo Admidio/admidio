@@ -66,11 +66,7 @@ if ((int) $photoAlbum->getValue('pho_quantity') === 0)
 }
 
 // check whether to take original version instead of scaled one
-$takeOriginalsIfAvailable = false;
-if ($gSettingsManager->getBool('photo_keep_original'))
-{
-    $takeOriginalsIfAvailable = true;
-}
+$takeOriginalsIfAvailable = $gSettingsManager->getBool('photo_keep_original');
 
 $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 

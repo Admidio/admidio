@@ -96,7 +96,7 @@ if($getMode === 'show_list')
 
     // show link to create new backup
     $backupMenu->addItem(
-        'admMenuItemNewBackup', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php?mode=create_backup',
+        'admMenuItemNewBackup', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', array('mode' => 'create_backup')),
         $gL10n->get('BAC_START_BACKUP'), 'database_save.png'
     );
 
@@ -123,13 +123,12 @@ if($getMode === 'show_list')
 
         // create array with all column values
         $columnValues = array(
-            '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php?job=get_file&amp;filename='. $oldBackupFile. '"><img
+            '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => $oldBackupFile)). '"><img
                 src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'. $oldBackupFile. '" title="'. $oldBackupFile. '" />'. $oldBackupFile. '</a>',
             date($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), filemtime($backupAbsolutePath.$oldBackupFile)),
             round($fileSize / 1024). ' kB',
             '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
-                $key.'&amp;name='.urlencode($oldBackupFile).'&amp;database_id='.$oldBackupFile.'"><img
+                href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'bac', 'element_id' => 'row_file_'.$key, 'name' => $oldBackupFile, 'database_id' => $oldBackupFile)).'"><img
                 src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
     }

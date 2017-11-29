@@ -18,7 +18,7 @@ if (!is_file($pathConfigFile))
 {
     showNotice(
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        'installation.php?step=create_config',
+        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -43,7 +43,7 @@ if (isset($_SESSION['prefix'])
 {
     showNotice(
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        'installation.php?step=create_config',
+        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -55,7 +55,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, 'installation.php?step=create_config', $gL10n->get('SYS_BACK'), 'layout/back.png');
+    showNotice($sqlQueryResult, safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'layout/back.png');
     // => EXIT
 }
 

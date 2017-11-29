@@ -614,8 +614,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameCreated = '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php?user_id=' .
-                                $userIdCreated . '">' . $userNameCreated . '</a>';
+            $userNameCreated = '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdCreated)) .
+                               '">' . $userNameCreated . '</a>';
         }
 
         $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY', array($userNameCreated, $timestampCreate)) . '</span>';
@@ -634,8 +634,8 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameEdited = '<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php?user_id=' .
-                               $userIdEdited . '">' . $userNameEdited . '</a>';
+            $userNameEdited = '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdEdited)) .
+                              '">' . $userNameEdited . '</a>';
         }
 
         $html .= '<span class="info-edited">' . $gL10n->get('SYS_LAST_EDITED_BY', array($userNameEdited, $timestampEdited)) . '</span>';
@@ -762,6 +762,62 @@ function admFuncCheckUrl($url)
 }
 
 /**
+ * Escape all HTML, JavaScript, and CSS
+ * @param string $input    The input string
+ * @param string $encoding Define character encoding tue use
+ * @return string Escaped string
+ */
+function noHTML($input, $encoding = 'UTF-8')
+{
+    // backwards compatibility for PHP-Version < 5.4
+    if (!defined('ENT_HTML5'))
+    {
+        return htmlentities($input, ENT_QUOTES, $encoding);
+    }
+
+    return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+}
+
+/**
+ * @param string              $path
+ * @param array<string,mixed> $params
+ * @param string              $anchor
+ * @param bool                $escape
+ * @return string
+ */
+function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
+{
+    $paramsText = '';
+    if (count($params) > 0)
+    {
+        // backwards compatibility for PHP-Version < 5.4
+        if (defined('PHP_QUERY_RFC3986'))
+        {
+            $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+        }
+        else
+        {
+            $paramsText = '?' . http_build_query($params, '', '&');
+        }
+    }
+
+    $anchorText = '';
+    if ($anchor !== '')
+    {
+        $anchorText = '#' . rawurlencode($anchor);
+    }
+
+    $url = $path . $paramsText . $anchorText;
+
+    if ($escape)
+    {
+        return noHTML($url);
+    }
+
+    return $url;
+}
+
+/**
  * This is a safe method for redirecting.
  * @param string $url        The URL where redirecting to. Must be a absolute URL. (www.example.org)
  * @param int    $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
@@ -807,28 +863,11 @@ function admRedirect($url, $statusCode = 303)
     {
         $gLogger->notice('REDIRECT: Redirecting to external URL!', $loggerObject);
 
-        $redirectUrl = ADMIDIO_URL . '/adm_program/system/redirect.php?url=' . $url;
+        $redirectUrl = safeUrl(ADMIDIO_URL . '/adm_program/system/redirect.php', array('url' => $url));
     }
 
     header('Location: ' . $redirectUrl, true, $statusCode);
     exit();
-}
-
-/**
- * Escape all HTML, JavaScript, and CSS
- * @param string $input    The input string
- * @param string $encoding Define character encoding tue use
- * @return string Escaped string
- */
-function noHTML($input, $encoding = 'UTF-8')
-{
-    // backwards compatibility for PHP-Version < 5.4
-    if (!defined('ENT_HTML5'))
-    {
-        return htmlentities($input, ENT_QUOTES, $encoding);
-    }
-
-    return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
 }
 
 /**

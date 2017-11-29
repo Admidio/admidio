@@ -304,12 +304,12 @@ while($user = $userStatement->fetch())
 
     if($gProfileFields->visible('LAST_NAME', $gCurrentUser->editUsers()))
     {
-        $arrContent[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['last_name'].'</a>';
+        $arrContent[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['last_name'].'</a>';
     }
 
     if($gProfileFields->visible('FIRST_NAME', $gCurrentUser->editUsers()))
     {
-        $arrContent[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$user['usr_id'].'">'.$user['first_name'].'</a>';
+        $arrContent[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['first_name'].'</a>';
     }
 
     // create string with user address

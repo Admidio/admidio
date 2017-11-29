@@ -156,7 +156,7 @@ if($gValidLogin)
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl(
         'plg_user', $gL10n->get('SYS_MEMBER'),
-        '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $gCurrentUser->getValue('usr_id'). '" '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
+        '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $gCurrentUser->getValue('usr_id'))). '" '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
     );
@@ -266,12 +266,12 @@ else
         elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
             // show link of message module to send mail to administrator role
-            $linkUrl = ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php?rol_id='. $roleAdministrator->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $linkUrl = safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('rol_id' => $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
         else
         {
             // show link to send mail with local mail-client to administrator
-            $linkUrl = 'mailto:'. $gSettingsManager->getString('email_administrator'). '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $linkUrl = safeUrl('mailto:'. $gSettingsManager->getString('email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
 
         if($plg_show_icons)

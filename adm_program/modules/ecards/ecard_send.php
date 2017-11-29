@@ -18,7 +18,7 @@ $postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr',       'int',  arr
 
 $funcClass       = new FunctionClass($gL10n);
 $photoAlbum      = new TablePhotos($gDb, $postPhotoId);
-$imageUrl        = ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$postPhotoId.'&photo_nr='.$postPhotoNr.'&max_width='.$gSettingsManager->getInt('ecard_card_picture_width').'&max_height='.$gSettingsManager->getInt('ecard_card_picture_height');
+$imageUrl        = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $postPhotoId, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_card_picture_width'), 'max_height' => $gSettingsManager->getInt('ecard_card_picture_height')));
 $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$postPhotoId.'/'.$postPhotoNr.'.jpg';
 
 $_SESSION['ecard_request'] = $_POST;
