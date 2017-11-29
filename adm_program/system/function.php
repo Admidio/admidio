@@ -791,7 +791,7 @@ function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
     if (count($params) > 0)
     {
         // backwards compatibility for PHP-Version < 5.4
-        if (defined('ENT_HTML5'))
+        if (defined('PHP_QUERY_RFC3986'))
         {
             $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
         }
