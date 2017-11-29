@@ -59,7 +59,7 @@ catch (AdmException $e)
 {
     showNotice(
         $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
+        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -197,7 +197,7 @@ if ($getMode === 1)
     || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep))
     {
         // create a page with the notice that the installation must be configured on the next pages
-        $form = new HtmlFormInstallation('update_login_form', safeUrl(ADMIDIO_PATH . '/adm_program/installation/update.php', array('mode' => 2)));
+        $form = new HtmlFormInstallation('update_login_form', safeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
         $form->setUpdateModus();
         $form->setFormDescription('<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>');
 
