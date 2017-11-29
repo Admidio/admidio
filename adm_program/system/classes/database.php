@@ -153,7 +153,7 @@ class Database
 
         $this->connect();
 
-        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
         {
             $gLogger->debug('DATABASE: connected!');
         }
@@ -166,7 +166,7 @@ class Database
     {
         global $gLogger;
 
-        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
         {
             $gLogger->debug('DATABASE: sleep/serialize!');
         }
@@ -178,14 +178,14 @@ class Database
     {
         global $gLogger;
 
-        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
         {
             $gLogger->debug('DATABASE: wakeup/unserialize!');
         }
 
         $this->connect();
 
-        if(is_object($gLogger)) // fix for non-object error in PHP 5.3
+        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
         {
             $gLogger->debug('DATABASE: reconnected!');
         }
