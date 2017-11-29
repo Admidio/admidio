@@ -86,8 +86,8 @@ if($getMode === 2)
 {
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php?mode=3&user_id='.$getUserId.'&new_user_id='.$getNewUserId);
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php?usr_id=' . $getUserId);
+    $gNavigation->addUrl(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+    admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
     // => EXIT
 }
 
@@ -154,7 +154,7 @@ elseif($getMode === 5)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->manageRoles())
     {
-        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php?new_user=3&usr_id=' . $registrationUser->getValue('usr_id'));
+        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'usr_id' => $registrationUser->getValue('usr_id'))));
         // => EXIT
     }
     else
@@ -182,6 +182,6 @@ elseif($getMode === 6)
 
     // Zugangsdaten neu verschicken
     $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php?mode=4&usr_id=' . $getUserId);
+    admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'usr_id' => $getUserId)));
     // => EXIT
 }

@@ -83,7 +83,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-            $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
+            $.get("' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 4)) . '&usf_id=" + usfID + "&sequence=" + direction);
         }
     }
 ');
@@ -101,7 +101,7 @@ $fieldsMenu->addItem(
 );
 // define link to maintain categories
 $fieldsMenu->addItem(
-    'menu_item_maintain_category', ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php?type=USF',
+    'menu_item_maintain_category', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'USF')),
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
 );
 
@@ -166,7 +166,7 @@ while($row = $statement->fetch())
     {
         $description = substr($userField->getValue('usf_description', 'database'), 0, 22).'
             <a data-toggle="modal" data-target="#admidio_modal"
-                href="'. ADMIDIO_URL. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='.$userField->getValue('usf_name_intern').'&amp;inline=true"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
+                href="'. safeUrl(ADMIDIO_URL. '/adm_program/system/msg_window.php', array('message_id' => 'user_field_description', 'message_var1' => $userField->getValue('usf_name_intern'), 'inline' => 'true')).'"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif($userField->getValue('usf_description') === '')
     {
@@ -225,7 +225,7 @@ while($row = $statement->fetch())
                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
-    $usfSystem = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'"><img
+    $usfSystem = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $userField->getValue('usf_id'))).'"><img
                     src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
     if($userField->getValue('usf_system') == 1)
@@ -235,14 +235,14 @@ while($row = $statement->fetch())
     else
     {
         $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=usf&amp;element_id=row_usf_'.
-                        $userField->getValue('usf_id').'&amp;name='.urlencode($userField->getValue('usf_name')).'&amp;database_id='.$userField->getValue('usf_id').'"><img
+                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$userField->getValue('usf_id'),
+                        'name' => $userField->getValue('usf_name'), 'database_id' => $userField->getValue('usf_id'))).'"><img
                         src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'">'.$userField->getValue('usf_name').'</a>',
+        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $userField->getValue('usf_id'))).'">'.$userField->getValue('usf_name').'</a>',
         '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$userField->getValue('usf_id').')"><img
             src="'.THEME_URL.'/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
         <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$userField->getValue('usf_id').')"><img

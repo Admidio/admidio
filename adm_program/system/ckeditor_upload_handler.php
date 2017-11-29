@@ -76,7 +76,7 @@ try
                 substr($localFile, 0, strrpos($localFile, '.')) . '_' .
                 mt_rand().substr($localFile, strrpos($localFile, '.'));
         }
-        $htmlUrl = ADMIDIO_URL.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
+        $htmlUrl = safeUrl(ADMIDIO_URL.'/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $localFile));
         move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
     }
     else

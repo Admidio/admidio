@@ -130,7 +130,7 @@ if($gSettingsManager->getBool('lists_enable_module') && $gValidLogin)
         $gL10n->get('LST_MY_LIST')
     );
     $moduleMenu->addSubItem(
-        'lists', 'rolinac', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php?active_role=0',
+        'lists', 'rolinac', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', array('active_role' => 0)),
         $gL10n->get('ROL_INACTIV_ROLE')
     );
 }
@@ -142,7 +142,7 @@ if((int) $gSettingsManager->get('enable_dates_module') === 1
         $gL10n->get('DAT_DATES'), '/icons/dates_big.png', $gL10n->get('DAT_DATES_DESC')
     );
     $moduleMenu->addSubItem(
-        'dates', 'olddates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?mode=old',
+        'dates', 'olddates', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('mode' => 'old')),
         $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES')))
     );
 }
