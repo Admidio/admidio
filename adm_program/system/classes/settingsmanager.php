@@ -93,7 +93,7 @@ class SettingsManager
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
      * @throws \UnexpectedValueException Throws if there is no setting to the given name found
-     * @return mixed Returns the setting value
+     * @return string Returns the setting value
      */
     private function load($name)
     {
