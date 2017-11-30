@@ -356,7 +356,7 @@ class Language
             }
         }
 
-        $text = self::prepareXmlText($xmlNodes[0]);
+        $text = self::prepareXmlText((string) $xmlNodes[0]);
 
         $this->languageData->setTextCache($textId, $text);
 
