@@ -738,8 +738,7 @@ CREATE TABLE %PREFIX%_user_relations
     ure_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ure_usr_id_change           integer unsigned    NULL        DEFAULT NULL,
     ure_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    CONSTRAINT %PREFIX%_pk_ure_id PRIMARY KEY (ure_id),
-    CONSTRAINT %PREFIX%_chk_ure_timestamp CHECK (ure_timestamp_create <= ure_timestamp_change)
+    PRIMARY KEY (ure_id)
 )
 ENGINE = InnoDB
 DEFAULT character SET = utf8
