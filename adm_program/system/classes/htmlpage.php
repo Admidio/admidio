@@ -285,7 +285,7 @@ class HtmlPage
 
                     if($row->men_need_enable == 1)
                     {
-                        if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                        if($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
                         {
                             $menu_view = true;
                         }
@@ -338,7 +338,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $menu_view = false;
-                        if($gPreferences['registration_enable_module'] > 0)
+                        if($gSettingsManager->has('registration_enable_module') > 0)
                         {
                             $menu_view = true;
                         }
@@ -379,8 +379,8 @@ class HtmlPage
                         }
 
                         //Submenu for Dates
-                        if(($gPreferences['enable_dates_module'] == 1 && $row->men_modul_name === 'dates')
-                        || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
+                        if(($gSettingsManager->has('enable_dates_module') == 1 && $row->men_modul_name === 'dates')
+                        || ($gSettingsManager->has('enable_dates_module') == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
                         {
                             $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
                                                     $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
@@ -405,7 +405,7 @@ class HtmlPage
      */
     public function addModalMenu()
     {
-        global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
 
         // display Menu
         $sql = 'SELECT *
@@ -449,7 +449,7 @@ class HtmlPage
 
                     if($row->men_need_enable == 1)
                     {
-                        if($gPreferences['enable_'.$row->men_modul_name.'_module'] == 1  || ($gPreferences['enable_'.$row->men_modul_name.'_module'] == 2 && $gValidLogin))
+                        if($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
                         {
                             $menu_view = true;
                         }
@@ -495,7 +495,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $menu_view = false;
-                        if($gPreferences['registration_enable_module'] > 0)
+                        if($gSettingsManager->has('registration_enable_module') > 0)
                         {
                             $menu_view = true;
                         }
@@ -666,7 +666,7 @@ class HtmlPage
     public function setPrintMode()
     {
         global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
         global $g_root_path;
 
         $headerContent    = '';
