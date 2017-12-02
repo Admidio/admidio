@@ -347,7 +347,7 @@ create table %PREFIX%_menu
     men_parent_id               integer,
     men_name_intern             varchar(255),
     men_name                    varchar(255),
-    men_description             varchar(255),
+    men_description             varchar(4000),
     men_order                   integer,
     men_standart                boolean       not null default '0',
     men_url                     varchar(255),

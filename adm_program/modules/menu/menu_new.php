@@ -147,9 +147,9 @@ if($getMenId > 0)
     );
 }
 
-$form->addInput(
-    'men_description', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_description', 'database'), 
-    array('maxLength' => 100, 'helpTextIdLabel' => 'MNU_NAME_DESC_DESC')
+$form->addMultilineTextInput(
+    'men_description', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_description', 'database'), 2,
+    array('maxLength' => 4000, 'helpTextIdLabel' => 'MNU_NAME_DESC_DESC')
 );
 
 $form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, array(
@@ -162,9 +162,10 @@ $form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, ar
 
 $form->addCheckbox('men_need_enable', $gL10n->get('MNU_NEED_ENABLED'), $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
 
-$form->addSelectBox('menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED,
-                                                                                              'defaultValue' => $roleViewSet,
-                                                                                              'multiselect'  => true));
+$form->addSelectBox(
+    'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, 
+    array('defaultValue' => $roleViewSet, 'multiselect'  => true)
+);
 
 $form->addInput('men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), array('maxLength' => 100));
 
