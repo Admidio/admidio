@@ -62,6 +62,8 @@
                 default character set = utf8
                 collate = utf8_unicode_ci</step>
     <step id="410">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_parent_id)</step>
-    <step id="420">ComponentUpdate::updateStepMigrateToStandartMenu</step>
+    <step id="420">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                   VALUES ('menu_view', 'adm_menu')</step>
+    <step id="430">ComponentUpdate::updateStepMigrateToStandartMenu</step>
     <step>stop</step>
 </update>

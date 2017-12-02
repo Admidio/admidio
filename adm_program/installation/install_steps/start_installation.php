@@ -123,7 +123,8 @@ $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
                (ror_name_intern, ror_table)
         VALUES (\'folder_view\',   \'adm_folders\')
-             , (\'folder_upload\', \'adm_folders\')';
+             , (\'folder_upload\', \'adm_folders\')
+             , (\'menu_view\',     \'adm_menu\')';
 $db->queryPrepared($sql);
 
 // create profile fields of category master data
@@ -263,11 +264,6 @@ $sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_parent_id, men_order, men_standart
                 , (17, 2, 2, 1, \'usrmgt\', \'/adm_program/modules/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\', 0)
                 , (18, 2, 3, 1, \'roladm\', \'/adm_program/modules/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\', 0)
                 , (19, 2, 6, 1, \'menu\', \'/adm_program/modules/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\', 0)';
-$db->query($sql);
-
-// Menu security
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
-          VALUES (\'menu_view\', \''.$g_tbl_praefix.'_menu\')';
 $db->query($sql);
 
 // Menu security data

@@ -626,8 +626,6 @@ class ComponentUpdate extends Component
      */
     public function updateStepMigrateToStandartMenu()
     {
-        global $g_tbl_praefix;
-
         // Menu entries for the standart installation
         $sql = 'INSERT INTO '.TBL_MENU.' (men_id, men_parent_id, men_order, men_standart, men_modul_name, men_url, men_icon, men_translate_name, men_translate_desc, men_need_enable)
                    VALUES (1, NULL, 1, 1, NULL, NULL, \'\', \'SYS_MODULES\', \'\', 0)
@@ -656,40 +654,15 @@ class ComponentUpdate extends Component
         $menuRightsStatement = $this->db->query($sql);
         $menuRightId = $menuRightsStatement->fetchColumn();
 
-        if($menuRightId === false)
-        {
-            // Menu security
-            $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
-                      VALUES (\'menu_view\', \''.$g_tbl_praefix.'_menu\')';
-            $this->db->query($sql);
-
-            $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'menu_view\' ';
-            $menuRightsStatement = $this->db->query($sql);
-            $menuRightId = $menuRightsStatement->fetchColumn();
-
-            // Menu security data
-            $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_timestamp_create)
-                      VALUES ('.$menuRightId.', 1, 13, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 14, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 16, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 17, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 18, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 19, \''. DATETIME_NOW.'\')';
-            $this->db->query($sql);
-        }
-        else
-        {
-            // Menu security data
-            $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_timestamp_create)
-                      VALUES ('.$menuRightId.', 1, 13, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 14, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 16, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 17, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 18, \''. DATETIME_NOW.'\'),
-                             ('.$menuRightId.', 1, 19, \''. DATETIME_NOW.'\')';
-            $this->db->query($sql);
-        }
-
+        // Menu security data
+        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.' (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_timestamp_create)
+                  VALUES ('.$menuRightId.', 1, 13, \''. DATETIME_NOW.'\'),
+                         ('.$menuRightId.', 1, 14, \''. DATETIME_NOW.'\'),
+                         ('.$menuRightId.', 1, 16, \''. DATETIME_NOW.'\'),
+                         ('.$menuRightId.', 1, 17, \''. DATETIME_NOW.'\'),
+                         ('.$menuRightId.', 1, 18, \''. DATETIME_NOW.'\'),
+                         ('.$menuRightId.', 1, 19, \''. DATETIME_NOW.'\')';
+        $this->db->query($sql);
     }
 
     /**

@@ -88,7 +88,7 @@ if($getMode === 1)
         $displayMenu = new RolesRights($gDb, 'menu_view', $getMenId);
         $rolesDisplayRight = $displayMenu->getRolesIds();
 
-        if(!is_array($_POST['menu_view']))
+        if(!isset($_POST['menu_view']) || !is_array($_POST['menu_view']))
         {
             // remove all entries, so it is allowed without login
             $displayMenu->removeRoles($rolesDisplayRight);

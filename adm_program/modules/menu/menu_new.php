@@ -159,10 +159,10 @@ $form->addSelectBox('men_icon', $gL10n->get('SYS_ICON'), $array_icon, array('def
                                                                             'showContextDependentFirstEntry' => true));
 
 $form->addInput('men_translate_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_translate_name', 'database'), array('maxLength' => 100,
-                                                                                                                        'helpTextIdLabel' => array('MNU_NAME_DESC')));
+                                                                                                                        'helpTextIdLabel' => 'MNU_NAME_DESC'));
 
 $form->addInput('men_translate_desc', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_translate_desc', 'database'), array('maxLength'       => 100,
-                                                                                                                               'helpTextIdLabel' => array('MNU_NAME_DESC_DESC')));
+                                                                                                                               'helpTextIdLabel' => 'MNU_NAME_DESC_DESC'));
 
 if($fieldPropertyStandart == FIELD_DISABLED)
 {
