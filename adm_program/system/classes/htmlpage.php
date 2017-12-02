@@ -285,7 +285,7 @@ class HtmlPage
 
                     if($row->men_need_enable == 1)
                     {
-                        if($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
+                        if($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
                         {
                             $menu_view = true;
                         }
@@ -337,7 +337,7 @@ class HtmlPage
                     // special check for "newreg"
                     if($row->men_modul_name === 'newreg')
                     {
-                        if(!$gCurrentUser->approveUsers() || $gSettingsManager->has('registration_enable_module') === 0)
+                        if(!$gCurrentUser->approveUsers() || $gSettingsManager->get('registration_enable_module') === 0)
                         {
                             $menu_view = false;
                         }
@@ -378,8 +378,8 @@ class HtmlPage
                         }
 
                         //Submenu for Dates
-                        if(($gSettingsManager->has('enable_dates_module') == 1 && $row->men_modul_name === 'dates')
-                        || ($gSettingsManager->has('enable_dates_module') == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
+                        if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_modul_name === 'dates')
+                        || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
                         {
                             $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
                                                     $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
@@ -448,7 +448,7 @@ class HtmlPage
 
                     if($row->men_need_enable == 1)
                     {
-                        if($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->has('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
+                        if($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
                         {
                             $menu_view = true;
                         }
@@ -494,7 +494,7 @@ class HtmlPage
                     if($row->men_modul_name === 'newreg')
                     {
                         $menu_view = false;
-                        if($gSettingsManager->has('registration_enable_module') > 0)
+                        if($gSettingsManager->get('registration_enable_module') > 0)
                         {
                             $menu_view = true;
                         }
@@ -711,7 +711,7 @@ class HtmlPage
             $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
-        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
+        if ($gSettingsManager->get('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
         {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }
