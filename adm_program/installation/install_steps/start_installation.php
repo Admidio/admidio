@@ -123,7 +123,14 @@ $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
                (ror_name_intern, ror_table)
         VALUES (\'folder_view\',   \'adm_folders\')
-             , (\'folder_upload\', \'adm_folders\')';
+             , (\'folder_upload\', \'adm_folders\')
+             , (\'category_view\', \'adm_categories\')
+             , (\'event_participation\', \'adm_dates\')';
+$db->queryPrepared($sql);
+
+// add edit categories right with reference to parent right
+$sql = 'INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table, ror_ror_id_parent)
+        VALUES (\'category_edit\', \'adm_categories\', (SELECT rr.ror_id FROM %PREFIX%_roles_rights rr WHERE rr.ror_name_intern = \'category_view\'))'
 $db->queryPrepared($sql);
 
 // create profile fields of category master data
