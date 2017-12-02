@@ -33,7 +33,6 @@
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Transmitir la fecha en el calendario</string>
   <string name="DAT_ALL_DAY">jornada completa</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Los participantes pueden inscribir invitados anónimos</string>
   <string name="DAT_ALLOW_USER_COMMENTS">Permitir comentarios para el registro</string>
   <string name="DAT_ASSIGN_PARTICIPANTS">asignar a los participantes</string>
   <string name="DAT_ATTEND">participar</string>
@@ -79,10 +78,8 @@
   <string name="DAT_USER_INVITED">invitado</string>
   <string name="DAT_USER_REFUSED">anulado</string>
   <string name="DAT_USER_WILL_ATTEND">participa</string>
-  <string name="DAT_VIEW_MODE_DETAIL">detallado</string>
   <string name="DAT_VIEW_MODE_COMPACT">compacto</string>
   <string name="DAT_VISIBILITY">visibilidad</string>
-  <string name="DAT_VISIBLE_TO">visible para</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Añadir a la base de datos</string>
   <string name="DOW_COUNTER">contador</string>
@@ -170,7 +167,6 @@
   <string name="INS_FACEBOOK">Facebook</string>
   <string name="INS_GOOGLE_PLUS">Google+</string>
   <string name="INS_GROUPS">grupos</string>
-  <string name="INS_HOST_INVALID">nombre del host no es válido. Por favor, introduzca una dirección IP válida o nombre del host válido.</string>
   <string name="INS_ICQ">ICQ</string>
   <string name="INS_INSTALL_ADMIDIO">instalar Admidio</string>
   <string name="INS_INSTALLATION">Instalación</string>
@@ -216,8 +212,6 @@
   <string name="INS_SUBORDINATE">Subordinad@</string>
   <string name="INS_SUBORDINATE_MALE">Subordinado</string>
   <string name="INS_SUBORDINATE_FEMALE">Subordinada</string>
-  <string name="INS_SUPERIOR">Jef@</string>
-  <string name="INS_SUPERIOR_MALE">Jefe</string>
   <string name="INS_SUPERIOR_FEMALE">Jefa</string>
   <string name="INS_SIBLING">Hermanos</string>
   <string name="INS_SISTER">Hermana</string>
@@ -332,7 +326,6 @@
   <string name="MAI_SEND_EMAIL">Enviar E-Mail</string>
   <string name="MAI_SEND_METHOD">Enviar via</string>
   <string name="MAI_SENDER">Remitente</string>
-  <string name="MAI_SENDER_EMAIL">Dirección de E-Mail del remitente</string>
   <string name="MAI_SENDER_NAME">Nombre del remitente</string>
   <string name="MAI_SMTP">SMTP</string>
   <string name="MAI_SMTP_AUTH">Autenticación SMTP</string>

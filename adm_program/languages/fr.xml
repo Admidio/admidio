@@ -25,7 +25,6 @@
   <string name="BAC_SECONDS_VAR">#VAR1# secondes</string>
   <!--Phrases only in Category-Administration-->
   <string name="CAT_CATEGORY_EXIST">Le nom de la catégorie existe déjà dans l\'organisation sélectionnée.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Lorsque l\'option est activée, les champs du profil de la catégorie apparaîtront et pourront être modifiés dans le panneau du profil des organisations suivantes: \n\n#VAR1_BOLD#\n\n S\'il vous plaît désactiver l\'option si les champs doivent figurer dans votre organisation seulement.</string>
   <string name="CAT_DEFAULT_VAR">#VAR1# par défaut</string>
   <string name="CAT_MOVE_DOWN">Descendre #VAR1#</string>
   <string name="CAT_MOVE_UP">Monter #VAR1#</string>
@@ -58,7 +57,6 @@
   <string name="DAT_REGISTRATION_NOT_POSSIBLE">Inscriptions fermées.</string>
   <string name="DAT_REMOVE_APPLICATION">Voulez-vous retirer cet événement? Tous les participants seront supprimés.</string>
   <string name="DAT_ROOM_INFORMATIONS">Informations des pièces</string>
-  <string name="DAT_ROOM_OVERHANG">Dans le cas de places additionnelles, le nombre de places peut être spécifiées ici.</string>
   <string name="DAT_ROOM_RESERVED">La place sélectionnée est déjà utilisée.</string>
   <string name="DAT_ROOM_SELECTABLE">La place est disponible.</string>
   <string name="DAT_ROOM_SELECTABLE_DESC">Le choix des places libres est maintenant disponible. Sélectionner une place puis créer des événements pour la place choisie. (réponse par défaut: aucun)</string>
@@ -69,7 +67,6 @@
   <string name="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION">Ouvrir la gestion des agendas</string>
   <string name="DAT_SWITCH_TO_ROOM_ADMINISTRATION">Ouvrir l\'administration de la salle</string>
   <string name="DAT_VIEW_MODE">Affichage par défaut</string>
-  <string name="SYS_VISIBLE_FOR">Visible pour</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
   <string name="DOW_ADDITIONAL_FILES">Cette liste vise à fournir un aperçu des fichiers et dossiers qui ne sont pas importé dans la base de données. Ajoutez-les ici. Les droits d\'accès seront copiés du dossier sélectionné.</string>
@@ -81,7 +78,6 @@
   <string name="DOW_EMAIL_NOTIFICATION_TITLE">Un nouveau fichier a été téléchargé</string>
   <string name="DOW_EMAIL_NOTIFICATION_MESSAGE">Un nouveau fichier a été télécharger vers #VAR1#\n\nFile: #VAR2#\nTéléchargé par: #VAR3#\nTéléchargé à: #VAR4#</string>
   <string name="DOW_ENABLE_DOWNLOAD_MODULE">Activation du module de téléchargement</string>
-  <string name="DOW_ENABLE_DOWNLOAD_MODULE_DESC">Le module de téléchargement peut être désactivé ici. Après la désactivation, le module n\'apparaîtera plus dans le panneau. (par défaut: oui)</string>
   <string name="DOW_FILE_EXIST">Le fichier #VAR1# existe déjà!\n\nS\'il-vous-plaît, sélectionnez un nouveau nom de fichier.</string>
   <string name="DOW_FILE_EXTENSION_INVALID">Le type de fichier n\'est pas autorisé sur le serveur.</string>
   <string name="DOW_FILE_NAME_RULES">Le nom du fichier doit indiquer le contenu du fichier. Le nom du fichier affecte l\'ordre de tri. Par exemple, les noms de fichiers dans des dossiers d\'une procédure doivent commencer par la date (AAAA-MM-TT).</string>
@@ -109,7 +105,6 @@
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Carte de voeux envoyés par</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activation du module de cartes de vœux</string>
-  <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">Le module de cartes de vœux peut être désactivé et réactivé via ces options. Si le serveur n\'est pas capable d\'envoyer de courriel, s\'il vous plaît désactiver le module. Le module est accessible pour les utilisateurs connectés seulement. (par défaut: oui)</string>
   <string name="ECA_GREETING_CARD">Carte de voeux</string>
   <string name="ECA_GREETING_CARDS">Carte de voeux</string>
   <string name="ECA_GREETING_CARD_EDIT">Éditer la carte de voeux</string>
@@ -122,10 +117,8 @@
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">Afficher la grandeur réelle</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">Retour au livre d\'or</string>
-  <string name="GBO_CAPTCHA_DESC">Si cette option est activée les utilisateurs qui ne sont pas authentifiés obtiendrons une image avec un code captcha ou un simple calcul. Il est nécessaire de remplir le bon code ou le résultat pour enregistrer l\'entrée. Le captcha est une solution antispam. (par défaut: oui)</string>
   <string name="GBO_COMMENT_BY">Commentaire de #VAR1#</string>
   <string name="GBO_COMMENTS4ALL">Autoriser les commentaires anonymes</string>
-  <string name="GBO_COMMENTS4ALL_DESC">En activant cette option, les utilisateurs non enregistrés seront en mesure de faire des commentaires dans le livre. Toutes autres autorisations d\'accès définies dans le panneau d\'administration des rôles seront ignorées. (par défaut: non)</string>
   <string name="GBO_CREATE_COMMENT">Laisser un commentaire</string>
   <string name="GBO_CREATE_ENTRY">Laisser une entrée</string>
   <string name="GBO_CREATE_VAR_ENTRY">laisser #VAR1# une entrée</string>
@@ -138,7 +131,6 @@
   <string name="GBO_ENTRY_QUEUED">Entrée enregistrée. L\'entrée sera affichée après l\'édition.</string>
   <string name="GBO_FLOODING_PROTECTION">Votre dernière entrée a été créée il y a #VAR1# secondes.</string>
   <string name="GBO_FLOODING_PROTECTION_INTERVALL">Intervalle de protection des \"Flooding\"</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Les inscriptions des utilisateurs non enregistrés seront vérifiés. Trop d\'entrées dans un intervalle de temps donné ne sont pas autorisés. Cette option permet de prendre le contrôle sur les entrées non désirées. Lorsque l\'intervalle est réglé sur 0, l\'intervalle sera ignoré. (par défaut: 60 secondes)</string>
   <string name="GBO_GUESTBOOK">Livre d\'or</string>
   <string name="GBO_GUESTBOOK_DESC">Les visiteurs et les utilisateurs sont en mesure de laisser des salutations et des commentaires.</string>
   <string name="GBO_GUESTBOOK_MODERATION">Modération activé pour</string>
@@ -159,7 +151,6 @@
   <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Les informations de l\'administrateur sont incomplètes!</string>
   <string name="INS_AOL_INSTANT_MESSENGER">AOL Instant Messenger</string>
   <string name="INS_BOARD">Tableau administratif</string>
-  <string name="INS_CONFERENCE_ROOM">Salle de conférence</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Le fichier #VAR1_BOLD# ne peut être trouvé dans le dossier principal du bottin!\n\nVeuillez télécharger le fichier de nouveau et le copier dans le dossier mentionné.</string>
   <string name="INS_COURSES">Parcours</string>
   <string name="INS_CREATE_ADMINISTRATOR">Création d\'un administrateur</string>
@@ -290,7 +281,6 @@
   <string name="LST_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
   <string name="LST_SEARCH_TELEFON_DESC">Recherche des utilisateurs avec un numéro de téléphone incluant 241 et terminant avec 54</string>
   <string name="LST_SEARCH_YES_NO_FIELD">oui/non champs</string>
-  <string name="LST_SEARCH_YES_NO_FIELD_DESC">Recherche des utilisateur avec mention</string>
   <string name="LST_SHOW_LIST">Afficher la liste</string>
   <string name="LST_SHOW_LISTS">Afficher les listes</string>
   <string name="LST_YOUR_CONFIGURATION">Votre configuration</string>
@@ -301,13 +291,10 @@
   <string name="LST_Z_TO_A">Z à A</string>
   <!--Phrases only in Mailmodule-->
   <string name="MAI_ACTIVATE_EMAIL_MODULE">Activation du module de courriel</string>
-  <string name="MAI_ACTIVATE_EMAIL_MODULE_DESC">Le module de courriel peut être déasctivé ici. Après la désactivation, le module sera inutilisable dans le panneau d\'aperçu du module. Si votre serveur ne supporte pas l\'envoie de courriel, veuillez désactiver le module. (Par défaut: actif)</string>
   <string name="MAI_ADD_ATTACHEMENT">Joindre un fichier</string>
   <string name="MAI_ATTACHEMENT">Fichiers joints</string>
   <string name="MAI_ATTACHMENT_SIZE">Taille maximum des fichiers joint</string>
-  <string name="MAI_ATTACHMENT_SIZE_DESC">Les utilisateurs sont capable de joindre des fichiers de taille inférieur à la taille spécifiée ici. Si la valeur est à 0, aucun fichier ne pourra être joint au courriel (Par defaut: 1MB)</string>
   <string name="MAI_ATTACHMENT_TO_LARGE">Erreur lors du téléversement du fichier joint. \nLa taille du fichier est trop importante !</string>
-  <string name="MAI_CAPTCHA_DESC">Quand l\'option est activé, les membres authentifiés recevrons une image avec un capcha ou un calcule simple. Il est important de remplir le champs demandé afin d\'envoyer le courriel. (Par defaut: oui)</string>
   <string name="MAI_CHOOSE_ROLE">Veuillez sélectionner un rôle en tant que récipiendaire du courriel !</string>
   <string name="MAI_COUNT_BCC">Nombre si BCC récipiendaires</string>
   <string name="MAI_EMAIL_DESC">Système de courriel des membres.</string>
@@ -315,7 +302,6 @@
   <string name="MAI_SEND_COPY">Envoyer une copy du courriel à mon adresse</string>
   <string name="MAI_SEND_EMAIL">Envoyer le courriel</string>
   <string name="MAI_SENDER_NOT_LOGGED_IN">(L\'expéditeur c\'est déconecté. Les informations de l\'expéditeur peuvent être incorrect.)</string>
-  <string name="MAI_SHOW_CAPTCHA_DESC">Pour les utilisateurs déconectés, un texte alphanumérique apparaitra quand le module capcha est activé. Le texte devra être inséré dans le champs approprier. Cette méthode empêchera l\'abu des spammers (Par défaut: oui)</string>
   <string name="MAI_SUBJECT">Sujet</string>
   <!--Phrases only in Membersadministration-->
   <string name="MEM_ASSIGN_FIELDS">Assigner des champs</string>
@@ -356,19 +342,13 @@
   <string name="MSG_FORMER_MEMBERS">Membres fondateurs</string>
   <!--Phrases only in New-User-Registration-->
   <string name="NWU_ASSIGN_LOGIN">Assignation de l\'information d\'authentification</string>
-  <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">L\'information d\'authentification a été assignée avec succès.</string>
-  <string name="NWU_ASSIGN_LOGIN_EMAIL">L\'information d\'authentification a été assignée avec succès et l\'utilisateur à été informé par courriel.</string>
   <string name="NWU_ASSIGN_MEMBERSHIP">Assignation de l\'adhésion</string>
-  <string name="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN">Assignez l\'adhésion et les informations d\'authentifications à l\'usager sélectionné.</string>
   <string name="NWU_ASSIGN_REGISTRATION">Attribution d\'inscription</string>
   <string name="NWU_DELETE_REGISTRATION">Suppression d\'inscription</string>
   <string name="NWU_MANAGE_NEW_REGISTRATIONS_DESC">nouvelles inscriptions de visiteurs peuvent être énumérés, approuvé ou refusé ici.</string>
   <string name="NWU_NEW_REGISTRATIONS">Les nouvelles inscriptions</string>
-  <string name="NWU_NO_MEMBERSHIP">L\'utilisateur n\'est pas membre de l\'organisation #VAR1# mais il a déjà affecté les informations de connexion.</string>
-  <string name="NWU_NO_MEMBERSHIP_NO_LOGIN">L\'utilisateur n\'est pas membre de l\'organisation% VAR1% et n\'a pas d\'informations de connexion enregistrés.</string>
   <string name="NWU_NO_REGISTRATIONS">Aucune nouvelle inscription disponibles.</string>
   <string name="NWU_REGISTERED_ON">Enregistré le #VAR1#</string>
-  <string name="NWU_REMINDER_SEND_LOGIN">Voulez-vous rappeler à l\'utilisateur ses informations de connexion et mot de passe ?</string>
   <string name="NWU_SEND_LOGIN">Envoyer les informations de connexion</string>
   <string name="NWU_USER_NO_VALID_LOGIN">L\'utilisateur n\'a pas encore de login. \nVoulez-vous pour attribuer les informations de l\'enregistrement choisi pour l\'utilisateur ?</string>
   <string name="NWU_USER_VALID_LOGIN">L\'utilisateur possède déjà les informations de connexion valides.</string>
@@ -377,7 +357,6 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Les variables supplémentaires</string>
   <string name="ORG_ADMIDIO_THEME">Thèmes Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Sélectionnez la disposition des Admidio. Tous les thèmes enregistrés dans le dossier adm_themes sont montrées. (par défaut: moderne)</string>
-  <string name="ORG_ADVANCED_REGISTRATION">Sélectionnez l\'inscription avancée</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto déconnecter après</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Réglez le temps avant que le système se connecte automatiquement à un utilisateur inactifs. Un utilisateur est inactif lorsque aucune page n\'est chargée pendant un certain temps. Cette configuration est ignorée lorsque l\'utilisateur choisi #VAR1_BOLD#. (par défaut: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Message de mis à jour concernant navigateur désuet</string>
@@ -400,16 +379,15 @@
   <string name="ORG_EMAIL_ALERTS">E-mail d\'alerte</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Tous les membres de tous les rôles avec la permission #VAR1_BOLD# recevront des e-mail en cas d\'inscription de nouvel utilisateur. (par défaut: oui)</string>
   <string name="ORG_ENABLE_CAPTCHA">Activation du captcha</string>
-  <string name="ORG_FAST_REGISTRATION">inscription rapide</string>
   <string name="ORG_FIELD_DESCRIPTION">Définir illimitée des champs supplémentaires. Les champs seront affichés et peuvent être édités dans le profil utilisateur. Ces champs seront disponibles en propre liste, aussi.</string>
   <string name="ORG_FIELD_DOWN">Déplacer champ de profil bas</string>
   <string name="ORG_FIELD_EXIST">Terrain avec le même nom existe déjà dans cette catégorie.</string>
   <string name="ORG_FIELD_HIDDEN">Champ visible pour les utilisateurs autorisés seulement (même profil et le rôle d\'autorisation)</string>
-  <string name="ORG_FIELD_REQUIRED">Champ obligatoire.</string>
-  <string name="ORG_FIELD_REQUIRED_DESC">Flagged (obligatoire) des champs doivent toujours être remplis Cette règle s\'applique pour les inscriptions et les changements profil régulier effectué par les utilisateurs.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Ces champs peuvent être modifiés par les utilisateurs eux-mêmes.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Champ à voir pour tous les utilisateurs.</string>
   <string name="ORG_FIELD_NOT_MANDATORY">Champ est obligatoire. Il doit absolument être rempli.</string>
+  <string name="ORG_FIELD_REQUIRED">Champ obligatoire.</string>
+  <string name="ORG_FIELD_REQUIRED_DESC">Flagged (obligatoire) des champs doivent toujours être remplis Cette règle s\'applique pour les inscriptions et les changements profil régulier effectué par les utilisateurs.</string>
   <string name="ORG_FIELD_UP">Champ de profil</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Cette page apparaît quand un utilisateur connecté doit être fourni comme chemin relatif au dossier principal Admidio \n (ex:. adm_program / index. php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Cette page est la page par défaut du Admidio pour les invités. Chemin doit être fourni comme chemin relatif au dossier principal Admidio \n (ex: adm_program / index.php).</string>
@@ -428,7 +406,6 @@
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Champs de profil</string>
   <string name="ORG_REGISTERED_USERS">Utilisateur connecté</string>
-  <string name="ORG_REGISTRATION_MODE">Définir le caractère de l\'inscription ou le désactiver. L\'inscription rapide permet aux utilisateurs de s\'inscrire en remplissant les champs obligatoires seulement. L\'enregistrement complet fournit tous les champs du profil. (Par défaut: inscription rapide)</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Rechercher pour des noms similaires</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">À l\'inscriptions et l\'attribution Admidio est à la recherche des noms de famille et prénoms similaires afin d\'éviter les doubles entrées. Désactivation des résultats de recherche pour les noms identiques uniquement. (Par défaut: oui)</string>
   <string name="ORG_SECONDS">Secondes</string>
@@ -439,15 +416,11 @@
   <string name="ORG_TIME_FORMAT_DESC">Format respecté %VAR1 fonction PHP. (Par défaut: H: i)</string>
   <string name="ORG_URL">URL</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Lien d\'activation pour le nouveau mot de passe</string>
-  <string name="ORG_VARIABLE_EMAIL">Adresse courriel de l\'utilisateur</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Adresse courriel de l\'organisation</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">Prénom de l\'utilisateur</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Nom d\'utilisateur</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Nom de l\'organisme</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Nouveau mot de passe</string>
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Nom abrégé de l\'organisation</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Adresse du site Web de l\'organisation</string>
-  <string name="ORG_VARIABLE_USERNAME">Nom d\'utilisateur</string>
   <!--Phrases only in Updatecheck-->
   <string name="UPD_ADMIDIO">Aller à la page de mise à jour Admidio</string>
   <string name="UPD_CONNECTION_ERROR">Connexion à la page mise à jour Admidio n\'a pas pu être établie. S\'il vous plaît vérifiez votre connexion Internet ou réessayez plus tard. Vous pouvez également consulter le site Web #VAR1# pour mise à jour manuelle.</string>
@@ -467,12 +440,10 @@
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Un nouvel album photo a été créé</string>
   <string name="PHO_EMAIL_NOTIFICATION_MESSAGE">Un nouvel album photo à #VAR1# a été créée \n\nTitre: #VAR2# \nCréé par: #VAR3# \nCréé à: #VAR4#</string>
   <string name="PHO_FOLDER_NOT_FOUND">Le dossier n\'a pu être trouvée. Le dossier a peut-être supprimé en utilisant FTP ou doit être inaccessible, s\'il vous plaît supprimer un dossier dans Admidio. \nLes invités sans l\'autorisation de gestion de photos ne peuvent pas afficher l\'album sélectionné.</string>
-  <string name="PHO_MAX_PHOTO_SIZE_DESC">Définir la taille maximale d\'une photo affichée par un utilisateur. La taille des fenêtres popup et ColorBox seront automatiquement ajustées. La taille idéale devrait suivre la taille d\'image d\'origine afin d\'éviter redimensionnement. (Par défaut: 640 x 400 pixels)</string>
   <string name="PHO_NEXT_PHOTO">Image suivante</string>
   <string name="PHO_NO_ALBUM_CONTENT">L\'album ne contient pas de photos.</string>
   <string name="PHO_NO_FILES_OR_TO_LARGE">Afficher la page illégales ou le fichier n\'a pas pu être téléchargé.</string>
   <string name="PHO_NO_FILES_SELECTED">Aucune photos à ajouter ont été sélectionnés.</string>
-  <string name="PHO_NO_RIGHTS">Vous n\'avez pas les permissions pour exécuter cette action. \n\nSeulement utilisateurs connectés disposant des autorisations de gestion de photos ont la possibilité de gérer des photos.</string>
   <string name="PHO_PARENT_ALBUM">Albums Parent</string>
   <string name="PHO_PHOTO_ALBUMS">Albums photo</string>
   <string name="PHO_PHOTO_DELETE">Supprimer la photo</string>
@@ -493,8 +464,6 @@
   <string name="PHO_SAME_WINDOW">Même fenêtre</string>
   <string name="PHO_SCALE_AT_UPLOAD">Téléversement échelle</string>
   <string name="PHO_SCALE_AT_UPLOAD_DESC">Les photos peuvent ainsi être redimensionnés pendant le téléchargement. La valeur en pixel définit le bord long du portrait et des photos au format paysage. L\'autre côté reste proportionnelle au bord long. (Par défaut: 640 pixels)</string>
-  <string name="PHO_SCALE_THUMBNAILS">Échelle de la vignette</string>
-  <string name="PHO_SCALE_THUMBNAILS_DESC">Ajuster le bord long de la vignettes. Attention: ne pas trop mettre l\'échelle grande afin d\'éviter tout conflit avec la rangée de miniature et de la préférence de la colonne. Sinon, essayez le réglage de la rangée de la vignette et les préférences de colonne. (Par défaut: 160 pixels)</string>
   <string name="PHO_SHOW_CAPTION">Afficher le filigrane</string>
   <string name="PHO_SHOW_CAPTION_DESC">Le texte sera affiché dans toutes les photos avec un long bord de plus de 200 pixels. (Par défaut: ©#VAR1#)</string>
   <string name="PHO_SHOWN_ON_READY">Les photos ont été ajouté avec succès à l\'album si elles figurent sur cette page.</string>
@@ -579,20 +548,16 @@
   <string name="ROL_PREF" description="Abbreviation for Preferences">Préf.</string>
   <string name="ROL_QUARTERLY">Trimestriel</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Afficher toutes les listes de membres de tous les rôles</string>
-  <string name="ROL_RIGHT_ANNOUNCEMENTS">Créer et éditer des annonces</string>
   <string name="ROL_RIGHT_APPROVE_USERS">Organiser et affecter des inscriptions</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES">Organiser et attribuer des rôles</string>
   <string name="ROL_RIGHT_ASSIGN_ROLES_DESC">Les utilisateurs du rôle actuel sont autorisés à administrer et à créer des rôles et d\'attribuer des rôles aux utilisateurs.</string>
-  <string name="ROL_RIGHT_DATES">Créer et éditer des événements</string>
   <string name="ROL_RIGHT_EDIT_USER">Modifier le profil de tous les utilisateurs</string>
   <string name="ROL_RIGHT_GUESTBOOK">Modifier et supprimer des entrées du livre d\'or</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Créer un commentaires du livre d\'or</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Définir qui devrait être en mesure d\'envoyer des messages à ce rôle en utilisant le module électronique. Autorisation du rôle #VAR1_BOLD# est de configuration parents du niveau d\'autorisation actuelle.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">Envoyer des e-mails à tous les rôles</string>
   <string name="ROL_RIGHT_PHOTO">Upload et éditer des photos</string>
   <string name="ROL_RIGHT_PROFILE">Modifier mon profil</string>
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Définir quel utilisateur doit être capable de voir plusieurs listes et certains profils d\'utilisation des membres de son rôle actuel. Autorisation de rôle #VAR1_BOLD# est la configuration parent qui est le niveau d\'autorisation actuelle.</string>
-  <string name="ROL_RIGHT_WEBLINKS">Créer et modifier des liens web</string>
   <string name="ROL_ROLE_ADMINISTRATION">Administration de rôle</string>
   <string name="ROL_ROLE_ADMINISTRATION_DESC">Les rôles basée sur certains groupes, les cours et les départements peuvent être gérés ici. Autorisations de rôle peut être défini ici, aussi.</string>
   <string name="ROL_ROLE_DELETE">Suppression de rôle</string>
@@ -604,7 +569,6 @@
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Afficher le rôle d\'adhésion</string>
   <string name="ROL_SEMIYEARLY">bi-annuel</string>
   <string name="ROL_SEND_MAIL_GUESTS">Tous les clients sont autorisés à envoyer des e-mails sur le rôle actuel.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Les utilisateurs connectés sont autorisés à envoyer des courriels sur le rôle actuel.</string>
   <string name="ROL_SEND_MAIL_ROLE">Les membres de ce rôle ne sont pas autorisés à envoyer des courriels sur le rôle actuel.</string>
   <string name="ROL_SEND_MAILS">Envoyer des courriels</string>
   <string name="ROL_SHOW_MEMBERS">Voir les membres</string>
@@ -674,7 +638,6 @@
   <string name="SYS_DATE">Date</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">Date de fin est avant la date de début.</string>
   <string name="SYS_DATE_FROM_TO" description="Used in date-context: 2010/01/10 to 2010/01/12">#VAR1# vers #VAR2#</string>
-  <string name="SYS_DATA_GLOBAL">Lorsqu\'elle est active, toutes les dates apparaissent sur les sites des organisations suivantes où ils peuvent être modifiés par les utilisateurs autorisés: \n\n#VAR1_BOLD#</string>
   <string name="SYS_DATE_INVALID">Date invalide dans #VAR1_BOLD# \n\nLa date doit se conformer à cette mise en forme:#VAR2_BOLD#</string>
   <string name="SYS_DATE_MODIFIED">Date de modification</string>
   <string name="SYS_DATE_TO">à</string>
@@ -689,7 +652,6 @@
   <string name="SYS_EDIT_VAR">Modifier #VAR1#</string>
   <string name="SYS_EMAIL">Courriel</string>
   <string name="SYS_EMAIL_INVALID">L\'adresse courriel dans le champ #VAR1_BOLD# comprend des caractères non valides ou est incomplet.</string>
-  <string name="SYS_ENTRY_MULTI_ORGA">Entrée visible pour de multiples organisations</string>
   <string name="SYS_END" description="End of a date">Fin</string>
   <string name="SYS_ERROR">Erreur</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERREUR 404 - PAGE INTROUVABLE</string>
@@ -817,7 +779,6 @@
   <string name="SYS_SAVE">Enregistrer</string>
   <string name="SYS_SAVE_DATA">Les données ont été enregistrées.</string>
   <string name="SYS_SECONDS">Secondes</string>
-  <string name="SYS_SECURITY_ERROR">Erreur de sécurité</string>
   <string name="SYS_SEND">Envoyer</string>
   <string name="SYS_SEND_EMAIL_TO">Envoyer un e-mail à #VAR1#</string>
   <string name="SYS_SEARCH">Recherche</string>
@@ -860,7 +821,6 @@
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_VIEW">Affichage</string>
   <string name="SYS_VISIBLE">Visibles</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# seulement visibles pour les utilisateurs connectés.</string>
   <string name="SYS_VISITORS">Invités</string>
   <string name="SYS_WANT_REGISTER">Je veux m\'inscrire!</string>
   <string name="SYS_WARNING">Attention</string>

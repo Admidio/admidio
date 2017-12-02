@@ -27,7 +27,7 @@ $getName   = admFuncVariableIsValid($_GET, 'name',   'string');
 $_SESSION['mylist_request'] = $_POST;
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['lists_enable_module'] != 1)
+if (!$gSettingsManager->getBool('lists_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -116,16 +116,19 @@ if ($getMode === 1 || $getMode === 2)
         $_SESSION['mylist_request']['sel_select_configuration'] = $listId;
 
         // go back to mylist configuration
-        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php?lst_id=' . $listId);
+        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/lists/mylist.php', array('lst_id' => $listId)));
         // => EXIT
     }
 
     // weiterleiten zur allgemeinen Listeseite
-    admRedirect(
-        ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php?lst_id=' . $listId .
-        '&mode=html&rol_ids=' . implode(',', array_map('intval', $_POST['sel_roles_ids'])) .
-        '&urt_ids=' . implode(',', $_POST['sel_relationtype_ids'])
-    );
+    admRedirect(safeUrl(
+        ADMIDIO_URL . FOLDER_MODULES.'/lists/lists_show.php',
+        array(
+            'lst_id' => $listId, 'mode' => 'html',
+            'rol_ids' => implode(',', array_map('intval', $_POST['sel_roles_ids'])),
+            'urt_ids' => implode(',', $_POST['sel_relationtype_ids'])
+        )
+    ));
     // => EXIT
 }
 elseif ($getMode === 3)

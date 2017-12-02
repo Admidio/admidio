@@ -23,12 +23,12 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gPreferences['enable_photo_module'] == 2)
+elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -91,10 +91,10 @@ $page = new HtmlPage($headline);
 $page->enableModal();
 
 // add rss feed to photos
-if ($gPreferences['enable_rss'] == 1)
+if ($gSettingsManager->getBool('enable_rss'))
 {
     $page->addRssFile(
-        ADMIDIO_URL.FOLDER_MODULES.'/photos/rss_photos.php?headline='.$getHeadline,
+        safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/rss_photos.php', array('headline' => $getHeadline)),
         $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline))
     );
 }
@@ -110,7 +110,7 @@ if ($photoAlbum->editable())
         function imgrotate(img, direction) {
             $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data) {
                 // Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten
-                $("#img_" + img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr=" + img + "&thumb=1&rand=" + Math.random());
+                $("#img_" + img).attr("src", "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'thumb' => 1)).'&photo_nr=" + img + "&rand=" + Math.random());
                 return false;
             });
         }'
@@ -118,7 +118,7 @@ if ($photoAlbum->editable())
 }
 
 // integrate bootstrap ekko lightbox addon
-if ($gPreferences['photo_show_mode'] == 1)
+if ((int) $gSettingsManager->get('photo_show_mode') === 1)
 {
     $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.css');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.js');
@@ -140,7 +140,7 @@ $page->addJavascript('
     $("#menu_item_upload_photo").attr("data-toggle", "modal");
     $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
     $(".admidio-btn-album-upload").click(function(event) {
-        $.get("'.ADMIDIO_URL.'/adm_program/system/file_upload.php?module=photos&id=" + $(this).attr("data-pho-id"), function(response) {
+        $.get("'.safeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos')).'&id=" + $(this).attr("data-pho-id"), function(response) {
             $(".modal-content").html(response);
             $("#admidio_modal").modal();
         });
@@ -166,7 +166,7 @@ if ($gCurrentUser->editPhotoRight())
 {
     // show link to create new album
     $photosMenu->addItem(
-        'menu_item_new_album', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php?mode=new&amp;pho_id='.$getPhotoId,
+        'menu_item_new_album', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'pho_id' => $getPhotoId)),
         $gL10n->get('PHO_CREATE_ALBUM'), 'add.png'
     );
 
@@ -174,18 +174,18 @@ if ($gCurrentUser->editPhotoRight())
     {
         // show link to upload photos
         $photosMenu->addItem(
-            'menu_item_upload_photo', ADMIDIO_URL.'/adm_program/system/file_upload.php?module=photos&id='.$getPhotoId,
+            'menu_item_upload_photo', safeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)),
             $gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png'
         );
     }
 }
 
 // show link to download photos if enabled
-if ($gPreferences['photo_download_enabled'] == 1 && $photoAlbum->getValue('pho_quantity') > 0)
+if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValue('pho_quantity') > 0)
 {
     // show link to download photos
     $photosMenu->addItem(
-        'menu_item_download_photos', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$getPhotoId,
+        'menu_item_download_photos', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId)),
         $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png'
     );
 }
@@ -194,7 +194,7 @@ if ($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of photos
     $photosMenu->addItem(
-        'menu_item_preferences_photos', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=photos',
+        'menu_item_preferences_photos', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'photos')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }
@@ -210,7 +210,7 @@ while ($phoParentId > 0)
     $photoAlbumParent->readDataById($phoParentId);
 
     // Link zusammensetzen
-    $navilink = '<li><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$photoAlbumParent->getValue('pho_id').'">'.
+    $navilink = '<li><a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $photoAlbumParent->getValue('pho_id'))).'">'.
         $photoAlbumParent->getValue('pho_name').'</a></li>'.$navilink;
 
     // Elternveranst
@@ -237,13 +237,13 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 {
     $photoThumbnailTable = '';
     $firstPhotoNr        = 1;
-    $lastPhotoNr         = $gPreferences['photo_thumbs_page'];
+    $lastPhotoNr         = $gSettingsManager->getInt('photo_thumbs_page');
 
     // Wenn Bild übergeben wurde richtige Albenseite öffnen
     if ($getPhotoNr > 0)
     {
-        $firstPhotoNr = (round(($getPhotoNr - 1) / $gPreferences['photo_thumbs_page'], 0) * $gPreferences['photo_thumbs_page']) + 1;
-        $lastPhotoNr  = $firstPhotoNr + $gPreferences['photo_thumbs_page'] - 1;
+        $firstPhotoNr = (round(($getPhotoNr - 1) / $gSettingsManager->getInt('photo_thumbs_page')) * $gSettingsManager->getInt('photo_thumbs_page')) + 1;
+        $lastPhotoNr  = $firstPhotoNr + $gSettingsManager->getInt('photo_thumbs_page') - 1;
     }
 
     // create thumbnail container
@@ -256,33 +256,33 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
             $photoThumbnailTable .= '<div class="col-sm-6 col-md-3 admidio-album-thumbnail" id="div_image_'.$actThumbnail.'">';
 
                 // Popup window
-                if ($gPreferences['photo_show_mode'] == 0)
+                if ((int) $gSettingsManager->get('photo_show_mode') === 0)
                 {
                     $photoThumbnailTable .= '
                         <img class="thumbnail center-block" id="img_'.$actThumbnail.'" style="cursor: pointer"
-                            onclick="window.open(\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.($gPreferences['photo_show_height'] + 210).', width='.($gPreferences['photo_show_width']+70).',left=162,top=5\')"
-                            src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$actThumbnail.'&thumb=1" alt="'.$actThumbnail.'" />';
+                            onclick="window.open(\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'pho_id' => $getPhotoId)).'\',\'msg\', \'height='.($gSettingsManager->getInt('photo_show_height') + 210).', width='.($gSettingsManager->getInt('photo_show_width')+70).',left=162,top=5\')"
+                            src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" />';
                 }
 
                 // Bootstrap modal with lightbox
-                elseif ($gPreferences['photo_show_mode'] == 1)
+                elseif ((int) $gSettingsManager->get('photo_show_mode') === 1)
                 {
                     $photoThumbnailTable .= '
                         <a data-gallery="admidio-gallery" data-type="image" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'"
-                            href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img
-                            class="center-block thumbnail" id="img_'.$actThumbnail.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;thumb=1" alt="'.$actThumbnail.'" /></a>';
+                            href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'"><img
+                            class="center-block thumbnail" id="img_'.$actThumbnail.'" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" alt="'.$actThumbnail.'" /></a>';
                 }
 
                 // Same window
-                elseif ($gPreferences['photo_show_mode'] == 2)
+                elseif ((int) $gSettingsManager->get('photo_show_mode') === 2)
                 {
                     $photoThumbnailTable .= '
-                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'"><img
-                            class="thumbnail center-block" id="img_'.$actThumbnail.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'&amp;thumb=1" />
+                        <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'pho_id' => $getPhotoId)).'"><img
+                            class="thumbnail center-block" id="img_'.$actThumbnail.'" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail, 'thumb' => 1)).'" />
                         </a>';
                 }
 
-                if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
+                if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module')) || $gSettingsManager->getBool('photo_download_enabled'))
                 {
                     $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$actThumbnail.'">';
                 }
@@ -296,27 +296,27 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                         <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'right\')"><img
                             src="'. THEME_URL. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=pho&amp;element_id=div_image_'.
-                            $actThumbnail.'&amp;database_id='.$actThumbnail.'&amp;database_id_2='.$getPhotoId.'"><img
+                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
+                            'database_id' => $actThumbnail, 'database_id_2' => $getPhotoId)).'"><img
                             src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
 
-                if ($gValidLogin && $gPreferences['enable_ecard_module'] == 1)
+                if ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module'))
                 {
                     $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php?photo_nr='.$actThumbnail.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img
+                        <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/ecards/ecards.php', array('photo_nr' => $actThumbnail, 'pho_id' => $getPhotoId, 'show_page' => $getPhotoNr)).'"><img
                             src="'. THEME_URL. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                 }
 
-                if ($gPreferences['photo_download_enabled'] == 1)
+                if ($gSettingsManager->getBool('photo_download_enabled'))
                 {
                     // show link to download photo
                     $photoThumbnailTable .= '
-                        <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$actThumbnail.'"><img
+                        <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail)).'"><img
                             src="'. THEME_URL. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                 }
 
-                if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled'] == 1)
+                if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module')) || $gSettingsManager->getBool('photo_download_enabled'))
                 {
                     $photoThumbnailTable .= '</div>';
                 }
@@ -326,7 +326,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 
     // the lightbox should be able to go through the whole album, therefore we must
     // integrate links to the photos of the album pages to this page and container but hidden
-    if ($gPreferences['photo_show_mode'] == 1)
+    if ((int) $gSettingsManager->get('photo_show_mode') === 1)
     {
         $photoThumbnailTableShown = false;
 
@@ -344,7 +344,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
             {
                 $page->addHtml('
                     <a class="hidden" data-gallery="admidio-gallery" data-type="image" data-toggle="lightbox" data-title="'.$headline.'"
-                        href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$hiddenPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'">&nbsp;</a>
+                        href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $hiddenPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))).'">&nbsp;</a>
                 ');
             }
         }
@@ -358,11 +358,11 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
     }
 
     // show additional album information
-    $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
+    $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
 
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin') && strlen($photoAlbum->getValue('pho_end')) > 0)
     {
-        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
+        $datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
     }
 
     $page->addHtml('
@@ -385,9 +385,9 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 
     // show page navigations through thumbnails
     $page->addHtml(admFuncGeneratePagination(
-        ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$photoAlbum->getValue('pho_id'),
+        safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $photoAlbum->getValue('pho_id'))),
         (int) $photoAlbum->getValue('pho_quantity'),
-        (int) $gPreferences['photo_thumbs_page'],
+        $gSettingsManager->getInt('photo_thumbs_page'),
         $getPhotoNr,
         true,
         'photo_nr'
@@ -438,7 +438,7 @@ $childPhotoAlbum = new TablePhotos($gDb);
 
 $page->addHtml('<div class="row">');
 
-for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1 && $x < $albumsCount; ++$x)
+for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_per_page') - 1 && $x < $albumsCount; ++$x)
 {
     // Daten in ein Photo-Objekt uebertragen
     $childPhotoAlbum->clear();
@@ -457,17 +457,17 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
         // Album angaben
         if (is_dir($ordner) || $childPhotoAlbum->hasChildAlbums())
         {
-            $albumTitle = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
+            $albumTitle = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
         }
         else
         {
             $albumTitle = $childPhotoAlbum->getValue('pho_name');
         }
 
-        $albumDate = $childPhotoAlbum->getValue('pho_begin', $gPreferences['system_date']);
+        $albumDate = $childPhotoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
         if ($childPhotoAlbum->getValue('pho_end') !== $childPhotoAlbum->getValue('pho_begin'))
         {
-            $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gPreferences['system_date']);
+            $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
         }
 
         $page->addHtml('
@@ -479,10 +479,10 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
         ');
 
         // check if download option is enabled
-        if ($gPreferences['photo_download_enabled'] == 1 && $childPhotoAlbum->getValue('pho_quantity') > 0)
+        if ($gSettingsManager->getBool('photo_download_enabled') && $childPhotoAlbum->getValue('pho_quantity') > 0)
         {
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
+                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
                         src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>
             ');
         }
@@ -491,11 +491,11 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
         if ($gCurrentUser->editPhotoRight())
         {
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode=change"><img
+                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'"><img
                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=panel_pho_'.
-                    $childPhotoAlbum->getValue('pho_id').'&amp;name='.urlencode($childPhotoAlbum->getValue('pho_name')).'&amp;database_id='.$childPhotoAlbum->getValue('pho_id').'"><img
+                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.$childPhotoAlbum->getValue('pho_id'),
+                    'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
                     src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
             ');
         }
@@ -506,8 +506,8 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
-                        <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img
-                            class="thumbnail" src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$shuffleImage['shuffle_pho_id'].'&amp;photo_nr='.$shuffleImage['shuffle_img_nr'].'&amp;thumb=1" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                        <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
+                            class="thumbnail" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">
         ');
@@ -554,7 +554,7 @@ for ($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 
                         data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal"><img
                         src="'. THEME_URL. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
                     </button>
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode='.$lockMode.'\'"><img
+                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'"><img
                         src="'. THEME_URL. '/icons/key.png"  alt="'.$lockBtnName.'" />'.$lockBtnName.'
                     </button>
                 </div>
@@ -575,8 +575,8 @@ if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen(
 }
 
 // If necessary show links to navigate to next and previous albums of the query
-$baseUrl = ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php?pho_id='.$getPhotoId;
-$page->addHtml(admFuncGeneratePagination($baseUrl, $albumsCount, (int) $gPreferences['photo_albums_per_page'], $getStart));
+$baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $albumsCount, $gSettingsManager->getInt('photo_albums_per_page'), $getStart));
 
 // show html of complete page
 $page->show();

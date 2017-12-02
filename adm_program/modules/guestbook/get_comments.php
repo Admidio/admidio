@@ -23,7 +23,7 @@ $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'bool');
 if ($getGbcGboId > 0)
 {
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-    if($gPreferences['enable_guestbook_moderation'] > 0 && $getModeration)
+    if((int) $gSettingsManager->get('enable_guestbook_moderation') > 0 && $getModeration)
     {
         $conditions = ' AND gbc_locked = 1 ';
     }
@@ -71,17 +71,16 @@ if ($getGbcGboId > 0)
                     alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'" /></a>';
             }
             echo '</div>
-            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
+            <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
             // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
             if ($gCurrentUser->editGuestbookRight())
             {
                 echo '
-                <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php?cid='.$gbcId.'"><img
+                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('cid' => $gbcId)).'"><img
                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
-                    $gbcId.'&amp;database_id='.$gbcId.'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name')))).'"><img
+                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcId, 'database_id' => $gbcId, 'database_id_2' => $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'"><img
                     src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
             echo '</div>
@@ -95,9 +94,9 @@ if ($getGbcGboId > 0)
             {
                 echo '
                 <div class="btn-group" role="group">
-                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \'guestbook_function.php?mode=10&id='.$gbcId.'\')"><img
+                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')"><img
                         src="'. THEME_URL. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
-                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \'guestbook_function.php?mode=5&id='.$gbcId.'\')"><img
+                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')"><img
                         src="'. THEME_URL. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
                 </div>';
             }
@@ -114,11 +113,11 @@ if ($getGbcGboId > 0)
             echo '</div>';
         }
 
-        if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1))
+        if (!$getModeration && ($gCurrentUser->commentGuestbookRight() || $gSettingsManager->getBool('enable_gbook_comments4all')))
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
-            <button type="button" class="btn btn-default" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php?id='.$getGbcGboId.'\'"><img
+            <button type="button" class="btn btn-default" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('id' => $getGbcGboId)).'\'"><img
                 src="'. THEME_URL. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
                 title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }

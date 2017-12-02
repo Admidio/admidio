@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gPreferences['enable_rss'] != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -32,12 +32,12 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif ($gPreferences['enable_photo_module'] == 2)
+elseif ((int) $gSettingsManager->get('enable_photo_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -46,7 +46,7 @@ elseif ($gPreferences['enable_photo_module'] == 2)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
 
-if ($gPreferences['system_show_create_edit'] == 1)
+if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
@@ -127,11 +127,11 @@ while ($row = $statement->fetch())
     }
 
     // Inhalt zusammensetzen
-    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
+    $description = $gL10n->get('SYS_DATE').': '.$photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
     // Enddatum nur wenn anders als startdatum
     if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin'))
     {
-        $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gPreferences['system_date'])));
+        $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
     }
     $description .= '<br />'.$gL10n->get('PHO_PHOTOS').': '.$photoAlbum->countImages();
     $description .= '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photoAlbum->getValue('pho_photographers');
@@ -148,9 +148,9 @@ while ($row = $statement->fetch())
             if (is_file($photoPath))
             {
                 $description .=
-                    '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php?pho_id='.$phoId.'&amp;photo_nr='.$photoNr.'"><img
-                    src="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php?pho_id='.$phoId.'&amp;photo_nr='.$photoNr.
-                    '&amp;pho_begin='.$photoAlbum->getValue('pho_begin', 'Y-m-d').'&amp;thumb=1" border="0" /></a>&nbsp;';
+                    '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_presenter.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr)).'"><img
+                    src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $phoId, 'photo_nr' => $photoNr,
+                    'pho_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'), 'thumb' => '1')).'" border="0" /></a>&nbsp;';
             }
         }
     }
@@ -159,7 +159,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $parents . $photoAlbum->getValue('pho_name'),
         $description,
-        ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php?pho_id=' . $phoId,
+        safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('pho_id' => $phoId)),
         $row['create_name'],
         \DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create'))->format('r')
     );

@@ -37,7 +37,7 @@ $getRelationTypeIds   = admFuncVariableIsValid($_GET, 'urt_ids',             'st
 $getFullScreen        = admFuncVariableIsValid($_GET, 'full_screen',         'bool');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['lists_enable_module'] != 1)
+if (!$gSettingsManager->getBool('lists_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -146,18 +146,18 @@ $objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);
 if ($objDateFrom === false)
 {
     // check if date_from  has system format
-    $objDateFrom = \DateTime::createFromFormat($gPreferences['system_date'], $getDateFrom);
+    $objDateFrom = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
 }
-$dateFrom = $objDateFrom->format($gPreferences['system_date']);
+$dateFrom = $objDateFrom->format($gSettingsManager->getString('system_date'));
 $startDateEnglishFormat = $objDateFrom->format('Y-m-d');
 
 $objDateTo = \DateTime::createFromFormat('Y-m-d', $getDateTo);
 if ($objDateTo === false)
 {
     // check if date_from  has system format
-    $objDateTo = \DateTime::createFromFormat($gPreferences['system_date'], $getDateTo);
+    $objDateTo = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
 }
-$dateTo = $objDateTo->format($gPreferences['system_date']);
+$dateTo = $objDateTo->format($gSettingsManager->getString('system_date'));
 $endDateEnglishFormat = $objDateTo->format('Y-m-d');
 
 if($objDateFrom > $objDateTo)
@@ -441,8 +441,7 @@ if ($getMode !== 'csv')
                 if ($(this).val().length > 1) {
                     var result = $(this).val();
                     $(this).prop("selectedIndex", 0);
-                    self.location.href = "'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?" +
-                        "lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=" + result + "&show_former_members='.$getShowFormerMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'";
+                    self.location.href = "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'&mode=" + result;
                 }
             });
 
@@ -452,7 +451,7 @@ if ($getMode !== 'csv')
             });
 
             $("#menu_item_print_view").click(function() {
-                window.open("'.ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&rol_ids='.$getRoleIds.'&mode=print&show_former_members='.$getShowFormerMembers.'&date_from='.$getDateFrom.'&date_to='.$getDateTo.'", "_blank");
+                window.open("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)).'", "_blank");
             });',
             true
         );
@@ -464,13 +463,19 @@ if ($getMode !== 'csv')
 
         if ($getFullScreen)
         {
-            $listsMenu->addItem('menu_item_normal_picture', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_former_members='.$getShowFormerMembers.'&amp;full_screen=false&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
-                $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
+            $listsMenu->addItem(
+                'menu_item_normal_picture',
+                safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'false', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png'
+            );
         }
         else
         {
-            $listsMenu->addItem('menu_item_full_screen', ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php?lst_id='.$getListId.'&amp;rol_ids='.$getRoleIds.'&amp;mode=html&amp;show_former_members='.$getShowFormerMembers.'&amp;full_screen=true&amp;date_from='.$getDateFrom.'&date_to='.$getDateTo.'',
-                $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
+            $listsMenu->addItem(
+                'menu_item_full_screen',
+                safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'true', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
+                $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png'
+            );
         }
 
         // link to print overlay and exports
@@ -483,7 +488,7 @@ if ($getMode !== 'csv')
             {
                 $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
 
-                $listsMenu->addItem('menu_item_assign_members', ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php?rol_id='.$role->getValue('rol_id'),
+                $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $role->getValue('rol_id'))),
                     $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png', 'left', 'menu_item_extras');
             }
         }
@@ -513,7 +518,7 @@ if ($getMode !== 'csv')
         $listsMenu->addForm($form->show(false));
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-        $table->setDatatablesRowsPerPage((int) $gPreferences['lists_members_per_page']);
+        $table->setDatatablesRowsPerPage($gSettingsManager->getInt('lists_members_per_page'));
     }
     else
     {
@@ -744,7 +749,7 @@ foreach ($membersList as $member)
                 // show user photo
                 if ($getMode === 'html' || $getMode === 'print')
                 {
-                    $content = '<img src="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php?usr_id='.$member['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                    $content = '<img src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $member['usr_id'])).'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                 }
                 if ($getMode === 'csv' && $member[$sqlColumnNumber] != null)
                 {
@@ -777,7 +782,7 @@ foreach ($membersList as $member)
                 {
                     // date must be formated
                     $date = \DateTime::createFromFormat('Y-m-d', $member[$sqlColumnNumber]);
-                    $content = $date->format($gPreferences['system_date']);
+                    $content = $date->format($gSettingsManager->getString('system_date'));
                 }
             }
             elseif ($getMode === 'csv'
@@ -829,7 +834,7 @@ foreach ($membersList as $member)
                     || $usfId === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id')))
                 {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $content, $member['usr_id']);
-                    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$member['usr_id'].'">'.$htmlValue.'</a>';
+                    $columnValues[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $member['usr_id'])).'">'.$htmlValue.'</a>';
                 }
                 else
                 {
@@ -867,7 +872,7 @@ foreach ($membersList as $member)
         $dateId      = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php?dat_id=' . $dateId . '&amp;usr_id=' .$member['usr_id'] . '">
+                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
                                     <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
     }
 
@@ -977,7 +982,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Period
             if (strlen($role->getValue('rol_start_date')) > 0)
             {
-                $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date']))));
+                $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))));
             }
 
             // Event
@@ -988,7 +993,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             }
             if (strlen($role->getValue('rol_start_time')) > 0)
             {
-                $value = $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time'])));
+                $value = $gL10n->get('LST_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
             }
             if ($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
             {
@@ -1004,7 +1009,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Member Fee
             if (strlen($role->getValue('rol_cost')) > 0)
             {
-                $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gPreferences['system_currency']);
+                $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency'));
             }
 
             // Fee period

@@ -20,7 +20,7 @@ if (!$gValidLogin)
 }
 
 // check if the call of the page was allowed
-if ($gPreferences['enable_pm_module'] == 0 && $gPreferences['enable_mail_module'] == 0 && $gPreferences['enable_chat_module'] == 0)
+if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module') && !$gSettingsManager->getBool('enable_chat_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -59,7 +59,7 @@ $page->enableModal();
 // get module menu for messages
 $messagesMenu = $page->getMenu();
 // link to write new email
-if ($gPreferences['enable_mail_module'] == 1)
+if ($gSettingsManager->getBool('enable_mail_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
@@ -67,16 +67,16 @@ if ($gPreferences['enable_mail_module'] == 1)
     );
 }
 // link to write new PM
-if ($gPreferences['enable_pm_module'] == 1)
+if ($gSettingsManager->getBool('enable_pm_module'))
 {
     $messagesMenu->addItem(
-        'admMenuItemNewPm', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?msg_type=PM',
+        'admMenuItemNewPm', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
         $gL10n->get('PMS_SEND_PM'), '/pm.png'
     );
 }
 
 // link to Chat
-if ($gPreferences['enable_chat_module'] == 1)
+if ($gSettingsManager->getBool('enable_chat_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',
@@ -87,7 +87,7 @@ if ($gPreferences['enable_chat_module'] == 1)
 if ($gCurrentUser->isAdministrator())
 {
     $messagesMenu->addItem(
-        'admMenuItemPreferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=messages',
+        'admMenuItemPreferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'messages')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }

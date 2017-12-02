@@ -37,7 +37,7 @@ $getLastname  = admFuncVariableIsValid($_POST, 'lastname',  'string', array('req
 $getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('requireValue' => true));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gPreferences['system_search_similar'] == 1 && $gDbType === Database::PDO_ENGINE_MYSQL)
+if($gSettingsManager->getBool('system_search_similar') && $gDbType === Database::PDO_ENGINE_MYSQL)
 {
     $sqlSimilarName = '
         (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(?), 1, 4)     -- $gDb->escapeString($getLastname)
@@ -119,7 +119,7 @@ echo '
                 echo '<hr />';
             }
             echo '<p>
-                <a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usr_id'].'"><img
+                <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'"><img
                     src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />';
 
                 if(strlen($row['address']) > 0)
@@ -140,9 +140,9 @@ echo '
                 }
                 if(strlen($row['email']) > 0)
                 {
-                    if($gPreferences['enable_mail_module'] == 1)
+                    if($gSettingsManager->getBool('enable_mail_module'))
                     {
-                        echo '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a><br />';
+                        echo '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a><br />';
                     }
                     else
                     {
@@ -154,7 +154,7 @@ echo '
             if(!isMember($row['usr_id']))
             {
                 // gefundene User ist noch KEIN Mitglied dieser Organisation
-                $link = ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php?usr_id='.$row['usr_id'];
+                $link = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $row['usr_id']));
 
                 // KEINE Logindaten vorhanden
                 echo '<p>'.$gL10n->get('MEM_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
@@ -171,7 +171,7 @@ echo '
     <div class="panel-body">
         <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
 
-        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'\'"><img
+        <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1, 'lastname' => $getLastname, 'firstname' => $getFirstname)).'\'"><img
             src="'. THEME_URL. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
     </div>
 </div>';

@@ -18,7 +18,7 @@ if (!is_file($pathConfigFile))
 {
     showNotice(
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        'installation.php?step=create_config',
+        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -43,7 +43,7 @@ if (isset($_SESSION['prefix'])
 {
     showNotice(
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        'installation.php?step=create_config',
+        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -55,7 +55,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, 'installation.php?step=create_config', $gL10n->get('SYS_BACK'), 'layout/back.png');
+    showNotice($sqlQueryResult, safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'layout/back.png');
     // => EXIT
 }
 
@@ -81,7 +81,8 @@ $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be fi
 $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 
 // create all modules components
-$sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com_version, com_beta)
+$sql = 'INSERT INTO '.TBL_COMPONENTS.'
+               (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES (\'MODULE\', \'ANN_ANNOUNCEMENTS\',       \'ANNOUCEMENTS\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'BAC_DATABASE_BACKUP\',     \'BACKUP\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_CATEGORIES\',          \'CATEGORIES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -101,28 +102,33 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com
 $db->query($sql); // TODO add more params
 
 // create organization independent categories
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+$sql = 'INSERT INTO '.TBL_CATEGORIES.'
+               (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 1, 1, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdMasterData = $db->lastInsertId();
 
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+$sql = 'INSERT INTO '.TBL_CATEGORIES.'
+               (cat_org_id, cat_type, cat_name_intern, cat_name, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 2, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 $categoryIdSocialNetworks = $db->lastInsertId();
 
-$sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+$sql = 'INSERT INTO '.TBL_CATEGORIES.'
+               (cat_org_id, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 3, ?, ?) -- $currUsrId, DATETIME_NOW';
 $db->queryPrepared($sql, array($currUsrId, DATETIME_NOW));
 
 // create roles rights
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table)
+$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
+               (ror_name_intern, ror_table)
         VALUES (\'folder_view\',   \'adm_folders\')
              , (\'folder_upload\', \'adm_folders\')';
 $db->queryPrepared($sql);
 
 // create profile fields of category master data
-$sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+$sql = 'INSERT INTO '.TBL_USER_FIELDS.'
+               (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
         VALUES ('.$categoryIdMasterData.', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, NULL, 1, 1, 1, 1,  '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, NULL, 1, 1, 1, 2,  '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, NULL, 0, 0, 0, 3,  '.$currUsrId.', \''. DATETIME_NOW.'\')
@@ -140,7 +146,8 @@ female.png|SYS_FEMALE\', 0, 0, 0, 11, '.$currUsrId.', \''. DATETIME_NOW.'\')
 $db->query($sql); // TODO add more params
 
 // create profile fields of category social networks
-$sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+$sql = 'INSERT INTO '.TBL_USER_FIELDS.'
+               (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
         VALUES ('.$categoryIdSocialNetworks.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \'INS_AOL_INSTANT_MESSENGER\', NULL,                              \'aim.png\',         NULL,                                             0, 1, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'FACEBOOK\',              \'INS_FACEBOOK\',    \''.$gL10n->get('INS_FACEBOOK_DESC').'\',    \'facebook.png\',    \'https://www.facebook.com/#user_content#\',      0, 2, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'GOOGLE_PLUS\',           \'INS_GOOGLE_PLUS\', \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\', \'google_plus.png\', \'https://plus.google.com/#user_content#/posts\', 0, 3, '.$currUsrId.', \''. DATETIME_NOW.'\')
@@ -152,7 +159,8 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.' (usf_cat_id, usf_type, usf_name_intern, 
 $db->query($sql); // TODO add more params
 
 // create user relation types
-$sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.' (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
+$sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.'
+               (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
         VALUES (1, \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',          null, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , (2, \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , (3, \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$currUsrId.', \''. DATETIME_NOW.'\')
@@ -202,11 +210,13 @@ $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordH
 $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
 // create all necessary data for this organization
-$gCurrentOrganization->setPreferences($defaultOrgPreferences, false);
+$settingsManager =& $gCurrentOrganization->getSettingsManager();
+$settingsManager->setMutli($defaultOrgPreferences, false);
 $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
 // create default room for room module in database
-$sql = 'INSERT INTO '.TBL_ROOMS.' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
+$sql = 'INSERT INTO '.TBL_ROOMS.'
+               (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
         VALUES (?, ?, 15, ?, ?) -- $gL10n->get(\'INS_CONFERENCE_ROOM\'), $gL10n->get(\'INS_DESCRIPTION_CONFERENCE_ROOM\'), $currUsrId, DATETIME_NOW';
 $params = array(
     $gL10n->get('INS_CONFERENCE_ROOM'),

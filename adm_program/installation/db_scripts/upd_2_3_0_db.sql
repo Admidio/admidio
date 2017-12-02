@@ -264,7 +264,7 @@ UPDATE %PREFIX%_categories SET cat_name = 'SYS_COMMON', cat_name_intern = 'COMMO
 UPDATE %PREFIX%_categories SET cat_name = 'INS_GROUPS', cat_name_intern = 'GROUPS' WHERE cat_name_intern IN ('GROUPS', 'GRUPPEN');
 UPDATE %PREFIX%_categories SET cat_name = 'INS_COURSES', cat_name_intern = 'COURSES' WHERE cat_name_intern IN ('COURSES', 'KURSE');
 UPDATE %PREFIX%_categories SET cat_name = 'INS_TEAMS', cat_name_intern = 'TEAMS' WHERE cat_name_intern IN ('TEAMS', 'MANNSCHAFTEN');
-UPDATE %PREFIX%_categories SET cat_name = 'SYS_CONFIRMATION_OF_PARTICIPATION' WHERE cat_name_intern = 'CONFIRMATION_OF_PARTICIPATION';
+UPDATE %PREFIX%_categories SET cat_name = 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION' WHERE cat_name_intern = 'CONFIRMATION_OF_PARTICIPATION';
 UPDATE %PREFIX%_categories SET cat_name = 'INS_INTERN' WHERE cat_name_intern = 'INTERN';
 UPDATE %PREFIX%_categories SET cat_name = 'INS_TRAINING' WHERE cat_name_intern = 'TRAINING';
 UPDATE %PREFIX%_categories SET cat_name = 'INS_ADDIDIONAL_DATA', cat_name_intern = 'ADDIDIONAL_DATA' WHERE cat_name_intern IN ('ADDIDIONAL_DATA', 'ZUSÄTZLICHE_DATEN');

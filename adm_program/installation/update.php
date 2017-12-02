@@ -59,7 +59,7 @@ catch (AdmException $e)
 {
     showNotice(
         $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-        'installation.php?step=connect_database',
+        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -88,16 +88,16 @@ if ($currOrgId === 0)
 }
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
-$gPreferences = $gCurrentOrganization->getPreferences();
+$gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
 $gProfileFields = new ProfileFields($gDb, $currOrgId);
 
 // create language and language data object to handle translations
-if (!isset($gPreferences['system_language']))
+if ($gSettingsManager->has('system_language'))
 {
-    $gPreferences['system_language'] = 'de';
+    $gSettingsManager->set('system_language', 'de');
 }
-$gLanguageData = new LanguageData($gPreferences['system_language']);
+$gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
 
 // config.php exists at wrong place
@@ -140,10 +140,10 @@ $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
 if (!$gDb->queryPrepared($sql, array(), false))
 {
     // in Admidio version 2 the database version was stored in preferences table
-    if (isset($gPreferences['db_version']))
+    if ($gSettingsManager->has('db_version'))
     {
-        $installedDbVersion     = $gPreferences['db_version'];
-        $installedDbBetaVersion = $gPreferences['db_version_beta'];
+        $installedDbVersion     = $gSettingsManager->getString('db_version');
+        $installedDbBetaVersion = $gSettingsManager->getInt('db_version_beta');
     }
 }
 else
@@ -197,7 +197,7 @@ if ($getMode === 1)
     || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep))
     {
         // create a page with the notice that the installation must be configured on the next pages
-        $form = new HtmlFormInstallation('update_login_form', 'update.php?mode=2');
+        $form = new HtmlFormInstallation('update_login_form', safeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
         $form->setUpdateModus();
         $form->setFormDescription('<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>');
 
@@ -356,8 +356,9 @@ elseif ($getMode === 2)
     while($orgId = $orgaStatement->fetchColumn())
     {
         $organization = new Organization($gDb, $orgId);
-        $organization->setPreferences($defaultOrgPreferences, false);
-        $organization->setPreferences($updateOrgPreferences, true);
+        $settingsManager =& $gCurrentOrganization->getSettingsManager();
+        $settingsManager->setMulti($defaultOrgPreferences, false);
+        $settingsManager->setMulti($updateOrgPreferences);
     }
 
     if ($gDbType === Database::PDO_ENGINE_MYSQL)

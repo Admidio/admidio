@@ -21,7 +21,7 @@ unset($_SESSION['import_request']);
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
 
 // if only active members should be shown then set parameter
-if($gPreferences['members_show_all_users'] == 0)
+if(!$gSettingsManager->getBool('members_show_all_users'))
 {
     $getMembers = true;
 }
@@ -52,7 +52,7 @@ $page->addJavascript('
 
     // change mode of users that should be shown
     $("#mem_show_all").click(function() {
-        window.location.replace("'.ADMIDIO_URL.FOLDER_MODULES.'/members/members.php?members='.(int) $flagShowMembers.'");
+        window.location.replace("'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members.php', array('members' => $flagShowMembers)).'");
     });', true);
 
 // get module menu
@@ -63,7 +63,7 @@ $membersAdministrationMenu->addItem(
     $gL10n->get('MEM_CREATE_USER'), 'add.png'
 );
 
-if($gPreferences['profile_log_edit_fields'] == 1)
+if($gSettingsManager->getBool('profile_log_edit_fields'))
 {
     // show link to view profile field change history
     $membersAdministrationMenu->addItem(
@@ -73,7 +73,7 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 }
 
 // show checkbox to select all users or only active members
-if($gPreferences['members_show_all_users'] == 1)
+if($gSettingsManager->getBool('members_show_all_users'))
 {
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, array('type' => 'navbar', 'setFocus' => false));
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
@@ -96,7 +96,7 @@ if($gCurrentUser->isAdministrator())
         $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras'
     );
 
-    if($gPreferences['members_enable_user_relations'] == 1)
+    if($gSettingsManager->getBool('members_enable_user_relations'))
     {
         // show link to relation types
         $membersAdministrationMenu->addItem(
@@ -107,7 +107,7 @@ if($gCurrentUser->isAdministrator())
 
     // show link to system preferences of weblinks
     $membersAdministrationMenu->addItem(
-        'menu_item_preferences_links', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=user_management',
+        'menu_item_preferences_links', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'user_management')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
     );
 }
@@ -131,11 +131,11 @@ $columnHeading = array(
     '&nbsp;'
 );
 
-$membersTable->setServerSideProcessing(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php?members='.(int) $getMembers);
+$membersTable->setServerSideProcessing(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_data.php', array('members' => $getMembers)));
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $membersTable->disableDatatablesColumnsSort(array(1, count($columnHeading))); // disable sort in last column
 $membersTable->addRowHeadingByArray($columnHeading);
-$membersTable->setDatatablesRowsPerPage((int) $gPreferences['members_users_per_page']);
+$membersTable->setDatatablesRowsPerPage($gSettingsManager->getInt('members_users_per_page'));
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
 $page->addHtml($membersTable->show());

@@ -24,7 +24,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gPreferences['enable_rss'] != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -32,7 +32,7 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_guestbook_module'] != 1)
+if ((int) $gSettingsManager->get('enable_guestbook_module') !== 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -73,7 +73,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $guestbook->getValue('gbo_name'),
         $guestbook->getValue('gbo_text'),
-        ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php?id=' . (int) $guestbook->getValue('gbo_id'),
+        safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $guestbook->getValue('gbo_id'))),
         $guestbook->getValue('gbo_name'),
         \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create'))->format('r')
     );

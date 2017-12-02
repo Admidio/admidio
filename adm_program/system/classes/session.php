@@ -164,7 +164,7 @@ class Session extends TableAccess
      */
     public function isValidLogin($userId)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         if ($userId > 0)
         {
@@ -175,7 +175,7 @@ class Session extends TableAccess
 
                 // Check how long the user was inactive. If time range is to long -> logout
                 // if user has auto login than session is also valid
-                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gPreferences['logout_minutes'] * 60)
+                if ($this->mAutoLogin instanceof AutoLogin || $timeGap < $gSettingsManager->getInt('logout_minutes') * 60)
                 {
                     return true;
                 }
@@ -454,25 +454,27 @@ class Session extends TableAccess
     }
 
     /**
-     * @param string $name     The prefix name of the Cookie.
-     * @param int    $limit    The Lifetime (Seconds) of the cookie when it should expire.
-     *                         With "0" the cookie will expire if the session ends. (When Browser gets closed)
-     * @param string $path     Specify the path where the cookie should be available. (Also in sub-paths)
-     * @param string $domain   Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
-     * @param bool   $secure   If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
-     * @param bool   $httpOnly If "true" cookie is accessible only via HTTP.
-     *                         Set to "false" to allow access for JavaScript. (Possible XSS security leak)
+     * @param string $cookiePrefix The prefix name of the Cookie.
+     * @param int    $limit        The Lifetime (Seconds) of the cookie when it should expire.
+     *                             With "0" the cookie will expire if the session ends. (When Browser gets closed)
+     * @param string $path         Specify the path where the cookie should be available. (Also in sub-paths)
+     * @param string $domain       Specify the domain where the cookie should be available. (Set ".example.org" to allow sub-domains)
+     * @param bool   $secure       If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
+     * @param bool   $httpOnly     If "true" cookie is accessible only via HTTP.
+     *                             Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      */
-    public static function start($name, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
+    public static function start($cookiePrefix, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
         global $gLogger, $gSetCookieForDomain;
 
+        $sessionName = $cookiePrefix . '_SESSION_ID';
+
         // Set the cookie name
-        session_name($name . '_PHP_SESSION_ID');
+        session_name($sessionName);
 
         if ($path === '')
         {
-            if($gSetCookieForDomain)
+            if ($gSetCookieForDomain)
             {
                 $path = '/';
             }
@@ -507,7 +509,7 @@ class Session extends TableAccess
         // Start session
         session_start();
 
-        $gLogger->info('Session Started!', array('name' => $name . '_PHP_SESSION_ID', 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sessionId' => session_id()));
+        $gLogger->info('Session Started!', array('name' => $sessionName, 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sessionId' => session_id()));
     }
 
     /**

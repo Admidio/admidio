@@ -11,7 +11,7 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // check if module is active
-if($gPreferences['registration_enable_module'] == 0)
+if(!$gSettingsManager->getBool('registration_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -20,7 +20,7 @@ if($gPreferences['registration_enable_module'] == 0)
 // if there is no login then show a profile form where the user can register himself
 if(!$gValidLogin)
 {
-    admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php?new_user=2');
+    admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '2')));
     // => EXIT
 }
 
@@ -81,7 +81,7 @@ if($gCurrentUser->isAdministrator())
 
     // show link to system preferences of announcements
     $registrationMenu->addItem(
-        'menu_item_preferences', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=registration',
+        'menu_item_preferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'registration')),
         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
     );
 }
@@ -102,11 +102,11 @@ $table->addRowHeadingByArray($columnHeading);
 while($row = $usrStatement->fetch())
 {
     $timestampCreate = \DateTime::createFromFormat('Y-m-d H:i:s', $row['reg_timestamp']);
-    $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $datetimeCreate  = $timestampCreate->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
-    if($gPreferences['enable_mail_module'] == 1)
+    if($gSettingsManager->getBool('enable_mail_module'))
     {
-        $mailLink = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
+        $mailLink = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a>';
     }
     else
     {
@@ -115,15 +115,14 @@ while($row = $usrStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>',
+        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['last_name'].', '.$row['first_name'].'</a>',
         $datetimeCreate,
         $row['usr_login_name'],
         $mailLink,
-        '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php?new_user_id='.$row['usr_id'].'"><img
+        '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_id' => $row['usr_id'])).'"><img
             src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
-            $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img
+            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_id'])).'"><img
             src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
 
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);

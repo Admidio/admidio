@@ -234,14 +234,14 @@ if($numberBirthdays > 0)
                 // Namen mit Alter und Mail-Link anzeigen
                 if($gValidLogin)
                 {
-                    $plgShowName = '<a href="'. ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php?user_id='. $row['usr_id']. '"
+                    $plgShowName = '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['usr_id'])) . '"
                         target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plgShowName. '</a>';
 
                     // E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
                     if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
                     {
                         $plgShowName .= '
-                            <a class="admidio-icon-link" href="'. ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php?usr_id='. $row['usr_id']. '"><img
+                            <a class="admidio-icon-link" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('usr_id' => $row['usr_id'])) . '"><img
                             src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
                     }
                 }
@@ -296,7 +296,7 @@ if($numberBirthdays > 0)
                         }
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
                         echo '<li><span id="'.$plgCssClass.'">'.
-                            $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthayDate->format($gPreferences['system_date']))).
+                            $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthayDate->format($gSettingsManager->getString('system_date')))).
                         '</span></li>';
                     }
                 }

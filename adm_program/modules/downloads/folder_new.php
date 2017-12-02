@@ -21,7 +21,7 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'int', array('requireV
 $headline = $gL10n->get('DOW_CREATE_FOLDER');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_download_module'] != 1)
+if (!$gSettingsManager->getBool('enable_download_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -72,7 +72,7 @@ $folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 
 // show form
-$form = new HtmlForm('new_folder_form', ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId, $page);
+$form = new HtmlForm('new_folder_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '3', 'folder_id' => $getFolderId)), $page);
 $form->addInput(
     'new_folder', $gL10n->get('SYS_NAME'), $formValues['new_folder'],
     array('maxLength' => 255, 'property' => HtmlForm::FIELD_REQUIRED)

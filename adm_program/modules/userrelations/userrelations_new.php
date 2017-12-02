@@ -18,7 +18,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 // Initialize and check the parameters
 $getUsrId = admFuncVariableIsValid($_GET, 'usr_id', 'int');
 
-if ($gPreferences['members_enable_user_relations'] == 0)
+if (!$gSettingsManager->getBool('members_enable_user_relations'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -65,7 +65,7 @@ $relationEditMenu = $page->getMenu();
 $relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('relation_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php?usr_id='.$getUsrId.'&amp;mode=1', $page);
+$form = new HtmlForm('relation_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('usr_id' => $getUsrId, 'mode' => '1')), $page);
 
 $form->addInput(
     'usr_id', $gL10n->get('SYS_USER'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'),

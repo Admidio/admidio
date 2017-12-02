@@ -141,7 +141,7 @@ define('TBL_MENU',                $g_tbl_praefix . '_menu');
 
 // create an installation unique cookie prefix and remove special characters
 $cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
-$cookiePrefix = str_replace(array(' ', '.', ',', ';', ':', '[', ']'), '_', $cookiePrefix);
+$cookiePrefix = preg_replace('/\W/', '_', $cookiePrefix);
 define('COOKIE_PREFIX', $cookiePrefix);
 
 // constants for column rol_leader_rights

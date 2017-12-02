@@ -28,7 +28,7 @@ $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role',  'bool', array('d
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['lists_enable_module'] != 1)
+if (!$gSettingsManager->getBool('lists_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -458,7 +458,7 @@ $javascriptCode .= '
 
     function loadList() {
         var listId = $("#sel_select_configuration").val();
-        self.location.href = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php?lst_id=" + listId + "&active_role='.$getActiveRole.'";
+        self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => $getActiveRole)) . '&lst_id=" + listId;
     }
 
     /**
@@ -477,12 +477,12 @@ $javascriptCode .= '
 
         switch (mode) {
             case "show":
-                myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?mode=2";
+                myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('mode' => 2)).'";
                 myListConfigForm.submit();
                 break;
 
             case "save":
-                myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
+                myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 1)).'";
                 myListConfigForm.submit();
                 break;
 
@@ -490,7 +490,7 @@ $javascriptCode .= '
                 var listName = "";
                 listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
                 if (listName !== "") {
-                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?mode=1&name=" + listName;
+                    myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('mode' => 1)) . '&name=" + listName;
                     myListConfigForm.submit();
                 }
                 break;
@@ -498,7 +498,7 @@ $javascriptCode .= '
             case "delete":
                 var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                 if (msg_result) {
-                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
+                    myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 3)).'";
                     myListConfigForm.submit();
                 }
                 break;
@@ -506,7 +506,7 @@ $javascriptCode .= '
             case "system":
                 var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                 if (msg_result) {
-                    myListConfigForm.action = "' . ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
+                    myListConfigForm.action = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist_function.php', array('lst_id' => $getListId, 'mode' => 4)).'";
                     myListConfigForm.submit();
                 }
                 break;
@@ -533,7 +533,7 @@ $myListMenu = $page->getMenu();
 // show link to system preferences of roles
 if($gCurrentUser->isAdministrator())
 {
-    $myListMenu->addItem('admMenuItemPreferencesLists', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php?show_option=lists',
+    $myListMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
@@ -599,7 +599,7 @@ foreach($configurations as $configuration)
         else
         {
             // now add configuration to array
-            $configurationsArray[] = array($configuration['lst_id'], $objListTimestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']), $actualGroup);
+            $configurationsArray[] = array($configuration['lst_id'], $objListTimestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')), $actualGroup);
         }
     }
     else
@@ -631,7 +631,7 @@ if($gCurrentUser->isAdministrator())
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.ADMIDIO_URL.'/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true">
+                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => 'mylist_condition', 'inline' => 'true')).'">
                         <img src="'.THEME_URL.'/icons/help.png" alt="Help" />
                     </a>
                 </th>
@@ -717,7 +717,7 @@ else
 $form->addSelectBoxFromSql('sel_roles_ids', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $formValues['sel_roles_ids'], 'multiselect' => true));
 
-if ($gPreferences['members_enable_user_relations'] == 1)
+if ($gSettingsManager->getBool('members_enable_user_relations'))
 {
     // select box showing all relation types
     $sql = 'SELECT urt_id, urt_name, urt_name

@@ -75,8 +75,8 @@ class Component extends TableAccess
                 array('versionDB' => $dbVersion, 'versionFileSystem' => $filesystemVersion)
             );
 
-            throw new AdmException('SYS_DATABASE_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="' . ADMIDIO_URL . '/adm_program/installation/update.php">', '</a>');
+            throw new AdmException('SYS_DATABASE_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
+                                   '<a href="' . ADMIDIO_URL . '/adm_program/installation/update.php">', '</a>'));
         }
         elseif ($returnCode === 1) // filesystem has minor version
         {
@@ -85,8 +85,8 @@ class Component extends TableAccess
                 array('versionDB' => $dbVersion, 'versionFileSystem' => $filesystemVersion)
             );
 
-            throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', $dbVersion, ADMIDIO_VERSION_TEXT,
-                                   '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>');
+            throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
+                                   '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
         }
     }
 }

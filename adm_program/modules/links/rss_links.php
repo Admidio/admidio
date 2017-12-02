@@ -21,7 +21,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('LNK_WEBLINKS')));
 
 // Check if RSS is active...
-if ($gPreferences['enable_rss'] != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -29,14 +29,14 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if module is active or is public
-if ($gPreferences['enable_weblinks_module'] != 1)
+if ((int) $gSettingsManager->get('enable_weblinks_module') !== 1)
 {
     // disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
-if($gPreferences['system_show_create_edit'] == 1)
+if((int) $gSettingsManager->get('system_show_create_edit') === 1)
 {
     // show firstname and lastname of create and last change user
     $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
@@ -101,7 +101,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $weblink->getValue('lnk_name'),
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
-        ADMIDIO_URL. FOLDER_MODULES.'/links/links.php?id='. (int) $weblink->getValue('lnk_id'),
+        safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => $weblink->getValue('lnk_id'))),
         $row['create_name'],
         \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create'))->format('r')
     );

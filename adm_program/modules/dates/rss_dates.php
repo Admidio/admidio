@@ -27,7 +27,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ($gPreferences['enable_rss'] != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -35,7 +35,7 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_dates_module'] != 1)
+if ((int) $gSettingsManager->get('enable_dates_module') !== 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -71,8 +71,8 @@ if ($datesResult['numResults'] > 0)
         $date->setArray($row);
 
         $dateId       = (int) $date->getValue('dat_id');
-        $dateFrom     = $date->getValue('dat_begin', $gPreferences['system_date']);
-        $dateTo       = $date->getValue('dat_end', $gPreferences['system_date']);
+        $dateFrom     = $date->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+        $dateTo       = $date->getValue('dat_end', $gSettingsManager->getString('system_date'));
         $dateLocation = $date->getValue('dat_location');
 
         // set data for attributes of this entry
@@ -90,13 +90,13 @@ if ($datesResult['numResults'] > 0)
 
         if ($date->getValue('dat_all_day') == 0)
         {
-            $descDateFrom .= ' ' . $date->getValue('dat_begin', $gPreferences['system_time']) . ' ' . $gL10n->get('SYS_CLOCK');
+            $descDateFrom .= ' ' . $date->getValue('dat_begin', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
 
             if ($dateFrom !== $dateTo)
             {
                 $descDateTo = $dateTo . ' ';
             }
-            $descDateTo  .= ' ' . $date->getValue('dat_end', $gPreferences['system_time']) . ' ' . $gL10n->get('SYS_CLOCK');
+            $descDateTo  .= ' ' . $date->getValue('dat_end', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
             $description = $gL10n->get('SYS_DATE_FROM_TO', array($descDateFrom, $descDateTo));
         }
         else
@@ -115,13 +115,13 @@ if ($datesResult['numResults'] > 0)
         $description .= '<br /><br />' . $date->getValue('dat_description');
 
         // i-cal downloadlink
-        $description .= '<br /><br /><a href="' . ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php?dat_id=' . $dateId . '&mode=6">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
+        $description .= '<br /><br /><a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => '6')).'">' . $gL10n->get('DAT_ADD_DATE_TO_CALENDAR') . '</a>';
 
         // add entry to RSS feed
         $rss->addItem(
             $title,
             $description,
-            ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?id=' . $dateId . '&view=detail',
+            safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('id' => $dateId, 'view' => 'detail')),
             $row['create_name'],
             \DateTime::createFromFormat('Y-m-d H:i:s', $date->getValue('dat_timestamp_create'))->format('r')
         );

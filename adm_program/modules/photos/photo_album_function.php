@@ -25,7 +25,7 @@ $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'int');
 $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireValue' => true, 'validValues' => array('new', 'change', 'delete', 'lock', 'unlock')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     // check if the module is activated
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -75,10 +75,10 @@ if ($getMode === 'new' || $getMode === 'change')
     // Beginn
     if (strlen($_POST['pho_begin']) > 0)
     {
-        $startDate = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['pho_begin']);
+        $startDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['pho_begin']);
         if ($startDate === false)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gPreferences['system_date'])));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_START'), $gSettingsManager->getString('system_date'))));
             // => EXIT
         }
         else
@@ -95,10 +95,10 @@ if ($getMode === 'new' || $getMode === 'change')
     // Ende
     if (strlen($_POST['pho_end']) > 0)
     {
-        $endDate = \DateTime::createFromFormat($gPreferences['system_date'], $_POST['pho_end']);
+        $endDate = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $_POST['pho_end']);
         if ($endDate === false)
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gPreferences['system_date'])));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', array($gL10n->get('SYS_END'), $gSettingsManager->getString('system_date'))));
             // => EXIT
         }
         else
@@ -146,7 +146,7 @@ if ($getMode === 'new' || $getMode === 'change')
 
             // der entsprechende Ordner konnte nicht angelegt werden
             $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-            $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>')));
+            $gMessage->show($gL10n->get($error['text'], array($error['path'], '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
             // => EXIT
         }
 
@@ -156,7 +156,7 @@ if ($getMode === 'new' || $getMode === 'change')
             $notification = new Email();
             try
             {
-                $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'])));
+                $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', array($gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gSettingsManager->getString('system_date'))));
                 $notification->adminNotification($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
             }
             catch (AdmException $e)
@@ -182,7 +182,7 @@ if ($getMode === 'new' || $getMode === 'change')
             if (!$returnValue)
             {
                 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
-                $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>')));
+                $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
                 // => EXIT
             }
         }
@@ -196,7 +196,7 @@ if ($getMode === 'new' || $getMode === 'change')
 
     if ($getMode === 'new')
     {
-        admRedirect(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php?pho_id=' . $getPhotoId);
+        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)));
         // => EXIT
     }
     else

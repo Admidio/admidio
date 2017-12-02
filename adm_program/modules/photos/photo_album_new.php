@@ -23,7 +23,7 @@ $getMode    = admFuncVariableIsValid($_GET, 'mode',   'string', array('requireVa
 $photoAlbumsArray = array(0 => $gL10n->get('PHO_PHOTO_ALBUMS'));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_photo_module'] == 0)
+if ((int) $gSettingsManager->get('enable_photo_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -128,7 +128,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('photo_album_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
+$form = new HtmlForm('photo_album_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $getPhotoId, 'mode' => $getMode)), $page);
 $form->addInput(
     'pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 50)

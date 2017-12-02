@@ -109,7 +109,7 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_enable_module'] == 0)
+        if(!$gSettingsManager->getBool('registration_enable_module'))
         {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
             // => EXIT
@@ -155,7 +155,7 @@ $profileEditMenu = $page->getMenu();
 $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // create html form
-$form = new HtmlForm('edit_profile_form', ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser, $page);
+$form = new HtmlForm('edit_profile_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id', $getUserId, 'new_user' => $getNewUser)), $page);
 
 // *******************************************************************************
 // Loop over all categories and profile fields
@@ -235,7 +235,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     );
 
                     // show selectbox with all organizations of database
-                    if($gPreferences['system_organization_select'] == 1)
+                    if($gSettingsManager->getBool('system_organization_select'))
                     {
                         $sql = 'SELECT org_id, org_longname
                                   FROM '.TBL_ORGANIZATIONS.'
@@ -258,7 +258,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='.$getUserId.'"><img src="'. THEME_URL. '/icons/key.png"
+                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'"><img src="'. THEME_URL. '/icons/key.png"
                                 alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
@@ -314,9 +314,9 @@ foreach($gProfileFields->getProfileFields() as $field)
                 $arrListValues = $gL10n->getCountries();
                 $defaultValue  = null;
 
-                if((int) $user->getValue('usr_id') === 0 && strlen($gPreferences['default_country']) > 0)
+                if((int) $user->getValue('usr_id') === 0 && strlen($gSettingsManager->getString('default_country')) > 0)
                 {
-                    $defaultValue = $gPreferences['default_country'];
+                    $defaultValue = $gSettingsManager->getString('default_country');
                 }
                 elseif($user->getValue('usr_id') > 0 && strlen($user->getValue($usfNameIntern)) > 0)
                 {
@@ -436,7 +436,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 $form->closeGroupBox();
 
 // if captchas are enabled then visitors of the website must resolve this
-if($getNewUser === 2 && $gPreferences['enable_registration_captcha'] == 1)
+if($getNewUser === 2 && $gSettingsManager->getBool('enable_registration_captcha'))
 {
     $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');

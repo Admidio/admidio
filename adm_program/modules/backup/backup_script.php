@@ -38,7 +38,7 @@ if($gDbType !== Database::PDO_ENGINE_MYSQL)
 $gDb->queryPrepared('SET SQL_MODE = \'\'');
 
 // Some Defines
-define('ADMIN_EMAIL', $gPreferences['email_administrator']); // eg: admin@example.com
+define('ADMIN_EMAIL', $gSettingsManager->getString('email_administrator')); // eg: admin@example.com
 
 define('BACKTICKCHAR',             '`');
 define('QUOTECHAR',                '\'');
@@ -576,7 +576,7 @@ else
 echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.
     $gL10n->get('BAC_BACKUP_COMPLETED', array(FormattedTimeRemaining(getmicrotime() - $starttime, 2))).'.</strong><br /><br />
 
-'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/backup/backup_file_function.php', array('job' => 'get_file', 'filename' => basename($newfullfilename))).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';
 
 OutputInformation('cancel_link', '');

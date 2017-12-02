@@ -135,7 +135,7 @@ class ProfileFields
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
-        global $gPreferences, $gL10n;
+        global $gSettingsManager, $gL10n;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
@@ -168,7 +168,7 @@ class ProfileFields
                         $date = \DateTime::createFromFormat('Y-m-d', $value);
                         if ($date instanceof \DateTime)
                         {
-                            $htmlValue = $date->format($gPreferences['system_date']);
+                            $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
                     }
                     break;
@@ -176,7 +176,7 @@ class ProfileFields
                     // the value in db is only the position, now search for the text
                     if ($value !== '')
                     {
-                        if ($gPreferences['enable_mail_module'] != 1)
+                        if (!$gSettingsManager->getBool('enable_mail_module'))
                         {
                             $emailLink = 'mailto:' . $value;
                         }
@@ -188,7 +188,7 @@ class ProfileFields
                                 $value2 = $this->mUserId;
                             }
 
-                            $emailLink = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php?usr_id=' . $value2;
+                            $emailLink = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('usr_id' => $value2));
                         }
                         if (strlen($value) > 30)
                         {
@@ -212,7 +212,7 @@ class ProfileFields
                     {
                         // if value is imagefile or imageurl then show image
                         if ($usfType === 'RADIO_BUTTON'
-                        && (admStrEndsWith(admStrToLower($listValue), '.png') || admStrEndsWith(admStrToLower($listValue), '.jpg')))
+                        && (admStrContains(admStrToLower($listValue), '.png') || admStrContains(admStrToLower($listValue), '.jpg')))
                         {
                             // if there is imagefile and text separated by | then explode them
                             if (strpos($listValue, '|') > 0)
@@ -300,7 +300,7 @@ class ProfileFields
                 {
                     // facebook has two different profile urls (id and facebook name),
                     // we could only store one way in database (facebook name) and the other (id) is defined here
-                    $htmlValue = '<a href="https://www.facebook.com/profile.php?id=' . $value . '" target="_blank">' . $htmlValue . '</a>';
+                    $htmlValue = '<a href="' . safeUrl('https://www.facebook.com/profile.php', array('id' => $value)) . '" target="_blank">' . $htmlValue . '</a>';
                 }
                 else
                 {
@@ -346,7 +346,7 @@ class ProfileFields
      */
     public function getValue($fieldNameIntern, $format = '')
     {
-        global $gL10n, $gPreferences;
+        global $gL10n, $gSettingsManager;
 
         $value = '';
 
@@ -387,7 +387,7 @@ class ProfileFields
                             // if no format or html is set then show date format from Admidio settings
                             if ($format === '' || $format === 'html')
                             {
-                                $value = $date->format($gPreferences['system_date']);
+                                $value = $date->format($gSettingsManager->getString('system_date'));
                             }
                             else
                             {
@@ -538,7 +538,7 @@ class ProfileFields
      */
     public function setValue($fieldNameIntern, $fieldValue)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
@@ -558,7 +558,7 @@ class ProfileFields
                     break;
                 case 'DATE':
                     // Datum muss gueltig sein und formatiert werden
-                    $date = \DateTime::createFromFormat($gPreferences['system_date'], $fieldValue);
+                    $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValue);
                     if ($date === false)
                     {
                         $date = \DateTime::createFromFormat('Y-m-d', $fieldValue);

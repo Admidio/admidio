@@ -16,7 +16,7 @@ $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // "systemmail" and "request password" must be activated
-if($gPreferences['enable_system_mails'] == 0 || $gPreferences['enable_password_recovery'] == 0)
+if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -34,7 +34,7 @@ if(!empty($_POST['recipient_email']))
     try
     {
         // if user is not logged in and captcha is activated then check captcha
-        if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+        if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
         {
             FormValidation::checkCaptcha($_POST['captcha_code']);
         }
@@ -122,7 +122,7 @@ if(!empty($_POST['recipient_email']))
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database'));
             $sysmail->setVariable(1, $newPassword);
-            $sysmail->setVariable(2, ADMIDIO_URL.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activationId);
+            $sysmail->setVariable(2, safeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => $user->getValue('usr_id'), 'aid' => $activationId)));
             $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
             $user->saveChangesWithoutRights();
@@ -170,7 +170,7 @@ else
     );
 
     // if captchas are enabled then visitors of the website must resolve this
-    if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+    if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
     {
         $form->addCaptcha('captcha_code');
     }

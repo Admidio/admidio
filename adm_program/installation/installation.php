@@ -61,7 +61,7 @@ require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 
 // Initialize and check the parameters
-Session::start('ADMIDIO');
+Session::start('ADMIDIO_INSTALLATION');
 
 define('THEME_URL', 'layout');
 
@@ -78,7 +78,7 @@ else
 
 if (!in_array($step, $availableSteps, true))
 {
-    admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?step=welcome');
+    admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')));
     // => EXIT
 }
 
@@ -113,7 +113,7 @@ if (is_file($pathConfigFile))
     {
         showNotice(
             $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
-            'installation.php?step=connect_database',
+            safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
         );
@@ -149,7 +149,7 @@ if (is_file($pathConfigFile))
         $_SESSION['db_password'] = $g_adm_pw;
         $_SESSION['prefix']      = $g_tbl_praefix;
 
-        admRedirect(ADMIDIO_URL . '/adm_program/installation/installation.php?step=create_organization');
+        admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
         // => EXIT
     }
 }

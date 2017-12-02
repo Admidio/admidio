@@ -65,7 +65,7 @@ switch($getMode)
                         // => EXIT
                     }
 
-                    if(!isset($_POST['enable_auto_login']) && $gPreferences['enable_auto_login'] == 1)
+                    if(!isset($_POST['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login'))
                     {
                         // if auto login was deactivated than delete all saved logins
                         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
@@ -232,16 +232,16 @@ switch($getMode)
                     $text->setValue('txt_text', $value);
                     $text->save();
                 }
-                elseif($key === 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
+                elseif($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login'))
                 {
                     // if deactivate auto login than delete all saved logins
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                     $gDb->queryPrepared($sql);
-                    $gPreferences[$key] = $value;
+                    $gSettingsManager->set($key, $value);
                 }
                 else
                 {
-                    $gPreferences[$key] = $value;
+                    $gSettingsManager->set($key, $value);
                 }
             }
         }
@@ -249,12 +249,10 @@ switch($getMode)
         // now save all data
         $gCurrentOrganization->save();
 
-        $gCurrentOrganization->setPreferences($gPreferences);
-
         // refresh language if necessary
-        if($gL10n->getLanguage() !== $gPreferences['system_language'])
+        if($gL10n->getLanguage() !== $gSettingsManager->getString('system_language'))
         {
-            $gL10n->setLanguage($gPreferences['system_language']);
+            $gL10n->setLanguage($gSettingsManager->getString('system_language'));
         }
 
         // clean up
@@ -291,8 +289,7 @@ switch($getMode)
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
         // show form
-        $form = new HtmlForm('add_new_organization_form',
-                             ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php?mode=3', $page);
+        $form = new HtmlForm('add_new_organization_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '3')), $page);
         $form->addInput(
             'orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'],
             array('maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
@@ -354,10 +351,11 @@ switch($getMode)
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['email_administrator'] = $_POST['orgaEmail'];
-        $defaultOrgPreferences['system_language']     = $gPreferences['system_language'];
+        $defaultOrgPreferences['system_language']     = $gSettingsManager->getString('system_language');
 
         // create all necessary data for this organization
-        $newOrganization->setPreferences($defaultOrgPreferences, false);
+        $settingsManager =& $newOrganization->getSettingsManager();
+        $settingsManager->setMulti($defaultOrgPreferences, false);
         $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
 
         // if installation of second organization than show organization select at login

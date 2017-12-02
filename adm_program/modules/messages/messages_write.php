@@ -43,8 +43,8 @@ if ($getMsgId > 0)
 }
 
 // check if the call of the page was allowed by settings
-if (($gPreferences['enable_mail_module'] == 0 && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
-   || ($gPreferences['enable_pm_module'] == 0 && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
+if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== TableMessage::MESSAGE_TYPE_PM)
+   || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === TableMessage::MESSAGE_TYPE_PM))
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -81,9 +81,9 @@ if ($getMsgId > 0)
 }
 
 $maxNumberRecipients = 1;
-if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gPreferences['mail_max_receiver'] > 0)
+if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('mail_max_receiver') > 0)
 {
-    $maxNumberRecipients = $gPreferences['mail_max_receiver'];
+    $maxNumberRecipients = $gSettingsManager->getInt('mail_max_receiver');
 }
 
 $list = array();
@@ -211,16 +211,14 @@ $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
-
-    $formParam = 'msg_type=PM';
-
+    $formParams = array('msg_type' => 'PM');
     if ($getMsgId > 0)
     {
-        $formParam .= '&'.'msg_id='.$getMsgId;
+        $formParams['msg_id'] = $getMsgId;
     }
 
     // show form
-    $form = new HtmlForm('pm_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('pm_send_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
 
     if ($getUserId === 0)
     {
@@ -300,16 +298,16 @@ elseif (!isset($messageStatement))
         $rollenName = $role->getValue('rol_name');
     }
 
-    $formParam = '';
+    $formParams = array();
 
     // if subject was set as param then send this subject to next script
     if ($getSubject !== '')
     {
-        $formParam .= 'subject='.$getSubject.'&';
+        $formParams['subject'] = $getSubject;
     }
 
     // show form
-    $form = new HtmlForm('mail_send_form', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php?'.$formParam, $page, array('enableFileUpload' => true));
+    $form = new HtmlForm('mail_send_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_send.php', $formParams), $page, array('enableFileUpload' => true));
     $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
     $sqlRoleIds = array();
@@ -373,7 +371,7 @@ elseif (!isset($messageStatement))
                 $role->setArray($roleArray);
                 $list[] = array('groupID: '.$roleArray['rol_id'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_ACTIVE_MEMBERS') . ')');
                 $listRoleIdsArray[] = $roleArray['rol_id'];
-                if($role->hasFormerMembers() > 0 && $gPreferences['mail_show_former'] == 1)
+                if($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former'))
                 {
                     // list role with former members
                     $listFormer[] = array('groupID: '.$roleArray['rol_id'].'-1', $roleArray['rol_name'].' '.'('.$gL10n->get('SYS_FORMER_PL').')', $gL10n->get('SYS_ROLES'). ' (' .$gL10n->get('LST_FORMER_MEMBERS') . ')');
@@ -444,7 +442,7 @@ elseif (!isset($messageStatement))
                         $activeList[]  = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_ACTIVE_MEMBERS'));
                         $currentUserId = $usrId;
                     }
-                    elseif($gPreferences['mail_show_former'] == 1)
+                    elseif($gSettingsManager->getBool('mail_show_former'))
                     {
                         $passiveList[] = array($usrId, $row['last_name'].' '.$row['first_name'], $gL10n->get('LST_FORMER_MEMBERS'));
                         $currentUserId = $usrId;
@@ -570,7 +568,7 @@ elseif (!isset($messageStatement))
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($currUsrId > 0 && $gPreferences['mail_delivery_confirmation'] == 2) || $gPreferences['mail_delivery_confirmation'] == 1)
+    if (($currUsrId > 0 && $gSettingsManager->get('mail_delivery_confirmation') === 2) || $gSettingsManager->get('mail_delivery_confirmation') === 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }
@@ -584,7 +582,7 @@ elseif (!isset($messageStatement))
     );
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
-    if ($gValidLogin && ($gPreferences['max_email_attachment_size'] > 0) && PhpIniUtils::isFileUploadEnabled())
+    if ($gValidLogin && ($gSettingsManager->getInt('max_email_attachment_size') > 0) && PhpIniUtils::isFileUploadEnabled())
     {
         $form->addFileUpload(
             'btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'),
@@ -599,7 +597,7 @@ elseif (!isset($messageStatement))
     }
 
     // add textfield or ckeditor to form
-    if($gValidLogin && $gPreferences['mail_html_registered_users'] == 1)
+    if($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
     {
         $form->addEditor('msg_body', '', $formValues['msg_body'], array('property' => HtmlForm::FIELD_REQUIRED));
     }
@@ -614,7 +612,7 @@ elseif (!isset($messageStatement))
     $form->closeGroupBox();
 
     // if captchas are enabled then visitors of the website must resolve this
-    if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+    if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
     {
         $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
         $form->addCaptcha('captcha_code');
@@ -668,7 +666,7 @@ if (isset($messageStatement))
                     <div class="col-sm-8">
                         <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
                     </div>
-                    <div class="col-sm-4 text-right">' . $date->format($gPreferences['system_date'].' '.$gPreferences['system_time']) .
+                    <div class="col-sm-4 text-right">' . $date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')) .
                     '</div>
                 </div>
             </div>

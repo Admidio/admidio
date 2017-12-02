@@ -27,7 +27,7 @@ require_once(__DIR__ . '/../../system/common.php');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($gPreferences['enable_rss'] != 1)
+if (!$gSettingsManager->getBool('enable_rss'))
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
@@ -35,7 +35,7 @@ if ($gPreferences['enable_rss'] != 1)
 }
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ($gPreferences['enable_announcements_module'] != 1)
+if ((int) $gSettingsManager->get('enable_announcements_module') !== 1)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -72,7 +72,7 @@ if($announcements->getDataSetCount() > 0)
         $rss->addItem(
             $announcement->getValue('ann_headline'),
             $announcement->getValue('ann_description'),
-            ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php?id='.(int) $announcement->getValue('ann_id').'&headline='.$getHeadline,
+            safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('id' => $announcement->getValue('ann_id'), 'headline' => $getHeadline)),
             $row['create_name'],
             \DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create'))->format('r')
         );

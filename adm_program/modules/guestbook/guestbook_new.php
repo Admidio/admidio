@@ -21,12 +21,12 @@ $getGboId    = admFuncVariableIsValid($_GET, 'id',       'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_guestbook_module'] == 0)
+if ((int) $gSettingsManager->get('enable_guestbook_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
-elseif($gPreferences['enable_guestbook_module'] == 2)
+elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require(__DIR__ . '/../../system/login_valid.php');
@@ -86,7 +86,7 @@ if(isset($_SESSION['guestbook_entry_request']))
     unset($_SESSION['guestbook_entry_request']);
 }
 
-if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
+if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
 {
     // Falls er nicht eingeloggt ist, wird vor dem Ausfuellen des Formulars noch geprueft ob der
     // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
@@ -95,16 +95,16 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 
     $sql = 'SELECT COUNT(*) AS count
               FROM '.TBL_GUESTBOOK.'
-             WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gPreferences[\'flooding_protection_time\']
+             WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
-    $queryParams = array($gPreferences['flooding_protection_time'], $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
+    $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
     $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     if($pdoStatement->fetchColumn() > 0)
     {
         // Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gPreferences['flooding_protection_time'])));
+        $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', array($gSettingsManager->getInt('flooding_protection_time'))));
         // => EXIT
     }
 }
@@ -127,7 +127,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('guestbook_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
+$form = new HtmlForm('guestbook_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $getGboId, 'headline' => $getHeadline, 'mode' => $mode)), $page);
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name
@@ -157,7 +157,7 @@ $form->addEditor(
 );
 
 // if captchas are enabled then visitors of the website must resolve this
-if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
 {
     $form->openGroupBox('gb_confirmation_of_entry', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
     $form->addCaptcha('captcha_code');

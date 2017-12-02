@@ -229,7 +229,7 @@ class HtmlPage
      */
     public function showMainMenu($details = true)
     {
-        global $gL10n, $gPreferences, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
         $men_icon  = '/dummy.png';
         $full_menu = '';
 
@@ -689,7 +689,7 @@ class HtmlPage
      */
     private function addMainFilesAndContent()
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_PATH.'/css/admidio.css');
@@ -712,7 +712,7 @@ class HtmlPage
             $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
-        if (isset($gPreferences['system_browser_update_check']) && $gPreferences['system_browser_update_check'] == 1)
+        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
         {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }
@@ -743,9 +743,9 @@ class HtmlPage
      */
     private function getFileContent($filename)
     {
-        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType;
-        global $g_root_path;
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
+        global $g_root_path, $gPreferences;
 
         ob_start();
         include(THEME_ADMIDIO_PATH . '/' . $filename);

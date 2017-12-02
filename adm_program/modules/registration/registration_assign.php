@@ -26,7 +26,7 @@ if(!$gCurrentUser->approveUsers())
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if($gPreferences['registration_enable_module'] == 0)
+if(!$gSettingsManager->getBool('registration_enable_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -42,7 +42,7 @@ $lastName  = $gDb->escapeString($newUser->getValue('LAST_NAME', 'database'));
 $firstName = $gDb->escapeString($newUser->getValue('FIRST_NAME', 'database'));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-if($gDbType === Database::PDO_ENGINE_MYSQL && $gPreferences['system_search_similar'] == 1)
+if($gDbType === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar'))
 {
     $sqlSimilarName =
         '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX('. $lastName.'), 1, 4)
@@ -97,11 +97,11 @@ $usrStatement = $gDb->queryPrepared($sql, $queryParams);
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
 {
-    $urlCreateNewUser = ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php?new_user=3&user_id=' . $getNewUserId;
+    $urlCreateNewUser = safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => '3', 'user_id' => $getNewUserId));
 }
 else
 {
-    $urlCreateNewUser = ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php?mode=5&new_user_id=' . $getNewUserId;
+    $urlCreateNewUser = safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '5', 'new_user_id' => $getNewUserId));
 }
 
 if($usrStatement->rowCount() === 0)
@@ -136,7 +136,7 @@ while($row = $usrStatement->fetchObject())
         $page->addHtml('<hr />');
     }
     $page->addHtml('<p>
-        <a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php?user_id='.$row->usr_id.'"><img
+        <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row->usr_id)).'"><img
             src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
 
         if($row->address !== '')
@@ -149,9 +149,9 @@ while($row = $usrStatement->fetchObject())
         }
         if($row->email !== '')
         {
-            if($gPreferences['enable_mail_module'] == 1)
+            if($gSettingsManager->getBool('enable_mail_module'))
             {
-                $page->addHtml('<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />');
+                $page->addHtml('<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row->usr_id)).'">'.$row->email.'</a><br />');
             }
             else
             {
@@ -167,11 +167,11 @@ while($row = $usrStatement->fetchObject())
         {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
-            if($gPreferences['enable_system_mails'] == 1)
+            if($gSettingsManager->getBool('enable_system_mails'))
             {
                 $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
 
-                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6\'"><img
+                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row->usr_id, 'mode' => '6')).'\'"><img
                     src="'. THEME_URL. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
             }
         }
@@ -180,14 +180,14 @@ while($row = $usrStatement->fetchObject())
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1\'"><img
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row->usr_id, 'mode' => '1')).'\'"><img
                 src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
         }
     }
     else
     {
         // gefundene User ist noch KEIN Mitglied dieser Organisation
-        $link = ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
+        $link = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row->usr_id, 'mode' => '2'));
 
         if($row->usr_login_name !== '')
         {

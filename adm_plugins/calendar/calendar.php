@@ -220,7 +220,7 @@ if($plg_ter_aktiv)
             // event only within one day
             $eventsMonthDayArray[$startDate->format('j')][] = array(
                 'dat_id'   => $row['dat_id'],
-                'time'     => $startDate->format($gPreferences['system_time']),
+                'time'     => $startDate->format($gSettingsManager->getString('system_time')),
                 'all_day'  => $row['dat_all_day'],
                 'location' => $row['dat_location'],
                 'headline' => $row['dat_headline'],
@@ -267,7 +267,7 @@ if($plg_ter_aktiv)
             {
                 $eventsMonthDayArray[$i][] = array(
                     'dat_id'   => $row['dat_id'],
-                    'time'     => $startDate->format($gPreferences['system_time']),
+                    'time'     => $startDate->format($gSettingsManager->getString('system_time')),
                     'all_day'  => $row['dat_all_day'],
                     'location' => $row['dat_location'],
                     'headline' => $row['dat_headline'],
@@ -488,7 +488,7 @@ while($currentDay <= $lastDayCurrentMonth)
             {
                 // Link_Target auf Termin-Vorgabe einstellen
                 $plgLinkTarget = $plg_link_target_termin;
-                $plgLink = $plg_link_url.'?date_from='.$dateObj->format('Y-m-d').'&date_to='.$dateObj->format('Y-m-d');
+                $plgLink = safeUrl($plg_link_url, array('date_from' => $dateObj->format('Y-m-d'), 'date_to' => $dateObj->format('Y-m-d')));
             }
 
             if($plg_ajaxbox !== 1 && count($eventsMonthDayArray[$currentDay]) > 1)
@@ -622,7 +622,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
                 // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
                 echo '<a class="admidio-calendar-link '.$plgLinkClass.'" href="'.$plgLink.'" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
-                    title="'.$dateObj->format($gPreferences['system_date']).'" data-content="'.htmlspecialchars($htmlContent).'" target="'.$plgLinkTarget.'">'.$currentDay.'</a>';
+                    title="'.$dateObj->format($gSettingsManager->getString('system_date')).'" data-content="'.htmlspecialchars($htmlContent).'" target="'.$plgLinkTarget.'">'.$currentDay.'</a>';
             }
             else
             {

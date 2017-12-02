@@ -255,13 +255,13 @@ class ModuleLists extends Modules
      */
     public function getDataSet($startElement = 0, $limit = null)
     {
-        global $gCurrentOrganization, $gPreferences, $gDb;
+        global $gCurrentOrganization, $gSettingsManager, $gDb;
 
         // Parameter
         if($limit === null)
         {
             // Roles per page
-            $limit = $gPreferences['lists_roles_per_page'];
+            $limit = $gSettingsManager->getInt('lists_roles_per_page');
         }
 
         // assemble conditions
@@ -279,13 +279,13 @@ class ModuleLists extends Modules
                        (SELECT COUNT(*) AS count
                           FROM '.TBL_MEMBERS.' AS mem
                          WHERE mem.mem_rol_id = rol.rol_id
-                           AND mem_end < \''. DATE_NOW.'\') AS num_former
+                           AND mem_end < ?) AS num_former -- DATE_NOW
                   FROM '.TBL_ROLES.' AS rol
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = rol_cat_id
                  WHERE cat_name_intern <> \'EVENTS\'
-                   AND rol_valid   = '.(int) $this->activeRole.'
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND rol_valid = ? -- $this->activeRole
+                   AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                        '.$sqlConditions.'
               ORDER BY cat_sequence, rol_name';
@@ -300,7 +300,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->query($sql); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, (int) $this->activeRole, $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         // array for results
         return array(

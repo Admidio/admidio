@@ -99,7 +99,7 @@ function getFormerRolesFromDatabase($userId)
  */
 function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatement, $countRole = 0, $directOutput = false)
 {
-    global $gDb, $gL10n, $gCurrentUser, $gPreferences;
+    global $gDb, $gL10n, $gCurrentUser, $gSettingsManager;
 
     $countShowRoles = 0;
     $member = new TableMembers($gDb);
@@ -150,7 +150,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
 
                             if($gCurrentUser->hasRightViewRole($member->getValue('mem_rol_id')))
                             {
-                                $roleMemHTML .= '<a href="'. ADMIDIO_URL. FOLDER_MODULES.'/lists/lists_show.php?mode=html&amp;rol_ids='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                                $roleMemHTML .= '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $member->getValue('mem_rol_id'))). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }
                             else
                             {
@@ -166,15 +166,15 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                         <span class="pull-right text-right">';
                             if($showRoleEndDate)
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gPreferences['system_date']), $member->getValue('mem_end', $gPreferences['system_date'])));
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
                             }
                             elseif($futureMembership)
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gPreferences['system_date'])));
+                                $roleMemHTML .= $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
                             }
                             else
                             {
-                                $roleMemHTML .= $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gPreferences['system_date'])));
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
                             }
 
                             if($role->allowedToAssignMembers($gCurrentUser))
@@ -185,8 +185,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 {
                                     $roleMemHTML .= '
                                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
-                                        $role->getValue('rol_id'). '&amp;database_id='.$memberId.'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
+                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.$role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><img
                                         src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                                 }
                                 else
@@ -209,20 +208,20 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                             }
 
                             // only show info if system setting is activated
-                            if($gPreferences['system_show_create_edit'] > 0)
+                            if((int) $gSettingsManager->get('system_show_create_edit') > 0)
                             {
                                 $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$memberId.'" href="javascript:void(0)"><img src="'.THEME_URL.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
                             }
                         $roleMemHTML .= '</span>
                     </li>
                     <li class="list-group-item" id="membership_period_'.$memberId.'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
-                        $form = new HtmlForm('membership_period_form_'.$memberId, ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php?mode=7&amp;user_id='.$user->getValue('usr_id').'&amp;mem_id='.$row['mem_id'], null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
+                        $form = new HtmlForm('membership_period_form_'.$memberId, safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '7', 'user_id' => $user->getValue('usr_id'), 'mem_id' => $row['mem_id'])), null, array('type' => 'navbar', 'setFocus' => false, 'class' => 'admidio-form-membership-period'));
                         $form->addInput(
-                            'membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']),
+                            'membership_start_date_'.$memberId, $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                             array('type' => 'date', 'maxLength' => 10)
                         );
                         $form->addInput(
-                            'membership_end_date_'.$memberId, $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']),
+                            'membership_end_date_'.$memberId, $gL10n->get('SYS_END'), $member->getValue('mem_end', $gSettingsManager->getString('system_date')),
                             array('type' => 'date', 'maxLength' => 10)
                         );
                         $form->addButton(

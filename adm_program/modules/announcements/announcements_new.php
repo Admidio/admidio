@@ -19,7 +19,7 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // check if the module is enabled and disallow access if it's disabled
-if ($gPreferences['enable_announcements_module'] == 0)
+if ((int) $gSettingsManager->get('enable_announcements_module') === 0)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -92,7 +92,7 @@ $announcementsMenu = $page->getMenu();
 $announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // show form
-$form = new HtmlForm('announcements_edit_form', ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1', $page);
+$form = new HtmlForm('announcements_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_id' => $getAnnId, 'headline' => $getHeadline, 'mode' => '1')), $page);
 $form->addInput(
     'ann_headline', $gL10n->get('SYS_TITLE'), noHTML($announcement->getValue('ann_headline')),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)

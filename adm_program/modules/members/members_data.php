@@ -54,7 +54,7 @@ $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 $jsonArray = array('draw' => $getDraw);
 
 // if only active members should be shown then set parameter
-if($gPreferences['members_show_all_users'] == 0)
+if(!$gSettingsManager->getBool('members_show_all_users'))
 {
     $getMembers = true;
 }
@@ -267,11 +267,11 @@ while($row = $mglStatement->fetch())
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
 
-    $columnValues[] = '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usr_id'].'"><img
+    $columnValues[] = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'"><img
              src="'.THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
     // Add "Lastname" and "Firstname"
-    $columnValues[] = '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['name'].'</a>';
+    $columnValues[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
 
     // Add "Loginname"
     if(strlen($row['usr_login_name']) > 0)
@@ -300,7 +300,7 @@ while($row = $mglStatement->fetch())
     {
         // date must be formated
         $date = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-        $columnValues[] = $date->format($gPreferences['system_date']);
+        $columnValues[] = $date->format($gSettingsManager->getString('system_date'));
     }
     else
     {
@@ -309,7 +309,7 @@ while($row = $mglStatement->fetch())
 
     // Add "change date"
     $timestampChange = \DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
-    $columnValues[]  = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $columnValues[]  = $timestampChange->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
 
     // Add "user-administration icons"
     $userAdministration = '';
@@ -318,18 +318,18 @@ while($row = $mglStatement->fetch())
     if($memberOfThisOrganization && $gCurrentUser->isAdministrator()
     && strlen($row['usr_login_name']) > 0 && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id'))
     {
-        if(strlen($row['email']) > 0 && $gPreferences['enable_system_mails'] == 1)
+        if(strlen($row['email']) > 0 && $gSettingsManager->getBool('enable_system_mails'))
         {
             // if email is set and systemmails are activated then administrators can send a new password to user
             $userAdministration = '
-            <a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=5"><img
+            <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $row['usr_id'], 'mode' => 5)).'"><img
                 src="'.THEME_URL.'/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
         }
         else
         {
             // if user has no email or send email is disabled then administrators could set a new password
             $userAdministration = '
-            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php?usr_id='.$row['usr_id'].'"><img
+            <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $row['usr_id'])).'"><img
                 src="'.THEME_URL.'/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
         }
     }
@@ -337,25 +337,25 @@ while($row = $mglStatement->fetch())
     // add link to send email to user
     if(strlen($row['email']) > 0)
     {
-        if($gPreferences['enable_mail_module'] != 1)
+        if(!$gSettingsManager->getBool('enable_mail_module'))
         {
             $mailLink = 'mailto:'.$row['email'];
         }
         else
         {
-            $mailLink = ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php?usr_id='.$row['usr_id'];
+            $mailLink = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id']));
         }
         $userAdministration .= '<a class="admidio-icon-link" href="'.$mailLink.'"><img src="'.THEME_URL.'/icons/email.png"
                                 alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($row['email'])).'" /></a>';
     }
 
-    $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$row['usr_id'].'&amp;copy=1"><img
+    $userAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $row['usr_id'], 'copy' => 1)).'"><img
                                 src="'.THEME_URL.'/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
 
     // add link to edit user, but only edit users who are members of the current organization
     if($memberOfThisOrganization || !$memberOfOtherOrganization)
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php?user_id='.$row['usr_id'].'"><img
+        $userAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $row['usr_id'])).'"><img
                                     src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
     }
 
@@ -364,7 +364,7 @@ while($row = $mglStatement->fetch())
         || $memberOfThisOrganization)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
         && (int) $row['usr_id'] !== (int) $gCurrentUser->getValue('usr_id')) // das eigene Profil darf keiner entfernen
     {
-        $userAdministration .= '<a class="admidio-icon-link" href="'.ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
+        $userAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $row['usr_id'], 'mode' => 6)).'"><img
                                     src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
     }
 

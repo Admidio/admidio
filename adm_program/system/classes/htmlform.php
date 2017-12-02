@@ -508,7 +508,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addEditor($id, $label, $value, array $options = array())
     {
-        global $gPreferences, $gL10n;
+        global $gSettingsManager, $gL10n;
 
         ++$this->countElements;
         $attributes = array('class' => 'editor');
@@ -547,12 +547,12 @@ class HtmlForm extends HtmlFormBasic
             CKEDITOR.replace("' . $id . '", {
                 toolbar: "' . $optionsAll['toolbar'] . '",
                 language: "' . $gL10n->getLanguageIsoCode() . '",
-                uiColor: "' . $gPreferences['system_js_editor_color'] . '",
+                uiColor: "' . $gSettingsManager->getString('system_js_editor_color') . '",
                 filebrowserImageUploadUrl: "' . ADMIDIO_URL . '/adm_program/system/ckeditor_upload_handler.php"
             });
             CKEDITOR.config.height = "' . $optionsAll['height'] . '";';
 
-        if ((int) $gPreferences['system_js_editor_enabled'] === 1)
+        if ($gSettingsManager->getBool('system_js_editor_enabled'))
         {
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if ($this->htmlPage instanceof HtmlPage)
@@ -590,7 +590,7 @@ class HtmlForm extends HtmlFormBasic
      *                          If this is set then the user can only choose the specified files with the browser file dialog.
      *                          You should check the uploaded file against the MIME type because the file could be manipulated.
      *                        - @b maxUploadSize : The size in byte that could be maximum uploaded.
-     *                          The default will be $gPreferences['max_file_upload_size'] * 1024 * 1024.
+     *                          The default will be $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024.
      *                        - @b enableMultiUploads : If set to true a button will be added where the user can
      *                          add new upload fields to upload more than one file.
      *                        - @b multiUploadLabel : The label for the button who will add new upload fields to the form.
@@ -611,7 +611,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addFileUpload($id, $label, array $options = array())
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -619,7 +619,7 @@ class HtmlForm extends HtmlFormBasic
         // create array with all options
         $optionsDefault = array(
             'property'           => self::FIELD_DEFAULT,
-            'maxUploadSize'      => $gPreferences['max_file_upload_size'] * 1024 * 1024, // MiB
+            'maxUploadSize'      => $gSettingsManager->getInt('max_file_upload_size') * 1024 * 1024, // MiB
             'allowedMimeTypes'   => array(),
             'enableMultiUploads' => false,
             'hideUploadField'    => false,
@@ -731,7 +731,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addInput($id, $label, $value, array $options = array())
     {
-        global $gL10n, $gPreferences, $gLogger;
+        global $gL10n, $gSettingsManager, $gLogger;
 
         $attributes = array('class' => 'form-control');
         ++$this->countElements;
@@ -832,7 +832,7 @@ class HtmlForm extends HtmlFormBasic
         {
             if ($optionsAll['placeholder'] === '')
             {
-                $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']);
+                $attributes['placeholder'] = DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date'));
             }
             else
             {
@@ -858,7 +858,7 @@ class HtmlForm extends HtmlFormBasic
                 $javascriptCode = '
                     $("input[data-provide=\'' . $attributes['data-provide'] . '\']").datepicker({
                         language: "' . $gL10n->getLanguageIsoCode() . '",
-                        format: "' . DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']) . '",
+                        format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
                         ' . $datepickerOptions . '
                         todayHighlight: "true"
                     });';
@@ -898,12 +898,12 @@ class HtmlForm extends HtmlFormBasic
             $timeValue = '';
 
             // first try to split datetime to a date and a time value
-            $datetime = \DateTime::createFromFormat($gPreferences['system_date'] . ' ' . $gPreferences['system_time'], $value);
+            $datetime = \DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
 
             if ($datetime)
             {
-                $dateValue = $datetime->format($gPreferences['system_date']);
-                $timeValue = $datetime->format($gPreferences['system_time']);
+                $dateValue = $datetime->format($gSettingsManager->getString('system_date'));
+                $timeValue = $datetime->format($gSettingsManager->getString('system_time'));
             }
             // now add a date and a time field to the form
             $attributes['class'] .= ' datetime-date-control';
@@ -931,9 +931,9 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['passwordStrength'])
         {
             $passwordStrengthLevel = 1;
-            if ($gPreferences['password_min_strength'])
+            if ($gSettingsManager->getInt('password_min_strength'))
             {
-                $passwordStrengthLevel = $gPreferences['password_min_strength'];
+                $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }
 
             if ($this->htmlPage instanceof HtmlPage)

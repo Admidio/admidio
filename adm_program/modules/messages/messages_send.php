@@ -77,14 +77,14 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM)
 }
 
 // Stop if pm should be send pm module is disabled
-if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && (bool) $gPreferences['enable_pm_module'] === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
 }
 
 // Stop if mail should be send and mail module is disabled
-if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && (bool) $gPreferences['enable_mail_module'] === false)
+if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module'))
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     // => EXIT
@@ -111,7 +111,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // Check Captcha if enabled and user logged out
-    if (!$gValidLogin && (bool) $gPreferences['enable_mail_captcha'])
+    if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
     {
         try
         {
@@ -149,8 +149,8 @@ else
 }
 
 // if no User is set, he is not able to ask for delivery confirmation
-if (!($currUsrId > 0 && (int) $gPreferences['mail_delivery_confirmation'] === 2)
-&&  (int) $gPreferences['mail_delivery_confirmation'] !== 1)
+if (!($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2)
+&&  (int) $gSettingsManager->get('mail_delivery_confirmation') !== 1)
 {
     $postDeliveryConfirmation = false;
 }
@@ -208,13 +208,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $gCurrentOrganization->getValue('org_id')
                 );
 
-                if ($group['status'] === 'former' && (bool) $gPreferences['mail_show_former'])
+                if ($group['status'] === 'former' && $gSettingsManager->getBool('mail_show_former'))
                 {
                     // only former members
                     $sqlConditions = ' AND mem_end < ? -- DATE_NOW ';
                     $queryParams[] = DATE_NOW;
                 }
-                elseif ($group['status'] === 'active_former' && (bool) $gPreferences['mail_show_former'])
+                elseif ($group['status'] === 'active_former' && $gSettingsManager->getBool('mail_show_former'))
                 {
                     // former members and active members
                     $sqlConditions = ' AND mem_begin < ? -- DATE_NOW ';
@@ -269,15 +269,15 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 {
                     // normally we need no To-address and set "undisclosed recipients", but if
                     // that won't work than the following address will be set
-                    if ((int) $gPreferences['mail_recipients_with_roles'] === 1)
+                    if ((int) $gSettingsManager->get('mail_recipients_with_roles') === 1)
                     {
                         // fill recipient with sender address to prevent problems with provider
                         $email->addRecipient($postFrom, $postName);
                     }
-                    elseif ((int) $gPreferences['mail_recipients_with_roles'] === 2)
+                    elseif ((int) $gSettingsManager->get('mail_recipients_with_roles') === 2)
                     {
                         // fill recipient with administrators address to prevent problems with provider
-                        $email->addRecipient($gPreferences['email_administrator'], $gL10n->get('SYS_ADMINISTRATOR'));
+                        $email->addRecipient($gSettingsManager->getString('email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
                     }
 
                     // all role members will be attached as BCC
@@ -402,7 +402,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // if possible send html mail
-    if ($gValidLogin && (bool) $gPreferences['mail_html_registered_users'])
+    if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users'))
     {
         $email->sendDataAsHtml();
     }
@@ -506,29 +506,30 @@ else
 
     if ($getMsgId === 0)
     {
-        $pmId = 1;
-
-        $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$currUsrId.', \''.$postTo[0].'\', CURRENT_TIMESTAMP, 1)';
-
-        $gDb->query($sql); // TODO add more params
+        $sql = 'INSERT INTO '. TBL_MESSAGES. '
+                       (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
+                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 1) -- $getMsgType, $postSubjectSQL, $currUsrId, $postTo[0]';
+        $gDb->queryPrepared($sql, array($getMsgType, $postSubjectSQL, $currUsrId, $postTo[0]));
         $getMsgId = $gDb->lastInsertId();
     }
     else
     {
-        $pmId = $message->countMessageParts() + 1;
-
         $sql = 'UPDATE '. TBL_MESSAGES. '
-                   SET msg_read = 1, msg_timestamp = CURRENT_TIMESTAMP, msg_usr_id_sender = '.$currUsrId.', msg_usr_id_receiver = \''.$postTo[0].'\'
-                 WHERE msg_id = '.$getMsgId;
-
-        $gDb->query($sql); // TODO add more params
+                   SET msg_read = 1
+                     , msg_timestamp = CURRENT_TIMESTAMP
+                     , msg_usr_id_sender = ? -- $currUsrId
+                     , msg_usr_id_receiver = ? -- $postTo[0]
+                 WHERE msg_id = ? -- $getMsgId';
+        $gDb->queryPrepared($sql, array($currUsrId, $postTo[0], $getMsgId));
     }
 
-    $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-            VALUES ('.$getMsgId.', '.$pmId.', '.$currUsrId.', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
+    $messagePartNr = $message->countMessageParts() + 1;
 
-    if ($gDb->query($sql)) // TODO add more params
+    $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
+                   (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
+            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $messagePartNr, $currUsrId, $postBodySQL';
+
+    if ($gDb->queryPrepared($sql, array($getMsgId, $messagePartNr, $currUsrId, $postBodySQL)))
     {
         $sendResult = true;
     }
@@ -540,16 +541,16 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
     // save mail also to database
     if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL && $gValidLogin)
     {
-        $sql = 'INSERT INTO '. TBL_MESSAGES. ' (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
-                VALUES (\''.$getMsgType.'\', \''.$postSubjectSQL.'\', '.$currUsrId.', \''.$receiverString.'\', CURRENT_TIMESTAMP, 0)';
-
-        $gDb->query($sql); // TODO add more params
+        $sql = 'INSERT INTO '. TBL_MESSAGES. '
+                       (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
+                VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 0) -- $getMsgType, $postSubjectSQL, $currUsrId, $receiverString';
+        $gDb->queryPrepared($sql, array($getMsgType, $postSubjectSQL, $currUsrId, $receiverString));
         $getMsgId = $gDb->lastInsertId();
 
-        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. ' (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
-                VALUES ('.$getMsgId.', 1, '.$currUsrId.', \''.$postBodySQL.'\', CURRENT_TIMESTAMP)';
-
-        $gDb->query($sql); // TODO add more params
+        $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
+                       (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
+                VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
+        $gDb->queryPrepared($sql, array($getMsgId, $currUsrId, $postBodySQL));
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page

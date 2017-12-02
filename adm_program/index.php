@@ -50,7 +50,7 @@ else
         $gL10n->get('SYS_LOGIN'), 'key.png'
     );
 
-    if($gPreferences['registration_enable_module'] == 1)
+    if($gSettingsManager->getBool('registration_enable_module'))
     {
         // show registration link
         $mainMenu->addItem(
