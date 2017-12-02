@@ -128,14 +128,14 @@ while ($main_men = $main_men_statement->fetchObject())
 
                 $menuOverview->addTableBody();
                 $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-                $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$gL10n->get($main_men->men_translate_name),
+                $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$gL10n->get($main_men->men_name),
                                   array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
                 $menuOverview->addTableBody('id', $block_id);
 
                 $menuGroup = $menu_row->men_parent_id;
             }
 
-            $naming = $gL10n->get($menu_row->men_translate_name);
+            $naming = $gL10n->get($menu_row->men_name);
 
             $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu_row->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" /></a>
@@ -169,7 +169,7 @@ while ($main_men = $main_men_statement->fetchObject())
 
             // create array with all column values
             $columnValues = array(
-                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$gL10n->get($menu_row->men_translate_desc).'">'.$naming.'</a>',
+                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$gL10n->get($menu_row->men_description).'">'.$naming.'</a>',
                 $htmlMoveRow,
                 $htmlEnabledMenu,
                 $htmlStandartMenu,

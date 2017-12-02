@@ -39,6 +39,37 @@ class TableMenu extends TableAccess
     }
 
     /**
+     * This recursive method creates from the parameter name a unique name that only have
+     * capital letters followed by the next free number (index)
+     * Example: 'Membership' => 'MEMBERSHIP_2'
+     * @param string $name  The name from which the unique name should be created
+     * @param int    $index The index of the name. Should be startet with 1
+     * @return string Returns the unique name with capital letters and number
+     */
+    private function getNewNameIntern($name, $index)
+    {
+        $newNameIntern = strtoupper(str_replace(' ', '_', $name));
+
+        if ($index > 1)
+        {
+            $newNameIntern = $newNameIntern . '_' . $index;
+        }
+
+        $sql = 'SELECT men_id
+                  FROM '.TBL_MENU.'
+                 WHERE men_name_intern = ? -- $newNameIntern';
+        $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
+
+        if ($userFieldsStatement->rowCount() > 0)
+        {
+            ++$index;
+            $newNameIntern = $this->getNewNameIntern($name, $index);
+        }
+
+        return $newNameIntern;
+    }
+
+    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
@@ -54,7 +85,7 @@ class TableMenu extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if($columnName === 'men_translate_name' && $format !== 'database')
+        if($columnName === 'men_name' && $format !== 'database')
         {
             $value = $gL10n->get(admStrToUpper($value));
         }
@@ -166,6 +197,9 @@ class TableMenu extends TableAccess
 
         if($this->newRecord)
         {
+            // if new field than generate new name intern, otherwise no change will be made
+            $this->setValue('men_name_intern', $this->getNewNameIntern($this->getValue('men_name', 'database'), 1));
+            
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MENU.'

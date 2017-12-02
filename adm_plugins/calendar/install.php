@@ -41,7 +41,7 @@ $page = new HtmlPage($headline);
 
 $sql = "SELECT *
   FROM ".TBL_MENU."
-  where men_modul_name = 'plg_calendar'";
+  where men_name_intern = 'plg_calendar'";
 $statement = $gDb->query($sql);
 
 if($statement->rowCount() > 0)
@@ -72,10 +72,10 @@ else
 
     $form->addSelectBoxForCategories('men_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'MEN', 'EDIT_CATEGORIES', array('property' => FIELD_REQUIRED));
 
-    $form->addInput('men_translate_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
+    $form->addInput('men_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
-    $form->addInput('men_modul_name', $gL10n->get('SYS_NAME'), 'plg_calendar', array('property' => FIELD_DISABLED));
-    $form->addInput('men_modul_name', null, 'plg_calendar', array('type' => 'hidden'));
+    $form->addInput('men_name_intern', $gL10n->get('SYS_NAME'), 'plg_calendar', array('property' => FIELD_DISABLED));
+    $form->addInput('men_name_intern', null, 'plg_calendar', array('type' => 'hidden'));
 
     $form->addSelectBox('menu_view', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet,
                                        array('property'  => FIELD_REQUIRED, 'multiselect'  => true));

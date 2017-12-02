@@ -45,16 +45,16 @@
     <step id="390">alter table %PREFIX%_roles_rights add constraint %PREFIX%_FK_ROR_ROR_PARENT foreign key (ror_ror_id_parent) references %PREFIX%_roles_rights (ror_id) on delete set null on update restrict</step>
     <step id="400">CREATE TABLE %PREFIX%_menu
                 (
-                    men_id                         integer       unsigned not null AUTO_INCREMENT,
-                    men_parent_id                  integer,
-                    men_order                      integer,
-                    men_standart                   boolean       not null default '0',
-                    men_modul_name                 varchar(255),
-                    men_url                        varchar(255),
-                    men_icon                       varchar(2000),
-                    men_translate_name             varchar(255),
-                    men_translate_desc             varchar(255),
-                    men_need_enable                boolean       not null default '0',
+                    men_id                      integer       unsigned not null AUTO_INCREMENT,
+                    men_parent_id               integer,
+                    men_name_intern             varchar(255),
+                    men_name                    varchar(255),
+                    men_description             varchar(255),
+                    men_order                   integer,
+                    men_standart                boolean       not null default '0',
+                    men_url                     varchar(255),
+                    men_icon                    varchar(2000),
+                    men_need_enable             boolean       not null default '0',
                     primary key (men_id)
                 )
                 engine = InnoDB

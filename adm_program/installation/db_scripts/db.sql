@@ -339,6 +339,30 @@ COLLATE = utf8_unicode_ci;
 CREATE INDEX idx_%PREFIX%_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
 
 /*==============================================================*/
+/* Table: adm_menu                                             */
+/*==============================================================*/
+create table %PREFIX%_menu
+(
+    men_id                      integer       unsigned not null AUTO_INCREMENT,
+    men_parent_id               integer,
+    men_name_intern             varchar(255),
+    men_name                    varchar(255),
+    men_description             varchar(255),
+    men_order                   integer,
+    men_standart                boolean       not null default '0',
+    men_url                     varchar(255),
+    men_icon                    varchar(2000),
+    men_need_enable             boolean       not null default '0',
+    primary key (men_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_cat_id);
+
+/*==============================================================*/
 /* Table: adm_messages                                          */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_messages
@@ -702,30 +726,6 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX idx_%PREFIX%_usr_login_name ON %PREFIX%_users (usr_login_name);
-
-/*==============================================================*/
-/* Table: adm_menu                                             */
-/*==============================================================*/
-create table %PREFIX%_menu
-(
-    men_id                      integer       unsigned not null AUTO_INCREMENT,
-    men_parent_id               integer,
-    men_order                   integer,
-    men_standart                boolean       not null default '0',
-    men_modul_name              varchar(255),
-    men_url                     varchar(255),
-    men_icon                    varchar(2000),
-    men_translate_name          varchar(255),
-    men_translate_desc          varchar(255),
-    men_need_enable             boolean       not null default '0',
-    primary key (men_id)
-)
-engine = InnoDB
-auto_increment = 1
-default character set = utf8
-collate = utf8_unicode_ci;
-
-create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_cat_id);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */

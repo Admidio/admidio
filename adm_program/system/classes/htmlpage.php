@@ -263,19 +263,19 @@ class HtmlPage
                         {
                             $full_menu .= $Menu->show($details);
                         }
-                        $Menu = new Menu($main_men->men_modul_name, $gL10n->get($main_men->men_translate_name));
+                        $Menu = new Menu($main_men->men_name_intern, $gL10n->get($main_men->men_name));
                         $last = $row->men_parent_id;
                     }
 
                     $menu_view = true;
                     $desc = '';
 
-                    if(strlen($row->men_translate_desc) > 2)
+                    if(strlen($row->men_description) > 2)
                     {
-                        $desc = $gL10n->get($row->men_translate_desc);
+                        $desc = $gL10n->get($row->men_description);
                         if($desc == '##' || $desc[0] == '#')
                         {
-                            $desc = $row->men_translate_desc;
+                            $desc = $row->men_description;
                         }
                     }
 
@@ -285,7 +285,7 @@ class HtmlPage
 
                     if($row->men_need_enable == 1)
                     {
-                        if($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
+                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
                         {
                             $menu_view = true;
                         }
@@ -302,14 +302,14 @@ class HtmlPage
                         $men_icon = $row->men_icon;
                     }
 
-                    $men_translate_name = $gL10n->get($row->men_translate_name);
-                    if($men_translate_name == '##' || $men_translate_name[0] == '#')
+                    $men_name = $gL10n->get($row->men_name);
+                    if($men_name == '##' || $men_name[0] == '#')
                     {
-                        $men_translate_name = $row->men_translate_name;
+                        $men_name = $row->men_name;
                     }
 
                     //special case because there are differnent links if you are logged in or out for mail
-                    if($row->men_modul_name === 'mail' && $gValidLogin)
+                    if($row->men_name_intern === 'mail' && $gValidLogin)
                     {
                         // get number of unread messages for user
                         $message = new TableMessage($gDb);
@@ -322,7 +322,7 @@ class HtmlPage
 
                         $men_url = '/adm_program/modules/messages/messages.php';
                         $men_icon = 'messages.png';
-                        $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                        $men_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                     }
 
                     if(count($rolesDisplay) >= 1)
@@ -335,7 +335,7 @@ class HtmlPage
                     }
 
                     // special check for "newreg"
-                    if($row->men_modul_name === 'newreg')
+                    if($row->men_name_intern === 'newreg')
                     {
                         if(!$gCurrentUser->approveUsers() || $gSettingsManager->get('registration_enable_module') === 0)
                         {
@@ -344,7 +344,7 @@ class HtmlPage
                     }
 
                     // special check for "usrmgt"
-                    if($row->men_modul_name === 'usrmgt')
+                    if($row->men_name_intern === 'usrmgt')
                     {
                         if(!$gCurrentUser->editUsers())
                         {
@@ -353,7 +353,7 @@ class HtmlPage
                     }
 
                     // special check for "roladm"
-                    if($row->men_modul_name === 'roladm')
+                    if($row->men_name_intern === 'roladm')
                     {
                         if(!$gCurrentUser->manageRoles())
                         {
@@ -363,13 +363,13 @@ class HtmlPage
 
                     if($menu_view == true)
                     {
-                        $Menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, $desc);
+                        $Menu->addItem($row->men_name_intern, $men_url, $men_name, $men_icon, $desc);
                     }
 
                     if($details == true)
                     {
                         //Submenu for Lists
-                        if($gValidLogin && $row->men_modul_name === 'lists')
+                        if($gValidLogin && $row->men_name_intern === 'lists')
                         {
                             $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
                                                     $gL10n->get('LST_MY_LIST'));
@@ -378,8 +378,8 @@ class HtmlPage
                         }
 
                         //Submenu for Dates
-                        if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_modul_name === 'dates')
-                        || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_modul_name === 'dates'))
+                        if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
+                        || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                         {
                             $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
                                                     $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
@@ -430,16 +430,16 @@ class HtmlPage
                 {
                     if($row->men_parent_id != $last)
                     {
-                        $this->menu->addItem('menu_item_'.$main_men->men_modul_name, null, $gL10n->get($main_men->men_translate_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                        $this->menu->addItem('menu_item_'.$main_men->men_name_intern, null, $gL10n->get($main_men->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
                         $last = $row->men_parent_id;
                     }
 
                     $menu_view = true;
                     $desc = '';
 
-                    if(strlen($row->men_translate_desc) > 2)
+                    if(strlen($row->men_description) > 2)
                     {
-                        $desc = $gL10n->get($row->men_translate_desc);
+                        $desc = $gL10n->get($row->men_description);
                     }
 
                     // Read current roles rights of the menu
@@ -448,7 +448,7 @@ class HtmlPage
 
                     if($row->men_need_enable == 1)
                     {
-                        if($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_modul_name.'_module') == 2 && $gValidLogin))
+                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
                         {
                             $menu_view = true;
                         }
@@ -460,10 +460,10 @@ class HtmlPage
 
                     $men_url = $row->men_url;
                     $men_icon = $row->men_icon;
-                    $men_translate_name = $gL10n->get($row->men_translate_name);
+                    $men_name = $gL10n->get($row->men_name);
 
                     //special case because there are differnent links if you are logged in or out for mail
-                    if($row->men_modul_name === 'mail' && $gValidLogin)
+                    if($row->men_name_intern === 'mail' && $gValidLogin)
                     {
                         $unreadBadge = '';
 
@@ -478,7 +478,7 @@ class HtmlPage
 
                         $men_url = '/adm_program/modules/messages/messages.php';
                         $men_icon = '/icons/messages.png';
-                        $men_translate_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                        $men_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                     }
 
                     if(count($rolesDisplayRight) >= 1)
@@ -491,7 +491,7 @@ class HtmlPage
                     }
 
                     // special check for "newreg"
-                    if($row->men_modul_name === 'newreg')
+                    if($row->men_name_intern === 'newreg')
                     {
                         $menu_view = false;
                         if($gSettingsManager->get('registration_enable_module') > 0)
@@ -501,7 +501,7 @@ class HtmlPage
                     }
 
                     // special check for "usrmgt"
-                    if($row->men_modul_name === 'usrmgt')
+                    if($row->men_name_intern === 'usrmgt')
                     {
                         if(!$gCurrentUser->editUsers())
                         {
@@ -510,7 +510,7 @@ class HtmlPage
                     }
 
                     // special check for "roladm"
-                    if($row->men_modul_name === 'roladm')
+                    if($row->men_name_intern === 'roladm')
                     {
                         if(!$gCurrentUser->manageRoles())
                         {
@@ -520,7 +520,7 @@ class HtmlPage
 
                     if($menu_view == true)
                     {
-                        $this->menu->addItem($row->men_modul_name, $men_url, $men_translate_name, $men_icon, 'right', 'menu_item_'.$main_men->men_modul_name, 'admidio-default-menu-item');
+                        $this->menu->addItem($row->men_name_intern, $men_url, $men_name, $men_icon, 'right', 'menu_item_'.$main_men->men_name_intern, 'admidio-default-menu-item');
                     }
                 }
             }

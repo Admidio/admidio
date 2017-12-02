@@ -83,7 +83,7 @@ function subfolder($parentId, $vorschub, $menu)
         $parentMenu->setArray($admPhotoChild);
 
         // add entry to array of all photo albums
-        $menuArray[$parentMenu->getValue('men_id')] = $vorschub.'&#151; '.$parentMenu->getValue('men_translate_name');
+        $menuArray[$parentMenu->getValue('men_id')] = $vorschub.'&#151; '.$parentMenu->getValue('men_name');
 
         subfolder($parentMenu->getValue('men_id'), $vorschub, $menu);
     }//while
@@ -119,14 +119,12 @@ while($rowViewRoles = $rolesViewStatement->fetchObject())
 $form = new HtmlForm('menu_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
 
 // systemcategories should not be renamed
-$fieldPropertyStandart = FIELD_REQUIRED;
 $standart = 0;
 $roleViewSet[] = 0;
 
 if($getMenId > 0)
 {
     $menu->readDataById($getMenId);
-    $fieldPropertyStandart = FIELD_DISABLED;
     $standart = $menu->getValue('men_standart');
 
     // Read current roles rights of the menu
@@ -135,6 +133,25 @@ if($getMenId > 0)
 }
 
 subfolder(null, '', $menu);
+
+$form->addInput(
+    'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'), 
+    array('maxLength' => 100, 'property'=> FIELD_REQUIRED, 'helpTextIdLabel' => 'MNU_NAME_DESC')
+);
+
+if($getMenId > 0)
+{
+    $form->addInput(
+        'men_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $menu->getValue('men_name_intern', 'database'), 
+        array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
+    );
+}
+
+$form->addInput(
+    'men_description', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_description', 'database'), 
+    array('maxLength' => 100, 'helpTextIdLabel' => 'MNU_NAME_DESC_DESC')
+);
+
 $form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_parent_id'),
@@ -142,8 +159,6 @@ $form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, ar
         'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', 'MAIN')
     )
 );
-
-$form->addInput('men_modul_name', $gL10n->get('SYS_NAME_ABBREVIATION'), $menu->getValue('men_modul_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyStandart));
 
 $form->addCheckbox('men_need_enable', $gL10n->get('MNU_NEED_ENABLED'), $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
 
@@ -158,16 +173,6 @@ $def_icon = array_search($menu->getValue('men_icon', 'database'), $array_icon);
 $form->addSelectBox('men_icon', $gL10n->get('SYS_ICON'), $array_icon, array('defaultValue' => $def_icon,
                                                                             'showContextDependentFirstEntry' => true));
 
-$form->addInput('men_translate_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_translate_name', 'database'), array('maxLength' => 100,
-                                                                                                                        'helpTextIdLabel' => 'MNU_NAME_DESC'));
-
-$form->addInput('men_translate_desc', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_translate_desc', 'database'), array('maxLength'       => 100,
-                                                                                                                               'helpTextIdLabel' => 'MNU_NAME_DESC_DESC'));
-
-if($fieldPropertyStandart == FIELD_DISABLED)
-{
-    $form->addInput('men_modul_name', null, $menu->getValue('men_modul_name', 'database'), array('type' => 'hidden'));
-}
 $form->addInput('men_standart', null, $standart, array('type' => 'hidden'));
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));

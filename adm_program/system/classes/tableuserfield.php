@@ -114,12 +114,12 @@ class TableUserField extends TableAccess
     }
 
     /**
-     * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
-     * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-     * Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_2'
-     * @param string $name
-     * @param int    $index
-     * @return string
+     * This recursive method creates from the parameter name a unique name that only have
+     * capital letters followed by the next free number (index)
+     * Example: 'Membership' => 'MEMBERSHIP_2'
+     * @param string $name  The name from which the unique name should be created
+     * @param int    $index The index of the name. Should be startet with 1
+     * @return string Returns the unique name with capital letters and number
      */
     private function getNewNameIntern($name, $index)
     {

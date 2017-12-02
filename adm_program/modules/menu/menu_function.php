@@ -27,7 +27,7 @@ $getMenId    = admFuncVariableIsValid($_GET, 'men_id',    'int');
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'int',    array('requireValue' => true));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence',  'string', array('validValues' => array('UP', 'DOWN')));
 
-$postModuleName = admFuncVariableIsValid($_POST, 'men_modul_name',  'string', array('default' => ''));
+$postModuleName = admFuncVariableIsValid($_POST, 'men_name_intern',  'string', array('default' => ''));
 
 // check rights
 if(!$gCurrentUser->isAdministrator())
@@ -46,8 +46,8 @@ if($getMenId > 0)
 // create menu or update it
 if($getMode === 1)
 {
-    $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_translate_desc',  'string', array('default' => ''));
-    $postTranslateName = admFuncVariableIsValid($_POST, 'men_translate_name',  'string', array('default' => ''));
+    $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_description',  'string', array('default' => ''));
+    $postTranslateName = admFuncVariableIsValid($_POST, 'men_name',  'string', array('default' => ''));
     $postIcon = admFuncVariableIsValid($_POST, 'men_icon',  'string', array('default' => ''));
 
     try
@@ -57,11 +57,11 @@ if($getMode === 1)
         $icon = $array_icon[$postIcon];
 
         $menu->setValue('men_parent_id', $_POST['men_parent_id']);
-        $menu->setValue('men_modul_name', $postModuleName);
+        $menu->setValue('men_name_intern', $postModuleName);
         $menu->setValue('men_url',  $_POST['men_url']);
         $menu->setValue('men_icon', $icon);
-        $menu->setValue('men_translate_name', $postTranslateName);
-        $menu->setValue('men_translate_desc', $postTranslateDesc);
+        $menu->setValue('men_name', $postTranslateName);
+        $menu->setValue('men_description', $postTranslateDesc);
 
         // check all values from Checkboxes, because if there is no value set, we need
         // to set it on 0 as default
