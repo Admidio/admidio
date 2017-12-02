@@ -43,9 +43,9 @@ if(!headers_sent())
 }
 
 // determine session id
-if(array_key_exists(COOKIE_PREFIX . '_ID', $_COOKIE))
+if(array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
 {
-    $gSessionId = $_COOKIE[COOKIE_PREFIX . '_ID'];
+    $gSessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
 }
 else
 {

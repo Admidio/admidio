@@ -628,7 +628,7 @@ class User extends TableAccess
         if ($updateSessionCookies)
         {
             // set cookie for session id
-            Session::setCookie(COOKIE_PREFIX . '_ID', $gSessionId);
+            Session::setCookie(COOKIE_PREFIX . '_SESSION_ID', $gSessionId);
 
             // count logins and update login dates
             $this->saveChangesWithoutRights();
