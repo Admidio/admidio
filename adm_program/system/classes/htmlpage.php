@@ -337,10 +337,9 @@ class HtmlPage
                     // special check for "newreg"
                     if($row->men_modul_name === 'newreg')
                     {
-                        $menu_view = false;
-                        if($gSettingsManager->has('registration_enable_module') > 0)
+                        if(!$gCurrentUser->approveUsers() || $gSettingsManager->has('registration_enable_module') === 0)
                         {
-                            $menu_view = true;
+                            $menu_view = false;
                         }
                     }
 
