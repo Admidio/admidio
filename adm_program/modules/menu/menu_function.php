@@ -46,9 +46,25 @@ if($getMenId > 0)
 // create menu or update it
 if($getMode === 1)
 {
+    $_SESSION['menu_request'] = $_POST;
+
     $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_description',  'string', array('default' => ''));
     $postTranslateName = admFuncVariableIsValid($_POST, 'men_name',  'string', array('default' => ''));
     $postIcon = admFuncVariableIsValid($_POST, 'men_icon',  'string', array('default' => ''));
+
+    // Check if mandatory fields are filled
+    // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
+    if($postTranslateName === '')
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
+        // => EXIT
+    }
+
+    if($_POST['men_url'] === '')
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_URL'))));
+        // => EXIT
+    }
 
     try
     {

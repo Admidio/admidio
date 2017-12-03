@@ -41,6 +41,29 @@ else
     $headline = $gL10n->get('SYS_CREATE_VAR', array($headline));
 }
 
+// create menu object
+$menu = new TableMenu($gDb);
+
+// systemcategories should not be renamed
+$roleViewSet[] = 0;
+
+if($getMenId > 0)
+{
+    $menu->readDataById($getMenId);
+
+    // Read current roles rights of the menu
+    $display = new RolesRights($gDb, 'menu_view', $getMenId);
+    $roleViewSet = $display->getRolesIds();
+}
+
+if(isset($_SESSION['menu_request']))
+{
+    // due to incorrect input, the user has returned to this form
+    // Now write the previously entered content into the object
+    $menu->setArray($_SESSION['menu_request']);
+    unset($_SESSION['menu_request']);
+}
+
 $gNavigation->addUrl(CURRENT_URL, array($headline));
 
 $menuArray = array(0 => 'MAIN');
@@ -74,6 +97,7 @@ function subfolder($parentId, $vorschub, $menu)
     $sql = 'SELECT *
               FROM '.TBL_MENU.'
              WHERE men_id    <> ? -- $menu->getValue(\'men_id\')
+               AND men_node = 1
                    '.$sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
 
@@ -88,9 +112,6 @@ function subfolder($parentId, $vorschub, $menu)
         subfolder($parentMenu->getValue('men_id'), $vorschub, $menu);
     }//while
 }//function
-
-// UserField-objekt anlegen
-$menu = new TableMenu($gDb);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -118,20 +139,6 @@ while($rowViewRoles = $rolesViewStatement->fetchObject())
 // show form
 $form = new HtmlForm('menu_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
 
-// systemcategories should not be renamed
-$standart = 0;
-$roleViewSet[] = 0;
-
-if($getMenId > 0)
-{
-    $menu->readDataById($getMenId);
-    $standart = $menu->getValue('men_standart');
-
-    // Read current roles rights of the menu
-    $display = new RolesRights($gDb, 'menu_view', $getMenId);
-    $roleViewSet = $display->getRolesIds();
-}
-
 subfolder(null, '', $menu);
 
 $form->addInput(
@@ -152,7 +159,9 @@ $form->addMultilineTextInput(
     array('maxLength' => 4000, 'helpTextIdLabel' => 'MNU_NAME_DESC_DESC')
 );
 
-$form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, array(
+$form->addSelectBox(
+    'men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, 
+    array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_parent_id'),
         'showContextDependentFirstEntry' => false,
@@ -160,23 +169,35 @@ $form->addSelectBox('men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, ar
     )
 );
 
-$form->addCheckbox('men_need_enable', $gL10n->get('MNU_NEED_ENABLED'), $menu->getValue('men_need_enable'), array('icon' => 'star.png'));
+$form->addCheckbox(
+    'men_need_enable', $gL10n->get('MNU_NEED_ENABLED'), $menu->getValue('men_need_enable'), 
+    array('icon' => 'star.png')
+);
 
 $form->addSelectBox(
     'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, 
     array('defaultValue' => $roleViewSet, 'multiselect'  => true)
 );
 
-$form->addInput('men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), array('maxLength' => 100));
+if((bool) $menu->getValue('men_node') === false)
+{
+    $form->addInput(
+        'men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), 
+        array('maxLength' => 100, 'property' => FIELD_REQUIRED)
+    );
+}
 
 $array_icon = array_slice(scandir(THEME_ADMIDIO_PATH . '/icons'), 2);
 $def_icon = array_search($menu->getValue('men_icon', 'database'), $array_icon);
-$form->addSelectBox('men_icon', $gL10n->get('SYS_ICON'), $array_icon, array('defaultValue' => $def_icon,
-                                                                            'showContextDependentFirstEntry' => true));
+$form->addSelectBox(
+    'men_icon', $gL10n->get('SYS_ICON'), $array_icon, 
+    array('defaultValue' => $def_icon, 'showContextDependentFirstEntry' => true)
+);
 
-$form->addInput('men_standart', null, $standart, array('type' => 'hidden'));
-
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+$form->addSubmitButton(
+    'btn_save', $gL10n->get('SYS_SAVE'), 
+    array('icon' => THEME_PATH.'/icons/disk.png')
+);
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

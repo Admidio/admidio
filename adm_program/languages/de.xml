@@ -625,6 +625,7 @@
     <string name="MNU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
     <string name="MNU_NAME_DESC_DESC">Eine Beschreibung die in der Übersicht angezeigt werden soll. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
     <string name="MNU_NEED_ENABLED">Muss auch über die Einstellungen erlaubt werden</string>
+    <string name="MNU_MENU_NODE">Menüknoten</string>
     <!-- Phrases only in New-User-Registration -->
     <string name="NWU_ASSIGN_LOGIN">Zugangsdaten zuordnen</string>
     <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Die Anmeldedaten wurden erfolgreich zugeordnet.</string>
