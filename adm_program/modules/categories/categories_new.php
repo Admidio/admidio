@@ -264,11 +264,11 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
-            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', array($organizations));
+            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
         }
         else
         {
-            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', array($organizations));
+            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
         }
     }
 
@@ -292,7 +292,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 
     $form->addStaticControl(
         'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', array($gL10n->get($rolesRightsName))))
+        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', $gL10n->get($rolesRightsName)))
     );
 
     $checked = false;
