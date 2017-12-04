@@ -598,6 +598,11 @@
     <string name="MEM_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</string>
     <string name="MEM_USERS_PER_PAGE">Anzahl Benutzer pro Seite</string>
     <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
+    <!-- Phrases only in Menü -->
+    <string name="MEN_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+    <string name="MEN_NAME_DESC_DESC">Eine Beschreibung die in der Übersicht angezeigt werden soll. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+    <string name="MEN_MENU_LEVEL">Menüebene</string>
+    <string name="MEN_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Willst du den Menüpunkt auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
     <!-- Phrases only in Messagemodule -->
     <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
     <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Das Chat-Modul kann über diese Einstellung aktiviert oder deaktiviert werden. Das Modul lädt alle 3 Sekunden dynamisch Daten aus der Datenbank. Es werden maximal 99 Einträge gespeichert. Bei 100 Meldungen werden die ersten 50 Einträge wieder gelöscht. (Standard: Deaktiviert)</string>
@@ -621,12 +626,6 @@
     <string name="PMS_SEND_PM">Private Nachricht senden</string>
     <string name="PMS_WAS_SENT_TO">Nachricht wurde gesendet an:</string>
     <string name="PMS_WAS_NOT_SENT_TO">Fehler - Nachricht wurde nicht gesendet an:</string>
-    <!-- Phrases only in Menü -->
-    <string name="MNU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
-    <string name="MNU_NAME_DESC_DESC">Eine Beschreibung die in der Übersicht angezeigt werden soll. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
-    <string name="MNU_NEED_ENABLED">Muss auch über die Einstellungen erlaubt werden</string>
-    <string name="MNU_MENU_LEVEL">Menüebene</string>
-    <string name="MNU_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Willst du den Menüpunkt auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
     <!-- Phrases only in New-User-Registration -->
     <string name="NWU_ASSIGN_LOGIN">Zugangsdaten zuordnen</string>
     <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Die Anmeldedaten wurden erfolgreich zugeordnet.</string>

@@ -90,11 +90,12 @@ $menuOverview = new HtmlTable('tbl_menues', $page, true);
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
-    'Order',
+    '&nbsp;',
+    $gL10n->get('ORG_URL'),
     'Standart Menu',
     '&nbsp;'
 );
-$menuOverview->setColumnAlignByArray(array('left', 'left', 'center', 'left', 'right'));
+$menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
 $menuOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
@@ -163,6 +164,7 @@ while ($main_men = $main_men_statement->fetchObject())
             $columnValues = array(
                 '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$gL10n->get($menu_row->men_description).'">'.$naming.'</a>',
                 $htmlMoveRow,
+                '<a href="'.ADMIDIO_URL. $menu_row->men_url. '" title="'.$gL10n->get($menu_row->men_description).'">'. $menu_row->men_url. '</a>',
                 $htmlStandartMenu,
                 $menuAdministration
             );

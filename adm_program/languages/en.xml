@@ -622,8 +622,8 @@
   <string name="PMS_WAS_SENT_TO">Message was sent to:</string>
   <string name="PMS_WAS_NOT_SENT_TO">Error - message was not sent to:</string>
   <!-- Phrases only in Menü -->
-  <string name="MNU_NAME_DESC">The Name of the entry in the Menu. You can also use a string from the translation file.</string>
-  <string name="MNU_NAME_DESC_DESC">Enter the description that should be shown in de Overview details. You can also use a string from the translation file.</string>
+  <string name="MEN_NAME_DESC">The Name of the entry in the Menu. You can also use a string from the translation file.</string>
+  <string name="MEN_NAME_DESC_DESC">Enter the description that should be shown in de Overview details. You can also use a string from the translation file.</string>
   <string name="MNU_NEED_ENABLED">need also to be enabled in config</string>
   <!--Phrases only in New-User-Registration-->
   <string name="NWU_ASSIGN_LOGIN">Assigning login information</string>

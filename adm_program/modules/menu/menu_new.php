@@ -143,7 +143,7 @@ subfolder(null, '', $menu);
 
 $form->addInput(
     'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'), 
-    array('maxLength' => 100, 'property'=> FIELD_REQUIRED, 'helpTextIdLabel' => 'MNU_NAME_DESC')
+    array('maxLength' => 100, 'property'=> FIELD_REQUIRED, 'helpTextIdLabel' => 'MEN_NAME_DESC')
 );
 
 if($getMenId > 0)
@@ -156,16 +156,16 @@ if($getMenId > 0)
 
 $form->addMultilineTextInput(
     'men_description', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_description', 'database'), 2,
-    array('maxLength' => 4000, 'helpTextIdLabel' => 'MNU_NAME_DESC_DESC')
+    array('maxLength' => 4000, 'helpTextIdLabel' => 'MEN_NAME_DESC_DESC')
 );
 
 $form->addSelectBox(
-    'men_parent_id', $gL10n->get('MNU_MENU_LEVEL'), $menuArray, 
+    'men_parent_id', $gL10n->get('MEN_MENU_LEVEL'), $menuArray, 
     array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_parent_id'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => array('MNU_MENU_LEVEL_DESC', 'MAIN')
+        'helpTextIdLabel'                => array('MEN_MENU_LEVEL_DESC', 'MAIN')
     )
 );
 
