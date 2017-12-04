@@ -86,12 +86,12 @@ function subfolder($parentId, $vorschub, $menu)
     // Erfassen des auszugebenden Albums
     if ($parentId > 0)
     {
-        $sqlConditionParentId .= ' AND men_parent_id = ? -- $parentId';
+        $sqlConditionParentId .= ' AND men_men_id_parent = ? -- $parentId';
         $queryParams[] = $parentId;
     }
     else
     {
-        $sqlConditionParentId .= ' AND men_parent_id IS NULL';
+        $sqlConditionParentId .= ' AND men_men_id_parent IS NULL';
     }
 
     $sql = 'SELECT *
@@ -156,14 +156,14 @@ if($getMenId > 0)
 
 $form->addMultilineTextInput(
     'men_description', $gL10n->get('SYS_DESCRIPTION'), $menu->getValue('men_description', 'database'), 2,
-    array('maxLength' => 4000, 'helpTextIdLabel' => 'MEN_NAME_DESC_DESC')
+    array('maxLength' => 4000)
 );
 
 $form->addSelectBox(
-    'men_parent_id', $gL10n->get('MEN_MENU_LEVEL'), $menuArray, 
+    'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuArray, 
     array(
         'property'                       => FIELD_REQUIRED,
-        'defaultValue'                   => $menu->getValue('men_parent_id'),
+        'defaultValue'                   => $menu->getValue('men_men_id_parent'),
         'showContextDependentFirstEntry' => false,
         'helpTextIdLabel'                => array('MEN_MENU_LEVEL_DESC', 'MAIN')
     )
@@ -182,11 +182,11 @@ if((bool) $menu->getValue('men_node') === false)
     );
 }
 
-$array_icon = array_slice(scandir(THEME_ADMIDIO_PATH . '/icons'), 2);
-$def_icon = array_search($menu->getValue('men_icon', 'database'), $array_icon);
+$arrayIcons  = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
+$defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons);
 $form->addSelectBox(
-    'men_icon', $gL10n->get('SYS_ICON'), $array_icon, 
-    array('defaultValue' => $def_icon, 'showContextDependentFirstEntry' => true)
+    'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons, 
+    array('defaultValue' => $defaultIcon, 'showContextDependentFirstEntry' => true)
 );
 
 $form->addSubmitButton(

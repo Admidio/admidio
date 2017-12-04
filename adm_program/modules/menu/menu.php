@@ -100,7 +100,7 @@ $menuOverview->addRowHeadingByArray($columnHeading);
 
 $sql = 'SELECT *
   FROM '.TBL_MENU.'
-  where men_parent_id is null
+  where men_men_id_parent is null
  ORDER BY men_order';
 $main_men_statement = $gDb->query($sql);
 
@@ -109,8 +109,8 @@ while ($main_men = $main_men_statement->fetchObject())
 
     $sql = 'SELECT *
               FROM '.TBL_MENU.'
-              where men_parent_id = ? -- $main_men->men_id
-             ORDER BY men_parent_id DESC, men_order';
+              where men_men_id_parent = ? -- $main_men->men_id
+             ORDER BY men_men_id_parent DESC, men_order';
             $menuStatement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
     if($menuStatement->rowCount() > 0)
@@ -122,9 +122,9 @@ while ($main_men = $main_men_statement->fetchObject())
         while($menu_row = $menuStatement->fetchObject())
         {
 
-            if($menuGroup != $menu_row->men_parent_id)
+            if($menuGroup != $menu_row->men_men_id_parent)
             {
-                $block_id = 'admMenu_'.$menu_row->men_parent_id;
+                $block_id = 'admMenu_'.$menu_row->men_men_id_parent;
 
                 $menuOverview->addTableBody();
                 $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
@@ -132,7 +132,7 @@ while ($main_men = $main_men_statement->fetchObject())
                                   array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
                 $menuOverview->addTableBody('id', $block_id);
 
-                $menuGroup = $menu_row->men_parent_id;
+                $menuGroup = $menu_row->men_men_id_parent;
             }
 
             $naming = $gL10n->get($menu_row->men_name);

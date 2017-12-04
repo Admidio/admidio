@@ -68,14 +68,16 @@ if($getMode === 1)
 
     try
     {
-        // get the name of the icon to save it.
-        $array_icon = array_slice(scandir(THEME_ADMIDIO_PATH . '/icons'), 2);
-        $icon = $array_icon[$postIcon];
+        if($postIcon !== '')
+        {
+            // get the name of the icon to save it.
+            $arrayIcons = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
+            $menu->setValue('men_icon',$arrayIcons[$postIcon]);
+        }
 
-        $menu->setValue('men_parent_id', $_POST['men_parent_id']);
+        $menu->setValue('men_men_id_parent', $_POST['men_men_id_parent']);
         $menu->setValue('men_name_intern', $postModuleName);
         $menu->setValue('men_url',  $_POST['men_url']);
-        $menu->setValue('men_icon', $icon);
         $menu->setValue('men_name', $postTranslateName);
         $menu->setValue('men_description', $postTranslateDesc);
 

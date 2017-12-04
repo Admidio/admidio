@@ -236,7 +236,7 @@ class HtmlPage
         // display Menu
         $sql = 'SELECT *
           FROM '.TBL_MENU.'
-          where men_parent_id is null
+          where men_men_id_parent is null
          ORDER BY men_order';
         $main_men_statement = $gDb->query($sql);
 
@@ -247,8 +247,8 @@ class HtmlPage
             // display Menu
             $sql = 'SELECT *
               FROM '.TBL_MENU.'
-              where men_parent_id = ? -- $main_men->men_id
-             ORDER BY men_parent_id DESC, men_order';
+              where men_men_id_parent = ? -- $main_men->men_id
+             ORDER BY men_men_id_parent DESC, men_order';
             $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
             if($statement->rowCount() > 0)
@@ -257,14 +257,14 @@ class HtmlPage
 
                 while ($row = $statement->fetchObject())
                 {
-                    if($row->men_parent_id != $last)
+                    if($row->men_men_id_parent != $last)
                     {
                         if($last > 0)
                         {
                             $full_menu .= $Menu->show($details);
                         }
                         $Menu = new Menu($main_men->men_name_intern, $gL10n->get($main_men->men_name));
-                        $last = $row->men_parent_id;
+                        $last = $row->men_men_id_parent;
                     }
 
                     $menu_view = true;
@@ -409,7 +409,7 @@ class HtmlPage
         // display Menu
         $sql = 'SELECT *
           FROM '.TBL_MENU.'
-          where men_parent_id is null
+          where men_men_id_parent is null
          ORDER BY men_order';
         $main_men_statement = $gDb->query($sql);
 
@@ -418,8 +418,8 @@ class HtmlPage
             // display Menu
             $sql = 'SELECT *
               FROM '.TBL_MENU.'
-              where men_parent_id = ? -- $main_men->men_id
-             ORDER BY men_parent_id DESC, men_order';
+              where men_men_id_parent = ? -- $main_men->men_id
+             ORDER BY men_men_id_parent DESC, men_order';
             $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
 
             if($statement->rowCount() > 0)
@@ -428,10 +428,10 @@ class HtmlPage
 
                 while ($row = $statement->fetchObject())
                 {
-                    if($row->men_parent_id != $last)
+                    if($row->men_men_id_parent != $last)
                     {
                         $this->menu->addItem('menu_item_'.$main_men->men_name_intern, null, $gL10n->get($main_men->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                        $last = $row->men_parent_id;
+                        $last = $row->men_men_id_parent;
                     }
 
                     $menu_view = true;

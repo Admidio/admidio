@@ -600,7 +600,6 @@
     <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
     <!-- Phrases only in Menü -->
     <string name="MEN_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
-    <string name="MEN_NAME_DESC_DESC">Eine Beschreibung die in der Übersicht angezeigt werden soll. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
     <string name="MEN_MENU_LEVEL">Menüebene</string>
     <string name="MEN_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Willst du den Menüpunkt auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
     <!-- Phrases only in Messagemodule -->

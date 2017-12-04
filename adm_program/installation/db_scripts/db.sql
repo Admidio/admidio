@@ -343,14 +343,15 @@ CREATE INDEX idx_%PREFIX%_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_us
 /*==============================================================*/
 create table %PREFIX%_menu
 (
-    men_id                      integer       unsigned not null AUTO_INCREMENT,
-    men_parent_id               integer,
+    men_id                      integer unsigned    NOT NULL AUTO_INCREMENT,
+    men_com_id                  integer unsigned,
+    men_men_id_parent           integer unsigned,
     men_name_intern             varchar(255),
     men_name                    varchar(255),
     men_description             varchar(4000),
-    men_node                    boolean       not null default '0',
+    men_node                    boolean             NOT NULL DEFAULT '0',
     men_order                   integer,
-    men_standart                boolean       not null default '0',
+    men_standart                boolean             NOT NULL DEFAULT '0',
     men_url                     varchar(255),
     men_icon                    varchar(2000),
     primary key (men_id)
