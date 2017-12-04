@@ -91,7 +91,6 @@ $menuOverview = new HtmlTable('tbl_menues', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     'Order',
-    'need to enable in menu <img class="admidio-icon-info" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" />',
     'Standart Menu',
     '&nbsp;'
 );
@@ -142,13 +141,6 @@ while ($main_men = $main_men_statement->fetchObject())
                                <a class="admidio-icon-link" href="javascript:moveMenu(\'down\', '.$menu_row->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" /></a>';
 
-
-            $htmlEnabledMenu = '&nbsp;';
-            if($menu_row->men_need_enable == 1)
-            {
-                $htmlEnabledMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" />';
-            }
-
             $htmlStandartMenu = '&nbsp;';
             if($menu_row->men_standart == 1)
             {
@@ -171,7 +163,6 @@ while ($main_men = $main_men_statement->fetchObject())
             $columnValues = array(
                 '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$gL10n->get($menu_row->men_description).'">'.$naming.'</a>',
                 $htmlMoveRow,
-                $htmlEnabledMenu,
                 $htmlStandartMenu,
                 $menuAdministration
             );

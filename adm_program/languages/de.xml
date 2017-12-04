@@ -625,7 +625,8 @@
     <string name="MNU_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
     <string name="MNU_NAME_DESC_DESC">Eine Beschreibung die in der Übersicht angezeigt werden soll. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
     <string name="MNU_NEED_ENABLED">Muss auch über die Einstellungen erlaubt werden</string>
-    <string name="MNU_MENU_NODE">Menüknoten</string>
+    <string name="MNU_MENU_LEVEL">Menüebene</string>
+    <string name="MNU_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Willst du den Menüpunkt auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
     <!-- Phrases only in New-User-Registration -->
     <string name="NWU_ASSIGN_LOGIN">Zugangsdaten zuordnen</string>
     <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Die Anmeldedaten wurden erfolgreich zugeordnet.</string>

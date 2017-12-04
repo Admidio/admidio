@@ -79,17 +79,6 @@ if($getMode === 1)
         $menu->setValue('men_name', $postTranslateName);
         $menu->setValue('men_description', $postTranslateDesc);
 
-        // check all values from Checkboxes, because if there is no value set, we need
-        // to set it on 0 as default
-        if(!isset($_POST['men_need_enable']) || $_POST['men_need_enable'] != 1)
-        {
-            $menu->setValue('men_need_enable', 0);
-        }
-        else
-        {
-            $menu->setValue('men_need_enable', 1);
-        }
-
         $getMenId = $menu->getValue('men_id');
 
         // save Data to Table

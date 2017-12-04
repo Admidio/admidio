@@ -283,7 +283,7 @@ class HtmlPage
                     $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
                     $rolesDisplay = $displayMenu->getRolesIds();
 
-                    if($row->men_need_enable == 1)
+                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
                     {
                         if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
                         {
@@ -446,7 +446,7 @@ class HtmlPage
                     $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
                     $rolesDisplayRight = $displayMenu->getRolesIds();
 
-                    if($row->men_need_enable == 1)
+                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
                     {
                         if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
                         {

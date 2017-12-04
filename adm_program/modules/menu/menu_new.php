@@ -160,18 +160,13 @@ $form->addMultilineTextInput(
 );
 
 $form->addSelectBox(
-    'men_parent_id', $gL10n->get('SYS_CATEGORY'), $menuArray, 
+    'men_parent_id', $gL10n->get('MNU_MENU_LEVEL'), $menuArray, 
     array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_parent_id'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', 'MAIN')
+        'helpTextIdLabel'                => array('MNU_MENU_LEVEL_DESC', 'MAIN')
     )
-);
-
-$form->addCheckbox(
-    'men_need_enable', $gL10n->get('MNU_NEED_ENABLED'), $menu->getValue('men_need_enable'), 
-    array('icon' => 'star.png')
 );
 
 $form->addSelectBox(
