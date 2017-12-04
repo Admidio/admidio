@@ -336,7 +336,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX idx_%PREFIX%_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
+CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
 
 /*==============================================================*/
 /* Table: adm_menu                                             */
@@ -398,7 +398,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX idx_%PREFIX%_msc_part_id ON %PREFIX%_messages_content (msc_part_id);
+CREATE INDEX %PREFIX%_idx_msc_part_id ON %PREFIX%_messages_content (msc_part_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -416,7 +416,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX ak_%PREFIX%_shortname ON %PREFIX%_organizations (org_shortname);
+CREATE UNIQUE INDEX %PREFIX%_idx_org_shortname ON %PREFIX%_organizations (org_shortname);
 
 /*==============================================================*/
 /* Table: adm_photos                                            */
@@ -457,7 +457,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX idx_%PREFIX%_prf_org_id_name ON %PREFIX%_preferences (prf_org_id, prf_name);
+CREATE UNIQUE INDEX %PREFIX%_idx_prf_org_id_name ON %PREFIX%_preferences (prf_org_id, prf_name);
 
 /*==============================================================*/
 /* Table: adm_registrations                                     */
@@ -571,7 +571,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX idx_%PREFIX%_rrd_ror_rol_object_id ON %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_rrd_ror_rol_object_id ON %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id);
 
 /*==============================================================*/
 /* Table: adm_rooms                                             */
@@ -613,7 +613,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX idx_%PREFIX%_session_id ON %PREFIX%_sessions (ses_session_id);
+CREATE INDEX %PREFIX%_idx_session_id ON %PREFIX%_sessions (ses_session_id);
 
 /*==============================================================*/
 /* Table: adm_texts                                             */
@@ -660,7 +660,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX idx_%PREFIX%_usf_name_intern ON %PREFIX%_user_fields (usf_name_intern);
+CREATE UNIQUE INDEX %PREFIX%_idx_usf_name_intern ON %PREFIX%_user_fields (usf_name_intern);
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
@@ -677,7 +677,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX idx_%PREFIX%_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
 /*==============================================================*/
 /* Table: adm_user_log                                          */
@@ -726,7 +726,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX idx_%PREFIX%_usr_login_name ON %PREFIX%_users (usr_login_name);
+CREATE UNIQUE INDEX %PREFIX%_idx_usr_login_name ON %PREFIX%_users (usr_login_name);
 
 /*==============================================================*/
 /* Table: adm_user_relation_types                               */
