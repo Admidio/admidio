@@ -34,10 +34,6 @@ class ComponentUpdate extends Component
      */
     private $updateFinished;
     /**
-     * @var \SimpleXMLElement The SimpleXML object with all the update steps
-     */
-    private $xmlObject;
-    /**
      * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
      */
     private $targetVersionArray;
