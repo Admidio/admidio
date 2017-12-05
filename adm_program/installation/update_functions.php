@@ -111,72 +111,66 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 {
     global $gLogger, $gDb, $gL10n;
 
-    $flagNextVersion = true;
-
-    // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
-    while($flagNextVersion)
+    // nun in einer Schleife alle Update-Scripte fuer Version 2 einspielen
+    while ($versionMain === 2)
     {
         $flagNextVersion = false;
 
-        if ($versionMain === 2)
+        // version 2 Admidio had sql and php files where the update statements where stored
+        // these files must be executed
+
+        // in der Schleife wird geschaut ob es Scripte fuer eine patch-version (3. Versionsstelle) gibt
+        // patch-version 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
+        for ($tmpPathVersion = $versionPatch; $tmpPathVersion <= 14; ++$tmpPathVersion)
         {
-            // version 2 Admidio had sql and php files where the update statements where stored
-            // these files must be executed
+            $version = $versionMain . '_' . $versionMinor . '_' . $tmpPathVersion;
 
-            // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
-            // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-            for ($versionPatch; $versionPatch < 15; ++$versionPatch)
+            // output of the version number for better debugging
+            $gLogger->info('Update to version ' . $version);
+
+            $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
+            $sqlFileName = 'upd_' . $version . '_db.sql';
+            $phpFileName = 'upd_' . $version . '_conv.php';
+
+            if (is_file($dbScriptsPath . $sqlFileName))
             {
-                $version = $versionMain . '_' . $versionMinor . '_' . $versionPatch;
+                $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
 
-                // output of the version number for better debugging
-                $gLogger->info('Update to version ' . $version);
-
-                $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
-                $sqlFileName = 'upd_' . $version . '_db.sql';
-                $phpFileName = 'upd_' . $version . '_conv.php';
-
-                if (is_file($dbScriptsPath . $sqlFileName))
+                if ($sqlQueryResult === true)
                 {
-                    $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
-
-                    if ($sqlQueryResult === true)
-                    {
-                        $flagNextVersion = true;
-                    }
-                    else
-                    {
-                        showNotice($sqlQueryResult, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-                        // => EXIT
-                    }
-                }
-
-                $phpUpdateFile = $dbScriptsPath . $phpFileName;
-                // check if an php update file exists and then execute the script
-                if (is_file($phpUpdateFile))
-                {
-                    include($phpUpdateFile);
                     $flagNextVersion = true;
-                }
-            }
-
-            // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
-            // solange bis die aktuelle Versionsnummer erreicht wurde
-            if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $versionPatch, ADMIDIO_VERSION, '<'))
-            {
-                if ($versionMinor === 4) // we do not have more then 4 subversions with old updater
-                {
-                    ++$versionMain;
-                    $versionMinor = 0;
                 }
                 else
                 {
-                    ++$versionMinor;
+                    showNotice($sqlQueryResult, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+                    // => EXIT
                 }
+            }
 
-                $versionPatch = 0;
+            $phpUpdateFile = $dbScriptsPath . $phpFileName;
+            // check if an php update file exists and then execute the script
+            if (is_file($phpUpdateFile))
+            {
+                include($phpUpdateFile);
                 $flagNextVersion = true;
             }
+        }
+
+        // keine Datei mit der patch-version gefunden, dann die Main- oder minor-version hochsetzen,
+        // solange bis die aktuelle Versionsnummer erreicht wurde
+        if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $tmpPathVersion, ADMIDIO_VERSION, '<'))
+        {
+            if ($versionMinor === 4) // we do not have more then 4 minor-versions with old updater
+            {
+                $versionMain = 3;
+                $versionMinor = 0;
+            }
+            else
+            {
+                ++$versionMinor;
+            }
+
+            $versionPatch = 0;
         }
     }
 }
