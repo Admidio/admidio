@@ -357,7 +357,14 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update
-Session::start(COOKIE_PREFIX);
+try
+{
+    Session::start(COOKIE_PREFIX);
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
+}
 unset($_SESSION['gCurrentSession']);
 
 // create language and language data object to handle translations

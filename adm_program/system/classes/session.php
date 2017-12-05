@@ -462,10 +462,19 @@ class Session extends TableAccess
      * @param bool   $secure       If "true" cookie is only set if connection is HTTPS. Default is an auto detection.
      * @param bool   $httpOnly     If "true" cookie is accessible only via HTTP.
      *                             Set to "false" to allow access for JavaScript. (Possible XSS security leak)
+     * @throws \RuntimeException
      */
     public static function start($cookiePrefix, $limit = 0, $path = '', $domain = '', $secure = null, $httpOnly = true)
     {
         global $gLogger, $gSetCookieForDomain;
+
+        if (headers_sent())
+        {
+            $message = 'HTTP-Headers already sent!';
+            $gLogger->alert($message);
+
+            throw new \RuntimeException($message);
+        }
 
         $sessionName = $cookiePrefix . '_SESSION_ID';
 
