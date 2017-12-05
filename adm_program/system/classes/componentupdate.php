@@ -38,10 +38,6 @@ class ComponentUpdate extends Component
      */
     private $xmlObject;
     /**
-     * @var array<int,int> This is the version the component has actually before update. Each array element contains one part of the version.
-     */
-    private $currentVersionArray;
-    /**
      * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
      */
     private $targetVersionArray;
@@ -108,10 +104,10 @@ class ComponentUpdate extends Component
     public function getMaxUpdateStep()
     {
         $maxUpdateStep = 0;
-        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+        $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
         // open xml file for this version
-        if ($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
+        if ($this->createXmlObject($currentVersionArray[0], $currentVersionArray[1]))
         {
             // go step by step through the SQL statements until the last one is found
             foreach ($this->xmlObject->children() as $updateStep)
@@ -217,10 +213,10 @@ class ComponentUpdate extends Component
         global $gLogger;
 
         $this->updateFinished = false;
-        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
-        $initialMinorVersion = $this->currentVersionArray[1];
+        $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+        $initialMinorVersion = $currentVersionArray[1];
 
-        for ($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
+        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
             // then set target subversion to the max version
@@ -236,7 +232,7 @@ class ComponentUpdate extends Component
             for($minorVersion = $initialMinorVersion; $minorVersion <= $maxSubVersion; ++$minorVersion)
             {
                 // if version is not equal to current version then start update step with 0
-                if ($mainVersion !== $this->currentVersionArray[0] || $minorVersion !== $this->currentVersionArray[1])
+                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1])
                 {
                     $this->setValue('com_update_step', 0);
                     $this->save();
