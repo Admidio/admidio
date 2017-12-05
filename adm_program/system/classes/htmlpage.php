@@ -104,32 +104,6 @@ class HtmlPage
     }
 
     /**
-     * The method will return the filename. If you are in debug mode than it will return the
-     * not minified version of the filename otherwise it will return the minified version.
-     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
-     * and one version without the @b min.
-     * @param string $filepath Filename of the NOT minified file.
-     * @return string Returns the filename in dependence of the debug mode.
-     */
-    private function getDebugOrMinFilepath($filepath)
-    {
-        global $gDebug;
-
-        $fileInfo = pathinfo($filepath);
-        $filename = basename($fileInfo['filename'], '.min');
-
-        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
-
-        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
-        {
-            return ADMIDIO_URL . $filepathMin;
-        }
-
-        return ADMIDIO_URL . $filepathDebug;
-    }
-
-    /**
      * Adds a cascading style sheets file to the html page.
      * @param string $cssFile The url with filename or the relative path starting with @i adm_program of the css file.
      */
@@ -223,467 +197,6 @@ class HtmlPage
     }
 
     /**
-     * create and show Mainmenu
-     * @param bool $details  indicator to set if there should be details in the menu.
-     * @return HTML of the Menu
-     */
-    public function showMainMenu($details = true)
-    {
-        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
-        $men_icon  = '/dummy.png';
-        $full_menu = '';
-
-        // display Menu
-        $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_men_id_parent is null
-         ORDER BY men_order';
-        $main_men_statement = $gDb->query($sql);
-
-        while ($main_men = $main_men_statement->fetchObject())
-        {
-            $unreadBadge = '';
-
-            // display Menu
-            $sql = 'SELECT *
-              FROM '.TBL_MENU.'
-              where men_men_id_parent = ? -- $main_men->men_id
-             ORDER BY men_men_id_parent DESC, men_order';
-            $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
-
-            if($statement->rowCount() > 0)
-            {
-                $last = '';
-
-                while ($row = $statement->fetchObject())
-                {
-                    if($row->men_men_id_parent != $last)
-                    {
-                        if($last > 0)
-                        {
-                            $full_menu .= $Menu->show($details);
-                        }
-                        $Menu = new Menu($main_men->men_name_intern, $gL10n->get($main_men->men_name));
-                        $last = $row->men_men_id_parent;
-                    }
-
-                    $menu_view = true;
-                    $desc = '';
-
-                    if(strlen($row->men_description) > 2)
-                    {
-                        $desc = $gL10n->get($row->men_description);
-                        if($desc == '##' || $desc[0] == '#')
-                        {
-                            $desc = $row->men_description;
-                        }
-                    }
-
-                    // Read current roles rights of the menu
-                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
-                    $rolesDisplay = $displayMenu->getRolesIds();
-
-                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
-                    {
-                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
-                        {
-                            $menu_view = true;
-                        }
-                        else
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    $men_url = $row->men_url;
-
-                    if(strlen($row->men_icon) > 2)
-                    {
-                        $men_icon = $row->men_icon;
-                    }
-
-                    $men_name = $gL10n->get($row->men_name);
-                    if($men_name == '##' || $men_name[0] == '#')
-                    {
-                        $men_name = $row->men_name;
-                    }
-
-                    //special case because there are differnent links if you are logged in or out for mail
-                    if($row->men_name_intern === 'mail' && $gValidLogin)
-                    {
-                        // get number of unread messages for user
-                        $message = new TableMessage($gDb);
-                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                        if($unread > 0)
-                        {
-                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
-                        }
-
-                        $men_url = '/adm_program/modules/messages/messages.php';
-                        $men_icon = 'messages.png';
-                        $men_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                    }
-
-                    if(count($rolesDisplay) >= 1)
-                    {
-                        // check for rigth to show the menue
-                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    // special check for "newreg"
-                    if($row->men_name_intern === 'newreg')
-                    {
-                        if(!$gCurrentUser->approveUsers() || $gSettingsManager->get('registration_enable_module') === 0)
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    // special check for "usrmgt"
-                    if($row->men_name_intern === 'usrmgt')
-                    {
-                        if(!$gCurrentUser->editUsers())
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    // special check for "roladm"
-                    if($row->men_name_intern === 'roladm')
-                    {
-                        if(!$gCurrentUser->manageRoles())
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    if($menu_view == true)
-                    {
-                        $Menu->addItem($row->men_name_intern, $men_url, $men_name, $men_icon, $desc);
-                    }
-
-                    if($details == true)
-                    {
-                        //Submenu for Lists
-                        if($gValidLogin && $row->men_name_intern === 'lists')
-                        {
-                            $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
-                                                    $gL10n->get('LST_MY_LIST'));
-                            $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
-                                                    $gL10n->get('ROL_INACTIV_ROLE'));
-                        }
-
-                        //Submenu for Dates
-                        if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
-                        || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
-                        {
-                            $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
-                                                    $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
-                        }
-                    }
-                }
-                $full_menu .= $Menu->show($details);
-            }
-
-            $this->menu->addItem(
-                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
-                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        return $full_menu;
-    }
-
-    /**
-     * Adds the modal menu
-     * @return void
-     */
-    public function addModalMenu()
-    {
-        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
-
-        // display Menu
-        $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_men_id_parent is null
-         ORDER BY men_order';
-        $main_men_statement = $gDb->query($sql);
-
-        while ($main_men = $main_men_statement->fetchObject())
-        {
-            // display Menu
-            $sql = 'SELECT *
-              FROM '.TBL_MENU.'
-              where men_men_id_parent = ? -- $main_men->men_id
-             ORDER BY men_men_id_parent DESC, men_order';
-            $statement = $gDb->queryPrepared($sql, array($main_men->men_id));
-
-            if($statement->rowCount() > 0)
-            {
-                $last = '';
-
-                while ($row = $statement->fetchObject())
-                {
-                    if($row->men_men_id_parent != $last)
-                    {
-                        $this->menu->addItem('menu_item_'.$main_men->men_name_intern, null, $gL10n->get($main_men->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                        $last = $row->men_men_id_parent;
-                    }
-
-                    $menu_view = true;
-                    $desc = '';
-
-                    if(strlen($row->men_description) > 2)
-                    {
-                        $desc = $gL10n->get($row->men_description);
-                    }
-
-                    // Read current roles rights of the menu
-                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
-                    $rolesDisplayRight = $displayMenu->getRolesIds();
-
-                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
-                    {
-                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
-                        {
-                            $menu_view = true;
-                        }
-                        else
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    $men_url = $row->men_url;
-                    $men_icon = $row->men_icon;
-                    $men_name = $gL10n->get($row->men_name);
-
-                    //special case because there are differnent links if you are logged in or out for mail
-                    if($row->men_name_intern === 'mail' && $gValidLogin)
-                    {
-                        $unreadBadge = '';
-
-                        // get number of unread messages for user
-                        $message = new TableMessage($gDb);
-                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                        if($unread > 0)
-                        {
-                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
-                        }
-
-                        $men_url = '/adm_program/modules/messages/messages.php';
-                        $men_icon = '/icons/messages.png';
-                        $men_name = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                    }
-
-                    if(count($rolesDisplayRight) >= 1)
-                    {
-                        // check for rigth to show the menue
-                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    // special check for "newreg"
-                    if($row->men_name_intern === 'newreg')
-                    {
-                        $menu_view = false;
-                        if($gSettingsManager->get('registration_enable_module') > 0)
-                        {
-                            $menu_view = true;
-                        }
-                    }
-
-                    // special check for "usrmgt"
-                    if($row->men_name_intern === 'usrmgt')
-                    {
-                        if(!$gCurrentUser->editUsers())
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    // special check for "roladm"
-                    if($row->men_name_intern === 'roladm')
-                    {
-                        if(!$gCurrentUser->manageRoles())
-                        {
-                            $menu_view = false;
-                        }
-                    }
-
-                    if($menu_view == true)
-                    {
-                        $this->menu->addItem($row->men_name_intern, $men_url, $men_name, $men_icon, 'right', 'menu_item_'.$main_men->men_name_intern, 'admidio-default-menu-item');
-                    }
-                }
-            }
-        }
-
-        if ($gValidLogin)
-        {
-            // show link to own profile
-            $this->menu->addItem(
-                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
-                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-            // show logout link
-            $this->menu->addItem(
-                'menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
-                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-        else
-        {
-            // show registration link
-            $this->menu->addItem(
-                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-            // show login link
-            $this->menu->addItem(
-                'menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
-                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-    }
-
-    /**
-     * Adds the html code for a modal window to the current script.
-     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
-     */
-    public function enableModal()
-    {
-        $this->showModal = true;
-    }
-
-    /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
-     * @return string Returns the headline of the current Admidio page.
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Returns the menu object of this html page.
-     * @return \HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-
-    /**
-     * Returns the title of the html page.
-     * @return string Returns the title of the html page.
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Every html page of Admidio contains a menu.
-     * If the menu should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideMenu()
-    {
-        $this->showMenu = false;
-    }
-
-    /**
-     * Every html page of Admidio contains three files of the custom theme.
-     * my_header.php, my_body_top.php and my_body_bottom.php
-     * With these files the administrator can contain custom layout to Admidio.
-     * If these files should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideThemeHtml()
-    {
-        $this->showThemeHtml = false;
-    }
-
-    /**
-     * Flag if the current page has a navbar.
-     * @return void
-     */
-    public function hasNavbar()
-    {
-        $this->hasNavbar = true;
-    }
-
-    /**
-     * Set the h1 headline of the current html page. If the title of the page
-     * was not set until now than this will also be the title.
-     * @param string $headline A string that contains the headline for the page.
-     * @return void
-     */
-    public function setHeadline($headline)
-    {
-        if ($this->title === '')
-        {
-            $this->setTitle($headline);
-        }
-
-        $this->headline = $headline;
-        $this->menu->setName($headline);
-    }
-
-    /**
-     * Set the title of the html page that will be shown in the <title> tag.
-     * @param string $title A string that contains the title for the page.
-     * @return void
-     */
-    public function setTitle($title)
-    {
-        global $gCurrentOrganization;
-
-        if ($title === '')
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname');
-        }
-        else
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
-        }
-    }
-
-    /**
-     * If print mode is set then a print specific css file will be loaded.
-     * All styles will be more print compatible and are only black, grey and white.
-     * @return void
-     */
-    public function setPrintMode()
-    {
-        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
-        global $g_root_path;
-
-        $headerContent    = '';
-        $htmlMyHeader     = '';
-        $htmlMyBodyTop    = '';
-        $htmlMyBodyBottom = '';
-        $htmlMenu         = '';
-        $htmlHeadline     = '';
-
-        if($this->showMenu)
-        {
-            // add modules and administration modules to the menu
-            $this->addModalMenu();
-            $htmlMenu = $this->menu->show();
-        }
-    }
-
-    /**
      * adds the main necessary files
      */
     private function addMainFilesAndContent()
@@ -733,6 +246,206 @@ class HtmlPage
                 </div>'
             );
         }
+    }
+
+    /**
+     * Adds the modal menu
+     * @return void
+     */
+    public function addModalMenu()
+    {
+        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
+
+        // display Menu
+        $sql = 'SELECT *
+          FROM '.TBL_MENU.'
+          where men_men_id_parent is null
+         ORDER BY men_order';
+        $mainMenuStatement = $gDb->query($sql);
+
+        while ($mainMenu = $mainMenuStatement->fetchObject())
+        {
+            // display Menu
+            $sql = 'SELECT *
+              FROM '.TBL_MENU.'
+              where men_men_id_parent = ? -- $mainMenu->men_id
+             ORDER BY men_men_id_parent DESC, men_order';
+            $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
+
+            if($statement->rowCount() > 0)
+            {
+                $last = '';
+
+                while ($row = $statement->fetchObject())
+                {
+                    if($row->men_men_id_parent != $last)
+                    {
+                        $this->menu->addItem('menu_item_'.$mainMenu->men_name_intern, null, $gL10n->get($mainMenu->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                        $last = $row->men_men_id_parent;
+                    }
+
+                    $viewMenu = true;
+                    $desc = '';
+
+                    if(strlen($row->men_description) > 2)
+                    {
+                        $desc = $gL10n->get($row->men_description);
+                    }
+
+                    // Read current roles rights of the menu
+                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
+                    $rolesDisplayRight = $displayMenu->getRolesIds();
+
+                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
+                    {
+                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
+                        {
+                            $viewMenu = true;
+                        }
+                        else
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    $menuUrl = $row->men_url;
+                    $menuIcon = $row->men_icon;
+                    $menuName = $gL10n->get($row->men_name);
+
+                    //special case because there are differnent links if you are logged in or out for mail
+                    if($row->men_name_intern === 'mail' && $gValidLogin)
+                    {
+                        $unreadBadge = '';
+
+                        // get number of unread messages for user
+                        $message = new TableMessage($gDb);
+                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                        if($unread > 0)
+                        {
+                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                        }
+
+                        $menuUrl = '/adm_program/modules/messages/messages.php';
+                        $menuIcon = '/icons/messages.png';
+                        $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                    }
+
+                    if(count($rolesDisplayRight) >= 1)
+                    {
+                        // check for rigth to show the menue
+                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    // special check for "newreg"
+                    if($row->men_name_intern === 'newreg')
+                    {
+                        $viewMenu = false;
+                        if($gSettingsManager->get('registration_enable_module') > 0)
+                        {
+                            $viewMenu = true;
+                        }
+                    }
+
+                    // special check for "usrmgt"
+                    if($row->men_name_intern === 'usrmgt')
+                    {
+                        if(!$gCurrentUser->editUsers())
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    // special check for "roladm"
+                    if($row->men_name_intern === 'roladm')
+                    {
+                        if(!$gCurrentUser->manageRoles())
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    if($viewMenu == true)
+                    {
+                        $this->menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, 'right', 'menu_item_'.$mainMenu->men_name_intern, 'admidio-default-menu-item');
+                    }
+                }
+            }
+        }
+
+        if ($gValidLogin)
+        {
+            // show link to own profile
+            $this->menu->addItem(
+                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
+                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+            // show logout link
+            $this->menu->addItem(
+                'menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
+                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+        }
+        else
+        {
+            // show registration link
+            $this->menu->addItem(
+                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
+                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+            // show login link
+            $this->menu->addItem(
+                'menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
+                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+        }
+    }
+
+    /**
+     * Adds the html code for a modal window to the current script.
+     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
+     */
+    public function enableModal()
+    {
+        $this->showModal = true;
+    }
+
+    /**
+     * The method will return the filename. If you are in debug mode than it will return the
+     * not minified version of the filename otherwise it will return the minified version.
+     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
+     * and one version without the @b min.
+     * @param string $filepath Filename of the NOT minified file.
+     * @return string Returns the filename in dependence of the debug mode.
+     */
+    private function getDebugOrMinFilepath($filepath)
+    {
+        global $gDebug;
+
+        $fileInfo = pathinfo($filepath);
+        $filename = basename($fileInfo['filename'], '.min');
+
+        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+
+        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
+        {
+            return ADMIDIO_URL . $filepathMin;
+        }
+
+        return ADMIDIO_URL . $filepathDebug;
+    }
+
+    /**
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * @return string Returns the headline of the current Admidio page.
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
     }
 
     /**
@@ -891,6 +604,117 @@ class HtmlPage
     }
 
     /**
+     * Returns the menu object of this html page.
+     * @return \HtmlNavbar Returns the menu object of this html page.
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * Returns the title of the html page.
+     * @return string Returns the title of the html page.
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Flag if the current page has a navbar.
+     * @return void
+     */
+    public function hasNavbar()
+    {
+        $this->hasNavbar = true;
+    }
+
+    /**
+     * Every html page of Admidio contains a menu.
+     * If the menu should not be included in the current page, than this method must be called.
+     * @return void
+     */
+    public function hideMenu()
+    {
+        $this->showMenu = false;
+    }
+
+    /**
+     * Every html page of Admidio contains three files of the custom theme.
+     * my_header.php, my_body_top.php and my_body_bottom.php
+     * With these files the administrator can contain custom layout to Admidio.
+     * If these files should not be included in the current page, than this method must be called.
+     * @return void
+     */
+    public function hideThemeHtml()
+    {
+        $this->showThemeHtml = false;
+    }
+
+    /**
+     * Set the h1 headline of the current html page. If the title of the page
+     * was not set until now than this will also be the title.
+     * @param string $headline A string that contains the headline for the page.
+     * @return void
+     */
+    public function setHeadline($headline)
+    {
+        if ($this->title === '')
+        {
+            $this->setTitle($headline);
+        }
+
+        $this->headline = $headline;
+        $this->menu->setName($headline);
+    }
+
+    /**
+     * Set the title of the html page that will be shown in the <title> tag.
+     * @param string $title A string that contains the title for the page.
+     * @return void
+     */
+    public function setTitle($title)
+    {
+        global $gCurrentOrganization;
+
+        if ($title === '')
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname');
+        }
+        else
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
+        }
+    }
+
+    /**
+     * If print mode is set then a print specific css file will be loaded.
+     * All styles will be more print compatible and are only black, grey and white.
+     * @return void
+     */
+    public function setPrintMode()
+    {
+        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
+        global $g_root_path;
+
+        $headerContent    = '';
+        $htmlMyHeader     = '';
+        $htmlMyBodyTop    = '';
+        $htmlMyBodyBottom = '';
+        $htmlMenu         = '';
+        $htmlHeadline     = '';
+
+        if($this->showMenu)
+        {
+            // add modules and administration modules to the menu
+            $this->addModalMenu();
+            $htmlMenu = $this->menu->show();
+        }
+    }
+
+    /**
      * This method send the whole html code of the page to the browser. Call this method
      * if you have finished your page layout.
      * @param bool $directOutput If set to @b true (default) the html page will be directly send
@@ -916,5 +740,181 @@ class HtmlPage
         {
             return $html;
         }
+    }
+
+    /**
+     * create and show Mainmenu
+     * @param bool $details  indicator to set if there should be details in the menu.
+     * @return HTML of the Menu
+     */
+    public function showMainMenu($details = true)
+    {
+        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
+        $menuIcon  = '/dummy.png';
+        $htmlMenu = '';
+
+        // display Menu
+        $sql = 'SELECT *
+          FROM '.TBL_MENU.'
+          where men_men_id_parent is null
+         ORDER BY men_order';
+        $mainMenuStatement = $gDb->query($sql);
+
+        while ($mainMenu = $mainMenuStatement->fetchObject())
+        {
+            $unreadBadge = '';
+
+            // display Menu
+            $sql = 'SELECT *
+              FROM '.TBL_MENU.'
+              where men_men_id_parent = ? -- $mainMenu->men_id
+             ORDER BY men_men_id_parent DESC, men_order';
+            $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
+
+            if($statement->rowCount() > 0)
+            {
+                $last = '';
+
+                while ($row = $statement->fetchObject())
+                {
+                    if($row->men_men_id_parent != $last)
+                    {
+                        if($last > 0)
+                        {
+                            $htmlMenu .= $Menu->show($details);
+                        }
+                        $Menu = new Menu($mainMenu->men_name_intern, $gL10n->get($mainMenu->men_name));
+                        $last = $row->men_men_id_parent;
+                    }
+
+                    $viewMenu = true;
+                    $desc = '';
+
+                    if(strlen($row->men_description) > 2)
+                    {
+                        $desc = $gL10n->get($row->men_description);
+                        if($desc == '##' || $desc[0] == '#')
+                        {
+                            $desc = $row->men_description;
+                        }
+                    }
+
+                    // Read current roles rights of the menu
+                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
+                    $rolesDisplay = $displayMenu->getRolesIds();
+
+                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
+                    {
+                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
+                        {
+                            $viewMenu = true;
+                        }
+                        else
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    $menuUrl = $row->men_url;
+
+                    if(strlen($row->men_icon) > 2)
+                    {
+                        $menuIcon = $row->men_icon;
+                    }
+
+                    $menuName = $gL10n->get($row->men_name);
+                    if($menuName == '##' || $menuName[0] == '#')
+                    {
+                        $menuName = $row->men_name;
+                    }
+
+                    //special case because there are differnent links if you are logged in or out for mail
+                    if($row->men_name_intern === 'mail' && $gValidLogin)
+                    {
+                        // get number of unread messages for user
+                        $message = new TableMessage($gDb);
+                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+
+                        if($unread > 0)
+                        {
+                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                        }
+
+                        $menuUrl = '/adm_program/modules/messages/messages.php';
+                        $menuIcon = 'messages.png';
+                        $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                    }
+
+                    if(count($rolesDisplay) >= 1)
+                    {
+                        // check for rigth to show the menue
+                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    // special check for "newreg"
+                    if($row->men_name_intern === 'newreg')
+                    {
+                        if(!$gCurrentUser->approveUsers() || $gSettingsManager->get('registration_enable_module') === 0)
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    // special check for "usrmgt"
+                    if($row->men_name_intern === 'usrmgt')
+                    {
+                        if(!$gCurrentUser->editUsers())
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    // special check for "roladm"
+                    if($row->men_name_intern === 'roladm')
+                    {
+                        if(!$gCurrentUser->manageRoles())
+                        {
+                            $viewMenu = false;
+                        }
+                    }
+
+                    if($viewMenu == true)
+                    {
+                        $Menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, $desc);
+                    }
+
+                    if($details == true)
+                    {
+                        //Submenu for Lists
+                        if($gValidLogin && $row->men_name_intern === 'lists')
+                        {
+                            $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
+                                                    $gL10n->get('LST_MY_LIST'));
+                            $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
+                                                    $gL10n->get('ROL_INACTIV_ROLE'));
+                        }
+
+                        //Submenu for Dates
+                        if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
+                        || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
+                        {
+                            $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
+                                                    $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
+                        }
+                    }
+                }
+                $htmlMenu .= $Menu->show($details);
+            }
+
+            $this->menu->addItem(
+                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
+                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
+            );
+        }
+
+        return $htmlMenu;
     }
 }

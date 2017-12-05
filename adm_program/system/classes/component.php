@@ -89,4 +89,130 @@ class Component extends TableAccess
                                    '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
         }
     }
+
+
+    /**
+     * This method checks if the current user is allowed to view the component. Therefore
+     * special checks for each component were done.
+     * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. LISTS
+     * @return bool Return true if the current user is allowed to view the component
+     */
+    public static visible($componentName)
+    {
+        global $gValidLogin, $gCurrentUser, $gSettingsManager;
+
+        $view = false;
+
+        switch($componentName)
+        {
+            case 'CORE':
+                if($gValidLogin)
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'ANNOUNCEMENTS':
+                if($gSettingsManager->get('enable_announcements_module') === 1
+                || ($gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'DATES':
+                if($gSettingsManager->get('enable_dates_module') === 1
+                || ($gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'DOWNLOADS':
+                if($gSettingsManager->getBool('enable_download_module'))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'GUESTBOOK':
+                if($gSettingsManager->get('enable_guestbook_module') === 1
+                || ($gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
+                {
+                    $view = true;
+                }
+                break;
+ 
+            case 'LINKS':
+                if($gSettingsManager->get('enable_weblinks_module') === 1
+                || ($gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'LISTS':
+                if($gSettingsManager->getBool('lists_enable_module'))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'MEMBERS':
+                if($gCurrentUser->editUsers())
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'MESSAGES':
+                if ($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module') || $gSettingsManager->getBool('enable_chat_module'))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'PHOTOS':
+                if($gSettingsManager->get('enable_photo_module') === 1
+                || ($gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'PROFILE':
+                if($gCurrentUser->hasRightViewProfile($user))
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'REGISTRATION':
+                if($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers())
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'ROLES':
+                if($gCurrentUser->manageRoles())
+                {
+                    $view = true;
+                }
+                break;
+
+            case 'BACKUP':
+            case 'CATEGORIES':
+            case 'MENU':
+            case 'PREFERENCES':
+            case 'ROOMS':
+                if($gCurrentUser->isWebmaster())
+                {
+                    $view = true;
+                }
+                break;
+        }
+
+        return $view;
+    }
 }
