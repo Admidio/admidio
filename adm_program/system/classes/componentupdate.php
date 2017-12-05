@@ -68,16 +68,16 @@ class ComponentUpdate extends Component
     /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
-     * @param int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
-     * @param int $subVersion  Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
+     * @param int $mainVersion  Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
+     * @param int $minorVersion Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
      * @return bool
      */
-    private function createXmlObject($mainVersion, $subVersion)
+    private function createXmlObject($mainVersion, $minorVersion)
     {
         // update of Admidio core has another path for the xml files as plugins
         if($this->getValue('com_type') === 'SYSTEM')
         {
-            $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
+            $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if(is_file($updateFile))
             {
@@ -204,7 +204,7 @@ class ComponentUpdate extends Component
 
         $this->updateFinished = false;
         $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
-        $initialSubVersion = $this->currentVersionArray[1];
+        $initialMinorVersion = $this->currentVersionArray[1];
 
         for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
         {
@@ -219,20 +219,20 @@ class ComponentUpdate extends Component
                 $maxSubVersion = 20;
             }
 
-            for($subVersion = $initialSubVersion; $subVersion <= $maxSubVersion; ++$subVersion)
+            for($minorVersion = $initialMinorVersion; $minorVersion <= $maxSubVersion; ++$minorVersion)
             {
                 // if version is not equal to current version then start update step with 0
-                if($mainVersion !== $this->currentVersionArray[0] || $subVersion !== $this->currentVersionArray[1])
+                if($mainVersion !== $this->currentVersionArray[0] || $minorVersion !== $this->currentVersionArray[1])
                 {
                     $this->setValue('com_update_step', 0);
                     $this->save();
                 }
 
                 // output of the version number for better debugging
-                $gLogger->info('Update to version '.$mainVersion.'.'.$subVersion);
+                $gLogger->info('Update to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
-                if($this->createXmlObject($mainVersion, $subVersion))
+                if($this->createXmlObject($mainVersion, $minorVersion))
                 {
                     // go step by step through the SQL statements and execute them
                     foreach($this->xmlObject->children() as $updateStep)
@@ -249,7 +249,7 @@ class ComponentUpdate extends Component
                 }
 
                 // check if an php update file exists and then execute the script
-                $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$subVersion.'_0_conv.php';
+                $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$minorVersion.'_0_conv.php';
 
                 if(is_file($phpUpdateFile))
                 {
@@ -270,7 +270,7 @@ class ComponentUpdate extends Component
             }
 
             // reset subversion because we want to start update for next main version with subversion 0
-            $initialSubVersion = 0;
+            $initialMinorVersion = 0;
         }
     }
 
