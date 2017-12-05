@@ -68,6 +68,16 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * Set the target version for the component after update.
+     * This information should be read from the files of the component.
+     * @param string $version Target version of the component after update
+     */
+    public function setTargetVersion($version)
+    {
+        $this->targetVersionArray = self::getVersionArrayFromVersion($version);
+    }
+
+    /**
      * Will open a XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
      * @param int $mainVersion  Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
@@ -77,17 +87,43 @@ class ComponentUpdate extends Component
     private function createXmlObject($mainVersion, $minorVersion)
     {
         // update of Admidio core has another path for the xml files as plugins
-        if($this->getValue('com_type') === 'SYSTEM')
+        if ($this->getValue('com_type') === 'SYSTEM')
         {
             $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
-            if(is_file($updateFile))
+            if (is_file($updateFile))
             {
                 $this->xmlObject = new \SimpleXMLElement($updateFile, 0, true);
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Goes step by step through the update xml file of the current database version and search for the maximum step.
+     * If the last step is found than the id of this step will be returned.
+     * @return int Return the number of the last update step that was found in xml file of the current version.
+     */
+    public function getMaxUpdateStep()
+    {
+        $maxUpdateStep = 0;
+        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+
+        // open xml file for this version
+        if ($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
+        {
+            // go step by step through the SQL statements until the last one is found
+            foreach ($this->xmlObject->children() as $updateStep)
+            {
+                if ((string) $updateStep !== self::UPDATE_STEP_STOP)
+                {
+                    $maxUpdateStep = (int) $updateStep['id'];
+                }
+            }
+        }
+
+        return $maxUpdateStep;
     }
 
     /**
@@ -172,42 +208,6 @@ class ComponentUpdate extends Component
     }
 
     /**
-     * Goes step by step through the update xml file of the current database version and search for the maximum step.
-     * If the last step is found than the id of this step will be returned.
-     * @return int Return the number of the last update step that was found in xml file of the current version.
-     */
-    public function getMaxUpdateStep()
-    {
-        $maxUpdateStep = 0;
-        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
-
-        // open xml file for this version
-        if($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
-        {
-            // go step by step through the SQL statements until the last one is found
-            foreach($this->xmlObject->children() as $updateStep)
-            {
-                if((string) $updateStep !== self::UPDATE_STEP_STOP)
-                {
-                    $maxUpdateStep = (int) $updateStep['id'];
-                }
-            }
-        }
-
-        return $maxUpdateStep;
-    }
-
-    /**
-     * Set the target version for the component after update.
-     * This information should be read from the files of the component.
-     * @param string $version Target version of the component after update
-     */
-    public function setTargetVersion($version)
-    {
-        $this->targetVersionArray = self::getVersionArrayFromVersion($version);
-    }
-
-    /**
      * Do a loop through all versions start with the current version and end with the target version.
      * Within every subversion the method will search for an update xml file and execute all steps
      * in this file until the end of file is reached. If an error occurred then the update will be stopped.
@@ -220,11 +220,11 @@ class ComponentUpdate extends Component
         $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
         $initialMinorVersion = $this->currentVersionArray[1];
 
-        for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
+        for ($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
             // then set target subversion to the max version
-            if($mainVersion === $this->targetVersionArray[0])
+            if ($mainVersion === $this->targetVersionArray[0])
             {
                 $maxSubVersion = $this->targetVersionArray[1];
             }
@@ -236,7 +236,7 @@ class ComponentUpdate extends Component
             for($minorVersion = $initialMinorVersion; $minorVersion <= $maxSubVersion; ++$minorVersion)
             {
                 // if version is not equal to current version then start update step with 0
-                if($mainVersion !== $this->currentVersionArray[0] || $minorVersion !== $this->currentVersionArray[1])
+                if ($mainVersion !== $this->currentVersionArray[0] || $minorVersion !== $this->currentVersionArray[1])
                 {
                     $this->setValue('com_update_step', 0);
                     $this->save();
@@ -246,16 +246,16 @@ class ComponentUpdate extends Component
                 $gLogger->info('Update to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
-                if($this->createXmlObject($mainVersion, $minorVersion))
+                if ($this->createXmlObject($mainVersion, $minorVersion))
                 {
                     // go step by step through the SQL statements and execute them
-                    foreach($this->xmlObject->children() as $updateStep)
+                    foreach ($this->xmlObject->children() as $updateStep)
                     {
-                        if($updateStep['id'] > $this->getValue('com_update_step'))
+                        if ($updateStep['id'] > $this->getValue('com_update_step'))
                         {
                             $this->executeStep($updateStep);
                         }
-                        elseif((string) $updateStep === self::UPDATE_STEP_STOP)
+                        elseif ((string) $updateStep === self::UPDATE_STEP_STOP)
                         {
                             $this->updateFinished = true;
                         }
@@ -265,7 +265,7 @@ class ComponentUpdate extends Component
                 // check if an php update file exists and then execute the script
                 $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$minorVersion.'_0_conv.php';
 
-                if(is_file($phpUpdateFile))
+                if (is_file($phpUpdateFile))
                 {
                     require_once($phpUpdateFile);
                 }
