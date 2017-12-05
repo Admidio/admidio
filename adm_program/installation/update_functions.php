@@ -78,7 +78,7 @@ function updateOrgPreferences()
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
     $orgaStatement = $gDb->queryPrepared($sql);
 
-    while($orgId = $orgaStatement->fetchColumn())
+    while ($orgId = $orgaStatement->fetchColumn())
     {
         $organization = new Organization($gDb, $orgId);
         $settingsManager =& $organization->getSettingsManager();
@@ -177,7 +177,7 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 
 function doVersion3Update()
 {
-    global $gDb, $gL10n, $gProfileFields;
+    global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
 
     // set system user as current user, but this user only exists since version 3
     $sql = 'SELECT usr_id
