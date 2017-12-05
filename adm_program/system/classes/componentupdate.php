@@ -127,7 +127,7 @@ class ComponentUpdate extends Component
      */
     private function executeStep(\SimpleXMLElement $xmlNode)
     {
-        global $gDbType;
+        global $gDbType, $gLogger;
 
         // for backwards compatibility "postgresql"
         $dbType = $gDbType;
@@ -138,34 +138,30 @@ class ComponentUpdate extends Component
 
         $updateStepContent = trim((string) $xmlNode);
 
-        $executeSql = true;
-        $showError  = true;
-
-        // if the sql statement is only for a special database and you do
-        // not have this database then don't execute this statement
-        if (isset($xmlNode['database']) && (string) $xmlNode['database'] !== $dbType)
-        {
-            $executeSql = false;
-        }
-
-        // if the attribute error was set to "ignore" then don't show errors that occures on sql execution
-        if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
-        {
-            $showError = false;
-        }
-
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
         if (admStrStartsWith($updateStepContent, 'ComponentUpdate::'))
         {
-            $executeSql = false;
-
             $this->executeUpdateFunction($updateStepContent);
         }
-
-        if ($executeSql)
+        // only execute if sql statement is for all databases or for the used database
+        elseif (!isset($xmlNode['database']) || (string) $xmlNode['database'] === $dbType)
         {
+            $showError = true;
+            // if the attribute error was set to "ignore" then don't show errors that occurs on sql execution
+            if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore')
+            {
+                $showError = false;
+            }
+
             $this->executeUpdateSql($updateStepContent, $showError);
+        }
+        else
+        {
+            $gLogger->warning(
+                'UPDATE: Unexpected update step!',
+                array('content' => (string) $xmlNode, 'attributes' => (array) $xmlNode->attributes())
+            );
         }
 
         // save the successful executed update step in database
