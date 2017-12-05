@@ -78,10 +78,13 @@ class ComponentUpdate extends Component
      * must be passed to successfully update Admidio to this version
      * @param int $mainVersion  Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
      * @param int $minorVersion Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
-     * @return bool
+     * @throws \UnexpectedValueException
+     * @return \SimpleXMLElement
      */
-    private function createXmlObject($mainVersion, $minorVersion)
+    private function getXmlObject($mainVersion, $minorVersion)
     {
+        global $gLogger;
+
         // update of Admidio core has another path for the xml files as plugins
         if ($this->getValue('com_type') === 'SYSTEM')
         {
@@ -89,11 +92,16 @@ class ComponentUpdate extends Component
 
             if (is_file($updateFile))
             {
-                $this->xmlObject = new \SimpleXMLElement($updateFile, 0, true);
-                return true;
+                return new \SimpleXMLElement($updateFile, 0, true);
             }
+
+            $message = 'XML-Update file not found!';
+            $gLogger->warning($message, array('filePath' => $updateFile));
+
+            throw new \UnexpectedValueException($message);
         }
-        return false;
+
+        throw new \UnexpectedValueException('No System update!');
     }
 
     /**
@@ -106,16 +114,22 @@ class ComponentUpdate extends Component
         $maxUpdateStep = 0;
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
-        // open xml file for this version
-        if ($this->createXmlObject($currentVersionArray[0], $currentVersionArray[1]))
+        try
         {
-            // go step by step through the SQL statements until the last one is found
-            foreach ($this->xmlObject->children() as $updateStep)
+            // open xml file for this version
+            $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
+        }
+        catch (\UnexpectedValueException $exception)
+        {
+            return 0;
+        }
+
+        // go step by step through the SQL statements until the last one is found
+        foreach ($xmlObject->children() as $updateStep)
+        {
+            if ((string) $updateStep !== self::UPDATE_STEP_STOP)
             {
-                if ((string) $updateStep !== self::UPDATE_STEP_STOP)
-                {
-                    $maxUpdateStep = (int) $updateStep['id'];
-                }
+                $maxUpdateStep = (int) $updateStep['id'];
             }
         }
 
@@ -146,7 +160,7 @@ class ComponentUpdate extends Component
         // replace prefix with installation specific table prefix
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateSql);
 
-        $this->db->query($sql, $showError); // TODO add more params
+        $this->db->queryPrepared($sql, array(), $showError);
     }
 
     /**
@@ -219,17 +233,14 @@ class ComponentUpdate extends Component
         for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
-            // then set target subversion to the max version
+            // then set target minor-version to the max version
+            $maxMinorVersion = 20;
             if ($mainVersion === $this->targetVersionArray[0])
             {
-                $maxSubVersion = $this->targetVersionArray[1];
-            }
-            else
-            {
-                $maxSubVersion = 20;
+                $maxMinorVersion = $this->targetVersionArray[1];
             }
 
-            for($minorVersion = $initialMinorVersion; $minorVersion <= $maxSubVersion; ++$minorVersion)
+            for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion)
             {
                 // if version is not equal to current version then start update step with 0
                 if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1])
@@ -242,10 +253,12 @@ class ComponentUpdate extends Component
                 $gLogger->info('Update to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
-                if ($this->createXmlObject($mainVersion, $minorVersion))
+                try
                 {
+                    $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
+
                     // go step by step through the SQL statements and execute them
-                    foreach ($this->xmlObject->children() as $updateStep)
+                    foreach ($xmlObject->children() as $updateStep)
                     {
                         if ($updateStep['id'] > $this->getValue('com_update_step'))
                         {
@@ -257,13 +270,9 @@ class ComponentUpdate extends Component
                         }
                     }
                 }
-
-                // check if an php update file exists and then execute the script
-                $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$minorVersion.'_0_conv.php';
-
-                if (is_file($phpUpdateFile))
+                catch (\UnexpectedValueException $exception)
                 {
-                    require_once($phpUpdateFile);
+                    // TODO
                 }
 
                 // save current version to system component
