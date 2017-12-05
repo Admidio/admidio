@@ -89,6 +89,33 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * Get function name and execute this function
+     * @param string $updateStepContent
+     */
+    private function executeUpdateFunction($updateStepContent)
+    {
+        // get the method name (remove "ComponentUpdate::")
+        $functionName = substr($updateStepContent, 17);
+        // now call the method
+        $this->{$functionName}();
+    }
+
+    /**
+     * Prepares and execute a sql statement
+     * @param string $updateSql
+     * @param bool   $showError
+     */
+    private function executeUpdateSql($updateSql, $showError)
+    {
+        global $g_tbl_praefix;
+
+        // replace prefix with installation specific table prefix
+        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateSql);
+
+        $this->db->query($sql, $showError); // TODO add more params
+    }
+
+    /**
      * Will execute the specific update step that is set through the parameter $xmlNode.
      * If the step was successfully done the id will be stored in the component recordset
      * so if the whole update crashs later we know that this step was successfully executed.
@@ -100,7 +127,7 @@ class ComponentUpdate extends Component
      */
     private function executeStep(\SimpleXMLElement $xmlNode)
     {
-        global $g_tbl_praefix, $gDbType;
+        global $gDbType;
 
         // for backwards compatibility "postgresql"
         $dbType = $gDbType;
@@ -110,11 +137,6 @@ class ComponentUpdate extends Component
         }
 
         $updateStepContent = trim((string) $xmlNode);
-
-        if ($updateStepContent === '')
-        {
-            return;
-        }
 
         $executeSql = true;
         $showError  = true;
@@ -134,22 +156,16 @@ class ComponentUpdate extends Component
 
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
-        if (admStrContains($updateStepContent, 'ComponentUpdate'))
+        if (admStrStartsWith($updateStepContent, 'ComponentUpdate::'))
         {
             $executeSql = false;
 
-            // get the method name
-            $function = substr($updateStepContent, strpos($updateStepContent, '::') + 2);
-            // now call the method
-            $this->{$function}();
+            $this->executeUpdateFunction($updateStepContent);
         }
 
         if ($executeSql)
         {
-            // replace prefix with installation specific table prefix
-            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateStepContent);
-
-            $this->db->query($sql, $showError); // TODO add more params
+            $this->executeUpdateSql($updateStepContent, $showError);
         }
 
         // save the successful executed update step in database
