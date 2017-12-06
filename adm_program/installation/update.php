@@ -182,12 +182,8 @@ if ($installedDbBetaVersion > 0)
 // if database version is not set then show notice
 if ($installedDbVersion === '')
 {
-    $message = '
-        <div class="alert alert-danger alert-small" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign"></span>
-            <strong>' . $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '</strong>
-        </div>
-        <p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION_TEXT) . '</p>';
+    $message = getErrorMessage($gL10n->get('INS_UPDATE_NOT_POSSIBLE')) .
+        '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION_TEXT) . '</p>';
 
     showNotice(
         $message,
@@ -299,8 +295,25 @@ elseif ($getMode === 2)
     if (!isset($gLoginForUpdate) || $gLoginForUpdate == 1)
     {
         // get username and password
-        $loginName = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
-        $password  = admFuncVariableIsValid($_POST, 'password',   'string', array('requireValue' => true, 'directOutput' => true));
+        $loginName = $_POST['login_name'];
+        $password  = $_POST['password'];
+
+        if ($loginName === '')
+        {
+            showNotice(
+                getErrorMessage($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME'))),
+                'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true
+            );
+            // => EXIT
+        }
+        if ($password === '')
+        {
+            showNotice(
+                getErrorMessage($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD'))),
+                'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true
+            );
+            // => EXIT
+        }
 
         // Search for username
         $sql = 'SELECT usr_id
@@ -310,13 +323,10 @@ elseif ($getMode === 2)
 
         if ($userStatement->rowCount() === 0)
         {
-            $message = '
-                <div class="alert alert-danger alert-small" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
-                </div>';
-
-            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+            showNotice(
+                getErrorMessage($gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT')),
+                'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true
+            );
             // => EXIT
         }
         else
@@ -332,13 +342,10 @@ elseif ($getMode === 2)
 
             if (is_string($checkLoginReturn))
             {
-                $message = '
-                    <div class="alert alert-danger alert-small" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                        <strong>' . $checkLoginReturn . '</strong>
-                    </div>';
-
-                showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+                showNotice(
+                    getErrorMessage($checkLoginReturn), 'update.php',
+                    $gL10n->get('SYS_BACK'), 'layout/back.png', true
+                );
                 // => EXIT
             }
         }
