@@ -22,17 +22,12 @@
  * @code // update the system module to the actual filesystem version
  * $componentUpdateHandle = new ComponentUpdate($gDb);
  * $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
- * $componentUpdateHandle->setTargetVersion(ADMIDIO_VERSION);
- * $componentUpdateHandle->update(); @endcode
+ * $componentUpdateHandle->update(ADMIDIO_VERSION); @endcode
  */
 class ComponentUpdate extends Component
 {
     const UPDATE_STEP_STOP = 'stop';
 
-    /**
-     * @var bool Flag that will store if the update process of this version was successfully finished
-     */
-    private $updateFinished;
     /**
      * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
      */
@@ -123,10 +118,12 @@ class ComponentUpdate extends Component
         // go step by step through the SQL statements until the last one is found
         foreach ($xmlObject->children() as $updateStep)
         {
-            if ((string) $updateStep !== self::UPDATE_STEP_STOP)
+            if ((string) $updateStep === self::UPDATE_STEP_STOP)
             {
-                $maxUpdateStep = (int) $updateStep['id'];
+                break;
             }
+
+            $maxUpdateStep = (int) $updateStep['id'];
         }
 
         return $maxUpdateStep;
@@ -222,7 +219,6 @@ class ComponentUpdate extends Component
     {
         global $gLogger;
 
-        $this->updateFinished = false;
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
         $initialMinorVersion = $currentVersionArray[1];
 
@@ -256,13 +252,13 @@ class ComponentUpdate extends Component
                     // go step by step through the SQL statements and execute them
                     foreach ($xmlObject->children() as $updateStep)
                     {
+                        if ((string) $updateStep === self::UPDATE_STEP_STOP)
+                        {
+                            break;
+                        }
                         if ($updateStep['id'] > $this->getValue('com_update_step'))
                         {
                             $this->executeStep($updateStep);
-                        }
-                        elseif ((string) $updateStep === self::UPDATE_STEP_STOP)
-                        {
-                            $this->updateFinished = true;
                         }
                     }
                 }
