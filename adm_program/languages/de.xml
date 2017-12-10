@@ -602,6 +602,8 @@
     <string name="MEN_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
     <string name="MEN_MENU_LEVEL">Menüebene</string>
     <string name="MEN_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Willst du den Menüpunkt auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
+    <string name="MEN_MODULE_RIGHTS">Modulrechte</string>
+    <string name="MEN_MODULE_RIGHTS_DESC">Wenn du hier ein Modul angibst, dann wird der Menüpunkt nur angezeigt, wenn der Benutzer auch das Recht hat, dieses Modul zu sehen.</string>
     <!-- Phrases only in Messagemodule -->
     <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
     <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Das Chat-Modul kann über diese Einstellung aktiviert oder deaktiviert werden. Das Modul lädt alle 3 Sekunden dynamisch Daten aus der Datenbank. Es werden maximal 99 Einträge gespeichert. Bei 100 Meldungen werden die ersten 50 Einträge wieder gelöscht. (Standard: Deaktiviert)</string>

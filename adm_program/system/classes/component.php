@@ -97,7 +97,7 @@ class Component extends TableAccess
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. LISTS
      * @return bool Return true if the current user is allowed to view the component
      */
-    public static visible($componentName)
+    public static function visible($componentName)
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager;
 

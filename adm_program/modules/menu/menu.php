@@ -135,7 +135,16 @@ while ($main_men = $main_men_statement->fetchObject())
                 $menuGroup = $menu_row->men_men_id_parent;
             }
 
-            $naming = $gL10n->get($menu_row->men_name);
+            if(admIsTranslationStrId($menu_row->men_name))
+            {
+                $menuName = $gL10n->get($menu_row->men_name);
+                $menuNameDesc = $gL10n->get($menu_row->men_description);
+            }
+            else
+            {
+                $menuName = $menu_row->men_name;                
+                $menuNameDesc = $menu_row->men_description;
+            }
 
             $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu_row->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" /></a>
@@ -156,15 +165,15 @@ while ($main_men = $main_men_statement->fetchObject())
             {
                 $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                             href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_men_'.
-                                            $menu_row->men_id.'&amp;name='.urlencode($naming).'&amp;database_id='.$menu_row->men_id.'"><img
+                                            $menu_row->men_id.'&amp;name='.urlencode($menuName).'&amp;database_id='.$menu_row->men_id.'"><img
                                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
 
             // create array with all column values
             $columnValues = array(
-                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$gL10n->get($menu_row->men_description).'">'.$naming.'</a>',
+                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
                 $htmlMoveRow,
-                '<a href="'.ADMIDIO_URL. $menu_row->men_url. '" title="'.$gL10n->get($menu_row->men_description).'">'. $menu_row->men_url. '</a>',
+                '<a href="'.ADMIDIO_URL. $menu_row->men_url. '" title="'.$menuNameDesc.'">'. $menu_row->men_url. '</a>',
                 $htmlStandartMenu,
                 $menuAdministration
             );

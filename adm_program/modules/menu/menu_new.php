@@ -139,6 +139,15 @@ while($rowViewRoles = $rolesViewStatement->fetchObject())
 // show form
 $form = new HtmlForm('menu_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
 
+$fieldRequired = FIELD_REQUIRED;
+$fieldDefault  = FIELD_DEFAULT;
+
+if((bool) $menu->getValue('men_standart'))
+{
+    $fieldRequired = FIELD_DISABLED;
+    $fieldDefault  = FIELD_DISABLED;    
+}
+
 subfolder(null, '', $menu);
 
 $form->addInput(
@@ -169,6 +178,16 @@ $form->addSelectBox(
     )
 );
 
+$sql = 'SELECT com_id, com_name FROM '.TBL_COMPONENTS.' ORDER BY com_name';
+$form->addSelectBoxFromSql(
+    'men_com_id', $gL10n->get('MEN_MODULE_RIGHTS'), $gDb, $sql,
+    array(
+        'property'                       => $fieldDefault,
+        'defaultValue'                   => $menu->getValue('men_com_id'),
+        'helpTextIdLabel'                => 'MEN_MODULE_RIGHTS_DESC'
+    )
+);
+
 $form->addSelectBox(
     'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, 
     array('defaultValue' => $roleViewSet, 'multiselect'  => true)
@@ -178,7 +197,7 @@ if((bool) $menu->getValue('men_node') === false)
 {
     $form->addInput(
         'men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), 
-        array('maxLength' => 100, 'property' => FIELD_REQUIRED)
+        array('maxLength' => 100, 'property' => $fieldRequired)
     );
 }
 
