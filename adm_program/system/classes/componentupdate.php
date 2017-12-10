@@ -229,7 +229,7 @@ class ComponentUpdate extends Component
                 }
 
                 // output of the version number for better debugging
-                $gLogger->info('Update to version '.$mainVersion.'.'.$minorVersion);
+                $gLogger->notice('UPDATE: Start updating to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
                 try
@@ -253,6 +253,8 @@ class ComponentUpdate extends Component
                 {
                     // TODO
                 }
+
+                $gLogger->notice('UPDATE: Finished updating to version '.$mainVersion.'.'.$minorVersion);
 
                 // save current version to system component
                 $this->setValue('com_version', ADMIDIO_VERSION);
