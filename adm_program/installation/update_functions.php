@@ -190,8 +190,7 @@ function doVersion3Update()
     // reread component because in version 3.0 the component will be created within the update
     $componentUpdateHandle = new ComponentUpdate($gDb);
     $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-    $componentUpdateHandle->setTargetVersion(ADMIDIO_VERSION);
-    $componentUpdateHandle->update();
+    $componentUpdateHandle->update(ADMIDIO_VERSION);
 }
 
 function createHtaccessIfNotExist()

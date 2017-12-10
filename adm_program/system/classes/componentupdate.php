@@ -29,11 +29,6 @@ class ComponentUpdate extends Component
     const UPDATE_STEP_STOP = 'stop';
 
     /**
-     * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
-     */
-    private $targetVersionArray;
-
-    /**
      * Constructor that will create an object for component updating.
      * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
      */
@@ -52,16 +47,6 @@ class ComponentUpdate extends Component
     private static function getVersionArrayFromVersion($versionString)
     {
         return array_map('intval', explode('.', $versionString));
-    }
-
-    /**
-     * Set the target version for the component after update.
-     * This information should be read from the files of the component.
-     * @param string $version Target version of the component after update
-     */
-    public function setTargetVersion($version)
-    {
-        $this->targetVersionArray = self::getVersionArrayFromVersion($version);
     }
 
     /**
@@ -214,22 +199,24 @@ class ComponentUpdate extends Component
      * Do a loop through all versions start with the current version and end with the target version.
      * Within every subversion the method will search for an update xml file and execute all steps
      * in this file until the end of file is reached. If an error occurred then the update will be stopped.
+     * @param string $targetVersion The target version to update.
      */
-    public function update()
+    public function update($targetVersion)
     {
         global $gLogger;
 
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+        $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
         $initialMinorVersion = $currentVersionArray[1];
 
-        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
+        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
             // then set target minor-version to the max version
             $maxMinorVersion = 20;
-            if ($mainVersion === $this->targetVersionArray[0])
+            if ($mainVersion === $targetVersionArray[0])
             {
-                $maxMinorVersion = $this->targetVersionArray[1];
+                $maxMinorVersion = $targetVersionArray[1];
             }
 
             for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion)
