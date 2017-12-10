@@ -180,7 +180,13 @@ class ComponentUpdate extends Component
                 $showError = false;
             }
 
+            $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
+
             $this->executeUpdateSql($updateStepContent, $showError);
+        }
+        elseif ((string) $xmlNode['database'] !== $dbType)
+        {
+            $gLogger->info('UPDATE: Update step is for another database!', array('database' => (string) $xmlNode['database']));
         }
         else
         {
@@ -229,7 +235,7 @@ class ComponentUpdate extends Component
                 }
 
                 // output of the version number for better debugging
-                $gLogger->notice('UPDATE: Start updating to version '.$mainVersion.'.'.$minorVersion);
+                $gLogger->notice('UPDATE: Start executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
                 try
@@ -243,7 +249,7 @@ class ComponentUpdate extends Component
                         {
                             break;
                         }
-                        if ($updateStep['id'] > $this->getValue('com_update_step'))
+                        if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step'))
                         {
                             $this->executeStep($updateStep);
                         }
@@ -254,7 +260,7 @@ class ComponentUpdate extends Component
                     // TODO
                 }
 
-                $gLogger->notice('UPDATE: Finished updating to version '.$mainVersion.'.'.$minorVersion);
+                $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // save current version to system component
                 $this->setValue('com_version', ADMIDIO_VERSION);
