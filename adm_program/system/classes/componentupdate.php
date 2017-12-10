@@ -243,7 +243,7 @@ class ComponentUpdate extends Component
                 // open xml file for this version
                 try
                 {
-                    $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
+                    $xmlObject = $this->getXmlObject($mainVersion, $minorVersion);
 
                     // go step by step through the SQL statements and execute them
                     foreach ($xmlObject->children() as $updateStep)
