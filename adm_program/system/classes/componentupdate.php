@@ -186,7 +186,10 @@ class ComponentUpdate extends Component
         }
         elseif ((string) $xmlNode['database'] !== $dbType)
         {
-            $gLogger->info('UPDATE: Update step is for another database!', array('database' => (string) $xmlNode['database']));
+            $gLogger->info(
+                'UPDATE: Update step is for another database!',
+                array('database' => (string) $xmlNode['database'], 'step' => (int) $xmlNode['id'])
+            );
         }
         else
         {
@@ -252,6 +255,10 @@ class ComponentUpdate extends Component
                         if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step'))
                         {
                             $this->executeStep($updateStep);
+                        }
+                        else
+                        {
+                            $gLogger->info('UPDATE: Skip update step Nr: ' . (int) $updateStep['id']);
                         }
                     }
                 }
