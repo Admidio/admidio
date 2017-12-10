@@ -105,7 +105,7 @@ final class FileSystemUtils
         $fileOwnerResult = fileowner($path);
         if ($fileOwnerResult === false)
         {
-            throw new \RuntimeException('File owner could not be determined!');
+            throw new \RuntimeException('File owner cannot be determined!');
         }
 
         return posix_getpwuid($fileOwnerResult);
@@ -135,7 +135,7 @@ final class FileSystemUtils
         $fileGroupResult = filegroup($path);
         if ($fileGroupResult === false)
         {
-            throw new \RuntimeException('File group could not be determined!');
+            throw new \RuntimeException('File group cannot be determined!');
         }
 
         return posix_getgrgid($fileGroupResult);
@@ -182,7 +182,7 @@ final class FileSystemUtils
         $perms = fileperms($path);
         if ($perms === false)
         {
-            throw new \RuntimeException('File permissions could not be read!');
+            throw new \RuntimeException('File permissions cannot be read!');
         }
 
         if ($octal)
@@ -326,7 +326,7 @@ final class FileSystemUtils
         $mkdirResult = mkdir($directoryPath, $options['mode']);
         if (!$mkdirResult)
         {
-            throw new \RuntimeException('Directory could not be created!');
+            throw new \RuntimeException('Directory cannot be created!');
         }
 
         return true;
@@ -354,7 +354,7 @@ final class FileSystemUtils
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false)
         {
-            throw new \RuntimeException('Directory could not be opened!');
+            throw new \RuntimeException('Directory cannot be opened!');
         }
 
         while (($entry = readdir($dirHandle)) !== false)
@@ -396,7 +396,7 @@ final class FileSystemUtils
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false)
         {
-            throw new \RuntimeException('Directory could not be opened!');
+            throw new \RuntimeException('Directory cannot be opened!');
         }
 
         $directoryContent = array();
@@ -468,7 +468,7 @@ final class FileSystemUtils
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false)
         {
-            throw new \RuntimeException('Directory could not be opened!');
+            throw new \RuntimeException('Directory cannot be opened!');
         }
 
         while (($entry = readdir($dirHandle)) !== false)
@@ -507,7 +507,7 @@ final class FileSystemUtils
 
         if ($directoryPath === self::ROOT_FOLDER)
         {
-            throw new \UnexpectedValueException('Directory "root" could not be deleted!');
+            throw new \UnexpectedValueException('Directory "root" cannot be deleted!');
         }
 
         $parentDirectoryPath = dirname($directoryPath);
@@ -540,7 +540,7 @@ final class FileSystemUtils
         $rmdirResult = rmdir($directoryPath);
         if (!$rmdirResult)
         {
-            throw new \RuntimeException('Directory could not be deleted!');
+            throw new \RuntimeException('Directory cannot be deleted!');
         }
 
         return true;
@@ -733,7 +733,7 @@ final class FileSystemUtils
         $resultChmod = chmod($directoryPath, $mode);
         if (!$resultChmod)
         {
-            throw new \RuntimeException('Directory mode could not be changed!');
+            throw new \RuntimeException('Directory mode cannot be changed!');
         }
 
         if ($recursive)
@@ -784,7 +784,7 @@ final class FileSystemUtils
         $unlinkResult = unlink($filePath);
         if (!$unlinkResult)
         {
-            throw new \RuntimeException('File could not be deleted!');
+            throw new \RuntimeException('File cannot be deleted!');
         }
 
         return true;
@@ -873,7 +873,7 @@ final class FileSystemUtils
         $copyResult = copy($oldFilePath, $newFilePath);
         if (!$copyResult)
         {
-            throw new \RuntimeException('File could not be copied!');
+            throw new \RuntimeException('File cannot be copied!');
         }
 
         return $returnValue;
@@ -894,7 +894,7 @@ final class FileSystemUtils
         $renameResult = rename($oldFilePath, $newFilePath);
         if (!$renameResult)
         {
-            throw new \RuntimeException('File could not be moved!');
+            throw new \RuntimeException('File cannot be moved!');
         }
 
         return $returnValue;
@@ -928,7 +928,7 @@ final class FileSystemUtils
         $chmodResult = chmod($filePath, $mode);
         if (!$chmodResult)
         {
-            throw new \RuntimeException('File mode could not be changed!');
+            throw new \RuntimeException('File mode cannot be changed!');
         }
     }
 
@@ -960,7 +960,7 @@ final class FileSystemUtils
         $data = file_get_contents($filePath);
         if ($data === false)
         {
-            throw new \RuntimeException('File could not be read!');
+            throw new \RuntimeException('File cannot be read!');
         }
 
         return $data;
@@ -1008,7 +1008,7 @@ final class FileSystemUtils
         $bytes = file_put_contents($filePath, $data, $flags);
         if ($bytes === false)
         {
-            throw new \RuntimeException('File could not be written!');
+            throw new \RuntimeException('File cannot be written!');
         }
 
         return $bytes;
