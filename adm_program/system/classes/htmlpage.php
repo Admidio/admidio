@@ -258,18 +258,19 @@ class HtmlPage
 
         // display Menu
         $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_men_id_parent is null
-         ORDER BY men_order';
+                  FROM '.TBL_MENU.'
+                 WHERE men_men_id_parent is null
+                 ORDER BY men_order';
         $mainMenuStatement = $gDb->query($sql);
 
         while ($mainMenu = $mainMenuStatement->fetchObject())
         {
             // display Menu
             $sql = 'SELECT *
-              FROM '.TBL_MENU.'
-              where men_men_id_parent = ? -- $mainMenu->men_id
-             ORDER BY men_men_id_parent DESC, men_order';
+                      FROM '.TBL_MENU.'
+                 LEFT JOIN '.TBL_COMPONENTS.' ON com_id = men_com_id
+                     WHERE men_men_id_parent = ? -- $mainMenu->men_id
+                  ORDER BY men_men_id_parent DESC, men_order';
             $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
 
             if($statement->rowCount() > 0)
@@ -278,99 +279,62 @@ class HtmlPage
 
                 while ($row = $statement->fetchObject())
                 {
-                    if($row->men_men_id_parent != $last)
+                    if((int) $row->men_com_id === 0 || Component::visible($row->com_name_intern))
                     {
-                        $this->menu->addItem('menu_item_'.$mainMenu->men_name_intern, null, $gL10n->get($mainMenu->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                        $last = $row->men_men_id_parent;
-                    }
-
-                    $viewMenu = true;
-                    $description = '';
-
-                    if(strlen($row->men_description) > 2)
-                    {
-                        $description = $gL10n->get($row->men_description);
-                    }
-
-                    // Read current roles rights of the menu
-                    $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
-                    $rolesDisplayRight = $displayMenu->getRolesIds();
-
-                    if($gSettingsManager->has('enable_'.$row->men_name_intern.'_module'))
-                    {
-                        if($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 1  || ($gSettingsManager->get('enable_'.$row->men_name_intern.'_module') == 2 && $gValidLogin))
+                        if($row->men_men_id_parent != $last)
                         {
-                            $viewMenu = true;
+                            $this->menu->addItem('menu_item_'.$mainMenu->men_name_intern, null, $gL10n->get($mainMenu->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                            $last = $row->men_men_id_parent;
                         }
-                        else
+    
+                        $viewMenu = true;
+                        $description = '';
+    
+                        if(strlen($row->men_description) > 2)
                         {
-                            $viewMenu = false;
+                            $description = $gL10n->get($row->men_description);
                         }
-                    }
-
-                    $menuUrl = $row->men_url;
-                    $menuIcon = $row->men_icon;
-                    $menuName = $gL10n->get($row->men_name);
-
-                    //special case because there are differnent links if you are logged in or out for mail
-                    if($row->men_name_intern === 'mail' && $gValidLogin)
-                    {
-                        $unreadBadge = '';
-
-                        // get number of unread messages for user
-                        $message = new TableMessage($gDb);
-                        $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                        if($unread > 0)
+    
+                        // Read current roles rights of the menu
+                        $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
+                        $rolesDisplayRight = $displayMenu->getRolesIds();
+    
+                        $menuUrl = $row->men_url;
+                        $menuIcon = $row->men_icon;
+                        $menuName = $gL10n->get($row->men_name);
+    
+                        //special case because there are differnent links if you are logged in or out for mail
+                        if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
-                            $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                            $unreadBadge = '';
+    
+                            // get number of unread messages for user
+                            $message = new TableMessage($gDb);
+                            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
+    
+                            if($unread > 0)
+                            {
+                                $unreadBadge = '<span class="badge">' . $unread . '</span>';
+                            }
+    
+                            $menuUrl = '/adm_program/modules/messages/messages.php';
+                            $menuIcon = '/icons/messages.png';
+                            $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
-
-                        $menuUrl = '/adm_program/modules/messages/messages.php';
-                        $menuIcon = '/icons/messages.png';
-                        $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                    }
-
-                    if(count($rolesDisplayRight) >= 1)
-                    {
-                        // check for rigth to show the menue
-                        if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+    
+                        if(count($rolesDisplayRight) >= 1)
                         {
-                            $viewMenu = false;
+                            // check for rigth to show the menue
+                            if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                            {
+                                $viewMenu = false;
+                            }
                         }
-                    }
-
-                    // special check for "newreg"
-                    if($row->men_name_intern === 'newreg')
-                    {
-                        $viewMenu = false;
-                        if($gSettingsManager->get('registration_enable_module') > 0)
+    
+                        if($viewMenu == true)
                         {
-                            $viewMenu = true;
+                            $this->menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, 'right', 'menu_item_'.$mainMenu->men_name_intern, 'admidio-default-menu-item');
                         }
-                    }
-
-                    // special check for "usrmgt"
-                    if($row->men_name_intern === 'usrmgt')
-                    {
-                        if(!$gCurrentUser->editUsers())
-                        {
-                            $viewMenu = false;
-                        }
-                    }
-
-                    // special check for "roladm"
-                    if($row->men_name_intern === 'roladm')
-                    {
-                        if(!$gCurrentUser->manageRoles())
-                        {
-                            $viewMenu = false;
-                        }
-                    }
-
-                    if($viewMenu == true)
-                    {
-                        $this->menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, 'right', 'menu_item_'.$mainMenu->men_name_intern, 'admidio-default-menu-item');
                     }
                 }
             }
@@ -568,6 +532,7 @@ class HtmlPage
         {
             // add modules and administration modules to the menu
             $this->showMainMenu();
+            $this->addModalMenu();
             $htmlMenu = $this->menu->show();
         }
 
@@ -705,13 +670,6 @@ class HtmlPage
         $htmlMyBodyBottom = '';
         $htmlMenu         = '';
         $htmlHeadline     = '';
-
-        if($this->showMenu)
-        {
-            // add modules and administration modules to the menu
-            $this->addModalMenu();
-            $htmlMenu = $this->menu->show();
-        }
     }
 
     /**
