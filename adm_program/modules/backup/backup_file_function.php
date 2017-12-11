@@ -14,7 +14,7 @@
  * filename : Der Name der Datei, welche heruntergeladen werden soll
  ***********************************************************************************************
  */
-require(__DIR__ . '/../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters

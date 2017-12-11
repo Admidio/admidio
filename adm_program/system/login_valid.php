@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Dieses Script muss mit include() eingefuegt werden, wenn der User zum Aufruf
+ * Dieses Script muss mit require() eingefuegt werden, wenn der User zum Aufruf
  * einer Seite eingeloggt sein MUSS
  *
  * Ist der User nicht eingeloggt, wird er automatisch auf die Loginseite weitergeleitet

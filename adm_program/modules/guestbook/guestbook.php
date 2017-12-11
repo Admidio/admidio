@@ -363,9 +363,11 @@ else
 
                             // read all comments of this guestbook entry
                             ob_start();
-                            include(__DIR__ . '/get_comments.php');
-                            $page->addHtml(ob_get_contents());
+                            require(__DIR__ . '/get_comments.php');
+                            $fileContent = ob_get_contents();
                             ob_end_clean();
+
+                            $page->addHtml($fileContent);
                         }
                     $page->addHtml('</div>');
                 }
@@ -386,9 +388,11 @@ else
                 if ($countGuestbookEntries > 0 && $getGboId > 0)
                 {
                     ob_start();
-                    include(__DIR__ . '/get_comments.php');
-                    $page->addHtml(ob_get_contents());
+                    require(__DIR__ . '/get_comments.php');
+                    $fileContent = ob_get_contents();
                     ob_end_clean();
+
+                    $page->addHtml($fileContent);
                 }
             $page->addHtml('</div>');
 

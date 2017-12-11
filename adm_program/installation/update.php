@@ -412,7 +412,7 @@ elseif ($getMode === 2)
                     // check if an php update file exists and then execute the script
                     if (is_file($phpUpdateFile))
                     {
-                        include($phpUpdateFile);
+                        require($phpUpdateFile);
                         $flagNextVersion = true;
                     }
                 }

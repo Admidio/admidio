@@ -336,7 +336,7 @@ function doInstallation($language)
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';
-    include_once(__DIR__ . '/data_edit.php');
+    require_once(__DIR__ . '/data_edit.php');
 
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();

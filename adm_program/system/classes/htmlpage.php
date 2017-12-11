@@ -561,7 +561,7 @@ class HtmlPage
         global $g_root_path, $gPreferences;
 
         ob_start();
-        include(THEME_ADMIDIO_PATH . '/' . $filename);
+        require(THEME_ADMIDIO_PATH . '/' . $filename);
         $fileContent = ob_get_contents();
         ob_end_clean();
 
