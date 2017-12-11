@@ -121,14 +121,13 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 
         // in der Schleife wird geschaut ob es Scripte fuer eine patch-version (3. Versionsstelle) gibt
         // patch-version 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-        for ($tmpPathVersion = $versionPatch; $tmpPathVersion <= 14; ++$tmpPathVersion)
+        for ($tmpPatchVersion = $versionPatch; $tmpPatchVersion <= 14; ++$tmpPatchVersion)
         {
-            $version = $versionMain . '_' . $versionMinor . '_' . $tmpPathVersion;
-
             // output of the version number for better debugging
-            $gLogger->info('Update to version ' . $version);
+            $gLogger->notice('UPDATE: Start executing update steps to version '.$versionMain.'.'.$versionMinor.'.'.$tmpPatchVersion);
 
             $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
+            $version = $versionMain . '_' . $versionMinor . '_' . $tmpPatchVersion;
             $sqlFileName = 'upd_' . $version . '_db.sql';
             $phpFileName = 'upd_' . $version . '_conv.php';
 
@@ -154,11 +153,13 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
                 include($phpUpdateFile);
                 $flagNextVersion = true;
             }
+
+            $gLogger->notice('UPDATE: Finish executing update steps to version '.$versionMain.'.'.$versionMinor.'.'.$tmpPatchVersion);
         }
 
         // keine Datei mit der patch-version gefunden, dann die Main- oder minor-version hochsetzen,
         // solange bis die aktuelle Versionsnummer erreicht wurde
-        if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $tmpPathVersion, ADMIDIO_VERSION, '<'))
+        if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $tmpPatchVersion, ADMIDIO_VERSION, '<'))
         {
             if ($versionMinor === 4) // we do not have more then 4 minor-versions with old updater
             {
