@@ -94,7 +94,7 @@ $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 $gProfileFields = new ProfileFields($gDb, $currOrgId);
 
 // create language and language data object to handle translations
-if ($gSettingsManager->has('system_language'))
+if (!$gSettingsManager->has('system_language'))
 {
     $gSettingsManager->set('system_language', 'de');
 }
