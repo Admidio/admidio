@@ -150,7 +150,7 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
             // check if an php update file exists and then execute the script
             if (is_file($phpUpdateFile))
             {
-                include($phpUpdateFile);
+                require($phpUpdateFile);
                 $flagNextVersion = true;
             }
 
