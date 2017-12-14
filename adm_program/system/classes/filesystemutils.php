@@ -22,13 +22,13 @@ final class FileSystemUtils
     const ROOT_ID = 0;
     const ROOT_FOLDER = '/';
 
-    private static $workingDirectories = array();
+    private static $allowedDirectories = array();
 
     /**
      * @param array<int,string> $directoryPaths
      * @throws \UnexpectedValueException
      */
-    public static function setWorkingDirectories(array $directoryPaths = array())
+    public static function setAllowedDirectories(array $directoryPaths = array())
     {
         foreach ($directoryPaths as $directoryPath)
         {
@@ -38,29 +38,29 @@ final class FileSystemUtils
             }
         }
 
-        self::$workingDirectories = $directoryPaths;
+        self::$allowedDirectories = $directoryPaths;
     }
 
     /**
      * @param string $path
      * @throws \RuntimeException
      */
-    private static function checkIsInWorkingDirectories($path)
+    private static function checkIsInAllowedDirectories($path)
     {
-        if (count(self::$workingDirectories) === 0)
+        if (count(self::$allowedDirectories) === 0)
         {
             return;
         }
 
-        foreach (self::$workingDirectories as $workingDirectory)
+        foreach (self::$allowedDirectories as $allowedDirectory)
         {
-            if (strpos($path, $workingDirectory) === 0)
+            if (strpos($path, $allowedDirectory) === 0)
             {
                 return;
             }
         }
 
-        throw new \RuntimeException('Path is not in working directory!');
+        throw new \RuntimeException('Path is not in valid directory!');
     }
 
     // INFO STUFF
@@ -89,7 +89,7 @@ final class FileSystemUtils
      */
     public static function getPathOwnerInfo($path)
     {
-        self::checkIsInWorkingDirectories($path);
+        self::checkIsInAllowedDirectories($path);
 
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
@@ -119,7 +119,7 @@ final class FileSystemUtils
      */
     public static function getPathGroupInfo($path)
     {
-        self::checkIsInWorkingDirectories($path);
+        self::checkIsInAllowedDirectories($path);
 
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
@@ -149,7 +149,7 @@ final class FileSystemUtils
      */
     public static function hasPathOwnerRight($path)
     {
-        self::checkIsInWorkingDirectories($path);
+        self::checkIsInAllowedDirectories($path);
 
         $processOwnerInfo = self::getProcessOwnerInfo();
         $pathOwnerInfo = self::getPathOwnerInfo($path);
@@ -166,7 +166,7 @@ final class FileSystemUtils
      */
     public static function getPathMode($path, $octal = false)
     {
-        self::checkIsInWorkingDirectories($path);
+        self::checkIsInAllowedDirectories($path);
 
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
@@ -258,7 +258,7 @@ final class FileSystemUtils
      */
     public static function getPathPermissions($path)
     {
-        self::checkIsInWorkingDirectories($path);
+        self::checkIsInAllowedDirectories($path);
 
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
@@ -292,7 +292,7 @@ final class FileSystemUtils
      */
     public static function createDirectoryIfNotExists($directoryPath, array $options = array())
     {
-        self::checkIsInWorkingDirectories($directoryPath);
+        self::checkIsInAllowedDirectories($directoryPath);
 
         $options = array_merge(array('mode' => 0777, 'modeParents' => 0777, 'createDirectoryStructure' => true), $options);
 
@@ -340,7 +340,7 @@ final class FileSystemUtils
      */
     public static function isDirectoryEmpty($directoryPath)
     {
-        self::checkIsInWorkingDirectories($directoryPath);
+        self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath))
         {
@@ -382,7 +382,7 @@ final class FileSystemUtils
      */
     public static function getDirectoryContent($directoryPath, $recursive = false, $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK))
     {
-        self::checkIsInWorkingDirectories($directoryPath);
+        self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath))
         {
@@ -444,7 +444,7 @@ final class FileSystemUtils
      */
     public static function deleteDirectoryContentIfExists($directoryPath)
     {
-        self::checkIsInWorkingDirectories($directoryPath);
+        self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath))
         {
@@ -503,7 +503,7 @@ final class FileSystemUtils
      */
     public static function deleteDirectoryIfExists($directoryPath, $deleteWithContent = false)
     {
-        self::checkIsInWorkingDirectories($directoryPath);
+        self::checkIsInAllowedDirectories($directoryPath);
 
         if ($directoryPath === self::ROOT_FOLDER)
         {
@@ -556,8 +556,8 @@ final class FileSystemUtils
      */
     private static function checkDirectoryPreconditions($oldDirectoryPath, $newDirectoryPath, array $options = array())
     {
-        self::checkIsInWorkingDirectories($oldDirectoryPath);
-        self::checkIsInWorkingDirectories($newDirectoryPath);
+        self::checkIsInAllowedDirectories($oldDirectoryPath);
+        self::checkIsInAllowedDirectories($newDirectoryPath);
 
         $options = array_merge(array('createDirectoryStructure' => true, 'overwriteContent' => false), $options);
 
@@ -718,7 +718,7 @@ final class FileSystemUtils
      */
     public static function chmodDirectory($directoryPath, $mode, $recursive = false, $onlyDirectories = true)
     {
-        self::checkIsInWorkingDirectories($directoryPath);
+        self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath))
         {
@@ -764,7 +764,7 @@ final class FileSystemUtils
      */
     public static function deleteFileIfExists($filePath)
     {
-        self::checkIsInWorkingDirectories($filePath);
+        self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
@@ -803,8 +803,8 @@ final class FileSystemUtils
     {
         $options = array_merge(array('createDirectoryStructure' => true, 'overwrite' => false), $options);
 
-        self::checkIsInWorkingDirectories($oldFilePath);
-        self::checkIsInWorkingDirectories($newFilePath);
+        self::checkIsInAllowedDirectories($oldFilePath);
+        self::checkIsInAllowedDirectories($newFilePath);
 
         $oldParentDirectoryPath = dirname($oldFilePath);
         if ($mode === 'move' && !is_executable($oldParentDirectoryPath))
@@ -908,7 +908,7 @@ final class FileSystemUtils
      */
     public static function chmodFile($filePath, $mode)
     {
-        self::checkIsInWorkingDirectories($filePath);
+        self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
@@ -940,7 +940,7 @@ final class FileSystemUtils
      */
     public static function readFile($filePath)
     {
-        self::checkIsInWorkingDirectories($filePath);
+        self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
@@ -976,7 +976,7 @@ final class FileSystemUtils
      */
     public static function writeFile($filePath, $data, $append = false)
     {
-        self::checkIsInWorkingDirectories($filePath);
+        self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
