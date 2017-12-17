@@ -1907,7 +1907,9 @@ class User extends TableAccess
         // Felder, die mit usr_ beginnen
         // Felder, die sich nicht geändert haben
         // Wenn usr_id ist 0 (der User neu angelegt wird; Das wird bereits dokumentiert)
-        if ($returnCode && $usrId > 0 && $gSettingsManager->getBool('profile_log_edit_fields'))
+        if ($returnCode && $usrId > 0)
+        // need a fix, blocks installation
+        //if ($returnCode && $usrId > 0 && $gSettingsManager->getBool('profile_log_edit_fields'))
         {
             $logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
             $logEntry->setValue('usl_usr_id', $usrId);

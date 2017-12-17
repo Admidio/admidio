@@ -347,7 +347,7 @@ class SettingsManager
             }
             if (!self::isValidValue($value))
             {
-                throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
+                throw new \UnexpectedValueException('Settings value "' . $value . '" for setting "' . $name . '" is an invalid value!');
             }
         }
 
