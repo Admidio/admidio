@@ -412,7 +412,7 @@ elseif ($getMode === 2)
                     // check if an php update file exists and then execute the script
                     if (is_file($phpUpdateFile))
                     {
-                        include($phpUpdateFile);
+                        require($phpUpdateFile);
                         $flagNextVersion = true;
                     }
                 }
@@ -482,7 +482,14 @@ elseif ($getMode === 2)
 
     // start php session and remove session object with all data, so that
     // all data will be read after the update
-    Session::start(COOKIE_PREFIX);
+    try
+    {
+        Session::start(COOKIE_PREFIX);
+    }
+    catch (\RuntimeException $exception)
+    {
+        // TODO
+    }
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful

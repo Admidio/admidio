@@ -7,15 +7,15 @@
         </div><!-- closes "div.col-md-9" -->
         <div class="col-md-3">
             <div id="right-block" class="admidio-container">
-                    <?php
+                <?php
 
-                    include (SERVER_PATH ."/adm_plugins/login_form/login_form.php");
+                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/login_form/login_form.php');
 
-                    // create html page object and display Menu
-                    $page = new HtmlPage();
-                    echo $page->showMainMenu(false);
+                // create html page object and display Menu
+                $page = new HtmlPage();
+                echo $page->showMainMenu(false);
 
-                    ?>
+                ?>
             </div><!-- closes "div#right-block" -->
         </div><!-- closes "div.col-md-3" -->
     </div><!-- closes "div.row" -->

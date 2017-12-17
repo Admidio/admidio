@@ -336,7 +336,7 @@ function doInstallation($language)
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';
-    include_once(__DIR__ . '/data_edit.php');
+    require_once(__DIR__ . '/data_edit.php');
 
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();
@@ -357,7 +357,14 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update
-Session::start(COOKIE_PREFIX);
+try
+{
+    Session::start(COOKIE_PREFIX);
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
+}
 unset($_SESSION['gCurrentSession']);
 
 // create language and language data object to handle translations

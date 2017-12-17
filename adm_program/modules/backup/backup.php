@@ -144,9 +144,11 @@ if($getMode === 'show_list')
 elseif($getMode === 'create_backup')
 {
     ob_start();
-    include(__DIR__ . '/backup_script.php');
-    $page->addHtml(ob_get_contents());
+    require_once(__DIR__ . '/backup_script.php');
+    $fileContent = ob_get_contents();
     ob_end_clean();
+
+    $page->addHtml($fileContent);
 
     // show button with link to backup list
     $form = new HtmlForm('show_backup_list_form', ADMIDIO_URL.FOLDER_MODULES.'/backup/backup.php', $page);

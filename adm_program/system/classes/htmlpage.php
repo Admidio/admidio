@@ -419,12 +419,20 @@ class HtmlPage
      */
     private function getFileContent($filename)
     {
-        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
+        global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
         global $g_root_path, $gPreferences;
 
+        $filePath = THEME_ADMIDIO_PATH . '/' . $filename;
+        if (!is_file($filePath))
+        {
+            $gLogger->error('THEME: Theme file "' . $filename . '" not found!', array('filePath' => $filePath));
+
+            return '';
+        }
+
         ob_start();
-        include(THEME_ADMIDIO_PATH . '/' . $filename);
+        require($filePath);
         $fileContent = ob_get_contents();
         ob_end_clean();
 

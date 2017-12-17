@@ -37,9 +37,13 @@ catch(AdmException $e)
 /********************************************************************************/
 
 // start PHP session
-if(!headers_sent())
+try
 {
     Session::start(COOKIE_PREFIX);
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
 }
 
 // determine session id

@@ -60,8 +60,15 @@ $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_prog
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 
-// Initialize and check the parameters
-Session::start('ADMIDIO_INSTALLATION');
+// start PHP session
+try
+{
+    Session::start('ADMIDIO_INSTALLATION');
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
+}
 
 define('THEME_URL', 'layout');
 

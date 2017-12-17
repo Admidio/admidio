@@ -40,7 +40,7 @@ function admFuncAutoload($className)
     {
         if (is_file($libFile))
         {
-            include($libFile);
+            require($libFile);
             return null;
         }
     }

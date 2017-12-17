@@ -174,6 +174,9 @@ class Database
         return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
     }
 
+    /**
+     * @throws AdmException
+     */
     public function __wakeup()
     {
         global $gLogger;
@@ -220,7 +223,7 @@ class Database
             );
             $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
 
-            throw new AdmException($e->getMessage());
+            throw new AdmException($e->getMessage()); // TODO: change exception class
         }
     }
 
@@ -944,7 +947,7 @@ class Database
             return $pdoStatement->fetch($fetchType);
         }
         // if no pdo statement was committed then take the one from the last query
-        elseif ($this->pdoStatement instanceof \PDOStatement)
+        if ($this->pdoStatement instanceof \PDOStatement)
         {
             return $this->pdoStatement->fetch($fetchType);
         }
@@ -975,7 +978,7 @@ class Database
             return $pdoStatement->fetchObject();
         }
         // if no pdo statement was committed then take the one from the last query
-        elseif ($this->pdoStatement instanceof \PDOStatement)
+        if ($this->pdoStatement instanceof \PDOStatement)
         {
             return $this->pdoStatement->fetchObject();
         }
@@ -1021,7 +1024,7 @@ class Database
             return $pdoStatement->rowCount();
         }
         // if no pdo statement was committed then take the one from the last query
-        elseif ($this->pdoStatement instanceof \PDOStatement)
+        if ($this->pdoStatement instanceof \PDOStatement)
         {
             return $this->pdoStatement->rowCount();
         }
