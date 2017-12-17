@@ -218,7 +218,8 @@ $defaultOrgPreferences['system_language']     = $language;
 $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
 $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
-// create all necessary data for this organization
+// create all necessary data for this
+$gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
 $settingsManager =& $gCurrentOrganization->getSettingsManager();
 $settingsManager->setMulti($defaultOrgPreferences, false);
 $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
