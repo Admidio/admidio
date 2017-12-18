@@ -350,7 +350,7 @@ final class ComponentUpdateSteps
                          WHERE fol_org_id = '.$rowId;
                 self::$db->query($sql); // TODO add more params
 
-                if($row['org_shortname'] === $g_organization)
+                if($row['org_shortname'] === $g_organization && is_dir($folderOldName))
                 {
                     rename($folderOldName, $folder->getFullFolderPath());
                 }
