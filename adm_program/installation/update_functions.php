@@ -109,13 +109,11 @@ function toggleForeignKeyChecks($enable)
  */
 function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 {
-    global $gLogger, $gDb, $gL10n, $g_tbl_praefix, $gSettingsManager;
+    global $gLogger, $gDb, $gL10n, $g_tbl_praefix, $gSettingsManager, $gDbType;
 
     // nun in einer Schleife alle Update-Scripte fuer Version 2 einspielen
     while ($versionMain === 2)
     {
-        $flagNextVersion = false;
-
         // version 2 Admidio had sql and php files where the update statements where stored
         // these files must be executed
 
@@ -135,11 +133,7 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
             {
                 $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
 
-                if ($sqlQueryResult === true)
-                {
-                    $flagNextVersion = true;
-                }
-                else
+                if ($sqlQueryResult !== true)
                 {
                     showNotice($sqlQueryResult, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
                     // => EXIT
@@ -151,34 +145,31 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
             if (is_file($phpUpdateFile))
             {
                 require($phpUpdateFile);
-                $flagNextVersion = true;
             }
 
             $gLogger->notice('UPDATE: Finish executing update steps to version '.$versionMain.'.'.$versionMinor.'.'.$tmpPatchVersion);
         }
 
-        // keine Datei mit der patch-version gefunden, dann die Main- oder minor-version hochsetzen,
-        // solange bis die aktuelle Versionsnummer erreicht wurde
-        if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $tmpPatchVersion, ADMIDIO_VERSION, '<'))
+        // update minor verion number
+        if ($versionMinor === 4) // we do not have more then 4 minor-versions with old updater
         {
-            if ($versionMinor === 4) // we do not have more then 4 minor-versions with old updater
-            {
-                $versionMain = 3;
-                $versionMinor = 0;
-            }
-            else
-            {
-                ++$versionMinor;
-            }
-
-            $versionPatch = 0;
+            $versionMain = 3;
+            $versionMinor = 0;
         }
+        else
+        {
+            ++$versionMinor;
+        }
+
+        $versionPatch = 0;
     }
 }
 
 function doVersion3Update()
 {
-    global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
+    global $gDb, $gL10n, $gCurrentOrganization, $gCurrentUser;
+
+    $gProfileFields = new ProfileFields($gDb, (int) $gCurrentOrganization->getValue('org_id'));
 
     // set system user as current user, but this user only exists since version 3
     $sql = 'SELECT usr_id
