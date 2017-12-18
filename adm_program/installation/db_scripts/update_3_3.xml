@@ -64,7 +64,7 @@
     <step id="490" database="mysql" error="ignore">ALTER TABLE %PREFIX%_members DROP INDEX idx_%PREFIX%_mem_rol_usr_id, ADD INDEX %PREFIX%_idx_mem_rol_usr_id (mem_rol_id, mem_usr_id)</step>
     <step id="495" database="mysql" error="ignore">ALTER TABLE %PREFIX%_members DROP INDEX ak_rol_usr_id, ADD INDEX %PREFIX%_idx_mem_rol_usr_id (mem_rol_id, mem_usr_id)</step>
     <step id="500" database="mysql" error="ignore">ALTER TABLE %PREFIX%_messages_content DROP INDEX idx_%PREFIX%_msc_part_id, ADD INDEX %PREFIX%_idx_msc_part_id (msc_part_id)</step>
-    <step id="505" database="mysql">ALTER TABLE %PREFIX%_messages_content ADD INDEX %PREFIX%_idx_msc_part_id (msc_part_id)</step>
+    <step id="505" database="mysql" error="ignore">ALTER TABLE %PREFIX%_messages_content ADD INDEX %PREFIX%_idx_msc_part_id (msc_part_id)</step>
     <step id="510" database="mysql">ALTER TABLE %PREFIX%_organizations DROP INDEX ak_%PREFIX%_shortname, ADD INDEX %PREFIX%_idx_org_shortname (org_shortname)</step>
     <step id="520" database="mysql" error="ignore">ALTER TABLE %PREFIX%_preferences DROP INDEX idx_%PREFIX%_prf_org_id_name, ADD INDEX %PREFIX%_idx_prf_org_id_name (prf_org_id, prf_name)</step>
     <step id="525" database="mysql" error="ignore">ALTER TABLE %PREFIX%_preferences DROP INDEX idx_prf_org_id_name, ADD INDEX %PREFIX%_idx_prf_org_id_name (prf_org_id, prf_name)</step>
