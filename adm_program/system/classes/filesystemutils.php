@@ -11,7 +11,11 @@
 
 /**
  * @class FileSystemUtils
- * Class handle the most necessary file-system operations
+ * This class handles the most necessary file-system operations like:
+ * - Restrict all operations to specific directories
+ * - Info: process owner/group info, path owner/group info, is path owner, path mode, path permissions
+ * - Folder: create, is empty, get content, delete content, delete folder, copy, move, chmod
+ * - File: delete, copy, move, chmod, read, write
  */
 final class FileSystemUtils
 {
@@ -22,6 +26,9 @@ final class FileSystemUtils
     const ROOT_ID = 0;
     const ROOT_FOLDER = '/';
 
+    /**
+     * @var array<int,string>
+     */
     private static $allowedDirectories = array();
 
     /**
