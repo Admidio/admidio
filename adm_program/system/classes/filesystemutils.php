@@ -63,7 +63,7 @@ final class FileSystemUtils
             {
                 if ($test === '..')
                 {
-                    // Change to grate-parent directory => add two times ".."
+                    // Change to grand-parent directory => add two times ".."
                     $parts[] = $test;
                     $parts[] = $segment;
                 }
