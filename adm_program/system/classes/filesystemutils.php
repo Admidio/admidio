@@ -38,37 +38,48 @@ final class FileSystemUtils
      */
     public static function normalizePath($path)
     {
+        // Normalize directory separators
         $path = str_replace('\\', '/', $path);
         $path = preg_replace('/\/+/', '/', $path);
 
         $segments = explode('/', $path);
 
         $parts = array();
-        foreach ($segments as $segment)
+        foreach ($segments as $index =>  $segment)
         {
             if ($segment === '.')
             {
+                // Actual directory => ignore
                 continue;
             }
 
             $test = array_pop($parts);
             if ($test === null)
             {
+                // No path added => add first path
                 $parts[] = $segment;
             }
             elseif ($segment === '..')
             {
                 if ($test === '..')
                 {
+                    // Change to grate-parent directory => add two times ".."
                     $parts[] = $test;
-                }
-                if ($test === '..' || $test === '')
-                {
                     $parts[] = $segment;
                 }
+                elseif ($test === '')
+                {
+                    // File-system root => remove root and add ".."
+                    $parts[] = $segment;
+                }
+//                else
+//                {
+//                    // Change to parent directory => ignore
+//                }
             }
             else
             {
+                // New sub-path => add parent path and new path
                 $parts[] = $test;
                 $parts[] = $segment;
             }
