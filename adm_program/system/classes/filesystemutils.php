@@ -75,7 +75,8 @@ final class FileSystemUtils
     // INFO STUFF
 
     /**
-     * @return array<string,string|int>
+     * Gets info about the process owner
+     * @return array<string,string|int> Returns info about the process owner
      */
     public static function getProcessOwnerInfo()
     {
@@ -83,7 +84,8 @@ final class FileSystemUtils
     }
 
     /**
-     * @return array<string,string|int|array>
+     * Gets info about the process group
+     * @return array<string,string|int|array> Returns info about the process group
      */
     public static function getProcessGroupInfo()
     {
@@ -91,10 +93,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $path
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return array<string,string|int>
+     * Gets info about the path owner
+     * @param string $path The path from which to get the information
+     * @throws \UnexpectedValueException Throws if path does not exist
+     * @throws \RuntimeException         Throws if the fileowner determination fails
+     * @return array<string,string|int> Returns info about the path owner
      */
     public static function getPathOwnerInfo($path)
     {
@@ -121,10 +124,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $path
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return array<string,string|int|array>
+     * Gets info about the path group
+     * @param string $path The path from which to get the information
+     * @throws \UnexpectedValueException Throws if path does not exist
+     * @throws \RuntimeException         Throws if the groupowner determination fails
+     * @return array<string,string|int|array> Returns info about the path group
      */
     public static function getPathGroupInfo($path)
     {
@@ -151,10 +155,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $path
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Checks if the process is the path owner
+     * @param string $path The path from which to get the information
+     * @throws \UnexpectedValueException Throws if path does not exist
+     * @throws \RuntimeException         Throws if the fileowner determination fails
+     * @return bool Returns true if process is the path owner
      */
     public static function hasPathOwnerRight($path)
     {
@@ -167,11 +172,12 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $path
-     * @param bool   $octal
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return string
+     * Gets the mode permissions of a path
+     * @param string $path  The path from which to get the information
+     * @param bool   $octal Set true to get the octal instead of the string mode representation
+     * @throws \UnexpectedValueException Throws if path does not exist
+     * @throws \RuntimeException         Throws if the permissions determination fails
+     * @return string Returns the mode permissions of a path in octal or string representation
      */
     public static function getPathMode($path, $octal = false)
     {
@@ -199,14 +205,15 @@ final class FileSystemUtils
             return substr(sprintf('%o', $perms), -4);
         }
 
-        return self::parsePermsToString($perms);
+        return self::convertPermsToString($perms);
     }
 
     /**
-     * @param int $perms
-     * @return string
+     * Convert file permissions to string representation
+     * @param int $perms The file permissions
+     * @return string Returns file permissions in string representation
      */
-    private static function parsePermsToString($perms)
+    private static function convertPermsToString($perms)
     {
         switch ($perms & 0xF000)
         {
@@ -260,10 +267,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $path
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return array<string,string>
+     * Gets owner, group and mode info from a path
+     * @param string $path The path from which to get the information
+     * @throws \UnexpectedValueException Throws if path does not exist
+     * @throws \RuntimeException         Throws if a info determination fails
+     * @return array<string,string> Returns owner, group and mode info from a path
      */
     public static function getPathPermissions($path)
     {
