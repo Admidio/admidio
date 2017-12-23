@@ -385,8 +385,9 @@ final class FileSystemUtils
         {
             if ($options['createDirectoryStructure'])
             {
-                $options['mode'] = $options['modeParents'];
-                self::createDirectoryIfNotExists($parentDirectoryPath, $options);
+                $parentOptions = $options;
+                $parentOptions['mode'] = $options['modeParents'];
+                self::createDirectoryIfNotExists($parentDirectoryPath, $parentOptions);
             }
             else
             {
