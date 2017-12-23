@@ -92,7 +92,7 @@ $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
     $gL10n->get('ORG_URL'),
-    'Standart Menu',
+    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />',
     '&nbsp;'
 );
 $menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
@@ -142,7 +142,7 @@ while ($main_men = $main_men_statement->fetchObject())
             }
             else
             {
-                $menuName = $menu_row->men_name;                
+                $menuName = $menu_row->men_name;
                 $menuNameDesc = $menu_row->men_description;
             }
 
@@ -154,7 +154,7 @@ while ($main_men = $main_men_statement->fetchObject())
             $htmlStandartMenu = '&nbsp;';
             if($menu_row->men_standart == 1)
             {
-                $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" title="'.$gL10n->get('ORG_ACCESS_TO_MODULE', array($headline)).'" />';
+                $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />';
             }
 
             $menuAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu_row->men_id. '"><img

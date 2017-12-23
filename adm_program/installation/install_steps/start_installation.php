@@ -254,9 +254,9 @@ $gCurrentUser->readDataById($currUsrId);
 
 // Menu entries for the standart installation
 $sql = 'INSERT INTO '.TBL_MENU.' (men_com_id, men_men_id_parent, men_node, men_order, men_standart, men_name_intern, men_url, men_icon, men_name, men_description)
-           VALUES (NULL, NULL, 1, 1, 1, NULL, NULL, \'\', \'SYS_MODULES\', \'\')
-                , (NULL, NULL, 1, 2, 1, NULL, NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
-                , (NULL, NULL, 1, 3, 1, NULL, NULL, \'\', \'MEN_PLUGIN\', \'\')
+           VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
+                , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
+                , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')
                 , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
                 , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOWNLOADS\'), 1, 0, 3, 1, \'download\', \'/adm_program/modules/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\')
                 , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \'/adm_program/modules/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\')

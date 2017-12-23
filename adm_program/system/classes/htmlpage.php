@@ -275,53 +275,47 @@ class HtmlPage
 
             if($statement->rowCount() > 0)
             {
-                $last = '';
+                $this->menu->addItem('menu_item_'.$mainMenu->men_name_intern, null, $gL10n->get($mainMenu->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
 
                 while ($row = $statement->fetchObject())
                 {
                     if((int) $row->men_com_id === 0 || Component::visible($row->com_name_intern))
                     {
-                        if($row->men_men_id_parent != $last)
-                        {
-                            $this->menu->addItem('menu_item_'.$mainMenu->men_name_intern, null, $gL10n->get($mainMenu->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
-                            $last = $row->men_men_id_parent;
-                        }
-    
                         $viewMenu = true;
                         $description = '';
-    
+
                         if(strlen($row->men_description) > 2)
                         {
                             $description = $gL10n->get($row->men_description);
                         }
-    
+
                         // Read current roles rights of the menu
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
                         $rolesDisplayRight = $displayMenu->getRolesIds();
-    
+
                         $menuUrl = $row->men_url;
                         $menuIcon = $row->men_icon;
                         $menuName = $gL10n->get($row->men_name);
-    
+
                         //special case because there are differnent links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
                             $unreadBadge = '';
-    
+
                             // get number of unread messages for user
                             $message = new TableMessage($gDb);
                             $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-    
+
                             if($unread > 0)
                             {
                                 $unreadBadge = '<span class="badge">' . $unread . '</span>';
                             }
-    
+
                             $menuUrl = '/adm_program/modules/messages/messages.php';
                             $menuIcon = '/icons/messages.png';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
-    
+
                         if(count($rolesDisplayRight) >= 1)
                         {
                             // check for rigth to show the menue
@@ -330,7 +324,7 @@ class HtmlPage
                                 $viewMenu = false;
                             }
                         }
-    
+
                         if($viewMenu == true)
                         {
                             $this->menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, 'right', 'menu_item_'.$mainMenu->men_name_intern, 'admidio-default-menu-item');
@@ -740,20 +734,10 @@ class HtmlPage
 
             if($statement->rowCount() > 0)
             {
-                $last = '';
+                $Menu = new Menu($mainMenu->men_name_intern, $gL10n->get($mainMenu->men_name));
 
                 while ($row = $statement->fetchObject())
                 {
-                    if($row->men_men_id_parent != $last)
-                    {
-                        if($last > 0)
-                        {
-                            $htmlMenu .= $Menu->show($details);
-                        }
-                        $Menu = new Menu($mainMenu->men_name_intern, $gL10n->get($mainMenu->men_name));
-                        $last = $row->men_men_id_parent;
-                    }
-
                     $description = '';
 
                     if((int) $row->men_com_id === 0 || Component::visible($row->com_name_intern))
@@ -766,43 +750,43 @@ class HtmlPage
                                 $description = $row->men_description;
                             }
                         }
-    
+
                         // Read current roles rights of the menu
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
                         $rolesDisplay = $displayMenu->getRolesIds();
-    
+
                         $menuUrl = $row->men_url;
-    
+
                         if(strlen($row->men_icon) > 2)
                         {
                             $menuIcon = $row->men_icon;
                         }
-    
+
                         $menuName = $gL10n->get($row->men_name);
                         if($menuName == '##' || $menuName[0] == '#')
                         {
                             $menuName = $row->men_name;
                         }
-    
+
                         //special case because there are differnent links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
                             // get number of unread messages for user
                             $message = new TableMessage($gDb);
                             $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-    
+
                             if($unread > 0)
                             {
                                 $unreadBadge = '<span class="badge">' . $unread . '</span>';
                             }
-    
+
                             $menuUrl = '/adm_program/modules/messages/messages.php';
                             $menuIcon = 'messages.png';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
                         $Menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, $description);
-    
+
                         if($details == true)
                         {
                             //Submenu for Lists
@@ -813,7 +797,7 @@ class HtmlPage
                                 $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
                                                         $gL10n->get('ROL_INACTIV_ROLE'));
                             }
-    
+
                             //Submenu for Dates
                             if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
                             || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
