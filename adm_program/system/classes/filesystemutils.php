@@ -45,7 +45,7 @@ final class FileSystemUtils
         $segments = explode('/', $path);
 
         $parts = array();
-        foreach ($segments as $index =>  $segment)
+        foreach ($segments as $segment)
         {
             if ($segment === '.')
             {
