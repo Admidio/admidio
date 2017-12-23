@@ -32,6 +32,52 @@ final class FileSystemUtils
     private static $allowedDirectories = array();
 
     /**
+     * Normalize a path
+     * @param string $path The path to normalize
+     * @return string The normalized path
+     */
+    public static function normalizePath($path)
+    {
+        $path = str_replace('\\', '/', $path);
+        $path = preg_replace('/\/+/', '/', $path);
+
+        $segments = explode('/', $path);
+
+        $parts = array();
+        foreach ($segments as $segment)
+        {
+            if ($segment === '.')
+            {
+                continue;
+            }
+
+            $test = array_pop($parts);
+            if ($test === null)
+            {
+                $parts[] = $segment;
+            }
+            elseif ($segment === '..')
+            {
+                if ($test === '..')
+                {
+                    $parts[] = $test;
+                }
+                if ($test === '..' || $test === '')
+                {
+                    $parts[] = $segment;
+                }
+            }
+            else
+            {
+                $parts[] = $test;
+                $parts[] = $segment;
+            }
+        }
+
+        return implode(DIRECTORY_SEPARATOR, $parts);
+    }
+
+    /**
      * Restrict all operations of this class to specific directories
      * @param array<int,string> $directoryPaths The allowed directories
      * @throws \UnexpectedValueException Throws if a given directory does not exist
