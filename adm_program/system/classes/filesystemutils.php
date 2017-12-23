@@ -32,11 +32,11 @@ final class FileSystemUtils
     private static $allowedDirectories = array();
 
     /**
-     * Normalize a path
+     * Get a normalized path
      * @param string $path The path to normalize
      * @return string The normalized path
      */
-    public static function normalizePath($path)
+    public static function getNormalizedPath($path)
     {
         // Normalize directory separators
         $path = str_replace('\\', '/', $path);
@@ -97,7 +97,7 @@ final class FileSystemUtils
     {
         foreach ($directoryPaths as &$directoryPath)
         {
-            $directoryPath = self::normalizePath($directoryPath);
+            $directoryPath = self::getNormalizedPath($directoryPath);
             if (!is_dir($directoryPath))
             {
                 throw new \UnexpectedValueException('Directory does not exist!');
@@ -115,7 +115,7 @@ final class FileSystemUtils
      */
     private static function checkIsInAllowedDirectories(&$path)
     {
-        $path = self::normalizePath($path);
+        $path = self::getNormalizedPath($path);
 
         if (count(self::$allowedDirectories) === 0)
         {
