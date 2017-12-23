@@ -84,13 +84,15 @@ final class FileSystemUtils
      */
     public static function setAllowedDirectories(array $directoryPaths = array())
     {
-        foreach ($directoryPaths as $directoryPath)
+        foreach ($directoryPaths as &$directoryPath)
         {
+            $directoryPath = self::normalizePath($directoryPath);
             if (!is_dir($directoryPath))
             {
                 throw new \UnexpectedValueException('Directory does not exist!');
             }
         }
+        unset($directoryPath);
 
         self::$allowedDirectories = $directoryPaths;
     }
@@ -100,8 +102,10 @@ final class FileSystemUtils
      * @param string $path The path to check
      * @throws \RuntimeException Throws if the given path is not in an allowed directory
      */
-    private static function checkIsInAllowedDirectories($path)
+    private static function checkIsInAllowedDirectories(&$path)
     {
+        $path = self::normalizePath($path);
+
         if (count(self::$allowedDirectories) === 0)
         {
             return;
