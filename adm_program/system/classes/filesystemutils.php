@@ -301,11 +301,12 @@ final class FileSystemUtils
     // FOLDER STUFF
 
     /**
-     * @param string              $directoryPath
-     * @param array<string,mixed> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Creates a directory if it already did not exist
+     * @param string              $directoryPath The directory to create
+     * @param array<string,mixed> $options       Operation options (mode, modeParents, createDirectoryStructure)
+     * @throws \UnexpectedValueException Throws if the parent directory is not writable
+     * @throws \RuntimeException         Throws if the mkdir process fails
+     * @return bool Returns true if directory was successfully created or false if directory did already exist
      */
     public static function createDirectoryIfNotExists($directoryPath, array $options = array())
     {
@@ -350,10 +351,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $directoryPath
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Checks if a directory is empty
+     * @param string $directoryPath The directory to check if is empty
+     * @throws \UnexpectedValueException Throws if the directory is not readable
+     * @throws \RuntimeException         Throws if the opendir process fails
+     * @return bool Returns true if the directory is empty
      */
     public static function isDirectoryEmpty($directoryPath)
     {
@@ -389,13 +391,14 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string            $directoryPath
-     * @param bool              $recursive
-     * @param bool              $fullPath
-     * @param array<int,string> $includedContentTypes
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return array<string,string|array>
+     * Gets the content of a directory and optional recursive from all subdirectories
+     * @param string            $directoryPath        The directory from which to get the content
+     * @param bool              $recursive            If true, also all subdirectories are scanned
+     * @param bool              $fullPath             Set true to get the full paths instead of the content entry names
+     * @param array<int,string> $includedContentTypes A list with all content types that should get returned (directories, files, links)
+     * @throws \UnexpectedValueException Throws if directory is not readable
+     * @throws \RuntimeException         Throws if the opendir process fails
+     * @return array<string,string|array> The content of the directory (and all the subdirectories)
      */
     public static function getDirectoryContent($directoryPath, $recursive = false, $fullPath = true, array $includedContentTypes = array(self::CONTENT_TYPE_DIRECTORY, self::CONTENT_TYPE_FILE, self::CONTENT_TYPE_LINK))
     {
@@ -454,10 +457,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $directoryPath
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Deletes the content of a directory
+     * @param string $directoryPath The directory where to delete the content
+     * @throws \UnexpectedValueException Throws if directory is not writable and readable
+     * @throws \RuntimeException         Throws if the unlink, rmdir or opendir process fails
+     * @return bool Returns true if directory content was successfully deleted or false if directory was already empty
      */
     public static function deleteDirectoryContentIfExists($directoryPath)
     {
@@ -512,11 +516,12 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $directoryPath
-     * @param bool   $deleteWithContent
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Deletes a directory if it exists
+     * @param string $directoryPath     The directory to delete
+     * @param bool   $deleteWithContent If true, directory will also be deleted if directory is not empty
+     * @throws \UnexpectedValueException Throws if the parent directory is not writable
+     * @throws \RuntimeException         Throws if the rmdir or opendir process fails
+     * @return bool Returns true if directory was successfully deleted or false if directory already did not exist
      */
     public static function deleteDirectoryIfExists($directoryPath, $deleteWithContent = false)
     {
@@ -564,12 +569,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string             $oldDirectoryPath
-     * @param string             $newDirectoryPath
-     * @param array<string,bool> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Checks if all preconditions are fulfilled
+     * @param string             $oldDirectoryPath The source directory
+     * @param string             $newDirectoryPath The destination directory
+     * @param array<string,bool> $options          Operation options (createDirectoryStructure, overwriteContent)
+     * @throws \UnexpectedValueException Throws if source directory is not readable, destination directory is not writable or a collision is detected
+     * @throws \RuntimeException         Throws if the mkdir or opendir process fails
+     * @return bool Returns true if content will get overwritten
      */
     private static function checkDirectoryPreconditions($oldDirectoryPath, $newDirectoryPath, array $options = array())
     {
@@ -624,10 +630,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param array<string,string|array> $directoryContentTree1
-     * @param array<string,string|array> $directoryContentTree2
-     * @param bool                       $considerDirectoryCollisions
-     * @return bool
+     * Checks if two directories have same files or directories
+     * @param array<string,string|array> $directoryContentTree1       Thirst directory to check
+     * @param array<string,string|array> $directoryContentTree2       Second directory to check
+     * @param bool                       $considerDirectoryCollisions If true, also directory collisions are checked
+     * @return bool Returns true if both directories has same files or directories
      */
     private static function checkDirectoryContentTreeCollisions(array $directoryContentTree1, array $directoryContentTree2, $considerDirectoryCollisions = false)
     {
@@ -659,10 +666,11 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $oldDirectoryPath
-     * @param string $newDirectoryPath
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
+     * Execute the copy process to copy a directory
+     * @param string $oldDirectoryPath The directory to copy
+     * @param string $newDirectoryPath The destination directory
+     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws \RuntimeException         Throws if the mkdir, copy or opendir process fails
      */
     private static function doCopyDirectory($oldDirectoryPath, $newDirectoryPath)
     {
@@ -690,12 +698,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string             $oldDirectoryPath
-     * @param string             $newDirectoryPath
-     * @param array<string,bool> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Copies a directory
+     * @param string             $oldDirectoryPath The directory to copy
+     * @param string             $newDirectoryPath The destination directory
+     * @param array<string,bool> $options          Operation options (createDirectoryStructure, overwriteContent)
+     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws \RuntimeException         Throws if the mkdir, copy or opendir process fails
+     * @return bool Returns true if content was overwritten
      */
     public static function copyDirectory($oldDirectoryPath, $newDirectoryPath, array $options = array())
     {
@@ -707,12 +716,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string             $oldDirectoryPath
-     * @param string             $newDirectoryPath
-     * @param array<string,bool> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Moves a directory
+     * @param string             $oldDirectoryPath The directory to move
+     * @param string             $newDirectoryPath The destination directory
+     * @param array<string,bool> $options          Operation options (createDirectoryStructure, overwriteContent)
+     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws \RuntimeException         Throws if the mkdir, copy, rmdir, unlink or opendir process fails
+     * @return bool Returns true if content was overwritten
      */
     public static function moveDirectory($oldDirectoryPath, $newDirectoryPath, array $options = array())
     {
@@ -726,12 +736,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $directoryPath
-     * @param int    $mode
-     * @param bool   $recursive
-     * @param bool   $onlyDirectories
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
+     * Chmod a directory and optional recursive all subdirectories and files
+     * @param string $directoryPath   The directory to chmod
+     * @param int    $mode            The mode to set, in octal notation (e.g. 0755)
+     * @param bool   $recursive       If true, subdirectories are chmod too
+     * @param bool   $onlyDirectories If true, only directories gets chmod. If false all content gets chmod
+     * @throws \UnexpectedValueException Throws if process is not directory owner
+     * @throws \RuntimeException         Throws if the chmod or opendir process fails
      */
     public static function chmodDirectory($directoryPath, $mode, $recursive = false, $onlyDirectories = true)
     {
