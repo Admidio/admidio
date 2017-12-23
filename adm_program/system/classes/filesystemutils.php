@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Class handle the most necessary file-system operations
+ * This class handles the most necessary file-system operations
  *
  * @copyright 2004-2017 The Admidio Team
  * @see https://www.admidio.org/
@@ -27,13 +27,14 @@ final class FileSystemUtils
     const ROOT_FOLDER = '/';
 
     /**
-     * @var array<int,string>
+     * @var array<int,string> The allowed directories
      */
     private static $allowedDirectories = array();
 
     /**
-     * @param array<int,string> $directoryPaths
-     * @throws \UnexpectedValueException
+     * Restrict all operations of this class to specific directories
+     * @param array<int,string> $directoryPaths The allowed directories
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
      */
     public static function setAllowedDirectories(array $directoryPaths = array())
     {
@@ -49,8 +50,9 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $path
-     * @throws \RuntimeException
+     * Check if a given path is in the allowed directories
+     * @param string $path The path to check
+     * @throws \RuntimeException Throws if the given path is not in an allowed directory
      */
     private static function checkIsInAllowedDirectories($path)
     {
@@ -764,10 +766,11 @@ final class FileSystemUtils
     // FILE STUFF
 
     /**
-     * @param string $filePath
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Deletes a file if it exists
+     * @param string $filePath The file to delete
+     * @throws \UnexpectedValueException Throws if the file is not writable
+     * @throws \RuntimeException         Throws if the delete process fails
+     * @return bool Returns true if file was successfully deleted or false if file already did not exist
      */
     public static function deleteFileIfExists($filePath)
     {
@@ -798,13 +801,14 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string             $mode
-     * @param string             $oldFilePath
-     * @param string             $newFilePath
-     * @param array<string,bool> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Checks the preconditions for tile copy and move
+     * @param string             $mode        The operation mode (copy or move)
+     * @param string             $oldFilePath The source path
+     * @param string             $newFilePath The destination path
+     * @param array<string,bool> $options     Operation options (createDirectoryStructure, overwrite)
+     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws \RuntimeException         Throws if the destination folder could not be created
+     * @return bool Returns true if the destination path will be overwritten
      */
     private static function checkFilePreconditions($mode, $oldFilePath, $newFilePath, array $options = array())
     {
@@ -866,12 +870,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string             $oldFilePath
-     * @param string             $newFilePath
-     * @param array<string,bool> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Copies a file
+     * @param string             $oldFilePath The file to copy
+     * @param string             $newFilePath The path where to copy to
+     * @param array<string,bool> $options     Operation options (createDirectoryStructure, overwrite)
+     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws \RuntimeException         Throws if the copy process fails
+     * @return bool Returns true if the destination path was overwritten
      */
     public static function copyFile($oldFilePath, $newFilePath, array $options = array())
     {
@@ -887,12 +892,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string             $oldFilePath
-     * @param string             $newFilePath
-     * @param array<string,bool> $options
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return bool
+     * Moves a file
+     * @param string             $oldFilePath The file to move
+     * @param string             $newFilePath The path where to move to
+     * @param array<string,bool> $options     Operation options (createDirectoryStructure, overwrite)
+     * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
+     * @throws \RuntimeException         Throws if the move process fails
+     * @return bool Returns true if the destination path was overwritten
      */
     public static function moveFile($oldFilePath, $newFilePath, array $options = array())
     {
@@ -908,10 +914,10 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $filePath
-     * @param int    $mode
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
+     * @param string $filePath The file to chmod
+     * @param int    $mode     The mode to set in octal notation (e.g. 0755)
+     * @throws \UnexpectedValueException Throws if the file does not exist or is not chmod-able
+     * @throws \RuntimeException         Throws if the chmod process fails
      */
     public static function chmodFile($filePath, $mode)
     {
@@ -940,10 +946,10 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $filePath
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return string
+     * @param string $filePath The file to read
+     * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
+     * @throws \RuntimeException         Throws if the read process fails
+     * @return string Returns the file content
      */
     public static function readFile($filePath)
     {
@@ -974,12 +980,13 @@ final class FileSystemUtils
     }
 
     /**
-     * @param string $filePath
-     * @param string $data
-     * @param bool   $append
-     * @throws \UnexpectedValueException
-     * @throws \RuntimeException
-     * @return int
+     * Write some data into a file
+     * @param string $filePath The file to write
+     * @param string $data     The data to write
+     * @param bool   $append   If true the data gets appended instead of overwriting the content
+     * @throws \UnexpectedValueException Throws if the file in not writable
+     * @throws \RuntimeException         Throws if the write process fails
+     * @return int Returns the written bytes
      */
     public static function writeFile($filePath, $data, $append = false)
     {
