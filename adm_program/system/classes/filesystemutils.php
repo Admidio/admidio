@@ -93,7 +93,8 @@ final class FileSystemUtils
      * Gets human readable bytes with unit
      * @param int  $bytes The bytes
      * @param bool $si    Use SI or binary unit. Set true for SI units
-     * @return string Returns human readable bytes with unit. Format: "[value] [unit]" (e.g: 34.5 MiB)
+     * @return string Returns human readable bytes with unit.
+     * @example "[value] [unit]" (e.g: 34.5 MiB)
      */
     public static function getHumanReadableBytes($bytes, $si = false)
     {
@@ -165,12 +166,12 @@ final class FileSystemUtils
     // INFO STUFF
 
     /**
-     * Gets the total, free and used disk space in bytes.
+     * Gets the total, free and used disk space in bytes
      * @param string $path Path of the filesystem
-     * @return array<string,int> Returns the total, free and used disk space in bytes.
-     *                           Format: array("total" => $total, "free" => $free, "used" => $used)
+     * @return array<string,int> Returns the total, free and used disk space in bytes
      * @see https://secure.php.net/manual/en/function.disk-total-space.php
      * @see https://secure.php.net/manual/en/function.disk-free-space.php
+     * @example array("total" => 10737418240, "free" => 2147483648, "used" => 8589934592)
      */
     public static function getDiskSpace($path = '/')
     {
@@ -182,10 +183,15 @@ final class FileSystemUtils
     }
 
     /**
-     * Gets info about the process owner
-     * @return array<string,string|int> Returns info about the process owner
+     * Gets info about the php-process owner
+     * @return array<string,string|int> Returns info about the php-process owner
      * @see https://secure.php.net/manual/en/function.posix-geteuid.php
      * @see https://secure.php.net/manual/en/function.posix-getpwuid.php
+     * @example
+     * array(
+     *     "name" => "max", "passwd" => "x", "uid" => 1000, "gid" => 1000,
+     *     "gecos" => "max,,,", "dir" => "/home/max", "shell" => "/bin/bash"
+     * )
      */
     public static function getProcessOwnerInfo()
     {
@@ -193,10 +199,11 @@ final class FileSystemUtils
     }
 
     /**
-     * Gets info about the process group
-     * @return array<string,string|int|array> Returns info about the process group
+     * Gets info about the php-process group
+     * @return array<string,string|int|array> Returns info about the php-process group
      * @see https://secure.php.net/manual/en/function.posix-getegid.php
      * @see https://secure.php.net/manual/en/function.posix-getgrgid.php
+     * @example array("name" => "max", "passwd" => "x", "members" => array(), "gid" => 1000)
      */
     public static function getProcessGroupInfo()
     {
@@ -268,11 +275,11 @@ final class FileSystemUtils
     }
 
     /**
-     * Checks if the process is the path owner
+     * Checks if the php-process is the path owner
      * @param string $path The path from which to get the information
      * @throws \UnexpectedValueException Throws if path does not exist
      * @throws \RuntimeException         Throws if the fileowner determination fails
-     * @return bool Returns true if process is the path owner
+     * @return bool Returns true if php-process is the path owner
      * @see https://secure.php.net/manual/en/function.posix-geteuid.php
      * @see https://secure.php.net/manual/en/function.posix-getpwuid.php
      * @see https://secure.php.net/manual/en/function.fileowner.php
@@ -295,6 +302,7 @@ final class FileSystemUtils
      * @throws \RuntimeException         Throws if the permissions determination fails
      * @return string Returns the mode permissions of a path in octal or string representation
      * @see https://secure.php.net/manual/en/function.fileperms.php
+     * @example "drwxrwxr-x" or "0775"
      */
     public static function getPathMode($path, $octal = false)
     {
@@ -393,6 +401,7 @@ final class FileSystemUtils
      * @see https://secure.php.net/manual/en/function.fileowner.php
      * @see https://secure.php.net/manual/en/function.filegroup.php
      * @see https://secure.php.net/manual/en/function.fileperms.php
+     * @example array("owner" => "www-data", "group" => "www", "mode" => "drwxrwxr-x")
      */
     public static function getPathPermissions($path)
     {
