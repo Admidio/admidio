@@ -1065,7 +1065,7 @@ final class FileSystemUtils
      * @param string $filePath The file to write
      * @param string $data     The data to write
      * @param bool   $append   If true the data gets appended instead of overwriting the content
-     * @throws \UnexpectedValueException Throws if the file in not writable
+     * @throws \UnexpectedValueException Throws if the file or parent directory is not writable
      * @throws \RuntimeException         Throws if the write process fails
      * @return int Returns the written bytes
      */
