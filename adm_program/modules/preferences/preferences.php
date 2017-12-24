@@ -686,7 +686,7 @@ else
 }
 $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
 
-$diskSpace = admGetDiskSpace();
+$diskSpace = FileSystemUtils::getDiskSpace();
 $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
 $progressBarClass = '';
 if ($diskUsagePercent > 90)
@@ -697,7 +697,7 @@ elseif ($diskUsagePercent > 70)
 {
     $progressBarClass = ' progress-bar-warning';
 }
-$text = admGetHumanReadableSize($diskSpace['used']) . ' / ' .  admGetHumanReadableSize($diskSpace['total']);
+$text = FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' .  FileSystemUtils::getHumanReadableBytes($diskSpace['total']);
 $html = '
 <div class="progress">
   <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
