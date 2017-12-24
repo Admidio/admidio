@@ -32,16 +32,16 @@ final class FileSystemUtils
     private static $allowedDirectories = array();
 
     /**
-     * Get a normalized path
+     * Get a normalized/simplified path
      * @param string $path The path to normalize
      * @return string The normalized path
      * @see https://secure.php.net/manual/en/function.realpath.php
+     * @example "/path/to/test/.././..//..///..///../one/two/../three/filename" => "../../one/three/filename"
      */
     public static function getNormalizedPath($path)
     {
-        // Normalize directory separators
-        $path = str_replace('\\', '/', $path);
-        $path = preg_replace('/\/+/', '/', $path);
+        $path = str_replace('\\', '/', $path); // Replace back-slashes with forward-slashes
+        $path = preg_replace('/\/+/', '/', $path); // Combine multiple slashes into a single slash
 
         $segments = explode('/', $path);
 
