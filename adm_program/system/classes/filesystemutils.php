@@ -12,8 +12,8 @@
 /**
  * @class FileSystemUtils
  * This class handles the most necessary file-system operations like:
- * - Restrict all operations to specific directories
- * - Info: process owner/group info, path owner/group info, is path owner, path mode, path permissions
+ * - Function: get normalized path, get human readable bytes, restrict all operations to specific directories
+ * - Info: disk space, process owner/group info, path owner/group info, is path owner, path mode, path permissions
  * - Folder: create, is empty, get content, delete content, delete folder, copy, move, chmod
  * - File: delete, copy, move, chmod, read, write
  */
@@ -89,6 +89,34 @@ final class FileSystemUtils
     }
 
     /**
+     * Gets human readable bytes with unit
+     * @param int  $bytes The bytes
+     * @param bool $si    Use SI or binary unit. Set true for SI units
+     * @return string Returns human readable bytes with unit. Format: "[value] [unit]" (e.g: 34.5 MiB)
+     */
+    public static function getHumanReadableBytes($bytes, $si = false)
+    {
+        $divider = 1024;
+        $units = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'YiB');
+        if ($si)
+        {
+            $divider = 1000;
+            $units = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'YB');
+        }
+
+        $iteration = 0;
+        while ($bytes >= $divider)
+        {
+            ++$iteration;
+            $bytes /= $divider;
+        }
+
+        $unit = $units[$iteration];
+
+        return round($bytes, 1) . ' ' . $unit;
+    }
+
+    /**
      * Restrict all operations of this class to specific directories
      * @param array<int,string> $directoryPaths The allowed directories
      * @throws \UnexpectedValueException Throws if a given directory does not exist
@@ -134,6 +162,21 @@ final class FileSystemUtils
     }
 
     // INFO STUFF
+
+    /**
+     * Gets the total, free and used disk space in bytes.
+     * @param string $path Path of the filesystem
+     * @return array<string,int> Returns the total, free and used disk space in bytes.
+     *                           Format: array("total" => $total, "free" => $free, "used" => $used)
+     */
+    public static function getDiskSpace($path = '/')
+    {
+        $total = (int) disk_total_space($path);
+        $free = (int) disk_free_space($path);
+        $used = $total - $free;
+
+        return array('total' => $total, 'free' => $free, 'used' => $used);
+    }
 
     /**
      * Gets info about the process owner
