@@ -132,9 +132,9 @@ class MyFiles extends Folder
                 // create ".htaccess" file for folder "adm_my_files"
                 if (!is_file($serverPathAdmMyFiles.'/.htaccess'))
                 {
-                    $protection = new Htaccess($serverPathAdmMyFiles);
+                    $htaccess = new Htaccess($serverPathAdmMyFiles);
 
-                    if (!$protection->protectFolder())
+                    if (!$htaccess->protectFolder())
                     {
                         return false;
                     }
