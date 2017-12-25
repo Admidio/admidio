@@ -102,20 +102,24 @@ class UploadHandlerPhoto extends UploadHandler
                 // if enabled then save original image
                 if ($gSettingsManager->getBool('photo_keep_original'))
                 {
-                    if(!is_dir($albumFolder.'/originals'))
+                    try
                     {
-                        $folder = new Folder($albumFolder);
-                        $folder->createFolder('originals', true);
+                        FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
+                    }
+                    catch (\RuntimeException $exception)
+                    {
                     }
 
                     rename($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
                 }
 
                 // save thumbnail
-                if(!is_dir($albumFolder.'/thumbnails'))
+                try
                 {
-                    $folder = new Folder($albumFolder);
-                    $folder->createFolder('thumbnails', true);
+                    FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
+                }
+                catch (\RuntimeException $exception)
+                {
                 }
 
                 $image = new Image($fileLocation);

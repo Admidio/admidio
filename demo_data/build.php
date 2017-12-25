@@ -103,19 +103,16 @@ function getBacktrace()
 }
 
 /**
- * @return bool
+ * @throws \RuntimeException
+ * @throws \UnexpectedValueException
  */
 function prepareAdmidioDataFolder()
 {
-    $srcFolder = ADMIDIO_PATH . '/demo_data/adm_my_files';
-    $myFilesFolder = new Folder($srcFolder);
+    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/backup', true);
+    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/download', true);
+    FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/photos', true);
 
-    $newFolder = ADMIDIO_PATH . FOLDER_DATA;
-    $myFilesFolder->delete($newFolder . '/backup');
-    $myFilesFolder->delete($newFolder . '/download');
-    $myFilesFolder->delete($newFolder . '/photos');
-
-    return $myFilesFolder->copy($newFolder);
+    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo_data/adm_my_files', ADMIDIO_PATH . FOLDER_DATA);
 }
 
 /**
@@ -373,11 +370,16 @@ $gL10n = new Language($gLanguageData);
 $gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-$copySuccessful = prepareAdmidioDataFolder();
-if (!$copySuccessful)
+try
 {
-    echo '<p style="color: #cc0000;">Folder <strong>adm_my_files</strong> is not writable.<br />
-    No files could be copied to that folder.</p>';
+    prepareAdmidioDataFolder();
+}
+catch (\RuntimeException $exception)
+{
+    echo '<p style="color: #cc0000;">
+        Folder <strong>adm_my_files</strong> is not writable.<br />
+        No files could be copied to that folder.
+    </p>';
     exit();
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';

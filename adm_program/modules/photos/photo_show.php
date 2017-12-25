@@ -91,11 +91,13 @@ if ($getThumbnail)
         // Wenn nicht anlegen
         if (!is_file($picThumbPath) || $thumbLength !== $gSettingsManager->getInt('photo_thumbs_scale'))
         {
-            // Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
-            if (!is_dir($albumFolder . '/thumbnails'))
+            try
             {
-                $folder = new Folder($albumFolder);
-                $folder->createFolder('thumbnails', true);
+                // If thumnail directory does not exist, create one
+                FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
+            }
+            catch (\RuntimeException $exception)
+            {
             }
 
             // nun das Thumbnail anlegen
