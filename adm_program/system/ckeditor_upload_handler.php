@@ -58,43 +58,40 @@ switch ($getCKEditor)
         // TODO
 }
 
-try
+// set path to module folder in adm_my_files
+$myFilesProfilePhotos = new MyFiles($folderName);
+// upload photo to images folder of module folder
+if($myFilesProfilePhotos->checkSettings() && $myFilesProfilePhotos->setSubFolder('images'))
 {
-    // set path to module folder in adm_my_files
-    $myFilesProfilePhotos = new MyFiles($folderName);
-    // upload photo to images folder of module folder
-    if($myFilesProfilePhotos->checkSettings() && $myFilesProfilePhotos->setSubFolder('images'))
+    // create a filename with the unix timestamp,
+    // so we have a scheme for the filenames and the risk of duplicates is low
+    $localFile = time() . substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
+    $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
+    if(is_file($serverUrl))
     {
-        // create a filename with the unix timestamp,
-        // so we have a scheme for the filenames and the risk of duplicates is low
-        $localFile = time() . substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
-        $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
-        if(is_file($serverUrl))
-        {
-            // if file exists than create a random number and append it to the filename
-            $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
-                substr($localFile, 0, strrpos($localFile, '.')) . '_' .
-                mt_rand().substr($localFile, strrpos($localFile, '.'));
-        }
-        $htmlUrl = safeUrl(ADMIDIO_URL.'/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $localFile));
-        move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
+        // if file exists than create a random number and append it to the filename
+        $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
+            substr($localFile, 0, strrpos($localFile, '.')) . '_' .
+            mt_rand().substr($localFile, strrpos($localFile, '.'));
     }
-    else
-    {
-        $message = strStripTags($gL10n->get(
-            $myFilesProfilePhotos->errorText,
-            array($myFilesProfilePhotos->errorPath,
-            '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')
-        ));
-    }
+    $htmlUrl = safeUrl(ADMIDIO_URL.'/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $localFile));
+    move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
+}
+else
+{
+    $message = strStripTags($gL10n->get(
+        $myFilesProfilePhotos->errorText,
+        array($myFilesProfilePhotos->errorPath,
+        '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')
+    ));
+}
 
-    // now call CKEditor function and send photo data
-    echo '<html><body><script type="text/javascript">
+// now call CKEditor function and send photo data
+echo '<!DOCTYPE html>
+<html>
+    <body>
+        <script type="text/javascript">
             window.parent.CKEDITOR.tools.callFunction('.$getCKEditorFuncNum.', "'.$htmlUrl.'","'.$message.'");
-        </script></body></html>';
-}
-catch(AdmException $e)
-{
-    $e->showHtml();
-    // => EXIT
-}
+        </script>
+    </body>
+</html>';
