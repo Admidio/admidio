@@ -55,7 +55,7 @@ $headline = $gL10n->get('BAC_DATABASE_BACKUP');
 $page = new HtmlPage($headline);
 $page->enableModal();
 
-$backupAbsolutePath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
+$backupAbsolutePath = ADMIDIO_PATH . FOLDER_DATA . '/backup/'; // make sure to include trailing slash
 
 if($getMode === 'show_list')
 {
