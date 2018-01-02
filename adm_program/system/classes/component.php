@@ -113,16 +113,16 @@ class Component extends TableAccess
                 break;
 
             case 'ANNOUNCEMENTS':
-                if($gSettingsManager->get('enable_announcements_module') === 1
-                || ($gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
+                if($gSettingsManager->get('enable_announcements_module') === '1'
+                || ($gSettingsManager->get('enable_announcements_module') === '2' && $gValidLogin))
                 {
                     $view = true;
                 }
                 break;
 
             case 'DATES':
-                if($gSettingsManager->get('enable_dates_module') === 1
-                || ($gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
+                if($gSettingsManager->get('enable_dates_module') === '1'
+                || ($gSettingsManager->get('enable_dates_module') === '2' && $gValidLogin))
                 {
                     $view = true;
                 }
@@ -136,16 +136,16 @@ class Component extends TableAccess
                 break;
 
             case 'GUESTBOOK':
-                if($gSettingsManager->get('enable_guestbook_module') === 1
-                || ($gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
+                if($gSettingsManager->get('enable_guestbook_module') === '1'
+                || ($gSettingsManager->get('enable_guestbook_module') === '2' && $gValidLogin))
                 {
                     $view = true;
                 }
                 break;
- 
+
             case 'LINKS':
-                if($gSettingsManager->get('enable_weblinks_module') === 1
-                || ($gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
+                if($gSettingsManager->get('enable_weblinks_module') === '1'
+                || ($gSettingsManager->get('enable_weblinks_module') === '2' && $gValidLogin))
                 {
                     $view = true;
                 }
@@ -173,8 +173,8 @@ class Component extends TableAccess
                 break;
 
             case 'PHOTOS':
-                if($gSettingsManager->get('enable_photo_module') === 1
-                || ($gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
+                if($gSettingsManager->get('enable_photo_module') === '1'
+                || ($gSettingsManager->get('enable_photo_module') === '2' && $gValidLogin))
                 {
                     $view = true;
                 }

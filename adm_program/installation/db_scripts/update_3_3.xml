@@ -101,6 +101,6 @@
     <step id="600">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_men_id_parent)</step>
     <step id="610">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('menu_view', 'adm_menu')</step>
-    <step id="620">ComponentUpdate::updateStepMigrateToStandartMenu</step>
+    <step id="620">ComponentUpdateSteps::updateStepMigrateToStandartMenu</step>
     <step>stop</step>
 </update>
