@@ -22,29 +22,11 @@
  * @code // update the system module to the actual filesystem version
  * $componentUpdateHandle = new ComponentUpdate($gDb);
  * $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
- * $componentUpdateHandle->setTargetVersion(ADMIDIO_VERSION);
- * $componentUpdateHandle->update(); @endcode
+ * $componentUpdateHandle->update(ADMIDIO_VERSION); @endcode
  */
 class ComponentUpdate extends Component
 {
     const UPDATE_STEP_STOP = 'stop';
-
-    /**
-     * @var bool Flag that will store if the update process of this version was successfully finished
-     */
-    private $updateFinished;
-    /**
-     * @var \SimpleXMLElement The SimpleXML object with all the update steps
-     */
-    private $xmlObject;
-    /**
-     * @var array<int,int> This is the version the component has actually before update. Each array element contains one part of the version.
-     */
-    private $currentVersionArray;
-    /**
-     * @var array<int,int> This is the version that is stored in the files of the component. Each array element contains one part of the version.
-     */
-    private $targetVersionArray;
 
     /**
      * Constructor that will create an object for component updating.
@@ -53,6 +35,8 @@ class ComponentUpdate extends Component
     public function __construct(Database $database)
     {
         parent::__construct($database);
+
+        ComponentUpdateSteps::setDatabase($database);
     }
 
     /**
@@ -70,34 +54,76 @@ class ComponentUpdate extends Component
      * must be passed to successfully update Admidio to this version
      * @param int $mainVersion  Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
      * @param int $minorVersion Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
-     * @return bool
+     * @throws \UnexpectedValueException
+     * @return \SimpleXMLElement
      */
-    private function createXmlObject($mainVersion, $minorVersion)
+    private function getXmlObject($mainVersion, $minorVersion)
     {
+        global $gLogger;
+
         // update of Admidio core has another path for the xml files as plugins
-        if($this->getValue('com_type') === 'SYSTEM')
+        if ($this->getValue('com_type') === 'SYSTEM')
         {
             $updateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
-            if(is_file($updateFile))
+            if (is_file($updateFile))
             {
-                $this->xmlObject = new \SimpleXMLElement($updateFile, 0, true);
-                return true;
+                return new \SimpleXMLElement($updateFile, 0, true);
             }
+
+            $message = 'XML-Update file not found!';
+            $gLogger->warning($message, array('filePath' => $updateFile));
+
+            throw new \UnexpectedValueException($message);
         }
-        return false;
+
+        throw new \UnexpectedValueException('No System update!');
     }
 
     /**
-     * Get function name and execute this function
+     * Goes step by step through the update xml file of the current database version and search for the maximum step.
+     * If the last step is found than the id of this step will be returned.
+     * @return int Return the number of the last update step that was found in xml file of the current version.
+     */
+    public function getMaxUpdateStep()
+    {
+        $maxUpdateStep = 0;
+        $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+
+        try
+        {
+            // open xml file for this version
+            $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
+        }
+        catch (\UnexpectedValueException $exception)
+        {
+            return 0;
+        }
+
+        // go step by step through the SQL statements until the last one is found
+        foreach ($xmlObject->children() as $updateStep)
+        {
+            if ((string) $updateStep === self::UPDATE_STEP_STOP)
+            {
+                break;
+            }
+
+            $maxUpdateStep = (int) $updateStep['id'];
+        }
+
+        return $maxUpdateStep;
+    }
+
+    /**
+     * Get method name and execute this method
      * @param string $updateStepContent
      */
-    private function executeUpdateFunction($updateStepContent)
+    private static function executeUpdateMethod($updateStepContent)
     {
-        // get the method name (remove "ComponentUpdate::")
-        $functionName = substr($updateStepContent, 17);
+        // get the method name (remove "ComponentUpdateSteps::")
+        $methodName = substr($updateStepContent, 22);
         // now call the method
-        $this->{$functionName}();
+        ComponentUpdateSteps::{$methodName}();
     }
 
     /**
@@ -112,7 +138,7 @@ class ComponentUpdate extends Component
         // replace prefix with installation specific table prefix
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateSql);
 
-        $this->db->query($sql, $showError); // TODO add more params
+        $this->db->queryPrepared($sql, array(), $showError);
     }
 
     /**
@@ -140,9 +166,9 @@ class ComponentUpdate extends Component
 
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
-        if (admStrStartsWith($updateStepContent, 'ComponentUpdate::'))
+        if (admStrStartsWith($updateStepContent, 'ComponentUpdateSteps::'))
         {
-            $this->executeUpdateFunction($updateStepContent);
+            self::executeUpdateMethod($updateStepContent);
         }
         // only execute if sql statement is for all databases or for the used database
         elseif (!isset($xmlNode['database']) || (string) $xmlNode['database'] === $dbType)
@@ -154,7 +180,16 @@ class ComponentUpdate extends Component
                 $showError = false;
             }
 
+            $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
+
             $this->executeUpdateSql($updateStepContent, $showError);
+        }
+        elseif ((string) $xmlNode['database'] !== $dbType)
+        {
+            $gLogger->info(
+                'UPDATE: Update step is for another database!',
+                array('database' => (string) $xmlNode['database'], 'step' => (int) $xmlNode['id'])
+            );
         }
         else
         {
@@ -170,103 +205,69 @@ class ComponentUpdate extends Component
     }
 
     /**
-     * Goes step by step through the update xml file of the current database version and search for the maximum step.
-     * If the last step is found than the id of this step will be returned.
-     * @return int Return the number of the last update step that was found in xml file of the current version.
-     */
-    public function getMaxUpdateStep()
-    {
-        $maxUpdateStep = 0;
-        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
-
-        // open xml file for this version
-        if($this->createXmlObject($this->currentVersionArray[0], $this->currentVersionArray[1]))
-        {
-            // go step by step through the SQL statements until the last one is found
-            foreach($this->xmlObject->children() as $updateStep)
-            {
-                if((string) $updateStep !== self::UPDATE_STEP_STOP)
-                {
-                    $maxUpdateStep = (int) $updateStep['id'];
-                }
-            }
-        }
-
-        return $maxUpdateStep;
-    }
-
-    /**
-     * Set the target version for the component after update.
-     * This information should be read from the files of the component.
-     * @param string $version Target version of the component after update
-     */
-    public function setTargetVersion($version)
-    {
-        $this->targetVersionArray = self::getVersionArrayFromVersion($version);
-    }
-
-    /**
      * Do a loop through all versions start with the current version and end with the target version.
      * Within every subversion the method will search for an update xml file and execute all steps
      * in this file until the end of file is reached. If an error occurred then the update will be stopped.
+     * @param string $targetVersion The target version to update.
      */
-    public function update()
+    public function update($targetVersion)
     {
         global $gLogger;
 
-        $this->updateFinished = false;
-        $this->currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
-        $initialMinorVersion = $this->currentVersionArray[1];
+        $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+        $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
+        $initialMinorVersion = $currentVersionArray[1];
 
-        for($mainVersion = $this->currentVersionArray[0]; $mainVersion <= $this->targetVersionArray[0]; ++$mainVersion)
+        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion)
         {
             // Set max subversion for iteration. If we are in the loop of the target main version
-            // then set target subversion to the max version
-            if($mainVersion === $this->targetVersionArray[0])
+            // then set target minor-version to the max version
+            $maxMinorVersion = 20;
+            if ($mainVersion === $targetVersionArray[0])
             {
-                $maxSubVersion = $this->targetVersionArray[1];
-            }
-            else
-            {
-                $maxSubVersion = 20;
+                $maxMinorVersion = $targetVersionArray[1];
             }
 
-            for($minorVersion = $initialMinorVersion; $minorVersion <= $maxSubVersion; ++$minorVersion)
+            for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion)
             {
                 // if version is not equal to current version then start update step with 0
-                if($mainVersion !== $this->currentVersionArray[0] || $minorVersion !== $this->currentVersionArray[1])
+                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1])
                 {
                     $this->setValue('com_update_step', 0);
                     $this->save();
                 }
 
                 // output of the version number for better debugging
-                $gLogger->info('Update to version '.$mainVersion.'.'.$minorVersion);
+                $gLogger->notice('UPDATE: Start executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // open xml file for this version
-                if($this->createXmlObject($mainVersion, $minorVersion))
+                try
                 {
+                    $xmlObject = $this->getXmlObject($mainVersion, $minorVersion);
+
                     // go step by step through the SQL statements and execute them
-                    foreach($this->xmlObject->children() as $updateStep)
+                    foreach ($xmlObject->children() as $updateStep)
                     {
-                        if($updateStep['id'] > $this->getValue('com_update_step'))
+                        if ((string) $updateStep === self::UPDATE_STEP_STOP)
+                        {
+                            break;
+                        }
+                        if ((int) $updateStep['id'] > (int) $this->getValue('com_update_step'))
                         {
                             $this->executeStep($updateStep);
                         }
-                        elseif((string) $updateStep === self::UPDATE_STEP_STOP)
+                        else
                         {
-                            $this->updateFinished = true;
+                            $gLogger->info('UPDATE: Skip update step Nr: ' . (int) $updateStep['id']);
                         }
                     }
                 }
-
-                // check if an php update file exists and then execute the script
-                $phpUpdateFile = ADMIDIO_PATH.'/adm_program/installation/db_scripts/upd_'.$mainVersion.'_'.$minorVersion.'_0_conv.php';
-
-                if(is_file($phpUpdateFile))
+                catch (\UnexpectedValueException $exception)
                 {
-                    require_once($phpUpdateFile);
+                    // TODO
                 }
+
+                $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // save current version to system component
                 $this->setValue('com_version', ADMIDIO_VERSION);

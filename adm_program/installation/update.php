@@ -43,6 +43,7 @@ else
 $rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
+require_once(ADMIDIO_PATH . '/adm_program/installation/update_functions.php');
 
 // Initialize and check the parameters
 
@@ -79,21 +80,18 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 
 // create an organization object of the current organization
 $gCurrentOrganization = new Organization($gDb, $g_organization);
-$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
-if ($currOrgId === 0)
+if ((int) $gCurrentOrganization->getValue('org_id') === 0)
 {
-    // Organisation wurde nicht gefunden
+    // Organization was not found
     exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
 }
 
-// organisationsspezifische Einstellungen aus adm_preferences auslesen
+// read organization specific parameters from adm_preferences
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
-$gProfileFields = new ProfileFields($gDb, $currOrgId);
-
 // create language and language data object to handle translations
-if ($gSettingsManager->has('system_language'))
+if (!$gSettingsManager->has('system_language'))
 {
     $gSettingsManager->set('system_language', 'de');
 }
@@ -278,207 +276,7 @@ if ($getMode === 1)
 }
 elseif ($getMode === 2)
 {
-    $gLogger->info('UPDATE: Execute update');
-
-    /**************************************/
-    /* execute update script for database */
-    /**************************************/
-
-    if (!isset($gLoginForUpdate) || $gLoginForUpdate == 1)
-    {
-        // get username and password
-        $loginName = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
-        $password  = admFuncVariableIsValid($_POST, 'password',   'string', array('requireValue' => true, 'directOutput' => true));
-
-        // Search for username
-        $sql = 'SELECT usr_id
-                  FROM '.TBL_USERS.'
-                 WHERE UPPER(usr_login_name) = UPPER(?)';
-        $userStatement = $gDb->queryPrepared($sql, array($loginName));
-
-        if ($userStatement->rowCount() === 0)
-        {
-            $message = '
-                <div class="alert alert-danger alert-small" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
-                </div>';
-
-            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-            // => EXIT
-        }
-        else
-        {
-            // create object with current user field structure und user object
-            $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
-
-            // check login data. If login failed an exception will be thrown.
-            // Don't update the current session with user id and don't do a rehash of the password
-            // because in former versions the password field was to small for the current hashes
-            // and the update of this field will be done after this check.
-            $checkLoginReturn = $gCurrentUser->checkLogin($password, false, false, false, true);
-
-            if (is_string($checkLoginReturn))
-            {
-                $message = '
-                    <div class="alert alert-danger alert-small" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                        <strong>' . $checkLoginReturn . '</strong>
-                    </div>';
-
-                showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-                // => EXIT
-            }
-        }
-    }
-
-    // setzt die Ausfuehrungszeit des Scripts auf 5 Min., da hier teilweise sehr viel gemacht wird
-    // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
-    @set_time_limit(300);
-
-    preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
-    $versionArray = array_map('intval', $versionArray);
-    list(, $versionMain, $versionMinor, $versionPatch) = $versionArray;
-
-    $flagNextVersion = true;
-    ++$versionPatch;
-
-    // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
-    require_once(__DIR__ . '/db_scripts/preferences.php');
-
-    // calculate the best cost value for your server performance
-    $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
-    $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['cost']);
-
-    $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-    $orgaStatement = $gDb->queryPrepared($sql);
-
-    while($orgId = $orgaStatement->fetchColumn())
-    {
-        $organization = new Organization($gDb, $orgId);
-        $settingsManager =& $gCurrentOrganization->getSettingsManager();
-        $settingsManager->setMulti($defaultOrgPreferences, false);
-        $settingsManager->setMulti($updateOrgPreferences);
-    }
-
-    if ($gDbType === Database::PDO_ENGINE_MYSQL)
-    {
-        // disable foreign key checks for mysql, so tables can easily deleted
-        $gDb->queryPrepared('SET foreign_key_checks = 0');
-    }
-
-    // in version 2 we had an other update mechanism which will be handled here
-    if ($versionMain === 2)
-    {
-        // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
-        while($flagNextVersion)
-        {
-            $flagNextVersion = false;
-
-            if ($versionMain === 2)
-            {
-                // version 2 Admidio had sql and php files where the update statements where stored
-                // these files must be executed
-
-                // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
-                // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-                for ($versionPatch; $versionPatch < 15; ++$versionPatch)
-                {
-                    $version = $versionMain . '_' . $versionMinor . '_' . $versionPatch;
-
-                    // output of the version number for better debugging
-                    $gLogger->info('Update to version ' . $version);
-
-                    $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
-                    $sqlFileName = 'upd_' . $version . '_db.sql';
-                    $phpFileName = 'upd_' . $version . '_conv.php';
-
-                    if (is_file($dbScriptsPath . $sqlFileName))
-                    {
-                        $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
-
-                        if ($sqlQueryResult === true)
-                        {
-                            $flagNextVersion = true;
-                        }
-                        else
-                        {
-                            showNotice($sqlQueryResult, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-                            // => EXIT
-                        }
-                    }
-
-                    $phpUpdateFile = $dbScriptsPath . $phpFileName;
-                    // check if an php update file exists and then execute the script
-                    if (is_file($phpUpdateFile))
-                    {
-                        require($phpUpdateFile);
-                        $flagNextVersion = true;
-                    }
-                }
-
-                // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
-                // solange bis die aktuelle Versionsnummer erreicht wurde
-                if (!$flagNextVersion && version_compare($versionMain . '.' . $versionMinor . '.' . $versionPatch, ADMIDIO_VERSION, '<'))
-                {
-                    if ($versionMinor === 4) // we do not have more then 4 subversions with old updater
-                    {
-                        ++$versionMain;
-                        $versionMinor = 0;
-                    }
-                    else
-                    {
-                        ++$versionMinor;
-                    }
-
-                    $versionPatch = 0;
-                    $flagNextVersion = true;
-                }
-            }
-        }
-    }
-
-    disableSoundexSearchIfPgSql($gDb);
-
-    // since version 3 we do the update with xml files and a new class model
-    if ($versionMain >= 3)
-    {
-        // set system user as current user, but this user only exists since version 3
-        $sql = 'SELECT usr_id
-                  FROM ' . TBL_USERS . '
-                 WHERE usr_login_name = ?';
-        $systemUserStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
-
-        $gCurrentUser = new User($gDb, $gProfileFields, (int) $systemUserStatement->fetchColumn());
-
-        // reread component because in version 3.0 the component will be created within the update
-        $componentUpdateHandle = new ComponentUpdate($gDb);
-        $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-        $componentUpdateHandle->setTargetVersion(ADMIDIO_VERSION);
-        $componentUpdateHandle->update();
-    }
-
-    if ($gDbType === Database::PDO_ENGINE_MYSQL)
-    {
-        // activate foreign key checks, so database is consistent
-        $gDb->queryPrepared('SET foreign_key_checks = 1');
-    }
-
-
-    // create ".htaccess" file for folder "adm_my_files"
-    if (!is_file(ADMIDIO_PATH . FOLDER_DATA.'/.htaccess'))
-    {
-        $protection = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
-
-        if (!$protection->protectFolder())
-        {
-            $gLogger->warning('htaccess file could not be created!');
-        }
-    }
-
-    // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
-    $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';
-    $gDb->queryPrepared($sql);
+    doAdmidioUpdate($installedDbVersion);
 
     // start php session and remove session object with all data, so that
     // all data will be read after the update
