@@ -102,5 +102,6 @@
     <step id="610">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('menu_view', 'adm_menu')</step>
     <step id="620">ComponentUpdateSteps::updateStepMigrateToStandartMenu</step>
+    <step id="630">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
     <step>stop</step>
 </update>
