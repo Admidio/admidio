@@ -81,9 +81,9 @@
     <string name="DAT_EXPORT_ICAL">Exportieren (iCal)</string>
     <string name="DAT_HIGHLIGHT_DATE">Termin optisch hervorheben</string>
     <string name="DAT_ICAL_DAYS_FUTURE">Anzahl iCal Tage Zukunft</string>
-    <string name="DAT_ICAL_DAYS_FUTURE_DESC">Gibt an, wie viele Tage in die Zukunft in einem iCal-Download oder -Abo einbezogen werden. (Standard: 365)</string>
+    <string name="DAT_ICAL_DAYS_FUTURE_DESC">Anzahl der Tage in der Zukunft, die in einem iCal-Download oder -Abo einbezogen werden sollen. Wird der iCal-Download innerhalb des Event-Moduls gestartet, dann wird diese Einstellung ignoriert und die gefilterten Termine exportiert. (Standard: 365)</string>
     <string name="DAT_ICAL_DAYS_PAST">Anzahl iCal Tage Vergangenheit</string>
-    <string name="DAT_ICAL_DAYS_PAST_DESC">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abo einbezogen werden.  (Standard: 30)</string>
+    <string name="DAT_ICAL_DAYS_PAST_DESC">Anzahl der Tage in der Vergangenheit, die in einem iCal-Download oder -Abo einbezogen werden sollen. Wird der iCal-Download innerhalb des Event-Moduls gestartet, dann wird diese Einstellung ignoriert und die gefilterten Termine exportiert. (Standard: 30)</string>
     <string name="DAT_LOCATION">Ort</string>
     <string name="DAT_LOCATION_LINK">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</string>
     <string name="DAT_LOGIN_POSSIBLE">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</string>
