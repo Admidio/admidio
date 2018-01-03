@@ -6,7 +6,7 @@
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
 /* jshint nomen:false */
@@ -30,6 +30,7 @@
             require('jquery'),
             require('blueimp-tmpl'),
             require('./jquery.fileupload-image'),
+            require('./jquery.fileupload-audio'),
             require('./jquery.fileupload-video'),
             require('./jquery.fileupload-validate')
         );
