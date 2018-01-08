@@ -120,6 +120,170 @@
     <step id="500">ComponentUpdateSteps::updateStepRewriteFolderRights</step>
     <step id="510" database="pgsql">UPDATE %PREFIX%_user_fields SET usf_value_list = E'male.png|SYS_MALE\nfemale.png|SYS_FEMALE' WHERE usf_name_intern = 'GENDER'</step>
     <step id="520">UPDATE %PREFIX%_roles SET rol_administrator = 1 WHERE rol_name = 'Administrator'</step>
-
+    <step id="530" error="ignore">alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_CAT foreign key (ann_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict</step>
+    <step id="540" error="ignore">alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="550" error="ignore">alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="560" error="ignore">alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_USR foreign key (atl_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="570" error="ignore">alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_ORG foreign key (atl_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="580" error="ignore">alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="590" error="ignore">alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="600" error="ignore">alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="610" error="ignore">alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_DAT foreign key (dtr_dat_id)
+      references %PREFIX%_dates (dat_id) on delete restrict on update restrict</step>
+    <step id="620" error="ignore">alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_ROL foreign key (dtr_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="630" error="ignore">alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_CAT foreign key (dat_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict</step>
+    <step id="640" error="ignore">alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_ROL foreign key (dat_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="650" error="ignore">alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_ROOM foreign key (dat_room_id)
+      references %PREFIX%_rooms (room_id) on delete set null on update restrict</step>
+    <step id="660" error="ignore">alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_USR_CREATE foreign key (dat_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="670" error="ignore">alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="680" error="ignore">alter table %PREFIX%_files add constraint %PREFIX%_FK_FIL_FOL foreign key (fil_fol_id)
+      references %PREFIX%_folders (fol_id) on delete restrict on update restrict</step>
+    <step id="690" error="ignore">alter table %PREFIX%_files add constraint %PREFIX%_FK_FIL_USR foreign key (fil_usr_id)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="700" error="ignore">alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_ORG foreign key (fol_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="710" error="ignore">alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_FOL_PARENT foreign key (fol_fol_id_parent)
+      references %PREFIX%_folders (fol_id) on delete restrict on update restrict</step>
+    <step id="720" error="ignore">alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_USR foreign key (fol_usr_id)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="730" error="ignore">alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_ORG foreign key (gbo_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="740" error="ignore">alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_USR_CREATE foreign key (gbo_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="750" error="ignore">alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_USR_CHANGE foreign key (gbo_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="760" error="ignore">alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_GBO foreign key (gbc_gbo_id)
+      references %PREFIX%_guestbook (gbo_id) on delete restrict on update restrict</step>
+    <step id="770" error="ignore">alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CREATE foreign key (gbc_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="780" error="ignore">alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="790" error="ignore">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="800" error="ignore">alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict</step>
+    <step id="810" error="ignore">alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CREATE foreign key (lnk_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="820" error="ignore">alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="830" error="ignore">alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_USR foreign key (lst_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="840" error="ignore">alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_ORG foreign key (lst_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="850" error="ignore">alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_LST foreign key (lsc_lst_id)
+      references %PREFIX%_lists (lst_id) on delete restrict on update restrict</step>
+    <step id="860" error="ignore">alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_USF foreign key (lsc_usf_id)
+      references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict</step>
+    <step id="870" error="ignore">alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_ROL foreign key (mem_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="880" error="ignore">alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="890" error="ignore">alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign key (mem_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="900" error="ignore">alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="910" error="ignore">alter table %PREFIX%_messages add constraint %PREFIX%_FK_MSG_USR_SENDER foreign key (msg_usr_id_sender)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="920" error="ignore">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_MSG_ID foreign key (msc_msg_id)
+      references %PREFIX%_messages (msg_id) on delete restrict on update restrict</step>
+    <step id="930" error="ignore">alter table %PREFIX%_messages_content add constraint %PREFIX%_FK_MSC_USR_ID foreign key (msc_usr_id)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="940" error="ignore">alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
+      references %PREFIX%_organizations (org_id) on delete set null on update restrict</step>
+    <step id="950" error="ignore">alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
+      references %PREFIX%_photos (pho_id) on delete set null on update restrict</step>
+    <step id="960" error="ignore">alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="970" error="ignore">alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CREATE foreign key (pho_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="980" error="ignore">alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="990" error="ignore">alter table %PREFIX%_preferences add constraint %PREFIX%_FK_PRF_ORG foreign key (prf_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="1000" error="ignore">alter table %PREFIX%_registrations add CONSTRAINT %PREFIX%_FK_REG_ORG FOREIGN KEY (reg_org_id)
+    REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="1010" error="ignore">alter table %PREFIX%_registrations add CONSTRAINT %PREFIX%_FK_REG_USR FOREIGN KEY (reg_usr_id)
+    REFERENCES %PREFIX%_users (usr_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="1020" error="ignore">alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="1030" error="ignore">alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_PARENT foreign key (rld_rol_id_parent)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="1040" error="ignore">alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_USR foreign key (rld_usr_id)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1050" error="ignore">alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_CAT foreign key (rol_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict</step>
+    <step id="1060" error="ignore">alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_LST_ID foreign key (rol_lst_id)
+      references %PREFIX%_lists (lst_id) on delete set null on update set null</step>
+    <step id="1070" error="ignore">alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CREATE foreign key (rol_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1080" error="ignore">alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key (rol_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1090" error="ignore">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
+      references %PREFIX%_roles_rights (ror_id) on delete restrict on update restrict</step>
+    <step id="1100" error="ignore">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROL foreign key (rrd_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict</step>
+    <step id="1110" error="ignore">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_USR_CREATE foreign key (rrd_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1120" error="ignore">alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CREATE foreign key (room_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1130" error="ignore">alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CHANGE foreign key (room_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1140" error="ignore">alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_ORG foreign key (ses_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="1150" error="ignore">alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_USR foreign key (ses_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="1160" error="ignore">alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict</step>
+    <step id="1170" error="ignore">alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_CAT foreign key (usf_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict</step>
+    <step id="1180" error="ignore">alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CREATE foreign key (usf_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1190" error="ignore">alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CHANGE foreign key (usf_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1200" error="ignore">alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USF foreign key (usd_usf_id)
+      references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict</step>
+    <step id="1210" error="ignore">alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USR foreign key (usd_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
+    <step id="1220" error="ignore">alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_1 FOREIGN KEY (usl_usr_id )
+    REFERENCES %PREFIX%_users (usr_id ) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="1230" error="ignore">alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_2 FOREIGN KEY (usl_usr_id_create )
+    REFERENCES %PREFIX%_users (usr_id ) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="1240" error="ignore">alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_3 FOREIGN KEY (usl_usf_id )
+    REFERENCES %PREFIX%_user_fields (usf_id ) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="1250" error="ignore">alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key (usr_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1260" error="ignore">alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1270" error="ignore">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_ID_INVERSE foreign key (urt_id_inverse)
+      references %PREFIX%_user_relation_types (urt_id) on delete cascade on update restrict</step>
+    <step id="1280" error="ignore">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CHANGE foreign key (urt_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1290" error="ignore">alter table %PREFIX%_user_relation_types add constraint %PREFIX%_FK_URT_USR_CREATE foreign key (urt_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1300" error="ignore">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_URT foreign key (ure_urt_id)
+      references %PREFIX%_user_relation_types (urt_id) on delete cascade on update restrict</step>
+    <step id="1310" error="ignore">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR1 foreign key (ure_usr_id1)
+      references %PREFIX%_users (usr_id) on delete cascade on update restrict</step>
+    <step id="1320" error="ignore">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR2 foreign key (ure_usr_id2)
+      references %PREFIX%_users (usr_id) on delete cascade on update restrict</step>
+    <step id="1330" error="ignore">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CHANGE foreign key (ure_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+    <step id="1340" error="ignore">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
+      
     <step>stop</step>
 </update>
