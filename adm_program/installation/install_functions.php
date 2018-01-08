@@ -147,3 +147,16 @@ function disableSoundexSearchIfPgSql(Database $db)
         $db->queryPrepared($sql);
     }
 }
+
+/**
+ * @param string $message
+ * @return string
+ */
+function getErrorMessage($message)
+{
+    return '
+        <div class="alert alert-danger alert-small" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <strong>' . $message . '</strong>
+        </div>';
+}

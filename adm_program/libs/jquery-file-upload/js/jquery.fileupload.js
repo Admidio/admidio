@@ -6,7 +6,7 @@
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
 /* jshint nomen:false */
@@ -18,7 +18,7 @@
         // Register as an anonymous AMD module:
         define([
             'jquery',
-            'jquery-ui/widget'
+            'jquery-ui/ui/widget'
         ], factory);
     } else if (typeof exports === 'object') {
         // Node/CommonJS:
@@ -453,7 +453,7 @@
             }
             if (!multipart || options.blob || !this._isInstanceOf('File', file)) {
                 options.headers['Content-Disposition'] = 'attachment; filename="' +
-                    encodeURI(file.name) + '"';
+                    encodeURI(file.uploadName || file.name) + '"';
             }
             if (!multipart) {
                 options.contentType = file.type || 'application/octet-stream';
@@ -489,7 +489,11 @@
                         });
                     }
                     if (options.blob) {
-                        formData.append(paramName, options.blob, file.name);
+                        formData.append(
+                            paramName,
+                            options.blob,
+                            file.uploadName || file.name
+                        );
                     } else {
                         $.each(options.files, function (index, file) {
                             // This check allows the tests to run with
@@ -730,7 +734,7 @@
                 promise = dfd.promise(),
                 jqXHR,
                 upload;
-            if (!(this._isXHRUpload(options) && slice && (ub || mcs < fs)) ||
+            if (!(this._isXHRUpload(options) && slice && (ub || ($.type(mcs) === 'function' ? mcs(options) : mcs) < fs)) ||
                     options.data) {
                 return false;
             }
@@ -753,7 +757,7 @@
                 o.blob = slice.call(
                     file,
                     ub,
-                    ub + mcs,
+                    ub + ($.type(mcs) === 'function' ? mcs(o) : mcs),
                     file.type
                 );
                 // Store the current chunk size, as the blob itself
