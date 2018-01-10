@@ -22,10 +22,13 @@ use Monolog\Processor\IntrospectionProcessor;
 function createLogDirIfNotExist()
 {
     // check log folder in "adm_my_files" and create if necessary
-    $myFilesLogs = new MyFiles('LOGS');
-    if (!$myFilesLogs->checkSettings())
+    try
     {
-        error_log('Log folder could not be created! [error_text: ' . $myFilesLogs->errorText . ', error_path: ' . $myFilesLogs->errorPath . ']');
+        FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/logs');
+    }
+    catch (\RuntimeException $exception)
+    {
+        error_log('Log folder could not be created! ' . $exception->getMessage());
     }
 }
 

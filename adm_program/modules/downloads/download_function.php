@@ -38,10 +38,13 @@ $getName     = admFuncVariableIsValid($_GET, 'name',      'file');
 $_SESSION['download_request'] = $_POST;
 
 // Pfad in adm_my_files pruefen und ggf. anlegen
-$myFilesDownload = new MyFiles('DOWNLOAD');
-if(!$myFilesDownload->checkSettings())
+try
 {
-    $gMessage->show($gL10n->get($myFilesDownload->errorText, array($myFilesDownload->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
+    FileSystemUtils::createDirectoryIfNotExists(TableFolder::getRootFolderName());
+}
+catch (\RuntimeException $exception)
+{
+    $gMessage->show($exception->getMessage());
     // => EXIT
 }
 

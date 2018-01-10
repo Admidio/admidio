@@ -51,10 +51,13 @@ if(!$gCurrentUser->hasRightEditProfile($user))
 if((int) $gSettingsManager->get('profile_photo_storage') === 1)
 {
     // ggf. Ordner für Userfotos in adm_my_files anlegen
-    $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
-    if(!$myFilesProfilePhotos->checkSettings())
+    try
     {
-        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, array($myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
+        FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos');
+    }
+    catch (\RuntimeException $exception)
+    {
+        $gMessage->show($exception->getMessage());
         // => EXIT
     }
 }

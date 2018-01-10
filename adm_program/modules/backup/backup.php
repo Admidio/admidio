@@ -42,10 +42,13 @@ if($gDbType !== Database::PDO_ENGINE_MYSQL)
 }
 
 // check backup path in adm_my_files and create it if necessary
-$myFilesBackup = new MyFiles('BACKUP');
-if(!$myFilesBackup->checkSettings())
+try
 {
-    $gMessage->show($gL10n->get($myFilesBackup->errorText, array($myFilesBackup->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
+    FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/backup');
+}
+catch (\RuntimeException $exception)
+{
+    $gMessage->show($exception->getMessage());
     // => EXIT
 }
 

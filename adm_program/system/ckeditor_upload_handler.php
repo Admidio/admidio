@@ -58,12 +58,11 @@ switch ($getCKEditor)
         // TODO
 }
 
-// set path to module folder in adm_my_files
-$myFilesUploadPhotos = new MyFiles($folderName);
-// upload photo to images folder of module folder
-if ($myFilesUploadPhotos->checkSettings())
+try
 {
     $imagesPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName . '/images';
+
+    FileSystemUtils::createDirectoryIfNotExists($imagesPath);
 
     // create a filename with the unix timestamp,
     // so we have a scheme for the filenames and the risk of duplicates is low
@@ -81,13 +80,9 @@ if ($myFilesUploadPhotos->checkSettings())
 
     move_uploaded_file($_FILES['upload']['tmp_name'], $storagePath);
 }
-else
+catch (\RuntimeException $exception)
 {
-    $message = strStripTags($gL10n->get(
-        $myFilesUploadPhotos->errorText,
-        array($myFilesUploadPhotos->errorPath,
-        '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')
-    ));
+    $message = $exception->getMessage();
 }
 
 // now call CKEditor function and send photo data

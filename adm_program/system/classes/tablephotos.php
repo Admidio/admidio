@@ -82,23 +82,17 @@ class TablePhotos extends TableAccess
      */
     public function createFolder()
     {
-        // Pfad in adm_my_files pruefen und ggf. anlegen
-        $myFilesPhotos = new MyFiles('PHOTOS');
-        if (!$myFilesPhotos->checkSettings())
-        {
-            return array(
-                'text' => $myFilesPhotos->errorText,
-                'path' => $myFilesPhotos->errorPath
-            );
-        }
-
-        // nun den Ordner fuer die Veranstaltung anlegen
+        // Ordner fuer die Veranstaltung anlegen
         $folderName = $this->getValue('pho_begin', 'Y-m-d') . '_' . $this->getValue('pho_id');
-        if (!$myFilesPhotos->createFolder($folderName, true))
+        try
+        {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $folderName);
+        }
+        catch (\RuntimeException $exception)
         {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
-                'path' => 'adm_my_files/photos/'.$folderName
+                'path' => 'adm_my_files/photos/' . $folderName
             );
         }
 
