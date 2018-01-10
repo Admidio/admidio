@@ -129,6 +129,11 @@
  */
 class ModuleDates extends Modules
 {
+    const MEMBER_APPROVAL_STATE_INVITED   = 0;
+    const MEMBER_APPROVAL_STATE_TENTATIVE = 1;
+    const MEMBER_APPROVAL_STATE_ATTEND    = 2;
+    const MEMBER_APPROVAL_STATE_REFUSED   = 3;
+
     /**
      * Constructor that will create an object of a parameter set needed in modules to get the recordsets.
      * Initialize parameters

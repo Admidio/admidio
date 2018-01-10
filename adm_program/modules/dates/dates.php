@@ -479,24 +479,24 @@ else
                 // If user is invited to the event then the approval state is not initialized and has value "null" in data table
                 if($row['member_date_role'] > 0 && $row['member_approval_state'] == null)
                 {
-                    $row['member_approval_state'] = '0';
+                    $row['member_approval_state'] = ModuleDates::MEMBER_APPROVAL_STATE_INVITED;
                 }
 
                 switch($row['member_approval_state'])
                 {
-                    case '0':
+                    case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
                         $buttonText = $gL10n->get('DAT_USER_INVITED');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/warning.png" alt="' . $gL10n->get('DAT_USER_INVITED') . '" title="' . $gL10n->get('DAT_USER_INVITED') . '"/>';
                         break;
-                    case '1':
+                    case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
                         $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '" title="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '"/>';
                         break;
-                    case '2':
+                    case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
                         $buttonText = $gL10n->get('DAT_USER_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_USER_ATTEND') . '" title="' . $gL10n->get('DAT_USER_ATTEND') . '"/>';
                         break;
-                    case '3':
+                    case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
                         $buttonText = $gL10n->get('DAT_USER_REFUSED');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_USER_REFUSED') . '" title="' . $gL10n->get('DAT_USER_REFUSED') . '"/>';
                         break;
