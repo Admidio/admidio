@@ -470,14 +470,7 @@ else
 
             if($date->getValue('dat_deadline') !== null)
             {
-                if ($date->getValue('dat_all_day') === 0)
-                {
-                     $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
-                }
-                else
-                {
-                    $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'));
-                }
+                $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
             }
 
             // Links for the participation only in html mode
