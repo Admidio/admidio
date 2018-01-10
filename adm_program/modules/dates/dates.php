@@ -493,23 +493,23 @@ else
                 switch($row['member_approval_state'])
                 {
                     case '0':
-                        $buttonText =  $gL10n->get('DAT_USER_INVITED');
+                        $buttonText = $gL10n->get('DAT_USER_INVITED');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/warning.png" alt="' . $gL10n->get('DAT_USER_INVITED') . '" title="' . $gL10n->get('DAT_USER_INVITED') . '"/>';
                         break;
                     case '1':
-                        $buttonText =  $gL10n->get('DAT_USER_TENTATIVE');
+                        $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '" title="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '"/>';
                         break;
                     case '2':
-                        $buttonText =  $gL10n->get('DAT_USER_ATTEND');
+                        $buttonText = $gL10n->get('DAT_USER_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_USER_ATTEND') . '" title="' . $gL10n->get('DAT_USER_ATTEND') . '"/>';
                         break;
                     case '3':
-                        $buttonText =  $gL10n->get('DAT_USER_REFUSED');
+                        $buttonText = $gL10n->get('DAT_USER_REFUSED');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_USER_REFUSED') . '" title="' . $gL10n->get('DAT_USER_REFUSED') . '"/>';
                         break;
                     default:
-                        $buttonText =  $gL10n->get('DAT_ATTEND');
+                        $buttonText = $gL10n->get('DAT_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>';
                         break;
                 }
