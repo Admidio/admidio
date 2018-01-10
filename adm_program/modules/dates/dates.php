@@ -95,8 +95,7 @@ else
 }
 
 // read relevant events from database
-$datesResult     = $dates->getDataSet($getStart, $datesPerPage);
-$datesTotalCount = $dates->getDataSetCount();
+$datesResult = $dates->getDataSet($getStart, $datesPerPage);
 
 if($getViewMode === 'html' && $getId === 0)
 {
@@ -252,7 +251,7 @@ else // $getViewMode = 'print'
     }
 }
 
-if($datesTotalCount === 0)
+if($datesResult['totalCount'] === 0)
 {
     // No events found
     if($getId > 0)
@@ -952,5 +951,5 @@ else
 }
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $datesTotalCount, $datesResult['limit'], $getStart));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
 $page->show();
