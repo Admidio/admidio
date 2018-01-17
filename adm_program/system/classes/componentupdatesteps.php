@@ -352,7 +352,13 @@ final class ComponentUpdateSteps
 
                 if($row['org_shortname'] === $g_organization && is_dir($folderOldName))
                 {
-                    rename($folderOldName, $folder->getFullFolderPath());
+                    try
+                    {
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                    }
+                    catch (\RuntimeException $exception)
+                    {
+                    }
                 }
             }
             else

@@ -149,7 +149,15 @@ class UploadHandlerPhoto extends UploadHandler
             catch(AdmException $e)
             {
                 $file->error = $e->getText();
-                unlink($this->options['upload_dir'].$file->name);
+
+                try
+                {
+                    FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
+                }
+                catch (\RuntimeException $exception)
+                {
+                }
+
                 return $file;
             }
         }

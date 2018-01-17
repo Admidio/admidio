@@ -239,7 +239,13 @@ class FunctionClass
         }
 
         // nun noch das von der Groesse angepasste Bild loeschen
-        unlink($imgPhotoPath);
+        try
+        {
+            FileSystemUtils::deleteFileIfExists($imgPhotoPath);
+        }
+        catch (\RuntimeException $exception)
+        {
+        }
 
         return $returnCode;
     }

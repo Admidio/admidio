@@ -946,7 +946,14 @@ elseif ($getMode === 'pdf')
 
     readfile($file);
     ignore_user_abort(true);
-    unlink($file);
+
+    try
+    {
+        FileSystemUtils::deleteFileIfExists($file);
+    }
+    catch (\RuntimeException $exception)
+    {
+    }
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {

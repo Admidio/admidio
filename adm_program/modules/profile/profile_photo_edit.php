@@ -146,7 +146,13 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
-        unlink(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
+        try
+        {
+            FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
+        }
+        catch (\RuntimeException $exception)
+        {
+        }
     }
     // Datenbankspeicherung, Daten aus Session entfernen
     else

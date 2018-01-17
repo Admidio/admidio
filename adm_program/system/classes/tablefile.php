@@ -45,8 +45,13 @@ class TableFile extends TableAccess
      */
     public function delete()
     {
-        @chmod($this->getFullFilePath(), 0777);
-        @unlink($this->getFullFilePath());
+        try
+        {
+            FileSystemUtils::deleteFileIfExists($this->getFullFilePath());
+        }
+        catch (\RuntimeException $exception)
+        {
+        }
 
         // Even if the delete won't work, return true, so that the entry of the DB disappears
         return parent::delete();

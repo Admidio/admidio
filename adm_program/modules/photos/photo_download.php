@@ -209,7 +209,13 @@ if ($getPhotoNr == null)
     $fp = fopen($zipTempName, 'rb');
     fpassthru($fp);
 
-    unlink($zipTempName);
+    try
+    {
+        FileSystemUtils::deleteFileIfExists($zipTempName);
+    }
+    catch (\RuntimeException $exception)
+    {
+    }
 }
 else
 {
