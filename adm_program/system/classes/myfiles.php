@@ -11,6 +11,7 @@
 
 /**
  * @class MyFiles
+ * @deprecated 3.3.0:4.0.0 The class "MyFiles" is deprecated and should not be used anymore. The class "FileSystemUtils" should be used instead.
  * This class supports the assignment of rights to every folder of adm_my_files
  * It's easy to create new folders and get detailed error messages if there are
  * problems with folder rights
@@ -52,10 +53,15 @@ class MyFiles extends Folder
     /**
      * module name should be the folder name in adm_my_files for this module
      * Example: 'PHOTOS', 'BACKUP', 'DOWNLOAD'
+     * @deprecated 3.3.0:4.0.0 The class "MyFiles" is deprecated and should not be used anymore. The class "FileSystemUtils" should be used instead.
      * @param string $module
      */
     public function __construct($module)
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: The class "MyFiles" is deprecated and should not be used anymore. The class "FileSystemUtils" should be used instead!');
+
         if($module === 'DOWNLOAD')
         {
             $folderName = TableFolder::getRootFolderName();

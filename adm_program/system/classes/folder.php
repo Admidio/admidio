@@ -11,6 +11,7 @@
 
 /**
  * @class Folder
+ * @deprecated 3.3.0:4.0.0 The class "Folder" is deprecated and should not be used anymore. The class "FileSystemUtils" should be used instead.
  * Mit dieser Klasse koennen Ordner leichter verwaltet werden. Das rekursive Verschieben,
  * Kopieren, Loeschen uvw. wird unterstuetzt.
  *
@@ -35,10 +36,15 @@ class Folder
     protected $folderWithPath = '';
 
     /**
+     * @deprecated 3.3.0:4.0.0 The class "Folder" is deprecated and should not be used anymore. The class "FileSystemUtils" should be used instead.
      * @param string $folderWithPath
      */
     public function __construct($folderWithPath = '')
     {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: The class "Folder" is deprecated and should not be used anymore. The class "FileSystemUtils" should be used instead!');
+
         if($folderWithPath !== '' && is_dir($folderWithPath))
         {
             $this->folderWithPath = $folderWithPath;
