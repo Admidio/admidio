@@ -9,40 +9,41 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/login_func.php');
-$checkLoginReturn =createUserObjectFromPost();
-if (is_string($checkLoginReturn))
-    {
-        $gMessage->show($checkLoginReturn);
-        // => EXIT
-    }
-    else
-    {
-        // check if browser can set cookies and throw error if not
-        if (!array_key_exists(COOKIE_PREFIX.'_SESSION_ID', $_COOKIE))
-        {
-            $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
-            // => EXIT
-        }
 
-        // remove login page from navigation stack
-        if(admStrEndsWith($gNavigation->getUrl(), '/login.php'))
-        {
-            $gNavigation->deleteLastUrl();
-        }
+try {
+    createUserObjectFromPost();   
+}
+catch (AdmException $e) {
+    $gMessage->show($e->getText());
+    // => EXIT
+}
 
-        // If no forward url has been set, then refer to the start page after login
-        if(array_key_exists('login_forward_url', $_SESSION))
-        {
-            $forwardUrl = $_SESSION['login_forward_url'];
-        }
-        else
-        {
-            $forwardUrl = $gHomepage;
-        }
+// check if browser can set cookies and throw error if not
+if (!array_key_exists(COOKIE_PREFIX.'_SESSION_ID', $_COOKIE))
+{
+    $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
+    // => EXIT
+}
 
-        unset($_SESSION['login_forward_url']);
+// remove login page from navigation stack
+if(admStrEndsWith($gNavigation->getUrl(), '/login.php'))
+{
+    $gNavigation->deleteLastUrl();
+}
 
-        admRedirect($forwardUrl);
-        // => EXIT
-    }
+// If no forward url has been set, then refer to the start page after login
+if(array_key_exists('login_forward_url', $_SESSION))
+{
+    $forwardUrl = $_SESSION['login_forward_url'];
+}
+else
+{
+    $forwardUrl = $gHomepage;
+}
+
+unset($_SESSION['login_forward_url']);
+
+admRedirect($forwardUrl);
+// => EXIT
+
 

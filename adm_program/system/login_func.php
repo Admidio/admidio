@@ -37,8 +37,18 @@ function initLoginParams($prefix)
     }
 }
 
-function createUserObjectFromPost()
-{
+    /**
+     * tries to create the actual user by setting the global variable $gCurrentUser based on the user creditials given
+     * by the $_POST array received in the http request header
+     * @throws AdmException in case of errors. exection->text contains a string with the reason why the login failed.
+     * @return true|string Return true if login was successful
+     *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
+     *                                       SYS_LOGIN_NOT_ACTIVATED
+     *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
+     *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
+     *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
+     */
+function createUserObjectFromPost(){
     
     global $gSettingsManager, $gCurrentUser, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
     
@@ -50,24 +60,22 @@ function createUserObjectFromPost()
         initLoginParams('plg_');
     }
     
-    if ($loginname === '') {
-        return $gL10n->get('SYS_FIELD_EMPTY', array(
-            $gL10n->get('SYS_USERNAME')
-        ));
+    if($loginname === '')
+    {
+	throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME'));
         // => EXIT
     }
     
-    if ($password === '') {
-        return $gL10n->get('SYS_FIELD_EMPTY', array(
-            $gL10n->get('SYS_PASSWORD')
-        ));
+    if($password === '')
+    {
+	throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD'));
         // => EXIT
     }
     
     // TODO Future: check Password min/max Length
     //if(strlen($password) < PASSWORD_MIN_LENGTH)
     //{
-    //    return $gL10n->get('PRO_PASSWORD_LENGTH', array($gL10n->get('SYS_PASSWORD')));
+    //    throw new AdmException( $gL10n->get('PRO_PASSWORD_LENGTH', array($gL10n->get('SYS_PASSWORD'))));
     //}
     
     // Search for username
@@ -84,7 +92,7 @@ function createUserObjectFromPost()
             'password' => '******'
         ));
         
-        return $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
+	throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         // => EXIT
     } else {
         // if login organization is different to organization of config file then create new session variables
