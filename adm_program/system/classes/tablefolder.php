@@ -515,16 +515,7 @@ class TableFolder extends TableAccess
     {
         global $gCurrentOrganization;
 
-        $replaceArray = array(
-            ' '  => '_',
-            '.'  => '_',
-            ','  => '_',
-            '\'' => '_',
-            '"'  => '_',
-            '´'  => '_',
-            '`'  => '_'
-        );
-        $orgName = str_replace(array_keys($replaceArray), array_values($replaceArray), $gCurrentOrganization->getValue('org_shortname'));
+        $orgName = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_shortname'));
 
         return 'download_' . strtolower($orgName);
     }
