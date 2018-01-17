@@ -67,9 +67,13 @@ switch($getJob)
 
     case 'delete':
         // Backupdatei loeschen
-        if(unlink($completePath))
+        try
         {
+            FileSystemUtils::deleteFileIfExists($file);
             echo 'done';
+        }
+        catch (\RuntimeException $exception)
+        {
         }
         exit();
         break;

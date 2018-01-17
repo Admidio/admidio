@@ -114,7 +114,11 @@ if (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FO
 if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php'))
 {
     // try to delete the config file at the old place otherwise show notice to user
-    if (!@unlink(ADMIDIO_PATH . '/config.php'))
+    try
+    {
+        FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
+    }
+    catch (\RuntimeException $exception)
     {
         showNotice(
             $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),

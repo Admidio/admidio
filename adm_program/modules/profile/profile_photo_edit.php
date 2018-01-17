@@ -81,12 +81,14 @@ if($getMode === 'save')
         if(is_file($fileOld))
         {
             $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
-            if(is_file($fileNew))
+            try
             {
-                unlink($fileNew);
+                FileSystemUtils::deleteFileIfExists($fileNew);
+                FileSystemUtils::moveFile($fileOld, $fileNew);
             }
-
-            rename($fileOld, $fileNew);
+            catch (\RuntimeException $exception)
+            {
+            }
         }
     }
     else
@@ -119,9 +121,12 @@ elseif($getMode === 'dont_save')
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
-        if(is_file($file))
+        try
         {
-            unlink($file);
+            FileSystemUtils::deleteFileIfExists($file);
+        }
+        catch (\RuntimeException $exception)
+        {
         }
     }
     // Datenbankspeicherung

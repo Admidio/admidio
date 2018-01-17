@@ -105,12 +105,11 @@ class UploadHandlerPhoto extends UploadHandler
                     try
                     {
                         FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
+                        FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
                     }
                     catch (\RuntimeException $exception)
                     {
                     }
-
-                    rename($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
                 }
 
                 // save thumbnail
@@ -128,9 +127,12 @@ class UploadHandlerPhoto extends UploadHandler
                 $image->delete();
 
                 // delete image from upload folder
-                if(is_file($fileLocation))
+                try
                 {
-                    unlink($fileLocation);
+                    FileSystemUtils::deleteFileIfExists($fileLocation);
+                }
+                catch (\RuntimeException $exception)
+                {
                 }
 
                 // if image was successfully saved in filesystem then update image count of album
