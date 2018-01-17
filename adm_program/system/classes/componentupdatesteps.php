@@ -398,36 +398,21 @@ final class ComponentUpdateSteps
      */
     public static function updateStepRewriteFolderRights($folder = '')
     {
-        $returnValue = true;
-
         if ($folder === '')
         {
             $folder = ADMIDIO_PATH . FOLDER_DATA;
         }
 
-        $dirHandle = @opendir($folder);
-        if ($dirHandle)
+        try
         {
-            while (($entry = readdir($dirHandle)) !== false)
-            {
-                if ($entry !== '.' && $entry !== '..')
-                {
-                    $resource = $folder . '/' . $entry;
+            FileSystemUtils::chmodDirectory($folder, 0777, true);
 
-                    if (is_dir($resource))
-                    {
-                        // now check the subfolder
-                        $returnValue = $returnValue && self::updateStepRewriteFolderRights($resource);
-
-                        // set rights to 0777
-                        $returnValue = $returnValue && @chmod($resource, 0777);
-                    }
-                }
-            }
-            closedir($dirHandle);
+            return true;
         }
-
-        return $returnValue;
+        catch (\RuntimeException $exception)
+        {
+            return false;
+        }
     }
 
     /**
