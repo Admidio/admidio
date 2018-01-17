@@ -32,6 +32,33 @@ final class FileSystemUtils
     private static $allowedDirectories = array();
 
     /**
+     * Get a generated filename with a timestamp and a secure random identifier
+     * @param string $filename The original filename
+     * @throws AdmException Throws if secure random identifier could not be generated
+     * @return string Returns the generated filename
+     * @example "IMG_123456.JPG" => "20180131-123456_abcdef0123456798.JPG"
+     */
+    public static function getGeneratedFilename($filename)
+    {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $now = new \DateTime();
+
+        return $now->format('Ymd-His') . '_' . PasswordHashing::genRandomPassword() . '.' . $extension;
+    }
+
+    /**
+     * Get a from special-characters clean path-entry
+     * @param string $pathname The path-entry to clean
+     * @param string $replacer The character to replace spacial-characters with
+     * @return string Returns the special-characters cleaned path-entry
+     * @example "image-12#34+ß.jpg" => "image-12_34__.jpg"
+     */
+    public static function getSanitizedPathEntry($pathname, $replacer = '_')
+    {
+        return preg_replace('/[^A-Za-z0-9._-]/u', $replacer, $pathname);
+    }
+
+    /**
      * Get a normalized/simplified path
      * @param string $path The path to normalize
      * @throws \UnexpectedValueException Throws if the given path is higher than root
