@@ -34,7 +34,8 @@ final class FileSystemUtils
     /**
      * Get a normalized/simplified path
      * @param string $path The path to normalize
-     * @return string The normalized path
+     * @throws \UnexpectedValueException Throws if the given path is higher than root
+     * @return string Returns the normalized path
      * @see https://secure.php.net/manual/en/function.realpath.php
      * @example "/path/to/test/.././..//..///..///../one/two/../three/filename" => "../../one/three/filename"
      */
@@ -70,8 +71,8 @@ final class FileSystemUtils
                 }
                 elseif ($test === '')
                 {
-                    // File-system root => remove root and add ".."
-                    $parts[] = $segment;
+                    // File-system root => higher as root is not possible/valid => throw Exception
+                    throw new \UnexpectedValueException('Path is higher than root!');
                 }
 //                else
 //                {
