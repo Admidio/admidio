@@ -20,10 +20,10 @@
  * show      - all               : (Default) show all events
  *           - maybe_participate : Show only events where the current user participates or could participate
  *           - only_participate  : Show only events where the current user participates
- * date_from - is set to actual date,
- *             if no date information is delivered
- * date_to   - is set to 31.12.9999,
- *             if no date information is delivered
+ * date_from - set the minimum date of the events that should be shown
+ *             if this parameter is not set than the actual date is set
+ * date_to   - set the maximum date of the events that should be shown
+ *             if this parameter is not set than this date is set to 31.12.9999
  * view_mode - Content output in 'html' or 'print' view
  * view      - Content output in different views like 'detail', 'list'
  *             (Default: according to preferences)
@@ -95,8 +95,7 @@ else
 }
 
 // read relevant events from database
-$datesResult     = $dates->getDataSet($getStart, $datesPerPage);
-$datesTotalCount = $dates->getDataSetCount();
+$datesResult = $dates->getDataSet($getStart, $datesPerPage);
 
 if($getViewMode === 'html' && $getId === 0)
 {
@@ -191,7 +190,7 @@ if($getViewMode === 'html')
         if($gSettingsManager->getBool('enable_dates_ical'))
         {
             $datesMenu->addItem(
-                'admMenuItemICal', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId)),
+                'admMenuItemICal', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras'
             );
         }
@@ -252,7 +251,7 @@ else // $getViewMode = 'print'
     }
 }
 
-if($datesTotalCount === 0)
+if($datesResult['totalCount'] === 0)
 {
     // No events found
     if($getId > 0)
@@ -471,14 +470,7 @@ else
 
             if($date->getValue('dat_deadline') !== null)
             {
-                if ($date->getValue('dat_all_day') === 0)
-                {
-                     $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
-                }
-                else
-                {
-                    $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'));
-                }
+                $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
             }
 
             // Links for the participation only in html mode
@@ -487,29 +479,29 @@ else
                 // If user is invited to the event then the approval state is not initialized and has value "null" in data table
                 if($row['member_date_role'] > 0 && $row['member_approval_state'] == null)
                 {
-                    $row['member_approval_state'] = '0';
+                    $row['member_approval_state'] = ModuleDates::MEMBER_APPROVAL_STATE_INVITED;
                 }
 
                 switch($row['member_approval_state'])
                 {
-                    case '0':
-                        $buttonText =  $gL10n->get('DAT_USER_INVITED');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
+                        $buttonText = $gL10n->get('DAT_USER_INVITED');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/warning.png" alt="' . $gL10n->get('DAT_USER_INVITED') . '" title="' . $gL10n->get('DAT_USER_INVITED') . '"/>';
                         break;
-                    case '1':
-                        $buttonText =  $gL10n->get('DAT_USER_TENTATIVE');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
+                        $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '" title="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '"/>';
                         break;
-                    case '2':
-                        $buttonText =  $gL10n->get('DAT_USER_ATTEND');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
+                        $buttonText = $gL10n->get('DAT_USER_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_USER_ATTEND') . '" title="' . $gL10n->get('DAT_USER_ATTEND') . '"/>';
                         break;
-                    case '3':
-                        $buttonText =  $gL10n->get('DAT_USER_REFUSED');
+                    case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
+                        $buttonText = $gL10n->get('DAT_USER_REFUSED');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_USER_REFUSED') . '" title="' . $gL10n->get('DAT_USER_REFUSED') . '"/>';
                         break;
                     default:
-                        $buttonText =  $gL10n->get('DAT_ATTEND');
+                        $buttonText = $gL10n->get('DAT_ATTEND');
                         $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>';
                         break;
                 }
@@ -952,5 +944,5 @@ else
 }
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('view' => $getView, 'mode' => $getMode, 'headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $dates->getParameter('dateStartFormatEnglish'), 'date_to' => $dates->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $datesTotalCount, $datesResult['limit'], $getStart));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $datesResult['totalCount'], $datesResult['limit'], $getStart));
 $page->show();

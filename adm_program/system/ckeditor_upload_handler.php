@@ -59,29 +59,33 @@ switch ($getCKEditor)
 }
 
 // set path to module folder in adm_my_files
-$myFilesProfilePhotos = new MyFiles($folderName);
+$myFilesUploadPhotos = new MyFiles($folderName);
 // upload photo to images folder of module folder
-if($myFilesProfilePhotos->checkSettings() && $myFilesProfilePhotos->setSubFolder('images'))
+if ($myFilesUploadPhotos->checkSettings())
 {
+    $imagesPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName . '/images';
+
     // create a filename with the unix timestamp,
     // so we have a scheme for the filenames and the risk of duplicates is low
-    $localFile = time() . substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
-    $serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
-    if(is_file($serverUrl))
+    $extension = pathinfo($_FILES['upload']['name'], PATHINFO_EXTENSION);
+    $now = time();
+    $filename = $now . '.' . $extension;
+    $storagePath = $imagesPath . '/' . $filename;
+    if (is_file($storagePath))
     {
         // if file exists than create a random number and append it to the filename
-        $serverUrl = $myFilesProfilePhotos->getServerPath() . '/' .
-            substr($localFile, 0, strrpos($localFile, '.')) . '_' .
-            mt_rand().substr($localFile, strrpos($localFile, '.'));
+        $filename = $now . '_' . mt_rand() . '.' . $extension;
+        $storagePath = $imagesPath . '/' . $filename;
     }
-    $htmlUrl = safeUrl(ADMIDIO_URL.'/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $localFile));
-    move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
+    $htmlUrl = safeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $filename));
+
+    move_uploaded_file($_FILES['upload']['tmp_name'], $storagePath);
 }
 else
 {
     $message = strStripTags($gL10n->get(
-        $myFilesProfilePhotos->errorText,
-        array($myFilesProfilePhotos->errorPath,
+        $myFilesUploadPhotos->errorText,
+        array($myFilesUploadPhotos->errorPath,
         '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')
     ));
 }
@@ -91,7 +95,7 @@ echo '<!DOCTYPE html>
 <html>
     <body>
         <script type="text/javascript">
-            window.parent.CKEDITOR.tools.callFunction('.$getCKEditorFuncNum.', "'.$htmlUrl.'","'.$message.'");
+            window.parent.CKEDITOR.tools.callFunction('.$getCKEditorFuncNum.', "'.$htmlUrl.'", "'.$message.'");
         </script>
     </body>
 </html>';
