@@ -274,7 +274,7 @@ $listStatement = $gDb->query($mainSql); // TODO add more params
 $numMembers = $listStatement->rowCount();
 
 // get all members and their data of this list in an array
-$membersList = $listStatement->fetchAll();
+$membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
 
 if ($numMembers === 0)
 {
