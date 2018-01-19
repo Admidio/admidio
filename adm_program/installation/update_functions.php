@@ -48,14 +48,15 @@ function checkLogin()
         // Don't update the current session with user id and don't do a rehash of the password
         // because in former versions the password field was to small for the current hashes
         // and the update of this field will be done after this check.
-        $checkLoginReturn = $gCurrentUser->checkLogin($password, false, false, false, true);
-
-        if (is_string($checkLoginReturn))
-        {
+        
+	try {
+	    $gCurrentUser->checkLogin($password, false, false, false, true);
+	}
+	catch (AdmException $e) {
             $message = '
                 <div class="alert alert-danger alert-small" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    <strong>' . $checkLoginReturn . '</strong>
+                    <strong>' . $e->getText() . '</strong>
                 </div>';
 
             showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
