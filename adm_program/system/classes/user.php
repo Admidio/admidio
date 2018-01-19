@@ -562,12 +562,13 @@ class User extends TableAccess
      *                                     the best hashing algorithm. If not the password will be rehashed with
      *                                     the new algorithm. If set to false the password will not be rehashed.
      * @param bool   $isAdministrator      If set to true check if user is admin of organization.
-     * @return true|string Return true if login was successful and a string with the reason why the login failed.
+     * @throws AdmException in case of errors. exception->text contains a string with the reason why the login failed.
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
+     * @return true Return true if login was successful
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {

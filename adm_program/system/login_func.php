@@ -28,47 +28,52 @@ function initLoginParams($prefix)
     $loginname = $_POST[$prefix . 'usr_login_name'];
     $password  = $_POST[$prefix . 'usr_password'];
     
-    if ($gSettingsManager->getBool('enable_auto_login') && array_key_exists($prefix . 'auto_login', $_POST) && $_POST[$prefix . 'auto_login'] == 1) {
+    if ($gSettingsManager->getBool('enable_auto_login') && array_key_exists($prefix . 'auto_login', $_POST) && $_POST[$prefix . 'auto_login'] == 1)
+    {
         $bAutoLogin = true;
     }
     // if user can choose organization then save the selection
-    if (array_key_exists($prefix . 'org_id', $_POST) && is_numeric($_POST[$prefix . 'org_id']) && $_POST[$prefix . 'org_id'] > 0) {
+    if (array_key_exists($prefix . 'org_id', $_POST) && is_numeric($_POST[$prefix . 'org_id']) && $_POST[$prefix . 'org_id'] > 0)
+    {
         $organizationId = (int) $_POST[$prefix . 'org_id'];
     }
 }
 
-    /**
-     * tries to create the actual user by setting the global variable $gCurrentUser based on the user creditials given
-     * by the $_POST array received in the http request header
-     * @throws AdmException in case of errors. exection->text contains a string with the reason why the login failed.
-     * @return true|string Return true if login was successful
-     *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
-     *                                       SYS_LOGIN_NOT_ACTIVATED
-     *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
-     *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
-     *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
-     */
-function createUserObjectFromPost(){
+/**
+ * tries to create the actual user by setting the global variable $gCurrentUser based on the user creditials given
+ * by the $_POST array received in the http request header
+ * @throws AdmException in case of errors. exception->text contains a string with the reason why the login failed.
+ *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
+ *                                       SYS_LOGIN_NOT_ACTIVATED
+ *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
+ *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
+ *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
+ * @return true|string Return true if login was successful
+ */
+function createUserObjectFromPost()
+{
     
     global $gSettingsManager, $gCurrentUser, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
     
-    if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '') {
+    if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
+    {
         initLoginParams('');
     }
     
-    if (array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'] !== '') {
+    if (array_key_exists('plg_usr_login_name', $_POST) && $_POST['plg_usr_login_name'] !== '')
+    {
         initLoginParams('plg_');
     }
     
-    if($loginname === '')
+    if ($loginname === '')
     {
-	throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME'));
+        throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME'));
         // => EXIT
     }
     
-    if($password === '')
+    if ($password === '')
     {
-	throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD'));
+        throw new AdmException('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD'));
         // => EXIT
     }
     
@@ -86,17 +91,21 @@ function createUserObjectFromPost(){
         $loginname
     ));
     
-    if ($userStatement->rowCount() === 0) {
+    if ($userStatement->rowCount() === 0)
+    {
         $gLogger->warning('AUTHENTICATION: Incorrect username/password!', array(
             'username' => $loginname,
             'password' => '******'
         ));
         
-	throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
+        throw new AdmException('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
         // => EXIT
-    } else {
+    }
+    else
+    {
         // if login organization is different to organization of config file then create new session variables
-        if ($organizationId !== (int) $gCurrentOrganization->getValue('org_id')) {
+        if ($organizationId !== (int) $gCurrentOrganization->getValue('org_id'))
+        {
             // read organization of config file with their preferences
             $gCurrentOrganization->readDataById($organizationId);
             
