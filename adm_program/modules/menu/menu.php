@@ -124,13 +124,13 @@ while ($main_men = $main_men_statement->fetchObject())
 
             if($menuGroup != $menu_row->men_men_id_parent)
             {
-                $block_id = 'admMenu_'.$menu_row->men_men_id_parent;
+                $blockId = 'admMenu_'.$menu_row->men_men_id_parent;
 
                 $menuOverview->addTableBody();
                 $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-                $menuOverview->addColumn('<span id="caret_'.$block_id.'" class="caret"></span>'.$gL10n->get($main_men->men_name),
-                                  array('id' => 'group_'.$block_id, 'colspan' => '8'), 'td');
-                $menuOverview->addTableBody('id', $block_id);
+                $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$gL10n->get($main_men->men_name),
+                                  array('id' => 'group_'.$blockId, 'colspan' => '8'));
+                $menuOverview->addTableBody('id', $blockId);
 
                 $menuGroup = $menu_row->men_men_id_parent;
             }

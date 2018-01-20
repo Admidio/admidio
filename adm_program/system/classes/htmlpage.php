@@ -254,7 +254,7 @@ class HtmlPage
      */
     public function addModalMenu()
     {
-        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gValidLogin, $gDb, $gCurrentUser;
 
         // display Menu
         $sql = 'SELECT *
