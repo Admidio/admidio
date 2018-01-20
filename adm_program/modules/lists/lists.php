@@ -124,11 +124,10 @@ if($gCurrentUser->isAdministrator())
 $previousCategoryId = 0;
 
 // Get Lists
-$getStart      = $lists->getStartElement();
-$listsResult   = $lists->getDataSet($getStart);
-$numberOfRoles = $lists->getDataSetCount();
+$getStart    = $lists->getStartElement();
+$listsResult = $lists->getDataSet($getStart);
 
-if($numberOfRoles === 0)
+if($listsResult['totalCount'] === 0)
 {
     if($gValidLogin)
     {
@@ -336,7 +335,7 @@ if($listsResult['numResults'] > 0)
 
 // If necessary show links to navigate to next and previous recordsets of the query
 $baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('cat_id' => $getCatId, 'active_role' => $getActiveRole));
-$page->addHtml(admFuncGeneratePagination($baseUrl, $numberOfRoles, $gSettingsManager->getInt('lists_roles_per_page'), $getStart));
+$page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('lists_roles_per_page'), $getStart));
 
 $page->addHtml('</div>');
 $page->show();

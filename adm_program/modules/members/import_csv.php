@@ -157,10 +157,10 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                             }
                             break;
                         case 'TEXT':
-                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 50));
+                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 100));
                             break;
                         default:
-                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
+                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 4000));
                     }
                 }
             }

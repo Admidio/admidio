@@ -562,12 +562,13 @@ class User extends TableAccess
      *                                     the best hashing algorithm. If not the password will be rehashed with
      *                                     the new algorithm. If set to false the password will not be rehashed.
      * @param bool   $isAdministrator      If set to true check if user is admin of organization.
-     * @return true|string Return true if login was successful and a string with the reason why the login failed.
+     * @throws AdmException in case of errors. exception->text contains a string with the reason why the login failed.
      *                     Possible reasons: SYS_LOGIN_MAX_INVALID_LOGIN
      *                                       SYS_LOGIN_NOT_ACTIVATED
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
+     * @return true Return true if login was successful
      */
     public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true, $updateHash = true, $isAdministrator = false)
     {
@@ -575,33 +576,33 @@ class User extends TableAccess
 
         if ($this->hasMaxInvalidLogins())
         {
-            return $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN');
+            throw new AdmException($gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
         }
 
         if (!PasswordHashing::verify($password, $this->getValue('usr_password')))
         {
             $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
 
-            return $gL10n->get($incorrectLoginMessage);
+            throw new AdmException($gL10n->get($incorrectLoginMessage));
         }
 
         if (!$this->getValue('usr_valid'))
         {
             $gLogger->warning('AUTHENTICATION: User is not activated!', array('username' => $this->getValue('usr_login_name')));
 
-            return $gL10n->get('SYS_LOGIN_NOT_ACTIVATED');
+            throw new AdmException($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
         }
 
         $orgLongname = $this->getOrgLongname();
 
         if (!$this->isMemberOfOrganization($orgLongname))
         {
-            return $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname));
+            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname)));
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongname))
         {
-            return $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname));
+            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname)));
         }
 
         if ($updateHash)
