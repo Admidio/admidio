@@ -931,11 +931,10 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['passwordStrength'])
         {
             $passwordStrengthLevel = 1;
-            // need a fix, blocks installation
-            //if ($gSettingsManager->getInt('password_min_strength'))
-            //{
-            //    $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
-            //}
+            if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength'))
+            {
+                $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
+            }
 
             if ($this->htmlPage instanceof HtmlPage)
             {
