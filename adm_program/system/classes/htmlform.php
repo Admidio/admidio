@@ -931,7 +931,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['passwordStrength'])
         {
             $passwordStrengthLevel = 1;
-            if ($gSettingsManager->getInt('password_min_strength'))
+            if ($gSettingsManager instanceof SettingsManager && $gSettingsManager->getInt('password_min_strength'))
             {
                 $passwordStrengthLevel = $gSettingsManager->getInt('password_min_strength');
             }

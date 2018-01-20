@@ -206,7 +206,7 @@ $administrator->setValue('usr_timestamp_create', DATETIME_NOW);
 $administrator->save(false); // no registered user -> UserIdCreate couldn't be filled
 
 // write all preferences from preferences.php in table adm_preferences
-require_once(ADMIDIO_URL . '/adm_program/installation/db_scripts/preferences.php');
+require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
 $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
@@ -217,8 +217,8 @@ $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordH
 $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
 // create all necessary data for this organization
-$settingsManager =& $gCurrentOrganization->getSettingsManager();
-$settingsManager->setMutli($defaultOrgPreferences, false);
+$gSettingsManager =& $gCurrentOrganization->getSettingsManager();
+$gSettingsManager->setMulti($defaultOrgPreferences, false);
 $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
 // create default room for room module in database
