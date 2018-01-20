@@ -576,33 +576,33 @@ class User extends TableAccess
 
         if ($this->hasMaxInvalidLogins())
         {
-            throw new AdmException( $gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
+            throw new AdmException($gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
         }
 
         if (!PasswordHashing::verify($password, $this->getValue('usr_password')))
         {
             $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
 
-            throw new AdmException( $gL10n->get($incorrectLoginMessage));
+            throw new AdmException($gL10n->get($incorrectLoginMessage));
         }
 
         if (!$this->getValue('usr_valid'))
         {
             $gLogger->warning('AUTHENTICATION: User is not activated!', array('username' => $this->getValue('usr_login_name')));
 
-            throw new AdmException( $gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
+            throw new AdmException($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
         }
 
         $orgLongname = $this->getOrgLongname();
 
         if (!$this->isMemberOfOrganization($orgLongname))
         {
-            throw new AdmException( $gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname)));
+            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION', array($orgLongname)));
         }
 
         if ($isAdministrator && version_compare($installedDbVersion, '2.4', '>=') && !$this->isAdminOfOrganization($orgLongname))
         {
-            throw new AdmException( $gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname)));
+            throw new AdmException($gL10n->get('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongname)));
         }
 
         if ($updateHash)

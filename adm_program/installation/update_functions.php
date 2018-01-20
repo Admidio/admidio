@@ -9,6 +9,9 @@
  ***********************************************************************************************
  */
 
+/**
+ * checks if login is required and if so, if it is valid
+ */
 function checkLogin()
 {
     global $gDb, $gL10n, $gProfileFields, $gLoginForUpdate;
@@ -44,15 +47,16 @@ function checkLogin()
         // create object with current user field structure und user object
         $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
-        // check login data. If login failed an exception will be thrown.
-        // Don't update the current session with user id and don't do a rehash of the password
-        // because in former versions the password field was to small for the current hashes
-        // and the update of this field will be done after this check.
-        
-	try {
-	    $gCurrentUser->checkLogin($password, false, false, false, true);
-	}
-	catch (AdmException $e) {
+        try
+        {
+            // check login data. If login failed an exception will be thrown.
+            // Don't update the current session with user id and don't do a rehash of the password
+            // because in former versions the password field was to small for the current hashes
+            // and the update of this field will be done after this check.
+            $gCurrentUser->checkLogin($password, false, false, false, true);
+        }
+        catch (AdmException $e)
+        {
             $message = '
                 <div class="alert alert-danger alert-small" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>

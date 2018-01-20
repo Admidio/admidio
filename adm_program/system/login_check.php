@@ -23,9 +23,7 @@ catch (AdmException $e)
 // check if browser can set cookies and throw error if not
 if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
 {
-    $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(
-        DOMAIN
-    )));
+    $gMessage->show($gL10n->get('SYS_COOKIE_NOT_SET', array(DOMAIN)));
     // => EXIT
 }
 
@@ -49,4 +47,3 @@ unset($_SESSION['login_forward_url']);
 
 admRedirect($forwardUrl);
 // => EXIT
-
