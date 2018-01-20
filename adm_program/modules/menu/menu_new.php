@@ -69,14 +69,14 @@ $gNavigation->addUrl(CURRENT_URL, array($headline));
 $menuArray = array(0 => 'MAIN');
 
 /**
- * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorausw‰hlen
- * @param int    $parentId
- * @param string $vorschub
- * @param        $menu
+ * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorausw√§hlen
+ * @param int       $parentId
+ * @param string    $vorschub
+ * @param TableMenu $menu
  */
 function subfolder($parentId, $vorschub, $menu)
 {
-    global $gDb, $gCurrentOrganization, $menuArray;
+    global $gDb, $menuArray;
 
     $vorschub .= '&nbsp;&nbsp;&nbsp;';
     $sqlConditionParentId = '';
@@ -96,7 +96,7 @@ function subfolder($parentId, $vorschub, $menu)
 
     $sql = 'SELECT *
               FROM '.TBL_MENU.'
-             WHERE men_id    <> ? -- $menu->getValue(\'men_id\')
+             WHERE men_id  <> ? -- $menu->getValue(\'men_id\')
                AND men_node = 1
                    '.$sqlConditionParentId;
     $childStatement = $gDb->queryPrepared($sql, $queryParams);
@@ -110,8 +110,8 @@ function subfolder($parentId, $vorschub, $menu)
         $menuArray[$parentMenu->getValue('men_id')] = $vorschub.'&#151; '.$parentMenu->getValue('men_name');
 
         subfolder($parentMenu->getValue('men_id'), $vorschub, $menu);
-    }//while
-}//function
+    }
+}
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -145,20 +145,20 @@ $fieldDefault  = FIELD_DEFAULT;
 if((bool) $menu->getValue('men_standart'))
 {
     $fieldRequired = FIELD_DISABLED;
-    $fieldDefault  = FIELD_DISABLED;    
+    $fieldDefault  = FIELD_DISABLED;
 }
 
 subfolder(null, '', $menu);
 
 $form->addInput(
-    'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'), 
+    'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'),
     array('maxLength' => 100, 'property'=> FIELD_REQUIRED, 'helpTextIdLabel' => 'MEN_NAME_DESC')
 );
 
 if($getMenId > 0)
 {
     $form->addInput(
-        'men_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $menu->getValue('men_name_intern', 'database'), 
+        'men_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $menu->getValue('men_name_intern', 'database'),
         array('maxLength' => 100, 'property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC')
     );
 }
@@ -169,7 +169,7 @@ $form->addMultilineTextInput(
 );
 
 $form->addSelectBox(
-    'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuArray, 
+    'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuArray,
     array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_men_id_parent'),
@@ -182,21 +182,21 @@ $sql = 'SELECT com_id, com_name FROM '.TBL_COMPONENTS.' ORDER BY com_name';
 $form->addSelectBoxFromSql(
     'men_com_id', $gL10n->get('MEN_MODULE_RIGHTS'), $gDb, $sql,
     array(
-        'property'                       => $fieldDefault,
-        'defaultValue'                   => $menu->getValue('men_com_id'),
-        'helpTextIdLabel'                => 'MEN_MODULE_RIGHTS_DESC'
+        'property'        => $fieldDefault,
+        'defaultValue'    => $menu->getValue('men_com_id'),
+        'helpTextIdLabel' => 'MEN_MODULE_RIGHTS_DESC'
     )
 );
 
 $form->addSelectBox(
-    'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet, 
+    'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet,
     array('defaultValue' => $roleViewSet, 'multiselect'  => true)
 );
 
 if((bool) $menu->getValue('men_node') === false)
 {
     $form->addInput(
-        'men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'), 
+        'men_url', $gL10n->get('ORG_URL'), $menu->getValue('men_url', 'database'),
         array('maxLength' => 100, 'property' => $fieldRequired)
     );
 }
@@ -204,12 +204,12 @@ if((bool) $menu->getValue('men_node') === false)
 $arrayIcons  = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
 $defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons);
 $form->addSelectBox(
-    'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons, 
+    'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons,
     array('defaultValue' => $defaultIcon, 'showContextDependentFirstEntry' => true)
 );
 
 $form->addSubmitButton(
-    'btn_save', $gL10n->get('SYS_SAVE'), 
+    'btn_save', $gL10n->get('SYS_SAVE'),
     array('icon' => THEME_PATH.'/icons/disk.png')
 );
 

@@ -39,9 +39,9 @@ $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
 // create html page object
 $page = new HtmlPage($headline);
 
-$sql = "SELECT *
-  FROM ".TBL_MENU."
-  where men_name_intern = 'plg_calendar'";
+$sql = 'SELECT *
+          FROM '.TBL_MENU.'
+         WHERE men_name_intern = \'plg_calendar\'';
 $statement = $gDb->query($sql);
 
 if($statement->rowCount() > 0)

@@ -1,4 +1,5 @@
 <?php
+
 // load standart layouts and processes from system
 require_once('/adm_program/system/common.php');
 
@@ -25,4 +26,3 @@ $page->addHtml('<br>put your HTML Code here!');
 
 // show page
 $page->show();
-?>

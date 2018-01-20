@@ -72,17 +72,17 @@ if($getMode === 1)
         {
             // get the name of the icon to save it.
             $arrayIcons = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
-            $menu->setValue('men_icon',$arrayIcons[$postIcon]);
+            $menu->setValue('men_icon', $arrayIcons[$postIcon]);
         }
 
         $menu->setValue('men_men_id_parent', $_POST['men_men_id_parent']);
         $menu->setValue('men_name', $postTranslateName);
         $menu->setValue('men_description', $postTranslateDesc);
 
-        if((bool) !$menu->getValue('men_standart'))
+        if(!$menu->getValue('men_standart'))
         {
-            $menu->setValue('men_url',  $_POST['men_url']);        
-            $menu->setValue('men_com_id',  $_POST['men_com_id']);        
+            $menu->setValue('men_url',  $_POST['men_url']);
+            $menu->setValue('men_com_id',  $_POST['men_com_id']);
         }
 
         $getMenId = $menu->getValue('men_id');

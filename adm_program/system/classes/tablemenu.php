@@ -31,11 +31,11 @@ class TableMenu extends TableAccess
      * Constructor that will create an object of a recordset of the table adm_category.
      * If the id is set than the specific category will be loaded.
      * @param \Database $database Object of the class Database. This should be the default global object @b $gDb.
-     * @param int       $cat_id   The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
+     * @param int       $menId    The recordset of the category with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
-    public function __construct(&$database, $men_id = 0)
+    public function __construct($database, $menId = 0)
     {
-        parent::__construct($database, TBL_MENU, 'men', $men_id);
+        parent::__construct($database, TBL_MENU, 'men', $menId);
     }
 
     /**
@@ -99,8 +99,6 @@ class TableMenu extends TableAccess
      */
     public function moveSequence($mode)
     {
-        global $gCurrentOrganization;
-
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
@@ -114,7 +112,8 @@ class TableMenu extends TableAccess
         {
             if($this->getValue('men_order') > 1)
             {
-                $sql = 'UPDATE '.TBL_MENU.' SET men_order = '.$this->getValue('men_order').'
+                $sql = 'UPDATE '.TBL_MENU.'
+                           SET men_order = '.$this->getValue('men_order').'
                          WHERE men_men_id_parent = \''. $this->getValue('men_men_id_parent'). '\'
                            AND men_order = '.$this->getValue('men_order').' - 1 ';
                 $this->db->query($sql);
@@ -127,7 +126,8 @@ class TableMenu extends TableAccess
         {
             if($this->getValue('men_order') < $row['count'])
             {
-                $sql = 'UPDATE '.TBL_MENU.' SET men_order = '.$this->getValue('men_order').'
+                $sql = 'UPDATE '.TBL_MENU.'
+                           SET men_order = '.$this->getValue('men_order').'
                          WHERE men_men_id_parent = \''. $this->getValue('men_men_id_parent'). '\'
                            AND men_order = '.$this->getValue('men_order').' + 1 ';
                 $this->db->query($sql);
@@ -145,8 +145,6 @@ class TableMenu extends TableAccess
      */
     public function readDataById($men_id)
     {
-        global $g_tbl_praefix;
-
         $returnValue = parent::readDataById($men_id);
 
         if($returnValue)
@@ -191,15 +189,13 @@ class TableMenu extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession;
-        $fields_changed = $this->columnsValueChanged;
         $this->db->startTransaction();
 
         if($this->newRecord)
         {
             // if new field than generate new name intern, otherwise no change will be made
             $this->setValue('men_name_intern', $this->getNewNameIntern($this->getValue('men_name', 'database'), 1));
-            
+
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MENU.'
