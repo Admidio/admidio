@@ -259,8 +259,8 @@ class HtmlPage
         // display Menu
         $sql = 'SELECT *
                   FROM '.TBL_MENU.'
-                 WHERE men_men_id_parent is null
-                 ORDER BY men_order';
+                 WHERE men_men_id_parent IS NULL
+              ORDER BY men_order';
         $mainMenuStatement = $gDb->query($sql);
 
         while ($mainMenu = $mainMenuStatement->fetchObject())
@@ -268,7 +268,8 @@ class HtmlPage
             // display Menu
             $sql = 'SELECT *
                       FROM '.TBL_MENU.'
-                 LEFT JOIN '.TBL_COMPONENTS.' ON com_id = men_com_id
+                 LEFT JOIN '.TBL_COMPONENTS.'
+                        ON com_id = men_com_id
                      WHERE men_men_id_parent = ? -- $mainMenu->men_id
                   ORDER BY men_men_id_parent DESC, men_order';
             $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
@@ -715,9 +716,9 @@ class HtmlPage
 
         // display Menu
         $sql = 'SELECT *
-          FROM '.TBL_MENU.'
-          where men_men_id_parent is null
-         ORDER BY men_order';
+                  FROM '.TBL_MENU.'
+                 WHERE men_men_id_parent IS NULL
+              ORDER BY men_order';
         $mainMenuStatement = $gDb->query($sql);
 
         while ($mainMenu = $mainMenuStatement->fetchObject())
