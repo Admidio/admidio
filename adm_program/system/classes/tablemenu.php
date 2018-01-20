@@ -24,6 +24,9 @@
  */
 class TableMenu extends TableAccess
 {
+    const MOVE_UP   = 'UP';
+    const MOVE_DOWN = 'DOWN';
+
     protected $elementTable;
     protected $elementColumn;
 
@@ -108,7 +111,7 @@ class TableMenu extends TableAccess
         $row = $countMenuStatement->fetch();
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) === 'UP')
+        if($mode === self::MOVE_UP)
         {
             if($this->getValue('men_order') > 1)
             {
@@ -122,7 +125,7 @@ class TableMenu extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) === 'DOWN')
+        elseif($mode === self::MOVE_DOWN)
         {
             if($this->getValue('men_order') < $row['count'])
             {

@@ -57,7 +57,7 @@ $page->addJavascript('
         }
 
         // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-        if (direction === "up") {
+        if (direction === "UP") {
             if (prevNode !== null) {
                 actRow.parentNode.insertBefore(actRow, prevNode);
                 secondSequence = actSequence - 1;
@@ -146,9 +146,9 @@ while ($main_men = $main_men_statement->fetchObject())
                 $menuNameDesc = $menu_row->men_description;
             }
 
-            $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'up\', '.$menu_row->men_id.')"><img
+            $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menu_row->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" /></a>
-                               <a class="admidio-icon-link" href="javascript:moveMenu(\'down\', '.$menu_row->men_id.')"><img
+                               <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menu_row->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" /></a>';
 
             $htmlStandartMenu = '&nbsp;';
