@@ -27,7 +27,7 @@ if (isset($_POST['orga_shortname']))
     {
         showNotice(
             $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'),
-            safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_organization')),
+            safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')),
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
         );
@@ -54,7 +54,7 @@ else
 $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
 // create a page to enter all necessary data to create a administrator user
-$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')));
+$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')));
 $form->addHeader('<script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/zxcvbn/dist/zxcvbn.js"></script>');
 $form->addHeader('
     <script type="text/javascript">
@@ -103,7 +103,7 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_organization')))
+    array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')))
 );
 $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
 echo $form->show();
