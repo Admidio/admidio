@@ -52,7 +52,7 @@ function initLoginParams($prefix)
  */
 function createUserObjectFromPost()
 {
-    global $gSettingsManager, $gCurrentUser, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
+    global $gLogger, $gCurrentUser, $loginname, $password, $gDb, $gL10n, $gCurrentOrganization, $bAutoLogin, $organizationId, $gProfileFields, $userStatement, $gCurrentSession;
 
     if (array_key_exists('usr_login_name', $_POST) && $_POST['usr_login_name'] !== '')
     {
