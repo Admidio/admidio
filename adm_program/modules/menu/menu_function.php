@@ -20,7 +20,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/common.php');
+require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
 $getMenId    = admFuncVariableIsValid($_GET, 'men_id',    'int');
