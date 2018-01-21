@@ -279,12 +279,8 @@ class Email extends PHPMailer
     public function setText($text)
     {
         // Erst mal die Zeilenumbrueche innerhalb des Mailtextes umwandeln in einfache Umbrueche
-        // statt \r und \r\n nur noch \n
-        $replaceArray = array(
-            "\r"   => "\n",
-            "\r\n" => "\n"
-        );
-        $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
+        // statt \r\n nur noch \n
+        $text = str_replace("\r\n", "\n", $text);
 
         $this->emText .= strip_tags($text);
         $this->emHtmlText .= $text;
