@@ -145,12 +145,12 @@ class TableMenu extends TableAccess
     /**
      * Reads a menu out of the table in database selected by the unique menu id in the table.
      * Per default all columns of adm_menu will be read and stored in the object.
-     * @param int $men_id Unique men_id
+     * @param int $menId Unique men_id
      * @return bool Returns @b true if one record is found
      */
-    public function readDataById($men_id)
+    public function readDataById($menId)
     {
-        $returnValue = parent::readDataById($men_id);
+        $returnValue = parent::readDataById($menId);
 
         if($returnValue)
         {
