@@ -283,12 +283,6 @@ class HtmlPage
                     if((int) $row->men_com_id === 0 || Component::visible($row->com_name_intern))
                     {
                         $viewMenu = true;
-                        $description = '';
-
-                        if(strlen($row->men_description) > 2)
-                        {
-                            $description = $gL10n->get($row->men_description);
-                        }
 
                         // Read current roles rights of the menu
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
@@ -752,10 +746,6 @@ class HtmlPage
                                 $description = $row->men_description;
                             }
                         }
-
-                        // Read current roles rights of the menu
-                        $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
-                        $rolesDisplay = $displayMenu->getRolesIds();
 
                         $menuUrl = $row->men_url;
 
