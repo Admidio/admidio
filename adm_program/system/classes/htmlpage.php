@@ -705,8 +705,8 @@ class HtmlPage
 
     /**
      * create and show Mainmenu
-     * @param bool $details  indicator to set if there should be details in the menu.
-     * @return HTML of the Menu
+     * @param bool $details indicator to set if there should be details in the menu.
+     * @return string HTML of the Menu
      */
     public function showMainMenu($details = true)
     {
