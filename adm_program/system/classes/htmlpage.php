@@ -224,7 +224,7 @@ class HtmlPage
             $this->addCssFile(THEME_URL.'/css/custom.css');
         }
 
-        if ($gSettingsManager->get('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
+        if ($gSettingsManager->has('system_browser_update_check') && $gSettingsManager->getBool('system_browser_update_check'))
         {
             $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/browser-update/browser-update.js');
         }
