@@ -157,21 +157,21 @@ while ($mainMen = $mainMenStatement->fetchObject())
                 $htmlStandardMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />';
             }
 
-            $menuAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php?men_id='. $menuRow->men_id. '"><img
+            $menuAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('men_id' => $menuRow->men_id)). '"><img
                                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
             // don't allow delete for standart menus
             if($menuRow->men_standart == 0)
             {
                 $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_men_'.
-                                            $menuRow->men_id.'&amp;name='.urlencode($menuName).'&amp;database_id='.$menuRow->men_id.'"><img
+                                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
+                                            $menuRow->men_id, 'name' => $menuName, 'database_id' => $menuRow->men_id)).'"><img
                                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
 
             // create array with all column values
             $columnValues = array(
-                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menuRow->men_id. '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
+                '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('men_id' => $menuRow->men_id)). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
                 $htmlMoveRow,
                 '<a href="'.ADMIDIO_URL. $menuRow->men_url. '" title="'.$menuNameDesc.'">'. $menuRow->men_url. '</a>',
                 $htmlStandardMenu,
