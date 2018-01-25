@@ -320,7 +320,7 @@ class HtmlPage
                             }
                         }
 
-                        if($viewMenu == true)
+                        if($viewMenu)
                         {
                             $this->menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, 'right', 'menu_item_'.$mainMenu->men_name_intern, 'admidio-default-menu-item');
                         }
@@ -723,7 +723,8 @@ class HtmlPage
             // display Menu
             $sql = 'SELECT *
                       FROM '.TBL_MENU.'
-                 LEFT JOIN '.TBL_COMPONENTS.' ON com_id = men_com_id
+                 LEFT JOIN '.TBL_COMPONENTS.'
+                        ON com_id = men_com_id
                      WHERE men_men_id_parent = ? -- $mainMenu->men_id
                   ORDER BY men_men_id_parent DESC, men_order';
             $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
@@ -741,7 +742,7 @@ class HtmlPage
                         if(strlen($row->men_description) > 2)
                         {
                             $description = $gL10n->get($row->men_description);
-                            if($description == '##' || $description[0] == '#')
+                            if($description === '##' || $description[0] === '#')
                             {
                                 $description = $row->men_description;
                             }
@@ -755,7 +756,7 @@ class HtmlPage
                         }
 
                         $menuName = $gL10n->get($row->men_name);
-                        if($menuName == '##' || $menuName[0] == '#')
+                        if($menuName === '##' || $menuName[0] === '#')
                         {
                             $menuName = $row->men_name;
                         }
@@ -779,7 +780,7 @@ class HtmlPage
 
                         $menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, $description);
 
-                        if($details == true)
+                        if($details)
                         {
                             // Submenu for Lists
                             if($gValidLogin && $row->men_name_intern === 'lists')
