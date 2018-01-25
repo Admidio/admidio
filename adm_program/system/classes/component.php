@@ -101,14 +101,12 @@ class Component extends TableAccess
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager;
 
-        $view = false;
-
         switch($componentName)
         {
             case 'CORE':
                 if($gValidLogin)
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
@@ -116,7 +114,7 @@ class Component extends TableAccess
                 if((int) $gSettingsManager->get('enable_announcements_module') === 1
                 || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
@@ -124,14 +122,14 @@ class Component extends TableAccess
                 if((int) $gSettingsManager->get('enable_dates_module') === 1
                 || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'DOWNLOADS':
                 if($gSettingsManager->getBool('enable_download_module'))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
@@ -139,7 +137,7 @@ class Component extends TableAccess
                 if((int) $gSettingsManager->get('enable_guestbook_module') === 1
                 || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
@@ -147,28 +145,28 @@ class Component extends TableAccess
                 if((int) $gSettingsManager->get('enable_weblinks_module') === 1
                 || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'LISTS':
                 if($gSettingsManager->getBool('lists_enable_module'))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'MEMBERS':
                 if($gCurrentUser->editUsers())
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'MESSAGES':
                 if ($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module') || $gSettingsManager->getBool('enable_chat_module'))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
@@ -176,28 +174,28 @@ class Component extends TableAccess
                 if((int) $gSettingsManager->get('enable_photo_module') === 1
                 || ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'PROFILE':
                 if($gCurrentUser->hasRightViewProfile($user))
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'REGISTRATION':
                 if($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers())
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
             case 'ROLES':
                 if($gCurrentUser->manageRoles())
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
 
@@ -208,11 +206,11 @@ class Component extends TableAccess
             case 'ROOMS':
                 if($gCurrentUser->isAdministrator())
                 {
-                    $view = true;
+                    return true;
                 }
                 break;
         }
 
-        return $view;
+        return false;
     }
 }
