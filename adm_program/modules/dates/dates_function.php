@@ -50,7 +50,7 @@ if((int) $gSettingsManager->get('enable_dates_module') === 0)
     // => EXIT
 }
 
-if($getMode !== 6 || $gSettingsManager->get('enable_dates_module') === 2)
+if($getMode !== 6 || (int) $gSettingsManager->get('enable_dates_module') === 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require(__DIR__ . '/../../system/login_valid.php');

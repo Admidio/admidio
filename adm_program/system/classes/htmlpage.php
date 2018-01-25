@@ -801,8 +801,8 @@ class HtmlPage
                             }
 
                             //Submenu for Dates
-                            if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
-                            || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
+                            if(((int) $gSettingsManager->get('enable_dates_module') === 1 && $row->men_name_intern === 'dates')
+                            || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                             {
                                 $menu->addSubItem('dates', 'olddates', FOLDER_MODULES . '/dates/dates.php?mode=old',
                                                         $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
