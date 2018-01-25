@@ -314,7 +314,7 @@ class TableFolder extends TableAccess
                        WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlUpdate, array((int) $lockedFlag, $folderId));
 
-        //...und natuerlich auch fuer alle Files die in diesem Ordner sind
+        // ...und natuerlich auch fuer alle Files die in diesem Ordner sind
         $sqlUpdate = 'UPDATE '.TBL_FILES.'
                          SET fil_locked = ? -- $lockedFlag
                        WHERE fil_fol_id = ? -- $folderId';

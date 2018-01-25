@@ -298,7 +298,7 @@ class HtmlPage
                         $menuIcon = $row->men_icon;
                         $menuName = $gL10n->get($row->men_name);
 
-                        //special case because there are differnent links if you are logged in or out for mail
+                        // special case because there are different links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
                             $unreadBadge = '';
@@ -319,7 +319,7 @@ class HtmlPage
 
                         if(count($rolesDisplayRight) >= 1)
                         {
-                            // check for rigth to show the menue
+                            // check for right to show the menu
                             if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
                             {
                                 $viewMenu = false;
@@ -770,7 +770,7 @@ class HtmlPage
                             $menuName = $row->men_name;
                         }
 
-                        //special case because there are differnent links if you are logged in or out for mail
+                        // special case because there are differnent links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
                             // get number of unread messages for user
@@ -791,7 +791,7 @@ class HtmlPage
 
                         if($details == true)
                         {
-                            //Submenu for Lists
+                            // Submenu for Lists
                             if($gValidLogin && $row->men_name_intern === 'lists')
                             {
                                 $menu->addSubItem('lists', 'mylist', FOLDER_MODULES . '/lists/mylist.php',
@@ -800,7 +800,7 @@ class HtmlPage
                                                         $gL10n->get('ROL_INACTIV_ROLE'));
                             }
 
-                            //Submenu for Dates
+                            // Submenu for Dates
                             if(((int) $gSettingsManager->get('enable_dates_module') === 1 && $row->men_name_intern === 'dates')
                             || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                             {
