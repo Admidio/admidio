@@ -24,6 +24,9 @@
  */
 class TableCategory extends TableAccess
 {
+    const MOVE_UP   = 'UP';
+    const MOVE_DOWN = 'DOWN';
+
     /**
      * @var string
      */
@@ -270,7 +273,7 @@ class TableCategory extends TableAccess
         $queryParams = array($catSequence, $this->getValue('cat_type'), $gCurrentOrganization->getValue('org_id'));
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if ($mode === 'UP')
+        if ($mode === self::MOVE_UP)
         {
             if ($catOrgId === 0 || $catSequence > $rowCount + 1)
             {
@@ -280,7 +283,7 @@ class TableCategory extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif ($mode === 'DOWN')
+        elseif ($mode === self::MOVE_DOWN)
         {
             if ($catOrgId > 0 || $catSequence < $rowCount)
             {
