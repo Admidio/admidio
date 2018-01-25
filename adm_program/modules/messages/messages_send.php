@@ -14,7 +14,6 @@
  ***********************************************************************************************
  */
 require_once(__DIR__ . '/../../system/common.php');
-require_once(__DIR__ . '/../../system/template.php');
 
 // Initialize and check the parameters
 $getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
@@ -441,7 +440,15 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     // load the template and set the new email body with template
-    $emailTemplate = admReadTemplateFile('template.html');
+    try
+    {
+        $emailTemplate = FileSystemUtils::readFile(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html');
+    }
+    catch (\RuntimeException $exception)
+    {
+        $emailTemplate = '#message#';
+    }
+
     $emailTemplate = str_replace('#message#', $postBody, $emailTemplate);
 
     // add sender and receiver to email if template include the variables

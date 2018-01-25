@@ -15,29 +15,24 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'template.php')
 
 /**
  * Function to Read a file and store all data into a variable
+ * @deprecated 3.3.0:4.0.0 "admReadTemplateFile($filename)" is deprecated. Use "FileSystemUtils::readFile($path)" instead.
  * @param string $filename
  * @return string
  */
 function admReadTemplateFile($filename)
 {
+    global $gLogger;
+
+    $gLogger->warning('DEPRECATED: "admReadTemplateFile($filename)" is deprecated. Use "FileSystemUtils::readFile($path)" instead!');
+
     $file = ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/' . $filename;
 
-    if (is_file($file))
+    try
     {
-        $fileHandle = fopen($file, 'rb');
-
-        if ($fileHandle !== false)
-        {
-            $str = '';
-            while (!feof($fileHandle))
-            {
-                $str .= fread($fileHandle, 1024);
-            }
-            fclose($fileHandle);
-
-            return $str;
-        }
+        return FileSystemUtils::readFile($file);
     }
-
-    return '#message#';
+    catch (\RuntimeException $exception)
+    {
+        return '#message#';
+    }
 }
