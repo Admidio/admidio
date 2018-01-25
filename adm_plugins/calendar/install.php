@@ -47,7 +47,7 @@ $statement = $gDb->query($sql);
 if($statement->rowCount() > 0)
 {
     $page->addHtml('<div class="panel-body">This Plugin is already installed</div>');
-    $page->addHtml('<div class="panel-body"><a href="'.$g_root_path.'/adm_program/modules/menu/menu.php">use this menu for delete</a></div>');
+    $page->addHtml('<div class="panel-body"><a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu.php">use this menu for delete</a></div>');
 }
 else
 {
@@ -68,7 +68,7 @@ else
     }
 
     // show form
-    $form = new HtmlForm('menu_install_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?mode=1', $page);
+    $form = new HtmlForm('menu_install_form', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php?mode=1', $page);
 
     $form->addSelectBoxForCategories('men_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'MEN', 'EDIT_CATEGORIES', array('property' => FIELD_REQUIRED));
 

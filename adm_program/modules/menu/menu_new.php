@@ -137,7 +137,7 @@ while($rowViewRoles = $rolesViewStatement->fetchObject())
 }
 
 // show form
-$form = new HtmlForm('menu_edit_form', $g_root_path.'/adm_program/modules/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
+$form = new HtmlForm('menu_edit_form', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php?men_id='.$getMenId.'&amp;mode=1', $page);
 
 $fieldRequired = FIELD_REQUIRED;
 $fieldDefault  = FIELD_DEFAULT;

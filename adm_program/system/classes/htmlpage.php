@@ -312,7 +312,7 @@ class HtmlPage
                                 $unreadBadge = '<span class="badge">' . $unread . '</span>';
                             }
 
-                            $menuUrl = '/adm_program/modules/messages/messages.php';
+                            $menuUrl = FOLDER_MODULES . '/messages/messages.php';
                             $menuIcon = '/icons/messages.png';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
@@ -781,7 +781,7 @@ class HtmlPage
                                 $unreadBadge = '<span class="badge">' . $unread . '</span>';
                             }
 
-                            $menuUrl = '/adm_program/modules/messages/messages.php';
+                            $menuUrl = FOLDER_MODULES . '/messages/messages.php';
                             $menuIcon = 'messages.png';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
@@ -793,9 +793,9 @@ class HtmlPage
                             //Submenu for Lists
                             if($gValidLogin && $row->men_name_intern === 'lists')
                             {
-                                $Menu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
+                                $Menu->addSubItem('lists', 'mylist', FOLDER_MODULES . '/lists/mylist.php',
                                                         $gL10n->get('LST_MY_LIST'));
-                                $Menu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
+                                $Menu->addSubItem('lists', 'rolinac', FOLDER_MODULES . '/lists/lists.php?active_role=0',
                                                         $gL10n->get('ROL_INACTIV_ROLE'));
                             }
 
@@ -803,7 +803,7 @@ class HtmlPage
                             if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
                             || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                             {
-                                $Menu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
+                                $Menu->addSubItem('dates', 'olddates', FOLDER_MODULES . '/dates/dates.php?mode=old',
                                                         $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
                             }
                         }

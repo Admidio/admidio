@@ -81,7 +81,7 @@ $menuMenu = $page->getMenu();
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
-$menuMenu->addItem('admMenuItemNew', $g_root_path.'/adm_program/modules/menu/menu_new.php',
+$menuMenu->addItem('admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
                          $gL10n->get('GBO_CREATE_VAR_ENTRY', array($gL10n->get('SYS_MENU'))), 'add.png');
 
 // Create table object
@@ -157,14 +157,14 @@ while ($main_men = $main_men_statement->fetchObject())
                 $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />';
             }
 
-            $menuAdministration = '<a class="admidio-icon-link" href="'.$g_root_path.'/adm_program/modules/menu/menu_new.php?men_id='. $menu_row->men_id. '"><img
+            $menuAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php?men_id='. $menu_row->men_id. '"><img
                                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
             //don't allow delete for standart menus
             if($menu_row->men_standart == 0)
             {
                 $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_men_'.
+                                            href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_men_'.
                                             $menu_row->men_id.'&amp;name='.urlencode($menuName).'&amp;database_id='.$menu_row->men_id.'"><img
                                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
