@@ -108,7 +108,7 @@ class TableMenu extends TableAccess
                   FROM '.TBL_MENU.'
                  WHERE men_men_id_parent = ? -- $this->getValue(\'men_men_id_parent\')';
         $countMenuStatement = $this->db->queryPrepared($sql, array($this->getValue('men_men_id_parent')));
-        $row = $countMenuStatement->fetch();
+        $rowCount = $countMenuStatement->fetchColumn();
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if($mode === self::MOVE_UP)
@@ -127,7 +127,7 @@ class TableMenu extends TableAccess
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif($mode === self::MOVE_DOWN)
         {
-            if($this->getValue('men_order') < $row['count'])
+            if($this->getValue('men_order') < $rowCount)
             {
                 $sql = 'UPDATE '.TBL_MENU.'
                            SET men_order = '.$this->getValue('men_order').'
@@ -205,8 +205,8 @@ class TableMenu extends TableAccess
                      WHERE men_men_id_parent = ? -- $this->getValue(\'men_men_id_parent\')';
             $countMenuStatement = $this->db->queryPrepared($sql, array($this->getValue('men_men_id_parent')));
 
-            $row = $countMenuStatement->fetch();
-            $this->setValue('men_order', $row['count'] + 1);
+            $rowCount = $countMenuStatement->fetchColumn();
+            $this->setValue('men_order', $rowCount + 1);
         }
 
         $returnValue = parent::save($updateFingerPrint);
