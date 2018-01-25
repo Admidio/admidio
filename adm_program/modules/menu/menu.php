@@ -81,8 +81,10 @@ $menuMenu = $page->getMenu();
 $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // define link to create new menu
-$menuMenu->addItem('admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
-                         $gL10n->get('GBO_CREATE_VAR_ENTRY', array($gL10n->get('SYS_MENU'))), 'add.png');
+$menuMenu->addItem(
+    'admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
+    $gL10n->get('GBO_CREATE_VAR_ENTRY', array($gL10n->get('SYS_MENU'))), 'add.png'
+);
 
 // Create table object
 $menuOverview = new HtmlTable('tbl_menues', $page, true);
@@ -102,82 +104,80 @@ $sql = 'SELECT *
           FROM '.TBL_MENU.'
          WHERE men_men_id_parent IS NULL
       ORDER BY men_order';
-$main_men_statement = $gDb->queryPrepared($sql);
+$mainMenStatement = $gDb->queryPrepared($sql);
 
-while ($main_men = $main_men_statement->fetchObject())
+while ($mainMen = $mainMenStatement->fetchObject())
 {
-
     $sql = 'SELECT *
               FROM '.TBL_MENU.'
-             WHERE men_men_id_parent = ? -- $main_men->men_id
+             WHERE men_men_id_parent = ? -- $mainMen->men_id
           ORDER BY men_men_id_parent DESC, men_order';
-    $menuStatement = $gDb->queryPrepared($sql, array($main_men->men_id));
+    $menuStatement = $gDb->queryPrepared($sql, array($mainMen->men_id));
 
     if($menuStatement->rowCount() > 0)
     {
-
         $menuGroup = 0;
 
         // Get data
-        while($menu_row = $menuStatement->fetchObject())
+        while($menuRow = $menuStatement->fetchObject())
         {
 
-            if($menuGroup != $menu_row->men_men_id_parent)
+            if($menuGroup != $menuRow->men_men_id_parent)
             {
-                $blockId = 'admMenu_'.$menu_row->men_men_id_parent;
+                $blockId = 'admMenu_'.$menuRow->men_men_id_parent;
 
                 $menuOverview->addTableBody();
                 $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
-                $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$gL10n->get($main_men->men_name),
+                $menuOverview->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$gL10n->get($mainMen->men_name),
                                   array('id' => 'group_'.$blockId, 'colspan' => '8'));
                 $menuOverview->addTableBody('id', $blockId);
 
-                $menuGroup = $menu_row->men_men_id_parent;
+                $menuGroup = $menuRow->men_men_id_parent;
             }
 
-            if(admIsTranslationStrId($menu_row->men_name))
+            if(admIsTranslationStrId($menuRow->men_name))
             {
-                $menuName = $gL10n->get($menu_row->men_name);
-                $menuNameDesc = $gL10n->get($menu_row->men_description);
+                $menuName = $gL10n->get($menuRow->men_name);
+                $menuNameDesc = $gL10n->get($menuRow->men_description);
             }
             else
             {
-                $menuName = $menu_row->men_name;
-                $menuNameDesc = $menu_row->men_description;
+                $menuName = $menuRow->men_name;
+                $menuNameDesc = $menuRow->men_description;
             }
 
-            $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menu_row->men_id.')"><img
+            $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menuRow->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" /></a>
-                               <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menu_row->men_id.')"><img
+                               <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menuRow->men_id.')"><img
                                     src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" /></a>';
 
-            $htmlStandartMenu = '&nbsp;';
-            if($menu_row->men_standart == 1)
+            $htmlStandardMenu = '&nbsp;';
+            if($menuRow->men_standart == 1)
             {
-                $htmlStandartMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />';
+                $htmlStandardMenu = '<img class="admidio-icon-info" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />';
             }
 
-            $menuAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php?men_id='. $menu_row->men_id. '"><img
+            $menuAdministration = '<a class="admidio-icon-link" href="'.ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php?men_id='. $menuRow->men_id. '"><img
                                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
             //don't allow delete for standart menus
-            if($menu_row->men_standart == 0)
+            if($menuRow->men_standart == 0)
             {
                 $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                             href="'.ADMIDIO_URL.'/adm_program/system/popup_message.php?type=men&amp;element_id=row_men_'.
-                                            $menu_row->men_id.'&amp;name='.urlencode($menuName).'&amp;database_id='.$menu_row->men_id.'"><img
+                                            $menuRow->men_id.'&amp;name='.urlencode($menuName).'&amp;database_id='.$menuRow->men_id.'"><img
                                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
 
             // create array with all column values
             $columnValues = array(
-                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menu_row->men_id. '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
+                '<a href="'.ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php?men_id='. $menuRow->men_id. '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
                 $htmlMoveRow,
-                '<a href="'.ADMIDIO_URL. $menu_row->men_url. '" title="'.$menuNameDesc.'">'. $menu_row->men_url. '</a>',
-                $htmlStandartMenu,
+                '<a href="'.ADMIDIO_URL. $menuRow->men_url. '" title="'.$menuNameDesc.'">'. $menuRow->men_url. '</a>',
+                $htmlStandardMenu,
                 $menuAdministration
             );
-            $menuOverview->addRowByArray($columnValues, 'row_'. $menu_row->men_id);
+            $menuOverview->addRowByArray($columnValues, 'row_'. $menuRow->men_id);
         }
     }
 }
