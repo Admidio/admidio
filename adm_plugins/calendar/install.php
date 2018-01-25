@@ -42,7 +42,7 @@ $page = new HtmlPage($headline);
 $sql = 'SELECT *
           FROM '.TBL_MENU.'
          WHERE men_name_intern = \'plg_calendar\'';
-$statement = $gDb->query($sql);
+$statement = $gDb->queryPrepared($sql);
 
 if($statement->rowCount() > 0)
 {
@@ -59,7 +59,7 @@ else
                    WHERE rol_valid  = 1
                      AND rol_system = 0
                 ORDER BY rol_name';
-    $rolesViewStatement = $gDb->query($sqlRoles);
+    $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
     while($rowViewRoles = $rolesViewStatement->fetchObject())
     {

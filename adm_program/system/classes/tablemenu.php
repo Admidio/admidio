@@ -106,8 +106,8 @@ class TableMenu extends TableAccess
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MENU.'
-                 WHERE men_men_id_parent = \''. $this->getValue('men_men_id_parent'). '\'';
-        $countMenuStatement = $this->db->query($sql);
+                 WHERE men_men_id_parent = ? -- $this->getValue(\'men_men_id_parent\')';
+        $countMenuStatement = $this->db->queryPrepared($sql, array($this->getValue('men_men_id_parent')));
         $row = $countMenuStatement->fetch();
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
@@ -202,8 +202,8 @@ class TableMenu extends TableAccess
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MENU.'
-                     WHERE men_men_id_parent = \''. $this->getValue('men_men_id_parent'). '\'';
-            $countMenuStatement = $this->db->query($sql);
+                     WHERE men_men_id_parent = ? -- $this->getValue(\'men_men_id_parent\')';
+            $countMenuStatement = $this->db->queryPrepared($sql, array($this->getValue('men_men_id_parent')));
 
             $row = $countMenuStatement->fetch();
             $this->setValue('men_order', $row['count'] + 1);

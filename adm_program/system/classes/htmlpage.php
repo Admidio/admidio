@@ -261,7 +261,7 @@ class HtmlPage
                   FROM '.TBL_MENU.'
                  WHERE men_men_id_parent IS NULL
               ORDER BY men_order';
-        $mainMenuStatement = $gDb->query($sql);
+        $mainMenuStatement = $gDb->queryPrepared($sql);
 
         while ($mainMenu = $mainMenuStatement->fetchObject())
         {
@@ -719,7 +719,7 @@ class HtmlPage
                   FROM '.TBL_MENU.'
                  WHERE men_men_id_parent IS NULL
               ORDER BY men_order';
-        $mainMenuStatement = $gDb->query($sql);
+        $mainMenuStatement = $gDb->queryPrepared($sql);
 
         while ($mainMenu = $mainMenuStatement->fetchObject())
         {

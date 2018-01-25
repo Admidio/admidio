@@ -641,8 +641,8 @@ class ComponentUpdate extends Component
     {
         // add new module menu to components table
         $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com_version, com_beta)
-                VALUES (\'MODULE\', \'SYS_MENU\', \'MENU\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
-        $this->db->query($sql);
+                VALUES (\'MODULE\', \'SYS_MENU\', \'MENU\', ?, ?) -- ADMIDIO_VERSION, ADMIDIO_VERSION_BETA';
+        $this->db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
 
         // Menu entries for the standart installation
         $sql = 'INSERT INTO '.TBL_MENU.' (men_com_id, men_men_id_parent, men_node, men_order, men_standart, men_name_intern, men_url, men_icon, men_name, men_description)
@@ -668,8 +668,10 @@ class ComponentUpdate extends Component
         $this->db->query($sql);
 
         // migrate adm_folder_roles to adm_roles_rights
-        $sql = 'SELECT ror_id FROM '.TBL_ROLES_RIGHTS.' WHERE ror_name_intern = \'menu_view\' ';
-        $menuRightsStatement = $this->db->query($sql);
+        $sql = 'SELECT ror_id
+                  FROM '.TBL_ROLES_RIGHTS.'
+                 WHERE ror_name_intern = \'menu_view\'';
+        $menuRightsStatement = $this->db->queryPrepared($sql);
         $menuRightId = $menuRightsStatement->fetchColumn();
 
         // Menu security data

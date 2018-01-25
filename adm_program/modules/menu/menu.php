@@ -102,7 +102,7 @@ $sql = 'SELECT *
           FROM '.TBL_MENU.'
          WHERE men_men_id_parent IS NULL
       ORDER BY men_order';
-$main_men_statement = $gDb->query($sql);
+$main_men_statement = $gDb->queryPrepared($sql);
 
 while ($main_men = $main_men_statement->fetchObject())
 {

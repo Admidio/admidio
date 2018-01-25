@@ -128,7 +128,7 @@ $sqlRoles =  'SELECT *
                WHERE rol_valid  = 1
                  AND rol_system = 0
             ORDER BY rol_name';
-$rolesViewStatement = $gDb->query($sqlRoles);
+$rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
 while($rowViewRoles = $rolesViewStatement->fetchObject())
 {
