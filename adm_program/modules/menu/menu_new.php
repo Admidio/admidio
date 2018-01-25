@@ -178,7 +178,9 @@ $form->addSelectBox(
     )
 );
 
-$sql = 'SELECT com_id, com_name FROM '.TBL_COMPONENTS.' ORDER BY com_name';
+$sql = 'SELECT com_id, com_name
+          FROM '.TBL_COMPONENTS.'
+      ORDER BY com_name';
 $form->addSelectBoxFromSql(
     'men_com_id', $gL10n->get('MEN_MODULE_RIGHTS'), $gDb, $sql,
     array(
@@ -190,7 +192,7 @@ $form->addSelectBoxFromSql(
 
 $form->addSelectBox(
     'menu_view', $gL10n->get('SYS_VISIBLE_FOR'), $parentRoleViewSet,
-    array('defaultValue' => $roleViewSet, 'multiselect'  => true)
+    array('defaultValue' => $roleViewSet, 'multiselect' => true)
 );
 
 if((bool) $menu->getValue('men_node') === false)
@@ -202,7 +204,7 @@ if((bool) $menu->getValue('men_node') === false)
 }
 
 $arrayIcons  = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
-$defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons);
+$defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons, true);
 $form->addSelectBox(
     'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons,
     array('defaultValue' => $defaultIcon, 'showContextDependentFirstEntry' => true)
