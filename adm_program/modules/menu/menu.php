@@ -182,5 +182,5 @@ while ($mainMen = $mainMenStatement->fetchObject())
     }
 }
 
-$page->addHtml($menuOverview->show(false));
+$page->addHtml($menuOverview->show());
 $page->show();
