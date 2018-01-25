@@ -711,6 +711,7 @@ class HtmlPage
     public function showMainMenu($details = true)
     {
         global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
+
         $menuIcon  = '/dummy.png';
         $htmlMenu = '';
 
@@ -735,7 +736,7 @@ class HtmlPage
 
             if($statement->rowCount() > 0)
             {
-                $Menu = new Menu($mainMenu->men_name_intern, $gL10n->get($mainMenu->men_name));
+                $menu = new Menu($mainMenu->men_name_intern, $gL10n->get($mainMenu->men_name));
 
                 while ($row = $statement->fetchObject())
                 {
@@ -786,16 +787,16 @@ class HtmlPage
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
-                        $Menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, $description);
+                        $menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, $description);
 
                         if($details == true)
                         {
                             //Submenu for Lists
                             if($gValidLogin && $row->men_name_intern === 'lists')
                             {
-                                $Menu->addSubItem('lists', 'mylist', FOLDER_MODULES . '/lists/mylist.php',
+                                $menu->addSubItem('lists', 'mylist', FOLDER_MODULES . '/lists/mylist.php',
                                                         $gL10n->get('LST_MY_LIST'));
-                                $Menu->addSubItem('lists', 'rolinac', FOLDER_MODULES . '/lists/lists.php?active_role=0',
+                                $menu->addSubItem('lists', 'rolinac', FOLDER_MODULES . '/lists/lists.php?active_role=0',
                                                         $gL10n->get('ROL_INACTIV_ROLE'));
                             }
 
@@ -803,13 +804,13 @@ class HtmlPage
                             if(($gSettingsManager->get('enable_dates_module') == 1 && $row->men_name_intern === 'dates')
                             || ($gSettingsManager->get('enable_dates_module') == 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                             {
-                                $Menu->addSubItem('dates', 'olddates', FOLDER_MODULES . '/dates/dates.php?mode=old',
+                                $menu->addSubItem('dates', 'olddates', FOLDER_MODULES . '/dates/dates.php?mode=old',
                                                         $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
                             }
                         }
                     }
                 }
-                $htmlMenu .= $Menu->show($details);
+                $htmlMenu .= $menu->show($details);
             }
 
             $this->menu->addItem(
