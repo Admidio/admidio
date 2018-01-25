@@ -206,7 +206,7 @@ class Component extends TableAccess
             case 'MENU':
             case 'PREFERENCES':
             case 'ROOMS':
-                if($gCurrentUser->isWebmaster())
+                if($gCurrentUser->isAdministrator())
                 {
                     $view = true;
                 }
