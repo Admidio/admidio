@@ -250,27 +250,28 @@ class TableCategory extends TableAccess
     {
         global $gCurrentOrganization;
 
+        $catType = $this->getValue('cat_type');
+
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_org_id IS NULL
                    AND cat_name_intern <> \'EVENTS\'
-                   AND cat_type = ? -- $this->getValue(\'cat_type\')';
-        $countCategoriesStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_type')));
+                   AND cat_type = ? -- $catType';
+        $countCategoriesStatement = $this->db->queryPrepared($sql, array($catType));
         $rowCount = (int) $countCategoriesStatement->fetchColumn();
 
-        $mode = admStrToUpper($mode);
         $catOrgId    = (int) $this->getValue('cat_org_id');
         $catSequence = (int) $this->getValue('cat_sequence');
 
         $sql = 'UPDATE '.TBL_CATEGORIES.'
                    SET cat_sequence = ? -- $catSequence
-                 WHERE cat_type = ? -- $this->getValue(\'cat_type\')
+                 WHERE cat_type     = ? -- $catType
                    AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_sequence = ? -- $catSequence';
-        $queryParams = array($catSequence, $this->getValue('cat_type'), $gCurrentOrganization->getValue('org_id'));
+        $queryParams = array($catSequence, $catType, $gCurrentOrganization->getValue('org_id'));
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if ($mode === self::MOVE_UP)

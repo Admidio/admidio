@@ -102,12 +102,14 @@ class TableMenu extends TableAccess
      */
     public function moveSequence($mode)
     {
+        $menIdParent = (int) $this->getValue('men_men_id_parent');
+
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MENU.'
-                 WHERE men_men_id_parent = ? -- $this->getValue(\'men_men_id_parent\')';
-        $countMenuStatement = $this->db->queryPrepared($sql, array($this->getValue('men_men_id_parent')));
+                 WHERE men_men_id_parent = ? -- $menIdParent';
+        $countMenuStatement = $this->db->queryPrepared($sql, array($menIdParent));
         $rowCount = $countMenuStatement->fetchColumn();
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
@@ -117,9 +119,9 @@ class TableMenu extends TableAccess
             {
                 $sql = 'UPDATE '.TBL_MENU.'
                            SET men_order = '.$this->getValue('men_order').'
-                         WHERE men_men_id_parent = \''. $this->getValue('men_men_id_parent'). '\'
+                         WHERE men_men_id_parent = ? -- $menIdParent
                            AND men_order = '.$this->getValue('men_order').' - 1 ';
-                $this->db->query($sql);
+                $this->db->queryPrepared($sql, array($menIdParent));
                 $this->setValue('men_order', $this->getValue('men_order')-1);
                 $this->save();
             }
@@ -131,9 +133,9 @@ class TableMenu extends TableAccess
             {
                 $sql = 'UPDATE '.TBL_MENU.'
                            SET men_order = '.$this->getValue('men_order').'
-                         WHERE men_men_id_parent = \''. $this->getValue('men_men_id_parent'). '\'
+                         WHERE men_men_id_parent = ? -- $menIdParent
                            AND men_order = '.$this->getValue('men_order').' + 1 ';
-                $this->db->query($sql);
+                $this->db->queryPrepared($sql, array($menIdParent));
                 $this->setValue('men_order', $this->getValue('men_order')+1);
                 $this->save();
             }
