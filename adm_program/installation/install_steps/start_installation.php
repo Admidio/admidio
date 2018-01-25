@@ -191,7 +191,7 @@ $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
 
-disableSoundexSearchIfPgsql($db);
+disableSoundexSearchIfPgSql($db);
 
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
