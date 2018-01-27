@@ -142,7 +142,7 @@ if ($image !== null)
         }
         $imageSize = $image->getImageSize();
         $fontX = $fontSize;
-        $fontY = $imageSize[0] - $fontSize;
+        $fontY = $imageSize[1] - $fontSize;
         $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
         $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
         $text = $gSettingsManager->getString('photo_image_text');
