@@ -197,6 +197,139 @@ class Image
     }
 
     /**
+     * Methode dreht das Bild um 90° in eine Richtung
+     * @param string $direction 'right' o. 'left' Richtung, in die gedreht wird
+     * @return bool
+     */
+    public function rotate($direction = self::ROTATE_DIRECTION_RIGHT)
+    {
+        switch ($direction)
+        {
+            case self::ROTATE_DIRECTION_LEFT:
+                $angle = 90;
+                break;
+            case self::ROTATE_DIRECTION_RIGHT:
+                $angle = -90;
+                break;
+            case self::ROTATE_DIRECTION_FLIP:
+                $angle = 180;
+                break;
+            default:
+                return false;
+        }
+
+        $imageRotated = imagerotate($this->imageResource, $angle, 0);
+
+        // save
+        $this->copyToFile($imageRotated);
+
+        // Delete image from ram
+        imagedestroy($imageRotated);
+
+        return true;
+    }
+
+    /**
+     * Scale an image to the new size of the parameters. Therefore the PHP instance may need
+     * some memory which should be set through the PHP setting memory_limit.
+     * @param int  $newXSize            The new horizontal width in pixel. The image will be scaled to this size.
+     * @param int  $newYSize            The new vertical height in pixel. The image will be scaled to this size.
+     * @param bool $maintainAspectRatio If this is set to true, the image will be within the given size
+     *                                  but maybe one side will be smaller than set with the parameters.
+     * @return bool Return true if the image was scaled otherwise false.
+     */
+    public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
+    {
+        if ($maintainAspectRatio)
+        {
+            if ($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight)
+            {
+                return false;
+            }
+
+            // calc aspect ratio
+            $aspectRatio = $this->imageWidth / $this->imageHeight;
+
+            if ($aspectRatio > $newXSize / $newYSize)
+            {
+                // scale to maximum width
+                $newWidth = $newXSize;
+                $newHeight = (int) round($newXSize / $aspectRatio);
+            }
+            else
+            {
+                // scale to maximum height
+                $newWidth = (int) round($newYSize * $aspectRatio);
+                $newHeight = $newYSize;
+            }
+
+            return $this->scale($newWidth, $newHeight, false);
+        }
+
+        // check current memory limit and set this to 50MB if the current value is lower
+        if (PhpIniUtils::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
+        {
+            @ini_set('memory_limit', '50M');
+        }
+
+        if (version_compare(PHP_VERSION, '5.5.0', '>='))
+        {
+            // create new resized image
+            $resizedImageResource = imagescale($this->imageResource, $newXSize, $newYSize);
+        }
+        else // backwards compatibility for PHP-Version < 5.5
+        {
+            // create a new image
+            $resizedImageResource = imagecreatetruecolor($newXSize, $newYSize);
+
+            // copy image data to a new image with the new given size
+            imagecopyresampled($resizedImageResource, $this->imageResource, 0, 0, 0, 0, $newXSize, $newYSize, $this->imageWidth, $this->imageHeight);
+        }
+
+        imagedestroy($this->imageResource);
+
+        // update the class parameters to new image data
+        $this->imageResource = $resizedImageResource;
+        $this->imageWidth    = $newXSize;
+        $this->imageHeight   = $newYSize;
+
+        return true;
+    }
+
+    /**
+     * Scales the longer side of the image to the passed pixel value. The other side
+     * is then calculated back according to the page ratio. If the image is already
+     * smaller than the new max size nothing is done.
+     * @param int $newMaxSize New maximum size in pixel to which the image should be scaled.
+     * @return bool Return true if the image was scaled otherwise false.
+     */
+    public function scaleLargerSide($newMaxSize)
+    {
+        if($newMaxSize < $this->imageWidth || $newMaxSize < $this->imageHeight)
+        {
+            // calc aspect ratio
+            $aspectRatio = $this->imageWidth / $this->imageHeight;
+
+            if($this->imageWidth > $this->imageHeight)
+            {
+                // Scale the x-side
+                $newXSize = $newMaxSize;
+                $newYSize = (int) round($newMaxSize / $aspectRatio);
+            }
+            else
+            {
+                // Scale the y-side
+                $newXSize = (int) round($newMaxSize * $aspectRatio);
+                $newYSize = $newMaxSize;
+            }
+
+            return $this->scale($newXSize, $newYSize, false);
+        }
+
+        return false;
+    }
+
+    /**
      * Methode liest das Bild aus einem String ein und wird intern als PNG-Bild weiter verarbeitet und ausgegeben
      * @param string $imageData String with binary image data
      * @return bool
@@ -265,139 +398,6 @@ class Image
             default:
                 return false;
         }
-
-        return true;
-    }
-
-    /**
-     * Methode dreht das Bild um 90° in eine Richtung
-     * @param string $direction 'right' o. 'left' Richtung, in die gedreht wird
-     * @return bool
-     */
-    public function rotate($direction = self::ROTATE_DIRECTION_RIGHT)
-    {
-        switch ($direction)
-        {
-            case self::ROTATE_DIRECTION_LEFT:
-                $angle = 90;
-                break;
-            case self::ROTATE_DIRECTION_RIGHT:
-                $angle = -90;
-                break;
-            case self::ROTATE_DIRECTION_FLIP:
-                $angle = 180;
-                break;
-            default:
-                return false;
-        }
-
-        $imageRotated = imagerotate($this->imageResource, $angle, 0);
-
-        // save
-        $this->copyToFile($imageRotated);
-
-        // Delete image from ram
-        imagedestroy($imageRotated);
-
-        return true;
-    }
-
-    /**
-     * Scales the longer side of the image to the passed pixel value. The other side
-     * is then calculated back according to the page ratio. If the image is already
-     * smaller than the new max size nothing is done.
-     * @param int $newMaxSize New maximum size in pixel to which the image should be scaled.
-     * @return bool Return true if the image was scaled otherwise false.
-     */
-    public function scaleLargerSide($newMaxSize)
-    {
-        if($newMaxSize < $this->imageWidth || $newMaxSize < $this->imageHeight)
-        {
-            // calc aspect ratio
-            $aspectRatio = $this->imageWidth / $this->imageHeight;
-
-            if($this->imageWidth > $this->imageHeight)
-            {
-                // Scale the x-side
-                $newXSize = $newMaxSize;
-                $newYSize = (int) round($newMaxSize / $aspectRatio);
-            }
-            else
-            {
-                // Scale the y-side
-                $newXSize = (int) round($newMaxSize * $aspectRatio);
-                $newYSize = $newMaxSize;
-            }
-
-            return $this->scale($newXSize, $newYSize, false);
-        }
-
-        return false;
-    }
-
-    /**
-     * Scale an image to the new size of the parameters. Therefore the PHP instance may need
-     * some memory which should be set through the PHP setting memory_limit.
-     * @param int  $newXSize            The new horizontal width in pixel. The image will be scaled to this size.
-     * @param int  $newYSize            The new vertical height in pixel. The image will be scaled to this size.
-     * @param bool $maintainAspectRatio If this is set to true, the image will be within the given size
-     *                                  but maybe one side will be smaller than set with the parameters.
-     * @return bool Return true if the image was scaled otherwise false.
-     */
-    public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
-    {
-        if ($maintainAspectRatio)
-        {
-            if ($newXSize >= $this->imageWidth && $newYSize >= $this->imageHeight)
-            {
-                return false;
-            }
-
-            // calc aspect ratio
-            $aspectRatio = $this->imageWidth / $this->imageHeight;
-
-            if ($aspectRatio > $newXSize / $newYSize)
-            {
-                // scale to maximum width
-                $newWidth = $newXSize;
-                $newHeight = (int) round($newXSize / $aspectRatio);
-            }
-            else
-            {
-                // scale to maximum height
-                $newWidth = (int) round($newYSize * $aspectRatio);
-                $newHeight = $newYSize;
-            }
-
-            return $this->scale($newWidth, $newHeight, false);
-        }
-
-        // check current memory limit and set this to 50MB if the current value is lower
-        if (PhpIniUtils::getMemoryLimit() < 50 * 1024 * 1024) // 50MB
-        {
-            @ini_set('memory_limit', '50M');
-        }
-
-        if (version_compare(PHP_VERSION, '5.5.0', '>='))
-        {
-            // create new resized image
-            $resizedImageResource = imagescale($this->imageResource, $newXSize, $newYSize);
-        }
-        else // backwards compatibility for PHP-Version < 5.5
-        {
-            // create a new image
-            $resizedImageResource = imagecreatetruecolor($newXSize, $newYSize);
-
-            // copy image data to a new image with the new given size
-            imagecopyresampled($resizedImageResource, $this->imageResource, 0, 0, 0, 0, $newXSize, $newYSize, $this->imageWidth, $this->imageHeight);
-        }
-
-        imagedestroy($this->imageResource);
-
-        // update the class parameters to new image data
-        $this->imageResource = $resizedImageResource;
-        $this->imageWidth    = $newXSize;
-        $this->imageHeight   = $newYSize;
 
         return true;
     }
