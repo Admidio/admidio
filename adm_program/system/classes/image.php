@@ -71,96 +71,31 @@ class Image
     }
 
     /**
-     * @return resource|null Returns the image resource
-     */
-    public function getImageResource()
-    {
-        return $this->imageResource;
-    }
-
-    /**
-     * @return array<int,int> Returns an array of the image width and height
-     */
-    public function getImageSize()
-    {
-        return array($this->imageWidth, $this->imageHeight);
-    }
-
-    /**
-     * Methode setzt den Pfad zum Bild und liest Bildinformationen ein
-     * @param string $pathAndFilename
+     * Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
+     * @param resource|null $imageResource eine andere Bild-Resource kann uebergeben werden
+     * @param int           $quality       die Qualitaet kann fuer jpeg-Dateien veraendert werden
      * @return bool
      */
-    public function setImageFromPath($pathAndFilename)
+    public function copyToBrowser($imageResource = null, $quality = 95)
     {
-        if (!is_file($pathAndFilename))
+        if ($imageResource === null)
         {
-            return false;
+            $imageResource = $this->imageResource;
         }
 
-        $this->imagePath = $pathAndFilename;
-        $imageProperties = getimagesize($this->imagePath);
-
-        if ($imageProperties === false)
-        {
-            return false;
-        }
-
-        $this->imageWidth  = $imageProperties[0];
-        $this->imageHeight = $imageProperties[1];
-        $this->imageType   = $imageProperties[2];
-
-        return $this->createResource($pathAndFilename);
-    }
-
-    /**
-     * Methode liest das Bild aus einem String ein und wird intern als PNG-Bild weiter verarbeitet und ausgegeben
-     * @param string $imageData String with binary image data
-     * @return bool
-     */
-    public function setImageFromData($imageData)
-    {
-        $imageResource = imagecreatefromstring($imageData);
-
-        if ($imageResource === false)
-        {
-            return false;
-        }
-
-        $this->imageResource = $imageResource;
-
-        $this->imageWidth  = imagesx($this->imageResource);
-        $this->imageHeight = imagesy($this->imageResource);
-        $this->imageType   = IMAGETYPE_PNG;
-
-        return true;
-    }
-
-    /**
-     * @param string $pathAndFilename
-     * @return bool
-     */
-    private function createResource($pathAndFilename)
-    {
         switch ($this->imageType)
         {
             case IMAGETYPE_JPEG:
-                $imageResource = imagecreatefromjpeg($pathAndFilename);
+                echo imagejpeg($imageResource, null, $quality);
                 break;
 
             case IMAGETYPE_PNG:
-                $imageResource = imagecreatefrompng($pathAndFilename);
+                echo imagepng($imageResource);
                 break;
+
             default:
                 return false;
         }
-
-        if ($imageResource === false)
-        {
-            return false;
-        }
-
-        $this->imageResource = $imageResource;
 
         return true;
     }
@@ -198,33 +133,58 @@ class Image
     }
 
     /**
-     * Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
-     * @param resource|null $imageResource eine andere Bild-Resource kann uebergeben werden
-     * @param int           $quality       die Qualitaet kann fuer jpeg-Dateien veraendert werden
+     * @param string $pathAndFilename
      * @return bool
      */
-    public function copyToBrowser($imageResource = null, $quality = 95)
+    private function createResource($pathAndFilename)
     {
-        if ($imageResource === null)
-        {
-            $imageResource = $this->imageResource;
-        }
-
         switch ($this->imageType)
         {
             case IMAGETYPE_JPEG:
-                echo imagejpeg($imageResource, null, $quality);
+                $imageResource = imagecreatefromjpeg($pathAndFilename);
                 break;
 
             case IMAGETYPE_PNG:
-                echo imagepng($imageResource);
+                $imageResource = imagecreatefrompng($pathAndFilename);
                 break;
-
             default:
                 return false;
         }
 
+        if ($imageResource === false)
+        {
+            return false;
+        }
+
+        $this->imageResource = $imageResource;
+
         return true;
+    }
+
+    /**
+     * Delete image from class and server memory
+     */
+    public function delete()
+    {
+        imagedestroy($this->imageResource);
+        $this->imageResource = null;
+        $this->imagePath = '';
+    }
+
+    /**
+     * @return resource|null Returns the image resource
+     */
+    public function getImageResource()
+    {
+        return $this->imageResource;
+    }
+
+    /**
+     * @return array<int,int> Returns an array of the image width and height
+     */
+    public function getImageSize()
+    {
+        return array($this->imageWidth, $this->imageHeight);
     }
 
     /**
@@ -234,6 +194,56 @@ class Image
     public function getMimeType()
     {
         return image_type_to_mime_type($this->imageType);
+    }
+
+    /**
+     * Methode liest das Bild aus einem String ein und wird intern als PNG-Bild weiter verarbeitet und ausgegeben
+     * @param string $imageData String with binary image data
+     * @return bool
+     */
+    public function setImageFromData($imageData)
+    {
+        $imageResource = imagecreatefromstring($imageData);
+
+        if ($imageResource === false)
+        {
+            return false;
+        }
+
+        $this->imageResource = $imageResource;
+
+        $this->imageWidth  = imagesx($this->imageResource);
+        $this->imageHeight = imagesy($this->imageResource);
+        $this->imageType   = IMAGETYPE_PNG;
+
+        return true;
+    }
+
+    /**
+     * Methode setzt den Pfad zum Bild und liest Bildinformationen ein
+     * @param string $pathAndFilename
+     * @return bool
+     */
+    public function setImageFromPath($pathAndFilename)
+    {
+        if (!is_file($pathAndFilename))
+        {
+            return false;
+        }
+
+        $this->imagePath = $pathAndFilename;
+        $imageProperties = getimagesize($this->imagePath);
+
+        if ($imageProperties === false)
+        {
+            return false;
+        }
+
+        $this->imageWidth  = $imageProperties[0];
+        $this->imageHeight = $imageProperties[1];
+        $this->imageType   = $imageProperties[2];
+
+        return $this->createResource($pathAndFilename);
     }
 
     /**
@@ -390,15 +400,5 @@ class Image
         $this->imageHeight   = $newYSize;
 
         return true;
-    }
-
-    /**
-     * Delete image from class and server memory
-     */
-    public function delete()
-    {
-        imagedestroy($this->imageResource);
-        $this->imageResource = null;
-        $this->imagePath = '';
     }
 }
