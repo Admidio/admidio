@@ -63,7 +63,10 @@ class Organization extends TableAccess
             $this->readDataByColumns(array('org_shortname' => $organization));
         }
 
-        $this->settingsManager = new SettingsManager($database, (int) $this->getValue('org_id'));
+        if((int) $this->getValue('org_id') > 0)
+        {
+            $this->settingsManager = new SettingsManager($database, (int) $this->getValue('org_id'));
+        }
     }
 
     /**
@@ -71,6 +74,11 @@ class Organization extends TableAccess
      */
     public function &getSettingsManager()
     {
+        if(!$this->settingsManager instanceof SettingsManager)
+        {
+            $this->settingsManager = new SettingsManager($this->db, (int) $this->getValue('org_id'));
+        }
+
         return $this->settingsManager;
     }
 

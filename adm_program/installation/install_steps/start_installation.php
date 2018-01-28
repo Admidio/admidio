@@ -18,7 +18,7 @@ if (!is_file($pathConfigFile))
 {
     showNotice(
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
-        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')),
+        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -43,7 +43,7 @@ if (isset($_SESSION['prefix'])
 {
     showNotice(
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')),
+        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
         'layout/back.png'
     );
@@ -55,7 +55,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'layout/back.png');
+    showNotice($sqlQueryResult, safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'layout/back.png');
     // => EXIT
 }
 
@@ -129,8 +129,8 @@ $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
 $db->queryPrepared($sql);
 
 // add edit categories right with reference to parent right
-$sql = 'INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table, ror_ror_id_parent)
-        VALUES (\'category_edit\', \'adm_categories\', (SELECT rr.ror_id FROM %PREFIX%_roles_rights rr WHERE rr.ror_name_intern = \'category_view\'))'
+$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table, ror_ror_id_parent)
+        VALUES (\'category_edit\', \'adm_categories\', (SELECT rr.ror_id FROM '.TBL_ROLES_RIGHTS.' rr WHERE rr.ror_name_intern = \'category_view\'))';
 $db->queryPrepared($sql);
 
 // create profile fields of category master data
@@ -217,8 +217,8 @@ $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordH
 $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
 // create all necessary data for this organization
-$settingsManager =& $gCurrentOrganization->getSettingsManager();
-$settingsManager->setMutli($defaultOrgPreferences, false);
+$gSettingsManager =& $gCurrentOrganization->getSettingsManager();
+$gSettingsManager->setMulti($defaultOrgPreferences, false);
 $gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
 
 // create default room for room module in database

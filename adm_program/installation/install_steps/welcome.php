@@ -40,7 +40,7 @@ if (PhpIniUtils::isSafeModeEnabled())
 
 // create a page with the notice that the installation must be configured on the next pages
 // create form with selectbox where user can select a language
-$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'connect_database')));
+$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')));
 
 $form->setFormDescription(
     $gL10n->get('INS_WELCOME_TEXT', array('<a href="https://www.admidio.org/forum">', '</a>')),

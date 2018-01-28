@@ -19,11 +19,11 @@ $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int', array('requireValue'
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
 
 // Initialize local variables
-$disableAdditionalGuests    = 4;
-$disableComments            = 4;
-$disableStatusAttend        = '';
-$disableStatusTentative     = '';
-$editUserStatus             = false;
+$disableAdditionalGuests = 4;
+$disableComments         = 4;
+$disableStatusAttend     = '';
+$disableStatusTentative  = '';
+$editUserStatus          = false;
 
 // Get the date object
 $date = new TableDate($gDb, $getDateId);
@@ -68,32 +68,32 @@ $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 
 header('Content-type: text/html; charset=utf-8');
 
 // Add javascript
-echo'<script>
-        $("button[id^=btn_attend_]").click(function() {
-                    // Select current form and action attribute
-                    var submit_ParticipationForm = $(this).get(0).form;
-                    var form_action = $(submit_ParticipationForm).attr("action");
+echo '<script>
+    $("button[id^=btn_attend_]").click(function() {
+        // Select current form and action attribute
+        var submitParticipationForm = $(this).get(0).form;
+        var formAction = $(submitParticipationForm).attr("action");
 
-                    // add value 3 to mode attribute in link for participation
-                    $(submit_ParticipationForm).attr("action", form_action + 3);
-                    submit_ParticipationForm.submit();
-                });
+        // add value 3 to mode attribute in link for participation
+        $(submitParticipationForm).attr("action", formAction + 3);
+        submitParticipationForm.submit();
+    });
 
-                $("button[id^=btn_tentative_]").click(function() {
-                    var submit_ParticipationForm = $(this).get(0).form;
-                    var form_action = $(submit_ParticipationForm).attr("action");
+    $("button[id^=btn_tentative_]").click(function() {
+        var submitParticipationForm = $(this).get(0).form;
+        var formAction = $(submitParticipationForm).attr("action");
 
-                    $(submit_ParticipationForm).attr("action", form_action + 7);
-                    submit_ParticipationForm.submit();
-                });
+        $(submitParticipationForm).attr("action", formAction + 7);
+        submitParticipationForm.submit();
+    });
 
-                $("button[id^=btn_refuse_]").click(function() {
-                    var submit_ParticipationForm = $(this).get(0).form;
-                    var form_action = $(submit_ParticipationForm).attr("action");
+    $("button[id^=btn_refuse_]").click(function() {
+        var submitParticipationForm = $(this).get(0).form;
+        var formAction = $(submitParticipationForm).attr("action");
 
-                    $(submit_ParticipationForm).attr("action", form_action + 4);
-                    submit_ParticipationForm.submit();
-                });
+        $(submitParticipationForm).attr("action", formAction + 4);
+        submitParticipationForm.submit();
+    });
 </script>';
 
 // Define form
@@ -127,5 +127,5 @@ $participationForm->addButton(
 );
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');
-// Outut form
-$participationForm->show(true);
+// Output form
+$participationForm->show();

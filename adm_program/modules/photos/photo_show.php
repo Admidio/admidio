@@ -144,10 +144,20 @@ if ($image !== null)
         }
         $imageSize = $image->getImageSize();
         $fontX = $fontSize;
-        $fontY = $imageSize[0] - $fontSize;
+        $fontY = $imageSize[1] - $fontSize;
         $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
         $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
-        $text = $gSettingsManager->getString('photo_image_text');
+
+        // show name of photograph if set otherwise show name of organization
+        if(strlen($photoAlbum->getValue('pho_photographers')) > 0)
+        {
+            $text = '© ' . $photoAlbum->getValue('pho_photographers');
+        }
+        else
+        {
+            $text = $gPreferences['photo_image_text'];
+        }
+
         imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
     }
 

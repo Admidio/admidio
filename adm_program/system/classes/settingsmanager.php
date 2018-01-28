@@ -9,6 +9,9 @@
  ***********************************************************************************************
  */
 
+/**
+ * @class SettingsManager
+ */
 class SettingsManager
 {
     /**
@@ -332,30 +335,19 @@ class SettingsManager
     }
 
     /**
-     * Sets multiple settings in the database
-     * @param array<string,mixed> $settings The settings to set
+     * Expects an array with setting name and value and will than add all the settings of the array to
+     * the database. Checks the existence of each setting and perform an insert or update.
+     * @param array<string,mixed> $settings Array with all setting names and values to set
      * @param bool                $update   Set true to make a force reload of this setting from the database
      * @throws \UnexpectedValueException Throws if one or more of the setting names are invalid or do not exist
      */
     public function setMulti(array $settings, $update = true)
     {
-        foreach ($settings as $name => $value)
-        {
-            if (!self::isValidName($name))
-            {
-                throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
-            }
-            if (!self::isValidValue($value))
-            {
-                throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
-            }
-        }
-
         $this->db->startTransaction();
 
         foreach ($settings as $name => $value)
         {
-            $this->updateOrInsertSetting($name, (string) $value, $update);
+            $this->set($name, (string) $value, $update);
         }
 
         $this->db->endTransaction();

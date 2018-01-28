@@ -274,7 +274,7 @@ $listStatement = $gDb->query($mainSql); // TODO add more params
 $numMembers = $listStatement->rowCount();
 
 // get all members and their data of this list in an array
-$membersList = $listStatement->fetchAll();
+$membersList = $listStatement->fetchAll(\PDO::FETCH_BOTH);
 
 if ($numMembers === 0)
 {
@@ -385,7 +385,7 @@ if ($getMode !== 'csv')
         $pdf->setFooterMargin(0);
 
         // headline for PDF
-        $pdf->setHeaderData('', '', $headline, '');
+        $pdf->setHeaderData('', '', $headline);
 
         // set font
         $pdf->SetFont('times', '', 10);
@@ -934,7 +934,7 @@ if ($getMode === 'csv')
 elseif ($getMode === 'pdf')
 {
     // output the HTML content
-    $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
+    $pdf->writeHTML($table->getHtmlTable(), true, false, true);
 
     $file = ADMIDIO_PATH . FOLDER_DATA . '/' . $filename;
 

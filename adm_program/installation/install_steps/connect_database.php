@@ -20,7 +20,7 @@ if (!isset($_SESSION['language']))
     {
         showNotice(
             $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
-            safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'welcome')),
+            safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
         );
@@ -60,7 +60,7 @@ $hostRegex = '^(' . $hostnameRegex . '|' . $ipv4Regex . '|' . $ipv6Regex . ')$';
 $sqlIdentifiersRegex = '^[a-zA-Z]([a-zA-Z0-9_]*[a-zA-Z0-9])?$';
 
 // create a page to enter all necessary database connection information
-$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
+$form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
 $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
 $form->addSelectBoxFromXml(
@@ -94,7 +94,7 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_PATH . '/adm_program/installation/installation.php', array('step' => 'welcome')))
+    array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')))
 );
 $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
 echo $form->show();
