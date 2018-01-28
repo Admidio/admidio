@@ -842,7 +842,7 @@ ALTER TABLE %PREFIX%_role_dependencies
 
 ALTER TABLE %PREFIX%_roles
     ADD CONSTRAINT %PREFIX%_fk_rol_cat         FOREIGN KEY (rol_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_rol_lst_id      FOREIGN KEY (rol_lst_id)         REFERENCES %PREFIX%_lists (lst_id)               ON DELETE SET NULL ON UPDATE SET NULL
+    ADD CONSTRAINT %PREFIX%_fk_rol_lst_id      FOREIGN KEY (rol_lst_id)         REFERENCES %PREFIX%_lists (lst_id)               ON DELETE SET NULL ON UPDATE SET NULL,
     ADD CONSTRAINT %PREFIX%_fk_rol_usr_create  FOREIGN KEY (rol_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_rol_usr_change  FOREIGN KEY (rol_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
