@@ -125,6 +125,17 @@ else
 $orgId = (int) $gCurrentOrganization->getValue('org_id');
 
 /**
+ * @param string $type
+ * @param string $text
+ * @param string $info
+ * @return string
+ */
+function getStaticText($type, $text, $info = '')
+{
+    return '<span class="text-' . $type . '"><strong>' . $text . '</strong></span>' . $info;
+}
+
+/**
  * @param string $id
  * @param string $title
  * @param string $icon
@@ -590,25 +601,25 @@ $formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LA
 
 if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
-    $html = '<span class="text-danger"><strong>'.PHP_VERSION.'</strong> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)).'</span>';
+    $html = getStaticText('danger', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION)));
 }
 elseif (version_compare(PHP_VERSION, '5.6', '<'))
 {
-    $html = '<span class="text-warning"><strong>'.PHP_VERSION.'</strong> &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://secure.php.net/supported-versions.php" target="_blank">Supported Versions</a>')).'</span>';
+    $html = getStaticText('warning', PHP_VERSION, ' &rarr; '.$gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://secure.php.net/supported-versions.php" target="_blank">Supported Versions</a>')));
 }
 else
 {
-    $html = '<span class="text-success"><strong>'.PHP_VERSION.'</strong></span>';
+    $html = getStaticText('success', PHP_VERSION);
 }
 $formSystemInformation->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 
 if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
 {
-    $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion()));
+    $html = getStaticText('danger', $gDb->getVersion(), ' &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion())));
 }
 else
 {
-    $html = '<span class="text-success"><strong>'.$gDb->getVersion().'</strong></span>';
+    $html = getStaticText('success', $gDb->getVersion());
 }
 $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
@@ -616,22 +627,22 @@ $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'
 if(PhpIniUtils::isSafeModeEnabled())
 {
     $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
-    $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
+    $html = getStaticText('danger', $gL10n->get('SYS_ON'), ' &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM'));
 }
 else
 {
-    $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
+    $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
 $formSystemInformation->addStaticControl('safe_mode', $gL10n->get('SYS_SAFE_MODE'), $html);
 
 try
 {
     PasswordHashing::genRandomInt(0, 1, true);
-    $html = '<span class="text-success"><strong>' . $gL10n->get('SYS_SECURE') . '</strong></span>';
+    $html = getStaticText('success', $gL10n->get('SYS_SECURE'));
 }
 catch (AdmException $e)
 {
-    $html = '<span class="text-danger"><strong>' . $gL10n->get('SYS_PRNG_INSECURE') . '</strong><br />' . $e->getText() . '</span>';
+    $html = getStaticText('danger', $gL10n->get('SYS_PRNG_INSECURE'), '<br />' . $e->getText());
 }
 $formSystemInformation->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
 
@@ -655,11 +666,11 @@ else
 
 if(PhpIniUtils::isFileUploadEnabled())
 {
-    $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
+    $html = getStaticText('success', $gL10n->get('SYS_ON'));
 }
 else
 {
-    $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
+    $html = getStaticText('danger', $gL10n->get('SYS_OFF'));
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
@@ -678,11 +689,11 @@ $formSystemInformation->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO')
 
 if($gDebug)
 {
-    $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
+    $html = getStaticText('danger', $gL10n->get('SYS_ON'));
 }
 else
 {
-    $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
+    $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
 $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
 
