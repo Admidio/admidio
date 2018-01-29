@@ -597,7 +597,22 @@ if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) !== 0)
 
 $component = new ComponentUpdate($gDb);
 $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-$formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step') . ' / ' . $component->getMaxUpdateStep());
+$updateStep = (int) $gSystemComponent->getValue('com_update_step');
+$maxStep = $component->getMaxUpdateStep();
+$textStep = $updateStep . ' / ' . $maxStep;
+if ($updateStep === $maxStep)
+{
+    $html = getStaticText('success', PHP_VERSION);
+}
+elseif ($updateStep > $maxStep)
+{
+    $html = getStaticText('warning', PHP_VERSION);
+}
+else
+{
+    $html = getStaticText('danger', PHP_VERSION);
+}
+$formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
 
 if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
@@ -648,21 +663,23 @@ $formSystemInformation->addStaticControl('pseudo_random_number_generator', $gL10
 
 if(PhpIniUtils::getPostMaxSize() === -1)
 {
-    $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), PhpIniUtils::getPostMaxSize());
+    $html = getStaticText('success', PhpIniUtils::getPostMaxSize());
 }
 else
 {
-    $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
+$formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
 
 if(PhpIniUtils::getMemoryLimit() === -1)
 {
-    $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), PhpIniUtils::getMemoryLimit());
+    $html = getStaticText('success', PhpIniUtils::getMemoryLimit());
 }
 else
 {
-    $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
+$formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
 
 if(PhpIniUtils::isFileUploadEnabled())
 {
@@ -676,12 +693,13 @@ $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_U
 
 if(PhpIniUtils::getFileUploadMaxFileSize() === -1)
 {
-    $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), PhpIniUtils::getFileUploadMaxFileSize());
+    $html = getStaticText('success', PhpIniUtils::getFileUploadMaxFileSize());
 }
 else
 {
-    $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
+$formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
 
 $formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGA_PIXEL'));
 $html = '<a href="' . ADMIDIO_URL . '/adm_program/system/phpinfo.php' . '" target="_blank">phpinfo()</a>';
