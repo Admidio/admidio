@@ -69,7 +69,7 @@ if ($gCurrentUser->hasRightViewProfile($user))
         else
         {
             $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
-            if (file_exists($file))
+            if (is_file($file))
             {
                 $picPath = $file;
             }

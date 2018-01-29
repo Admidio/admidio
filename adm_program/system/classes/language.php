@@ -61,11 +61,11 @@ class Language
      */
     public function __construct(LanguageData $languageDataObject = null)
     {
-        global $gPreferences;
+        global $gSettingsManager;
 
         if ($languageDataObject === null)
         {
-            $languageDataObject = new LanguageData($gPreferences['system_language']);
+            $languageDataObject = new LanguageData($gSettingsManager->getString('system_language'));
         }
         $this->languageData =& $languageDataObject;
     }
