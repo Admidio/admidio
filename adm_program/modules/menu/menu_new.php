@@ -121,13 +121,13 @@ $menuCreateMenu = $page->getMenu();
 $menuCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // alle aus der DB aus lesen
-$sqlRoles =  'SELECT *
-                FROM '.TBL_ROLES.'
-          INNER JOIN '.TBL_CATEGORIES.'
-                  ON cat_id = rol_cat_id
-               WHERE rol_valid  = 1
-                 AND rol_system = 0
-            ORDER BY rol_name';
+$sqlRoles = 'SELECT *
+               FROM '.TBL_ROLES.'
+         INNER JOIN '.TBL_CATEGORIES.'
+                 ON cat_id = rol_cat_id
+              WHERE rol_valid  = 1
+                AND rol_system = 0
+           ORDER BY rol_name';
 $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
 while($rowViewRoles = $rolesViewStatement->fetchObject())

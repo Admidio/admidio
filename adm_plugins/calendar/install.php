@@ -16,11 +16,11 @@
  ****************************************************************************/
 
  // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
 
 if(!defined('PLUGIN_PATH'))
 {
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 
@@ -30,8 +30,7 @@ if(!$gCurrentUser->isAdministrator())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$plugin_folder = '/adm_plugins/calendar/calendar.php';
-$standart = 0;
+$pluginFolder = '/adm_plugins/calendar/calendar.php';
 
 // set module headline
 $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
@@ -52,13 +51,14 @@ if($statement->rowCount() > 0)
 else
 {
     // alle aus der DB auslesen
-    $sqlRoles =  'SELECT *
-                    FROM '.TBL_ROLES.'
-              INNER JOIN '.TBL_CATEGORIES.'
-                      ON cat_id = rol_cat_id
-                   WHERE rol_valid  = 1
-                     AND rol_system = 0
-                ORDER BY rol_name';
+    $parentRoleViewSet = array();
+    $sqlRoles = 'SELECT *
+                   FROM '.TBL_ROLES.'
+             INNER JOIN '.TBL_CATEGORIES.'
+                     ON cat_id = rol_cat_id
+                  WHERE rol_valid  = 1
+                    AND rol_system = 0
+               ORDER BY rol_name';
     $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
     while($rowViewRoles = $rolesViewStatement->fetchObject())
@@ -80,8 +80,8 @@ else
     $form->addSelectBox('menu_view', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet,
                                        array('property'  => FIELD_REQUIRED, 'multiselect'  => true));
 
-    $form->addInput('men_url', null, $plugin_folder, array('type' => 'hidden'));
-    $form->addInput('men_url', $gL10n->get('ORG_URL'), $plugin_folder, array('property' => FIELD_DISABLED));
+    $form->addInput('men_url', null, $pluginFolder, array('type' => 'hidden'));
+    $form->addInput('men_url', $gL10n->get('ORG_URL'), $pluginFolder, array('property' => FIELD_DISABLED));
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 

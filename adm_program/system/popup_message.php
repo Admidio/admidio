@@ -78,6 +78,13 @@ switch ($getType)
     case 'lnk':
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 2, 'lnk_id' => $getDatabaseId));
         break;
+    case 'men':
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . 'menu/menu_function.php', array('mode' => 2, 'men_id' => $getDatabaseId));
+        break;
+    case 'msg':
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_id' => $getDatabaseId));
+        $text = 'MSG_DELETE_DESC';
+        break;
     case 'nwu':
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration/registration_function.php', array('mode' => 4, 'new_user_id' => $getDatabaseId));
         break;
@@ -126,19 +133,12 @@ switch ($getType)
     case 'usf':
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences/fields_function.php', array('mode' => 2, 'usf_id' => $getDatabaseId));
         break;
-    case 'msg':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_id' => $getDatabaseId));
-        $text = 'MSG_DELETE_DESC';
-        break;
     case 'urt':
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 2, 'urt_id' => $getDatabaseId));
         $text = 'REL_USER_RELATION_TYPE_DEL';
         break;
     case 'ure':
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 2, 'ure_id' => $getDatabaseId));
-        break;
-    case 'men':
-        $url = 'menu_function.php?mode=2&men_id='.$getDatabaseId;
         break;
     default:
         $url = '';
