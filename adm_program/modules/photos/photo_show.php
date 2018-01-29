@@ -153,7 +153,7 @@ if ($image !== null)
         }
         else
         {
-            $text = $gPreferences['photo_image_text'];
+            $text = $gSettingsManager->getString('photo_image_text');
         }
 
         imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);
