@@ -602,15 +602,15 @@ $maxStep = $component->getMaxUpdateStep();
 $textStep = $updateStep . ' / ' . $maxStep;
 if ($updateStep === $maxStep)
 {
-    $html = getStaticText('success', PHP_VERSION);
+    $html = getStaticText('success', $textStep);
 }
 elseif ($updateStep > $maxStep)
 {
-    $html = getStaticText('warning', PHP_VERSION);
+    $html = getStaticText('warning', $textStep);
 }
 else
 {
-    $html = getStaticText('danger', PHP_VERSION);
+    $html = getStaticText('danger', $textStep);
 }
 $formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
 
