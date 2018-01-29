@@ -101,14 +101,10 @@ if($datesResult['numResults'] > 0)
 
 $iCal .= $date->getIcalFooter();
 
-// for IE the filename must have special chars in hexadecimal
-if (isset($_SERVER['HTTP_USER_AGENT']) && admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-{
-    $getHeadline = urlencode($getHeadline);
-}
+$filename = FileSystemUtils::getSanitizedPathEntry($getHeadline) . '.ics';
 
 header('Content-Type: text/calendar; charset=utf-8');
-header('Content-Disposition: attachment; filename="'. $getHeadline. '.ics"');
+header('Content-Disposition: attachment; filename="'. $filename. '"');
 
 // necessary for IE, because without it the download with SSL has problems
 header('Cache-Control: private');

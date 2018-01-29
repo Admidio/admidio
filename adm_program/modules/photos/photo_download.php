@@ -81,7 +81,6 @@ if ($getPhotoNr == null)
     //$tempfolder = "/is/htdocs/user_tmp/xxxxxx/";
     $tempFolder  = sys_get_temp_dir();
     $zipTempName = tempnam($tempFolder, 'zip');
-    $zipNiceName = $photoAlbum->getValue('pho_name').' - '.$photoAlbum->getValue('pho_photographers').'.zip';
 
     $zip = new \ZipArchive();
     $zipOpenCode = $zip->open($zipTempName, \ZipArchive::CREATE);
@@ -197,10 +196,13 @@ if ($getPhotoNr == null)
         // => EXIT
     }
 
+    $filename = $photoAlbum->getValue('pho_name').' - '.$photoAlbum->getValue('pho_photographers').'.zip';
+    $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+
     header('Content-Type: application/zip');
     header('Content-Length: ' . filesize($zipTempName));
     header('Content-Description: File Transfer');
-    header('Content-Disposition: attachment; filename="'.$zipNiceName.'"');
+    header('Content-Disposition: attachment; filename="'.$filename.'"');
     header('Expires: 0');
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: private');
