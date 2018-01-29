@@ -42,13 +42,13 @@ $callbackFunction = '';
 switch ($getType)
 {
     case 'ann':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements_function.php', array('mode' => 2, 'ann_id' => $getDatabaseId));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements_function.php', array('mode' => 2, 'ann_id' => $getDatabaseId));
         break;
     case 'bac':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/backup/backup_file_function.php', array('job' => 'delete', 'filename' => $getDatabaseId));
         break;
     case 'cat':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories_function.php', array('cat_id' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories/categories_function.php', array('cat_id' => $getDatabaseId, 'mode' => 2, 'type' => $getDatabaseId2));
 
         // get special message for calendars
         if($getDatabaseId2 === 'DAT')
