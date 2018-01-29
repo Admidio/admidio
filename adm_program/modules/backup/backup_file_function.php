@@ -69,7 +69,7 @@ switch($getJob)
         // Backupdatei loeschen
         try
         {
-            FileSystemUtils::deleteFileIfExists($file);
+            FileSystemUtils::deleteFileIfExists($completePath);
             echo 'done';
         }
         catch (\RuntimeException $exception)
