@@ -40,7 +40,7 @@ $_SESSION['download_request'] = $_POST;
 // Pfad in adm_my_files pruefen und ggf. anlegen
 try
 {
-    FileSystemUtils::createDirectoryIfNotExists(TableFolder::getRootFolderName());
+    FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName());
 }
 catch (\RuntimeException $exception)
 {
