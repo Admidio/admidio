@@ -527,4 +527,40 @@ final class ComponentUpdateSteps
             $rightCategoryView->saveRoles($roles);
         }
     }
+
+    /**
+     * This method renames the download folders of the different organizations to the new secure filename pattern
+     */
+    public static function updateStepDownloadOrgFolderName()
+    {
+        $sql = 'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $pdoStatement = self::$db->queryPrepared($sql);
+
+        while($orgShortname = $pdoStatement->fetchColumn())
+        {
+            $path = ADMIDIO_PATH . FOLDER_DATA . '/download_';
+            $replaceArray = array(
+                ' '  => '_',
+                '.'  => '_',
+                ','  => '_',
+                '\'' => '_',
+                '"'  => '_',
+                '´'  => '_',
+                '`'  => '_'
+            );
+            $orgNameOld = str_replace(array_keys($replaceArray), array_values($replaceArray), $orgShortname);
+            $orgNameNew = FileSystemUtils::getSanitizedPathEntry($orgShortname);
+
+            if ($orgNameOld !== $orgNameNew)
+            {
+                try
+                {
+                    FileSystemUtils::moveDirectory($path . strtolower($orgNameOld), $path . strtolower($orgNameNew));
+                }
+                catch (\RuntimeException $exception)
+                {
+                }
+            }
+        }
+    }
 }
