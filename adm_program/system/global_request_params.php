@@ -4,7 +4,7 @@
  * Remove HTML & PHP-Code and escape all quotes from all request parameters.
  * If debug is on and change is made, log it.
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
