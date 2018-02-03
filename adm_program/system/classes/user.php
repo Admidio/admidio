@@ -148,6 +148,173 @@ class User extends TableAccess
     }
 
     /**
+     * @param string $mode      'set' or 'edit'
+     * @param int $id           Id of the role for which the membership should be set,
+     *                          or id of the current membership that should be edited.
+     * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
+     * @param string $endDate   New end date of the membership. Default will be @b 31.12.9999
+     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
+     *                          might get more rights for this role.
+     * @return bool Return @b true if the membership was successfully added/edited.
+     */
+    private function changeRoleMembership($mode, $id, $startDate, $endDate, $leader)
+    {
+        if ($startDate === '' || $endDate === '')
+        {
+            return false;
+        }
+
+        $minStartDate = $startDate;
+        $maxEndDate   = $endDate;
+
+        if ($mode === 'set')
+        {
+            // subtract 1 day from start date so that we find memberships that ends yesterday
+            // these memberships can be continued with new date
+            $oneDayOffset = new \DateInterval('P1D');
+
+            $startDate = \DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
+            // add 1 to max date because we subtract one day if a membership ends
+            if ($endDate !== DATE_MAX)
+            {
+                $endDate = \DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
+            }
+        }
+
+        $this->db->startTransaction();
+
+        // search for membership with same role and user and overlapping dates
+        if ($mode === 'set')
+        {
+            $member = new TableMembers($this->db);
+
+            $sql = 'SELECT *
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_rol_id = ? -- $id
+                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_begin <= ? -- $endDate
+                       AND mem_end   >= ? -- $startDate
+                  ORDER BY mem_begin ASC';
+            $queryParams = array(
+                $id,
+                $this->getValue('usr_id'),
+                $endDate,
+                $startDate
+            );
+        }
+        else
+        {
+            $member = new TableMembers($this->db, $id);
+
+            $sql = 'SELECT *
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_id    <> ? -- $id
+                       AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
+                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_begin <= ? -- $endDate
+                       AND mem_end   >= ? -- $startDate
+                  ORDER BY mem_begin ASC';
+            $queryParams = array(
+                $id,
+                $member->getValue('mem_rol_id'),
+                $this->getValue('usr_id'),
+                $endDate,
+                $startDate
+            );
+        }
+        $membershipStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($membershipStatement->rowCount() === 1)
+        {
+            // one record found than update this record
+            $row = $membershipStatement->fetch();
+            $member->setArray($row);
+
+            // save new start date if an earlier date exists
+            if (strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+            {
+                $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+            }
+
+            if ($mode === 'set')
+            {
+                // save new end date if an later date exists
+                // but only if end date is greater than the begin date otherwise the membership should be deleted
+                if (strcmp($member->getValue('mem_end', 'Y-m-d'),   $maxEndDate) > 0
+                &&  strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0)
+                {
+                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+                }
+            }
+            else
+            {
+                // save new end date if an later date exists
+                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+                {
+                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+                }
+            }
+        }
+        elseif ($membershipStatement->rowCount() > 1)
+        {
+            // several records found then read min and max date and delete all records
+            while ($row = $membershipStatement->fetch())
+            {
+                $member->clear();
+                $member->setArray($row);
+
+                // save new start date if an earlier date exists
+                if (strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+                {
+                    $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+                }
+
+                // save new end date if an later date exists
+                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+                {
+                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+                }
+
+                // delete existing entry because a new overlapping entry will be created
+                $member->delete();
+            }
+            $member->clear();
+        }
+
+        if (strcmp($minStartDate, $maxEndDate) > 0)
+        {
+            // if start date is greater than end date than delete membership
+            if ($member->getValue('mem_id') > 0)
+            {
+                $member->delete();
+            }
+            $returnStatus = true;
+        }
+        else
+        {
+            // save membership to database
+            if ($mode === 'set')
+            {
+                $member->setValue('mem_rol_id', $id);
+                $member->setValue('mem_usr_id', $this->getValue('usr_id'));
+            }
+            $member->setValue('mem_begin', $minStartDate);
+            $member->setValue('mem_end', $maxEndDate);
+
+            if ($leader !== null)
+            {
+                $member->setValue('mem_leader', $leader);
+            }
+            $returnStatus = $member->save();
+        }
+
+        $this->db->endTransaction();
+        $this->renewRoleData();
+
+        return $returnStatus;
+    }
+
+    /**
      * Method reads all relationships of the user and will store them in an array. Also the
      * relationship property if the user can edit the profile of the other user will be stored
      * for later checks within this class.
@@ -349,207 +516,6 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the maximum of invalid logins is reached.
-     * @return bool Returns true if the maximum of invalid logins is reached.
-     */
-    private function hasMaxInvalidLogins()
-    {
-        global $gLogger;
-
-        // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
-        $now = new \DateTime();
-        $minutesOffset = new \DateInterval('PT15M');
-        $minutesBefore = $now->sub($minutesOffset);
-        $dateInvalid = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
-
-        if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() > $dateInvalid->getTimestamp())
-        {
-            return false;
-        }
-
-        $loggingObject = array(
-            'username'      => $this->getValue('usr_login_name'),
-            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
-            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
-        );
-        $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
-
-        $this->clear();
-
-        return true;
-    }
-
-    /**
-     * Handles the incorrect given login password.
-     * @return string Return string with the reason why the login failed.
-     */
-    private function handleIncorrectPasswordLogin()
-    {
-        global $gLogger;
-
-        // log invalid logins
-        if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS)
-        {
-            $this->setValue('usr_number_invalid', 1);
-        }
-        else
-        {
-            $this->setValue('usr_number_invalid', $this->getValue('usr_number_invalid') + 1);
-        }
-
-        $this->setValue('usr_date_invalid', DATETIME_NOW);
-        $this->saveChangesWithoutRights();
-        $this->save(false); // don't update timestamp // TODO Exception handling
-
-        $loggingObject = array(
-            'username'      => $this->getValue('usr_login_name'),
-            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
-            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
-        );
-
-        if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS)
-        {
-            $this->clear();
-
-            $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
-
-            return 'SYS_LOGIN_MAX_INVALID_LOGIN';
-        }
-
-        $this->clear();
-
-        $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
-
-        return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
-    }
-
-    /**
-     * Gets the longname of this organization.
-     * @return string Returns the longname of the organization.
-     */
-    private function getOrgLongname()
-    {
-        $sql = 'SELECT org_longname
-                  FROM '.TBL_ORGANIZATIONS.'
-                 WHERE org_id = ?';
-        $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
-
-        return $orgStatement->fetchColumn();
-    }
-
-    /**
-     * Checks if this user is a member of this organization.
-     * @param string $orgLongname The longname of this organization.
-     * @return bool Return true if user is member of this organization.
-     */
-    private function isMemberOfOrganization($orgLongname)
-    {
-        global $gLogger;
-
-        // Check if user is currently member of a role of an organisation
-        $sql = 'SELECT mem_usr_id
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                   AND rol_valid  = 1
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
-                   AND cat_org_id = ? -- $this->organizationId';
-        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
-        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
-
-        if ($pdoStatement->rowCount() > 0)
-        {
-            return true;
-        }
-
-        $loggingObject = array(
-            'username'     => $this->getValue('usr_login_name'),
-            'organisation' => $orgLongname
-        );
-
-        $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
-
-        return false;
-    }
-
-    /**
-     * Checks if this user is an admin of this organization.
-     * @param string $orgLongname The longname of this organization.
-     * @return bool Return true if user is admin of this organization.
-     */
-    private function isAdminOfOrganization($orgLongname)
-    {
-        global $gLogger, $installedDbVersion;
-
-        // only check for administrator role if version > 3.1 because before it was webmaster role
-        if (version_compare($installedDbVersion, '3.2', '>='))
-        {
-            $administratorColumn = 'rol_administrator';
-        }
-        else
-        {
-            $administratorColumn = 'rol_webmaster';
-        }
-
-        // Check if user is currently member of a role of an organisation
-        $sql = 'SELECT mem_usr_id
-                  FROM '.TBL_MEMBERS.'
-            INNER JOIN '.TBL_ROLES.'
-                    ON rol_id = mem_rol_id
-            INNER JOIN '.TBL_CATEGORIES.'
-                    ON cat_id = rol_cat_id
-                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                   AND rol_valid  = 1
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
-                   AND cat_org_id = ? -- $this->organizationId
-                   AND '.$administratorColumn.' = 1';
-        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
-        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
-
-        if ($pdoStatement->rowCount() > 0)
-        {
-            return true;
-        }
-
-        $loggingObject = array(
-            'username'     => $this->getValue('usr_login_name'),
-            'organisation' => $orgLongname
-        );
-
-        $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
-
-        return false;
-    }
-
-    /**
-     * Rehashes the password of the user if necessary.
-     * @param string $password The password for the current user. This should not be encoded.
-     * @return bool Returns true if password was rehashed.
-     */
-    private function rehashIfNecessary($password)
-    {
-        global $gLogger;
-
-        if (!PasswordHashing::needsRehash($this->getValue('usr_password')))
-        {
-            return false;
-        }
-
-        $this->saveChangesWithoutRights();
-        $this->setPassword($password);
-        $this->save(); // TODO Exception handling
-
-        $gLogger->info('AUTHENTICATION: Password rehashed!', array('username' => $this->getValue('usr_login_name')));
-
-        return true;
-    }
-
-    /**
      * Check if a valid password is set for the user and return true if the correct password
      * was set. Optional the current session could be updated to a valid login session.
      * @param string $password             The password for the current user. This should not be encoded.
@@ -665,15 +631,6 @@ class User extends TableAccess
         $this->usersEditAllowed = array();
         $this->renewRoleData();
         $this->saveChangesWithoutRights = false;
-    }
-
-    /**
-     * returns true if a column of user table or profile fields has changed
-     * @return bool
-     */
-    public function hasColumnsValueChanged()
-    {
-        return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
     }
 
     /**
@@ -854,6 +811,22 @@ class User extends TableAccess
     }
 
     /**
+     * Edit an existing role membership of the current user. If the new date range contains
+     * a future or past membership of the same role then the two memberships will be merged.
+     * In opposite to setRoleMembership this method is useful to end a membership earlier.
+     * @param int    $memberId  Id of the current membership that should be edited.
+     * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
+     * @param string $endDate   New end date of the membership. Default will be @b DATE_MAX
+     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
+     *                          might get more rights for this role.
+     * @return bool Return @b true if the membership was successfully edited.
+     */
+    public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
+    {
+        return $this->changeRoleMembership('edit', $memberId, $startDate, $endDate, $leader);
+    }
+
+    /**
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
      * @return array<int,int> Array with categories ids where user has the right to edit them
@@ -1002,6 +975,59 @@ class User extends TableAccess
     public function getOrganization()
     {
         return $this->organizationId;
+    }
+
+    /**
+     * Gets the longname of this organization.
+     * @return string Returns the longname of the organization.
+     */
+    private function getOrgLongname()
+    {
+        $sql = 'SELECT org_longname
+                  FROM '.TBL_ORGANIZATIONS.'
+                 WHERE org_id = ?';
+        $orgStatement = $this->db->queryPrepared($sql, array($this->organizationId));
+
+        return $orgStatement->fetchColumn();
+    }
+
+    /**
+     * Returns data from the user to improve dictionary attack check
+     * @return array<int,string>
+     */
+    public function getPasswordUserData()
+    {
+        $userData = array(
+            // Names
+            $this->getValue('FIRST_NAME'),
+            $this->getValue('LAST_NAME'),
+            $this->getValue('usr_login_name'),
+            // Birthday
+            $this->getValue('BIRTHDAY', 'Y'), // YYYY
+            $this->getValue('BIRTHDAY', 'md'), // MMDD
+            $this->getValue('BIRTHDAY', 'dm'), // DDMM
+            // Email
+            $this->getValue('EMAIL'),
+            // Address
+            $this->getValue('STREET'),
+            $this->getValue('CITY'),
+            $this->getValue('POSTCODE'),
+            $this->getValue('COUNTRY')
+        );
+
+        if (!function_exists('filterEmptyStrings'))
+        {
+            /**
+             * @param string $value
+             * @return bool
+             */
+            function filterEmptyStrings($value)
+            {
+                return $value !== '';
+            }
+        }
+
+        return array_filter($userData, 'filterEmptyStrings');
     }
 
     /**
@@ -1168,6 +1194,46 @@ class User extends TableAccess
         $vCard[] = 'END:VCARD';
 
         return implode("\r\n", $vCard) . "\r\n";
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return parent::hasColumnsValueChanged() || $this->mProfileFieldsData->hasColumnsValueChanged();
+    }
+
+    /**
+     * Checks if the maximum of invalid logins is reached.
+     * @return bool Returns true if the maximum of invalid logins is reached.
+     */
+    private function hasMaxInvalidLogins()
+    {
+        global $gLogger;
+
+        // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
+        $now = new \DateTime();
+        $minutesOffset = new \DateInterval('PT15M');
+        $minutesBefore = $now->sub($minutesOffset);
+        $dateInvalid = \DateTime::createFromFormat('Y-m-d H:i:s', $this->getValue('usr_date_invalid', 'Y-m-d H:i:s'));
+
+        if ($this->getValue('usr_number_invalid') < self::MAX_INVALID_LOGINS || $minutesBefore->getTimestamp() > $dateInvalid->getTimestamp())
+        {
+            return false;
+        }
+
+        $loggingObject = array(
+            'username'      => $this->getValue('usr_login_name'),
+            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
+            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
+        );
+        $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
+
+        $this->clear();
+
+        return true;
     }
 
     /**
@@ -1386,6 +1452,50 @@ class User extends TableAccess
     }
 
     /**
+     * Handles the incorrect given login password.
+     * @return string Return string with the reason why the login failed.
+     */
+    private function handleIncorrectPasswordLogin()
+    {
+        global $gLogger;
+
+        // log invalid logins
+        if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS)
+        {
+            $this->setValue('usr_number_invalid', 1);
+        }
+        else
+        {
+            $this->setValue('usr_number_invalid', $this->getValue('usr_number_invalid') + 1);
+        }
+
+        $this->setValue('usr_date_invalid', DATETIME_NOW);
+        $this->saveChangesWithoutRights();
+        $this->save(false); // don't update timestamp // TODO Exception handling
+
+        $loggingObject = array(
+            'username'      => $this->getValue('usr_login_name'),
+            'numberInvalid' => (int) $this->getValue('usr_number_invalid'),
+            'dateInvalid'   => $this->getValue('usr_date_invalid', 'Y-m-d H:i:s')
+        );
+
+        if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS)
+        {
+            $this->clear();
+
+            $gLogger->warning('AUTHENTICATION: Maximum number of invalid logins!', $loggingObject);
+
+            return 'SYS_LOGIN_MAX_INVALID_LOGIN';
+        }
+
+        $this->clear();
+
+        $gLogger->warning('AUTHENTICATION: Incorrect username/password!', $loggingObject);
+
+        return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+    }
+
+    /**
      * Checks if the user is assigned to the role @b Administrator
      * @return bool Returns @b true if the user is a member of the role @b Administrator
      */
@@ -1397,6 +1507,56 @@ class User extends TableAccess
     }
 
     /**
+     * Checks if this user is an admin of this organization.
+     * @param string $orgLongname The longname of this organization.
+     * @return bool Return true if user is admin of this organization.
+     */
+    private function isAdminOfOrganization($orgLongname)
+    {
+        global $gLogger, $installedDbVersion;
+
+        // only check for administrator role if version > 3.1 because before it was webmaster role
+        if (version_compare($installedDbVersion, '3.2', '>='))
+        {
+            $administratorColumn = 'rol_administrator';
+        }
+        else
+        {
+            $administratorColumn = 'rol_webmaster';
+        }
+
+        // Check if user is currently member of a role of an organisation
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                   AND rol_valid  = 1
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND cat_org_id = ? -- $this->organizationId
+                   AND '.$administratorColumn.' = 1';
+        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($pdoStatement->rowCount() > 0)
+        {
+            return true;
+        }
+
+        $loggingObject = array(
+            'username'     => $this->getValue('usr_login_name'),
+            'organisation' => $orgLongname
+        );
+
+        $gLogger->warning('AUTHENTICATION: User is no administrator!', $loggingObject);
+
+        return false;
+    }
+
+    /**
      * check if user is leader of a role
      * @param int $roleId
      * @return bool
@@ -1404,6 +1564,45 @@ class User extends TableAccess
     public function isLeaderOfRole($roleId)
     {
         return array_key_exists($roleId, $this->rolesMembershipLeader);
+    }
+
+    /**
+     * Checks if this user is a member of this organization.
+     * @param string $orgLongname The longname of this organization.
+     * @return bool Return true if user is member of this organization.
+     */
+    private function isMemberOfOrganization($orgLongname)
+    {
+        global $gLogger;
+
+        // Check if user is currently member of a role of an organisation
+        $sql = 'SELECT mem_usr_id
+                  FROM '.TBL_MEMBERS.'
+            INNER JOIN '.TBL_ROLES.'
+                    ON rol_id = mem_rol_id
+            INNER JOIN '.TBL_CATEGORIES.'
+                    ON cat_id = rol_cat_id
+                 WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                   AND rol_valid  = 1
+                   AND mem_begin <= ? -- DATE_NOW
+                   AND mem_end    > ? -- DATE_NOW
+                   AND cat_org_id = ? -- $this->organizationId';
+        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($pdoStatement->rowCount() > 0)
+        {
+            return true;
+        }
+
+        $loggingObject = array(
+            'username'     => $this->getValue('usr_login_name'),
+            'organisation' => $orgLongname
+        );
+
+        $gLogger->warning('AUTHENTICATION: User is not member in this organisation!', $loggingObject);
+
+        return false;
     }
 
     /**
@@ -1442,6 +1641,29 @@ class User extends TableAccess
         }
 
         return false;
+    }
+
+    /**
+     * Rehashes the password of the user if necessary.
+     * @param string $password The password for the current user. This should not be encoded.
+     * @return bool Returns true if password was rehashed.
+     */
+    private function rehashIfNecessary($password)
+    {
+        global $gLogger;
+
+        if (!PasswordHashing::needsRehash($this->getValue('usr_password')))
+        {
+            return false;
+        }
+
+        $this->saveChangesWithoutRights();
+        $this->setPassword($password);
+        $this->save(); // TODO Exception handling
+
+        $gLogger->info('AUTHENTICATION: Password rehashed!', array('username' => $this->getValue('usr_login_name')));
+
+        return true;
     }
 
     /**
@@ -1590,212 +1812,6 @@ class User extends TableAccess
     }
 
     /**
-     * Returns data from the user to improve dictionary attack check
-     * @return array<int,string>
-     */
-    public function getPasswordUserData()
-    {
-        $userData = array(
-            // Names
-            $this->getValue('FIRST_NAME'),
-            $this->getValue('LAST_NAME'),
-            $this->getValue('usr_login_name'),
-            // Birthday
-            $this->getValue('BIRTHDAY', 'Y'), // YYYY
-            $this->getValue('BIRTHDAY', 'md'), // MMDD
-            $this->getValue('BIRTHDAY', 'dm'), // DDMM
-            // Email
-            $this->getValue('EMAIL'),
-            // Address
-            $this->getValue('STREET'),
-            $this->getValue('CITY'),
-            $this->getValue('POSTCODE'),
-            $this->getValue('COUNTRY')
-        );
-
-        if (!function_exists('filterEmptyStrings'))
-        {
-            /**
-             * @param string $value
-             * @return bool
-             */
-            function filterEmptyStrings($value)
-            {
-                return $value !== '';
-            }
-        }
-
-        return array_filter($userData, 'filterEmptyStrings');
-    }
-
-    /**
-     * @param string $mode      'set' or 'edit'
-     * @param int $id           Id of the role for which the membership should be set,
-     *                          or id of the current membership that should be edited.
-     * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
-     * @param string $endDate   New end date of the membership. Default will be @b 31.12.9999
-     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
-     *                          might get more rights for this role.
-     * @return bool Return @b true if the membership was successfully added/edited.
-     */
-    private function changeRoleMembership($mode, $id, $startDate, $endDate, $leader)
-    {
-        if ($startDate === '' || $endDate === '')
-        {
-            return false;
-        }
-
-        $minStartDate = $startDate;
-        $maxEndDate   = $endDate;
-
-        if ($mode === 'set')
-        {
-            // subtract 1 day from start date so that we find memberships that ends yesterday
-            // these memberships can be continued with new date
-            $oneDayOffset = new \DateInterval('P1D');
-
-            $startDate = \DateTime::createFromFormat('Y-m-d', $startDate)->sub($oneDayOffset)->format('Y-m-d');
-            // add 1 to max date because we subtract one day if a membership ends
-            if ($endDate !== DATE_MAX)
-            {
-                $endDate = \DateTime::createFromFormat('Y-m-d', $endDate)->add($oneDayOffset)->format('Y-m-d');
-            }
-        }
-
-        $this->db->startTransaction();
-
-        // search for membership with same role and user and overlapping dates
-        if ($mode === 'set')
-        {
-            $member = new TableMembers($this->db);
-
-            $sql = 'SELECT *
-                      FROM '.TBL_MEMBERS.'
-                     WHERE mem_rol_id = ? -- $id
-                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                       AND mem_begin <= ? -- $endDate
-                       AND mem_end   >= ? -- $startDate
-                  ORDER BY mem_begin ASC';
-            $queryParams = array(
-                $id,
-                $this->getValue('usr_id'),
-                $endDate,
-                $startDate
-            );
-        }
-        else
-        {
-            $member = new TableMembers($this->db, $id);
-
-            $sql = 'SELECT *
-                      FROM '.TBL_MEMBERS.'
-                     WHERE mem_id    <> ? -- $id
-                       AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
-                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                       AND mem_begin <= ? -- $endDate
-                       AND mem_end   >= ? -- $startDate
-                  ORDER BY mem_begin ASC';
-            $queryParams = array(
-                $id,
-                $member->getValue('mem_rol_id'),
-                $this->getValue('usr_id'),
-                $endDate,
-                $startDate
-            );
-        }
-        $membershipStatement = $this->db->queryPrepared($sql, $queryParams);
-
-        if ($membershipStatement->rowCount() === 1)
-        {
-            // one record found than update this record
-            $row = $membershipStatement->fetch();
-            $member->setArray($row);
-
-            // save new start date if an earlier date exists
-            if (strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
-            {
-                $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
-            }
-
-            if ($mode === 'set')
-            {
-                // save new end date if an later date exists
-                // but only if end date is greater than the begin date otherwise the membership should be deleted
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'),   $maxEndDate) > 0
-                &&  strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0)
-                {
-                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-                }
-            }
-            else
-            {
-                // save new end date if an later date exists
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
-                {
-                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-                }
-            }
-        }
-        elseif ($membershipStatement->rowCount() > 1)
-        {
-            // several records found then read min and max date and delete all records
-            while ($row = $membershipStatement->fetch())
-            {
-                $member->clear();
-                $member->setArray($row);
-
-                // save new start date if an earlier date exists
-                if (strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
-                {
-                    $minStartDate = $member->getValue('mem_begin', 'Y-m-d');
-                }
-
-                // save new end date if an later date exists
-                if (strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
-                {
-                    $maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-                }
-
-                // delete existing entry because a new overlapping entry will be created
-                $member->delete();
-            }
-            $member->clear();
-        }
-
-        if (strcmp($minStartDate, $maxEndDate) > 0)
-        {
-            // if start date is greater than end date than delete membership
-            if ($member->getValue('mem_id') > 0)
-            {
-                $member->delete();
-            }
-            $returnStatus = true;
-        }
-        else
-        {
-            // save membership to database
-            if ($mode === 'set')
-            {
-                $member->setValue('mem_rol_id', $id);
-                $member->setValue('mem_usr_id', $this->getValue('usr_id'));
-            }
-            $member->setValue('mem_begin', $minStartDate);
-            $member->setValue('mem_end', $maxEndDate);
-
-            if ($leader !== null)
-            {
-                $member->setValue('mem_leader', $leader);
-            }
-            $returnStatus = $member->save();
-        }
-
-        $this->db->endTransaction();
-        $this->renewRoleData();
-
-        return $returnStatus;
-    }
-
-    /**
      * Create a new membership to a role for the current user. If the date range contains
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method can't be used to end a membership earlier!
@@ -1809,22 +1825,6 @@ class User extends TableAccess
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
         return $this->changeRoleMembership('set', $roleId, $startDate, $endDate, $leader);
-    }
-
-    /**
-     * Edit an existing role membership of the current user. If the new date range contains
-     * a future or past membership of the same role then the two memberships will be merged.
-     * In opposite to setRoleMembership this method is useful to end a membership earlier.
-     * @param int    $memberId  Id of the current membership that should be edited.
-     * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
-     * @param string $endDate   New end date of the membership. Default will be @b DATE_MAX
-     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
-     *                          might get more rights for this role.
-     * @return bool Return @b true if the membership was successfully edited.
-     */
-    public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
-    {
-        return $this->changeRoleMembership('edit', $memberId, $startDate, $endDate, $leader);
     }
 
     /**
