@@ -18,13 +18,17 @@
  * The position of the items is important. Only the first items will display
  * permanently in the module. The other items are summarized in a submenu.
  * @par Examples
- * @code   // create module menu
+ * @code
+ * // create module menu
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *
  * // show link to create new announcement
- * $myNavbar->addItem('menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/mymodule/mymodule_new.php',
- *                         $gL10n->get('SYS_CREATE'), 'add.png');
- * $myNavbar->show(); @endcode
+ * $myNavbar->addItem(
+ *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/mymodule/mymodule_new.php',
+ *     $gL10n->get('SYS_CREATE'), 'add.png'
+ * );
+ * $myNavbar->show();
+ * @endcode
  */
 class HtmlNavbar
 {
@@ -163,13 +167,13 @@ class HtmlNavbar
         // add THEME_PATH to images unless the full URL is given
         if ($icon !== '' && preg_match($urlStartRegex, $icon) === 0)
         {
-            if (preg_match('/icons/', $icon) === 0)
+            if (admStrStartsWith($icon, '/icons/'))
             {
-                $icon = THEME_PATH . '/icons/' . $icon;
+                $icon = THEME_PATH . $icon;
             }
             else
             {
-                $icon = THEME_PATH . $icon;
+                $icon = THEME_PATH . '/icons/' . $icon;
             }
         }
 
