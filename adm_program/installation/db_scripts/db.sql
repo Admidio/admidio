@@ -341,7 +341,7 @@ CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_us
 /*==============================================================*/
 /* Table: adm_menu                                             */
 /*==============================================================*/
-create table %PREFIX%_menu
+CREATE TABLE %PREFIX%_menu
 (
     men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     men_com_id                  integer unsigned,

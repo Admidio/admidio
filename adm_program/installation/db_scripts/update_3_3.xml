@@ -80,25 +80,24 @@
     <step id="575" database="mysql" error="ignore">ALTER TABLE %PREFIX%_users DROP INDEX ak_usr_login_name, ADD INDEX %PREFIX%_idx_usr_login_name (usr_login_name)</step>
     <step id="580" database="mysql" error="ignore">DROP_INDEX ak_shortname ON %PREFIX%_organizations</step>
     <step id="590">CREATE TABLE %PREFIX%_menu
-                (
-                    men_id                      integer unsigned not null AUTO_INCREMENT,
-                    men_com_id                  integer unsigned,
-                    men_men_id_parent           integer unsigned,
-                    men_name_intern             varchar(255),
-                    men_name                    varchar(255),
-                    men_description             varchar(4000),
-                    men_node                    boolean       not null default '0',
-                    men_order                   integer,
-                    men_standart                boolean       not null default '0',
-                    men_url                     varchar(255),
-                    men_icon                    varchar(2000),
-                    primary key (men_id)
-                )
-                engine = InnoDB
-                auto_increment = 1
-                default character set = utf8
-                collate = utf8_unicode_ci</step>
-    <step id="600">create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_men_id_parent)</step>
+        (
+            men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            men_com_id                  integer unsigned,
+            men_men_id_parent           integer unsigned,
+            men_name_intern             varchar(255),
+            men_name                    varchar(255),
+            men_description             varchar(4000),
+            men_node                    boolean             NOT NULL    DEFAULT '0',
+            men_order                   integer,
+            men_standart                boolean             NOT NULL    DEFAULT '0',
+            men_url                     varchar(255),
+            men_icon                    varchar(2000),
+            PRIMARY KEY (men_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci</step>
+    <step id="600">CREATE INDEX IDX_%PREFIX%_MEN_ID ON %PREFIX%_menu (men_men_id_parent)</step>
     <step id="610">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('menu_view', 'adm_menu')</step>
     <step id="620">ComponentUpdateSteps::updateStepMigrateToStandartMenu</step>
