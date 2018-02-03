@@ -204,18 +204,12 @@ class HtmlPage
         global $gSettingsManager;
 
         // add admidio css file at last because there the user can redefine all css
-        $this->addCssFile(THEME_PATH.'/css/admidio.css');
-
-        // add custom css file if it exists to add own css styles without edit the original admidio css
-        if(is_file(THEME_PATH.'/css/custom.css'))
-        {
-            $this->addCssFile(THEME_PATH.'/css/custom.css');
-        }
+        $this->addCssFile(THEME_URL.'/css/admidio.css');
 
         // if print mode is set then add a print specific css file
         if ($this->printMode)
         {
-            $this->addCssFile(THEME_PATH.'/css/print.css');
+            $this->addCssFile(THEME_URL.'/css/print.css');
         }
 
         // add custom css file if it exists to add own css styles without edit the original admidio css
