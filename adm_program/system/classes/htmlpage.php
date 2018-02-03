@@ -776,7 +776,7 @@ class HtmlPage
                             {
                                 $menu->addSubItem('lists', 'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
                                                         $gL10n->get('LST_MY_LIST'));
-                                $menu->addSubItem('lists', 'rolinac', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php?active_role=0',
+                                $menu->addSubItem('lists', 'rolinac', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', array('active_role' => 0)),
                                                         $gL10n->get('ROL_INACTIV_ROLE'));
                             }
 
@@ -784,7 +784,7 @@ class HtmlPage
                             if(((int) $gSettingsManager->get('enable_dates_module') === 1 && $row->men_name_intern === 'dates')
                             || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                             {
-                                $menu->addSubItem('dates', 'olddates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?mode=old',
+                                $menu->addSubItem('dates', 'olddates', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('mode' => 'old')),
                                                         $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
                             }
                         }

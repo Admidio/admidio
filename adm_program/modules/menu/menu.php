@@ -66,7 +66,7 @@ $page->addJavascript('
 
         if (secondSequence > 0) {
             // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-            $.get(gRootPath + "/adm_program/modules/menu/menu_function.php?men_id=" + menID + "&mode=3&sequence=" + direction);
+            $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 3) . '&men_id=" + menID + "&sequence=" + direction);
         }
     }');
 
