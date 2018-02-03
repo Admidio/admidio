@@ -79,7 +79,7 @@ if($getMode === 1)
         $menu->setValue('men_name', $postTranslateName);
         $menu->setValue('men_description', $postTranslateDesc);
 
-        if(!$menu->getValue('men_standart'))
+        if(!$menu->getValue('men_standard'))
         {
             $menu->setValue('men_url',  $_POST['men_url']);
             $menu->setValue('men_com_id',  $_POST['men_com_id']);

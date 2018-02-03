@@ -142,7 +142,7 @@ $form = new HtmlForm('menu_edit_form', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/
 $fieldRequired = FIELD_REQUIRED;
 $fieldDefault  = FIELD_DEFAULT;
 
-if((bool) $menu->getValue('men_standart'))
+if((bool) $menu->getValue('men_standard'))
 {
     $fieldRequired = FIELD_DISABLED;
     $fieldDefault  = FIELD_DISABLED;

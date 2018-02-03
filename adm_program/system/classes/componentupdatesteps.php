@@ -386,7 +386,7 @@ final class ComponentUpdateSteps
 
         // Menu entries for the standart installation
         $sql = 'INSERT INTO '.TBL_MENU.'
-                       (men_com_id, men_men_id_parent, men_node, men_order, men_standart, men_name_intern, men_url, men_icon, men_name, men_description)
+                       (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
                 VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
                      , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
                      , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')

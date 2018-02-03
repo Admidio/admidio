@@ -351,7 +351,7 @@ CREATE TABLE %PREFIX%_menu
     men_description             varchar(4000),
     men_node                    boolean             NOT NULL    DEFAULT '0',
     men_order                   integer,
-    men_standart                boolean             NOT NULL    DEFAULT '0',
+    men_standard                boolean             NOT NULL    DEFAULT '0',
     men_url                     varchar(255),
     men_icon                    varchar(2000),
     PRIMARY KEY (men_id)
