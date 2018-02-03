@@ -344,8 +344,8 @@ CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_us
 CREATE TABLE %PREFIX%_menu
 (
     men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    men_com_id                  integer unsigned,
     men_men_id_parent           integer unsigned,
+    men_com_id                  integer unsigned,
     men_name_intern             varchar(255),
     men_name                    varchar(255),
     men_description             varchar(4000),
