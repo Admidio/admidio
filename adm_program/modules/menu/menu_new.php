@@ -130,6 +130,7 @@ $sqlRoles = 'SELECT *
            ORDER BY rol_name';
 $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
+$parentRoleViewSet = array();
 while($rowViewRoles = $rolesViewStatement->fetchObject())
 {
     // Jede Rolle wird nun dem Array hinzugefuegt
