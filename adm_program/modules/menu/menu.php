@@ -114,10 +114,11 @@ while ($mainMen = $mainMenStatement->fetchObject())
     // Get data
     while($menuRow = $menuStatement->fetchObject())
     {
+        $menIdParent = (int) $menuRow->men_men_id_parent;
 
-        if($menuGroup != $menuRow->men_men_id_parent)
+        if($menuGroup !== $menIdParent)
         {
-            $blockId = 'admMenu_'.$menuRow->men_men_id_parent;
+            $blockId = 'admMenu_'.$menIdParent;
 
             $menuOverview->addTableBody();
             $menuOverview->addRow('', array('class' => 'admidio-group-heading'));
@@ -125,7 +126,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
                               array('id' => 'group_'.$blockId, 'colspan' => '8'));
             $menuOverview->addTableBody('id', $blockId);
 
-            $menuGroup = $menuRow->men_men_id_parent;
+            $menuGroup = $menIdParent;
         }
 
         if(admIsTranslationStrId($menuRow->men_name))
@@ -145,7 +146,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
                                 src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($headline)).'" /></a>';
 
         $htmlStandardMenu = '&nbsp;';
-        if($menuRow->men_standard == 1)
+        if($menuRow->men_standard)
         {
             $htmlStandardMenu = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($gL10n->get('MEN_MENU_ITEM'))).'" />';
         }
@@ -154,7 +155,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
                                     src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
         // don't allow delete for standard menus
-        if($menuRow->men_standard == 0)
+        if(!$menuRow->men_standard)
         {
             $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                         href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'men', 'element_id' => 'row_men_'.
