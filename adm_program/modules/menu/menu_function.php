@@ -66,83 +66,68 @@ if($getMode === 1)
         // => EXIT
     }
 
-    try
+    if($postIcon !== '')
     {
-        if($postIcon !== '')
-        {
-            // get the name of the icon to save it.
-            $arrayIcons = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
-            $menu->setValue('men_icon', $arrayIcons[$postIcon]);
-        }
-
-        $menu->setValue('men_men_id_parent', $_POST['men_men_id_parent']);
-        $menu->setValue('men_name', $postTranslateName);
-        $menu->setValue('men_description', $postTranslateDesc);
-
-        if(!$menu->getValue('men_standard'))
-        {
-            $menu->setValue('men_url',  $_POST['men_url']);
-            $menu->setValue('men_com_id',  $_POST['men_com_id']);
-        }
-
-        $getMenId = $menu->getValue('men_id');
-
-        // save Data to Table
-        $returnCode = $menu->save();
-
-        if($returnCode < 0)
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        }
-
-        // Read current roles of the menu
-        $displayMenu = new RolesRights($gDb, 'menu_view', $getMenId);
-        $rolesDisplayRight = $displayMenu->getRolesIds();
-
-        if(!isset($_POST['menu_view']) || !is_array($_POST['menu_view']))
-        {
-            // remove all entries, so it is allowed without login
-            $displayMenu->removeRoles($rolesDisplayRight);
-        }
-        else
-        {
-            // add new or update roles
-            $displayMenu->addRoles($_POST['menu_view']);
-        }
-
-        if($gNavigation->count() > 1)
-        {
-            $gNavigation->deleteLastUrl();
-        }
-        else
-        {
-            $gNavigation->addUrl($gHomepage, 'Home');
-        }
-
-        unset($_SESSION['menu_request']);
-
-        header('Location: '. $gNavigation->getUrl());
-        exit();
-
+        // get the name of the icon to save it.
+        $arrayIcons = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
+        $menu->setValue('men_icon', $arrayIcons[$postIcon]);
     }
-    catch(AdmException $e)
+
+    $menu->setValue('men_men_id_parent', $_POST['men_men_id_parent']);
+    $menu->setValue('men_name', $postTranslateName);
+    $menu->setValue('men_description', $postTranslateDesc);
+
+    if(!$menu->getValue('men_standard'))
     {
-        $e->showHtml();
+        $menu->setValue('men_url', $_POST['men_url']);
+        $menu->setValue('men_com_id', $_POST['men_com_id']);
     }
+
+    $getMenId = $menu->getValue('men_id');
+
+    // save Data to Table
+    $returnCode = $menu->save();
+
+    if($returnCode < 0)
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    }
+
+    // Read current roles of the menu
+    $displayMenu = new RolesRights($gDb, 'menu_view', $getMenId);
+    $rolesDisplayRight = $displayMenu->getRolesIds();
+
+    if(!isset($_POST['menu_view']) || !is_array($_POST['menu_view']))
+    {
+        // remove all entries, so it is allowed without login
+        $displayMenu->removeRoles($rolesDisplayRight);
+    }
+    else
+    {
+        // add new or update roles
+        $displayMenu->addRoles($_POST['menu_view']);
+    }
+
+    if($gNavigation->count() > 1)
+    {
+        $gNavigation->deleteLastUrl();
+    }
+    else
+    {
+        $gNavigation->addUrl($gHomepage, 'Home');
+    }
+
+    unset($_SESSION['menu_request']);
+
+    header('Location: '. $gNavigation->getUrl());
+    exit();
 }
 elseif($getMode === 2)
 {
     // delete menu
-    try
+    if($menu->delete())
     {
-        if($menu->delete())
-        {
-            echo 'done';
-        }
-    }
-    catch(AdmException $e)
-    {
-        $e->showText();
+        echo 'done';
     }
 }
 elseif($getMode === 3)
