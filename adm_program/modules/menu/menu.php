@@ -155,7 +155,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
             $menuAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php', array('men_id' => $menuRow->men_id)). '"><img
                                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
-            // don't allow delete for standart menus
+            // don't allow delete for standard menus
             if($menuRow->men_standard == 0)
             {
                 $menuAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"

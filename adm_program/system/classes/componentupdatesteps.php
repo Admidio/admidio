@@ -374,7 +374,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * This method update the security settings for menus to standart values
+     * This method update the security settings for menus to standard values
      */
     public static function updateStepMigrateToStandardMenu()
     {
@@ -384,7 +384,7 @@ final class ComponentUpdateSteps
                 VALUES (\'MODULE\', \'SYS_MENU\', \'MENU\', ?, ?) -- ADMIDIO_VERSION, ADMIDIO_VERSION_BETA';
         self::$db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
 
-        // Menu entries for the standart installation
+        // Menu entries for the standard installation
         $sql = 'INSERT INTO '.TBL_MENU.'
                        (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
                 VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')

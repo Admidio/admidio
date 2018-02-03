@@ -252,7 +252,7 @@ $systemUser->save(false); // no registered user -> UserIdCreate couldn't be fill
 // now set current user to system user
 $gCurrentUser->readDataById($currUsrId);
 
-// Menu entries for the standart installation
+// Menu entries for the standard installation
 $sql = 'INSERT INTO '.TBL_MENU.'
                (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
