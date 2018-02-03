@@ -23,11 +23,11 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMenId    = admFuncVariableIsValid($_GET, 'men_id',    'int');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',      'int',    array('requireValue' => true));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence',  'string', array('validValues' => array('UP', 'DOWN')));
+$getMenId    = admFuncVariableIsValid($_GET, 'men_id',   'int');
+$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
-$postModuleName = admFuncVariableIsValid($_POST, 'men_name_intern',  'string', array('default' => ''));
+$postModuleName = admFuncVariableIsValid($_POST, 'men_name_intern', 'string', array('default' => ''));
 
 // check rights
 if(!$gCurrentUser->isAdministrator())
@@ -48,9 +48,9 @@ if($getMode === 1)
 {
     $_SESSION['menu_request'] = $_POST;
 
-    $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_description',  'string', array('default' => ''));
-    $postTranslateName = admFuncVariableIsValid($_POST, 'men_name',  'string', array('default' => ''));
-    $postIcon = admFuncVariableIsValid($_POST, 'men_icon',  'string', array('default' => ''));
+    $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_description', 'string', array('default' => ''));
+    $postTranslateName = admFuncVariableIsValid($_POST, 'men_name',        'string', array('default' => ''));
+    $postIcon          = admFuncVariableIsValid($_POST, 'men_icon',        'string', array('default' => ''));
 
     // Check if mandatory fields are filled
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
