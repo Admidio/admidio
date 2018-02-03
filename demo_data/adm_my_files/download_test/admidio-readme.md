@@ -79,12 +79,11 @@ membership software.
 
 ## Changelog
 
-Please visit our [changelog](https://www.admidio.org/index.php?page=changelog) for detail information about the bugfixes and enhancements in each version.
+Please visit our [changelog](https://www.admidio.org/changelog.php) for detail information about the bugfixes and enhancements in each version.
 
 ## Donation
 
-If you like the software and our project then we are happy if you [donate
-some money](https://www.admidio.org/index.php?page=donate) to the project.
+If you like the software and our project then we are happy if you [donate some money](https://www.admidio.org/donate.php) to the project.
 
 ## Copyright and License
 
@@ -124,4 +123,4 @@ and sharing great software.
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
-Copyright (c) 2004 - 2016 The Admidio Team
+Copyright (c) 2004 - 2018 The Admidio Team
