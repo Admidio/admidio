@@ -289,16 +289,7 @@ class HtmlPage
                         // special case because there are different links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
-                            $unreadBadge = '';
-
-                            // get number of unread messages for user
-                            $message = new TableMessage($gDb);
-                            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                            if($unread > 0)
-                            {
-                                $unreadBadge = '<span class="badge">' . $unread . '</span>';
-                            }
+                            $unreadBadge = self::getUnreadMessagesBadge();
 
                             $menuUrl = FOLDER_MODULES . '/messages/messages.php';
                             $menuIcon = '/icons/messages.png';
@@ -578,6 +569,26 @@ class HtmlPage
     }
 
     /**
+     * Get a badge with the unread messages count
+     * @return string
+     */
+    private static function getUnreadMessagesBadge()
+    {
+        global $gDb, $gCurrentUser;
+
+        // get number of unread messages for user
+        $message = new TableMessage($gDb);
+        $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
+
+        if ($unread > 0)
+        {
+            return '<span class="badge">' . $unread . '</span>';
+        }
+
+        return '';
+    }
+
+    /**
      * Flag if the current page has a navbar.
      * @return void
      */
@@ -749,14 +760,7 @@ class HtmlPage
                         // special case because there are differnent links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
-                            // get number of unread messages for user
-                            $message = new TableMessage($gDb);
-                            $unread = $message->countUnreadMessageRecords($gCurrentUser->getValue('usr_id'));
-
-                            if($unread > 0)
-                            {
-                                $unreadBadge = '<span class="badge">' . $unread . '</span>';
-                            }
+                            $unreadBadge = self::getUnreadMessagesBadge();
 
                             $menuUrl = FOLDER_MODULES . '/messages/messages.php';
                             $menuIcon = 'messages.png';
