@@ -343,25 +343,24 @@ CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_us
 /*==============================================================*/
 create table %PREFIX%_menu
 (
-    men_id                      integer unsigned    NOT NULL AUTO_INCREMENT,
+    men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     men_com_id                  integer unsigned,
     men_men_id_parent           integer unsigned,
     men_name_intern             varchar(255),
     men_name                    varchar(255),
     men_description             varchar(4000),
-    men_node                    boolean             NOT NULL DEFAULT '0',
+    men_node                    boolean             NOT NULL    DEFAULT '0',
     men_order                   integer,
-    men_standart                boolean             NOT NULL DEFAULT '0',
+    men_standart                boolean             NOT NULL    DEFAULT '0',
     men_url                     varchar(255),
     men_icon                    varchar(2000),
-    primary key (men_id)
+    PRIMARY KEY (men_id)
 )
-engine = InnoDB
-auto_increment = 1
-default character set = utf8
-collate = utf8_unicode_ci;
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
-create index IDX_%PREFIX%_MEN_ID on %PREFIX%_menu (men_cat_id);
+CREATE INDEX IDX_%PREFIX%_MEN_ID ON %PREFIX%_menu (men_cat_id);
 
 /*==============================================================*/
 /* Table: adm_messages                                          */
