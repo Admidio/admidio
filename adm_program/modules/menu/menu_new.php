@@ -28,17 +28,60 @@ if(!$gCurrentUser->isAdministrator())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// set module headline
-$headline = $gL10n->get('SYS_MENU');
+/**
+ * @param array<int,string> $menuList
+ * @param int               $parentId
+ * @param int               $level
+ * @param int               $menId
+ */
+function subMenu(&$menuList, $parentId, $level, $menId)
+{
+    global $gDb;
 
-// set headline of the script
+    $sqlConditionParentId = '';
+    $queryParams = array($menId);
+
+    // Erfassen des auszugebenden Menu
+    if ($parentId > 0)
+    {
+        $sqlConditionParentId .= ' AND men_men_id_parent = ? -- $parentId';
+        $queryParams[] = $parentId;
+    }
+    else
+    {
+        $sqlConditionParentId .= ' AND men_men_id_parent IS NULL';
+    }
+
+    $sql = 'SELECT *
+              FROM '.TBL_MENU.'
+             WHERE men_node = 1
+               AND men_id  <> ? -- $menu->getValue(\'men_id\')
+                   '.$sqlConditionParentId;
+    $childStatement = $gDb->queryPrepared($sql, $queryParams);
+
+    $parentMenu = new TableMenu($gDb);
+    $einschub = str_repeat('&nbsp;', $level * 3) . '&#151;&nbsp;';
+
+    while($menuEntry = $childStatement->fetch())
+    {
+        $parentMenu->clear();
+        $parentMenu->setArray($menuEntry);
+
+        // add entry to array of all menus
+        $menuList[$parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
+
+        subMenu($menuList, $parentMenu->getValue('men_id'), ++$level, $menId);
+    }
+}
+
+// set module headline
 if($getMenId > 0)
 {
-    $headline = $gL10n->get('SYS_EDIT_VAR', array($headline));
+    $headline = $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_MENU')));
 }
 else
 {
-    $headline = $gL10n->get('SYS_CREATE_VAR', array($headline));
+    $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
 }
 
 // create menu object
@@ -65,53 +108,6 @@ if(isset($_SESSION['menu_request']))
 }
 
 $gNavigation->addUrl(CURRENT_URL, array($headline));
-
-$menuArray = array(0 => 'MAIN');
-
-/**
- * die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
- * @param int       $parentId
- * @param string    $vorschub
- * @param TableMenu $menu
- */
-function subfolder($parentId, $vorschub, $menu)
-{
-    global $gDb, $menuArray;
-
-    $vorschub .= '&nbsp;&nbsp;&nbsp;';
-    $sqlConditionParentId = '';
-    $parentMenu = new TableMenu($gDb);
-
-    $queryParams = array($menu->getValue('men_id'));
-    // Erfassen des auszugebenden Albums
-    if ($parentId > 0)
-    {
-        $sqlConditionParentId .= ' AND men_men_id_parent = ? -- $parentId';
-        $queryParams[] = $parentId;
-    }
-    else
-    {
-        $sqlConditionParentId .= ' AND men_men_id_parent IS NULL';
-    }
-
-    $sql = 'SELECT *
-              FROM '.TBL_MENU.'
-             WHERE men_id  <> ? -- $menu->getValue(\'men_id\')
-               AND men_node = 1
-                   '.$sqlConditionParentId;
-    $childStatement = $gDb->queryPrepared($sql, $queryParams);
-
-    while($admPhotoChild = $childStatement->fetch())
-    {
-        $parentMenu->clear();
-        $parentMenu->setArray($admPhotoChild);
-
-        // add entry to array of all photo albums
-        $menuArray[$parentMenu->getValue('men_id')] = $vorschub.'&#151; '.$parentMenu->getValue('men_name');
-
-        subfolder($parentMenu->getValue('men_id'), $vorschub, $menu);
-    }
-}
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -149,7 +145,8 @@ if((bool) $menu->getValue('men_standard'))
     $fieldDefault  = FIELD_DISABLED;
 }
 
-subfolder(null, '', $menu);
+$menuList = array(0 => 'MAIN');
+subMenu($menuList, null, 1, (int) $menu->getValue('men_id'));
 
 $form->addInput(
     'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'),
@@ -170,7 +167,7 @@ $form->addMultilineTextInput(
 );
 
 $form->addSelectBox(
-    'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuArray,
+    'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuList,
     array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_men_id_parent'),
