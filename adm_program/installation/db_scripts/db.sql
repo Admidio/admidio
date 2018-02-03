@@ -360,7 +360,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE INDEX IDX_%PREFIX%_MEN_ID ON %PREFIX%_menu (men_cat_id);
+CREATE INDEX %PREFIX%_idx_men_men_id_parent ON %PREFIX%_menu (men_men_id_parent);
 
 /*==============================================================*/
 /* Table: adm_messages                                          */
