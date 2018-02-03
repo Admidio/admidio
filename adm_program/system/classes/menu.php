@@ -53,6 +53,7 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
+     * @throws AdmException
      * @return array<string,string|array>
      */
     private function buildItem($id, $link, $text, $icon, $desc = '')
@@ -64,15 +65,10 @@ class Menu
         }
 
         // if icon is imagefile or imageurl then show image
-        if(strpos(admStrToLower($icon), '.png') > 0 || strpos(admStrToLower($icon), '.jpg') > 0)
+        if (preg_match('/^http(s?):\/\//', $icon) === 0 && admStrIsValidFileName($icon, true)
+        && (strpos(admStrToLower($icon), '.png') > 0 || strpos(admStrToLower($icon), '.jpg') > 0))
         {
-            if (preg_match('/^http(s?):\/\//', $icon) === 0)
-            {
-                if (admStrIsValidFileName($icon, true))
-                {
-                    $icon = THEME_URL . '/icons/' . $icon;
-                }
-            }
+            $icon = THEME_URL . '/icons/' . $icon;
         }
 
         return array(
@@ -91,6 +87,7 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
+     * @throws AdmException
      */
     public function addItem($id, $link, $text, $icon, $desc = '')
     {
@@ -133,6 +130,7 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
+     * @throws AdmException
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
