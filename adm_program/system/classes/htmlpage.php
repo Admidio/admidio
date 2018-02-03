@@ -700,7 +700,7 @@ class HtmlPage
      */
     public function showMainMenu($details = true)
     {
-        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
+        global $gL10n, $gSettingsManager, $gValidLogin, $gDb;
 
         $menuIcon  = '/dummy.png';
         $htmlMenu = '';
@@ -757,7 +757,7 @@ class HtmlPage
                             $menuName = $row->men_name;
                         }
 
-                        // special case because there are differnent links if you are logged in or out for mail
+                        // special case because there are different links if you are logged in or out for mail
                         if($row->men_name_intern === 'mail' && $gValidLogin)
                         {
                             $unreadBadge = self::getUnreadMessagesBadge();
