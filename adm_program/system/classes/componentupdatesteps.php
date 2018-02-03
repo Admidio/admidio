@@ -376,7 +376,7 @@ final class ComponentUpdateSteps
     /**
      * This method update the security settings for menus to standart values
      */
-    public static function updateStepMigrateToStandartMenu()
+    public static function updateStepMigrateToStandardMenu()
     {
         // add new module menu to components table
         $sql = 'INSERT INTO '.TBL_COMPONENTS.'
