@@ -291,7 +291,7 @@ class HtmlPage
                         {
                             $unreadBadge = self::getUnreadMessagesBadge();
 
-                            $menuUrl = FOLDER_MODULES . '/messages/messages.php';
+                            $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
                             $menuIcon = '/icons/messages.png';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
@@ -762,7 +762,7 @@ class HtmlPage
                         {
                             $unreadBadge = self::getUnreadMessagesBadge();
 
-                            $menuUrl = FOLDER_MODULES . '/messages/messages.php';
+                            $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
                             $menuIcon = 'messages.png';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
@@ -774,9 +774,9 @@ class HtmlPage
                             // Submenu for Lists
                             if($gValidLogin && $row->men_name_intern === 'lists')
                             {
-                                $menu->addSubItem('lists', 'mylist', FOLDER_MODULES . '/lists/mylist.php',
+                                $menu->addSubItem('lists', 'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
                                                         $gL10n->get('LST_MY_LIST'));
-                                $menu->addSubItem('lists', 'rolinac', FOLDER_MODULES . '/lists/lists.php?active_role=0',
+                                $menu->addSubItem('lists', 'rolinac', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php?active_role=0',
                                                         $gL10n->get('ROL_INACTIV_ROLE'));
                             }
 
@@ -784,7 +784,7 @@ class HtmlPage
                             if(((int) $gSettingsManager->get('enable_dates_module') === 1 && $row->men_name_intern === 'dates')
                             || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin && $row->men_name_intern === 'dates'))
                             {
-                                $menu->addSubItem('dates', 'olddates', FOLDER_MODULES . '/dates/dates.php?mode=old',
+                                $menu->addSubItem('dates', 'olddates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php?mode=old',
                                                         $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
                             }
                         }
@@ -794,7 +794,7 @@ class HtmlPage
             }
 
             $this->menu->addItem(
-                'menu_item_private_message', FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
+                'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
                 'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
