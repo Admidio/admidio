@@ -657,16 +657,7 @@ class HtmlPage
      */
     public function setPrintMode()
     {
-        global $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
-        global $g_root_path;
-
-        $headerContent    = '';
-        $htmlMyHeader     = '';
-        $htmlMyBodyTop    = '';
-        $htmlMyBodyBottom = '';
-        $htmlMenu         = '';
-        $htmlHeadline     = '';
+        $this->printMode = true;
     }
 
     /**
