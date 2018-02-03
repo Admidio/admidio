@@ -30,7 +30,7 @@ if(!$gCurrentUser->isAdministrator())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$pluginFolder = '/adm_plugins/calendar/calendar.php';
+$pluginUrl = ADMIDIO_URL . FOLDER_PLUGINS . '/calendar/calendar.php';
 
 // set module headline
 $headline = $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_MENU')));
@@ -77,11 +77,10 @@ else
     $form->addInput('men_name_intern', $gL10n->get('SYS_NAME'), 'plg_calendar', array('property' => FIELD_DISABLED));
     $form->addInput('men_name_intern', null, 'plg_calendar', array('type' => 'hidden'));
 
-    $form->addSelectBox('menu_view', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet,
-                                       array('property'  => FIELD_REQUIRED, 'multiselect'  => true));
+    $form->addSelectBox('menu_view', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED, 'multiselect' => true));
 
-    $form->addInput('men_url', null, $pluginFolder, array('type' => 'hidden'));
-    $form->addInput('men_url', $gL10n->get('ORG_URL'), $pluginFolder, array('property' => FIELD_DISABLED));
+    $form->addInput('men_url', null, $pluginUrl, array('type' => 'hidden'));
+    $form->addInput('men_url', $gL10n->get('ORG_URL'), $pluginUrl, array('property' => FIELD_DISABLED));
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 
