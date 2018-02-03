@@ -78,7 +78,7 @@ class Component extends TableAccess
             throw new AdmException('SYS_DATABASE_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="' . ADMIDIO_URL . '/adm_program/installation/update.php">', '</a>'));
         }
-        elseif ($returnCode === 1) // filesystem has minor version
+        if ($returnCode === 1) // filesystem has minor version
         {
             $gLogger->warning(
                 'UPDATE: Filesystem-Version is lower than the database!',
@@ -95,6 +95,8 @@ class Component extends TableAccess
      * This method checks if the current user is allowed to view the component. Therefore
      * special checks for each component were done.
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. LISTS
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
      * @return bool Return true if the current user is allowed to view the component
      */
     public static function visible($componentName)
