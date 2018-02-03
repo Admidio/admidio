@@ -274,7 +274,7 @@ class HtmlPage
 
                 while ($row = $statement->fetchObject())
                 {
-                    if((int) $row->men_com_id === 0 || Component::visible($row->com_name_intern))
+                    if((int) $row->men_com_id === 0 || Component::isVisible($row->com_name_intern))
                     {
                         $viewMenu = true;
 
@@ -733,7 +733,7 @@ class HtmlPage
                 {
                     $description = '';
 
-                    if((int) $row->men_com_id === 0 || Component::visible($row->com_name_intern))
+                    if((int) $row->men_com_id === 0 || Component::isVisible($row->com_name_intern))
                     {
                         if(strlen($row->men_description) > 2)
                         {

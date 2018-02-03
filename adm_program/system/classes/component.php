@@ -99,7 +99,7 @@ class Component extends TableAccess
      * @throws \InvalidArgumentException
      * @return bool Return true if the current user is allowed to view the component
      */
-    public static function visible($componentName)
+    public static function isVisible($componentName)
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager;
 
