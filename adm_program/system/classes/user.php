@@ -1391,7 +1391,7 @@ class User extends TableAccess
         }
 
         // every user is allowed to view his own profile
-        if ((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id'))
+        if ((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id') && (int) $this->getValue('usr_id') > 0)
         {
             return true;
         }

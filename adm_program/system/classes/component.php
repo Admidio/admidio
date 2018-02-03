@@ -179,7 +179,7 @@ class Component extends TableAccess
                 break;
 
             case 'PROFILE':
-                if($gCurrentUser->hasRightViewProfile($user))
+                if($gCurrentUser->hasRightViewProfile($gCurrentUser))
                 {
                     return true;
                 }
