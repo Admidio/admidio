@@ -164,16 +164,16 @@ class HtmlNavbar
             $url = ADMIDIO_URL . '/' . $url;
         }
 
-        // add THEME_PATH to images unless the full URL is given
+        // add THEME_URL to images unless the full URL is given
         if ($icon !== '' && preg_match($urlStartRegex, $icon) === 0)
         {
             if (admStrStartsWith($icon, '/icons/'))
             {
-                $icon = THEME_PATH . $icon;
+                $icon = THEME_URL . $icon;
             }
             else
             {
-                $icon = THEME_PATH . '/icons/' . $icon;
+                $icon = THEME_URL . '/icons/' . $icon;
             }
         }
 

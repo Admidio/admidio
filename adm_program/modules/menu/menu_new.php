@@ -213,7 +213,7 @@ $form->addSelectBox(
 
 $form->addSubmitButton(
     'btn_save', $gL10n->get('SYS_SAVE'),
-    array('icon' => THEME_PATH.'/icons/disk.png')
+    array('icon' => THEME_URL.'/icons/disk.png')
 );
 
 // add form to html page and show page

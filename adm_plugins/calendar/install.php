@@ -82,7 +82,7 @@ else
     $form->addInput('men_url', null, $pluginUrl, array('type' => 'hidden'));
     $form->addInput('men_url', $gL10n->get('ORG_URL'), $pluginUrl, array('property' => FIELD_DISABLED));
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
