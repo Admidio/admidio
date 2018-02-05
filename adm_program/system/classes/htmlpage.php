@@ -244,50 +244,40 @@ class HtmlPage
 
     /**
      * Adds the modal menu
-     * @return void
      */
     public function addModalMenu()
     {
         global $gL10n, $gValidLogin, $gDb, $gCurrentUser;
 
-        // display Menu
-        $sql = 'SELECT *
-                  FROM '.TBL_MENU.'
-                 WHERE men_men_id_parent IS NULL
-              ORDER BY men_order';
-        $mainMenuStatement = $gDb->queryPrepared($sql);
+        $mainMenuStatement = self::getMainMenuStatement();
 
         while ($mainMenu = $mainMenuStatement->fetchObject())
         {
-            // display Menu
-            $sql = 'SELECT *
-                      FROM '.TBL_MENU.'
-                 LEFT JOIN '.TBL_COMPONENTS.'
-                        ON com_id = men_com_id
-                     WHERE men_men_id_parent = ? -- $mainMenu->men_id
-                  ORDER BY men_men_id_parent DESC, men_order';
-            $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
+            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
 
-            if($statement->rowCount() > 0)
+            if ($menuStatement->rowCount() > 0)
             {
-                $this->menu->addItem('menu_item_'.$mainMenu->men_name_intern, null, $gL10n->get($mainMenu->men_name), 'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item');
+                $this->menu->addItem(
+                    'menu_item_'.$mainMenu['men_name_intern'], null, $gL10n->get($mainMenu['men_name']),
+                    'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
+                );
 
-                while ($row = $statement->fetchObject())
+                while ($row = $menuStatement->fetchObject())
                 {
-                    if((int) $row->men_com_id === 0 || Component::isVisible($row->com_name_intern))
+                    if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
                         $viewMenu = true;
 
                         // Read current roles rights of the menu
-                        $displayMenu = new RolesRights($gDb, 'menu_view', $row->men_id);
+                        $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
                         $rolesDisplayRight = $displayMenu->getRolesIds();
 
-                        $menuUrl = $row->men_url;
-                        $menuIcon = $row->men_icon;
-                        $menuName = $gL10n->get($row->men_name);
+                        $menuUrl = $row['men_url'];
+                        $menuIcon = $row['men_icon'];
+                        $menuName = $gL10n->get($row['men_name']);
 
                         // special case because there are different links if you are logged in or out for mail
-                        if($row->men_name_intern === 'mail' && $gValidLogin)
+                        if ($gValidLogin && $row['men_name_intern'] === 'mail')
                         {
                             $unreadBadge = self::getUnreadMessagesBadge();
 
@@ -296,18 +286,21 @@ class HtmlPage
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
-                        if(count($rolesDisplayRight) >= 1)
+                        if (count($rolesDisplayRight) >= 1)
                         {
                             // check for right to show the menu
-                            if(!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                            if (!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
                             {
                                 $viewMenu = false;
                             }
                         }
 
-                        if($viewMenu)
+                        if ($viewMenu)
                         {
-                            $this->menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, 'right', 'menu_item_'.$mainMenu->men_name_intern, 'admidio-default-menu-item');
+                            $this->menu->addItem(
+                                $row['men_name_intern'], $menuUrl, $menuName, $menuIcon, 'right',
+                                'menu_item_'.$mainMenu['men_name_intern'], 'admidio-default-menu-item'
+                            );
                         }
                     }
                 }
@@ -323,7 +316,7 @@ class HtmlPage
             );
             // show logout link
             $this->menu->addItem(
-                'menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
+                'menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
                 'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
@@ -336,7 +329,7 @@ class HtmlPage
             );
             // show login link
             $this->menu->addItem(
-                'menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
+                'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
                 'key.png', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
@@ -551,6 +544,39 @@ class HtmlPage
     }
 
     /**
+     * @return \PDOStatement|false
+     */
+    private static function getMainMenuStatement()
+    {
+        global $gDb;
+
+        $sql = 'SELECT men_id, men_name, men_name_intern
+                  FROM '.TBL_MENU.'
+                 WHERE men_men_id_parent IS NULL
+              ORDER BY men_order';
+
+        return $gDb->queryPrepared($sql);
+    }
+
+    /**
+     * @param int $menId
+     * @return \PDOStatement|false
+     */
+    private static function getMenuStatement($menId)
+    {
+        global $gDb;
+
+        $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
+                  FROM '.TBL_MENU.'
+             LEFT JOIN '.TBL_COMPONENTS.'
+                    ON com_id = men_com_id
+                 WHERE men_men_id_parent = ? -- $menId
+              ORDER BY men_men_id_parent DESC, men_order';
+
+        return $gDb->queryPrepared($sql, array($menId));
+    }
+
+    /**
      * Returns the menu object of this html page.
      * @return \HtmlNavbar Returns the menu object of this html page.
      */
@@ -700,65 +726,53 @@ class HtmlPage
      */
     public function showMainMenu($details = true)
     {
-        global $gL10n, $gSettingsManager, $gValidLogin, $gDb;
+        global $gL10n, $gValidLogin, $gSettingsManager;
 
-        $menuIcon  = '/dummy.png';
+        $menuIcon = '/dummy.png';
         $htmlMenu = '';
 
-        // display Menu
-        $sql = 'SELECT *
-                  FROM '.TBL_MENU.'
-                 WHERE men_men_id_parent IS NULL
-              ORDER BY men_order';
-        $mainMenuStatement = $gDb->queryPrepared($sql);
+        $mainMenuStatement = self::getMainMenuStatement();
 
-        while ($mainMenu = $mainMenuStatement->fetchObject())
+        while ($mainMenu = $mainMenuStatement->fetch())
         {
             $unreadBadge = '';
 
-            // display Menu
-            $sql = 'SELECT *
-                      FROM '.TBL_MENU.'
-                 LEFT JOIN '.TBL_COMPONENTS.'
-                        ON com_id = men_com_id
-                     WHERE men_men_id_parent = ? -- $mainMenu->men_id
-                  ORDER BY men_men_id_parent DESC, men_order';
-            $statement = $gDb->queryPrepared($sql, array($mainMenu->men_id));
+            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
 
-            if($statement->rowCount() > 0)
+            if ($menuStatement->rowCount() > 0)
             {
-                $menu = new Menu($mainMenu->men_name_intern, $gL10n->get($mainMenu->men_name));
+                $menu = new Menu($mainMenu['men_name_intern'], $gL10n->get($mainMenu['men_name']));
 
-                while ($row = $statement->fetchObject())
+                while ($row = $menuStatement->fetchObject())
                 {
                     $description = '';
 
-                    if((int) $row->men_com_id === 0 || Component::isVisible($row->com_name_intern))
+                    if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
-                        if(strlen($row->men_description) > 2)
+                        if (strlen($row['men_description']) > 2)
                         {
-                            $description = $gL10n->get($row->men_description);
-                            if($description === '##' || $description[0] === '#')
+                            $description = $gL10n->get($row['men_description']);
+                            if ($description === '##' || $description[0] === '#')
                             {
-                                $description = $row->men_description;
+                                $description = $row['men_description'];
                             }
                         }
 
-                        $menuUrl = $row->men_url;
+                        $menuUrl = $row['men_url'];
 
-                        if(strlen($row->men_icon) > 2)
+                        if (strlen($row['men_icon']) > 2)
                         {
-                            $menuIcon = $row->men_icon;
+                            $menuIcon = $row['men_icon'];
                         }
 
-                        $menuName = $gL10n->get($row->men_name);
-                        if($menuName === '##' || $menuName[0] === '#')
+                        $menuName = $gL10n->get($row['men_name']);
+                        if ($menuName === '##' || $menuName[0] === '#')
                         {
-                            $menuName = $row->men_name;
+                            $menuName = $row['men_name'];
                         }
 
                         // special case because there are different links if you are logged in or out for mail
-                        if($row->men_name_intern === 'mail' && $gValidLogin)
+                        if ($gValidLogin && $row['men_name_intern'] === 'mail')
                         {
                             $unreadBadge = self::getUnreadMessagesBadge();
 
@@ -767,29 +781,37 @@ class HtmlPage
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
-                        $menu->addItem($row->men_name_intern, $menuUrl, $menuName, $menuIcon, $description);
+                        $menu->addItem($row['men_name_intern'], $menuUrl, $menuName, $menuIcon, $description);
 
-                        if($details)
+                        if ($details)
                         {
                             // Submenu for Lists
-                            if($gValidLogin && $row->men_name_intern === 'lists')
+                            if ($gValidLogin && $row['men_name_intern'] === 'lists')
                             {
-                                $menu->addSubItem('lists', 'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
-                                                        $gL10n->get('LST_MY_LIST'));
-                                $menu->addSubItem('lists', 'rolinac', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', array('active_role' => 0)),
-                                                        $gL10n->get('ROL_INACTIV_ROLE'));
+                                $menu->addSubItem(
+                                    'lists', 'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
+                                    $gL10n->get('LST_MY_LIST')
+                                );
+                                $menu->addSubItem(
+                                    'lists', 'rolinac', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', array('active_role' => 0)),
+                                    $gL10n->get('ROL_INACTIV_ROLE')
+                                );
                             }
 
                             // Submenu for Dates
-                            if(((int) $gSettingsManager->get('enable_dates_module') === 1 && $row->men_name_intern === 'dates')
-                            || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin && $row->men_name_intern === 'dates'))
+                            if ($row['men_name_intern'] === 'dates'
+                                && ((int) $gSettingsManager->get('enable_dates_module') === 1
+                                || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin)))
                             {
-                                $menu->addSubItem('dates', 'olddates', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('mode' => 'old')),
-                                                        $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES'))));
+                                $menu->addSubItem(
+                                    'dates', 'olddates', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('mode' => 'old')),
+                                    $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES')))
+                                );
                             }
                         }
                     }
                 }
+
                 $htmlMenu .= $menu->show($details);
             }
 
