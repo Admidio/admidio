@@ -25,11 +25,10 @@ require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id',   'int');
-$getType     = admFuncVariableIsValid($_GET, 'type',     'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
-$getTitle    = admFuncVariableIsValid($_GET, 'title',    'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
+$getCatId = admFuncVariableIsValid($_GET, 'cat_id', 'int');
+$getType  = admFuncVariableIsValid($_GET, 'type',   'string', array('requireValue' => true, 'validValues' => array('ROL', 'LNK', 'USF', 'ANN', 'DAT', 'AWA')));
+$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int',    array('requireValue' => true));
+$getTitle = admFuncVariableIsValid($_GET, 'title',  'string', array('defaultValue' => $gL10n->get('SYS_CATEGORY')));
 
 // create category object
 $category = new TableCategory($gDb);
@@ -229,6 +228,8 @@ elseif($getMode === 2)
 elseif($getMode === 4)
 {
     // Kategoriereihenfolge aktualisieren
+    $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableCategory::MOVE_UP, TableCategory::MOVE_DOWN)));
+
     $category->moveSequence($getSequence);
     exit();
 }

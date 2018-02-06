@@ -23,11 +23,8 @@
 require_once(__DIR__ . '/../../system/common.php');
 
 // Initialize and check the parameters
-$getMenId    = admFuncVariableIsValid($_GET, 'men_id',   'int');
-$getMode     = admFuncVariableIsValid($_GET, 'mode',     'int',    array('requireValue' => true));
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
-
-$postModuleName = admFuncVariableIsValid($_POST, 'men_name_intern', 'string', array('default' => ''));
+$getMenId = admFuncVariableIsValid($_GET, 'men_id', 'int');
+$getMode  = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
 // check rights
 if(!$gCurrentUser->isAdministrator())
@@ -133,6 +130,8 @@ elseif($getMode === 2)
 elseif($getMode === 3)
 {
     // Kategoriereihenfolge aktualisieren
+    $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array(TableMenu::MOVE_UP, TableMenu::MOVE_DOWN)));
+
     $menu->moveSequence($getSequence);
     exit();
 }
