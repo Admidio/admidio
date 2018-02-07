@@ -238,7 +238,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStepMigrateDatesRightsToFolderRights()
     {
-        global $g_tbl_praefix, $gCurrentUser;
+        global $gCurrentUser;
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
@@ -250,7 +250,7 @@ final class ComponentUpdateSteps
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
                 SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
-                  FROM '.$g_tbl_praefix.'_date_role
+                  FROM '.TABLE_PREFIX.'_date_role
                  WHERE dtr_rol_id IS NOT NULL';
         self::$db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
     }
@@ -261,7 +261,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStepMigrateToFolderRights()
     {
-        global $g_tbl_praefix, $g_organization, $gCurrentUser;
+        global $g_organization, $gCurrentUser;
 
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
@@ -273,7 +273,7 @@ final class ComponentUpdateSteps
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
                 SELECT '.$rolesRightId.', flr_rol_id, flr_fol_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
-                  FROM '.$g_tbl_praefix.'_folder_roles ';
+                  FROM '.TABLE_PREFIX.'_folder_roles ';
         self::$db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
 
         // add new right folder_update to adm_roles_rights

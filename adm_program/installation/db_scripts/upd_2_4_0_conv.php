@@ -13,17 +13,17 @@ require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/tableusers.php');
 // drop foreign keys to delete index
 if($gDbType === Database::PDO_ENGINE_MYSQL)
 {
-    $sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_USR_ORG_REG';
+    $sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.TABLE_PREFIX.'_FK_USR_ORG_REG';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_ROL';
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.TABLE_PREFIX.'_FK_MEM_ROL';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_USR';
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.TABLE_PREFIX.'_FK_MEM_USR';
     $gDb->query($sql, false);
     $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.$g_tbl_praefix.'_folder_roles DROP INDEX FLR_FOL_FK';
+    $sql = 'ALTER TABLE '.TABLE_PREFIX.'_folder_roles DROP INDEX FLR_FOL_FK';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.$g_tbl_praefix.'_folder_roles DROP INDEX FLR_ROL_FK';
+    $sql = 'ALTER TABLE '.TABLE_PREFIX.'_folder_roles DROP INDEX FLR_ROL_FK';
     $gDb->query($sql, false);
     $sql = 'ALTER TABLE '.TBL_ROLE_DEPENDENCIES.' DROP INDEX RLD_ROL_PARENT_FK';
     $gDb->query($sql, false);
@@ -45,11 +45,11 @@ if($gDbType === Database::PDO_ENGINE_MYSQL)
 }
 else
 {
-    $sql = 'ALTER TABLE '.TBL_USERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_USR_ORG_REG';
+    $sql = 'ALTER TABLE '.TBL_USERS.' DROP CONSTRAINT '.TABLE_PREFIX.'_FK_USR_ORG_REG';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL';
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.TABLE_PREFIX.'_FK_MEM_ROL';
     $gDb->query($sql, false);
-    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
+    $sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.TABLE_PREFIX.'_FK_MEM_USR';
     $gDb->query($sql, false);
     $sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
     $gDb->query($sql, false);
@@ -80,14 +80,14 @@ $sql = 'ALTER TABLE '.TBL_USERS.' DROP COLUMN usr_reg_org_shortname';
 $gDb->query($sql, false);
 
 // create foreign keys and new index
-$sql = 'ALTER TABLE '.$g_tbl_praefix.'_members ADD CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL FOREIGN KEY (mem_rol_id)
-      REFERENCES '.$g_tbl_praefix.'_roles (rol_id) ON DELETE RESTRICT ON UPDATE RESTRICT';
+$sql = 'ALTER TABLE '.TABLE_PREFIX.'_members ADD CONSTRAINT '.TABLE_PREFIX.'_FK_MEM_ROL FOREIGN KEY (mem_rol_id)
+      REFERENCES '.TABLE_PREFIX.'_roles (rol_id) ON DELETE RESTRICT ON UPDATE RESTRICT';
 $gDb->query($sql, false);
-$sql = 'ALTER TABLE '.$g_tbl_praefix.'_members ADD CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR FOREIGN KEY (mem_usr_id)
-      REFERENCES '.$g_tbl_praefix.'_users (usr_id) ON DELETE RESTRICT ON UPDATE RESTRICT';
+$sql = 'ALTER TABLE '.TABLE_PREFIX.'_members ADD CONSTRAINT '.TABLE_PREFIX.'_FK_MEM_USR FOREIGN KEY (mem_usr_id)
+      REFERENCES '.TABLE_PREFIX.'_users (usr_id) ON DELETE RESTRICT ON UPDATE RESTRICT';
 $gDb->query($sql, false);
 
-$sql = 'CREATE INDEX IDX_'.$g_tbl_praefix.'_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (mem_rol_id, mem_usr_id)';
+$sql = 'CREATE INDEX IDX_'.TABLE_PREFIX.'_MEM_ROL_USR_ID ON '.TBL_MEMBERS.' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);
 
 $sql = 'UPDATE '.TBL_ROLES.' SET rol_webmaster = 1

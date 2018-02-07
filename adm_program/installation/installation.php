@@ -154,7 +154,7 @@ if (is_file($pathConfigFile))
         $_SESSION['db_database'] = $g_adm_db;
         $_SESSION['db_user']     = $g_adm_usr;
         $_SESSION['db_password'] = $g_adm_pw;
-        $_SESSION['prefix']      = $g_tbl_praefix;
+        $_SESSION['prefix']      = TABLE_PREFIX;
 
         admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
         // => EXIT

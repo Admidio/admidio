@@ -133,10 +133,8 @@ class ComponentUpdate extends Component
      */
     private function executeUpdateSql($updateSql, $showError)
     {
-        global $g_tbl_praefix;
-
         // replace prefix with installation specific table prefix
-        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $updateSql);
+        $sql = str_replace('%PREFIX%', TABLE_PREFIX, $updateSql);
 
         $this->db->queryPrepared($sql, array(), $showError);
     }

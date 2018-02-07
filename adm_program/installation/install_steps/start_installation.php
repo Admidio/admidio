@@ -32,7 +32,7 @@ if (!is_file($pathConfigFile))
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['prefix'])
-&&    ($g_tbl_praefix  !== $_SESSION['prefix']
+&&    (TABLE_PREFIX    !== $_SESSION['prefix']
     || $gDbType        !== $_SESSION['db_type']
     || $g_adm_srv      !== $_SESSION['db_host']
     || $g_adm_port     !== $_SESSION['db_port']

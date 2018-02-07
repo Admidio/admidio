@@ -83,7 +83,7 @@ $sql = 'SELECT table_name
           FROM information_schema.tables
          WHERE table_schema = ?
            AND table_name LIKE ?';
-$statement = $gDb->queryPrepared($sql, array($g_adm_db, $g_tbl_praefix . '_%'));
+$statement = $gDb->queryPrepared($sql, array($g_adm_db, TABLE_PREFIX . '_%'));
 $tables = array();
 while($tableName = $statement->fetchColumn())
 {

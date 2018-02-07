@@ -94,7 +94,7 @@ function checkPhpVersion()
  */
 function querySqlFile(Database $db, $sqlFileName)
 {
-    global $gL10n, $g_tbl_praefix;
+    global $gL10n;
 
     $sqlPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
     $sqlFilePath = $sqlPath . $sqlFileName;
@@ -122,7 +122,7 @@ function querySqlFile(Database $db, $sqlFileName)
         if ($sql !== '')
         {
             // replace prefix with installation specific table prefix
-            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+            $sql = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
             // now execute update sql
             $db->queryPrepared($sql);
         }
