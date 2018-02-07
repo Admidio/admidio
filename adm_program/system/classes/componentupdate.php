@@ -168,6 +168,8 @@ class ComponentUpdate extends Component
         // then call this function and don't execute a SQL statement
         if (admStrStartsWith($updateStepContent, 'ComponentUpdateSteps::'))
         {
+            $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
+
             self::executeUpdateMethod($updateStepContent);
         }
         // only execute if sql statement is for all databases or for the used database
