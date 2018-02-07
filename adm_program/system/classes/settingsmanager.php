@@ -343,11 +343,23 @@ class SettingsManager
      */
     public function setMulti(array $settings, $update = true)
     {
+        foreach ($settings as $name => $value)
+        {
+            if (!self::isValidName($name))
+            {
+                throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            }
+            if (!self::isValidValue($value))
+            {
+                throw new \UnexpectedValueException('Settings value "' . $value . '" is an invalid value!');
+            }
+        }
+
         $this->db->startTransaction();
 
         foreach ($settings as $name => $value)
         {
-            $this->set($name, (string) $value, $update);
+            $this->updateOrInsertSetting($name, (string) $value, $update);
         }
 
         $this->db->endTransaction();
