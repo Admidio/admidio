@@ -251,7 +251,7 @@ class HtmlPage
 
         $mainMenuStatement = self::getMainMenuStatement();
 
-        while ($mainMenu = $mainMenuStatement->fetchObject())
+        while ($mainMenu = $mainMenuStatement->fetch())
         {
             $menuStatement = self::getMenuStatement($mainMenu['men_id']);
 
@@ -262,7 +262,7 @@ class HtmlPage
                     'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
-                while ($row = $menuStatement->fetchObject())
+                while ($row = $menuStatement->fetch())
                 {
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
@@ -743,7 +743,7 @@ class HtmlPage
             {
                 $menu = new Menu($mainMenu['men_name_intern'], $gL10n->get($mainMenu['men_name']));
 
-                while ($row = $menuStatement->fetchObject())
+                while ($row = $menuStatement->fetch())
                 {
                     $description = '';
 
