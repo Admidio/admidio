@@ -14,7 +14,7 @@
  */
 function checkLogin()
 {
-    global $gDb, $gL10n, $gProfileFields, $gLoginForUpdate;
+    global $gDb, $gL10n, $gLoginForUpdate, $gProfileFields, $gCurrentUser;
 
     if (isset($gLoginForUpdate) && !$gLoginForUpdate)
     {
@@ -172,9 +172,7 @@ function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 
 function doVersion3Update()
 {
-    global $gDb, $gL10n, $gCurrentOrganization, $gCurrentUser;
-
-    $gProfileFields = new ProfileFields($gDb, (int) $gCurrentOrganization->getValue('org_id'));
+    global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
 
     // set system user as current user, but this user only exists since version 3
     $sql = 'SELECT usr_id
