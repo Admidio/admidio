@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -122,8 +122,8 @@ class ComponentUpdate extends Component
     {
         // get the method name (remove "ComponentUpdateSteps::")
         $methodName = substr($updateStepContent, 22);
-        // now call the method
-        ComponentUpdateSteps::{$methodName}();
+        // now call the method that is also compatible to PHP 5.3
+        ComponentUpdateSteps::$methodName();
     }
 
     /**

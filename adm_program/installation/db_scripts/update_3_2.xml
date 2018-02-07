@@ -31,8 +31,7 @@
     <step id="80">create unique index IDX_%PREFIX%_RRD_ROR_ROL_OBJECT_ID on %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id)</step>
     <step id="90">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                   VALUES ('folder_view', 'adm_folders'),
-                         ('folder_upload', 'adm_folders')
-    </step>
+                         ('folder_upload', 'adm_folders')</step>
     <step id="100">ComponentUpdateSteps::updateStepMigrateToFolderRights</step>
     <step id="110">DROP TABLE %PREFIX%_folder_roles</step>
     <step id="120">alter table %PREFIX%_roles_rights_data add constraint %PREFIX%_FK_RRD_ROR foreign key (rrd_ror_id)
@@ -48,7 +47,6 @@
     <step id="190">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_height'</step>
     <step id="200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'captcha_signs'</step>
     <step id="210">UPDATE %PREFIX%_preferences SET prf_value = 'Powered by Admidio.org' WHERE prf_name = 'captcha_signature' and prf_value = 'POWERED  BY   A D M I D I O . O R G'</step>
-
     <step id="220">create table %PREFIX%_user_relation_types
         (
             urt_id integer unsigned not null AUTO_INCREMENT,
@@ -284,6 +282,6 @@
       references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
     <step id="1340" error="ignore">alter table %PREFIX%_user_relations add constraint %PREFIX%_FK_URE_USR_CREATE foreign key (ure_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict</step>
-      
+
     <step>stop</step>
 </update>

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for profile fields
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -63,7 +63,7 @@ if($getMode === 1)
 
     $_SESSION['fields_request'] = $_POST;
 
-    // pruefen, ob Pflichtfelder gefuellt sind
+    // Check if mandatory fields are filled
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')
     {

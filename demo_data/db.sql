@@ -2,7 +2,7 @@
  ***********************************************************************************************
  * SQL script with database structure
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -46,6 +46,7 @@ drop table if exists %PREFIX%_categories cascade;
 drop table if exists %PREFIX%_users cascade;
 drop table if exists %PREFIX%_organizations cascade;
 drop table if exists %PREFIX%_ids cascade;
+drop table if exists %PREFIX%_menu cascade;
 
 
 /*==============================================================*/

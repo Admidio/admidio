@@ -2,7 +2,7 @@
  ***********************************************************************************************
  * SQL script with database structure
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -44,6 +44,7 @@ DROP TABLE IF EXISTS %PREFIX%_categories          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_users               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_ids                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_menu                CASCADE;
 
 
 /*==============================================================*/
@@ -336,6 +337,30 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
+
+/*==============================================================*/
+/* Table: adm_menu                                             */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_menu
+(
+    men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    men_men_id_parent           integer unsigned,
+    men_com_id                  integer unsigned,
+    men_name_intern             varchar(255),
+    men_name                    varchar(255),
+    men_description             varchar(4000),
+    men_node                    boolean             NOT NULL    DEFAULT '0',
+    men_order                   integer unsigned,
+    men_standard                boolean             NOT NULL    DEFAULT '0',
+    men_url                     varchar(255),
+    men_icon                    varchar(2000),
+    PRIMARY KEY (men_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE INDEX %PREFIX%_idx_men_men_id_parent ON %PREFIX%_menu (men_men_id_parent);
 
 /*==============================================================*/
 /* Table: adm_messages                                          */
@@ -811,6 +836,10 @@ ALTER TABLE %PREFIX%_members
     ADD CONSTRAINT %PREFIX%_fk_mem_usr         FOREIGN KEY (mem_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_mem_usr_create  FOREIGN KEY (mem_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_mem_usr_change  FOREIGN KEY (mem_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_menu
+    ADD CONSTRAINT %PREFIX%_fk_men_men_parent  FOREIGN KEY (men_men_id_parent)  REFERENCES %PREFIX%_menu (men_id)                ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_men_com_id      FOREIGN KEY (men_com_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_messages
     ADD CONSTRAINT %PREFIX%_fk_msg_usr_sender  FOREIGN KEY (msg_usr_id_sender)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;

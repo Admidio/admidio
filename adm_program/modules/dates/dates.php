@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show a list of all events
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -113,7 +113,7 @@ if($getViewMode === 'html')
     $hoverRows  = true;
     $classTable = 'table';
 
-    if($gSettingsManager->getBool('enable_rss') && $gSettingsManager->get('enable_dates_module') === 1)
+    if($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('enable_dates_module') === 1)
     {
         $page->addRssFile(
             safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php', array('headline' => $getHeadline)),

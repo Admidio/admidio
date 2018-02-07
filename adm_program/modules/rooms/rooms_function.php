@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Various functions for rooms handling
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -72,7 +72,7 @@ if ($getMode === 1)
 // Löschen des Raums
 elseif ($getMode === 2)
 {
-    $sql = 'SELECT *
+    $sql = 'SELECT 1
               FROM '.TBL_DATES.'
              WHERE dat_room_id = ?';
     $statement = $gDb->queryPrepared($sql, array($getRoomId));

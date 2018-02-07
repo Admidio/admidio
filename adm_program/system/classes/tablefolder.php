@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Class manages access to database table adm_folders
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -320,7 +320,7 @@ class TableFolder extends TableAccess
                        WHERE fol_id = ? -- $folderId';
         $this->db->queryPrepared($sqlUpdate, array((int) $lockedFlag, $folderId));
 
-        //...und natuerlich auch fuer alle Files die in diesem Ordner sind
+        // ...und natuerlich auch fuer alle Files die in diesem Ordner sind
         $sqlUpdate = 'UPDATE '.TBL_FILES.'
                          SET fil_locked = ? -- $lockedFlag
                        WHERE fil_fol_id = ? -- $folderId';

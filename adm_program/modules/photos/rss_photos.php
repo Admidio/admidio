@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * RSS feed for photos
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -113,7 +113,7 @@ while ($row = $statement->fetch())
     while($phoParentId > 0)
     {
         // Erfassen des Eltern Albums
-        $sql = 'SELECT *
+        $sql = 'SELECT pho_name, pho_pho_id_parent
                   FROM '.TBL_PHOTOS.'
                  WHERE pho_id = ? -- $phoParentId';
         $parentsStatement = $gDb->queryPrepared($sql, array($phoParentId));

@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Photoresizer
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -155,7 +155,7 @@ if ($image !== null)
         }
         else
         {
-            $text = $gPreferences['photo_image_text'];
+            $text = $gSettingsManager->getString('photo_image_text');
         }
 
         imagettftext($image->getImageResource(), $fontSize, 0, $fontX, $fontY, $fontColor, $fontTtf, $text);

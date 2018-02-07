@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Overview and maintenance of all profile fields
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -155,7 +155,7 @@ while($row = $statement->fetch())
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading'));
         $table->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'),
-                          array('id' => 'group_'.$blockId, 'colspan' => '8'), 'td');
+                          array('id' => 'group_'.$blockId, 'colspan' => '8'));
         $table->addTableBody('id', $blockId);
 
         $categoryId = (int) $userField->getValue('usf_cat_id');

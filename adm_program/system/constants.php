@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Constants that will be used within Admidio
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -114,6 +114,7 @@ define('TBL_LINKS',               $g_tbl_praefix . '_links');
 define('TBL_LIST_COLUMNS',        $g_tbl_praefix . '_list_columns');
 define('TBL_LISTS',               $g_tbl_praefix . '_lists');
 define('TBL_MEMBERS',             $g_tbl_praefix . '_members');
+define('TBL_MENU',                $g_tbl_praefix . '_menu');
 define('TBL_MESSAGES',            $g_tbl_praefix . '_messages');
 define('TBL_MESSAGES_CONTENT',    $g_tbl_praefix . '_messages_content');
 define('TBL_ORGANIZATIONS',       $g_tbl_praefix . '_organizations');

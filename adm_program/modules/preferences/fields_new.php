@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Create and edit profile fields
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -81,8 +81,8 @@ if(isset($_SESSION['fields_request']))
         $_SESSION['fields_request']['usf_hidden'] = 1;
     }
 
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input, the user has returned to this form
+    // Now write the previously entered content into the object
     $userField->setArray($_SESSION['fields_request']);
     unset($_SESSION['fields_request']);
 }

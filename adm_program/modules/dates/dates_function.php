@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Verschiedene Funktionen fuer Termine
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -50,7 +50,7 @@ if((int) $gSettingsManager->get('enable_dates_module') === 0)
     // => EXIT
 }
 
-if($getMode !== 6 || $gSettingsManager->get('enable_dates_module') === 2)
+if($getMode !== 6 || (int) $gSettingsManager->get('enable_dates_module') === 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require(__DIR__ . '/../../system/login_valid.php');

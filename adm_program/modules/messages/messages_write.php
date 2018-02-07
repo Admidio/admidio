@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * messages form page
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -568,7 +568,7 @@ elseif (!isset($messageStatement))
     }
 
     // if preference is set then show a checkbox where the user can request a delivery confirmation for the email
-    if (($currUsrId > 0 && $gSettingsManager->get('mail_delivery_confirmation') === 2) || $gSettingsManager->get('mail_delivery_confirmation') === 1)
+    if (($currUsrId > 0 && (int) $gSettingsManager->get('mail_delivery_confirmation') === 2) || (int) $gSettingsManager->get('mail_delivery_confirmation') === 1)
     {
         $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $formValues['delivery_confirmation']);
     }

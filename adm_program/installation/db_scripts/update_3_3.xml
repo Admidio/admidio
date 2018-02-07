@@ -79,7 +79,31 @@
     <step id="570" database="mysql" error="ignore">ALTER TABLE %PREFIX%_users DROP INDEX idx_%PREFIX%_usr_login_name, ADD INDEX %PREFIX%_idx_usr_login_name (usr_login_name)</step>
     <step id="575" database="mysql" error="ignore">ALTER TABLE %PREFIX%_users DROP INDEX ak_usr_login_name, ADD INDEX %PREFIX%_idx_usr_login_name (usr_login_name)</step>
     <step id="580" database="mysql" error="ignore">DROP_INDEX ak_shortname ON %PREFIX%_organizations</step>
-    <step id="590">ComponentUpdateSteps::updateStepDownloadOrgFolderName</step>
-
+    <step id="590">CREATE TABLE %PREFIX%_menu
+        (
+            men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            men_men_id_parent           integer unsigned,
+            men_com_id                  integer unsigned,
+            men_name_intern             varchar(255),
+            men_name                    varchar(255),
+            men_description             varchar(4000),
+            men_node                    boolean             NOT NULL    DEFAULT '0',
+            men_order                   integer unsigned,
+            men_standard                boolean             NOT NULL    DEFAULT '0',
+            men_url                     varchar(255),
+            men_icon                    varchar(2000),
+            PRIMARY KEY (men_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci</step>
+    <step id="600">CREATE INDEX %PREFIX%_idx_men_men_id_parent ON %PREFIX%_menu (men_men_id_parent)</step>
+    <step id="610">ALTER TABLE %PREFIX%_menu ADD CONSTRAINT %PREFIX%_fk_men_men_parent FOREIGN KEY (men_men_id_parent) REFERENCES %PREFIX%_menu (men_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="620">ALTER TABLE %PREFIX%_menu ADD CONSTRAINT %PREFIX%_fk_men_com_id FOREIGN KEY (men_com_id) REFERENCES %PREFIX%_categories (cat_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="630">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                   VALUES ('menu_view', 'adm_menu')</step>
+    <step id="640">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>
+    <step id="650">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
+    <step id="660">ComponentUpdateSteps::updateStepDownloadOrgFolderName</step>
     <step>stop</step>
 </update>

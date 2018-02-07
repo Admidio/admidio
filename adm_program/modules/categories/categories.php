@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Overview and maintenance of all categories
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -240,9 +240,9 @@ while($catRow = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$catId.')"><img
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_UP.'\', '.$catId.')"><img
                                 src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" /></a>
-                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$catId.')"><img
+                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_DOWN.'\', '.$catId.')"><img
                                 src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" /></a>';
     }
 

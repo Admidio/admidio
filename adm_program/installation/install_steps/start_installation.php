@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Installation step: start_installation
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -83,7 +83,7 @@ $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 // create all modules components
 $sql = 'INSERT INTO '.TBL_COMPONENTS.'
                (com_type, com_name, com_name_intern, com_version, com_beta)
-        VALUES (\'MODULE\', \'ANN_ANNOUNCEMENTS\',       \'ANNOUCEMENTS\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+        VALUES (\'MODULE\', \'ANN_ANNOUNCEMENTS\',       \'ANNOUNCEMENTS\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'BAC_DATABASE_BACKUP\',     \'BACKUP\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_CATEGORIES\',          \'CATEGORIES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'DAT_DATES\',               \'DATES\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -93,6 +93,7 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'LST_LISTS\',               \'LISTS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'MEM_USER_MANAGEMENT\',     \'MEMBERS\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_MESSAGES\',            \'MESSAGES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_MENU\',                \'MENU\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'PHO_PHOTOS\',              \'PHOTOS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_SETTINGS\',            \'PREFERENCES\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'PRO_PROFILE\',             \'PROFILE\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -125,11 +126,13 @@ $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
         VALUES (\'folder_view\',   \'adm_folders\')
              , (\'folder_upload\', \'adm_folders\')
              , (\'category_view\', \'adm_categories\')
-             , (\'event_participation\', \'adm_dates\')';
+             , (\'event_participation\', \'adm_dates\')
+             , (\'menu_view\',     \'adm_menu\')';
 $db->queryPrepared($sql);
 
 // add edit categories right with reference to parent right
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.' (ror_name_intern, ror_table, ror_ror_id_parent)
+$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
+               (ror_name_intern, ror_table, ror_ror_id_parent)
         VALUES (\'category_edit\', \'adm_categories\', (SELECT rr.ror_id FROM '.TBL_ROLES_RIGHTS.' rr WHERE rr.ror_name_intern = \'category_view\'))';
 $db->queryPrepared($sql);
 
@@ -248,6 +251,41 @@ $systemUser->save(false); // no registered user -> UserIdCreate couldn't be fill
 
 // now set current user to system user
 $gCurrentUser->readDataById($currUsrId);
+
+// Menu entries for the standard installation
+$sql = 'INSERT INTO '.TBL_MENU.'
+               (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+        VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
+             , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
+             , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')
+             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOWNLOADS\'), 1, 0, 3, 1, \'download\', \''.FOLDER_MODULES.'/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \''.FOLDER_MODULES.'/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ROLES\'), 2, 0, 3, 1, \'roladm\', \''.FOLDER_MODULES.'/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
+$db->query($sql);
+
+// Menu security data
+$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
+               (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
+        VALUES (3, 1, 13, 1, \''. DATETIME_NOW.'\'),
+               (3, 1, 14, 1, \''. DATETIME_NOW.'\'),
+               (3, 1, 16, 1, \''. DATETIME_NOW.'\'),
+               (3, 1, 17, 1, \''. DATETIME_NOW.'\'),
+               (3, 1, 18, 1, \''. DATETIME_NOW.'\'),
+               (3, 1, 19, 1, \''. DATETIME_NOW.'\')';
+$db->query($sql);
 
 // delete session data
 session_unset();

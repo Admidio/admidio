@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Show user profile
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -475,8 +475,8 @@ $page->addHtml('
                     <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('usr_id' => $userId)).'"><img
                         src="'.THEME_URL.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /> '.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'</a>');
                 // Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                if((strlen($user->getValue('usr_photo')) > 0 && $gSettingsManager->get('profile_photo_storage') === 0)
-                    || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && $gSettingsManager->get('profile_photo_storage') === 1)
+                if((strlen($user->getValue('usr_photo')) > 0 && (int) $gSettingsManager->get('profile_photo_storage') === 0)
+                    || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/'.$userId.'.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1)
                 {
                     $page->addHtml('<a id="btn_delete_photo" class="btn" data-toggle="modal" data-target="#admidio_modal"
                                     href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pro_pho', 'element_id' => 'no_element', 'database_id' => $userId)).
@@ -649,7 +649,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'profile.png'
             );
         }
-        if($user->checkRolesRight('rol_announcements') && $gSettingsManager->get('enable_announcements_module') > 0)
+        if($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('enable_announcements_module') > 0)
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_announcements'],
@@ -657,7 +657,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'announcements.png'
             );
         }
-        if($user->checkRolesRight('rol_dates') && $gSettingsManager->get('enable_dates_module') > 0)
+        if($user->checkRolesRight('rol_dates') && (int) $gSettingsManager->get('enable_dates_module') > 0)
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_dates'],
@@ -665,7 +665,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'dates.png'
             );
         }
-        if($user->checkRolesRight('rol_photo') && $gSettingsManager->get('enable_photo_module') > 0)
+        if($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('enable_photo_module') > 0)
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_photo'],
@@ -673,7 +673,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'photo.png'
             );
         }
-        if($user->checkRolesRight('rol_download') && $gSettingsManager->getBool('enable_download_module'))
+        if($user->checkRolesRight('rol_download') && (int) $gSettingsManager->getBool('enable_download_module'))
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_download'],
@@ -681,7 +681,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'download.png'
             );
         }
-        if($user->checkRolesRight('rol_guestbook') && $gSettingsManager->get('enable_guestbook_module') > 0)
+        if($user->checkRolesRight('rol_guestbook') && (int) $gSettingsManager->get('enable_guestbook_module') > 0)
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook'],
@@ -689,7 +689,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'guestbook.png'
             );
         }
-        if($user->checkRolesRight('rol_guestbook_comments') && $gSettingsManager->get('enable_guestbook_module') > 0)
+        if($user->checkRolesRight('rol_guestbook_comments') && (int) $gSettingsManager->get('enable_guestbook_module') > 0)
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_guestbook_comments'],
@@ -697,7 +697,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                 'icon'  => 'comment.png'
             );
         }
-        if($user->checkRolesRight('rol_weblinks') && $gSettingsManager->get('enable_weblinks_module') > 0)
+        if($user->checkRolesRight('rol_weblinks') && (int) $gSettingsManager->get('enable_weblinks_module') > 0)
         {
             $profileRightsArray[] = array(
                 'roles' => $rightsOrigin['rol_weblinks'],

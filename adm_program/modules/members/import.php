@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Import assistant for user data
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -79,7 +79,7 @@ if(!$gCurrentUser->isAdministrator())
     $condition .= ' AND rol_administrator = 0 ';
 }
 
-$sql = 'SELECT *
+$sql = 'SELECT rol_id, rol_name, cat_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id

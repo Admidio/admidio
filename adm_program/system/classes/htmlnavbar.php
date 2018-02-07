@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
@@ -18,15 +18,17 @@
  * The position of the items is important. Only the first items will display
  * permanently in the module. The other items are summarized in a submenu.
  * @par Examples
- * @code   // create module menu
+ * @code
+ * // create module menu
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *
  * // show link to create new announcement
  * $myNavbar->addItem(
- *     'menu_item_new_entry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
+ *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/mymodule/mymodule_new.php',
  *     $gL10n->get('SYS_CREATE'), 'add.png'
  * );
- * $myNavbar->show(); @endcode
+ * $myNavbar->show();
+ * @endcode
  */
 class HtmlNavbar
 {
@@ -165,7 +167,14 @@ class HtmlNavbar
         // add THEME_URL to images unless the full URL is given
         if ($icon !== '' && preg_match($urlStartRegex, $icon) === 0)
         {
-            $icon = THEME_URL . '/icons/' . $icon;
+            if (admStrStartsWith($icon, '/icons/'))
+            {
+                $icon = THEME_URL . $icon;
+            }
+            else
+            {
+                $icon = THEME_URL . '/icons/' . $icon;
+            }
         }
 
         $item = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);

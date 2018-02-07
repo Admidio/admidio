@@ -3,7 +3,7 @@
  ***********************************************************************************************
  * Check message information and save it
  *
- * @copyright 2004-2017 The Admidio Team
+ * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
@@ -162,7 +162,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
     if (isset($postTo))
     {
-        if ($postListId > 0) //the id of a list was passed
+        if ($postListId > 0) // the id of a list was passed
         {
             $postTo = explode(',', $postUserIdList);
         }
