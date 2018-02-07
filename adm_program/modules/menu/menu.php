@@ -94,7 +94,7 @@ $columnHeading = array(
 $menuOverview->setColumnAlignByArray(array('left', 'left', 'left', 'center', 'right'));
 $menuOverview->addRowHeadingByArray($columnHeading);
 
-$sql = 'SELECT *
+$sql = 'SELECT men_id, men_name
           FROM '.TBL_MENU.'
          WHERE men_men_id_parent IS NULL
       ORDER BY men_order';
@@ -102,7 +102,7 @@ $mainMenStatement = $gDb->queryPrepared($sql);
 
 while ($mainMen = $mainMenStatement->fetchObject())
 {
-    $sql = 'SELECT *
+    $sql = 'SELECT men_id, men_men_id_parent, men_name, men_description, men_standard, men_url
               FROM '.TBL_MENU.'
              WHERE men_men_id_parent = ? -- $mainMen->men_id
           ORDER BY men_men_id_parent DESC, men_order';

@@ -117,7 +117,7 @@ $menuCreateMenu = $page->getMenu();
 $menuCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // alle aus der DB aus lesen
-$sqlRoles = 'SELECT *
+$sqlRoles = 'SELECT rol_id, rol_name, cat_name
                FROM '.TBL_ROLES.'
          INNER JOIN '.TBL_CATEGORIES.'
                  ON cat_id = rol_cat_id

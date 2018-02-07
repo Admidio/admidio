@@ -332,7 +332,7 @@ class User extends TableAccess
         if(!$this->relationshipsChecked && count($this->relationships) === 0)
         {
             // read all relations of the current user
-            $sql = 'SELECT *
+            $sql = 'SELECT urt_id, urt_edit_user, ure_usr_id2
                       FROM '.TBL_USER_RELATIONS.'
                 INNER JOIN '.TBL_USER_RELATION_TYPES.'
                         ON urt_id = ure_urt_id

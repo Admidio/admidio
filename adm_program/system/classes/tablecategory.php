@@ -82,7 +82,7 @@ class TableCategory extends TableAccess
 
         $this->db->startTransaction();
 
-        // Luecke in der Reihenfolge schliessen
+        // Close the gap in the sequence
         $sql = 'UPDATE '.TBL_CATEGORIES.'
                    SET cat_sequence = cat_sequence - 1
                  WHERE (  cat_org_id = ? -- $gCurrentSession->getValue(\'ses_org_id\')
@@ -94,8 +94,8 @@ class TableCategory extends TableAccess
 
         $catId = (int) $this->getValue('cat_id');
 
-        // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
-        $sql = 'SELECT *
+        // search for all related objects and delete them with further dependencies
+        $sql = 'SELECT 1
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
         $recordsetsStatement = $this->db->queryPrepared($sql, array($catId));

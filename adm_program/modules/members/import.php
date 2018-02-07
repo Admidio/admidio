@@ -79,7 +79,7 @@ if(!$gCurrentUser->isAdministrator())
     $condition .= ' AND rol_administrator = 0 ';
 }
 
-$sql = 'SELECT *
+$sql = 'SELECT rol_id, rol_name, cat_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
