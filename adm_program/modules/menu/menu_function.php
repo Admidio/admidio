@@ -45,19 +45,22 @@ if($getMode === 1)
 {
     $_SESSION['menu_request'] = $_POST;
 
-    $postTranslateDesc = admFuncVariableIsValid($_POST, 'men_description', 'string', array('default' => ''));
-    $postTranslateName = admFuncVariableIsValid($_POST, 'men_name',        'string', array('default' => ''));
-    $postIcon          = admFuncVariableIsValid($_POST, 'men_icon',        'string', array('default' => ''));
+    $postIdParent = admFuncVariableIsValid($_POST, 'men_men_id_parent', 'int');
+    $postComId    = admFuncVariableIsValid($_POST, 'men_com_id',        'int');
+    $postName     = admFuncVariableIsValid($_POST, 'men_name',          'string', array('default' => ''));
+    $postDesc     = admFuncVariableIsValid($_POST, 'men_description',   'string', array('default' => ''));
+    $postUrl      = admFuncVariableIsValid($_POST, 'men_url',           'string', array('default' => ''));
+    $postIcon     = admFuncVariableIsValid($_POST, 'men_icon',          'string', array('default' => ''));
 
     // Check if mandatory fields are filled
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
-    if($postTranslateName === '')
+    if($postName === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
 
-    if($_POST['men_url'] === '')
+    if($postUrl === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_URL'))));
         // => EXIT
@@ -65,19 +68,33 @@ if($getMode === 1)
 
     if($postIcon !== '')
     {
+        try
+        {
+            admStrIsValidFileName($postIcon, true);
+        }
+        catch (AdmException $exception)
+        {
+            $exception->showHtml();
+            // => EXIT
+        }
         // get the name of the icon to save it.
         $arrayIcons = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
+        if (!array_key_exists($postIcon, $arrayIcons))
+        {
+            $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
+            // => EXIT
+        }
         $menu->setValue('men_icon', $arrayIcons[$postIcon]);
     }
 
-    $menu->setValue('men_men_id_parent', $_POST['men_men_id_parent']);
-    $menu->setValue('men_name', $postTranslateName);
-    $menu->setValue('men_description', $postTranslateDesc);
+    $menu->setValue('men_men_id_parent', $postIdParent);
+    $menu->setValue('men_name', $postName);
+    $menu->setValue('men_description', $postDesc);
 
     if(!$menu->getValue('men_standard'))
     {
-        $menu->setValue('men_url', $_POST['men_url']);
-        $menu->setValue('men_com_id', $_POST['men_com_id']);
+        $menu->setValue('men_url', $postUrl);
+        $menu->setValue('men_com_id', $postComId);
     }
 
     $menId = (int) $menu->getValue('men_id');
@@ -102,7 +119,7 @@ if($getMode === 1)
     else
     {
         // add new or update roles
-        $displayMenu->addRoles($_POST['menu_view']);
+        $displayMenu->addRoles(array_map('intval', $_POST['menu_view']));
     }
 
     if($gNavigation->count() > 1)
