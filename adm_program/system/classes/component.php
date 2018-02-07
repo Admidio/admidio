@@ -78,7 +78,7 @@ class Component extends TableAccess
             throw new AdmException('SYS_DATABASE_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="' . ADMIDIO_URL . '/adm_program/installation/update.php">', '</a>'));
         }
-        elseif ($returnCode === 1) // filesystem has minor version
+        if ($returnCode === 1) // filesystem has minor version
         {
             $gLogger->warning(
                 'UPDATE: Filesystem-Version is lower than the database!',
@@ -88,5 +88,131 @@ class Component extends TableAccess
             throw new AdmException('SYS_FILESYSTEM_VERSION_INVALID', array($dbVersion, ADMIDIO_VERSION_TEXT,
                                    '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
         }
+    }
+
+
+    /**
+     * This method checks if the current user is allowed to view the component. Therefore
+     * special checks for each component were done.
+     * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. LISTS
+     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @return bool Return true if the current user is allowed to view the component
+     */
+    public static function isVisible($componentName)
+    {
+        global $gValidLogin, $gCurrentUser, $gSettingsManager;
+
+        switch($componentName)
+        {
+            case 'CORE':
+                if($gValidLogin)
+                {
+                    return true;
+                }
+                break;
+
+            case 'ANNOUNCEMENTS':
+                if((int) $gSettingsManager->get('enable_announcements_module') === 1
+                || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
+                {
+                    return true;
+                }
+                break;
+
+            case 'DATES':
+                if((int) $gSettingsManager->get('enable_dates_module') === 1
+                || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
+                {
+                    return true;
+                }
+                break;
+
+            case 'DOWNLOADS':
+                if($gSettingsManager->getBool('enable_download_module'))
+                {
+                    return true;
+                }
+                break;
+
+            case 'GUESTBOOK':
+                if((int) $gSettingsManager->get('enable_guestbook_module') === 1
+                || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
+                {
+                    return true;
+                }
+                break;
+
+            case 'LINKS':
+                if((int) $gSettingsManager->get('enable_weblinks_module') === 1
+                || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
+                {
+                    return true;
+                }
+                break;
+
+            case 'LISTS':
+                if($gSettingsManager->getBool('lists_enable_module'))
+                {
+                    return true;
+                }
+                break;
+
+            case 'MEMBERS':
+                if($gCurrentUser->editUsers())
+                {
+                    return true;
+                }
+                break;
+
+            case 'MESSAGES':
+                if ($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module') || $gSettingsManager->getBool('enable_chat_module'))
+                {
+                    return true;
+                }
+                break;
+
+            case 'PHOTOS':
+                if((int) $gSettingsManager->get('enable_photo_module') === 1
+                || ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
+                {
+                    return true;
+                }
+                break;
+
+            case 'PROFILE':
+                if($gCurrentUser->hasRightViewProfile($gCurrentUser))
+                {
+                    return true;
+                }
+                break;
+
+            case 'REGISTRATION':
+                if($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers())
+                {
+                    return true;
+                }
+                break;
+
+            case 'ROLES':
+                if($gCurrentUser->manageRoles())
+                {
+                    return true;
+                }
+                break;
+
+            case 'BACKUP':
+            case 'CATEGORIES':
+            case 'MENU':
+            case 'PREFERENCES':
+            case 'ROOMS':
+                if($gCurrentUser->isAdministrator())
+                {
+                    return true;
+                }
+                break;
+        }
+
+        return false;
     }
 }

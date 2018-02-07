@@ -114,6 +114,7 @@ define('TBL_LINKS',               $g_tbl_praefix . '_links');
 define('TBL_LIST_COLUMNS',        $g_tbl_praefix . '_list_columns');
 define('TBL_LISTS',               $g_tbl_praefix . '_lists');
 define('TBL_MEMBERS',             $g_tbl_praefix . '_members');
+define('TBL_MENU',                $g_tbl_praefix . '_menu');
 define('TBL_MESSAGES',            $g_tbl_praefix . '_messages');
 define('TBL_MESSAGES_CONTENT',    $g_tbl_praefix . '_messages_content');
 define('TBL_ORGANIZATIONS',       $g_tbl_praefix . '_organizations');

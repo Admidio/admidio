@@ -81,8 +81,8 @@ if(isset($_SESSION['fields_request']))
         $_SESSION['fields_request']['usf_hidden'] = 1;
     }
 
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    // due to incorrect input, the user has returned to this form
+    // Now write the previously entered content into the object
     $userField->setArray($_SESSION['fields_request']);
     unset($_SESSION['fields_request']);
 }

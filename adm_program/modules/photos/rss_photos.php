@@ -113,7 +113,7 @@ while ($row = $statement->fetch())
     while($phoParentId > 0)
     {
         // Erfassen des Eltern Albums
-        $sql = 'SELECT *
+        $sql = 'SELECT pho_name, pho_pho_id_parent
                   FROM '.TBL_PHOTOS.'
                  WHERE pho_id = ? -- $phoParentId';
         $parentsStatement = $gDb->queryPrepared($sql, array($phoParentId));

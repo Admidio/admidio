@@ -104,32 +104,6 @@ class HtmlPage
     }
 
     /**
-     * The method will return the filename. If you are in debug mode than it will return the
-     * not minified version of the filename otherwise it will return the minified version.
-     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
-     * and one version without the @b min.
-     * @param string $filepath Filename of the NOT minified file.
-     * @return string Returns the filename in dependence of the debug mode.
-     */
-    private function getDebugOrMinFilepath($filepath)
-    {
-        global $gDebug;
-
-        $fileInfo = pathinfo($filepath);
-        $filename = basename($fileInfo['filename'], '.min');
-
-        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
-        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
-
-        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
-        {
-            return ADMIDIO_URL . $filepathMin;
-        }
-
-        return ADMIDIO_URL . $filepathDebug;
-    }
-
-    /**
      * Adds a cascading style sheets file to the html page.
      * @param string $cssFile The url with filename or the relative path starting with @i adm_program of the css file.
      */
@@ -223,287 +197,6 @@ class HtmlPage
     }
 
     /**
-     * Adds the default menu
-     * @return void
-     */
-    public function addDefaultMenu()
-    {
-        global $gL10n, $gSettingsManager, $gValidLogin, $gDb, $gCurrentUser;
-
-        $this->menu->addItem(
-            'menu_item_modules', '', $gL10n->get('SYS_MODULES'),
-            'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
-        );
-
-        $this->menu->addItem(
-            'menu_item_overview', '/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'),
-            'home.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-        );
-
-        if ((int) $gSettingsManager->get('enable_announcements_module') === 1 || ((int) $gSettingsManager->get('enable_announcements_module') === 2 && $gValidLogin))
-        {
-            $this->menu->addItem(
-                'menu_item_announcements', ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php', $gL10n->get('ANN_ANNOUNCEMENTS'),
-                'announcements.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-        if ($gSettingsManager->getBool('enable_download_module'))
-        {
-            $this->menu->addItem(
-                'menu_item_download', ADMIDIO_URL . FOLDER_MODULES . '/downloads/downloads.php', $gL10n->get('DOW_DOWNLOADS'),
-                'download.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-        if ($gSettingsManager->getBool('enable_mail_module') && !$gValidLogin)
-        {
-            $this->menu->addItem(
-                'menu_item_email', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', $gL10n->get('SYS_EMAIL'),
-                'email.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        if (($gSettingsManager->getBool('enable_pm_module') || $gSettingsManager->getBool('enable_mail_module')) && $gValidLogin)
-        {
-            // get number of unread messages for user
-            $message = new TableMessage($gDb);
-            $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
-
-            $badge = '';
-            if ($unread > 0)
-            {
-                $badge = '<span class="badge">' . $unread . '</span>';
-            }
-
-            $this->menu->addItem(
-                'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $badge,
-                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-        if ((int) $gSettingsManager->get('enable_photo_module') === 1 || ((int) $gSettingsManager->get('enable_photo_module') === 2 && $gValidLogin))
-        {
-            $this->menu->addItem(
-                'menu_item_photo', ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', $gL10n->get('PHO_PHOTOS'),
-                'photo.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-        if ((int) $gSettingsManager->get('enable_guestbook_module') === 1 || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin))
-        {
-            $this->menu->addItem(
-                'menu_item_guestbook', ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', $gL10n->get('GBO_GUESTBOOK'),
-                'guestbook.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        $this->menu->addItem(
-            'menu_item_lists', ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', $gL10n->get('LST_LISTS'),
-            'lists.png', 'right', 'menu_item_modules', 'admidio-default-menu-item');
-        if ($gValidLogin)
-        {
-            $this->menu->addItem(
-                'menu_item_mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', $gL10n->get('LST_MY_LIST'),
-                'mylist.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        if ((int) $gSettingsManager->get('enable_dates_module') === 1 || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin))
-        {
-            $this->menu->addItem(
-                'menu_item_dates', ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', $gL10n->get('DAT_DATES'),
-                'dates.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        if ((int) $gSettingsManager->get('enable_weblinks_module') === 1 || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin))
-        {
-            $this->menu->addItem(
-                'menu_item_links', ADMIDIO_URL . FOLDER_MODULES . '/links/links.php', $gL10n->get('LNK_WEBLINKS'),
-                'weblinks.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
-            );
-        }
-
-        if ($gCurrentUser->approveUsers() || $gCurrentUser->editUsers() || $gCurrentUser->manageRoles() || $gCurrentUser->isAdministrator())
-        {
-            $this->menu->addItem(
-                'menu_item_administration', '', $gL10n->get('SYS_ADMINISTRATION'),
-                'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-
-        }
-        if ($gCurrentUser->approveUsers() && $gSettingsManager->getBool('registration_enable_module'))
-        {
-            $this->menu->addItem(
-                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('NWU_NEW_REGISTRATIONS'),
-                'new_registrations.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
-            );
-        }
-        if ($gCurrentUser->editUsers())
-        {
-            $this->menu->addItem(
-                'menu_item_members', ADMIDIO_URL . FOLDER_MODULES . '/members/members.php', $gL10n->get('MEM_USER_MANAGEMENT'),
-                'user_administration.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
-            );
-        }
-        if ($gCurrentUser->manageRoles())
-        {
-            $this->menu->addItem(
-                'menu_item_roles', ADMIDIO_URL . FOLDER_MODULES . '/roles/roles.php', $gL10n->get('ROL_ROLE_ADMINISTRATION'),
-                'roles.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
-            );
-        }
-        if ($gCurrentUser->isAdministrator())
-        {
-            $this->menu->addItem(
-                'menu_item_backup', ADMIDIO_URL . FOLDER_MODULES . '/backup/backup.php', $gL10n->get('BAC_DATABASE_BACKUP'),
-                'backup.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
-            );
-            $this->menu->addItem(
-                'menu_item_options', ADMIDIO_URL . FOLDER_MODULES . '/preferences/preferences.php', $gL10n->get('SYS_SETTINGS'),
-                'options.png', 'right', 'menu_item_administration', 'admidio-default-menu-item'
-            );
-        }
-
-        if ($gValidLogin)
-        {
-            // show link to own profile
-            $this->menu->addItem(
-                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
-                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-            // show logout link
-            $this->menu->addItem(
-                'menu_item_logout', '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
-                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-        else
-        {
-            // show registration link
-            $this->menu->addItem(
-                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-            // show login link
-            $this->menu->addItem(
-                'menu_item_login', '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
-                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
-            );
-        }
-    }
-
-    /**
-     * Adds the html code for a modal window to the current script.
-     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
-     */
-    public function enableModal()
-    {
-        $this->showModal = true;
-    }
-
-    /**
-     * Every html page of Admidio contains a menu.
-     * If the menu should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideMenu()
-    {
-        $this->showMenu = false;
-    }
-
-    /**
-     * Every html page of Admidio contains three files of the custom theme.
-     * my_header.php, my_body_top.php and my_body_bottom.php
-     * With these files the administrator can contain custom layout to Admidio.
-     * If these files should not be included in the current page, than this method must be called.
-     * @return void
-     */
-    public function hideThemeHtml()
-    {
-        $this->showThemeHtml = false;
-    }
-
-    /**
-     * Flag if the current page has a navbar.
-     * @return void
-     */
-    public function hasNavbar()
-    {
-        $this->hasNavbar = true;
-    }
-
-    /**
-     * Returns the menu object of this html page.
-     * @return HtmlNavbar Returns the menu object of this html page.
-     */
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-
-    /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
-     * @return string Returns the headline of the current Admidio page.
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
-    }
-
-    /**
-     * Returns the title of the html page.
-     * @return string Returns the title of the html page.
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set the h1 headline of the current html page. If the title of the page
-     * was not set until now than this will also be the title.
-     * @param string $headline A string that contains the headline for the page.
-     * @return void
-     */
-    public function setHeadline($headline)
-    {
-        if ($this->title === '')
-        {
-            $this->setTitle($headline);
-        }
-
-        $this->headline = $headline;
-        $this->menu->setName($headline);
-    }
-
-    /**
-     * Set the title of the html page that will be shown in the <title> tag.
-     * @param string $title A string that contains the title for the page.
-     * @return void
-     */
-    public function setTitle($title)
-    {
-        global $gCurrentOrganization;
-
-        if ($title === '')
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname');
-        }
-        else
-        {
-            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
-        }
-    }
-
-    /**
-     * If print mode is set then a print specific css file will be loaded.
-     * All styles will be more print compatible and are only black, grey and white.
-     * @return void
-     */
-    public function setPrintMode()
-    {
-        $this->printMode = true;
-    }
-
-    /**
      * adds the main necessary files
      */
     private function addMainFilesAndContent()
@@ -547,6 +240,143 @@ class HtmlPage
                 </div>'
             );
         }
+    }
+
+    /**
+     * Adds the modal menu
+     */
+    public function addModalMenu()
+    {
+        global $gL10n, $gValidLogin, $gDb, $gCurrentUser;
+
+        $mainMenuStatement = self::getMainMenuStatement();
+
+        while ($mainMenu = $mainMenuStatement->fetch())
+        {
+            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
+
+            if ($menuStatement->rowCount() > 0)
+            {
+                $this->menu->addItem(
+                    'menu_item_'.$mainMenu['men_name_intern'], null, $gL10n->get($mainMenu['men_name']),
+                    'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
+                );
+
+                while ($row = $menuStatement->fetch())
+                {
+                    if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
+                    {
+                        $viewMenu = true;
+
+                        // Read current roles rights of the menu
+                        $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
+                        $rolesDisplayRight = $displayMenu->getRolesIds();
+
+                        $menuUrl = $row['men_url'];
+                        $menuIcon = $row['men_icon'];
+                        $menuName = $gL10n->get($row['men_name']);
+
+                        // special case because there are different links if you are logged in or out for mail
+                        if ($gValidLogin && $row['men_name_intern'] === 'mail')
+                        {
+                            $unreadBadge = self::getUnreadMessagesBadge();
+
+                            $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
+                            $menuIcon = '/icons/messages.png';
+                            $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                        }
+
+                        if (count($rolesDisplayRight) >= 1)
+                        {
+                            // check for right to show the menu
+                            if (!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                            {
+                                $viewMenu = false;
+                            }
+                        }
+
+                        if ($viewMenu)
+                        {
+                            $this->menu->addItem(
+                                $row['men_name_intern'], $menuUrl, $menuName, $menuIcon, 'right',
+                                'menu_item_'.$mainMenu['men_name_intern'], 'admidio-default-menu-item'
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($gValidLogin)
+        {
+            // show link to own profile
+            $this->menu->addItem(
+                'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
+                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+            // show logout link
+            $this->menu->addItem(
+                'menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
+                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+        }
+        else
+        {
+            // show registration link
+            $this->menu->addItem(
+                'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
+                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+            // show login link
+            $this->menu->addItem(
+                'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
+                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
+            );
+        }
+    }
+
+    /**
+     * Adds the html code for a modal window to the current script.
+     * The link must have the following attributes: data-toggle="modal" data-target="#admidio_modal"
+     */
+    public function enableModal()
+    {
+        $this->showModal = true;
+    }
+
+    /**
+     * The method will return the filename. If you are in debug mode than it will return the
+     * not minified version of the filename otherwise it will return the minified version.
+     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
+     * and one version without the @b min.
+     * @param string $filepath Filename of the NOT minified file.
+     * @return string Returns the filename in dependence of the debug mode.
+     */
+    private function getDebugOrMinFilepath($filepath)
+    {
+        global $gDebug;
+
+        $fileInfo = pathinfo($filepath);
+        $filename = basename($fileInfo['filename'], '.min');
+
+        $filepathDebug = '/' . $fileInfo['dirname'] . '/' . $filename . '.'     . $fileInfo['extension'];
+        $filepathMin   = '/' . $fileInfo['dirname'] . '/' . $filename . '.min.' . $fileInfo['extension'];
+
+        if ((!$gDebug && is_file(ADMIDIO_PATH . $filepathMin)) || !is_file(ADMIDIO_PATH . $filepathDebug))
+        {
+            return ADMIDIO_URL . $filepathMin;
+        }
+
+        return ADMIDIO_URL . $filepathDebug;
+    }
+
+    /**
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * @return string Returns the headline of the current Admidio page.
+     */
+    public function getHeadline()
+    {
+        return $this->headline;
     }
 
     /**
@@ -676,7 +506,8 @@ class HtmlPage
         if ($this->showMenu)
         {
             // add modules and administration modules to the menu
-            $this->addDefaultMenu();
+            $this->showMainMenu();
+            $this->addModalMenu();
             $htmlMenu = $this->menu->show();
         }
 
@@ -713,6 +544,154 @@ class HtmlPage
     }
 
     /**
+     * @return \PDOStatement|false
+     */
+    private static function getMainMenuStatement()
+    {
+        global $gDb;
+
+        $sql = 'SELECT men_id, men_name, men_name_intern
+                  FROM '.TBL_MENU.'
+                 WHERE men_men_id_parent IS NULL
+              ORDER BY men_order';
+
+        return $gDb->queryPrepared($sql);
+    }
+
+    /**
+     * @param int $menId
+     * @return \PDOStatement|false
+     */
+    private static function getMenuStatement($menId)
+    {
+        global $gDb;
+
+        $sql = 'SELECT men_id, men_com_id, men_name_intern, men_name, men_description, men_url, men_icon, com_name_intern
+                  FROM '.TBL_MENU.'
+             LEFT JOIN '.TBL_COMPONENTS.'
+                    ON com_id = men_com_id
+                 WHERE men_men_id_parent = ? -- $menId
+              ORDER BY men_men_id_parent DESC, men_order';
+
+        return $gDb->queryPrepared($sql, array($menId));
+    }
+
+    /**
+     * Returns the menu object of this html page.
+     * @return \HtmlNavbar Returns the menu object of this html page.
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * Returns the title of the html page.
+     * @return string Returns the title of the html page.
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Get a badge with the unread messages count
+     * @return string
+     */
+    private static function getUnreadMessagesBadge()
+    {
+        global $gDb, $gCurrentUser;
+
+        // get number of unread messages for user
+        $message = new TableMessage($gDb);
+        $unread = $message->countUnreadMessageRecords((int) $gCurrentUser->getValue('usr_id'));
+
+        if ($unread > 0)
+        {
+            return '<span class="badge">' . $unread . '</span>';
+        }
+
+        return '';
+    }
+
+    /**
+     * Flag if the current page has a navbar.
+     * @return void
+     */
+    public function hasNavbar()
+    {
+        $this->hasNavbar = true;
+    }
+
+    /**
+     * Every html page of Admidio contains a menu.
+     * If the menu should not be included in the current page, than this method must be called.
+     * @return void
+     */
+    public function hideMenu()
+    {
+        $this->showMenu = false;
+    }
+
+    /**
+     * Every html page of Admidio contains three files of the custom theme.
+     * my_header.php, my_body_top.php and my_body_bottom.php
+     * With these files the administrator can contain custom layout to Admidio.
+     * If these files should not be included in the current page, than this method must be called.
+     * @return void
+     */
+    public function hideThemeHtml()
+    {
+        $this->showThemeHtml = false;
+    }
+
+    /**
+     * Set the h1 headline of the current html page. If the title of the page
+     * was not set until now than this will also be the title.
+     * @param string $headline A string that contains the headline for the page.
+     * @return void
+     */
+    public function setHeadline($headline)
+    {
+        if ($this->title === '')
+        {
+            $this->setTitle($headline);
+        }
+
+        $this->headline = $headline;
+        $this->menu->setName($headline);
+    }
+
+    /**
+     * Set the title of the html page that will be shown in the <title> tag.
+     * @param string $title A string that contains the title for the page.
+     * @return void
+     */
+    public function setTitle($title)
+    {
+        global $gCurrentOrganization;
+
+        if ($title === '')
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname');
+        }
+        else
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname') . ' - ' . $title;
+        }
+    }
+
+    /**
+     * If print mode is set then a print specific css file will be loaded.
+     * All styles will be more print compatible and are only black, grey and white.
+     * @return void
+     */
+    public function setPrintMode()
+    {
+        $this->printMode = true;
+    }
+
+    /**
      * This method send the whole html code of the page to the browser. Call this method
      * if you have finished your page layout.
      * @param bool $directOutput If set to @b true (default) the html page will be directly send
@@ -738,5 +717,110 @@ class HtmlPage
         {
             return $html;
         }
+    }
+
+    /**
+     * create and show Mainmenu
+     * @param bool $details indicator to set if there should be details in the menu.
+     * @return string HTML of the Menu
+     */
+    public function showMainMenu($details = true)
+    {
+        global $gL10n, $gValidLogin, $gSettingsManager;
+
+        $menuIcon = '/dummy.png';
+        $htmlMenu = '';
+
+        $mainMenuStatement = self::getMainMenuStatement();
+
+        while ($mainMenu = $mainMenuStatement->fetch())
+        {
+            $unreadBadge = '';
+
+            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
+
+            if ($menuStatement->rowCount() > 0)
+            {
+                $menu = new Menu($mainMenu['men_name_intern'], $gL10n->get($mainMenu['men_name']));
+
+                while ($row = $menuStatement->fetch())
+                {
+                    $description = '';
+
+                    if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
+                    {
+                        if (strlen($row['men_description']) > 2)
+                        {
+                            $description = $gL10n->get($row['men_description']);
+                            if ($description === '##' || $description[0] === '#')
+                            {
+                                $description = $row['men_description'];
+                            }
+                        }
+
+                        $menuUrl = $row['men_url'];
+
+                        if (strlen($row['men_icon']) > 2)
+                        {
+                            $menuIcon = $row['men_icon'];
+                        }
+
+                        $menuName = $gL10n->get($row['men_name']);
+                        if ($menuName === '##' || $menuName[0] === '#')
+                        {
+                            $menuName = $row['men_name'];
+                        }
+
+                        // special case because there are different links if you are logged in or out for mail
+                        if ($gValidLogin && $row['men_name_intern'] === 'mail')
+                        {
+                            $unreadBadge = self::getUnreadMessagesBadge();
+
+                            $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
+                            $menuIcon = 'messages.png';
+                            $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
+                        }
+
+                        $menu->addItem($row['men_name_intern'], $menuUrl, $menuName, $menuIcon, $description);
+
+                        if ($details)
+                        {
+                            // Submenu for Lists
+                            if ($gValidLogin && $row['men_name_intern'] === 'lists')
+                            {
+                                $menu->addSubItem(
+                                    'lists', 'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
+                                    $gL10n->get('LST_MY_LIST')
+                                );
+                                $menu->addSubItem(
+                                    'lists', 'rolinac', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', array('active_role' => 0)),
+                                    $gL10n->get('ROL_INACTIV_ROLE')
+                                );
+                            }
+
+                            // Submenu for Dates
+                            if ($row['men_name_intern'] === 'dates'
+                                && ((int) $gSettingsManager->get('enable_dates_module') === 1
+                                || ((int) $gSettingsManager->get('enable_dates_module') === 2 && $gValidLogin)))
+                            {
+                                $menu->addSubItem(
+                                    'dates', 'olddates', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/dates/dates.php', array('mode' => 'old')),
+                                    $gL10n->get('DAT_PREVIOUS_DATES', array($gL10n->get('DAT_DATES')))
+                                );
+                            }
+                        }
+                    }
+                }
+
+                $htmlMenu .= $menu->show($details);
+            }
+
+            $this->menu->addItem(
+                'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
+                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
+            );
+        }
+
+        return $htmlMenu;
     }
 }

@@ -113,7 +113,7 @@ if($getViewMode === 'html')
     $hoverRows  = true;
     $classTable = 'table';
 
-    if($gSettingsManager->getBool('enable_rss') && $gSettingsManager->get('enable_dates_module') === 1)
+    if($gSettingsManager->getBool('enable_rss') && (int) $gSettingsManager->get('enable_dates_module') === 1)
     {
         $page->addRssFile(
             safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/rss_dates.php', array('headline' => $getHeadline)),

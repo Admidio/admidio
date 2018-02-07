@@ -163,7 +163,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
     if (isset($postTo))
     {
-        if ($postListId > 0) //the id of a list was passed
+        if ($postListId > 0) // the id of a list was passed
         {
             $postTo = explode(',', $postUserIdList);
         }

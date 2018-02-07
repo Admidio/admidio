@@ -114,12 +114,12 @@ class TableUserField extends TableAccess
     }
 
     /**
-     * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
-     * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-     * Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_2'
-     * @param string $name
-     * @param int    $index
-     * @return string
+     * This recursive method creates from the parameter name a unique name that only have
+     * capital letters followed by the next free number (index)
+     * Example: 'Membership' => 'MEMBERSHIP_2'
+     * @param string $name  The name from which the unique name should be created
+     * @param int    $index The index of the name. Should be startet with 1
+     * @return string Returns the unique name with capital letters and number
      */
     private function getNewNameIntern($name, $index)
     {
@@ -321,6 +321,7 @@ class TableUserField extends TableAccess
     /**
      * das Feld wird um eine Position in der Reihenfolge verschoben
      * @param string $mode
+     * @throws AdmException
      */
     public function moveSequence($mode)
     {
@@ -355,6 +356,7 @@ class TableUserField extends TableAccess
      * with their timestamp will be updated.
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @throws AdmException
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -386,15 +388,18 @@ class TableUserField extends TableAccess
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue The new value that should be stored in the database field
      * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
+     * @throws AdmException
      * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
+        global $gL10n;
+
         if ($columnName === 'usf_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }
-        elseif($columnName === 'usf_cat_id')
+        if($columnName === 'usf_cat_id')
         {
             $category = new TableCategory($this->db, $newValue);
 

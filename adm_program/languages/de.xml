@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <!-- Phrases only in Announcementmodule -->
     <string name="ANN_ANNOUNCEMENT">Ankündigung</string>
@@ -598,6 +598,13 @@
     <string name="MEM_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</string>
     <string name="MEM_USERS_PER_PAGE">Anzahl Benutzer pro Seite</string>
     <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
+    <!-- Phrases only in Menü -->
+    <string name="MEN_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
+    <string name="MEN_MENU_ITEM">Menüeintrag</string>
+    <string name="MEN_MENU_LEVEL">Menüebene</string>
+    <string name="MEN_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wähle dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Willst du den Menüpunkt auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
+    <string name="MEN_MODULE_RIGHTS">Modulrechte</string>
+    <string name="MEN_MODULE_RIGHTS_DESC">Wenn du hier ein Modul angibst, dann wird der Menüpunkt nur angezeigt, wenn der Benutzer auch das Recht hat, dieses Modul zu sehen.</string>
     <!-- Phrases only in Messagemodule -->
     <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
     <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Das Chat-Modul kann über diese Einstellung aktiviert oder deaktiviert werden. Das Modul lädt alle 3 Sekunden dynamisch Daten aus der Datenbank. Es werden maximal 99 Einträge gespeichert. Bei 100 Meldungen werden die ersten 50 Einträge wieder gelöscht. (Standard: Deaktiviert)</string>
@@ -1195,7 +1202,7 @@
     <string name="SYS_IMPORTANT">Wichtig</string>
     <string name="SYS_INFORMATIONS">Informationen</string>
     <string name="SYS_INTERNAL_NAME">Interner Name</string>
-    <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</string>
+    <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
     <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
     <string name="SYS_IO_ERROR">E/A Fehler</string>
     <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1413,4 +1420,6 @@
     <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
     <string name="SYS_WIDTH">Breite</string>
     <string name="SYS_YES">Ja</string>
+    <!--Phrases only in Menu-->
+    <string name="MEN_PLUGIN">Plugins</string>
 </resources>

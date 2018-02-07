@@ -155,7 +155,7 @@ while($row = $statement->fetch())
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading'));
         $table->addColumn('<span id="caret_'.$blockId.'" class="caret"></span>'.$userField->getValue('cat_name'),
-                          array('id' => 'group_'.$blockId, 'colspan' => '8'), 'td');
+                          array('id' => 'group_'.$blockId, 'colspan' => '8'));
         $table->addTableBody('id', $blockId);
 
         $categoryId = (int) $userField->getValue('usf_cat_id');

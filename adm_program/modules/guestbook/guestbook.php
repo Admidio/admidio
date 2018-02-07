@@ -182,7 +182,7 @@ if($getGboId > 0 || $getModeration)
     );
 }
 
-if(!$getModeration && $gCurrentUser->editGuestbookRight() && $gSettingsManager->get('enable_guestbook_moderation') > 0)
+if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsManager->get('enable_guestbook_moderation') > 0)
 {
     // show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT COUNT(*) AS count

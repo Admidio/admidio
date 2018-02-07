@@ -63,7 +63,7 @@ if($getMode === 1)
 
     $_SESSION['fields_request'] = $_POST;
 
-    // pruefen, ob Pflichtfelder gefuellt sind
+    // Check if mandatory fields are filled
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($userField->getValue('usf_system') == 0 && $_POST['usf_name'] === '')
     {

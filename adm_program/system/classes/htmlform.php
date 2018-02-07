@@ -1353,6 +1353,12 @@ class HtmlForm extends HtmlFormBasic
                     $optionGroup = $value[2];
                 }
 
+                // if value is a translation string we must translate it
+                if(admIsTranslationStrId($value[1]))
+                {
+                    $value[1] = $gL10n->get($value[1]);
+                }
+
                 // add option
                 if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $value[0])
                 {
@@ -1374,6 +1380,12 @@ class HtmlForm extends HtmlFormBasic
                 if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $key)
                 {
                     $defaultEntry = true;
+                }
+
+                // if value is a translation string we must translate it
+                if(admIsTranslationStrId($value))
+                {
+                    $value = $gL10n->get($value);
                 }
 
                 if(is_array($optionsAll['valueAttributes']))

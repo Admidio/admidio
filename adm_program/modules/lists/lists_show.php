@@ -493,7 +493,7 @@ if ($getMode !== 'csv')
             }
         }
 
-        //link to email-module
+        // link to email-module
         if($showLinkMailToList)
         {
             if ($numberRoles === 1 && $role->allowedToAssignMembers($gCurrentUser))

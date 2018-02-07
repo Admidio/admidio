@@ -24,6 +24,9 @@
  */
 class TableCategory extends TableAccess
 {
+    const MOVE_UP   = 'UP';
+    const MOVE_DOWN = 'DOWN';
+
     /**
      * @var string
      */
@@ -79,7 +82,7 @@ class TableCategory extends TableAccess
 
         $this->db->startTransaction();
 
-        // Luecke in der Reihenfolge schliessen
+        // Close the gap in the sequence
         $sql = 'UPDATE '.TBL_CATEGORIES.'
                    SET cat_sequence = cat_sequence - 1
                  WHERE (  cat_org_id = ? -- $gCurrentSession->getValue(\'ses_org_id\')
@@ -91,8 +94,8 @@ class TableCategory extends TableAccess
 
         $catId = (int) $this->getValue('cat_id');
 
-        // alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
-        $sql = 'SELECT *
+        // search for all related objects and delete them with further dependencies
+        $sql = 'SELECT 1
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
         $recordsetsStatement = $this->db->queryPrepared($sql, array($catId));
@@ -247,30 +250,31 @@ class TableCategory extends TableAccess
     {
         global $gCurrentOrganization;
 
+        $catType = $this->getValue('cat_type');
+
         // count all categories that are organization independent because these categories should not
         // be mixed with the organization categories. Hidden categories are sidelined.
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_CATEGORIES.'
                  WHERE cat_org_id IS NULL
                    AND cat_name_intern <> \'EVENTS\'
-                   AND cat_type = ? -- $this->getValue(\'cat_type\')';
-        $countCategoriesStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_type')));
+                   AND cat_type = ? -- $catType';
+        $countCategoriesStatement = $this->db->queryPrepared($sql, array($catType));
         $rowCount = (int) $countCategoriesStatement->fetchColumn();
 
-        $mode = admStrToUpper($mode);
         $catOrgId    = (int) $this->getValue('cat_org_id');
         $catSequence = (int) $this->getValue('cat_sequence');
 
         $sql = 'UPDATE '.TBL_CATEGORIES.'
                    SET cat_sequence = ? -- $catSequence
-                 WHERE cat_type = ? -- $this->getValue(\'cat_type\')
+                 WHERE cat_type     = ? -- $catType
                    AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_sequence = ? -- $catSequence';
-        $queryParams = array($catSequence, $this->getValue('cat_type'), $gCurrentOrganization->getValue('org_id'));
+        $queryParams = array($catSequence, $catType, $gCurrentOrganization->getValue('org_id'));
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if ($mode === 'UP')
+        if ($mode === self::MOVE_UP)
         {
             if ($catOrgId === 0 || $catSequence > $rowCount + 1)
             {
@@ -280,7 +284,7 @@ class TableCategory extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif ($mode === 'DOWN')
+        elseif ($mode === self::MOVE_DOWN)
         {
             if ($catOrgId > 0 || $catSequence < $rowCount)
             {
