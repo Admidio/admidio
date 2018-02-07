@@ -99,7 +99,7 @@
         COLLATE = utf8_unicode_ci</step>
     <step id="600">CREATE INDEX %PREFIX%_idx_men_men_id_parent ON %PREFIX%_menu (men_men_id_parent)</step>
     <step id="610">ALTER TABLE %PREFIX%_menu ADD CONSTRAINT %PREFIX%_fk_men_men_parent FOREIGN KEY (men_men_id_parent) REFERENCES %PREFIX%_menu (men_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
-    <step id="620">ALTER TABLE %PREFIX%_menu ADD CONSTRAINT %PREFIX%_fk_men_com_id FOREIGN KEY (men_com_id) REFERENCES %PREFIX%_categories (cat_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="620">ALTER TABLE %PREFIX%_menu ADD CONSTRAINT %PREFIX%_fk_men_com_id FOREIGN KEY (men_com_id) REFERENCES %PREFIX%_components (com_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step id="630">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('menu_view', 'adm_menu')</step>
     <step id="640">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>

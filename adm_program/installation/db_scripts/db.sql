@@ -839,7 +839,7 @@ ALTER TABLE %PREFIX%_members
 
 ALTER TABLE %PREFIX%_menu
     ADD CONSTRAINT %PREFIX%_fk_men_men_parent  FOREIGN KEY (men_men_id_parent)  REFERENCES %PREFIX%_menu (men_id)                ON DELETE SET NULL ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_men_com_id      FOREIGN KEY (men_com_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT %PREFIX%_fk_men_com_id      FOREIGN KEY (men_com_id)         REFERENCES %PREFIX%_components (com_id)          ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_messages
     ADD CONSTRAINT %PREFIX%_fk_msg_usr_sender  FOREIGN KEY (msg_usr_id_sender)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
