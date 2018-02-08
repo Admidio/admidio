@@ -630,12 +630,7 @@ class TableAccess
                 // Byte/Blob
                 case 'bytea':
                     // PostgreSQL can only store hex values in bytea, so we must decode binary in hex
-                    // we must add slashes to binary data of blob fields so that the default stripslashes don't remove necessary slashes
-                    $newValue = addslashes(bin2hex($newValue));
-                    break;
-                case 'blob':
-                    // we must add slashes to binary data of blob fields so that the default stripslashes don't remove necessary slashes
-                    $newValue = addslashes($newValue);
+                    $newValue = bin2hex($newValue);
                     break;
             }
         }

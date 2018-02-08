@@ -80,12 +80,16 @@ if (!$pdoStatement || $pdoStatement->rowCount() === 0)
 
 // create an organization object of the current organization
 $gCurrentOrganization = new Organization($gDb, $g_organization);
+$currOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
-if ((int) $gCurrentOrganization->getValue('org_id') === 0)
+if ($currOrgId === 0)
 {
     // Organization was not found
     exit('<div style="color: #cc0000;">Error: The organization of the config.php could not be found in the database!</div>');
 }
+
+// define global
+$gProfileFields = new ProfileFields($gDb, $currOrgId);
 
 // read organization specific parameters from adm_preferences
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
