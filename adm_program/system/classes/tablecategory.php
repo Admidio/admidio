@@ -412,8 +412,6 @@ class TableCategory extends TableAccess
      */
     private function setTableAndColumnByCatType()
     {
-        global $g_tbl_praefix;
-
         switch ($this->getValue('cat_type'))
         {
             case 'ROL':
@@ -437,7 +435,7 @@ class TableCategory extends TableAccess
                 $this->elementColumn = 'ann_cat_id';
                 break;
             case 'AWA':
-                $this->elementTable = $g_tbl_praefix . '_user_awards';
+                $this->elementTable = TABLE_PREFIX . '_user_awards';
                 $this->elementColumn = 'awa_cat_id';
                 break;
         }

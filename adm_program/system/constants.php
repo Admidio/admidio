@@ -100,47 +100,49 @@ define('DATE_MAX', '9999-12-31');
 // ###  DB-TABLES  ###
 // ###################
 
-define('TBL_ANNOUNCEMENTS',       $g_tbl_praefix . '_announcements');
-define('TBL_AUTO_LOGIN',          $g_tbl_praefix . '_auto_login');
-define('TBL_CATEGORIES',          $g_tbl_praefix . '_categories');
-define('TBL_COMPONENTS',          $g_tbl_praefix . '_components');
-define('TBL_DATES',               $g_tbl_praefix . '_dates');
-define('TBL_FILES',               $g_tbl_praefix . '_files');
-define('TBL_FOLDERS',             $g_tbl_praefix . '_folders');
-define('TBL_GUESTBOOK',           $g_tbl_praefix . '_guestbook');
-define('TBL_GUESTBOOK_COMMENTS',  $g_tbl_praefix . '_guestbook_comments');
-define('TBL_IDS',                 $g_tbl_praefix . '_ids');
-define('TBL_LINKS',               $g_tbl_praefix . '_links');
-define('TBL_LIST_COLUMNS',        $g_tbl_praefix . '_list_columns');
-define('TBL_LISTS',               $g_tbl_praefix . '_lists');
-define('TBL_MEMBERS',             $g_tbl_praefix . '_members');
-define('TBL_MENU',                $g_tbl_praefix . '_menu');
-define('TBL_MESSAGES',            $g_tbl_praefix . '_messages');
-define('TBL_MESSAGES_CONTENT',    $g_tbl_praefix . '_messages_content');
-define('TBL_ORGANIZATIONS',       $g_tbl_praefix . '_organizations');
-define('TBL_PHOTOS',              $g_tbl_praefix . '_photos');
-define('TBL_PREFERENCES',         $g_tbl_praefix . '_preferences');
-define('TBL_REGISTRATIONS',       $g_tbl_praefix . '_registrations');
-define('TBL_ROLE_DEPENDENCIES',   $g_tbl_praefix . '_role_dependencies');
-define('TBL_ROLES',               $g_tbl_praefix . '_roles');
-define('TBL_ROLES_RIGHTS',        $g_tbl_praefix . '_roles_rights');
-define('TBL_ROLES_RIGHTS_DATA',   $g_tbl_praefix . '_roles_rights_data');
-define('TBL_ROOMS',               $g_tbl_praefix . '_rooms');
-define('TBL_SESSIONS',            $g_tbl_praefix . '_sessions');
-define('TBL_TEXTS',               $g_tbl_praefix . '_texts');
-define('TBL_USERS',               $g_tbl_praefix . '_users');
-define('TBL_USER_DATA',           $g_tbl_praefix . '_user_data');
-define('TBL_USER_FIELDS',         $g_tbl_praefix . '_user_fields');
-define('TBL_USER_LOG',            $g_tbl_praefix . '_user_log');
-define('TBL_USER_RELATIONS',      $g_tbl_praefix . '_user_relations');
-define('TBL_USER_RELATION_TYPES', $g_tbl_praefix . '_user_relation_types');
+define('TABLE_PREFIX', $g_tbl_praefix);
+
+define('TBL_ANNOUNCEMENTS',       TABLE_PREFIX . '_announcements');
+define('TBL_AUTO_LOGIN',          TABLE_PREFIX . '_auto_login');
+define('TBL_CATEGORIES',          TABLE_PREFIX . '_categories');
+define('TBL_COMPONENTS',          TABLE_PREFIX . '_components');
+define('TBL_DATES',               TABLE_PREFIX . '_dates');
+define('TBL_FILES',               TABLE_PREFIX . '_files');
+define('TBL_FOLDERS',             TABLE_PREFIX . '_folders');
+define('TBL_GUESTBOOK',           TABLE_PREFIX . '_guestbook');
+define('TBL_GUESTBOOK_COMMENTS',  TABLE_PREFIX . '_guestbook_comments');
+define('TBL_IDS',                 TABLE_PREFIX . '_ids');
+define('TBL_LINKS',               TABLE_PREFIX . '_links');
+define('TBL_LIST_COLUMNS',        TABLE_PREFIX . '_list_columns');
+define('TBL_LISTS',               TABLE_PREFIX . '_lists');
+define('TBL_MEMBERS',             TABLE_PREFIX . '_members');
+define('TBL_MENU',                TABLE_PREFIX . '_menu');
+define('TBL_MESSAGES',            TABLE_PREFIX . '_messages');
+define('TBL_MESSAGES_CONTENT',    TABLE_PREFIX . '_messages_content');
+define('TBL_ORGANIZATIONS',       TABLE_PREFIX . '_organizations');
+define('TBL_PHOTOS',              TABLE_PREFIX . '_photos');
+define('TBL_PREFERENCES',         TABLE_PREFIX . '_preferences');
+define('TBL_REGISTRATIONS',       TABLE_PREFIX . '_registrations');
+define('TBL_ROLE_DEPENDENCIES',   TABLE_PREFIX . '_role_dependencies');
+define('TBL_ROLES',               TABLE_PREFIX . '_roles');
+define('TBL_ROLES_RIGHTS',        TABLE_PREFIX . '_roles_rights');
+define('TBL_ROLES_RIGHTS_DATA',   TABLE_PREFIX . '_roles_rights_data');
+define('TBL_ROOMS',               TABLE_PREFIX . '_rooms');
+define('TBL_SESSIONS',            TABLE_PREFIX . '_sessions');
+define('TBL_TEXTS',               TABLE_PREFIX . '_texts');
+define('TBL_USERS',               TABLE_PREFIX . '_users');
+define('TBL_USER_DATA',           TABLE_PREFIX . '_user_data');
+define('TBL_USER_FIELDS',         TABLE_PREFIX . '_user_fields');
+define('TBL_USER_LOG',            TABLE_PREFIX . '_user_log');
+define('TBL_USER_RELATIONS',      TABLE_PREFIX . '_user_relations');
+define('TBL_USER_RELATION_TYPES', TABLE_PREFIX . '_user_relation_types');
 
 // #####################
 // ###  OTHER STUFF  ###
 // #####################
 
 // create an installation unique cookie prefix and remove special characters
-$cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . $g_tbl_praefix;
+$cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . TABLE_PREFIX;
 $cookiePrefix = preg_replace('/\W/', '_', $cookiePrefix);
 define('COOKIE_PREFIX', $cookiePrefix);
 

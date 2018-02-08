@@ -114,7 +114,7 @@ function toggleForeignKeyChecks($enable)
  */
 function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 {
-    global $gLogger, $gDb, $gL10n, $g_tbl_praefix, $gSettingsManager, $gDbType;
+    global $gLogger, $gDb, $gL10n, $gSettingsManager, $gDbType;
 
     // nun in einer Schleife alle Update-Scripte fuer Version 2 einspielen
     while ($versionMain === 2)

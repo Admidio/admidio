@@ -176,8 +176,6 @@ function readFileContent($filePath)
  */
 function prepareFileContent($fileContent)
 {
-    global $g_tbl_praefix;
-
     $sqlArray = explode(';', $fileContent);
 
     $sqlStatements = array();
@@ -187,7 +185,7 @@ function prepareFileContent($fileContent)
         if ($sql !== '')
         {
             // set prefix for all tables and execute sql statement
-            $sqlStatements[] = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+            $sqlStatements[] = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
         }
     }
 
