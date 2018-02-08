@@ -120,6 +120,29 @@ class Database
     protected $databaseName = '';
 
     /**
+     * Simple way to create a database object with the default Admidio globals
+     * @throws AdmException
+     * @return Database Returns a Database instance
+     */
+    public static function createDatabaseInstance()
+    {
+        global $gLogger, $gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw;
+
+        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
+        {
+            $gLogger->debug(
+                'DATABASE: Create DB-Instance with default params!',
+                array(
+                    'engine' => $gDbType, 'host' => $g_adm_srv, 'port' => $g_adm_port,
+                    'name' => $g_adm_db, 'username' => $g_adm_usr, 'password' => $g_adm_pw
+                )
+            );
+        }
+
+        return new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    }
+
+    /**
      * The constructor will check if a valid engine was set and try to connect to the database.
      * If the engine is invalid or the connection not possible an exception will be thrown.
      * @param string $engine   The database type that is supported from Admidio. @b mysql and @b pgsql are valid values.
@@ -587,7 +610,11 @@ class Database
      */
     private static function prepareSqlForLog($sql)
     {
-        return preg_replace('/\s+/', ' ', trim($sql));
+        $sql = preg_replace('/\/\*.+\*\//sU', '', $sql); // Removes /* ... */ (multi-line) comments
+        $sql = preg_replace('/--.+$/m', '', $sql); // Removes -- (single-line) comments
+        $sql = preg_replace('/\s+/', ' ', $sql); // Changes all types of sequent white spaces to one space
+
+        return trim($sql);
     }
 
     /**

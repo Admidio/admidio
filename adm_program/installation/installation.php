@@ -114,7 +114,7 @@ if (is_file($pathConfigFile))
 {
     try
     {
-        $db = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+        $db = Database::createDatabaseInstance();
     }
     catch (AdmException $e)
     {

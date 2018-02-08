@@ -1062,8 +1062,8 @@ $formLists->addSelectBoxFromSql(
 );
 $selectBoxEntries = array(
     '0' => $gL10n->get('SYS_NOBODY'),
-    '1' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_ASSIGN_ROLES'))),
-    '2' => $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER')))
+    '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_ASSIGN_ROLES')))),
+    '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER'))))
 );
 $formLists->addSelectBox(
     'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
