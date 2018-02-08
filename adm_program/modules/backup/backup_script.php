@@ -495,7 +495,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                         // reconnect to database
                         try
                         {
-                            $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+                            $gDb = Database::createDatabaseInstance();
                         }
                         catch (AdmException $e)
                         {

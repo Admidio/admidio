@@ -23,7 +23,7 @@ require_once(__DIR__ . '/adm_program/system/bootstrap.php');
 // connect to database
 try
 {
-    $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+    $gDb = Database::createDatabaseInstance();
 }
 catch (AdmException $e)
 {
