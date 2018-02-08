@@ -1139,6 +1139,7 @@
     <string name="SYS_DESCRIPTION">Beschreibung</string>
     <string name="SYS_DESIGNATION">Bezeichnung</string>
     <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
+    <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
     <string name="SYS_DISK_SPACE">Speicherplatz</string>
     <string name="SYS_DONATE">Spenden</string>
     <string name="SYS_DONT_SHOW">Nicht anzeigen</string>

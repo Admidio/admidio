@@ -681,7 +681,7 @@ else
     $html = getStaticText(
         'danger',
         '<span id="directory_protection_status">' . $gL10n->get('SYS_OFF') . '</span>',
-        ' &rarr; <a id="link_directory_protection" href="#link_directory_protection" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>'
+        ' &rarr; <a id="link_directory_protection" href="#link_directory_protection" title="'.$gL10n->get('SYS_CREATE_HTACCESS').'">'.$gL10n->get('SYS_CREATE_HTACCESS').'</a>'
     );
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
