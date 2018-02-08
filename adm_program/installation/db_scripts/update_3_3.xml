@@ -43,7 +43,7 @@
     <step id="370">ALTER TABLE %PREFIX%_roles_rights ADD COLUMN ror_ror_id_parent integer unsigned</step>
     <step id="380">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table, ror_ror_id_parent)
                    VALUES ('category_edit', 'adm_categories', (SELECT rr.ror_id FROM %PREFIX%_roles_rights rr WHERE rr.ror_name_intern = 'category_view'))</step>
-    <step id="390">alter table %PREFIX%_roles_rights add constraint %PREFIX%_FK_ROR_ROR_PARENT foreign key (ror_ror_id_parent) references %PREFIX%_roles_rights (ror_id) on delete set null on update restrict</step>
+    <step id="390">ALTER TABLE %PREFIX%_roles_rights ADD CONSTRAINT %PREFIX%_fk_ror_ror_parent FOREIGN KEY (ror_ror_id_parent) REFERENCES %PREFIX%_roles_rights (ror_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="395" database="pgsql">CREATE INDEX IF NOT EXISTS idx_%PREFIX%_msc_part_id ON %PREFIX%_messages_content (msc_part_id)</step>
     <step id="397" database="pgsql">CREATE INDEX IF NOT EXISTS ak_%PREFIX%_shortname ON %PREFIX%_organizations (org_shortname)</step>
     <step id="400" database="pgsql" error="ignore">ALTER INDEX idx_%PREFIX%_mem_rol_usr_id RENAME TO %PREFIX%_idx_mem_rol_usr_id</step>
