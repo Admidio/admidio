@@ -587,7 +587,11 @@ class Database
      */
     private static function prepareSqlForLog($sql)
     {
-        return preg_replace('/\s+/', ' ', trim($sql));
+        $sql = preg_replace('/\/\*.+\*\//sU', '', $sql); // Removes /* ... */ (multi-line) comments
+        $sql = preg_replace('/--.+$/m', '', $sql); // Removes -- (single-line) comments
+        $sql = preg_replace('/\s+/', ' ', $sql); // Changes all types of sequent white spaces to one space
+
+        return trim($sql);
     }
 
     /**
