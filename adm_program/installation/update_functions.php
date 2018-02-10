@@ -188,23 +188,6 @@ function doVersion3Update()
     $componentUpdateHandle->update(ADMIDIO_VERSION);
 }
 
-function createHtaccessIfNotExist()
-{
-    global $gLogger;
-
-    if (is_file(ADMIDIO_PATH . FOLDER_DATA.'/.htaccess'))
-    {
-        return;
-    }
-
-    // create ".htaccess" file for folder "adm_my_files"
-    $protection = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
-    if (!$protection->protectFolder())
-    {
-        $gLogger->warning('htaccess file could not be created!');
-    }
-}
-
 /**
  * @param string $installedDbVersion
  */
@@ -248,7 +231,13 @@ function doAdmidioUpdate($installedDbVersion)
     // activate foreign key checks, so database is consistent
     toggleForeignKeyChecks(true);
 
-    createHtaccessIfNotExist();
+    // create ".htaccess" file for folder "adm_my_files"
+    $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+
+    if (!$htaccess->protectFolder())
+    {
+        $gLogger->warning('.htaccess file could not be created!');
+    }
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_renew = 1';

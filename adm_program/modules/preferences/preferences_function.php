@@ -385,4 +385,24 @@ switch($getMode)
         // clean up
         unset($_SESSION['add_organization_request']);
         break;
+
+    case 4:
+        if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess'))
+        {
+            echo $gL10n->get('SYS_ON');
+            return;
+        }
+
+        // create ".htaccess" file for folder "adm_my_files"
+        $htaccess = new Htaccess(ADMIDIO_PATH . FOLDER_DATA);
+        if ($htaccess->protectFolder())
+        {
+            echo $gL10n->get('SYS_ON');
+            return;
+        }
+
+        $gLogger->warning('htaccess file could not be created!');
+
+        echo $gL10n->get('SYS_OFF');
+        break;
 }

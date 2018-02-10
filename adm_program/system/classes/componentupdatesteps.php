@@ -352,7 +352,13 @@ final class ComponentUpdateSteps
 
                 if($row['org_shortname'] === $g_organization && is_dir($folderOldName))
                 {
-                    rename($folderOldName, $folder->getFullFolderPath());
+                    try
+                    {
+                        FileSystemUtils::moveDirectory($folderOldName, $folder->getFullFolderPath());
+                    }
+                    catch (\RuntimeException $exception)
+                    {
+                    }
                 }
             }
             else
@@ -452,36 +458,21 @@ final class ComponentUpdateSteps
      */
     public static function updateStepRewriteFolderRights($folder = '')
     {
-        $returnValue = true;
-
         if ($folder === '')
         {
             $folder = ADMIDIO_PATH . FOLDER_DATA;
         }
 
-        $dirHandle = @opendir($folder);
-        if ($dirHandle)
+        try
         {
-            while (($entry = readdir($dirHandle)) !== false)
-            {
-                if ($entry !== '.' && $entry !== '..')
-                {
-                    $resource = $folder . '/' . $entry;
+            FileSystemUtils::chmodDirectory($folder, 0777, true);
 
-                    if (is_dir($resource))
-                    {
-                        // now check the subfolder
-                        $returnValue = $returnValue && self::updateStepRewriteFolderRights($resource);
-
-                        // set rights to 0777
-                        $returnValue = $returnValue && @chmod($resource, 0777);
-                    }
-                }
-            }
-            closedir($dirHandle);
+            return true;
         }
-
-        return $returnValue;
+        catch (\RuntimeException $exception)
+        {
+            return false;
+        }
     }
 
     /**
@@ -588,6 +579,42 @@ final class ComponentUpdateSteps
             // save roles to role right
             $rightCategoryView = new RolesRights(self::$db, 'category_view', (int) $row['cat_id']);
             $rightCategoryView->saveRoles($roles);
+        }
+    }
+
+    /**
+     * This method renames the download folders of the different organizations to the new secure filename pattern
+     */
+    public static function updateStepDownloadOrgFolderName()
+    {
+        $sql = 'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $pdoStatement = self::$db->queryPrepared($sql);
+
+        while($orgShortname = $pdoStatement->fetchColumn())
+        {
+            $path = ADMIDIO_PATH . FOLDER_DATA . '/download_';
+            $replaceArray = array(
+                ' '  => '_',
+                '.'  => '_',
+                ','  => '_',
+                '\'' => '_',
+                '"'  => '_',
+                '´'  => '_',
+                '`'  => '_'
+            );
+            $orgNameOld = str_replace(array_keys($replaceArray), array_values($replaceArray), $orgShortname);
+            $orgNameNew = FileSystemUtils::getSanitizedPathEntry($orgShortname);
+
+            if ($orgNameOld !== $orgNameNew)
+            {
+                try
+                {
+                    FileSystemUtils::moveDirectory($path . strtolower($orgNameOld), $path . strtolower($orgNameNew));
+                }
+                catch (\RuntimeException $exception)
+                {
+                }
+            }
         }
     }
 }

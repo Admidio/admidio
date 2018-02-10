@@ -82,23 +82,17 @@ class TablePhotos extends TableAccess
      */
     public function createFolder()
     {
-        // Pfad in adm_my_files pruefen und ggf. anlegen
-        $myFilesPhotos = new MyFiles('PHOTOS');
-        if (!$myFilesPhotos->checkSettings())
-        {
-            return array(
-                'text' => $myFilesPhotos->errorText,
-                'path' => $myFilesPhotos->errorPath
-            );
-        }
-
-        // nun den Ordner fuer die Veranstaltung anlegen
+        // Ordner fuer die Veranstaltung anlegen
         $folderName = $this->getValue('pho_begin', 'Y-m-d') . '_' . $this->getValue('pho_id');
-        if (!$myFilesPhotos->createFolder($folderName, true))
+        try
+        {
+            FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $folderName);
+        }
+        catch (\RuntimeException $exception)
         {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
-                'path' => 'adm_my_files/photos/'.$folderName
+                'path' => 'adm_my_files/photos/' . $folderName
             );
         }
 
@@ -152,20 +146,20 @@ class TablePhotos extends TableAccess
             $folder = ADMIDIO_PATH . FOLDER_DATA. '/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
 
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
-            if (is_dir($folder))
+            try
             {
-                // nun erst rekursiv den Ordner im Dateisystem loeschen
-                $myFilesPhotos = new MyFiles('PHOTOS');
-                $myFilesPhotos->setFolder($folder);
-                $returnValue = $myFilesPhotos->delete($folder);
-            }
+                $dirDeleted = FileSystemUtils::deleteDirectoryIfExists($folder, true);
 
-            if ($returnValue)
+                if ($dirDeleted)
+                {
+                    // Veranstaltung jetzt in DB loeschen
+                    $sql = 'DELETE FROM '.TBL_PHOTOS.'
+                             WHERE pho_id = ? -- $photoId';
+                    $this->db->queryPrepared($sql, array($photoId));
+                }
+            }
+            catch (\RuntimeException $exception)
             {
-                // Veranstaltung jetzt in DB loeschen
-                $sql = 'DELETE FROM '.TBL_PHOTOS.'
-                         WHERE pho_id = ? -- $photoId';
-                $this->db->queryPrepared($sql, array($photoId));
             }
         }
 

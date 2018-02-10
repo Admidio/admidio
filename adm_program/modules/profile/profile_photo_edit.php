@@ -51,10 +51,13 @@ if(!$gCurrentUser->hasRightEditProfile($user))
 if((int) $gSettingsManager->get('profile_photo_storage') === 1)
 {
     // ggf. Ordner für Userfotos in adm_my_files anlegen
-    $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
-    if(!$myFilesProfilePhotos->checkSettings())
+    try
     {
-        $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, array($myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));
+        FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos');
+    }
+    catch (\RuntimeException $exception)
+    {
+        $gMessage->show($exception->getMessage());
         // => EXIT
     }
 }
@@ -78,12 +81,14 @@ if($getMode === 'save')
         if(is_file($fileOld))
         {
             $fileNew = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
-            if(is_file($fileNew))
+            try
             {
-                unlink($fileNew);
+                FileSystemUtils::deleteFileIfExists($fileNew);
+                FileSystemUtils::moveFile($fileOld, $fileNew);
             }
-
-            rename($fileOld, $fileNew);
+            catch (\RuntimeException $exception)
+            {
+            }
         }
     }
     else
@@ -116,9 +121,12 @@ elseif($getMode === 'dont_save')
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
         $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '_new.jpg';
-        if(is_file($file))
+        try
         {
-            unlink($file);
+            FileSystemUtils::deleteFileIfExists($file);
+        }
+        catch (\RuntimeException $exception)
+        {
         }
     }
     // Datenbankspeicherung
@@ -138,7 +146,13 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
-        unlink(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
+        try
+        {
+            FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
+        }
+        catch (\RuntimeException $exception)
+        {
+        }
     }
     // Datenbankspeicherung, Daten aus Session entfernen
     else

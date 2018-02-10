@@ -45,17 +45,12 @@ switch($getJob)
     case 'get_file':
         // Dateigroese ermitteln
         $fileSize = filesize($completePath);
-
-        // for IE the filename must have special chars in hexadecimal
-        if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-        {
-            $getFilename = urlencode($getFilename);
-        }
+        $filename = FileSystemUtils::getSanitizedPathEntry($getFilename);
 
         // Passenden Datentyp erzeugen.
         header('Content-Type: application/octet-stream');
         header('Content-Length: '.$fileSize);
-        header('Content-Disposition: attachment; filename="'.$getFilename.'"');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
@@ -67,9 +62,13 @@ switch($getJob)
 
     case 'delete':
         // Backupdatei loeschen
-        if(unlink($completePath))
+        try
         {
+            FileSystemUtils::deleteFileIfExists($completePath);
             echo 'done';
+        }
+        catch (\RuntimeException $exception)
+        {
         }
         exit();
         break;

@@ -46,19 +46,27 @@ class Htaccess
      */
     public function protectFolder()
     {
-        if (is_dir($this->folderPath) && !is_file($this->folderPath.'/.htaccess'))
+        if (is_file($this->folderPath . '/.htaccess'))
         {
-            $file = fopen($this->folderPath.'/.htaccess', 'w+b');
-
-            if (!$file)
-            {
-                return false;
-            }
-
-            fwrite($file, "Order deny,allow\n");
-            fwrite($file, "Deny from all\n");
-            return fclose($file);
+            return true;
         }
+
+        try
+        {
+            FileSystemUtils::createDirectoryIfNotExists($this->folderPath);
+
+            $lines = array(
+                'Order deny,allow',
+                'Deny from all'
+            );
+            $data = implode("\n", $lines) . "\n";
+            FileSystemUtils::writeFile($this->folderPath . '/.htaccess', $data);
+        }
+        catch (\RuntimeException $exception)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -68,10 +76,15 @@ class Htaccess
      */
     public function unprotectFolder()
     {
-        if (is_dir($this->folderPath) && is_file($this->folderPath.'/.htaccess'))
+        try
         {
-            return @unlink($this->folderPath.'/.htaccess', 'w+');
+            FileSystemUtils::deleteFileIfExists($this->folderPath . '/.htaccess');
         }
+        catch (\RuntimeException $exception)
+        {
+            return false;
+        }
+
         return true;
     }
 }

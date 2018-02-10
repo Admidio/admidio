@@ -104,5 +104,6 @@
                    VALUES ('menu_view', 'adm_menu')</step>
     <step id="640">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>
     <step id="650">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
+    <step id="660">ComponentUpdateSteps::updateStepDownloadOrgFolderName</step>
     <step>stop</step>
 </update>

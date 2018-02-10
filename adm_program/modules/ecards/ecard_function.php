@@ -40,22 +40,16 @@ class FunctionClass
      */
     public function getFileNames($directory)
     {
-        $files = array();
-
-        $dirHandle = @opendir($directory);
-        if ($dirHandle)
+        try
         {
-            while (($entry = readdir($dirHandle)) !== false)
-            {
-                if ($entry !== '.' && $entry !== '..' && is_file($directory . '/' . $entry))
-                {
-                    $files[] = $entry;
-                }
-            }
-            closedir($dirHandle);
-        }
+            $directoryFiles = FileSystemUtils::getDirectoryContent($directory, false, false, array(FileSystemUtils::CONTENT_TYPE_FILE));
 
-        return $files;
+            return array_keys($directoryFiles);
+        }
+        catch (\RuntimeException $exception)
+        {
+            return array();
+        }
     }
 
     /**
@@ -245,7 +239,13 @@ class FunctionClass
         }
 
         // nun noch das von der Groesse angepasste Bild loeschen
-        unlink($imgPhotoPath);
+        try
+        {
+            FileSystemUtils::deleteFileIfExists($imgPhotoPath);
+        }
+        catch (\RuntimeException $exception)
+        {
+        }
 
         return $returnCode;
     }

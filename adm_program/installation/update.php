@@ -102,11 +102,45 @@ if (!$gSettingsManager->has('system_language'))
 $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
 
+if (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA))
+{
+    try
+    {
+        FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA, 0777);
+    }
+    catch (\RuntimeException $exception)
+    {
+        try
+        {
+            $pathPermissions = FileSystemUtils::getPathPermissions(ADMIDIO_PATH . FOLDER_DATA);
+        }
+        catch (\RuntimeException $exception)
+        {
+            $pathPermissions = array('exception' => $exception->getMessage());
+        }
+        $pathPermissions['path'] = ADMIDIO_PATH . FOLDER_DATA;
+
+        $gLogger->error('FILESYSTEM: Could not set the necessary directory mode!', $pathPermissions);
+
+        showNotice(
+            $gL10n->get('INS_DATA_DIR_RIGHTS'),
+            ADMIDIO_URL . '/adm_program/installation/index.php',
+            $gL10n->get('SYS_RELOAD'),
+            'layout/forward.png'
+        );
+        // => EXIT
+    }
+}
+
 // config.php exists at wrong place
 if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php'))
 {
     // try to delete the config file at the old place otherwise show notice to user
-    if (!@unlink(ADMIDIO_PATH . '/config.php'))
+    try
+    {
+        FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . '/config.php');
+    }
+    catch (\RuntimeException $exception)
     {
         showNotice(
             $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),

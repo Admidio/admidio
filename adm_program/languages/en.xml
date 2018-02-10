@@ -1138,6 +1138,8 @@
   <string name="SYS_DELETED_USER">Deleted user</string>
   <string name="SYS_DESCRIPTION">Description</string>
   <string name="SYS_DESIGNATION">Name</string>
+  <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
+  <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>

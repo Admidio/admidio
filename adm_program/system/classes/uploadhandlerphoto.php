@@ -102,20 +102,23 @@ class UploadHandlerPhoto extends UploadHandler
                 // if enabled then save original image
                 if ($gSettingsManager->getBool('photo_keep_original'))
                 {
-                    if(!is_dir($albumFolder.'/originals'))
+                    try
                     {
-                        $folder = new Folder($albumFolder);
-                        $folder->createFolder('originals', true);
+                        FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
+                        FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
                     }
-
-                    rename($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
+                    catch (\RuntimeException $exception)
+                    {
+                    }
                 }
 
                 // save thumbnail
-                if(!is_dir($albumFolder.'/thumbnails'))
+                try
                 {
-                    $folder = new Folder($albumFolder);
-                    $folder->createFolder('thumbnails', true);
+                    FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
+                }
+                catch (\RuntimeException $exception)
+                {
                 }
 
                 $image = new Image($fileLocation);
@@ -124,9 +127,12 @@ class UploadHandlerPhoto extends UploadHandler
                 $image->delete();
 
                 // delete image from upload folder
-                if(is_file($fileLocation))
+                try
                 {
-                    unlink($fileLocation);
+                    FileSystemUtils::deleteFileIfExists($fileLocation);
+                }
+                catch (\RuntimeException $exception)
+                {
                 }
 
                 // if image was successfully saved in filesystem then update image count of album
@@ -143,7 +149,15 @@ class UploadHandlerPhoto extends UploadHandler
             catch(AdmException $e)
             {
                 $file->error = $e->getText();
-                unlink($this->options['upload_dir'].$file->name);
+
+                try
+                {
+                    FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
+                }
+                catch (\RuntimeException $exception)
+                {
+                }
+
                 return $file;
             }
         }

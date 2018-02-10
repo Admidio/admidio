@@ -52,13 +52,7 @@ $file->save();
 
 // Dateigroese ermitteln
 $fileSize = filesize($completePath);
-$filename = $file->getValue('fil_name');
-
-// for IE the filename must have special chars in hexadecimal
-if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-{
-    $filename = urlencode($filename);
-}
+$filename = FileSystemUtils::getSanitizedPathEntry($file->getValue('fil_name'));
 
 // Passenden Datentyp erzeugen.
 header('Content-Type: application/octet-stream');

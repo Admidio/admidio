@@ -96,11 +96,22 @@ $page->addJavascript('
     });
 
     $("#link_check_for_update").click(function() {
-        $("#admidio_version_content").empty();
-        $("#admidio_version_content").prepend("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
+        var admVersionContent = $("#admidio_version_content");
+
+        admVersionContent.html("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
         $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
-            $("#admidio_version_content").empty();
-            $("#admidio_version_content").append(htmlVersion);
+            admVersionContent.html(htmlVersion);
+        });
+        return false;
+    });
+
+    $("#link_directory_protection").click(function() {
+        var dirProtectionStatus = $("#directory_protection_status");
+
+        dirProtectionStatus.html("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
+        $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php", {mode: "4"}, function(statusText) {
+            var directoryProtection = dirProtectionStatus.parent().parent().parent();
+            directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
         });
         return false;
     });',
@@ -660,6 +671,20 @@ catch (AdmException $e)
     $html = getStaticText('danger', $gL10n->get('SYS_PRNG_INSECURE'), '<br />' . $e->getText());
 }
 $formSystemInformation->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
+
+if(is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess'))
+{
+    $html = getStaticText('success', $gL10n->get('SYS_ON'));
+}
+else
+{
+    $html = getStaticText(
+        'danger',
+        '<span id="directory_protection_status">' . $gL10n->get('SYS_OFF') . '</span>',
+        ' &rarr; <a id="link_directory_protection" href="#link_directory_protection" title="'.$gL10n->get('SYS_CREATE_HTACCESS').'">'.$gL10n->get('SYS_CREATE_HTACCESS').'</a>'
+    );
+}
+$formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
 if(PhpIniUtils::getPostMaxSize() === -1)
 {

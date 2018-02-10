@@ -174,12 +174,12 @@ if ($getMode === 'new' || $getMode === 'change')
         {
             $newFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $_POST['pho_begin'] . '_' . $phoId;
 
-            // das komplette Album in den neuen Ordner kopieren
-            $albumFolder = new Folder($albumPath);
-            $returnValue = $albumFolder->move($newFolder);
-
-            // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
-            if (!$returnValue)
+            // das komplette Album in den neuen Ordner verschieben
+            try
+            {
+                FileSystemUtils::moveDirectory($albumPath, $newFolder);
+            }
+            catch (\RuntimeException $exception)
             {
                 $gMessage->setForwardUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php');
                 $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', array($newFolder, '<a href="mailto:'.$gSettingsManager->getString('email_administrator').'">', '</a>')));

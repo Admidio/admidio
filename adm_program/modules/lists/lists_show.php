@@ -901,13 +901,7 @@ if ($getMode === 'csv' || $getMode === 'pdf')
         $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
     }
 
-    $filename .= '.' . $getMode;
-
-    // for IE the filename must have special chars in hexadecimal
-    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-    {
-        $filename = urlencode($filename);
-    }
+    $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
 
     header('Content-Disposition: attachment; filename="'.$filename.'"');
 
@@ -946,7 +940,14 @@ elseif ($getMode === 'pdf')
 
     readfile($file);
     ignore_user_abort(true);
-    unlink($file);
+
+    try
+    {
+        FileSystemUtils::deleteFileIfExists($file);
+    }
+    catch (\RuntimeException $exception)
+    {
+    }
 }
 elseif ($getMode === 'html' || $getMode === 'print')
 {

@@ -38,8 +38,6 @@ class TableFolder extends TableAccess
     public function __construct(Database $database, $folId = 0)
     {
         parent::__construct($database, TBL_FOLDERS, 'fol', $folId);
-
-        $this->folderPath = new Folder();
     }
 
     /**
@@ -145,18 +143,21 @@ class TableFolder extends TableAccess
      */
     public function createFolder($folderName)
     {
-        $this->folderPath->setFolder($this->getFullFolderPath());
-        $this->folderPath->createFolder($folderName, true);
+        $baseFolder = $this->getFullFolderPath();
 
-        if ($this->folderPath->createFolder($folderName, true))
+        try
         {
-            return null;
+            FileSystemUtils::createDirectoryIfNotExists($baseFolder . '/' . $folderName);
+        }
+        catch (\RuntimeException $exception)
+        {
+            return array(
+                'text' => 'SYS_FOLDER_NOT_CREATED',
+                'path' => $baseFolder . '/' . $folderName
+            );
         }
 
-        return array(
-            'text' => 'SYS_FOLDER_NOT_CREATED',
-            'path' => $this->getFullFolderPath() . '/' . $folderName
-        );
+        return null;
     }
 
     /**
@@ -219,8 +220,13 @@ class TableFolder extends TableAccess
         // Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
         if ($folderPath !== '')
         {
-            $this->folderPath->setFolder($folderPath);
-            $this->folderPath->delete($folderPath);
+            try
+            {
+                FileSystemUtils::deleteDirectoryIfExists($folderPath, true);
+            }
+            catch (\RuntimeException $exception)
+            {
+            }
         }
 
         $returnCode = true;
@@ -509,16 +515,7 @@ class TableFolder extends TableAccess
     {
         global $gCurrentOrganization;
 
-        $replaceArray = array(
-            ' '  => '_',
-            '.'  => '_',
-            ','  => '_',
-            '\'' => '_',
-            '"'  => '_',
-            '´'  => '_',
-            '`'  => '_'
-        );
-        $orgName = str_replace(array_keys($replaceArray), array_values($replaceArray), $gCurrentOrganization->getValue('org_shortname'));
+        $orgName = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_shortname'));
 
         return 'download_' . strtolower($orgName);
     }

@@ -46,14 +46,10 @@ if($getMode === 1)
 
     $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
-    // for IE the filename must have special chars in hexadecimal
-    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-    {
-        $filename = urlencode($filename);
-    }
+    $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.vcf';
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
-    header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
+    header('Content-Disposition: attachment; filename="'.$filename.'"');
 
     // necessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
@@ -209,11 +205,7 @@ elseif ($getMode === 8)
         $role     = new TableRoles($gDb, $getRoleId);
         $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
 
-        // for IE the filename must have special chars in hexadecimal
-        if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-        {
-            $filename = urlencode($filename);
-        }
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
         header('Content-Type: text/x-vcard; charset=iso-8859-1');
         header('Content-Disposition: attachment; filename="'.$filename.'"');

@@ -138,8 +138,13 @@ if (!PhpIniUtils::isFileUploadEnabled())
 if($getMode === 'choose_files')
 {
     // delete old stuff in upload folder
-    $uploadFolder = new Folder(ADMIDIO_PATH . FOLDER_DATA. '/photos/upload');
-    $uploadFolder->delete('', true);
+    try
+    {
+        FileSystemUtils::deleteDirectoryContentIfExists(ADMIDIO_PATH . FOLDER_DATA. '/photos/upload');
+    }
+    catch (\RuntimeException $exception)
+    {
+    }
 
     // create html page object
     $page = new HtmlPage();

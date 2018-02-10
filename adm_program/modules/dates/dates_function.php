@@ -605,16 +605,10 @@ elseif($getMode === 2)
 
 elseif($getMode === 6)  // export event in ical format
 {
-    $filename = $date->getValue('dat_headline');
-
-    // for IE the filename must have special chars in hexadecimal
-    if (admStrContains($_SERVER['HTTP_USER_AGENT'], 'MSIE'))
-    {
-        $filename = urlencode($filename);
-    }
+    $filename = FileSystemUtils::getSanitizedPathEntry($date->getValue('dat_headline')) . '.ics';
 
     header('Content-Type: text/calendar; charset=utf-8');
-    header('Content-Disposition: attachment; filename="'. $filename. '.ics"');
+    header('Content-Disposition: attachment; filename="'. $filename. '"');
 
     // necessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');

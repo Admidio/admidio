@@ -49,37 +49,12 @@ function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
 {
     // Ordnerpfad zusammensetzen
     $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
-
-    // Thumbnail loeschen
-    if (is_file($photoPath))
+    try
     {
-        @chmod($photoPath, 0777);
-        unlink($photoPath);
+        FileSystemUtils::deleteFileIfExists($photoPath);
     }
-}
-
-/**
- * @param string $path
- */
-function tryDelete($path)
-{
-    if (is_file($path))
+    catch (\RuntimeException $exception)
     {
-        @chmod($path, 0777);
-        unlink($path);
-    }
-}
-
-/**
- * @param string $path
- * @param string $newPath
- */
-function tryRename($path, $newPath)
-{
-    if (is_file($path))
-    {
-        @chmod($path, 0777);
-        rename($path, $newPath);
     }
 }
 
@@ -94,23 +69,35 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
     // delete photos
-    tryDelete($albumPath.'/'.$picNr.'.jpg');
-    tryDelete($albumPath.'/originals/'.$picNr.'.jpg');
-    tryDelete($albumPath.'/originals/'.$picNr.'.png');
+    try
+    {
+        FileSystemUtils::deleteFileIfExists($albumPath.'/'.$picNr.'.jpg');
+        FileSystemUtils::deleteFileIfExists($albumPath.'/originals/'.$picNr.'.jpg');
+        FileSystemUtils::deleteFileIfExists($albumPath.'/originals/'.$picNr.'.png');
+    }
+    catch (\RuntimeException $exception)
+    {
+    }
 
     // Umbenennen der Restbilder und Thumbnails loeschen
     $newPicNr = $picNr;
     $thumbnailDelete = false;
 
-    for ($actPicNr = 1; $actPicNr <= $photoAlbum->getValue('pho_quantity'); ++$actPicNr)
+    for ($actPicNr = 1; $actPicNr <= (int) $photoAlbum->getValue('pho_quantity'); ++$actPicNr)
     {
         if (is_file($albumPath.'/'.$actPicNr.'.jpg'))
         {
             if ($actPicNr > $newPicNr)
             {
-                tryRename($albumPath.'/'.$actPicNr.'.jpg', $albumPath.'/'.$newPicNr.'.jpg');
-                tryRename($albumPath.'/originals/'.$actPicNr.'.jpg', $albumPath.'/originals/'.$newPicNr.'.jpg');
-                tryRename($albumPath.'/originals/'.$actPicNr.'.png', $albumPath.'/originals/'.$newPicNr.'.png');
+                try
+                {
+                    FileSystemUtils::moveFile($albumPath.'/'.$actPicNr.'.jpg', $albumPath.'/'.$newPicNr.'.jpg');
+                    FileSystemUtils::moveFile($albumPath.'/originals/'.$actPicNr.'.jpg', $albumPath.'/originals/'.$newPicNr.'.jpg');
+                    FileSystemUtils::moveFile($albumPath.'/originals/'.$actPicNr.'.png', $albumPath.'/originals/'.$newPicNr.'.png');
+                }
+                catch (\RuntimeException $exception)
+                {
+                }
                 ++$newPicNr;
             }
         }
