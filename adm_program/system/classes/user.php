@@ -109,7 +109,7 @@ class User extends TableAccess
      */
     public function allowedViewProfileField(User $user, $fieldNameIntern)
     {
-        return $user->mProfileFieldsData->visible($fieldNameIntern, $this->hasRightEditProfile($user));
+        return $user->mProfileFieldsData->isVisible($fieldNameIntern, $this->hasRightEditProfile($user));
     }
 
     /**

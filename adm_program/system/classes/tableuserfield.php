@@ -319,6 +319,29 @@ class TableUserField extends TableAccess
     }
 
     /**
+     * This method checks if the current user is allowed to view this profile field. Therefore
+     * the visibility of the category is checked. This method will not check the context if
+     * the user is allowed to view the field because he has the right to edit the profile.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function isVisible()
+    {
+        global $gCurrentUser;
+
+        $usrId = (int) $gCurrentUser->getValue('usr_id');
+
+        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
+        {
+            $this->mViewUserFieldUserId = $usrId;
+
+            // check if the current user could view the category of the profile field
+            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
+        }
+
+        return $this->mViewUserField;
+    }
+
+    /**
      * das Feld wird um eine Position in der Reihenfolge verschoben
      * @param string $mode
      * @throws AdmException
@@ -403,7 +426,7 @@ class TableUserField extends TableAccess
         {
             $category = new TableCategory($this->db, $newValue);
 
-            if(!$category->visible() || $category->getValue('cat_type') !== 'USF')
+            if(!$category->isVisible() || $category->getValue('cat_type') !== 'USF')
             {
                 throw new AdmException('Category of the user field '. $this->getValue('dat_name'). ' could not be set
                     because the category is not visible to the current user and current organization.');
@@ -438,28 +461,5 @@ class TableUserField extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
-    }
-
-    /**
-     * This method checks if the current user is allowed to view this profile field. Therefore
-     * the visibility of the category is checked. This method will not check the context if
-     * the user is allowed to view the field because he has the right to edit the profile.
-     * @return bool Return true if the current user is allowed to view this profile field
-     */
-    public function visible()
-    {
-        global $gCurrentUser;
-
-        $usrId = (int) $gCurrentUser->getValue('usr_id');
-
-        if ($this->mViewUserField === null || $this->mViewUserFieldUserId !== $usrId)
-        {
-            $this->mViewUserFieldUserId = $usrId;
-
-            // check if the current user could view the category of the profile field
-            $this->mViewUserField = in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('USF'), true);
-        }
-
-        return $this->mViewUserField;
     }
 }

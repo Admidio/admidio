@@ -302,23 +302,23 @@ while($user = $userStatement->fetch())
         $arrContent[] = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
     }
 
-    if($gProfileFields->visible('LAST_NAME', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
     {
         $arrContent[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['last_name'].'</a>';
     }
 
-    if($gProfileFields->visible('FIRST_NAME', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
     {
         $arrContent[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $user['usr_id'])).'">'.$user['first_name'].'</a>';
     }
 
     // create string with user address
-    if(strlen($user['country']) > 0 && $gProfileFields->visible('COUNTRY', $gCurrentUser->editUsers()))
+    if(strlen($user['country']) > 0 && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
     {
         $addressText .= $gL10n->getCountryByCode($user['country']);
     }
-    if((strlen($user['zip_code']) > 0 && $gProfileFields->visible('POSTCODE', $gCurrentUser->editUsers()))
-    || (strlen($user['city']) > 0 && $gProfileFields->visible('CITY', $gCurrentUser->editUsers())))
+    if((strlen($user['zip_code']) > 0 && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
+    || (strlen($user['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())))
     {
         // some countries have the order postcode city others have city postcode
         if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
@@ -330,15 +330,15 @@ while($user = $userStatement->fetch())
             $addressText .= ' - '. $user['city']. ' '. $user['zip_code'];
         }
     }
-    if(strlen($user['street']) > 0 && $gProfileFields->visible('STREET', $gCurrentUser->editUsers()))
+    if(strlen($user['street']) > 0 && $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers()))
     {
         $addressText .= ' - '. $user['street'];
     }
 
-    if($gProfileFields->visible('COUNTRY', $gCurrentUser->editUsers())
-    || $gProfileFields->visible('POSTCODE', $gCurrentUser->editUsers())
-    || $gProfileFields->visible('CITY', $gCurrentUser->editUsers())
-    || $gProfileFields->visible('STREET', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers())
+    || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
+    || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
+    || $gProfileFields->isVisible('STREET', $gCurrentUser->editUsers()))
     {
         if(strlen($addressText) > 0)
         {
@@ -350,7 +350,7 @@ while($user = $userStatement->fetch())
         }
     }
 
-    if($gProfileFields->visible('BIRTHDAY', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers()))
     {
         // show birthday if it's known
         if(strlen($user['birthday']) > 0)

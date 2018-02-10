@@ -184,7 +184,7 @@ class TablePhotos extends TableAccess
     {
         global $gCurrentUser;
 
-        return $gCurrentUser->editPhotoRight() && ($this->visible() || (int) $this->getValue('pho_id') === 0);
+        return $gCurrentUser->editPhotoRight() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
     }
 
     /**
@@ -204,6 +204,30 @@ class TablePhotos extends TableAccess
         }
 
         return $this->hasChildAlbums;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view this photo album. Therefore
+     * the album must be from the current organization and should not be locked or the user
+     * is a module administrator.
+     * @return bool Return true if the current user is allowed to view this photo album
+     */
+    public function isVisible()
+    {
+        global $gCurrentOrganization, $gCurrentUser;
+
+        // current photo album must belong to current organization
+        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
+        {
+            return false;
+        }
+        // locked photo album could only be viewed by module administrators
+        elseif((int) $this->getValue('pho_locked') === 1 && !$gCurrentUser->editPhotoRight())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -280,29 +304,5 @@ class TablePhotos extends TableAccess
         }
 
         return $shuffleImage;
-    }
-
-    /**
-     * This method checks if the current user is allowed to view this photo album. Therefore
-     * the album must be from the current organization and should not be locked or the user
-     * is a module administrator.
-     * @return bool Return true if the current user is allowed to view this photo album
-     */
-    public function visible()
-    {
-        global $gCurrentOrganization, $gCurrentUser;
-
-        // current photo album must belong to current organization
-        if($this->getValue('pho_id') > 0 && (int) $this->getValue('pho_org_id') !== (int) $gCurrentOrganization->getValue('org_id'))
-        {
-            return false;
-        }
-        // locked photo album could only be viewed by module administrators
-        elseif((int) $this->getValue('pho_locked') === 1 && !$gCurrentUser->editPhotoRight())
-        {
-            return false;
-        }
-
-        return true;
     }
 }

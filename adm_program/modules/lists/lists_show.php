@@ -586,7 +586,7 @@ for ($columnNumber = 1, $iMax = $list->countColumns(); $columnNumber <= $iMax; +
     }
 
     // show hidden fields only for user with rights
-    if ($usfId === 0 || $gProfileFields->visible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
+    if ($usfId === 0 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
     {
         if ($getMode === 'csv')
         {
@@ -731,7 +731,7 @@ foreach ($membersList as $member)
         }
 
         // hidden fields are only for users with rights
-        if ($usfId === 0 || $gProfileFields->visible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
+        if ($usfId === 0 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->editUsers()))
         {
 
             // fill content with data of database

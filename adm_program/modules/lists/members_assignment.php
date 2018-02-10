@@ -282,26 +282,26 @@ else
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 
-    if($gProfileFields->visible('LAST_NAME', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->editUsers()))
     {
         $columnHeading[] = $gL10n->get('SYS_LASTNAME');
         $columnAlignment[] = 'left';
     }
-    if($gProfileFields->visible('FIRST_NAME', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->editUsers()))
     {
         $columnHeading[] = $gL10n->get('SYS_FIRSTNAME');
         $columnAlignment[] = 'left';
     }
-    if($gProfileFields->visible('STREET', $gCurrentUser->editUsers())
-    || $gProfileFields->visible('POSTCODE', $gCurrentUser->editUsers())
-    || $gProfileFields->visible('CITY', $gCurrentUser->editUsers())
-    || $gProfileFields->visible('COUNTRY', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('STREET', $gCurrentUser->editUsers())
+    || $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers())
+    || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
+    || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
     {
         $columnHeading[] = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/map.png"
                                 alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />';
         $columnAlignment[] = 'left';
     }
-    if($gProfileFields->visible('BIRTHDAY', $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers()))
     {
         $columnHeading[] = $gL10n->get('SYS_BIRTHDAY');
         $columnAlignment[] = 'left';

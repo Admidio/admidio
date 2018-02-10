@@ -260,7 +260,7 @@ foreach($gProfileFields->getProfileFields() as $field)
     }
 
     // add profile field to user field array
-    if($gProfileFields->visible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers()))
+    if($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->editUsers()))
     {
         $javascriptCode .= '
             userFields[' . $i . '] = {

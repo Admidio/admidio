@@ -364,6 +364,43 @@ class TableRoles extends TableAccess
     }
 
     /**
+     * This method checks if the current user is allowed to view this role. Therefore
+     * the view properties of the role will be checked. If it's an event role than
+     * we also check if the user is a member of the roles that could participate to the event.
+     * @return bool Return true if the current user is allowed to view this role
+     */
+    public function isVisible()
+    {
+        global $gCurrentUser, $gValidLogin;
+
+        if (!$gValidLogin)
+        {
+            return false;
+        }
+
+        $rolId = (int) $this->getValue('rol_id');
+
+        if ($this->getValue('cat_name_intern') !== 'EVENTS')
+        {
+            return $gCurrentUser->hasRightViewRole($rolId);
+        }
+
+        if ((int) $this->getValue('rol_this_list_view') === 0)
+        {
+            return false;
+        }
+
+        // check if user is member of a role who could view the event
+        $sql = 'SELECT dat_id
+                  FROM '.TBL_DATES.'
+                 WHERE dat_rol_id = ? -- $rolId';
+        $pdoStatement = $this->db->queryPrepared($sql, array($rolId));
+        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $pdoStatement->fetchColumn());
+
+        return count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0;
+    }
+
+    /**
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
@@ -425,7 +462,7 @@ class TableRoles extends TableAccess
         {
             $category = new TableCategory($this->db, $newValue);
 
-            if(!$category->visible() || $category->getValue('cat_type') !== 'ROL')
+            if(!$category->isVisible() || $category->getValue('cat_type') !== 'ROL')
             {
                 throw new AdmException('Category of the role '. $this->getValue('dat_name'). ' could not be set
                     because the category is not visible to the current user and current organization.');
@@ -477,42 +514,5 @@ class TableRoles extends TableAccess
         }
 
         return false;
-    }
-
-    /**
-     * This method checks if the current user is allowed to view this role. Therefore
-     * the view properties of the role will be checked. If it's an event role than
-     * we also check if the user is a member of the roles that could participate to the event.
-     * @return bool Return true if the current user is allowed to view this role
-     */
-    public function visible()
-    {
-        global $gCurrentUser, $gValidLogin;
-
-        if (!$gValidLogin)
-        {
-            return false;
-        }
-
-        $rolId = (int) $this->getValue('rol_id');
-
-        if ($this->getValue('cat_name_intern') !== 'EVENTS')
-        {
-            return $gCurrentUser->hasRightViewRole($rolId);
-        }
-
-        if ((int) $this->getValue('rol_this_list_view') === 0)
-        {
-            return false;
-        }
-
-        // check if user is member of a role who could view the event
-        $sql = 'SELECT dat_id
-                  FROM '.TBL_DATES.'
-                 WHERE dat_rol_id = ? -- $rolId';
-        $pdoStatement = $this->db->queryPrepared($sql, array($rolId));
-        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $pdoStatement->fetchColumn());
-
-        return count(array_intersect($gCurrentUser->getRoleMemberships(), $eventParticipationRoles->getRolesIds())) > 0;
     }
 }

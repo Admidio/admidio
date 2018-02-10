@@ -39,7 +39,7 @@ $weblink = new TableWeblink($gDb, $getLinkId);
 $lnkUrl = $weblink->getValue('lnk_url');
 
 // if no link is set or the weblink is not visible to the user show error
-if(strlen($lnkUrl) === 0 || !$weblink->visible())
+if(strlen($lnkUrl) === 0 || !$weblink->isVisible())
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     // => EXIT

@@ -67,6 +67,25 @@ class ProfileFields
     }
 
     /**
+     * Delete all data of the user in table adm_user_data
+     * @return void
+     */
+    public function deleteUserData()
+    {
+        $this->db->startTransaction();
+
+        // delete every entry from adm_users_data
+        foreach ($this->mUserData as $field)
+        {
+            $field->delete();
+        }
+
+        $this->mUserData = array();
+
+        $this->db->endTransaction();
+    }
+
+    /**
      * returns true if a column of user table or profile fields has changed
      * @return bool
      */
@@ -418,6 +437,27 @@ class ProfileFields
     }
 
     /**
+     * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
+     * within the context of the user in this object. If no context is set than we only check if the
+     * current user has the right to view the category of the profile field.
+     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
+     * @param bool   $allowedToEditProfile Set to @b true if the current user has the right to edit the profile
+     *                                    in which context the right should be checked. This param must not be
+     *                                    set if you are not in a user context.
+     * @return bool Return true if the current user is allowed to view this profile field
+     */
+    public function isVisible($fieldNameIntern, $allowedToEditProfile = false)
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the profile field
+        // if it's the own profile than we check if user could edit his profile and if so he could view all fields
+        // check if the profile field is only visible for users that could edit this
+        return ($this->mProfileFields[$fieldNameIntern]->isVisible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
+            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
+    }
+
+    /**
      * If this method is called than all further calls of method @b setValue will not check the values.
      * The values will be stored in database without any inspections !
      */
@@ -638,46 +678,5 @@ class ProfileFields
         }
 
         return false;
-    }
-
-
-    /**
-     * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
-     * within the context of the user in this object. If no context is set than we only check if the
-     * current user has the right to view the category of the profile field.
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
-     * @param bool   $allowedToEditProfile Set to @b true if the current user has the right to edit the profile
-     *                                    in which context the right should be checked. This param must not be
-     *                                    set if you are not in a user context.
-     * @return bool Return true if the current user is allowed to view this profile field
-     */
-    public function visible($fieldNameIntern, $allowedToEditProfile = false)
-    {
-        global $gCurrentUser;
-
-        // check if the current user could view the category of the profile field
-        // if it's the own profile than we check if user could edit his profile and if so he could view all fields
-        // check if the profile field is only visible for users that could edit this
-        return ($this->mProfileFields[$fieldNameIntern]->visible() || (int) $gCurrentUser->getValue('usr_id') === $this->mUserId)
-            && ($allowedToEditProfile || $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 0);
-    }
-
-    /**
-     * Delete all user data
-     * @return void
-     */
-    public function deleteUserData()
-    {
-        $this->db->startTransaction();
-
-        // delete every entry from adm_users_data
-        foreach ($this->mUserData as $field)
-        {
-            $field->delete();
-        }
-
-        $this->mUserData = array();
-
-        $this->db->endTransaction();
     }
 }

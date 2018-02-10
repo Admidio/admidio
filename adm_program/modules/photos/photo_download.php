@@ -53,7 +53,7 @@ $photoAlbum = new TablePhotos($gDb);
 $photoAlbum->readDataById($getPhotoId);
 
 // check if the current user could view this photo album
-if(!$photoAlbum->visible())
+if(!$photoAlbum->isVisible())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT

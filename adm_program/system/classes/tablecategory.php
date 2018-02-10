@@ -140,7 +140,7 @@ class TableCategory extends TableAccess
             return false;
         }
 
-        if($this->visible())
+        if($this->isVisible())
         {
             // if category belongs to current organization than it's editable
             if($this->getValue('cat_org_id') > 0
@@ -240,6 +240,25 @@ class TableCategory extends TableAccess
         }
 
         return $value;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view this category. Therefore
+     * the visibility of the category is checked.
+     * @return bool Return true if the current user is allowed to view this category
+     */
+    public function isVisible()
+    {
+        global $gCurrentUser;
+
+        // a new record will always be visible until all data is saved
+        if($this->newRecord)
+        {
+            return true;
+        }
+
+        // check if the current user could view this category
+        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories($this->getValue('cat_type')), true);
     }
 
     /**
@@ -471,24 +490,5 @@ class TableCategory extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
-    }
-
-    /**
-     * This method checks if the current user is allowed to view this category. Therefore
-     * the visibility of the category is checked.
-     * @return bool Return true if the current user is allowed to view this category
-     */
-    public function visible()
-    {
-        global $gCurrentUser;
-
-        // a new record will always be visible until all data is saved
-        if($this->newRecord)
-        {
-            return true;
-        }
-
-        // check if the current user could view this category
-        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories($this->getValue('cat_type')), true);
     }
 }

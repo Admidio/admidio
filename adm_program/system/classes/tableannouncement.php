@@ -110,6 +110,19 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
+     * This method checks if the current user is allowed to view this announcement. Therefore
+     * the visibility of the category is checked.
+     * @return bool Return true if the current user is allowed to view this announcement
+     */
+    public function isVisible()
+    {
+        global $gCurrentUser;
+
+        // check if the current user could view the category of the announcement
+        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('ANN'), true);
+    }
+
+    /**
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
@@ -127,7 +140,7 @@ class TableAnnouncement extends TableAccess
         {
             $category = new TableCategory($this->db, $newValue);
 
-            if(!$category->visible() || $category->getValue('cat_type') !== 'ANN')
+            if(!$category->isVisible() || $category->getValue('cat_type') !== 'ANN')
             {
                 throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
                     because the category is not visible to the current user and current organization.');
@@ -135,18 +148,5 @@ class TableAnnouncement extends TableAccess
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
-    }
-
-    /**
-     * This method checks if the current user is allowed to view this announcement. Therefore
-     * the visibility of the category is checked.
-     * @return bool Return true if the current user is allowed to view this announcement
-     */
-    public function visible()
-    {
-        global $gCurrentUser;
-
-        // check if the current user could view the category of the announcement
-        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('ANN'), true);
     }
 }
