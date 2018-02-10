@@ -248,6 +248,8 @@ class HtmlTable extends HtmlTableBasic
         // set order columns
         $this->datatablesInitParameters[] = '"order": [' . implode(',', $this->columnsOrder) . ']';
 
+        $this->datatablesInitParameters[] = '"fixedHeader": true';
+
         // use DataTables Responsive extension
         $this->datatablesInitParameters[] = '"responsive": true';
 
