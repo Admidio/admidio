@@ -150,59 +150,6 @@ class ModuleAnnouncements extends Modules
     }
 
     /**
-     * Get additional tables for sql statement
-     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
-     */
-    private function sqlGetAdditional()
-    {
-        global $gSettingsManager, $gProfileFields;
-
-        if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
-        {
-            $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
-            $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
-
-            // show firstname and lastname of create and last change user
-            $additionalFields = '
-                cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
-                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
-            $additionalTables = '
-                LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
-                       ON cre_surname.usd_usr_id = ann_usr_id_create
-                      AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
-                LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
-                       ON cre_firstname.usd_usr_id = ann_usr_id_create
-                      AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
-                LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
-                       ON cha_surname.usd_usr_id = ann_usr_id_change
-                      AND cha_surname.usd_usf_id = ? -- $lastNameUsfId
-                LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
-                       ON cha_firstname.usd_usr_id = ann_usr_id_change
-                      AND cha_firstname.usd_usf_id = ? -- $firstNameUsfId';
-            $additionalParams = array($lastNameUsfId, $firstNameUsfId, $lastNameUsfId, $firstNameUsfId);
-        }
-        else
-        {
-            // show username of create and last change user
-            $additionalFields = '
-                cre_username.usr_login_name AS create_name,
-                cha_username.usr_login_name AS change_name ';
-            $additionalTables = '
-                LEFT JOIN '.TBL_USERS.' AS cre_username
-                       ON cre_username.usr_id = ann_usr_id_create
-                LEFT JOIN '.TBL_USERS.' AS cha_username
-                       ON cha_username.usr_id = ann_usr_id_change ';
-            $additionalParams = array();
-        }
-
-        return array(
-            'fields' => $additionalFields,
-            'tables' => $additionalTables,
-            'params' => $additionalParams
-        );
-    }
-
-    /**
      * Add several conditions to an SQL string that could later be used
      * as additional conditions in other SQL queries.
      * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions and it's query params.
@@ -299,5 +246,58 @@ class ModuleAnnouncements extends Modules
         $this->setParameter('date' . $dateRangePoint . 'FormatAdmidio', $objDate->format($gSettingsManager->getString('system_date')));
 
         return true;
+    }
+
+    /**
+     * Get additional tables for sql statement
+     * @return array<string,string|array<int,int>> Returns an array of a SQL string with the necessary joins and it's query params.
+     */
+    private function sqlGetAdditional()
+    {
+        global $gSettingsManager, $gProfileFields;
+
+        if ((int) $gSettingsManager->get('system_show_create_edit') === 1)
+        {
+            $lastNameUsfId  = (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id');
+            $firstNameUsfId = (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+
+            // show firstname and lastname of create and last change user
+            $additionalFields = '
+                cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
+                cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name ';
+            $additionalTables = '
+                LEFT JOIN '.TBL_USER_DATA.' AS cre_surname
+                       ON cre_surname.usd_usr_id = ann_usr_id_create
+                      AND cre_surname.usd_usf_id = ? -- $lastNameUsfId
+                LEFT JOIN '.TBL_USER_DATA.' AS cre_firstname
+                       ON cre_firstname.usd_usr_id = ann_usr_id_create
+                      AND cre_firstname.usd_usf_id = ? -- $firstNameUsfId
+                LEFT JOIN '.TBL_USER_DATA.' AS cha_surname
+                       ON cha_surname.usd_usr_id = ann_usr_id_change
+                      AND cha_surname.usd_usf_id = ? -- $lastNameUsfId
+                LEFT JOIN '.TBL_USER_DATA.' AS cha_firstname
+                       ON cha_firstname.usd_usr_id = ann_usr_id_change
+                      AND cha_firstname.usd_usf_id = ? -- $firstNameUsfId';
+            $additionalParams = array($lastNameUsfId, $firstNameUsfId, $lastNameUsfId, $firstNameUsfId);
+        }
+        else
+        {
+            // show username of create and last change user
+            $additionalFields = '
+                cre_username.usr_login_name AS create_name,
+                cha_username.usr_login_name AS change_name ';
+            $additionalTables = '
+                LEFT JOIN '.TBL_USERS.' AS cre_username
+                       ON cre_username.usr_id = ann_usr_id_create
+                LEFT JOIN '.TBL_USERS.' AS cha_username
+                       ON cha_username.usr_id = ann_usr_id_change ';
+            $additionalParams = array();
+        }
+
+        return array(
+            'fields' => $additionalFields,
+            'tables' => $additionalTables,
+            'params' => $additionalParams
+        );
     }
 }

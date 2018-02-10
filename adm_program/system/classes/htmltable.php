@@ -223,6 +223,95 @@ class HtmlTable extends HtmlTableBasic
     }
 
     /**
+     * Adds javascript libs and code and inits the datatables params for a datatables table
+     */
+    private function initDatatablesTable()
+    {
+        global $gSettingsManager;
+
+        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.js');
+        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/moment/min/moment.min.js');
+        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables-datetime-moment/datetime-moment.js');
+        $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.css');
+
+        if ($this->rowCount > 10 || $this->serverSideProcessing)
+        {
+            // set default page length of the table
+            $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
+        }
+        else
+        {
+            // disable page length menu
+            $this->datatablesInitParameters[] = '"paging": false';
+        }
+
+        // set order columns
+        $this->datatablesInitParameters[] = '"order": [' . implode(',', $this->columnsOrder) . ']';
+
+        // use DataTables Responsive extension
+        $this->datatablesInitParameters[] = '"responsive": true';
+
+        // set server-side processing
+        if ($this->serverSideProcessing)
+        {
+            $this->datatablesInitParameters[] = '"processing": true';
+            $this->datatablesInitParameters[] = '"serverSide": true';
+            $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
+        }
+
+        $javascriptGroup = '';
+        $javascriptGroupFunction = '';
+
+        if ($this->groupedColumn >= 0)
+        {
+            $javascriptGroup = ',
+                "drawCallback": function(settings) {
+                    var api  = this.api();
+                    var rows = api.rows({page: "current"}).nodes();
+                    var last = null;
+
+                    api.column(' . $this->groupedColumn . ', {page: "current"}).data().each(function(group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                "<tr class=\"admidio-group-heading\"><td colspan=\"' . $this->columnCount . '\">" + group + "</td></tr>"
+                            );
+
+                            last = group;
+                        }
+                    });
+                }';
+            $javascriptGroupFunction = '
+                // Order by the grouping
+                $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function() {
+                    var currentOrder = table.order()[0];
+                    if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
+                        table.order([' . $this->groupedColumn . ', "desc"]).draw();
+                    } else {
+                        table.order([' . $this->groupedColumn . ', "asc"]).draw();
+                    }
+                });';
+        }
+
+        // if columnDefs were defined then create a comma separated string with all elements of the array
+        if (count($this->datatablesColumnDefs) > 0)
+        {
+            $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
+        }
+
+        $this->htmlPage->addJavascript('
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . '"));
+            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
+
+            var admidioTable = $("#' . $this->id . '").DataTable({' .
+            implode(',', $this->datatablesInitParameters) .
+            $javascriptGroup . '
+            });
+            ' . $javascriptGroupFunction,
+            true
+        );
+    }
+
+    /**
      * Adds a column to the table.
      * @param string          $type          'th' for header row or 'td' for body row.
      * @param int             $key           Column number (starts with 0).
@@ -445,95 +534,6 @@ class HtmlTable extends HtmlTableBasic
         }
 
         return '<div class="table-responsive">' . $this->getHtmlTable() . '</div>';
-    }
-
-    /**
-     * Adds javascript libs and code and inits the datatables params for a datatables table
-     */
-    private function initDatatablesTable()
-    {
-        global $gSettingsManager;
-
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.js');
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/moment/min/moment.min.js');
-        $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables-datetime-moment/datetime-moment.js');
-        $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/datatables/datatables.css');
-
-        if ($this->rowCount > 10 || $this->serverSideProcessing)
-        {
-            // set default page length of the table
-            $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
-        }
-        else
-        {
-            // disable page length menu
-            $this->datatablesInitParameters[] = '"paging": false';
-        }
-
-        // set order columns
-        $this->datatablesInitParameters[] = '"order": [' . implode(',', $this->columnsOrder) . ']';
-
-        // use DataTables Responsive extension
-        $this->datatablesInitParameters[] = '"responsive": true';
-
-        // set server-side processing
-        if ($this->serverSideProcessing)
-        {
-            $this->datatablesInitParameters[] = '"processing": true';
-            $this->datatablesInitParameters[] = '"serverSide": true';
-            $this->datatablesInitParameters[] = '"ajax": "'.$this->serverSideFile.'"';
-        }
-
-        $javascriptGroup = '';
-        $javascriptGroupFunction = '';
-
-        if ($this->groupedColumn >= 0)
-        {
-            $javascriptGroup = ',
-                "drawCallback": function(settings) {
-                    var api  = this.api();
-                    var rows = api.rows({page: "current"}).nodes();
-                    var last = null;
-
-                    api.column(' . $this->groupedColumn . ', {page: "current"}).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                "<tr class=\"admidio-group-heading\"><td colspan=\"' . $this->columnCount . '\">" + group + "</td></tr>"
-                            );
-
-                            last = group;
-                        }
-                    });
-                }';
-            $javascriptGroupFunction = '
-                // Order by the grouping
-                $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function() {
-                    var currentOrder = table.order()[0];
-                    if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
-                        table.order([' . $this->groupedColumn . ', "desc"]).draw();
-                    } else {
-                        table.order([' . $this->groupedColumn . ', "asc"]).draw();
-                    }
-                });';
-        }
-
-        // if columnDefs were defined then create a comma separated string with all elements of the array
-        if (count($this->datatablesColumnDefs) > 0)
-        {
-            $this->datatablesInitParameters[] = '"columnDefs": [' . implode(',', $this->datatablesColumnDefs) . ']';
-        }
-
-        $this->htmlPage->addJavascript('
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . '"));
-            $.fn.dataTable.moment(formatPhpToMoment("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
-
-            var admidioTable = $("#' . $this->id . '").DataTable({' .
-            implode(',', $this->datatablesInitParameters) .
-            $javascriptGroup . '
-            });
-            ' . $javascriptGroupFunction,
-            true
-        );
     }
 
     /**

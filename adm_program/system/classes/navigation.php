@@ -128,6 +128,22 @@ class Navigation
     }
 
     /**
+     * Removes the last url from the stack. If there is only one element
+     * in the stack than don't remove it, because this will be the initial
+     * url that should be called.
+     * @return array<string,string>|null Returns the removed element
+     */
+    public function deleteLastUrl()
+    {
+        if (count($this->urlStack) > 1)
+        {
+            return array_pop($this->urlStack);
+        }
+
+        return null;
+    }
+
+    /**
      * Get the last added url from the stack.
      * @return string|null Returns the last added url. If the stack is empty returns null
      */
@@ -162,22 +178,6 @@ class Navigation
         $entry = max(0, $count - 2);
 
         return $this->urlStack[$entry]['url'];
-    }
-
-    /**
-     * Removes the last url from the stack. If there is only one element
-     * in the stack than don't remove it, because this will be the initial
-     * url that should be called.
-     * @return array<string,string>|null Returns the removed element
-     */
-    public function deleteLastUrl()
-    {
-        if (count($this->urlStack) > 1)
-        {
-            return array_pop($this->urlStack);
-        }
-
-        return null;
     }
 
     /**

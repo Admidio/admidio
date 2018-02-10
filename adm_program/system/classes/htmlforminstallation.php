@@ -57,6 +57,14 @@ class HtmlFormInstallation extends HtmlForm
     }
 
     /**
+     * @param $header string
+     */
+    public function addHeader($header)
+    {
+        $this->headers[] = $header;
+    }
+
+    /**
      * If the method is called then a text with an optional title will be displayed after
      * the headline before the form will be displayed.
      * @param string $description The (html) text that should be shown.
@@ -90,14 +98,6 @@ class HtmlFormInstallation extends HtmlForm
 
         $this->title = $gL10n->get('INS_UPDATE');
         $this->headline = $gL10n->get('INS_UPDATE_VERSION', array(ADMIDIO_VERSION_TEXT));
-    }
-
-    /**
-     * @param $header string
-     */
-    public function addHeader($header)
-    {
-        $this->headers[] = $header;
     }
 
     /**

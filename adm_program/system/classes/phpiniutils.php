@@ -18,6 +18,16 @@ final class PhpIniUtils
     const BYTES_UNIT_FACTOR_1000 = 1000;
 
     /**
+     * Checks if the size limits have valid values because they depend on each other
+     * @return bool
+     */
+    public static function checkSizeLimits()
+    {
+        return (self::getMemoryLimit() === -1 || self::getMemoryLimit() >= self::getPostMaxSize())
+            && (self::getPostMaxSize() === -1 || self::getPostMaxSize() >= self::getFileUploadMaxFileSize());
+    }
+
+    /**
      * Returns the calculated bytes of a string or -1 if unlimited
      * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
      *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
@@ -50,16 +60,6 @@ final class PhpIniUtils
     }
 
     /**
-     * Returns if safe-mode is enabled
-     * @deprecated 3.3.0:4.0.0 This function will be removed if PHP 5.3 support gets dropped
-     * @return bool
-     */
-    public static function isSafeModeEnabled()
-    {
-        return (bool) ini_get('safe_mode');
-    }
-
-    /**
      * Returns the allowed base-dirs
      * @return array<string,string>
      */
@@ -84,15 +84,6 @@ final class PhpIniUtils
     public static function getPostMaxSize()
     {
         return self::getBytesFromSize(ini_get('post_max_size'));
-    }
-
-    /**
-     * Returns if file-upload is enabled
-     * @return bool
-     */
-    public static function isFileUploadEnabled()
-    {
-        return (bool) ini_get('file_uploads');
     }
 
     /**
@@ -132,13 +123,12 @@ final class PhpIniUtils
     }
 
     /**
-     * Checks if the size limits have valid values because they depend on each other
+     * Returns if file-upload is enabled
      * @return bool
      */
-    public static function checkSizeLimits()
+    public static function isFileUploadEnabled()
     {
-        return (self::getMemoryLimit() === -1 || self::getMemoryLimit() >= self::getPostMaxSize())
-            && (self::getPostMaxSize() === -1 || self::getPostMaxSize() >= self::getFileUploadMaxFileSize());
+        return (bool) ini_get('file_uploads');
     }
 
     /**
@@ -165,6 +155,16 @@ final class PhpIniUtils
         }
 
         return $isInBaseDirs;
+    }
+
+    /**
+     * Returns if safe-mode is enabled
+     * @deprecated 3.3.0:4.0.0 This function will be removed if PHP 5.3 support gets dropped
+     * @return bool
+     */
+    public static function isSafeModeEnabled()
+    {
+        return (bool) ini_get('safe_mode');
     }
 
     /**

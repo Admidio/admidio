@@ -1852,15 +1852,6 @@ class HtmlForm extends HtmlFormBasic
     }
 
     /**
-     * Open a bootstrap btn-group if the form need more than one button.
-     */
-    public function openButtonGroup()
-    {
-        $this->buttonGroupOpen = true;
-        $this->addHtml('<div class="btn-group" role="group">');
-    }
-
-    /**
      * Close an open bootstrap btn-group
      */
     public function closeButtonGroup()
@@ -1938,6 +1929,61 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->addHtml('</div></div>');
         }
+    }
+
+    /**
+     * Close all html elements of a groupbox that was created before.
+     */
+    public function closeGroupBox()
+    {
+        $this->addHtml('</div></div>');
+    }
+
+    /**
+     * Add a small help icon to the form at the current element which shows the
+     * translated text of the text-id on mouseover or when you click on the icon.
+     * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
+     * @param string          $parameter If you need an additional parameter for the text you can set this parameter.
+     * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
+     */
+    public static function getHelpTextIcon($textId, $parameter = null)
+    {
+        global $gL10n, $gProfileFields;
+
+        // backwards compatibility
+        if (is_array($textId))
+        {
+            list($textId, $parameter) = $textId;
+        }
+
+        if ($parameter === null)
+        {
+            $text = $gL10n->get($textId);
+        }
+        else
+        {
+            if ($textId === 'user_field_description')
+            {
+                $text = $gProfileFields->getProperty($parameter, 'usf_description');
+            }
+            else
+            {
+                $text = $gL10n->get($textId, array($parameter));
+            }
+        }
+
+        return '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
+            title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
+            data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
+    }
+
+    /**
+     * Open a bootstrap btn-group if the form need more than one button.
+     */
+    public function openButtonGroup()
+    {
+        $this->buttonGroupOpen = true;
+        $this->addHtml('<div class="btn-group" role="group">');
     }
 
     /**
@@ -2048,51 +2094,6 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<div class="panel-body">');
     }
 
-    /**
-     * Close all html elements of a groupbox that was created before.
-     */
-    public function closeGroupBox()
-    {
-        $this->addHtml('</div></div>');
-    }
-
-    /**
-     * Add a small help icon to the form at the current element which shows the
-     * translated text of the text-id on mouseover or when you click on the icon.
-     * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     * @param string          $parameter If you need an additional parameter for the text you can set this parameter.
-     * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
-     */
-    public static function getHelpTextIcon($textId, $parameter = null)
-    {
-        global $gL10n, $gProfileFields;
-
-        // backwards compatibility
-        if (is_array($textId))
-        {
-            list($textId, $parameter) = $textId;
-        }
-
-        if ($parameter === null)
-        {
-            $text = $gL10n->get($textId);
-        }
-        else
-        {
-            if ($textId === 'user_field_description')
-            {
-                $text = $gProfileFields->getProperty($parameter, 'usf_description');
-            }
-            else
-            {
-                $text = $gL10n->get($textId, array($parameter));
-            }
-        }
-
-        return '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
-            title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
-            data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
-    }
 
     /**
      * This method send the whole html code of the form to the browser. Call this method

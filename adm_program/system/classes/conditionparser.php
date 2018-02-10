@@ -54,45 +54,6 @@ class ConditionParser
     }
 
     /**
-     * Starts the "DestCondition"
-     * @param string $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
-     * @param string $columnName      The name of the database column for which the condition should be created
-     * @param string $sourceCondition The user condition string
-     * @return bool Returns true if "mDestCondition" is complete
-     */
-    private function startDestCond($columnType, $columnName, $sourceCondition)
-    {
-        $this->destCond = ' AND ';  // Bedingungen fuer das Feld immer mit UND starten
-
-        if ($columnType === 'string')
-        {
-            $this->destCond .= '( UPPER(' . $columnName . ') ';
-        }
-        elseif ($columnType === 'checkbox')
-        {
-            // Sonderfall !!!
-            // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
-            if ($sourceCondition === '1')
-            {
-                $this->destCond .= $columnName . ' = 1 ';
-            }
-            else
-            {
-                $this->destCond .= '(' . $columnName . ' IS NULL OR ' . $columnName . ' = 0) ';
-            }
-
-            return true;
-        }
-        // $columnType = "int" or "date"
-        else
-        {
-            $this->destCond .= '( ' . $columnName . ' ';
-        }
-
-        return false;
-    }
-
-    /**
      * Ends the "DestCondition"
      */
     private function endDestCond()
@@ -105,18 +66,6 @@ class ConditionParser
         }
 
         $this->destCond .= ' ) ';
-    }
-
-    /**
-     * @param string $columnType
-     * @param string $sourceCondition
-     * @return bool Returns true if date search and false if age search
-     */
-    private static function isDateSearch($columnType, $sourceCondition)
-    {
-        $sourceCondition = admStrToUpper($sourceCondition);
-
-        return $columnType === 'date' && (admStrContains($sourceCondition, 'J') || admStrContains($sourceCondition, 'Y'));
     }
 
     /**
@@ -194,6 +143,18 @@ class ConditionParser
         }
 
         return '';
+    }
+
+    /**
+     * @param string $columnType
+     * @param string $sourceCondition
+     * @return bool Returns true if date search and false if age search
+     */
+    private static function isDateSearch($columnType, $sourceCondition)
+    {
+        $sourceCondition = admStrToUpper($sourceCondition);
+
+        return $columnType === 'date' && (admStrContains($sourceCondition, 'J') || admStrContains($sourceCondition, 'Y'));
     }
 
     /**
@@ -521,5 +482,44 @@ class ConditionParser
         $this->srcCond = str_replace(array_keys($replaceArray), array_values($replaceArray), $this->srcCond);
 
         return $this->srcCond;
+    }
+
+    /**
+     * Starts the "DestCondition"
+     * @param string $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
+     * @param string $columnName      The name of the database column for which the condition should be created
+     * @param string $sourceCondition The user condition string
+     * @return bool Returns true if "mDestCondition" is complete
+     */
+    private function startDestCond($columnType, $columnName, $sourceCondition)
+    {
+        $this->destCond = ' AND ';  // Bedingungen fuer das Feld immer mit UND starten
+
+        if ($columnType === 'string')
+        {
+            $this->destCond .= '( UPPER(' . $columnName . ') ';
+        }
+        elseif ($columnType === 'checkbox')
+        {
+            // Sonderfall !!!
+            // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
+            if ($sourceCondition === '1')
+            {
+                $this->destCond .= $columnName . ' = 1 ';
+            }
+            else
+            {
+                $this->destCond .= '(' . $columnName . ' IS NULL OR ' . $columnName . ' = 0) ';
+            }
+
+            return true;
+        }
+        // $columnType = "int" or "date"
+        else
+        {
+            $this->destCond .= '( ' . $columnName . ' ';
+        }
+
+        return false;
     }
 }

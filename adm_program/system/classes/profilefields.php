@@ -86,15 +86,6 @@ class ProfileFields
     }
 
     /**
-     * returns true if a column of user table or profile fields has changed
-     * @return bool
-     */
-    public function hasColumnsValueChanged()
-    {
-        return $this->columnsValueChanged;
-    }
-
-    /**
      * @return array<string,TableUserField>
      */
     public function getProfileFields()
@@ -434,6 +425,15 @@ class ProfileFields
         }
 
         return $value;
+    }
+
+    /**
+     * returns true if a column of user table or profile fields has changed
+     * @return bool
+     */
+    public function hasColumnsValueChanged()
+    {
+        return $this->columnsValueChanged;
     }
 
     /**

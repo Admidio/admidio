@@ -102,28 +102,6 @@ class HtmlNavbar
     }
 
     /**
-     * Creates the html for the menu entry.
-     * @param array<string,string> $data An array with all data if the item. This will be @id, @url, @text and @icon.
-     * @return string Returns the html for the menu entry
-     */
-    protected function createHtmlLink(array $data)
-    {
-        $icon = '';
-
-        if ($data['icon'] !== '')
-        {
-            $icon = '<img src="' . $data['icon'] . '" alt="' . strip_tags($data['text']) . '" />';
-        }
-
-        $html = '
-            <li class="' . $data['class'] . '">
-                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $icon . $data['text'] . '</a>
-            </li>';
-
-        return $html;
-    }
-
-    /**
      * This method adds an additional css class to the main nav tag of the menu.
      * @param string $className The name of a css class that should be add to the main nav tag of the manu
      */
@@ -204,12 +182,25 @@ class HtmlNavbar
     }
 
     /**
-     * Set the name of the navbar that will be shown when navbar changed to vertical mode on small devices.
-     * @param string $name New name of the navbar.
+     * Creates the html for the menu entry.
+     * @param array<string,string> $data An array with all data if the item. This will be @id, @url, @text and @icon.
+     * @return string Returns the html for the menu entry
      */
-    public function setName($name)
+    protected function createHtmlLink(array $data)
     {
-        $this->name = $name;
+        $icon = '';
+
+        if ($data['icon'] !== '')
+        {
+            $icon = '<img src="' . $data['icon'] . '" alt="' . strip_tags($data['text']) . '" />';
+        }
+
+        $html = '
+            <li class="' . $data['class'] . '">
+                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $icon . $data['text'] . '</a>
+            </li>';
+
+        return $html;
     }
 
     /**
@@ -257,6 +248,15 @@ class HtmlNavbar
         $html .= '</ul>';
 
         return $html;
+    }
+
+    /**
+     * Set the name of the navbar that will be shown when navbar changed to vertical mode on small devices.
+     * @param string $name New name of the navbar.
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**

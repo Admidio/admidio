@@ -251,186 +251,6 @@ class Database
     }
 
     /**
-     * Create a valid DSN string for the engine that was set through the constructor.
-     * If no valid engine is set than an exception is thrown.
-     * @throws \PDOException
-     */
-    private function setDSNString()
-    {
-        global $gLogger;
-
-        $availableDrivers = \PDO::getAvailableDrivers();
-
-        if (count($availableDrivers) === 0)
-        {
-            throw new \PDOException('PDO does not support any drivers'); // TODO: change exception class
-        }
-        if (!in_array($this->engine, $availableDrivers, true))
-        {
-            throw new \PDOException('The requested PDO driver ' . $this->engine . ' is not supported'); // TODO: change exception class
-        }
-
-        switch ($this->engine)
-        {
-            case self::PDO_ENGINE_MYSQL:
-                $port = '';
-                if ($this->port !== null)
-                {
-                    $port = ';port=' . $this->port;
-                }
-                // TODO: change to "charset=utf8mb4" if we change charset in DB to "utf8mb4"
-                $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8';
-                break;
-
-            case self::PDO_ENGINE_PGSQL:
-                $port = '';
-                if ($this->port !== null)
-                {
-                    $port = ';port=' . $this->port;
-                }
-                $this->dsn = 'pgsql:host=' . $this->host . $port . ';dbname=' . $this->dbName;
-                break;
-
-            default:
-                throw new \PDOException('Engine is not supported by Admidio'); // TODO: change exception class
-        }
-
-        $gLogger->debug('DATABASE: DSN-String: "' . $this->dsn . '"!');
-    }
-
-    /**
-     * Set connection specific options like UTF8 connection.
-     * These options should always be set if Admidio connect to a database.
-     */
-    private function setConnectionOptions()
-    {
-        global $gDebug;
-
-        if ($gDebug)
-        {
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        }
-        else
-        {
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
-        }
-
-        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
-        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-        $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC); // maybe change in future to \PDO::FETCH_OBJ
-        $this->pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
-
-        switch ($this->engine)
-        {
-            case self::PDO_ENGINE_MYSQL:
-                // MySQL charset UTF-8 is set in DSN-string
-                // set ANSI mode, that SQL could be more compatible with other DBs
-                $this->queryPrepared('SET SQL_MODE = \'ANSI\'');
-                // if the server has limited the joins, it can be canceled with this statement
-                $this->queryPrepared('SET SQL_BIG_SELECTS = 1');
-                break;
-            case self::PDO_ENGINE_PGSQL:
-                $this->queryPrepared('SET NAMES \'UTF8\'');
-                break;
-        }
-    }
-
-    /**
-     * @param string $property Property name of the in use database config
-     * @return string Returns the value of the chosen property
-     */
-    protected function getPropertyFromDatabaseConfig($property)
-    {
-        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
-        $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
-
-        return (string) $node[0];
-    }
-
-    /**
-     * Get the name of the database that is running Admidio.
-     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
-     */
-    public function getName()
-    {
-        if ($this->databaseName === '')
-        {
-            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
-        }
-
-        return $this->databaseName;
-    }
-
-    /**
-     * Get the minimum required version of the database that is necessary to run Admidio.
-     * @return string Returns a string with the minimum required database version e.g. '5.0.1'
-     */
-    public function getMinimumRequiredVersion()
-    {
-        if ($this->minRequiredVersion === '')
-        {
-            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
-        }
-
-        return $this->minRequiredVersion;
-    }
-
-    /**
-     * Get the version of the connected database.
-     * @return string Returns a string with the database version e.g. '5.5.8'
-     */
-    public function getVersion()
-    {
-        $versionStatement = $this->queryPrepared('SELECT version()');
-        $version = $versionStatement->fetchColumn();
-
-        if ($this->engine === self::PDO_ENGINE_PGSQL)
-        {
-            // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
-            $versionArray  = explode(',', $version);
-            $versionArray2 = explode(' ', $versionArray[0]);
-            return $versionArray2[1];
-        }
-
-        return $version;
-    }
-
-    /**
-     * Start a transaction if no open transaction exists. If you call this multiple times
-     * only 1 transaction will be open and it will be closed after the last endTransaction was send.
-     * @return bool
-     * @see Database#endTransaction
-     * @see Database#rollback
-     */
-    public function startTransaction()
-    {
-        global $gLogger;
-
-        // If we are within a transaction we will not open another one,
-        // but enclose the current one to not loose data (preventing auto commit)
-        if ($this->transactions > 0)
-        {
-            ++$this->transactions;
-            return true;
-        }
-
-        // if debug mode then log all sql statements
-        $gLogger->info('SQL: START TRANSACTION');
-
-        $result = $this->pdo->beginTransaction();
-
-        if (!$result)
-        {
-            $this->showError();
-            // => EXIT
-        }
-
-        $this->transactions = 1;
-
-        return $result;
-    }
-
-    /**
      * The method will commit an open transaction to the database. If the
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will performed.
@@ -483,6 +303,21 @@ class Database
     public function escapeString($string)
     {
         return $this->pdo->quote($string);
+    }
+
+    /**
+     * Returns an array with all available PDO database drivers of the server.
+     * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
+     * @return array<int,string> Returns an array with all available PDO database drivers of the server.
+     * @see <a href="https://secure.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a>
+     */
+    public static function getAvailableDBs()
+    {
+        global $gLogger;
+
+        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "\PDO::getAvailableDrivers()" instead!');
+
+        return \PDO::getAvailableDrivers();
     }
 
     /**
@@ -545,6 +380,200 @@ class Database
         $output .= '</div>';
 
         return $output;
+    }
+
+    /**
+     * Get the name of the database that is running Admidio.
+     * @return string Returns a string with the name of the database e.g. 'MySQL' or 'PostgreSQL'
+     */
+    public function getName()
+    {
+        if ($this->databaseName === '')
+        {
+            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
+        }
+
+        return $this->databaseName;
+    }
+
+    /**
+     * Get the minimum required version of the database that is necessary to run Admidio.
+     * @return string Returns a string with the minimum required database version e.g. '5.0.1'
+     */
+    public function getMinimumRequiredVersion()
+    {
+        if ($this->minRequiredVersion === '')
+        {
+            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
+        }
+
+        return $this->minRequiredVersion;
+    }
+
+    /**
+     * @param string $property Property name of the in use database config
+     * @return string Returns the value of the chosen property
+     */
+    protected function getPropertyFromDatabaseConfig($property)
+    {
+        $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . '/adm_program/system/databases.xml', 0, true);
+        $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
+
+        return (string) $node[0];
+    }
+
+    /**
+     * Method get all columns and their properties from the database table.
+     * @param string $table Name of the database table for which the columns-properties should be shown.
+     * @return array<string,array<string,mixed>> Returns an array with column-names.
+     */
+    public function getTableColumnsProperties($table)
+    {
+        if (!array_key_exists($table, $this->dbStructure))
+        {
+            $this->loadTableColumnsProperties($table);
+        }
+
+        return $this->dbStructure[$table];
+    }
+
+    /**
+     * Method get all columns-names from the database table.
+     * @param string $table Name of the database table for which the columns should be shown.
+     * @return array<int,string> Returns an array with each column and their properties.
+     */
+    public function getTableColumns($table)
+    {
+        if (!array_key_exists($table, $this->dbStructure))
+        {
+            $this->loadTableColumnsProperties($table);
+        }
+
+        return array_keys($this->dbStructure[$table]);
+    }
+
+    /**
+     * Get the version of the connected database.
+     * @return string Returns a string with the database version e.g. '5.5.8'
+     */
+    public function getVersion()
+    {
+        $versionStatement = $this->queryPrepared('SELECT version()');
+        $version = $versionStatement->fetchColumn();
+
+        if ($this->engine === self::PDO_ENGINE_PGSQL)
+        {
+            // the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+            $versionArray  = explode(',', $version);
+            $versionArray2 = explode(' ', $versionArray[0]);
+            return $versionArray2[1];
+        }
+
+        return $version;
+    }
+
+    /**
+     * Method gets all columns and their properties from the database table.
+     *
+     * The array has the following format:
+     * array (
+     *     'columnName1' => array (
+     *         'serial'   => true,
+     *         'null'     => false,
+     *         'key'      => false,
+     *         'unsigned' => true,
+     *         'default'  => 10
+     *         'type'     => 'integer'
+     *     ),
+     *     'columnName2' => array (...),
+     *     ...
+     * )
+     *
+     * @param string $table Name of the database table for which the columns-properties should be loaded.
+     *
+     * TODO: Links for improvements
+     *       https://secure.php.net/manual/en/pdostatement.getcolumnmeta.php
+     *       https://www.postgresql.org/docs/9.5/static/infoschema-columns.html
+     *       https://wiki.postgresql.org/wiki/Retrieve_primary_key_columns
+     *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
+     */
+    private function loadTableColumnsProperties($table)
+    {
+        $tableColumnsProperties = array();
+
+        if ($this->engine === self::PDO_ENGINE_MYSQL)
+        {
+            $sql = 'SHOW COLUMNS FROM ' . $table;
+            $columnsStatement = $this->query($sql); // TODO add more params
+            $columnsList      = $columnsStatement->fetchAll();
+
+            foreach ($columnsList as $properties)
+            {
+                $props = array(
+                    'serial'   => $properties['Extra'] === 'auto_increment',
+                    'null'     => $properties['Null'] === 'YES',
+                    'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
+                    'default'  => $properties['Default'],
+                    'unsigned' => admStrContains($properties['Type'], 'unsigned')
+                );
+
+                if (admStrContains($properties['Type'], 'tinyint(1)'))
+                {
+                    $props['type'] = 'boolean';
+                }
+                elseif (admStrContains($properties['Type'], 'smallint'))
+                {
+                    $props['type'] = 'smallint';
+                }
+                elseif (admStrContains($properties['Type'], 'int'))
+                {
+                    $props['type'] = 'integer';
+                }
+                else
+                {
+                    $props['type'] = $properties['Type'];
+                }
+
+                $tableColumnsProperties[$properties['Field']] = $props;
+            }
+        }
+        elseif ($this->engine === self::PDO_ENGINE_PGSQL)
+        {
+            $sql = 'SELECT column_name, column_default, is_nullable, data_type
+                      FROM information_schema.columns
+                     WHERE table_name = ?';
+            $columnsStatement = $this->queryPrepared($sql, array($table));
+            $columnsList = $columnsStatement->fetchAll();
+
+            foreach ($columnsList as $properties)
+            {
+                $props = array(
+                    'serial'   => admStrContains($properties['column_default'], 'nextval'),
+                    'null'     => $properties['is_nullable'] === 'YES',
+                    'key'      => null,
+                    'default'  => $properties['column_default'],
+                    'unsigned' => null
+                );
+
+                if (admStrContains($properties['data_type'], 'timestamp'))
+                {
+                    $props['type'] = 'timestamp';
+                }
+                elseif (admStrContains($properties['data_type'], 'time'))
+                {
+                    $props['type'] = 'time';
+                }
+                else
+                {
+                    $props['type'] = $properties['data_type'];
+                }
+
+                $tableColumnsProperties[$properties['column_name']] = $props;
+            }
+        }
+
+        // safe array with table structure in class array
+        $this->dbStructure[$table] = $tableColumnsProperties;
     }
 
     /**
@@ -752,137 +781,88 @@ class Database
     }
 
     /**
-     * Method gets all columns and their properties from the database table.
-     *
-     * The array has the following format:
-     * array (
-     *     'columnName1' => array (
-     *         'serial'   => true,
-     *         'null'     => false,
-     *         'key'      => false,
-     *         'unsigned' => true,
-     *         'default'  => 10
-     *         'type'     => 'integer'
-     *     ),
-     *     'columnName2' => array (...),
-     *     ...
-     * )
-     *
-     * @param string $table Name of the database table for which the columns-properties should be loaded.
-     *
-     * TODO: Links for improvements
-     *       https://secure.php.net/manual/en/pdostatement.getcolumnmeta.php
-     *       https://www.postgresql.org/docs/9.5/static/infoschema-columns.html
-     *       https://wiki.postgresql.org/wiki/Retrieve_primary_key_columns
-     *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
+     * Create a valid DSN string for the engine that was set through the constructor.
+     * If no valid engine is set than an exception is thrown.
+     * @throws \PDOException
      */
-    private function loadTableColumnsProperties($table)
+    private function setDSNString()
     {
-        $tableColumnsProperties = array();
+        global $gLogger;
 
-        if ($this->engine === self::PDO_ENGINE_MYSQL)
+        $availableDrivers = \PDO::getAvailableDrivers();
+
+        if (count($availableDrivers) === 0)
         {
-            $sql = 'SHOW COLUMNS FROM ' . $table;
-            $columnsStatement = $this->query($sql); // TODO add more params
-            $columnsList      = $columnsStatement->fetchAll();
-
-            foreach ($columnsList as $properties)
-            {
-                $props = array(
-                    'serial'   => $properties['Extra'] === 'auto_increment',
-                    'null'     => $properties['Null'] === 'YES',
-                    'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
-                    'default'  => $properties['Default'],
-                    'unsigned' => admStrContains($properties['Type'], 'unsigned')
-                );
-
-                if (admStrContains($properties['Type'], 'tinyint(1)'))
-                {
-                    $props['type'] = 'boolean';
-                }
-                elseif (admStrContains($properties['Type'], 'smallint'))
-                {
-                    $props['type'] = 'smallint';
-                }
-                elseif (admStrContains($properties['Type'], 'int'))
-                {
-                    $props['type'] = 'integer';
-                }
-                else
-                {
-                    $props['type'] = $properties['Type'];
-                }
-
-                $tableColumnsProperties[$properties['Field']] = $props;
-            }
+            throw new \PDOException('PDO does not support any drivers'); // TODO: change exception class
         }
-        elseif ($this->engine === self::PDO_ENGINE_PGSQL)
+        if (!in_array($this->engine, $availableDrivers, true))
         {
-            $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                      FROM information_schema.columns
-                     WHERE table_name = ?';
-            $columnsStatement = $this->queryPrepared($sql, array($table));
-            $columnsList = $columnsStatement->fetchAll();
-
-            foreach ($columnsList as $properties)
-            {
-                $props = array(
-                    'serial'   => admStrContains($properties['column_default'], 'nextval'),
-                    'null'     => $properties['is_nullable'] === 'YES',
-                    'key'      => null,
-                    'default'  => $properties['column_default'],
-                    'unsigned' => null
-                );
-
-                if (admStrContains($properties['data_type'], 'timestamp'))
-                {
-                    $props['type'] = 'timestamp';
-                }
-                elseif (admStrContains($properties['data_type'], 'time'))
-                {
-                    $props['type'] = 'time';
-                }
-                else
-                {
-                    $props['type'] = $properties['data_type'];
-                }
-
-                $tableColumnsProperties[$properties['column_name']] = $props;
-            }
+            throw new \PDOException('The requested PDO driver ' . $this->engine . ' is not supported'); // TODO: change exception class
         }
 
-        // safe array with table structure in class array
-        $this->dbStructure[$table] = $tableColumnsProperties;
+        switch ($this->engine)
+        {
+            case self::PDO_ENGINE_MYSQL:
+                $port = '';
+                if ($this->port !== null)
+                {
+                    $port = ';port=' . $this->port;
+                }
+                // TODO: change to "charset=utf8mb4" if we change charset in DB to "utf8mb4"
+                $this->dsn = 'mysql:host=' . $this->host . $port . ';dbname=' . $this->dbName . ';charset=utf8';
+                break;
+
+            case self::PDO_ENGINE_PGSQL:
+                $port = '';
+                if ($this->port !== null)
+                {
+                    $port = ';port=' . $this->port;
+                }
+                $this->dsn = 'pgsql:host=' . $this->host . $port . ';dbname=' . $this->dbName;
+                break;
+
+            default:
+                throw new \PDOException('Engine is not supported by Admidio'); // TODO: change exception class
+        }
+
+        $gLogger->debug('DATABASE: DSN-String: "' . $this->dsn . '"!');
     }
 
     /**
-     * Method get all columns and their properties from the database table.
-     * @param string $table Name of the database table for which the columns-properties should be shown.
-     * @return array<string,array<string,mixed>> Returns an array with column-names.
+     * Set connection specific options like UTF8 connection.
+     * These options should always be set if Admidio connect to a database.
      */
-    public function getTableColumnsProperties($table)
+    private function setConnectionOptions()
     {
-        if (!array_key_exists($table, $this->dbStructure))
+        global $gDebug;
+
+        if ($gDebug)
         {
-            $this->loadTableColumnsProperties($table);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        }
+        else
+        {
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_SILENT);
         }
 
-        return $this->dbStructure[$table];
-    }
+        $this->pdo->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC); // maybe change in future to \PDO::FETCH_OBJ
+        $this->pdo->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_NATURAL);
 
-    /**
-     * Method get all columns-names from the database table.
-     * @param string $table Name of the database table for which the columns should be shown.
-     * @return array<int,string> Returns an array with each column and their properties.
-     */
-    public function getTableColumns($table)
-    {
-        if (!array_key_exists($table, $this->dbStructure))
+        switch ($this->engine)
         {
-            $this->loadTableColumnsProperties($table);
+            case self::PDO_ENGINE_MYSQL:
+                // MySQL charset UTF-8 is set in DSN-string
+                // set ANSI mode, that SQL could be more compatible with other DBs
+                $this->queryPrepared('SET SQL_MODE = \'ANSI\'');
+                // if the server has limited the joins, it can be canceled with this statement
+                $this->queryPrepared('SET SQL_BIG_SELECTS = 1');
+                break;
+            case self::PDO_ENGINE_PGSQL:
+                $this->queryPrepared('SET NAMES \'UTF8\'');
+                break;
         }
-
-        return array_keys($this->dbStructure[$table]);
     }
 
     /**
@@ -936,19 +916,40 @@ class Database
     }
 
     /**
-     * Returns an array with all available PDO database drivers of the server.
-     * @deprecated 3.1.0:4.0.0 Switched to native PDO method.
-     * @return array<int,string> Returns an array with all available PDO database drivers of the server.
-     * @see <a href="https://secure.php.net/manual/en/pdo.getavailabledrivers.php">PDO::getAvailableDrivers</a>
+     * Start a transaction if no open transaction exists. If you call this multiple times
+     * only 1 transaction will be open and it will be closed after the last endTransaction was send.
+     * @return bool
+     * @see Database#endTransaction
+     * @see Database#rollback
      */
-    public static function getAvailableDBs()
+    public function startTransaction()
     {
         global $gLogger;
 
-        $gLogger->warning('DEPRECATED: "$database->getAvailableDBs()" is deprecated, use "\PDO::getAvailableDrivers()" instead!');
+        // If we are within a transaction we will not open another one,
+        // but enclose the current one to not loose data (preventing auto commit)
+        if ($this->transactions > 0)
+        {
+            ++$this->transactions;
+            return true;
+        }
 
-        return \PDO::getAvailableDrivers();
+        // if debug mode then log all sql statements
+        $gLogger->info('SQL: START TRANSACTION');
+
+        $result = $this->pdo->beginTransaction();
+
+        if (!$result)
+        {
+            $this->showError();
+            // => EXIT
+        }
+
+        $this->transactions = 1;
+
+        return $result;
     }
+
 
     /**
      * Fetch a result row as an associative array, a numeric array, or both.

@@ -212,6 +212,98 @@ class Email extends PHPMailer
     }
 
     /**
+     * Creates an email for the administrator. Therefore we use the email that is stored in
+     * the global preference email_administrator. We don't use the role administrator!
+     * @param string $subject
+     * @param string $message
+     * @param string $editorName
+     * @param string $editorEmail
+     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
+     * @return bool|string
+     */
+    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '')
+    {
+        global $gSettingsManager, $gCurrentOrganization;
+
+        if (!$gSettingsManager->getBool('enable_email_notification'))
+        {
+            return false;
+        }
+
+        // Send Notification to Admin
+        $this->addRecipient($gSettingsManager->getString('email_administrator'));
+
+        // Set Sender
+        if ($editorEmail === '')
+        {
+            $this->setSender($gSettingsManager->getString('email_administrator'));
+        }
+        else
+        {
+            $this->setSender($editorEmail, $editorName);
+        }
+
+        // Set Subject
+        $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
+
+        // send html if preference is set
+        if ($gSettingsManager->getBool('mail_html_registered_users'))
+        {
+            $this->sendDataAsHtml();
+        }
+        else
+        {
+            // html linebreaks should be converted in simple linefeed
+            $message = str_replace('<br />', "\n", $message);
+        }
+
+        // Set Text
+        $this->setText($message);
+
+        // Verschicken
+        $returnCode = $this->sendEmail();
+
+        // if something went wrong then throw an exception with the error message
+        if ($returnCode !== true)
+        {
+            throw new AdmException('SYS_EMAIL_NOT_SEND', $gSettingsManager->getString('email_administrator'), $returnCode);
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the maximum size of an attachment
+     * @param string $sizeUnit  'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
+     * @param int    $precision The number of decimal digits to round to
+     * @return float The maximum attachment size in the given size-unit
+     */
+    public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE, $precision = 1)
+    {
+        global $gSettingsManager;
+
+        $maxUploadSize = PhpIniUtils::getUploadMaxSize();
+        $currentAttachmentSize = $gSettingsManager->getInt('max_email_attachment_size') * pow(1024, 2);
+
+        $attachmentSize = min($maxUploadSize, $currentAttachmentSize);
+
+        switch ($sizeUnit)
+        {
+            case self::SIZE_UNIT_TEBIBYTE:
+                $attachmentSize /= 1024;
+            case self::SIZE_UNIT_GIBIBYTE:
+                $attachmentSize /= 1024;
+            case self::SIZE_UNIT_MEBIBYTE:
+                $attachmentSize /= 1024;
+            case self::SIZE_UNIT_KIBIBYTE:
+                $attachmentSize /= 1024;
+            default:
+        }
+
+        return round($attachmentSize, $precision);
+    }
+
+    /**
      * method adds sender to mail
      * @param string $address
      * @param string $name
@@ -332,66 +424,6 @@ class Email extends PHPMailer
     public function sendDataAsHtml()
     {
         $this->emSendAsHTML = true;
-    }
-
-    /**
-     * Mailbenachrichtigung für Admin
-     * @param string $subject
-     * @param string $message
-     * @param string $editorName
-     * @param string $editorEmail
-     * @throws AdmException 'SYS_EMAIL_NOT_SEND'
-     * @return bool|string
-     */
-    public function adminNotification($subject, $message, $editorName = '', $editorEmail = '')
-    {
-        global $gSettingsManager, $gCurrentOrganization;
-
-        if (!$gSettingsManager->getBool('enable_email_notification'))
-        {
-            return false;
-        }
-
-        // Send Notification to Admin
-        $this->addRecipient($gSettingsManager->getString('email_administrator'));
-
-        // Set Sender
-        if ($editorEmail === '')
-        {
-            $this->setSender($gSettingsManager->getString('email_administrator'));
-        }
-        else
-        {
-            $this->setSender($editorEmail, $editorName);
-        }
-
-        // Set Subject
-        $this->setSubject($gCurrentOrganization->getValue('org_shortname').': '.$subject);
-
-        // send html if preference is set
-        if ($gSettingsManager->getBool('mail_html_registered_users'))
-        {
-            $this->sendDataAsHtml();
-        }
-        else
-        {
-            // html linebreaks should be converted in simple linefeed
-            $message = str_replace('<br />', "\n", $message);
-        }
-
-        // Set Text
-        $this->setText($message);
-
-        // Verschicken
-        $returnCode = $this->sendEmail();
-
-        // if something went wrong then throw an exception with the error message
-        if ($returnCode !== true)
-        {
-            throw new AdmException('SYS_EMAIL_NOT_SEND', $gSettingsManager->getString('email_administrator'), $returnCode);
-        }
-
-        return true;
     }
 
     /**
@@ -533,37 +565,6 @@ class Email extends PHPMailer
         $this->clearAddresses();
 
         return true;
-    }
-
-    /**
-     * Returns the maximum size of an attachment
-     * @param string $sizeUnit  'Byte' = byte, 'KiB' = kibibyte, 'MiB' = mebibyte, 'GiB' = gibibyte, 'TiB' = tebibyte
-     * @param int    $precision The number of decimal digits to round to
-     * @return float The maximum attachment size in the given size-unit
-     */
-    public static function getMaxAttachmentSize($sizeUnit = self::SIZE_UNIT_BYTE, $precision = 1)
-    {
-        global $gSettingsManager;
-
-        $maxUploadSize = PhpIniUtils::getUploadMaxSize();
-        $currentAttachmentSize = $gSettingsManager->getInt('max_email_attachment_size') * pow(1024, 2);
-
-        $attachmentSize = min($maxUploadSize, $currentAttachmentSize);
-
-        switch ($sizeUnit)
-        {
-            case self::SIZE_UNIT_TEBIBYTE:
-                $attachmentSize /= 1024;
-            case self::SIZE_UNIT_GIBIBYTE:
-                $attachmentSize /= 1024;
-            case self::SIZE_UNIT_MEBIBYTE:
-                $attachmentSize /= 1024;
-            case self::SIZE_UNIT_KIBIBYTE:
-                $attachmentSize /= 1024;
-            default:
-        }
-
-        return round($attachmentSize, $precision);
     }
 
     /**
