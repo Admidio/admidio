@@ -81,9 +81,9 @@
   <string name="DAT_EXPORT_ICAL">Export (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Highlight date</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Number of iCal days in the future</string>
-  <string name="DAT_ICAL_DAYS_FUTURE_DESC">This value defines, how many days in the future should be included into an iCal download or subscription. (default: 365)</string>
+  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Number of days in the future, to be included in an iCal download or abo. If the iCal download is started within the event module, then this setting is ignored and the filtered appointments are exported. (Default: 365)</string>
   <string name="DAT_ICAL_DAYS_PAST">Number of iCal days in the past</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">This value defines, how many days in the past should be included into an iCal download or subscription. (default: 30)</string>
+  <string name="DAT_ICAL_DAYS_PAST_DESC">Number of days in the past, to be included in a iCal download or -Abo. If the iCal download started within the Event module, this setting is ignored and exports the filtered appointments. (Default: 30)</string>
   <string name="DAT_LOCATION">Location</string>
   <string name="DAT_LOCATION_LINK">If enough information regarding location is provided (street, city, location), Google Maps is able to calculate route to location.</string>
   <string name="DAT_LOGIN_POSSIBLE">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
@@ -598,6 +598,13 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="MEM_USERS_PER_PAGE">Number of users per page</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
+  <!--Phrases only in Menü-->
+  <string name="MEN_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
+  <string name="MEN_MENU_ITEM">Menu item</string>
+  <string name="MEN_MENU_LEVEL">Menu level</string>
+  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible. If you want to display the menu item at the top level, select # VAR1_BOLD #.</string>
+  <string name="MEN_MODULE_RIGHTS">Module rights</string>
+  <string name="MEN_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Activate chat</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">The chat module can be enabled or disabled using this setting. The module dynamically loads data from the database every 3 seconds. A maximum of 99 entries are saved. For 100 messages, the first 50 entries are deleted. (Default: Disabled)</string>
@@ -621,10 +628,6 @@
   <string name="PMS_SEND_PM">Send private message</string>
   <string name="PMS_WAS_SENT_TO">Message was sent to:</string>
   <string name="PMS_WAS_NOT_SENT_TO">Error - message was not sent to:</string>
-  <!-- Phrases only in Menü -->
-  <string name="MEN_NAME_DESC">The Name of the entry in the Menu. You can also use a string from the translation file.</string>
-  <string name="MEN_NAME_DESC_DESC">Enter the description that should be shown in de Overview details. You can also use a string from the translation file.</string>
-  <string name="MNU_NEED_ENABLED">need also to be enabled in config</string>
   <!--Phrases only in New-User-Registration-->
   <string name="NWU_ASSIGN_LOGIN">Assigning login information</string>
   <string name="NWU_ASSIGN_LOGIN_SUCCESSFUL">Login information has been successfully assigned.</string>
@@ -1199,7 +1202,7 @@
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
-  <string name="SYS_INTERNAL_NAME_DESC">The internal name is being used as a specific identifier of a field. In terms of the program usage, however, it is irrelevant. During software development this name has to be taken in order to be able to use the getValue method. The internal name will be filled in automatically during creation of a field.</string>
+  <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
