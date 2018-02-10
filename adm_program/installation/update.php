@@ -110,6 +110,17 @@ if (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FO
     }
     catch (\RuntimeException $exception)
     {
+        try
+        {
+            $pathPermissions = FileSystemUtils::getPathPermissions(ADMIDIO_PATH . FOLDER_DATA);
+        }
+        catch (\RuntimeException $exception)
+        {
+            $pathPermissions = array('exception' => $exception->getMessage());
+        }
+        $pathPermissions['path'] = ADMIDIO_PATH . FOLDER_DATA;
+
+        $gLogger->error('FILESYSTEM: Could not set the necessary directory mode!', $pathPermissions);
         // TODO
     }
 }
