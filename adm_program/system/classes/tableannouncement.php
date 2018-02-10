@@ -32,38 +32,6 @@ class TableAnnouncement extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this announcement. Therefore
-     * the announcement must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage announcements.
-     * Global announcements could be only edited by the parent organization.
-     * @return bool Return true if the current user is allowed to edit this announcement
-     */
-    public function editable()
-    {
-        global $gCurrentOrganization, $gCurrentUser;
-
-        // check if the current user could edit the category of the announcement
-        if($gCurrentUser->editAnnouncements()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true))
-        {
-            if ($gCurrentOrganization->countAllRecords() === 1)
-            {
-                return true;
-            }
-
-            // parent organizations could edit global announcements,
-            // child organizations could only edit their own announcements
-            if ($gCurrentOrganization->isParentOrganization()
-            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with @b setValue than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
@@ -107,6 +75,38 @@ class TableAnnouncement extends TableAccess
         }
 
         return $value;
+    }
+
+    /**
+     * This method checks if the current user is allowed to edit this announcement. Therefore
+     * the announcement must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage announcements.
+     * Global announcements could be only edited by the parent organization.
+     * @return bool Return true if the current user is allowed to edit this announcement
+     */
+    public function isEditable()
+    {
+        global $gCurrentOrganization, $gCurrentUser;
+
+        // check if the current user could edit the category of the announcement
+        if($gCurrentUser->editAnnouncements()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true))
+        {
+            if ($gCurrentOrganization->countAllRecords() === 1)
+            {
+                return true;
+            }
+
+            // parent organizations could edit global announcements,
+            // child organizations could only edit their own announcements
+            if ($gCurrentOrganization->isParentOrganization()
+            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

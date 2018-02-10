@@ -118,54 +118,6 @@ class TableCategory extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this category. Therefore
-     * the category must be visible to the user and must be of the current organization.
-     * If this is a global category than the current organization must be the parent organization.
-     * @return bool Return true if the current user is allowed to edit this category
-     */
-    public function editable()
-    {
-        global $gCurrentOrganization, $gCurrentUser;
-
-        $categoryType = $this->getValue('cat_type');
-
-        // check the rights in dependence of the category type
-        if(($categoryType === 'ROL' && !$gCurrentUser->manageRoles())
-        || ($categoryType === 'LNK' && !$gCurrentUser->editWeblinksRight())
-        || ($categoryType === 'ANN' && !$gCurrentUser->editAnnouncements())
-        || ($categoryType === 'USF' && !$gCurrentUser->editUsers())
-        || ($categoryType === 'DAT' && !$gCurrentUser->editDates())
-        || ($categoryType === 'AWA' && !$gCurrentUser->editUsers()))
-        {
-            return false;
-        }
-
-        if($this->isVisible())
-        {
-            // if category belongs to current organization than it's editable
-            if($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
-            {
-                return true;
-            }
-
-            // if category belongs to all organizations only parent organization could edit it
-            if((int) $this->getValue('cat_org_id') === 0 && $gCurrentOrganization->isParentOrganization())
-            {
-                return true;
-            }
-
-            // a new record will always be visible until all data is saved
-            if($this->newRecord)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
      * dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
      * Beispiel: 'Gruppen' => 'GRUPPEN_2'
@@ -240,6 +192,54 @@ class TableCategory extends TableAccess
         }
 
         return $value;
+    }
+
+    /**
+     * This method checks if the current user is allowed to edit this category. Therefore
+     * the category must be visible to the user and must be of the current organization.
+     * If this is a global category than the current organization must be the parent organization.
+     * @return bool Return true if the current user is allowed to edit this category
+     */
+    public function isEditable()
+    {
+        global $gCurrentOrganization, $gCurrentUser;
+
+        $categoryType = $this->getValue('cat_type');
+
+        // check the rights in dependence of the category type
+        if(($categoryType === 'ROL' && !$gCurrentUser->manageRoles())
+        || ($categoryType === 'LNK' && !$gCurrentUser->editWeblinksRight())
+        || ($categoryType === 'ANN' && !$gCurrentUser->editAnnouncements())
+        || ($categoryType === 'USF' && !$gCurrentUser->editUsers())
+        || ($categoryType === 'DAT' && !$gCurrentUser->editDates())
+        || ($categoryType === 'AWA' && !$gCurrentUser->editUsers()))
+        {
+            return false;
+        }
+
+        if($this->isVisible())
+        {
+            // if category belongs to current organization than it's editable
+            if($this->getValue('cat_org_id') > 0
+            && (int) $this->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
+            {
+                return true;
+            }
+
+            // if category belongs to all organizations only parent organization could edit it
+            if((int) $this->getValue('cat_org_id') === 0 && $gCurrentOrganization->isParentOrganization())
+            {
+                return true;
+            }
+
+            // a new record will always be visible until all data is saved
+            if($this->newRecord)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

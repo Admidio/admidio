@@ -72,7 +72,7 @@ if (in_array($getMode, array(1, 2, 5), true))
         $date->readDataById($getDateId);
 
         // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-        if (!$date->editable())
+        if (!$date->isEditable())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT

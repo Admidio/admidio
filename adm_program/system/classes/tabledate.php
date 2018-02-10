@@ -98,37 +98,6 @@ class TableDate extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this event. Therefore
-     * the event must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage events.
-     * Global events could be only edited by the parent organization.
-     * @return bool Return true if the current user is allowed to edit this event
-     */
-    public function editable()
-    {
-        global $gCurrentOrganization, $gCurrentUser;
-
-        if($gCurrentUser->editDates()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true))
-        {
-            if ($gCurrentOrganization->countAllRecords() === 1)
-            {
-                return true;
-            }
-
-            // parent organizations could edit global events,
-            // child organizations could only edit their own events
-            if ($gCurrentOrganization->isParentOrganization()
-            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param string $text
      * @return string
      */
@@ -339,6 +308,37 @@ class TableDate extends TableAccess
         $objDateDeadline = \DateTime::createFromFormat($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'), $validDeadline);
 
         return $objDateDeadline->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * This method checks if the current user is allowed to edit this event. Therefore
+     * the event must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage events.
+     * Global events could be only edited by the parent organization.
+     * @return bool Return true if the current user is allowed to edit this event
+     */
+    public function isEditable()
+    {
+        global $gCurrentOrganization, $gCurrentUser;
+
+        if($gCurrentUser->editDates()
+        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true))
+        {
+            if ($gCurrentOrganization->countAllRecords() === 1)
+            {
+                return true;
+            }
+
+            // parent organizations could edit global events,
+            // child organizations could only edit their own events
+            if ($gCurrentOrganization->isParentOrganization()
+            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

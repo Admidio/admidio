@@ -310,7 +310,7 @@ while($catRow = $categoryStatement->fetch())
         }
     }
 
-    if($category->editable())
+    if($category->isEditable())
     {
         $categoryAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'"><img
                                         src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';

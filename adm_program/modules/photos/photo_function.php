@@ -135,7 +135,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
 $photoAlbum = new TablePhotos($gDb, $getPhotoId);
 
 // check if the user is allowed to edit this photo album
-if (!$photoAlbum->editable())
+if (!$photoAlbum->isEditable())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
     // => EXIT

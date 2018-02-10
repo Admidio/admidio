@@ -179,7 +179,7 @@ else
                     alt="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" title="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" />'.$lnkName.'</a>');
 
                 // change and delete only users with rights
-                if ($weblink->editable())
+                if ($weblink->isEditable())
                 {
                     $page->addHtml('
                     <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('lnk_id' => $lnkId, 'headline' => $getHeadline)). '"><img

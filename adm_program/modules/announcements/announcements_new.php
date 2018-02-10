@@ -60,7 +60,7 @@ if($getAnnId > 0)
     }
 
     // check if the current user could edit this announcement
-    if(!$announcement->editable())
+    if(!$announcement->isEditable())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

@@ -99,7 +99,7 @@ if ($gSettingsManager->getBool('enable_rss'))
     );
 }
 
-if ($photoAlbum->editable())
+if ($photoAlbum->isEditable())
 {
     $page->addJavascript('
         /**

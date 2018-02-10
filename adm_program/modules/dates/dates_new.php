@@ -105,7 +105,7 @@ else
         $roleViewSet = $eventParticipationRolesObject->getRolesIds();
 
         // check if the current user could edit this event
-        if(!$date->editable())
+        if(!$date->isEditable())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             // => EXIT

@@ -37,7 +37,7 @@ if($getAnnId > 0)
     $announcement->readDataById($getAnnId);
 
     // check if the user has the right to edit this announcement
-    if(!$announcement->editable())
+    if(!$announcement->isEditable())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT

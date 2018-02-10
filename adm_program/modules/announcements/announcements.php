@@ -161,7 +161,7 @@ else
                 <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gSettingsManager->getString('system_date')));
 
                     // check if the user could edit this announcement
-                    if($announcement->editable())
+                    if($announcement->isEditable())
                     {
                         $page->addHtml('
                         <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_new.php', array('ann_id' => $annId, 'copy' => '1', 'headline' => $getHeadline)).'"><img

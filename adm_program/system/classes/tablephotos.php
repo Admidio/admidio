@@ -175,19 +175,6 @@ class TablePhotos extends TableAccess
     }
 
     /**
-     * This method checks if the current user is allowed to edit this photo album. Therefore
-     * the photo album must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage photo albums.
-     * @return bool Return true if the current user is allowed to edit this photo album
-     */
-    public function editable()
-    {
-        global $gCurrentUser;
-
-        return $gCurrentUser->editPhotoRight() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
-    }
-
-    /**
      * Check if this album has one or more child albums.
      * @return bool Return @b true if child albums exists.
      */
@@ -204,6 +191,19 @@ class TablePhotos extends TableAccess
         }
 
         return $this->hasChildAlbums;
+    }
+
+    /**
+     * This method checks if the current user is allowed to edit this photo album. Therefore
+     * the photo album must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that have the right to manage photo albums.
+     * @return bool Return true if the current user is allowed to edit this photo album
+     */
+    public function isEditable()
+    {
+        global $gCurrentUser;
+
+        return $gCurrentUser->editPhotoRight() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
     }
 
     /**

@@ -52,7 +52,7 @@ else
 }
 
 // check if this category is editable by the current user and current organization
-if(!$category->editable())
+if(!$category->isEditable())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT

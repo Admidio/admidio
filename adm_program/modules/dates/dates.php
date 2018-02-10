@@ -363,7 +363,7 @@ else
             }
 
             // change and delete is only for users with additional rights
-            if ($date->editable())
+            if ($date->isEditable())
             {
                 $outputButtonCopy = '
                     <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">

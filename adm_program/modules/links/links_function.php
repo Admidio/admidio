@@ -38,7 +38,7 @@ if($getLinkId > 0)
     $link->readDataById($getLinkId);
 
     // check if the current user could edit this weblink
-    if(!$link->editable())
+    if(!$link->isEditable())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
