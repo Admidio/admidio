@@ -261,6 +261,7 @@
     <string name="INS_DELETE_CONFIG_FILE">Im Hauptverzeichnis von Admidio #VAR1_BOLD# existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Lösche bitte diese Datei im Hauptverzeichnis.</string>
     <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Konfigurationsdatei herunterladen</string>
     <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Bitte gib dem Ordner Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder lade die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</string>
+    <string name="INS_DATA_DIR_RIGHTS">Die erforderlichen Ordnerrechte für "adm_my_files" konnten nicht automatisch gesetzt werden. Um fortzufahren müssen die Rechte manuell auf "777" gesetzt werden.</string>
     <string name="INS_DATA_DO_NOT_MATCH">Die Daten aus der #VAR1_BOLD# stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</string>
     <string name="INS_DATA_OF_ADMINISTRATOR">Daten des Administrators</string>
     <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an. Mit diesem Benutzer kannst du dich nach der Installation bei Admidio anmelden.</string>

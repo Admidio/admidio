@@ -121,7 +121,14 @@ if (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FO
         $pathPermissions['path'] = ADMIDIO_PATH . FOLDER_DATA;
 
         $gLogger->error('FILESYSTEM: Could not set the necessary directory mode!', $pathPermissions);
-        // TODO
+
+        showNotice(
+            $gL10n->get('INS_DATA_DIR_RIGHTS'),
+            ADMIDIO_URL . '/adm_program/installation/index.php',
+            $gL10n->get('SYS_RELOAD'),
+            'layout/forward.png'
+        );
+        // => EXIT
     }
 }
 
