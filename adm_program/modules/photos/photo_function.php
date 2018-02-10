@@ -83,7 +83,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     $newPicNr = $picNr;
     $thumbnailDelete = false;
 
-    for ($actPicNr = 1; $actPicNr <= $photoAlbum->getValue('pho_quantity'); ++$actPicNr)
+    for ($actPicNr = 1; $actPicNr <= (int) $photoAlbum->getValue('pho_quantity'); ++$actPicNr)
     {
         if (is_file($albumPath.'/'.$actPicNr.'.jpg'))
         {
@@ -94,11 +94,11 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
                     FileSystemUtils::moveFile($albumPath.'/'.$actPicNr.'.jpg', $albumPath.'/'.$newPicNr.'.jpg');
                     FileSystemUtils::moveFile($albumPath.'/originals/'.$actPicNr.'.jpg', $albumPath.'/originals/'.$newPicNr.'.jpg');
                     FileSystemUtils::moveFile($albumPath.'/originals/'.$actPicNr.'.png', $albumPath.'/originals/'.$newPicNr.'.png');
-                    ++$newPicNr;
                 }
                 catch (\RuntimeException $exception)
                 {
                 }
+                ++$newPicNr;
             }
         }
         else
