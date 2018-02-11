@@ -78,7 +78,7 @@
     <step id="565" database="mysql" error="ignore">ALTER TABLE %PREFIX%_user_data DROP INDEX ak_usr_usf_id, ADD INDEX %PREFIX%_idx_usd_usr_usf_id (usd_usr_id, usd_usf_id)</step>
     <step id="570" database="mysql" error="ignore">ALTER TABLE %PREFIX%_users DROP INDEX idx_%PREFIX%_usr_login_name, ADD INDEX %PREFIX%_idx_usr_login_name (usr_login_name)</step>
     <step id="575" database="mysql" error="ignore">ALTER TABLE %PREFIX%_users DROP INDEX ak_usr_login_name, ADD INDEX %PREFIX%_idx_usr_login_name (usr_login_name)</step>
-    <step id="580" database="mysql" error="ignore">DROP_INDEX ak_shortname ON %PREFIX%_organizations</step>
+    <step id="580" database="mysql" error="ignore">ALTER TABLE %PREFIX%_organizations DROP INDEX ak_shortname</step>
     <step id="590">CREATE TABLE %PREFIX%_menu
         (
             men_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
