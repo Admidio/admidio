@@ -64,9 +64,9 @@ $.fn.dataTable.moment = function ( format, locale ) {
 			// Strip out surrounding white space
 			d = $.trim( d );
 		}
-		
-		return d === '' || d === null ?
-			-Infinity :
+
+		return !moment(d, format, locale, true).isValid() ?
+			Infinity :
 			parseInt( moment( d, format, locale, true ).format( 'x' ), 10 );
 	};
 };
