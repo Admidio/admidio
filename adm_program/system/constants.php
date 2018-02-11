@@ -150,8 +150,7 @@ else
 {
     $cookiePrefix = 'ADMIDIO_' . TABLE_PREFIX;
 }
-$cookiePrefix = preg_replace('/\W/', '_', $cookiePrefix);
-define('COOKIE_PREFIX', $cookiePrefix);
+define('COOKIE_PREFIX', preg_replace('/\W/', '_', $cookiePrefix));
 
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);
