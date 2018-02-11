@@ -120,8 +120,8 @@ if ($photoAlbum->isEditable())
 // integrate bootstrap ekko lightbox addon
 if ((int) $gSettingsManager->get('photo_show_mode') === 1)
 {
-    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.css');
-    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/ekko-lightbox.js');
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/dist/ekko-lightbox.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/lightbox/dist/ekko-lightbox.js');
 
     $page->addJavascript('
         $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) {
