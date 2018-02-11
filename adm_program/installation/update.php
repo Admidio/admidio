@@ -236,7 +236,7 @@ if ($getMode === 1)
         $form = new HtmlFormInstallation('update_login_form', safeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
         $form->setUpdateModus();
         $form->setFormDescription(
-            $gL10n->get('INS_WELCOME_TEXT_UPDATE2', 
+            $gL10n->get('INS_WELCOME_TEXT_UPDATE', 
                 array(ADMIDIO_VERSION_TEXT, 
                     $installedDbVersion, 
                     '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update" target="_blank">', 
