@@ -250,7 +250,7 @@
     <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
     <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
     <string name="INS_DATABASE_LOGIN_DESC">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</string>
-    <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Deine Datenbank liegt in Version #VAR1# vor.\n\nEine Aktualisierung der Datenbank auf Version #VAR2# ist erforderlich.</string>
+    <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Aktuelle Datenbankversion: #VAR1#\n\nDatenbankversion nach Update: #VAR2#</string>
     <string name="INS_DATABASE_NAME_INVALID">Der Datenbank-Name enthält ungültige Zeichen!</string>
     <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzt du oder dein Webhoster einen speziellen Port, so kann dieser hier eingetragen werden.</string>
     <string name="INS_DATABASE_PORT_INVALID">Der angegebene Port ist nicht gültig. Für einen gültigen Port wähle zwischen 1 und 65535 oder lass den Port für den Standardport leer.</string>
@@ -318,7 +318,9 @@
     <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
     <string name="INS_WARNING_SAFE_MODE">Auf deinem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</string>
     <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
-    <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator anmelden kannst. Bei Fragen oder Problemen kannst du dich gerne an #VAR1#unser Supportforum#VAR2# wenden.</string>
+    <string name="INS_WELCOME_TO_UPDATE">Willkommen zur Aktualisierung von Admidio</string>
+    <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator anmelden kannst.\n\nHast du Fragen oder Probleme mit der Installation, schau dir bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wende dich an #VAR3#unser Supportforum#VAR4#.</string>
+    <string name="INS_WELCOME_TEXT_UPDATE2">Du hast bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun muss noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisiert werden, damit Admidio mit der neuen Version laufen kann.\n\nHast du Fragen oder Probleme mit dem Update, schau dir bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wende dich an #VAR5#unser Supportforum#VAR6#.</string>
     <string name="INS_WINDOWS_LIVE">Windows Live</string>
     <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu deiner Datenbank ist.</string>
     <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# setzt mindestens die PHP-Version #VAR2# voraus. Du solltest versuchen PHP zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu dieser PHP-Version ist.</string>

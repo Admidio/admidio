@@ -43,7 +43,12 @@ if (PhpIniUtils::isSafeModeEnabled())
 $form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')));
 
 $form->setFormDescription(
-    $gL10n->get('INS_WELCOME_TEXT', array('<a href="https://www.admidio.org/forum">', '</a>')),
+    $gL10n->get('INS_WELCOME_TEXT', 
+        array(
+            '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation" target="_blank">', 
+            '</a>', 
+            '<a href="https://www.admidio.org/forum" target="_blank">', 
+            '</a>')),
     $gL10n->get('INS_WELCOME_TO_INSTALLATION')
 );
 

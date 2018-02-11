@@ -235,7 +235,16 @@ if ($getMode === 1)
         // create a page with the notice that the installation must be configured on the next pages
         $form = new HtmlFormInstallation('update_login_form', safeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
         $form->setUpdateModus();
-        $form->setFormDescription('<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>');
+        $form->setFormDescription(
+            $gL10n->get('INS_WELCOME_TEXT_UPDATE2', 
+                array(ADMIDIO_VERSION_TEXT, 
+                    $installedDbVersion, 
+                    '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update" target="_blank">', 
+                    '</a>', 
+                    '<a href="https://www.admidio.org/forum" target="_blank">', 
+                    '</a>')).
+                '<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>',
+            $gL10n->get('INS_WELCOME_TO_UPDATE'));
 
         if (!isset($gLoginForUpdate) || $gLoginForUpdate == 1)
         {
