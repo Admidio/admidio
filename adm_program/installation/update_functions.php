@@ -97,9 +97,9 @@ function updateOrgPreferences()
  */
 function toggleForeignKeyChecks($enable)
 {
-    global $gDbType, $gDb;
+    global $gDb;
 
-    if ($gDbType === Database::PDO_ENGINE_MYSQL)
+    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL)
     {
         // disable foreign key checks for mysql, so tables can easily deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
@@ -114,7 +114,7 @@ function toggleForeignKeyChecks($enable)
  */
 function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
 {
-    global $gLogger, $gDb, $gL10n, $gSettingsManager, $gDbType;
+    global $gLogger, $gDb, $gL10n, $gSettingsManager;
 
     // nun in einer Schleife alle Update-Scripte fuer Version 2 einspielen
     while ($versionMain === 2)

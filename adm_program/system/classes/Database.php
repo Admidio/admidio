@@ -23,7 +23,7 @@
  * // create object and open connection to database
  * try
  * {
- *     $gDb = new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+ *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
  * catch (AdmException $e)
  * {
@@ -126,20 +126,20 @@ class Database
      */
     public static function createDatabaseInstance()
     {
-        global $gLogger, $gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw;
+        global $gLogger;
 
         if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
         {
             $gLogger->debug(
                 'DATABASE: Create DB-Instance with default params!',
                 array(
-                    'engine' => $gDbType, 'host' => $g_adm_srv, 'port' => $g_adm_port,
-                    'name' => $g_adm_db, 'username' => $g_adm_usr, 'password' => $g_adm_pw
+                    'engine' => DB_ENGINE, 'host' => DB_HOST, 'port' => DB_PORT,
+                    'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => DB_PASSWORD
                 )
             );
         }
 
-        return new Database($gDbType, $g_adm_srv, $g_adm_port, $g_adm_db, $g_adm_usr, $g_adm_pw);
+        return new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
     }
 
     /**

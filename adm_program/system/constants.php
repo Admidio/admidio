@@ -97,6 +97,17 @@ define('DATETIME_NOW', date('Y-m-d H:i:s'));
 define('DATE_MAX', '9999-12-31');
 
 // ###################
+// ###  DB-CONFIG  ###
+// ###################
+
+define('DB_ENGINE', $gDbType);
+define('DB_HOST', $g_adm_srv);
+define('DB_PORT', $g_adm_port);
+define('DB_NAME', $g_adm_db);
+define('DB_USERNAME', $g_adm_usr);
+define('DB_PASSWORD', $g_adm_pw);
+
+// ###################
 // ###  DB-TABLES  ###
 // ###################
 
@@ -144,7 +155,7 @@ define('TBL_USER_RELATION_TYPES', TABLE_PREFIX . '_user_relation_types');
 // create an installation unique cookie prefix and remove special characters
 if(isset($g_adm_db))
 {
-    $cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . TABLE_PREFIX;
+    $cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . DB_NAME . '_' . TABLE_PREFIX;
 }
 else
 {

@@ -120,9 +120,9 @@ function prepareAdmidioDataFolder()
  */
 function toggleForeignKeyChecks($enable)
 {
-    global $gDbType, $gDb;
+    global $gDb;
 
-    if ($gDbType === Database::PDO_ENGINE_MYSQL)
+    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL)
     {
         // disable foreign key checks for mysql, so tables can easily deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
@@ -258,9 +258,9 @@ function readAndExecuteSQLFromFile($filename)
 
 function resetPostgresSequences()
 {
-    global $gDb, $gDbType;
+    global $gDb;
 
-    if ($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
     {
         $sql = 'SELECT relname
                   FROM pg_class
