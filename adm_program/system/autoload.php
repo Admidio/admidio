@@ -25,7 +25,7 @@ function admFuncAutoload($className)
     global $gLogger;
 
     $libFiles = array(
-        ADMIDIO_PATH . FOLDER_CLASSES . '/' . strtolower($className) . '.php',
+        ADMIDIO_PATH . FOLDER_CLASSES . '/' . $className . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/jquery-file-upload/server/php/' . $className . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/' . strtolower($className) . '.php', // old phpass password hashing lib for backward compatibility
