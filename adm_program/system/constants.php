@@ -142,7 +142,14 @@ define('TBL_USER_RELATION_TYPES', TABLE_PREFIX . '_user_relation_types');
 // #####################
 
 // create an installation unique cookie prefix and remove special characters
-$cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . TABLE_PREFIX;
+if(isset($g_adm_db))
+{
+    $cookiePrefix = 'ADMIDIO_' . $g_organization . '_' . $g_adm_db . '_' . TABLE_PREFIX;
+}
+else
+{
+    $cookiePrefix = 'ADMIDIO_' . TABLE_PREFIX;
+}
 $cookiePrefix = preg_replace('/\W/', '_', $cookiePrefix);
 define('COOKIE_PREFIX', $cookiePrefix);
 
