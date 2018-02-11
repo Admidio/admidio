@@ -62,16 +62,15 @@ if($getCopy)
     $getDateId      = 0;
 }
 
-// Terminobjekt anlegen
+// create event object
 $date = new TableDate($gDb);
+$date->readDataById($getDateId);
 
 if (in_array($getMode, array(1, 2, 5), true))
 {
     if ($getDateId > 0)
     {
-        $date->readDataById($getDateId);
-
-        // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
+        // check if the current user has the right to edit this event
         if (!$date->isEditable())
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -703,6 +702,10 @@ if (in_array($getMode, array(3, 4, 7), true))
                     break;
             }
         }
+    }
+    else
+    {
+        $outputMessage = $gL10n->get('DAT_PARTICIPATE_NO_RIGHTS');
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl());

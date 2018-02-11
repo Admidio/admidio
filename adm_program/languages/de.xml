@@ -91,6 +91,7 @@
     <string name="DAT_MANAGE_CALENDARS">Kalender verwalten</string>
     <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
     <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
+    <string name="DAT_PARTICIPATE_NO_RIGHTS">Du besitzt nicht das Recht dich für diesen Termin anzumelden.</string>
     <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
     <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhältst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
     <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
