@@ -143,7 +143,7 @@ final class FileSystemUtils
 
         $unit = $units[$iteration];
 
-        return round($bytes, 1) . ' ' . $unit;
+        return round($bytes, 3 - floor(log10($bytes))) . ' ' . $unit;
     }
 
     /**
@@ -188,7 +188,7 @@ final class FileSystemUtils
             }
         }
 
-        throw new \RuntimeException('Path is not in valid directory!');
+        throw new \RuntimeException('Path is not in allowed directory!');
     }
 
     // INFO STUFF
