@@ -99,7 +99,7 @@ class Language
      * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
      * @endcode
      */
-    public function get($textId, $params = array())
+    public function get($textId, array $params = array())
     {
         global $gLogger;
 
@@ -115,25 +115,7 @@ class Language
             return '#' . $textId . '#';
         }
 
-        // unify different formats into one
-        if (is_array($params))
-        {
-            $paramsArray = $params;
-        }
-        else
-        {
-            // TODO deprecated: Remove in Admidio 4.0
-            $paramsArray = func_get_args();
-            $txtId = '\'' . array_shift($paramsArray) . '\'';
-            $paramsString = '\'' . implode('\', \'', $paramsArray) . '\'';
-
-            $gLogger->warning(
-                'DEPRECATED: "$gL10n->get(' . $txtId . ', ' . $paramsString . ')" is deprecated, use "$gL10n->get(' . $txtId . ', array(' . $paramsString . '))" instead!',
-                array('textId' => $textId, 'params' => $params, 'allParams' => func_get_args())
-            );
-        }
-
-        return self::prepareTextPlaceholders($text, $paramsArray);
+        return self::prepareTextPlaceholders($text, $params);
     }
 
     /**

@@ -56,28 +56,9 @@ class AdmException extends Exception
             $gDb->rollback();
         }
 
-        if (is_array($params))
-        {
-            $this->params = $params;
-        }
-        else
-        {
-            // TODO deprecated: Remove in Admidio 4.0
-            $paramCount = func_num_args();
-            $paramArray = func_get_args();
-
-            for ($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
-            {
-                $this->params[] = $paramArray[$paramNumber];
-            }
-
-            $gLogger->warning(
-                'DEPRECATED: "new AdmException(' . $message . ', ' . $params . ')" is deprecated, use "new AdmException(' . $message . ', array(' . $params . '))" instead!',
-                array('message' => $message, 'params' => $params, 'allParams' => $paramArray)
-            );
-        }
-
         $gLogger->notice('AdmException is thrown!', array('message' => $message, 'params' => $this->params));
+
+        $this->params = $params;
 
         // sicherstellen, dass alles korrekt zugewiesen wird
         parent::__construct($message);
@@ -106,34 +87,10 @@ class AdmException extends Exception
      * @param string            $message Translation @b id that should be shown when exception is catched
      * @param array<int,string> $params  Optional parameter for language string of translation id
      */
-    public function setNewMessage($message, $params = array())
+    public function setNewMessage($message, array $params = array())
     {
-        global $gLogger;
-
         $this->message = $message;
-
-        if (is_array($params))
-        {
-            $this->params = $params;
-        }
-        else
-        {
-            // TODO deprecated: Remove in Admidio 4.0
-            $this->params = array();
-
-            $paramCount = func_num_args();
-            $paramArray = func_get_args();
-
-            for ($paramNumber = 1; $paramNumber < $paramCount; ++$paramNumber)
-            {
-                $this->params[] = $paramArray[$paramNumber];
-            }
-
-            $gLogger->warning(
-                'DEPRECATED: "$e->setNewMessage(' . $message . ', ' . $params . ')" is deprecated, use "$e->setNewMessage(' . $message . ', array(' . $params . '))" instead!',
-                array('message' => $message, 'params' => $params, 'allParams' => $paramArray)
-            );
-        }
+        $this->params = $params;
     }
 
     /**

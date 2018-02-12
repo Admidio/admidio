@@ -1867,30 +1867,13 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function closeControlStructure($helpTextId = '')
     {
-        global $gL10n, $gLogger;
+        global $gL10n;
 
         $parameters = array();
         if (is_array($helpTextId))
         {
-            if (is_array($helpTextId[1]))
-            {
-                $parameters = $helpTextId[1];
-                $helpTextId = $helpTextId[0];
-            }
-            // backwards compatibility
-            else
-            {
-                // TODO deprecated: Remove in Admidio 4.0
-                $helpTextIds = '\'' . implode('\', \'', $helpTextId) . '\'';
-                $parameters = $helpTextId;
-                $helpTextId = array_shift($parameters);
-                $paramsString = '\'' . implode('\', \'', $parameters) . '\'';
-
-                $gLogger->warning(
-                    'DEPRECATED: "$htmlForm->closeControlStructure(' . $helpTextIds . ')" is deprecated, use "$htmlForm->closeControlStructure(\'' . $helpTextId . '\', array(' . $paramsString . ')" instead!',
-                    array('helpTextId' => $helpTextId, 'parameters' => $parameters)
-                );
-            }
+            $parameters = $helpTextId[1];
+            $helpTextId = $helpTextId[0];
         }
 
         if ($helpTextId !== '')
@@ -1942,19 +1925,13 @@ class HtmlForm extends HtmlFormBasic
     /**
      * Add a small help icon to the form at the current element which shows the
      * translated text of the text-id on mouseover or when you click on the icon.
-     * @param string|string[] $textId    A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
-     * @param string          $parameter If you need an additional parameter for the text you can set this parameter.
+     * @param string $textId    A unique text id from the translation xml files that should be shown e.g. SYS_DATA_CATEGORY_GLOBAL.
+     * @param string $parameter If you need an additional parameter for the text you can set this parameter.
      * @return string Return a html snippet that contains a help icon with a link to a popup box that shows the message.
      */
     public static function getHelpTextIcon($textId, $parameter = null)
     {
         global $gL10n, $gProfileFields;
-
-        // backwards compatibility
-        if (is_array($textId))
-        {
-            list($textId, $parameter) = $textId;
-        }
 
         if ($parameter === null)
         {
