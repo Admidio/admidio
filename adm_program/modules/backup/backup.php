@@ -35,7 +35,7 @@ if(!$gCurrentUser->isAdministrator())
 }
 
 // module not available for other databases except MySQL
-if($gDbType !== Database::PDO_ENGINE_MYSQL)
+if(DB_ENGINE !== Database::PDO_ENGINE_MYSQL)
 {
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
     // => EXIT

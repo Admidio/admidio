@@ -290,7 +290,7 @@ else
 // if room selection is activated then show a selectbox with all rooms
 if($gSettingsManager->getBool('dates_show_rooms'))
 {
-    if($gDbType === Database::PDO_ENGINE_MYSQL)
+    if(DB_ENGINE === Database::PDO_ENGINE_MYSQL)
     {
         $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                   FROM '.TBL_ROOMS.'

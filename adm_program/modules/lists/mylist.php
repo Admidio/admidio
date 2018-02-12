@@ -124,7 +124,7 @@ $page->enableModal();
 
 // within MySql it's only possible to join 61 tables therefore show a message if user
 // want's to join more than 57 columns
-if($gDbType === Database::PDO_ENGINE_MYSQL)
+if(DB_ENGINE === Database::PDO_ENGINE_MYSQL)
 {
     $mySqlMaxColumnAlert = '
     if (fieldNumberIntern >= 57) {

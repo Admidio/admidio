@@ -186,7 +186,7 @@ class ListConfiguration extends TableLists
      */
     public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationtypeIds = array())
     {
-        global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
+        global $gL10n, $gProfileFields, $gCurrentOrganization;
 
         $sqlColumnNames = array();
         $sqlOrderBys    = array();
@@ -229,7 +229,7 @@ class ListConfiguration extends TableLists
                 {
                     // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                    if($gDbType === Database::PDO_ENGINE_PGSQL || $gDbType === 'postgresql') // for backwards compatibility "postgresql"
+                    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
                     {
                         $columnType = 'numeric';
                     }

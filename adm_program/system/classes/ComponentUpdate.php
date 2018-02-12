@@ -144,18 +144,18 @@ class ComponentUpdate extends Component
      * If the step was successfully done the id will be stored in the component recordset
      * so if the whole update crashs later we know that this step was successfully executed.
      * When the node has an attribute @b database than this sql statement will only executed
-     * if the value of the attribute is equal to your current @b $gDbType . If the node has
+     * if the value of the attribute is equal to your current @b DB_ENGINE . If the node has
      * an attribute @b error and this is set to @b ignore than an sql error will not stop
      * the update script.
      * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      */
     private function executeStep(\SimpleXMLElement $xmlNode)
     {
-        global $gDbType, $gLogger;
+        global $gLogger;
 
         // for backwards compatibility "postgresql"
-        $dbType = $gDbType;
-        if ($gDbType === 'postgresql')
+        $dbType = DB_ENGINE;
+        if (DB_ENGINE === 'postgresql')
         {
             $dbType = Database::PDO_ENGINE_PGSQL;
         }

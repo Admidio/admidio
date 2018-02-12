@@ -27,7 +27,7 @@ if(!$gCurrentUser->isAdministrator())
 }
 
 // module not available for other databases except MySQL
-if($gDbType !== Database::PDO_ENGINE_MYSQL)
+if(DB_ENGINE !== Database::PDO_ENGINE_MYSQL)
 {
     $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
     // => EXIT
@@ -83,14 +83,14 @@ $sql = 'SELECT table_name
           FROM information_schema.tables
          WHERE table_schema = ?
            AND table_name LIKE ?';
-$statement = $gDb->queryPrepared($sql, array($g_adm_db, TABLE_PREFIX . '_%'));
+$statement = $gDb->queryPrepared($sql, array(DB_NAME, TABLE_PREFIX . '_%'));
 $tables = array();
 while($tableName = $statement->fetchColumn())
 {
     $tables[] = $tableName;
 }
 
-$SelectedTables[$g_adm_db] = $tables;
+$SelectedTables[DB_NAME] = $tables;
 
 $starttime = getmicrotime();
 
@@ -118,7 +118,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
 
     $fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (https://www.admidio.org)'.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', array(date('d.m.Y'), date('G:i:s'))).LINE_TERMINATOR.LINE_TERMINATOR;
-    $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
+    $fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.DB_NAME.LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME', 'database'). ' '. $gCurrentUser->getValue('LAST_NAME', 'database').LINE_TERMINATOR.LINE_TERMINATOR;
     $fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
     if (OUTPUT_COMPRESSION_TYPE === 'bzip2')

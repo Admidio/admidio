@@ -33,12 +33,12 @@ if (!is_file($pathConfigFile))
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['prefix'])
 &&    (TABLE_PREFIX    !== $_SESSION['prefix']
-    || $gDbType        !== $_SESSION['db_type']
-    || $g_adm_srv      !== $_SESSION['db_host']
-    || $g_adm_port     !== $_SESSION['db_port']
-    || $g_adm_db       !== $_SESSION['db_database']
-    || $g_adm_usr      !== $_SESSION['db_user']
-    || $g_adm_pw       !== $_SESSION['db_password']
+    || DB_ENGINE       !== $_SESSION['db_type']
+    || DB_HOST         !== $_SESSION['db_host']
+    || DB_PORT         !== $_SESSION['db_port']
+    || DB_NAME         !== $_SESSION['db_database']
+    || DB_USERNAME     !== $_SESSION['db_user']
+    || DB_PASSWORD     !== $_SESSION['db_password']
     || $g_organization !== $_SESSION['orga_shortname']))
 {
     showNotice(
