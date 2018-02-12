@@ -66,7 +66,7 @@ Just ask us for write permissions in the wiki and you can start.
 
 We always need persons who [translate our software Admidio](https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen) into another
 language or just update an existing language to the current version.
-We also need people you translate [our documentation](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:index) into english.
+We also need people who translate [our documentation](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:index) into english.
 
 If you have knowledge in PHP programming and know something about HTML, CSS and
 JavaScript then you can start to help us to improve the software Admidio.
