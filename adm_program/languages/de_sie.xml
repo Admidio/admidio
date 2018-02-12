@@ -91,6 +91,7 @@
   <string name="DAT_MANAGE_CALENDARS">Kalender verwalten</string>
   <string name="DAT_MAX_MEMBERS">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
+  <string name="DAT_PARTICIPATE_NO_RIGHTS">Sie besitzen nicht das Recht sich für diesen Termin anzumelden.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren machen.</string>
   <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2# </string>
@@ -250,7 +251,7 @@
   <string name="INS_DATABASE_IS_UPDATED">Datenbank wird aktualisiert</string>
   <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
   <string name="INS_DATABASE_LOGIN_DESC">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Ihre Datenbank liegt in Version #VAR1# vor.\n\nEine Aktualisierung der Datenbank auf Version #VAR2# ist erforderlich.</string>
+  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Aktuelle Datenbankversion: #VAR1#\n\nDatenbankversion nach Update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">Der Datenbank-Name enthält ungültige Zeichen!</string>
   <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzen Sie oder Ihr Webhoster einen speziellen Port, so kann dieser hier eingetragen werden. </string>
   <string name="INS_DATABASE_PORT_INVALID">Der angegebene Port ist nicht gültig. Für einen gültigen Port wählen Sie zwischen 1 und 65535 oder lassen Sie den Port für den Standardport leer.</string>
@@ -261,6 +262,7 @@
   <string name="INS_DELETE_CONFIG_FILE">Im Hauptverzeichnis von Admidio #VAR1_BOLD# existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Löschen Sie bitte diese Datei im Hauptverzeichnis.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Konfigurationsdatei herunterladen</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Geben Sie dem Ordner bitte Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder laden Sie die Konfigurationsdatei herunter und kopieren diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem Sie die Datei dort abgelegt haben, können Sie die Installation fortsetzen.</string>
+  <string name="INS_DATA_DIR_RIGHTS">Die erforderlichen Ordnerrechte für \"adm_my_files\" konnten nicht automatisch gesetzt werden. Um fortzufahren müssen die Rechte manuell auf \"777\" gesetzt werden.</string>
   <string name="INS_DATA_DO_NOT_MATCH">Die Daten aus der #VAR1_BOLD# stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfen Sie bitte Ihre config.php und ändern Sie die Daten entsprechend den gerade getätigten Angaben.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Daten des Administrators</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Geben Sie in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an. Mit diesem Benutzer können Sie sich nach der Installation bei Admidio anmelden.</string>
@@ -317,7 +319,9 @@
   <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="INS_WARNING_SAFE_MODE">Auf Ihrem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
-  <string name="INS_WELCOME_TEXT">Dieser Assistent hilft Ihnen die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und Sie sich als Administrator anmelden können. Bei Fragen oder Problemen können Sie sich gerne an #VAR1#unser Supportforum#VAR2# wenden.</string>
+  <string name="INS_WELCOME_TO_UPDATE">Willkommen zur Aktualisierung von Admidio</string>
+  <string name="INS_WELCOME_TEXT">Dieser Assistent hilft Ihnen die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und Sie sich als Administrator anmelden können.\n\nHaben Sie Fragen oder Probleme mit der Installation, schauen Sie bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wenden Sie sich an #VAR3#unser Supportforum#VAR4#.</string>
+  <string name="INS_WELCOME_TEXT_UPDATE">Sie haben bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun müssen Sie noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisieren, damit Admidio mit der neuen Version laufen kann.\n\nHaben Sie Fragen oder Probleme mit dem Update, schauen Sie bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wenden Sie sich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MySQL-Version #VAR2# voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu Ihrer Datenbank ist.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# setzt mindestens die PHP-Version #VAR2# voraus. Sie sollten versuchen PHP zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu dieser PHP-Version ist.</string>
@@ -598,13 +602,14 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</string>
   <string name="MEM_USERS_PER_PAGE">Anzahl Benutzer pro Seite</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</string>
-  <!--Phrases only in Menü-->
+  <!--Phrases only in Menu-->
   <string name="MEN_NAME_DESC">Der Name des Eintrages im Menüband. Hier kann auch der Name eines Übersetzungsstrings angegeben werden.</string>
   <string name="MEN_MENU_ITEM">Menüeintrag</string>
   <string name="MEN_MENU_LEVEL">Menüebene</string>
   <string name="MEN_MENU_LEVEL_DESC">Ein Menüpunkt ist immer einem anderen Menüpunkt untergeordnet. Wählen Sie dazu in der Auswahlliste eine Menüebene aus in dieser der neue Menüpunkt sichtbar sein soll. Wollen Sie den Menüpunkt auf der obersten Ebene anzeigen, dann wählen Sie #VAR1_BOLD# aus.</string>
   <string name="MEN_MODULE_RIGHTS">Modulrechte</string>
   <string name="MEN_MODULE_RIGHTS_DESC">Wenn Sie hier ein Modul angeben, dann wird der Menüpunkt nur angezeigt, wenn der Benutzer auch das Recht hat, dieses Modul zu sehen.</string>
+  <string name="MEN_PLUGIN">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Chat aktivieren</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">Das Chat-Modul kann über diese Einstellung aktiviert oder deaktiviert werden. Das Modul lädt alle 3 Sekunden dynamisch Daten aus der Datenbank. Es werden maximal 99 Einträge gespeichert. Bei 100 Meldungen werden die ersten 50 Einträge wieder gelöscht. (Standard: Deaktiviert)</string>
@@ -1422,6 +1427,4 @@
   <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
   <string name="SYS_WIDTH">Breite</string>
   <string name="SYS_YES">Ja</string>
-  <!--Phrases only in Menu-->
-  <string name="MEN_PLUGIN">Plugins</string>
 </resources>

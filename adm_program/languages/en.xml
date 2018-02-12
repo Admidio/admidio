@@ -91,6 +91,7 @@
   <string name="DAT_MANAGE_CALENDARS">Manage calendars</string>
   <string name="DAT_MAX_MEMBERS">Reduce number of participants for this event. Please leave field empty for unlimited participants.</string>
   <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
+  <string name="DAT_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
   <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the event and receive the right to add or remove further participants. In addition, you can make other people organizers.</string>
   <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2# </string>
@@ -250,7 +251,7 @@
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Provide your database access information here. Table prefix can be customized if needed. Customization is necessary if multiple Admidio installations are using the same database.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Your database version is #VAR1#.\n\nUpdate to version #VAR2# is required</string>
+  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Current database version: #VAR1#\n\nDatabase version after update: #VAR2#</string>
   <string name="INS_DATABASE_NAME_INVALID">The database name contains invalid characters!</string>
   <string name="INS_DATABASE_PORT_INFO">If this field isn\'t filled, the standard port for the database is used (MySQL: 3306, PostgreSQL: 5432). If you or your webhoster need a special port, you can type it here. </string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is not valid. For a valid port, select between 1 and 65535 or leave it blank.</string>
@@ -261,6 +262,7 @@
   <string name="INS_DELETE_CONFIG_FILE">The Admidio main directory #VAR1_BOLD# contains a config.php. It has already been moved to the adm_my_files folder. Please delete the file in the main directory.</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Download configuration file</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">The configuration file #VAR1_BOLD# could not be saved in folder #VAR2_BOLD#. Please assign write access to the folder (change the file attribute via FTP to 0777 or drwxrwxrwx respectively) or download the configurations file and copy it into the Admidio directory #VAR3_BOLD# by using a FTP program.\n\nAfter the file has been dropped at this location you can continue with the installation.</string>
+  <string name="INS_DATA_DIR_RIGHTS">The necessary folder permissions for \"adm_my_files\" could not be set automatically. To continue, the rights must be manually set to \"777\".</string>
   <string name="INS_DATA_DO_NOT_MATCH">Data from #VAR1_BOLD# does not comply with information provided in installation wizard.\n\nCheck config.php and all other information.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Enter the administrator\'s name, e-mail and access information. Log in with the administrator’s credentials after installation.</string>
@@ -317,7 +319,9 @@
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
   <string name="INS_WARNING_SAFE_MODE">Save Mode on server is active. This can cause later problems when using certain functions.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
-  <string name="INS_WELCOME_TEXT">This wizard will help you to set up Admidio. All necessary data is needed now, so that the system can be set up completely and you can log on as an administrator. If you have any questions or problems, feel free to contact us at #VAR1# our support forum #VAR2#.</string>
+  <string name="INS_WELCOME_TO_UPDATE">Welcome to the Admidio update</string>
+  <string name="INS_WELCOME_TEXT">This assistant helps you to set up the Admidio member management. All necessary data will be requested so that the system can be fully set up and you can log in as an administrator.\n\nIf you have questions or problems with the installation, please check #VAR1#our installation instructions#VAR2# or contact us at #VAR3#our support forum#VAR4#.</string>
+  <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
   <string name="INS_WINDOWS_LIVE">Windows Live</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires at least MySQL version #VAR2#. Please try to update your MySQL database or use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
   <string name="INS_WRONG_PHP_VERSION">Admidio #VAR1# requires at least PHP version #VAR2#. Please try to update your PHP version or oder use an #VAR3#older Admidio version#VAR4# in order to ensure compatibility.</string>
@@ -598,13 +602,14 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Display and organize all active and former members here. New users can be imported or created.</string>
   <string name="MEM_USERS_PER_PAGE">Number of users per page</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Number of users listed on each page. If there are multiple members in this group pages can be turned. (Default: 25)</string>
-  <!--Phrases only in Menü-->
+  <!--Phrases only in Menu-->
   <string name="MEN_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
   <string name="MEN_MENU_ITEM">Menu item</string>
   <string name="MEN_MENU_LEVEL">Menu level</string>
   <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible. If you want to display the menu item at the top level, select # VAR1_BOLD #.</string>
   <string name="MEN_MODULE_RIGHTS">Module rights</string>
   <string name="MEN_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
+  <string name="MEN_PLUGIN">Plugins</string>
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Activate chat</string>
   <string name="MSG_ACTIVATE_CHAT_MODULE_DESC">The chat module can be enabled or disabled using this setting. The module dynamically loads data from the database every 3 seconds. A maximum of 99 entries are saved. For 100 messages, the first 50 entries are deleted. (Default: Disabled)</string>
@@ -1422,6 +1427,4 @@
   <string name="SYS_WHAT_TO_DO">What to do?</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_YES">Yes</string>
-  <!--Phrases only in Menu-->
-  <string name="MEN_PLUGIN">Plugins</string>
 </resources>
