@@ -114,7 +114,7 @@ if ($getThumbnail)
     else
     {
         // kein Bild uebergeben, dann NoPix anzeigen
-        $image = new Image(THEME_ADMIDIO_PATH . '/images/nopix.jpg');
+        $image = new Image(THEME_PATH . '/images/nopix.jpg');
         $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
     }
 }
@@ -122,7 +122,7 @@ else
 {
     if (!is_file($picPath))
     {
-        $picPath = THEME_ADMIDIO_PATH . '/images/nopix.jpg';
+        $picPath = THEME_PATH . '/images/nopix.jpg';
     }
     // Bild einlesen und scalieren
     $image = new Image($picPath);
@@ -146,7 +146,7 @@ if ($image !== null)
         $fontX = $fontSize;
         $fontY = $imageSize[1] - $fontSize;
         $fontColor = imagecolorallocate($image->getImageResource(), 255, 255, 255);
-        $fontTtf = THEME_ADMIDIO_PATH.'/font.ttf';
+        $fontTtf = THEME_PATH.'/font.ttf';
 
         // show name of photograph if set otherwise show name of organization
         if(strlen($photoAlbum->getValue('pho_photographers')) > 0)

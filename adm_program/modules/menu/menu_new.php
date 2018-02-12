@@ -201,7 +201,7 @@ if((bool) $menu->getValue('men_node') === false)
     );
 }
 
-$arrayIcons  = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
+$arrayIcons  = admFuncGetDirectoryEntries(THEME_PATH . '/icons');
 $defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons, true);
 $form->addSelectBox(
     'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons,

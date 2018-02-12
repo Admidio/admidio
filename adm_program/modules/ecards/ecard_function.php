@@ -62,7 +62,7 @@ class FunctionClass
     {
         if ($tplFolder === '')
         {
-            $tplFolder = THEME_ADMIDIO_PATH . '/ecard_templates/';
+            $tplFolder = THEME_PATH . '/ecard_templates/';
         }
 
         if (!is_file($tplFolder . $tplFilename))
@@ -187,7 +187,7 @@ class FunctionClass
             foreach (array_unique($matchArray[2]) as $match)
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
-                $imgServerPath = str_replace(array(THEME_URL, ADMIDIO_URL), array(THEME_ADMIDIO_PATH, ADMIDIO_PATH), $match);
+                $imgServerPath = str_replace(array(THEME_URL, ADMIDIO_URL), array(THEME_PATH, ADMIDIO_PATH), $match);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
                 if (admStrContains($imgServerPath, 'photo_show.php'))

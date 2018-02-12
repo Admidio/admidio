@@ -31,7 +31,7 @@ if ((int) $user->getValue('usr_id') === 0)
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $image   = null;
-$picPath = THEME_ADMIDIO_PATH. '/images/no_profile_pic.png';
+$picPath = THEME_PATH. '/images/no_profile_pic.png';
 
 if ($gCurrentUser->hasRightViewProfile($user))
 {

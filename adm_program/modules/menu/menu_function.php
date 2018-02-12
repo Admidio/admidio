@@ -78,7 +78,7 @@ if($getMode === 1)
             // => EXIT
         }
         // get the name of the icon to save it.
-        $arrayIcons = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH . '/icons');
+        $arrayIcons = admFuncGetDirectoryEntries(THEME_PATH . '/icons');
         if (!array_key_exists($postIcon, $arrayIcons))
         {
             $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));

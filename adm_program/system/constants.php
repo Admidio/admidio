@@ -64,7 +64,7 @@ else
 define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
-define('WWW_PATH',     realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www    Will get "SERVER_PATH" in v4.0
+define('SERVER_PATH',  realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
 // 33 is string length of: '/adm_program/system/constants.php'
 define('ADMIDIO_PATH', substr(__FILE__, 0, -33)); // /var/www/subfolder
 define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
@@ -177,15 +177,3 @@ define('PASSWORD_GEN_CHARS', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN
 // ####################
 // ###  DEPRECATED  ###
 // ####################
-
-// TODO deprecated: Remove in Admidio 4.0
-define('SERVER_PATH', ADMIDIO_PATH);
-
-$gCookiePraefix = COOKIE_PREFIX;
-
-// Define Constants for PHP 5.3
-if (!defined('JSON_UNESCAPED_SLASHES'))
-{
-    define('JSON_UNESCAPED_SLASHES', 64);
-    define('JSON_UNESCAPED_UNICODE', 256);
-}

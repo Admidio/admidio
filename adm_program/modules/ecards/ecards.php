@@ -26,8 +26,8 @@ $showPage   = admFuncVariableIsValid($_GET, 'show_page', 'int', array('defaultVa
 
 // Initialisierung lokaler Variablen
 $funcClass = new FunctionClass($gL10n);
-$templates = $funcClass->getFileNames(THEME_ADMIDIO_PATH. '/ecard_templates/');
-$template  = THEME_ADMIDIO_PATH. '/ecard_templates/';
+$templates = $funcClass->getFileNames(THEME_PATH. '/ecard_templates/');
+$template  = THEME_PATH. '/ecard_templates/';
 $headline  = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // check if the module is enabled and disallow access if it's disabled
@@ -168,7 +168,7 @@ $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $getPhotoId, 'photo_nr' => $getPhotoNr, 'max_width' => $gSettingsManager->getInt('ecard_thumbs_scale'), 'max_height' => $gSettingsManager->getInt('ecard_thumbs_scale'))).'"
         class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
     </a>');
-$templates = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH.'/ecard_templates');
+$templates = admFuncGetDirectoryEntries(THEME_PATH.'/ecard_templates');
 if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));

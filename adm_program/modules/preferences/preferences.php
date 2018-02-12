@@ -989,7 +989,7 @@ $formEcards->addInput(
     'ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $formValues['ecard_card_picture_height'],
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC')
 );
-$templates = admFuncGetDirectoryEntries(THEME_ADMIDIO_PATH.'/ecard_templates');
+$templates = admFuncGetDirectoryEntries(THEME_PATH.'/ecard_templates');
 if (!is_array($templates))
 {
     $gMessage->show($gL10n->get('ECA_TEMPLATE_FOLDER_OPEN'));

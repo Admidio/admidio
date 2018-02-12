@@ -24,7 +24,7 @@ $userPhoto = $user->getValue('usr_photo');
 if(strlen($userPhoto) === 0 || !$gCurrentUser->hasRightViewProfile($user))
 {
     header('Content-Type: image/png');
-    readfile(THEME_ADMIDIO_PATH. '/images/no_profile_pic.png');
+    readfile(THEME_PATH. '/images/no_profile_pic.png');
 }
 else
 {

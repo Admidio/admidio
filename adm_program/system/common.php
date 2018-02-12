@@ -206,10 +206,8 @@ if ($gSettingsManager->has('theme'))
     $gSettingsManager->set('theme', 'modern');
 }
 
-define('THEME_ADMIDIO_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme')); // Will get "THEME_PATH" in v4.0
-define('THEME_URL', ADMIDIO_URL . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
-define('THEME_SERVER_PATH', THEME_ADMIDIO_PATH); // TODO deprecated: Remove in Admidio 4.0
-define('THEME_PATH', THEME_URL); // TODO deprecated: Remove in Admidio 4.0
+define('THEME_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
+define('THEME_URL',  ADMIDIO_URL  . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
 
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();

@@ -90,7 +90,7 @@ function initLogging($logger)
             'CURRENT_URL' => CURRENT_URL
         ),
         'PATHS' => array(
-            'WWW_PATH'     => WWW_PATH, // Will get "SERVER_PATH" in v4.0
+            'SERVER_PATH'  => SERVER_PATH,
             'ADMIDIO_PATH' => ADMIDIO_PATH,
             'CURRENT_PATH' => CURRENT_PATH
         ),

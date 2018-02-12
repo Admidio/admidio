@@ -390,7 +390,7 @@ class HtmlPage
         global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
         global $g_root_path, $gPreferences;
 
-        $filePath = THEME_ADMIDIO_PATH . '/' . $filename;
+        $filePath = THEME_PATH . '/' . $filename;
         if (!is_file($filePath))
         {
             $gLogger->error('THEME: Theme file "' . $filename . '" not found!', array('filePath' => $filePath));
