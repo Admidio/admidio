@@ -15,68 +15,6 @@
 class DateTimeExtended extends DateTime
 {
     /**
-     * @var bool
-     */
-    private $valid;
-
-    /**
-     * es muss das Datum und das dazugehoerige Format uebergeben werden
-     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use \DateTime::createFromFormat()
-     * @param string        $date     String mit dem Datum
-     * @param string        $format   das zum Datum passende Format (Schreibweise aus date())
-     * @param \DateTimeZone $timezone DateTimeZone
-     */
-    public function __construct($date, $format, \DateTimeZone $timezone = null)
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "new DateTimeExtended()" is deprecated, use "\DateTime::createFromFormat()" instead!');
-
-        $datetime = \DateTime::createFromFormat($format, $date);
-
-        if ($datetime === false)
-        {
-            $this->valid = false;
-            parent::__construct(null, $timezone);
-        }
-        else
-        {
-            $this->valid = true;
-            parent::__construct($datetime->format('Y-m-d H:i:s'), $timezone);
-        }
-    }
-
-    /**
-     * gibt true oder false zurueck, je nachdem ob DateTime gueltig ist
-     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method. Use \DateTime::createFromFormat() === false
-     * @return bool
-     */
-    public function isValid()
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$dateTimeExtended->isValid()" is deprecated, use "\DateTime::createFromFormat() === false" instead!');
-
-        return $this->valid;
-    }
-
-    /**
-     * berechnet aus dem Datum das Alter einer Person
-     * @deprecated 3.2.0:4.0.0 Switched to native DateTime method.
-     *             Use \DateTime::createFromFormat()->diff(new \DateTime('now'))->y
-     * @return int
-     */
-    public function getAge()
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$dateTimeExtended->getAge()" is deprecated, use "\DateTime::createFromFormat()->diff(new \DateTime(\'now\'))->y" instead!');
-
-        $now = new \DateTime('now');
-        return $this->diff($now)->y;
-    }
-
-    /**
      * Returns an array with all 7 weekdays with full name in the specific language.
      * @param int $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
      * @return string|string[] with all 7 weekday or if param weekday is set than the full name of that weekday

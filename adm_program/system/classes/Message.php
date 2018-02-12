@@ -291,18 +291,4 @@ class Message
     {
         $this->showTextOnly = $showText;
     }
-
-    /**
-     * If this is set to true than the message will be show with html of the bootstrap modal window.
-     * @deprecated 3.3.0:4.0.0 Switch to new method (showInModalWindow()).
-     */
-    public function showInModaleWindow()
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$message->showInModaleWindow()" is deprecated, use "$message->showInModalWindow()" instead!');
-
-        $this->modalWindowMode = true;
-        $this->inline = true;
-    }
 }

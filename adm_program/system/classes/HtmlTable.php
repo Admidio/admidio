@@ -537,22 +537,4 @@ class HtmlTable extends HtmlTableBasic
 
         return '<div class="table-responsive">' . $this->getHtmlTable() . '</div>';
     }
-
-    /**
-     * This method will set for a selected column other columns that should be used to order the datatables.
-     * For example if you will click the name column than you could set the columns lastname and firstname
-     * as alternative order columns and the table will be ordered by lastname and firstname.
-     * @deprecated 3.2.0:4.0.0 Switch to new method (setDatatablesAlternativeOrderColumns()).
-     * @param int       $selectedColumn    This is the column the user clicked to be sorted. (started with 1)
-     * @param int|int[] $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
-     *                                     than 1 column this must be an array. The columns of the table starts with 1 (not 0).
-     */
-    public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$htmlTable->setDatatablesAlternativOrderColumns()" is deprecated, use "$htmlTable->setDatatablesAlternativeOrderColumns()" instead!');
-
-        $this->setDatatablesAlternativeOrderColumns($selectedColumn, $arrayOrderColumns);
-    }
 }

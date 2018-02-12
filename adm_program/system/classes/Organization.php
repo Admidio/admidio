@@ -502,30 +502,4 @@ class Organization extends TableAccess
     {
         return $this->dbColumns;
     }
-
-    /**
-     * Reads all preferences of the current organization out of the database table adm_preferences.
-     * If the object has read the preferences than the method will return the stored values of the object.
-     * @deprecated 3.3.0:4.0.0 Switch to new method "$this->getSettingsManager()->getAll()".
-     * @param bool $update Should the preferences data be updated.
-     * @return array<string,string> Returns an array with all preferences of this organization.
-     *                              Array key is the column @b prf_name and array value is the column @b prf_value.
-     */
-    public function getPreferences($update = false)
-    {
-        return $this->settingsManager->getAll($update);
-    }
-
-    /**
-     * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
-     * The method will only insert or update changed preferences.
-     * @deprecated 3.3.0:4.0.0 Switch to new method "$this->getSettingsManager()->setMulti()".
-     * @param array<string,string> $settings Array with all preferences that should be stored in database. array('name_of_preference' => 'value')
-     * @param bool                 $update   If set to @b false then no update will be done, only inserts
-     * @throws \UnexpectedValueException
-     */
-    public function setPreferences(array $settings, $update = true)
-    {
-        $this->settingsManager->setMulti($settings, $update);
-    }
 }

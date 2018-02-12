@@ -167,18 +167,4 @@ class TableFile extends TableAccess
 
         return parent::save($updateFingerPrint);
     }
-
-    /**
-     * Returns the complete filepath
-     * @deprecated 3.3.0:4.0.0 Use Method getFullFilePath() instead.
-     * @return string Complete filepath
-     */
-    public function getCompletePathOfFile()
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$file->getCompletePathOfFile()" is deprecated, use "$file->getFullFilePath()" instead!');
-
-        return $this->getFullFilePath();
-    }
 }

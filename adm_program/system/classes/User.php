@@ -2050,33 +2050,4 @@ class User extends TableAccess
     {
         return $this->checkRolesRight('rol_weblinks');
     }
-
-    /**
-     * Checks if the user is assigned to the role @b Administrator
-     * @deprecated 3.2.0:4.0.0 Use Method isAdministrator() instead
-     * @return bool Returns @b true if the user is a member of the role @b Administrator
-     * @see User#isAdministrator
-     */
-    public function isWebmaster()
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$user->isWebmaster()" is deprecated, use "$user->isAdministrator()" instead!');
-
-        return $this->isAdministrator();
-    }
-
-    /**
-     * returns true if a column of user table or profile fields has changed
-     * @deprecated 3.3.0:4.0.0 Use Method hasColumnsValueChanged() instead
-     * @return bool
-     */
-    public function columnsValueChanged()
-    {
-        global $gLogger;
-
-        $gLogger->warning('DEPRECATED: "$user->columnsValueChanged()" is deprecated, use "$user->hasColumnsValueChanged()" instead!');
-
-        return $this->hasColumnsValueChanged();
-    }
 }
