@@ -740,7 +740,7 @@ else
 }
 $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
 
-$diskSpace = FileSystemUtils::getDiskSpace();
+$diskSpace = FileSystemUtils::getDiskSpace(ADMIDIO_PATH . '/');
 $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
 $progressBarClass = '';
 if ($diskUsagePercent > 90)
@@ -751,13 +751,12 @@ elseif ($diskUsagePercent > 70)
 {
     $progressBarClass = ' progress-bar-warning';
 }
-$text = FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' .  FileSystemUtils::getHumanReadableBytes($diskSpace['total']);
 $html = '
-<div class="progress">
-  <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
-    ' . $text . '
-  </div>
-</div>';
+    <div class="progress">
+        <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
+            ' . FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' . FileSystemUtils::getHumanReadableBytes($diskSpace['total']) . '
+        </div>
+    </div>';
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
 $page->addHtml(getPreferencePanel('system_informations', $gL10n->get('ORG_SYSTEM_INFORMATIONS'), 'info.png', $formSystemInformation->show(false)));

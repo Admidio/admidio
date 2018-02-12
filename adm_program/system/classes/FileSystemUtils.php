@@ -201,8 +201,10 @@ final class FileSystemUtils
      * @see https://secure.php.net/manual/en/function.disk-free-space.php
      * @example array("total" => 10737418240, "free" => 2147483648, "used" => 8589934592)
      */
-    public static function getDiskSpace($path = '/')
+    public static function getDiskSpace($path = self::ROOT_FOLDER)
     {
+        self::checkIsInAllowedDirectories($path);
+
         $total = (int) disk_total_space($path);
         $free = (int) disk_free_space($path);
         $used = $total - $free;
