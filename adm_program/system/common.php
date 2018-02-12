@@ -126,9 +126,6 @@ else
 
 $gL10n = new Language($gLanguageData);
 
-// Deprecated: backwards compatibility
-$gPreferences = $gSettingsManager->getAll();
-
 $orgId    = (int) $gCurrentOrganization->getValue('org_id');
 $sesUsrId = (int) $gCurrentSession->getValue('ses_usr_id');
 

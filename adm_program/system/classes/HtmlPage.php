@@ -387,8 +387,7 @@ class HtmlPage
     private function getFileContent($filename)
     {
         global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
-        global $g_root_path, $gPreferences;
+        global $gValidLogin, $gProfileFields, $gHomepage, $gSettingsManager;
 
         $filePath = THEME_PATH . '/' . $filename;
         if (!is_file($filePath))

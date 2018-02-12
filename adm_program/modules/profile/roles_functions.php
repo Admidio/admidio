@@ -251,12 +251,5 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
         $roleMemHTML .= '</ul>';
     }
 
-    // deprecated
-    if($directOutput)
-    {
-        echo $roleMemHTML;
-        return '';
-    }
-
     return $roleMemHTML;
 }
