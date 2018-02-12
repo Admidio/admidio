@@ -26,18 +26,6 @@ if (ADMIDIO_VERSION_BETA > 0)
         </div>';
 }
 
-// if safe mode is used then show a notice to the user
-// TODO deprecated: Remove if PHP 5.3 dropped
-if (PhpIniUtils::isSafeModeEnabled())
-{
-    $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
-
-    $messageWarning .= '
-        <div class="alert alert-warning alert-small" role="alert">
-            <span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_SAFE_MODE').'
-        </div>';
-}
-
 // create a page with the notice that the installation must be configured on the next pages
 // create form with selectbox where user can select a language
 $form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')));

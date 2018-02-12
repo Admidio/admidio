@@ -649,18 +649,6 @@ else
 }
 $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
-// TODO deprecated: Remove if PHP 5.3 dropped
-if(PhpIniUtils::isSafeModeEnabled())
-{
-    $gLogger->warning('DEPRECATED: Safe-Mode is enabled!');
-    $html = getStaticText('danger', $gL10n->get('SYS_ON'), ' &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM'));
-}
-else
-{
-    $html = getStaticText('success', $gL10n->get('SYS_OFF'));
-}
-$formSystemInformation->addStaticControl('safe_mode', $gL10n->get('SYS_SAFE_MODE'), $html);
-
 try
 {
     PasswordHashing::genRandomInt(0, 1, true);

@@ -158,16 +158,6 @@ final class PhpIniUtils
     }
 
     /**
-     * Returns if safe-mode is enabled
-     * @deprecated 3.3.0:4.0.0 This function will be removed if PHP 5.3 support gets dropped
-     * @return bool
-     */
-    public static function isSafeModeEnabled()
-    {
-        return (bool) ini_get('safe_mode');
-    }
-
-    /**
      * Sets the allowed base-dirs
      * @param array<int,string> $dirPaths The paths to set as allowed base-dirs
      * @throws Exception
