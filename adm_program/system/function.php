@@ -727,12 +727,6 @@ function admFuncCheckUrl($url)
  */
 function noHTML($input, $encoding = 'UTF-8')
 {
-    // backwards compatibility for PHP-Version < 5.4
-    if (!defined('ENT_HTML5'))
-    {
-        return htmlentities($input, ENT_QUOTES, $encoding);
-    }
-
     return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
 }
 
@@ -748,15 +742,7 @@ function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
     $paramsText = '';
     if (count($params) > 0)
     {
-        // backwards compatibility for PHP-Version < 5.4
-        if (defined('PHP_QUERY_RFC3986'))
-        {
-            $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-        }
-        else
-        {
-            $paramsText = '?' . http_build_query($params, '', '&');
-        }
+        $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     }
 
     $anchorText = '';
