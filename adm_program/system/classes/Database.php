@@ -158,14 +158,6 @@ class Database
     {
         global $gLogger;
 
-        // for compatibility to old versions accept the string postgresql
-        if ($engine === 'postgresql')
-        {
-            $gLogger->warning('DEPRECATED: Deprecated database engine type used!', array('engine' => $engine));
-
-            $engine = self::PDO_ENGINE_PGSQL;
-        }
-
         $this->engine   = $engine;
         $this->host     = $host;
         $this->port     = $port;

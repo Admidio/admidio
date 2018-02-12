@@ -281,7 +281,7 @@ if($plg_ter_aktiv)
 // query of all birthdays
 if($plg_geb_aktiv)
 {
-    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
+    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL)
     {
         $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
         $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';

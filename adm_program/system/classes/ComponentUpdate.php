@@ -153,13 +153,6 @@ class ComponentUpdate extends Component
     {
         global $gLogger;
 
-        // for backwards compatibility "postgresql"
-        $dbType = DB_ENGINE;
-        if (DB_ENGINE === 'postgresql')
-        {
-            $dbType = Database::PDO_ENGINE_PGSQL;
-        }
-
         $updateStepContent = trim((string) $xmlNode);
 
         // if a method of this class was set in the update step
@@ -171,7 +164,7 @@ class ComponentUpdate extends Component
             self::executeUpdateMethod($updateStepContent);
         }
         // only execute if sql statement is for all databases or for the used database
-        elseif (!isset($xmlNode['database']) || (string) $xmlNode['database'] === $dbType)
+        elseif (!isset($xmlNode['database']) || (string) $xmlNode['database'] === DB_ENGINE)
         {
             $showError = true;
             // if the attribute error was set to "ignore" then don't show errors that occurs on sql execution
@@ -184,7 +177,7 @@ class ComponentUpdate extends Component
 
             $this->executeUpdateSql($updateStepContent, $showError);
         }
-        elseif ((string) $xmlNode['database'] !== $dbType)
+        elseif ((string) $xmlNode['database'] !== DB_ENGINE)
         {
             $gLogger->info(
                 'UPDATE: Update step is for another database!',

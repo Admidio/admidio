@@ -229,7 +229,7 @@ class ListConfiguration extends TableLists
                 {
                     // if a field has numeric values then there must be a cast because database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
+                    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL)
                     {
                         $columnType = 'numeric';
                     }

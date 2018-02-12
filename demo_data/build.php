@@ -260,7 +260,7 @@ function resetPostgresSequences()
 {
     global $gDb;
 
-    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
+    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL)
     {
         $sql = 'SELECT relname
                   FROM pg_class
