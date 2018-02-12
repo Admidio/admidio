@@ -22,7 +22,6 @@ require_once($rootPath . '/adm_program/system/constants.php');
 // ERROR REPORTING
 // http://www.phptherightway.com/#error_reporting
 // https://secure.php.net/manual/en/errorfunc.configuration.php
-// error_reporting(E_ALL | E_STRICT); // PHP 5.3 fallback (https://secure.php.net/manual/en/function.error-reporting.php)
 ini_set('error_reporting', '-1');
 ini_set('log_errors', '1');
 
