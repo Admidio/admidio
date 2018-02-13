@@ -1008,11 +1008,11 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($newFilePath);
 
         $oldParentDirectoryPath = dirname($oldFilePath);
-        if ($mode === 'move' && !is_executable($oldParentDirectoryPath))
+        if (!is_executable($oldParentDirectoryPath))
         {
             throw new \UnexpectedValueException('Source parent directory is not executable!');
         }
-        if (!is_writable($oldParentDirectoryPath))
+        if ($mode === 'move' && !is_writable($oldParentDirectoryPath))
         {
             throw new \UnexpectedValueException('Source parent directory is not writable!');
         }
