@@ -290,7 +290,7 @@ if(!$gCurrentOrganization->isParentOrganization())
     $sqlData = array();
     $sqlData['query'] = 'SELECT org_id, org_longname
                            FROM '.TBL_ORGANIZATIONS.'
-                          WHERE org_id <> ? -- $gCurrentOrganization->getValue(\'org_id\')
+                          WHERE org_id <> ? -- $orgId
                             AND org_org_id_parent IS NULL
                        ORDER BY org_longname ASC, org_shortname ASC';
     $sqlData['params'] = array($orgId);
@@ -1051,7 +1051,7 @@ $formLists->addCheckbox(
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
-                      WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                      WHERE lst_org_id = ? -- $orgId
                         AND lst_global = 1
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
@@ -1248,7 +1248,7 @@ $formEvents->addCheckbox(
 $sqlData = array();
 $sqlData['query'] = 'SELECT lst_id, lst_name
                        FROM '.TBL_LISTS.'
-                      WHERE lst_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                      WHERE lst_org_id = ? -- $orgId
                         AND lst_global = 1
                    ORDER BY lst_name ASC, lst_timestamp DESC';
 $sqlData['params'] = array($orgId);
