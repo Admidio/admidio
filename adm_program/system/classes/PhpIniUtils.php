@@ -221,7 +221,7 @@ final class PhpIniUtils
      * @return bool|string
      * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
-    public static function setFileUploadTmpDir($directoryPath)
+    public static function setUploadTmpDir($directoryPath)
     {
         self::checkIsValidDir($directoryPath);
 
