@@ -167,7 +167,7 @@ final class FileSystemUtils
     }
 
     /**
-     * Check if a given path is in the allowed directories
+     * Checks if a given path is in the allowed directories
      * @param string $path The path to check
      * @throws \RuntimeException Throws if the given path is not in an allowed directory
      */
