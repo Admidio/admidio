@@ -227,4 +227,20 @@ final class PhpIniUtils
 
         return ini_set('upload_tmp_dir', $directoryPath);
     }
+
+    /**
+     * Starts a new maximum execution time limit
+     * @param int $seconds Maximum execution time limit in seconds
+     * @throws \RuntimeException Throws if starting a new maximum execution time limit failed
+     * @see https://secure.php.net/manual/en/function.set-time-limit.php
+     * @see https://secure.php.net/manual/en/info.configuration.php#ini.max-execution-time
+     */
+    public static function startNewMaxExecTimeLimit($seconds)
+    {
+        $result = set_time_limit($seconds);
+        if (!$result)
+        {
+            throw new \RuntimeException('Starting a new maximum execution time limit failed!');
+        }
+    }
 }

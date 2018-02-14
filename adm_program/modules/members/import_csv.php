@@ -15,7 +15,7 @@ $_SESSION['import_csv_request'] = $_POST;
 
 // setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
-@set_time_limit(500);
+PhpIniUtils::startNewMaxExecTimeLimit(500);
 
 // create readable constants for user import mode
 define('USER_IMPORT_NOT_EDIT', '1');

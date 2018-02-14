@@ -201,7 +201,7 @@ function doAdmidioUpdate($installedDbVersion)
 
     // setzt die Ausfuehrungszeit des Scripts auf 5 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
-    @set_time_limit(300);
+    PhpIniUtils::startNewMaxExecTimeLimit(300);
 
     updateOrgPreferences();
 

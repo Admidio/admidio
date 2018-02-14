@@ -348,7 +348,7 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // set runtime of script to 2 minutes because of the many work to do
 // but no output of error message because of safe mode
-@set_time_limit(1000);
+PhpIniUtils::startNewMaxExecTimeLimit(1000);
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update

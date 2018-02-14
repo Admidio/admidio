@@ -27,7 +27,7 @@ if (!is_file($pathConfigFile))
 
 // set execution time to 5 minutes because we have a lot to do :)
 // there should be no error output because of safe mode
-@set_time_limit(300);
+PhpIniUtils::startNewMaxExecTimeLimit(300);
 
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
