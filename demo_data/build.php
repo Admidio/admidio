@@ -374,10 +374,7 @@ try
 }
 catch (\RuntimeException $exception)
 {
-    echo '<p style="color: #cc0000;">
-        Folder <strong>adm_my_files</strong> is not writable.<br />
-        No files could be copied to that folder.
-    </p>';
+    echo '<p style="color: #cc0000;">' . $exception->getMessage() . '</p>';
     exit();
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
