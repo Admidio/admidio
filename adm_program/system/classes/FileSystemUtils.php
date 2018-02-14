@@ -99,7 +99,7 @@ final class FileSystemUtils
                 elseif ($test === '')
                 {
                     // File-system root => higher as root is not possible/valid => throw Exception
-                    throw new \UnexpectedValueException('Path is higher than root!');
+                    throw new \UnexpectedValueException('Path "' . $path . '" is higher than root!');
                 }
 //                else
 //                {
@@ -158,7 +158,7 @@ final class FileSystemUtils
             $directoryPath = self::getNormalizedPath($directoryPath);
             if (!is_dir($directoryPath))
             {
-                throw new \UnexpectedValueException('Directory does not exist!');
+                throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
             }
         }
         unset($directoryPath);
@@ -188,7 +188,7 @@ final class FileSystemUtils
             }
         }
 
-        throw new \RuntimeException('Path is not in allowed directory!');
+        throw new \RuntimeException('Path "' . $path . '" is not in allowed directory!');
     }
 
     // INFO STUFF
@@ -255,18 +255,18 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (!file_exists($path))
         {
-            throw new \UnexpectedValueException('Path does not exist!');
+            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
         }
 
         $fileOwnerResult = fileowner($path);
         if ($fileOwnerResult === false)
         {
-            throw new \RuntimeException('File owner cannot be determined!');
+            throw new \RuntimeException('File "' . $path . '" owner cannot be determined!');
         }
 
         return posix_getpwuid($fileOwnerResult);
@@ -287,18 +287,18 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (!file_exists($path))
         {
-            throw new \UnexpectedValueException('Path does not exist!');
+            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
         }
 
         $fileGroupResult = filegroup($path);
         if ($fileGroupResult === false)
         {
-            throw new \RuntimeException('File group cannot be determined!');
+            throw new \RuntimeException('File "' . $path . '" group cannot be determined!');
         }
 
         return posix_getgrgid($fileGroupResult);
@@ -341,18 +341,18 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (!file_exists($path))
         {
-            throw new \UnexpectedValueException('Path does not exist!');
+            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
         }
 
         $perms = fileperms($path);
         if ($perms === false)
         {
-            throw new \RuntimeException('File permissions cannot be read!');
+            throw new \RuntimeException('File "' . $path . '" permissions cannot be read!');
         }
 
         if ($octal)
@@ -440,12 +440,12 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($path);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (!file_exists($path))
         {
-            throw new \UnexpectedValueException('Path does not exist!');
+            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
         }
 
         $ownerInfo = self::getPathOwnerInfo($path);
@@ -491,22 +491,22 @@ final class FileSystemUtils
             }
             else
             {
-                throw new \UnexpectedValueException('Parent directory does not exist!');
+                throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" does not exist!');
             }
         }
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not writable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
         }
 
         $mkdirResult = mkdir($directoryPath, $options['mode']);
         if (!$mkdirResult)
         {
-            throw new \RuntimeException('Directory cannot be created!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
         return true;
@@ -527,17 +527,17 @@ final class FileSystemUtils
 
         if (!is_dir($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory does not exist!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
         if (!is_readable($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory is not readable!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
         }
 
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false)
         {
-            throw new \RuntimeException('Directory cannot be opened!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
         }
 
         while (($entry = readdir($dirHandle)) !== false)
@@ -572,17 +572,17 @@ final class FileSystemUtils
 
         if (!is_dir($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory does not exist!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
         if (!is_readable($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory is not readable!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
         }
 
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false)
         {
-            throw new \RuntimeException('Directory cannot be opened!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
         }
 
         $directoryContent = array();
@@ -637,7 +637,7 @@ final class FileSystemUtils
 
         if (!is_dir($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory does not exist!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
 
         if (self::isDirectoryEmpty($directoryPath))
@@ -647,17 +647,17 @@ final class FileSystemUtils
 
         if (!is_writable($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory is not writable!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not writable!');
         }
         if (!is_readable($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory is not readable!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not readable!');
         }
 
         $dirHandle = opendir($directoryPath);
         if ($dirHandle === false)
         {
-            throw new \RuntimeException('Directory cannot be opened!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be opened!');
         }
 
         while (($entry = readdir($dirHandle)) !== false)
@@ -698,13 +698,13 @@ final class FileSystemUtils
 
         if ($directoryPath === self::ROOT_FOLDER)
         {
-            throw new \UnexpectedValueException('Directory "root" cannot be deleted!');
+            throw new \UnexpectedValueException('Directory "' . self::ROOT_FOLDER . '" cannot be deleted!');
         }
 
         $parentDirectoryPath = dirname($directoryPath);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
         if (!is_dir($directoryPath))
         {
@@ -719,19 +719,19 @@ final class FileSystemUtils
             }
             else
             {
-                throw new \UnexpectedValueException('Directory is not empty!');
+                throw new \UnexpectedValueException('Directory "' . $directoryPath . '" is not empty!');
             }
         }
 
         if (!is_writable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not writable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
         }
 
         $rmdirResult = rmdir($directoryPath);
         if (!$rmdirResult)
         {
-            throw new \RuntimeException('Directory cannot be deleted!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be deleted!');
         }
 
         return true;
@@ -755,11 +755,11 @@ final class FileSystemUtils
 
         if (!is_dir($oldDirectoryPath))
         {
-            throw new \UnexpectedValueException('Source directory does not exist!');
+            throw new \UnexpectedValueException('Source directory "' . $oldDirectoryPath . '" does not exist!');
         }
         if (!is_readable($oldDirectoryPath))
         {
-            throw new \UnexpectedValueException('Source directory is not readable!');
+            throw new \UnexpectedValueException('Source directory "' . $oldDirectoryPath . '" is not readable!');
         }
 
         if (!is_dir($newDirectoryPath))
@@ -771,15 +771,15 @@ final class FileSystemUtils
                 return false;
             }
 
-            throw new \UnexpectedValueException('Destination directory does not exist!');
+            throw new \UnexpectedValueException('Destination directory "' . $newDirectoryPath . '" does not exist!');
         }
         if (!is_executable($newDirectoryPath))
         {
-            throw new \UnexpectedValueException('Destination directory is not executable!');
+            throw new \UnexpectedValueException('Destination directory "' . $newDirectoryPath . '" is not executable!');
         }
         if (!is_writable($newDirectoryPath))
         {
-            throw new \UnexpectedValueException('Destination directory is not writable!');
+            throw new \UnexpectedValueException('Destination directory "' . $newDirectoryPath . '" is not writable!');
         }
 
         $oldDirectoryContentTree = self::getDirectoryContent($oldDirectoryPath, true, false);
@@ -795,7 +795,7 @@ final class FileSystemUtils
             return true;
         }
 
-        throw new \UnexpectedValueException('Destination directory has collisions!');
+        throw new \UnexpectedValueException('Destination directory "' . $newDirectoryPath . '" has collisions!');
     }
 
     /**
@@ -920,18 +920,18 @@ final class FileSystemUtils
 
         if (!is_dir($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory does not exist!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
 
         if (!self::hasPathOwnerRight($directoryPath))
         {
-            throw new \UnexpectedValueException('Directory owner is different to process owner!');
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
         }
 
         $resultChmod = chmod($directoryPath, $mode);
         if (!$resultChmod)
         {
-            throw new \RuntimeException('Directory mode cannot be changed!');
+            throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
         }
 
         if ($recursive)
@@ -969,11 +969,11 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not writable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($filePath))
@@ -984,7 +984,7 @@ final class FileSystemUtils
         $unlinkResult = unlink($filePath);
         if (!$unlinkResult)
         {
-            throw new \RuntimeException('File cannot be deleted!');
+            throw new \RuntimeException('File "' . $filePath . '" cannot be deleted!');
         }
 
         return true;
@@ -1010,20 +1010,20 @@ final class FileSystemUtils
         $oldParentDirectoryPath = dirname($oldFilePath);
         if (!is_executable($oldParentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Source parent directory is not executable!');
+            throw new \UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not executable!');
         }
         if ($mode === 'move' && !is_writable($oldParentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Source parent directory is not writable!');
+            throw new \UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($oldFilePath))
         {
-            throw new \UnexpectedValueException('Source file does not exist!');
+            throw new \UnexpectedValueException('Source file "' . $oldFilePath . '" does not exist!');
         }
         if ($mode === 'copy' && !is_readable($oldFilePath))
         {
-            throw new \UnexpectedValueException('Source file is not readable!');
+            throw new \UnexpectedValueException('Source file "' . $oldFilePath . '" is not readable!');
         }
 
         $newParentDirectoryPath = dirname($newFilePath);
@@ -1036,15 +1036,15 @@ final class FileSystemUtils
                 return false;
             }
 
-            throw new \UnexpectedValueException('Destination parent directory does not exist!');
+            throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" does not exist!');
         }
         if (!is_executable($newParentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Destination parent directory is not executable!');
+            throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not executable!');
         }
         if (!is_writable($newParentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Destination parent directory is not writable!');
+            throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not writable!');
         }
 
         if (!is_file($newFilePath))
@@ -1056,7 +1056,7 @@ final class FileSystemUtils
             return true;
         }
 
-        throw new \UnexpectedValueException('Destination file already exist!');
+        throw new \UnexpectedValueException('Destination file "' . $newFilePath . '" already exist!');
     }
 
     /**
@@ -1076,7 +1076,7 @@ final class FileSystemUtils
         $copyResult = copy($oldFilePath, $newFilePath);
         if (!$copyResult)
         {
-            throw new \RuntimeException('File cannot be copied!');
+            throw new \RuntimeException('File "' . $oldFilePath . '" cannot be copied!');
         }
 
         return $returnValue;
@@ -1099,7 +1099,7 @@ final class FileSystemUtils
         $renameResult = rename($oldFilePath, $newFilePath);
         if (!$renameResult)
         {
-            throw new \RuntimeException('File cannot be moved!');
+            throw new \RuntimeException('File "' . $oldFilePath . '" cannot be moved!');
         }
 
         return $returnValue;
@@ -1119,22 +1119,22 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (!is_file($filePath))
         {
-            throw new \UnexpectedValueException('File does not exist!');
+            throw new \UnexpectedValueException('File "' . $filePath . '" does not exist!');
         }
         if (!self::hasPathOwnerRight($filePath))
         {
-            throw new \UnexpectedValueException('File owner is different to process owner!');
+            throw new \UnexpectedValueException('File "' . $filePath . '" owner is different to process owner!');
         }
 
         $chmodResult = chmod($filePath, $mode);
         if (!$chmodResult)
         {
-            throw new \RuntimeException('File mode cannot be changed!');
+            throw new \RuntimeException('File "' . $filePath . '" mode cannot be changed!');
         }
     }
 
@@ -1152,22 +1152,22 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (!is_file($filePath))
         {
-            throw new \UnexpectedValueException('File does not exist!');
+            throw new \UnexpectedValueException('File "' . $filePath . '" does not exist!');
         }
         if (!is_readable($filePath))
         {
-            throw new \UnexpectedValueException('File is not readable!');
+            throw new \UnexpectedValueException('File "' . $filePath . '" is not readable!');
         }
 
         $data = file_get_contents($filePath);
         if ($data === false)
         {
-            throw new \RuntimeException('File cannot be read!');
+            throw new \RuntimeException('File "' . $filePath . '" cannot be read!');
         }
 
         return $data;
@@ -1190,21 +1190,21 @@ final class FileSystemUtils
         $parentDirectoryPath = dirname($filePath);
         if (!is_executable($parentDirectoryPath))
         {
-            throw new \UnexpectedValueException('Parent directory is not executable!');
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
 
         if (is_file($filePath))
         {
             if (!is_writable($filePath))
             {
-                throw new \UnexpectedValueException('File is not writable!');
+                throw new \UnexpectedValueException('File "' . $filePath . '" is not writable!');
             }
         }
         else
         {
             if (!is_writable($parentDirectoryPath))
             {
-                throw new \UnexpectedValueException('Parent directory is not writable!');
+                throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not writable!');
             }
         }
 
@@ -1217,7 +1217,7 @@ final class FileSystemUtils
         $bytes = file_put_contents($filePath, $data, $flags);
         if ($bytes === false)
         {
-            throw new \RuntimeException('File cannot be written!');
+            throw new \RuntimeException('File "' . $filePath . '" cannot be written!');
         }
 
         return $bytes;
