@@ -62,6 +62,7 @@ final class PhpIniUtils
     /**
      * Returns the allowed base-dirs
      * @return array<string,string>
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
      */
     public static function getBaseDirs()
     {
@@ -71,6 +72,7 @@ final class PhpIniUtils
     /**
      * Returns the memory limit
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.memory-limit
      */
     public static function getMemoryLimit()
     {
@@ -80,6 +82,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum post size
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.post-max-size
      */
     public static function getPostMaxSize()
     {
@@ -89,6 +92,7 @@ final class PhpIniUtils
     /**
      * Returns the file upload temporary directory
      * @return string
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
     public static function getFileUploadTmpDir()
     {
@@ -98,6 +102,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum upload filesize
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-max-filesize
      */
     public static function getFileUploadMaxFileSize()
     {
@@ -107,6 +112,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum file upload count
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.max-file-uploads
      */
     public static function getFileUploadMaxFileCount()
     {
@@ -125,6 +131,7 @@ final class PhpIniUtils
     /**
      * Returns if file-upload is enabled
      * @return bool
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.file-uploads
      */
     public static function isFileUploadEnabled()
     {
@@ -135,6 +142,7 @@ final class PhpIniUtils
      * Returns if safe-mode is enabled
      * @deprecated 3.3.0:4.0.0 This function will be removed if PHP 5.3 support gets dropped
      * @return bool
+     * @see https://secure.php.net/manual/en/features.safe-mode.php
      */
     public static function isSafeModeEnabled()
     {
@@ -192,6 +200,7 @@ final class PhpIniUtils
      * @throws \UnexpectedValueException Throws if a given directory does not exist
      * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
      */
     public static function setBaseDirs(array $directoryPaths = array())
     {
@@ -210,6 +219,7 @@ final class PhpIniUtils
      * @throws \UnexpectedValueException Throws if a given directory does not exist
      * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
     public static function setFileUploadTmpDir($directoryPath)
     {
