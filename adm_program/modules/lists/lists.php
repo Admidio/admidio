@@ -40,20 +40,15 @@ else
 }
 
 // only users with the right to assign roles can view inactive roles
-// within PHP 5.3 false will not be set and therefore we must add 0 as value
-if($getActiveRole || !$gCurrentUser->checkRolesRight('rol_assign_roles'))
+if(!$gCurrentUser->checkRolesRight('rol_assign_roles'))
 {
-    $getActiveRole = 1;
-}
-else
-{
-    $getActiveRole = 0;
+    $getActiveRole = true;
 }
 
 // New Modulelist object
 $lists = new ModuleLists();
 $lists->setParameter('cat_id', $getCatId);
-$lists->setParameter('active_role', $getActiveRole);
+$lists->setParameter('active_role', (int) $getActiveRole);
 
 if($getCatId > 0)
 {
@@ -78,7 +73,7 @@ $page->addJavascript('
         roleId    = elementId.substr(elementId.search(/_/) + 1);
 
         if ($(this).val() === "mylist") {
-            self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => $getActiveRole)) . '&rol_id=" + roleId;
+            self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php', array('active_role' => (int) $getActiveRole)) . '&rol_id=" + roleId;
         } else {
             self.location.href = "' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists_show.php', array('mode' => 'html')) . '&lst_id=" + $(this).val() + "&rol_ids=" + roleId;
         }
@@ -107,7 +102,7 @@ if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 }
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
-$navbarForm = new HtmlForm('navbar_cat_id_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('active_role' => $getActiveRole)), $page, array('type' => 'navbar', 'setFocus' => false));
+$navbarForm = new HtmlForm('navbar_cat_id_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('active_role' => (int) $getActiveRole)), $page, array('type' => 'navbar', 'setFocus' => false));
 $navbarForm->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId)
@@ -334,7 +329,7 @@ if($listsResult['numResults'] > 0)
 }
 
 // If necessary show links to navigate to next and previous recordsets of the query
-$baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('cat_id' => $getCatId, 'active_role' => $getActiveRole));
+$baseUrl = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists.php', array('cat_id' => $getCatId, 'active_role' => (int) $getActiveRole));
 $page->addHtml(admFuncGeneratePagination($baseUrl, $listsResult['totalCount'], $gSettingsManager->getInt('lists_roles_per_page'), $getStart));
 
 $page->addHtml('</div>');

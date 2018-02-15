@@ -6,11 +6,8 @@ notifications:
 language: php
 
 php:
-#  - 5.3
-#  - 5.4
-#  - 5.5
-  - 5.6
-#  - 7.0
+#  - 5.6
+  - 7.0
 #  - 7.1
 #  - 7.2
 #  - hhvm
@@ -25,8 +22,8 @@ php:
 #  - postgresql
 
 #addons:
-#  postgresql: 9.6
 #  mariadb: 10.1
+#  postgresql: 9.6
 
 before_script:
   - wget http://get.sensiolabs.org/php-cs-fixer.phar -O php-cs-fixer.phar

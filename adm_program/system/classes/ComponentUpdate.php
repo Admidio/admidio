@@ -122,8 +122,8 @@ class ComponentUpdate extends Component
     {
         // get the method name (remove "ComponentUpdateSteps::")
         $methodName = substr($updateStepContent, 22);
-        // now call the method that is also compatible to PHP 5.3
-        ComponentUpdateSteps::$methodName();
+        // now call the method
+        ComponentUpdateSteps::{$methodName}();
     }
 
     /**

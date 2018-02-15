@@ -128,16 +128,13 @@ class Database
     {
         global $gLogger;
 
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug(
-                'DATABASE: Create DB-Instance with default params!',
-                array(
-                    'engine' => DB_ENGINE, 'host' => DB_HOST, 'port' => DB_PORT,
-                    'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => DB_PASSWORD
-                )
-            );
-        }
+        $gLogger->debug(
+            'DATABASE: Create DB-Instance with default params!',
+            array(
+                'engine' => DB_ENGINE, 'host' => DB_HOST, 'port' => DB_PORT,
+                'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => DB_PASSWORD
+            )
+        );
 
         return new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
     }
@@ -168,10 +165,7 @@ class Database
 
         $this->connect();
 
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug('DATABASE: connected!');
-        }
+        $gLogger->debug('DATABASE: connected!');
     }
 
     /**
@@ -181,10 +175,7 @@ class Database
     {
         global $gLogger;
 
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug('DATABASE: sleep/serialize!');
-        }
+        $gLogger->debug('DATABASE: sleep/serialize!');
 
         return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
     }
@@ -196,17 +187,11 @@ class Database
     {
         global $gLogger;
 
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug('DATABASE: wakeup/unserialize!');
-        }
+        $gLogger->debug('DATABASE: wakeup/unserialize!');
 
         $this->connect();
 
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug('DATABASE: reconnected!');
-        }
+        $gLogger->debug('DATABASE: reconnected!');
     }
 
     /**

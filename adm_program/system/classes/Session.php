@@ -510,7 +510,7 @@ class Session extends TableAccess
         }
         session_set_cookie_params($limit, $path, $domain, $secure, $httpOnly);
 
-        if (session_id() !== '') // PHP 5.4+ => (session_status() === PHP_SESSION_ACTIVE)
+        if (session_status() === PHP_SESSION_ACTIVE)
         {
             $gLogger->notice('Session is already started!', array('sessionId' => session_id()));
         }
