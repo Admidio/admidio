@@ -348,7 +348,7 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultVal
 
 // set runtime of script to 2 minutes because of the many work to do
 // but no output of error message because of safe mode
-@set_time_limit(1000);
+PhpIniUtils::startNewMaxExecTimeLimit(1000);
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update
@@ -374,10 +374,7 @@ try
 }
 catch (\RuntimeException $exception)
 {
-    echo '<p style="color: #cc0000;">
-        Folder <strong>adm_my_files</strong> is not writable.<br />
-        No files could be copied to that folder.
-    </p>';
+    echo '<p style="color: #cc0000;">' . $exception->getMessage() . '</p>';
     exit();
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';

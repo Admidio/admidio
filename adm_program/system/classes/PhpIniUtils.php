@@ -62,6 +62,7 @@ final class PhpIniUtils
     /**
      * Returns the allowed base-dirs
      * @return array<string,string>
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
      */
     public static function getBaseDirs()
     {
@@ -71,6 +72,7 @@ final class PhpIniUtils
     /**
      * Returns the memory limit
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.memory-limit
      */
     public static function getMemoryLimit()
     {
@@ -80,6 +82,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum post size
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.post-max-size
      */
     public static function getPostMaxSize()
     {
@@ -89,6 +92,7 @@ final class PhpIniUtils
     /**
      * Returns the file upload temporary directory
      * @return string
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
     public static function getFileUploadTmpDir()
     {
@@ -98,6 +102,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum upload filesize
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-max-filesize
      */
     public static function getFileUploadMaxFileSize()
     {
@@ -107,6 +112,7 @@ final class PhpIniUtils
     /**
      * Returns the maximum file upload count
      * @return int
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.max-file-uploads
      */
     public static function getFileUploadMaxFileCount()
     {
@@ -125,6 +131,7 @@ final class PhpIniUtils
     /**
      * Returns if file-upload is enabled
      * @return bool
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.file-uploads
      */
     public static function isFileUploadEnabled()
     {
@@ -132,11 +139,11 @@ final class PhpIniUtils
     }
 
     /**
-     * Checks if a given path is in the allowed base-dirs
-     * @param string $dirPath The path to check
+     * Checks if a given directory path is in the allowed base-directories
+     * @param string $directoryPath The directory path to check
      * @return bool
      */
-    private static function isInBaseDirs($dirPath)
+    private static function isInBaseDirs($directoryPath)
     {
         $baseDirs = self::getBaseDirs();
 
@@ -145,62 +152,84 @@ final class PhpIniUtils
             return true;
         }
 
-        $isInBaseDirs = false;
         foreach ($baseDirs as $baseDir)
         {
-            if (admStrStartsWith($dirPath, $baseDir))
+            if (strpos($directoryPath, $baseDir) === 0)
             {
-                $isInBaseDirs = true;
+                return true;
             }
         }
 
-        return $isInBaseDirs;
+        return false;
     }
 
     /**
-     * Sets the allowed base-dirs
-     * @param array<int,string> $dirPaths The paths to set as allowed base-dirs
-     * @throws Exception
-     * @return bool|string
+     * Checks if a given directory path exists and is in the base-directories
+     * @param string $directoryPath The directory path to check
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
+     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      */
-    public static function setBaseDirs(array $dirPaths = array())
+    private static function checkIsValidDir(&$directoryPath)
     {
-        $realDirPaths = array_map('realpath', $dirPaths);
+        $directoryPath = FileSystemUtils::getNormalizedPath($directoryPath);
 
-        foreach ($realDirPaths as $realDirPath)
+        if (!is_dir($directoryPath))
         {
-            if ($realDirPath === false)
-            {
-                throw new \Exception('Not a valid or allowed directory');
-            }
-            if (!self::isInBaseDirs($realDirPath))
-            {
-                throw new \Exception('Not in base-directory!');
-            }
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" does not exist!');
         }
+        if (!self::isInBaseDirs($directoryPath))
+        {
+            throw new \RuntimeException('Directory "' . $directoryPath . '" is not in base-directories!');
+        }
+    }
 
-        return ini_set('open_basedir', implode(PATH_SEPARATOR, $realDirPaths));
+    /**
+     * Sets the allowed base-directories
+     * @param array<int,string> $directoryPaths The directory paths to set as allowed base-dirs
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
+     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
+     * @return bool|string
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
+     */
+    public static function setBaseDirs(array $directoryPaths = array())
+    {
+        foreach ($directoryPaths as &$directoryPath)
+        {
+            self::checkIsValidDir($directoryPath);
+        }
+        unset($directoryPath);
+
+        return ini_set('open_basedir', implode(PATH_SEPARATOR, $directoryPaths));
     }
 
     /**
      * Sets the file upload temporary directory
-     * @param string $dirPath The path to set the file upload temporary directory
-     * @throws Exception
+     * @param string $directoryPath The directory path to set the file upload temporary directory
+     * @throws \UnexpectedValueException Throws if a given directory does not exist
+     * @throws \RuntimeException         Throws if a given directory is not in the base-directories
      * @return bool|string
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.upload-tmp-dir
      */
-    public static function setFileUploadTmpDir($dirPath)
+    public static function setUploadTmpDir($directoryPath)
     {
-        $realDirPath = realpath($dirPath);
+        self::checkIsValidDir($directoryPath);
 
-        if ($realDirPath === false)
-        {
-            throw new \Exception('Not a valid or allowed directory');
-        }
-        if (!self::isInBaseDirs($realDirPath))
-        {
-            throw new \Exception('Not in base-directory!');
-        }
+        return ini_set('upload_tmp_dir', $directoryPath);
+    }
 
-        return ini_set('upload_tmp_dir', $realDirPath);
+    /**
+     * Starts a new maximum execution time limit
+     * @param int $seconds Maximum execution time limit in seconds
+     * @throws \RuntimeException Throws if starting a new maximum execution time limit failed
+     * @see https://secure.php.net/manual/en/function.set-time-limit.php
+     * @see https://secure.php.net/manual/en/info.configuration.php#ini.max-execution-time
+     */
+    public static function startNewMaxExecTimeLimit($seconds)
+    {
+        $result = set_time_limit($seconds);
+        if (!$result)
+        {
+            throw new \RuntimeException('Starting a new maximum execution time limit failed!');
+        }
     }
 }

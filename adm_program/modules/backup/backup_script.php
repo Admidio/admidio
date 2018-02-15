@@ -165,7 +165,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
     {
         for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
         {
-            @set_time_limit(60);
+            PhpIniUtils::startNewMaxExecTimeLimit(60);
             OutputInformation('statusinfo', 'Creating structure for <strong>'.noHTML($dbname.'.'.$SelectedTables[$dbname][$t]).'</strong>');
 
             $fieldnames = array();
@@ -351,7 +351,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
         $processedrows = 0;
         foreach ($SelectedTables as $dbname => $value)
         {
-            @set_time_limit(60);
+            PhpIniUtils::startNewMaxExecTimeLimit(60);
             for ($t = 0, $tMax = count($SelectedTables[$dbname]); $t < $tMax; ++$t)
             {
                 $SQLquery  = 'SELECT *';
@@ -475,7 +475,7 @@ if ((OUTPUT_COMPRESSION_TYPE === 'gzip'  && ($zp = @gzopen($backupabsolutepath.$
                     }
                     if ((++$currentrow % STATS_INTERVAL) == 0)
                     {
-                        @set_time_limit(60);
+                        PhpIniUtils::startNewMaxExecTimeLimit(60);
                         if ($DHTMLenabled)
                         {
                             OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<strong>'.noHTML($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</strong>');
