@@ -229,18 +229,19 @@ final class PhpIniUtils
     }
 
     /**
-     * Starts a new maximum execution time limit
-     * @param int $seconds Maximum execution time limit in seconds
-     * @throws \RuntimeException Throws if starting a new maximum execution time limit failed
+     * Starts a new execution time limit
+     * @param int $seconds Execution time limit in seconds
+     * @throws \RuntimeException Throws if starting a new execution time limit failed
      * @see https://secure.php.net/manual/en/function.set-time-limit.php
      * @see https://secure.php.net/manual/en/info.configuration.php#ini.max-execution-time
      */
-    public static function startNewMaxExecTimeLimit($seconds)
+    public static function startNewExecutionTimeLimit($seconds)
     {
-        $result = set_time_limit($seconds);
+        // @ prevents error output in safe-mode
+        $result = @set_time_limit($seconds);
         if (!$result)
         {
-            throw new \RuntimeException('Starting a new maximum execution time limit failed!');
+            throw new \RuntimeException('Starting a new execution time limit failed!');
         }
     }
 }

@@ -334,8 +334,7 @@ switch($getMode)
         }
 
         // set execution time to 2 minutes because we have a lot to do :)
-        // there should be no error output because of safe mode
-        PhpIniUtils::startNewMaxExecTimeLimit(120);
+        PhpIniUtils::startNewExecutionTimeLimit(120);
 
         $gDb->startTransaction();
 
