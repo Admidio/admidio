@@ -79,7 +79,7 @@ switch ($getType)
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 2, 'lnk_id' => $getDatabaseId));
         break;
     case 'men':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . 'menu/menu_function.php', array('mode' => 2, 'men_id' => $getDatabaseId));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('mode' => 2, 'men_id' => $getDatabaseId));
         break;
     case 'msg':
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_id' => $getDatabaseId));
