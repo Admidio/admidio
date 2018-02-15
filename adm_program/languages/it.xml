@@ -535,7 +535,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Numero di voci per pagina</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Solo per gli utenti registrati</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gestisci le preferenze organizzative generali o le preferenze del modulo qui.</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">L\'organizzazione #VAR1_BOLD# è stata aggiunta con successo. Essa è ora selezionabile quando viene effettuato l\'accesso.\n\nSe hai previsto una home page diversa per questa organizzazione per favore aggiungila come home page separata nel file config.php.</string>
+  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">L\'organizzazione #VAR1_BOLD# è stata aggiunta con successo. Essa è ora selezionabile quando viene effettuato l\'accesso.\n\nSe hai previsto una home page diversa per questa organizzazione per favore aggiungila come home page separata nel file config.php.</string>
   <string name="ORG_PARENT_ORGANIZATION">Organizzazione madre</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Definisci l\'organizzazione madre qui. Le organizzazioni madre sono in grado di creare eventi e annunci, per esempio, che saranno visualizzati nelle organizzazioni (figlie) selezionate.</string>
   <string name="ORG_PIXEL">Pixel</string>

@@ -303,7 +303,7 @@ switch($getMode)
             array('type' => 'email', 'maxLength' => 50, 'property' => HtmlForm::FIELD_REQUIRED)
         );
         $form->addSubmitButton(
-            'btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
+            'btn_forward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
             array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3')
         );
 
@@ -372,11 +372,11 @@ switch($getMode)
         // create html page object
         $page = new HtmlPage($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
 
-        $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', array($_POST['orgaLongName'])).'</p>');
+        $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULLY_ADDED', array($_POST['orgaLongName'])).'</p>');
 
         // show form
         $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', $page);
-        $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
+        $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
 
         // add form to html page and show page
         $page->addHtml($form->show(false));

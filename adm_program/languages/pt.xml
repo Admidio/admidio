@@ -649,7 +649,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">O número de entradas exibidos numa página. Não existem mais entradas, por isso, pode movimentar-se entre elas. Se o valor está definido para 0, todas as entradas numa página e a função de paginação estão desativados. (Predefinição: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Apenas para usuários em sessão</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gerencie preferências gerais da organização ou preferências de módulo</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULL_ADDED">A organização #VAR1_BOLD# foi adicionada com sucesso. Ela está agora elegível ao iniciar a sessão.\n\nSe tens uma página inicial separada para esta organização, por favor, adicione-a ao arquivo config.php da página separada.</string>
+  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">A organização #VAR1_BOLD# foi adicionada com sucesso. Ela está agora elegível ao iniciar a sessão.\n\nSe tens uma página inicial separada para esta organização, por favor, adicione-a ao arquivo config.php da página separada.</string>
   <string name="ORG_PARENT_ORGANIZATION">Organização pai</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Defina as organizações pai aqui. Organizações pai podem, por exemplo, criar eventos e anúncios, que seriam exibidos na organização filha.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Força da palavra-passe</string>
