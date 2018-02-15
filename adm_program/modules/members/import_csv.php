@@ -59,10 +59,9 @@ $countImportNewUser  = 0;
 $countImportEditUser = 0;
 $countImportEditRole = 0;
 $importedFields = array();
-$depRoles = array();
 
 // Abhängige Rollen ermitteln
-$depRoles = RoleDependency::getParentRoles($gDb, $_SESSION['rol_id']);
+$depRoles = RoleDependency::getParentRoles($gDb, (int) $_SESSION['rol_id']);
 
 if($firstRowTitle)
 {
@@ -85,19 +84,26 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
         // dieser dann den Wert zuordnen
+        /**
+         * @var TableUserField $field
+         */
         foreach($gProfileFields->getProfileFields() as $field)
         {
-            if(strlen($_POST['usf-'. $field->getValue('usf_id')]) > 0 && $columnKey == $_POST['usf-'. $field->getValue('usf_id')])
+            $usfId = (int) $field->getValue('usf_id');
+
+            if(strlen($_POST['usf-'. $usfId]) > 0 && $columnKey == $_POST['usf-'. $usfId])
             {
+                $usfNameIntern = $field->getValue('usf_name_intern');
+
                 // importiertes Feld merken
-                if(!isset($importedFields[$field->getValue('usf_id')]))
+                if(!isset($importedFields[$usfId]))
                 {
-                    $importedFields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
+                    $importedFields[$usfId] = $usfNameIntern;
                 }
 
-                if($field->getValue('usf_name_intern') === 'COUNTRY')
+                if($usfNameIntern === 'COUNTRY')
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryIsoCode($columnValue));
+                    $user->setValue($usfNameIntern, $gL10n->getCountryIsoCode($columnValue));
                 }
                 else
                 {
@@ -110,7 +116,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                                 || $columnValueToLower === 'yes'
                                 || $columnValueToLower === '1')
                             {
-                                $user->setValue($field->getValue('usf_name_intern'), '1');
+                                $user->setValue($usfNameIntern, '1');
                             }
                             if($columnValueToLower === 'n'
                                 || $columnValueToLower === admStrToLower($gL10n->get('SYS_NO'))
@@ -118,7 +124,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                                 || $columnValueToLower === '0'
                                 || $columnValue === '')
                             {
-                                $user->setValue($field->getValue('usf_name_intern'), '0');
+                                $user->setValue($usfNameIntern, '0');
                             }
                             break;
                         case 'DROPDOWN':
@@ -132,12 +138,12 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                                 if(strcmp(admStrToLower($columnValue), admStrToLower(trim($arrListValues[$position]))) === 0)
                                 {
                                     // if col_value is text than save position if text is equal to text of position
-                                    $user->setValue($field->getValue('usf_name_intern'), $position);
+                                    $user->setValue($usfNameIntern, $position);
                                 }
                                 elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
                                 {
                                     // if col_value is numeric than save position if col_value is equal to position
-                                    $user->setValue($field->getValue('usf_name_intern'), $columnValue);
+                                    $user->setValue($usfNameIntern, $columnValue);
                                 }
                                 ++$position;
                             }
@@ -146,21 +152,21 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                             $columnValue = admStrToLower($columnValue);
                             if(strValidCharacters($columnValue, 'email'))
                             {
-                                $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
+                                $user->setValue($usfNameIntern, substr($columnValue, 0, 255));
                             }
                             break;
                         case 'INTEGER':
                             // number could contain dot and comma
                             if(is_numeric(strtr($columnValue, ',.', '00')))
                             {
-                                $user->setValue($field->getValue('usf_name_intern'), $columnValue);
+                                $user->setValue($usfNameIntern, $columnValue);
                             }
                             break;
                         case 'TEXT':
-                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 100));
+                            $user->setValue($usfNameIntern, substr($columnValue, 0, 100));
                             break;
                         default:
-                            $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 4000));
+                            $user->setValue($usfNameIntern, substr($columnValue, 0, 4000));
                     }
                 }
             }
