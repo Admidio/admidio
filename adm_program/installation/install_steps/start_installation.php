@@ -32,14 +32,14 @@ PhpIniUtils::startNewMaxExecTimeLimit(300);
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['prefix'])
-&&    (TABLE_PREFIX    !== $_SESSION['prefix']
-    || DB_ENGINE       !== $_SESSION['db_type']
-    || DB_HOST         !== $_SESSION['db_host']
-    || DB_PORT         !== $_SESSION['db_port']
-    || DB_NAME         !== $_SESSION['db_database']
-    || DB_USERNAME     !== $_SESSION['db_user']
-    || DB_PASSWORD     !== $_SESSION['db_password']
-    || $g_organization !== $_SESSION['orga_shortname']))
+&&    ($_SESSION['prefix']         !== TABLE_PREFIX
+    || $_SESSION['db_type']        !== DB_ENGINE
+    || $_SESSION['db_host']        !== DB_HOST
+    || $_SESSION['db_port']        !== DB_PORT
+    || $_SESSION['db_database']    !== DB_NAME
+    || $_SESSION['db_user']        !== DB_USERNAME
+    || $_SESSION['db_password']    !== DB_PASSWORD
+    || $_SESSION['orga_shortname'] !== $g_organization))
 {
     showNotice(
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
