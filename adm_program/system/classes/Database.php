@@ -233,7 +233,7 @@ class Database
 
             $this->setConnectionOptions();
         }
-        catch (\PDOException $e)
+        catch (\PDOException $exception)
         {
             $logContext = array(
                 'engine'   => $this->engine,
@@ -244,9 +244,9 @@ class Database
                 'password' => '******',
                 'options'  => $this->options
             );
-            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
+            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $exception->getMessage(), $logContext);
 
-            throw new AdmException($e->getMessage()); // TODO: change exception class
+            throw new AdmException($exception->getMessage()); // TODO: change exception class
         }
     }
 
@@ -679,15 +679,18 @@ class Database
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
         }
-        catch (\PDOException $e)
+        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        catch (\PDOException $exception)
         {
-            $gLogger->critical('PDOException: ' . $e->getMessage());
-
             if ($showError)
             {
+                $gLogger->critical('PDOException: ' . $exception->getMessage());
                 $this->showError();
                 // => EXIT
             }
+
+            $gLogger->warning('PDOException: ' . $exception->getMessage());
+
             return false;
         }
 
@@ -733,15 +736,18 @@ class Database
                 }
             }
         }
-        catch (\PDOException $e)
+        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        catch (\PDOException $exception)
         {
-            $gLogger->critical('PDOException: ' . $e->getMessage());
-
             if ($showError)
             {
+                $gLogger->critical('PDOException: ' . $exception->getMessage());
                 $this->showError();
                 // => EXIT
             }
+
+            $gLogger->warning('PDOException: ' . $exception->getMessage());
+
             return false;
         }
 
