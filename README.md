@@ -117,8 +117,6 @@ and sharing great software.
 - [James Heinrich](http://www.silisoftware.com/): backupDB
 - [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
 - [phpass](http://www.openwall.com/phpass/): Portable PHP password hashing framework
-- [Html5Shiv](https://github.com/aFarkas/html5shiv): Enable Html5 for older browsers
-- [Respond](https://github.com/scottjehl/Respond): Polyfill for min/max-width CSS3 Media Queries
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 

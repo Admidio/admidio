@@ -420,12 +420,6 @@ class HtmlPage
             $headerContent .= '<link rel="stylesheet" type="text/css" href="' . $cssFile . '" />';
         }
 
-        // add some special scripts so that ie8 could better understand the Bootstrap 3 framework
-        $headerContent .= '<!--[if lt IE 9]>
-            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/html5shiv/html5shiv.min.js"></script>
-            <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/respond/respond.min.js"></script>
-        <![endif]-->';
-
         // add javascript files to page
         foreach ($this->jsFiles as $jsFile)
         {
