@@ -33,7 +33,7 @@ class ConditionParser
      */
     private $destCond = '';
     /**
-     * @var array<int,string> An array from the string @b mSrcCond where every char is one array element
+     * @var array<int,string> An array from the string **mSrcCond** where every char is one array element
      */
     private $srcCondArray = array();
     /**
@@ -69,10 +69,10 @@ class ConditionParser
     }
 
     /**
-     * Creates a valid date format @b YYYY-MM-DD for the SQL statement
-     * @param string $date     The unformated date from user input e.g. @b 12.04.2012
-     * @param string $operator The actual operator for the @b date parameter
-     * @return string String with a SQL valid date format @b YYYY-MM-DD or empty string
+     * Creates a valid date format **YYYY-MM-DD** for the SQL statement
+     * @param string $date     The unformated date from user input e.g. **12.04.2012**
+     * @param string $operator The actual operator for the **date** parameter
+     * @return string String with a SQL valid date format **YYYY-MM-DD** or empty string
      */
     private function getFormatDate($date, $operator)
     {
@@ -174,7 +174,7 @@ class ConditionParser
      * Creates from a user defined condition a valid SQL condition
      * @param string $sourceCondition The user condition string
      * @param string $columnName      The name of the database column for which the condition should be created
-     * @param string $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
+     * @param string $columnType      The type of the column. Valid types are **string**, **int**, **date** and **checkbox**
      * @param string $fieldName       The name of the profile field. This is used for error output to the end user
      * @throws AdmException LST_NOT_VALID_DATE_FORMAT
      *                      LST_NOT_NUMERIC
@@ -437,7 +437,7 @@ class ConditionParser
 
     /**
      * Replace different user conditions with predefined chars that
-     * represents a special condition e.g. @b ! represents @b != and @b <>
+     * represents a special condition e.g. **!** represents **!=** and **<>**
      * @param string $sourceCondition The user condition string
      * @return string String with the predefined chars for conditions
      */
@@ -486,7 +486,7 @@ class ConditionParser
 
     /**
      * Starts the "DestCondition"
-     * @param string $columnType      The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
+     * @param string $columnType      The type of the column. Valid types are **string**, **int**, **date** and **checkbox**
      * @param string $columnName      The name of the database column for which the condition should be created
      * @param string $sourceCondition The user condition string
      * @return bool Returns true if "mDestCondition" is complete

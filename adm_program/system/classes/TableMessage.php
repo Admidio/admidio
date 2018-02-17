@@ -26,7 +26,7 @@ class TableMessage extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_messages.
      * If the id is set than the specific message will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int      $msgId    The recordset of the message with this conversation id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $msgId = 0)
@@ -81,7 +81,7 @@ class TableMessage extends TableAccess
     /**
      * Set a new value for a column of the database table.
      * @param int $usrId of the receiver - just for security reasons.
-     * @return false|\PDOStatement Returns @b answer of the SQL execution
+     * @return false|\PDOStatement Returns **answer** of the SQL execution
      */
     public function setReadValue($usrId)
     {
@@ -96,7 +96,7 @@ class TableMessage extends TableAccess
     /**
      * get a list with all messages of an conversation.
      * @param int $msgId of the conversation - just for security reasons.
-     * @return false|\PDOStatement Returns @b answer of the SQL execution
+     * @return false|\PDOStatement Returns **answer** of the SQL execution
      */
     public function getConversation($msgId)
     {
@@ -110,9 +110,9 @@ class TableMessage extends TableAccess
 
     /**
      * Set a new value for a column of the database table.
-     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param int $usrId
-     * @return int Returns @b ID of the user that is partner in the actual conversation
+     * @return int Returns **ID** of the user that is partner in the actual conversation
      */
     public function getConversationPartner($usrId)
     {
@@ -133,7 +133,7 @@ class TableMessage extends TableAccess
     /**
      * Deletes the selected message with all associated fields.
      * After that the class will be initialize.
-     * @return bool @b true if message is deleted or message with additional information if it is marked
+     * @return bool **true** if message is deleted or message with additional information if it is marked
      *         for other user to delete. On error it is false
      */
     public function delete()

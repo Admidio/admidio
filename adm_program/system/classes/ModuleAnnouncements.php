@@ -195,8 +195,8 @@ class ModuleAnnouncements extends Modules
 
     /**
      * Set a date range in which the dates should be searched. The method will fill
-     * 4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish,
-     * @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
+     * 4 parameters **dateStartFormatEnglish**, **dateStartFormatEnglish**,
+     * **dateEndFormatEnglish** and **dateEndFormatAdmidio** that could be read with
      * getParameter and could be used in the script.
      * @param string $dateRangeStart A date in english or Admidio format that will be the start date of the range.
      * @param string $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.

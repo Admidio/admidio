@@ -19,7 +19,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
  * @param string $roleName The name of the role where the membership of the user should be checked
  * @param int    $userId   The id of the user who should be checked if he is a member of the role.
  *                         If @userId is not set than this will be checked for the current user
- * @return bool Returns @b true if the user is a member of the role
+ * @return bool Returns **true** if the user is a member of the role
  */
 function hasRole($roleName, $userId = 0)
 {
@@ -51,7 +51,7 @@ function hasRole($roleName, $userId = 0)
 /**
  * Function checks if the user is a member in a role of the current organization.
  * @param int $userId The id of the user who should be checked if he is a member of the current organization
- * @return bool Returns @b true if the user is a member
+ * @return bool Returns **true** if the user is a member
  */
 function isMember($userId)
 {
@@ -85,7 +85,7 @@ function isMember($userId)
  * @param int $userId The id of the user who should be checked if he is a group leader
  * @param int $roleId (optional) If set <> 0 than the function checks if the user is group leader of this role
  *                    otherwise it checks if the user is group leader in one role of the current organization
- * @return bool Returns @b true if the user is a group leader
+ * @return bool Returns **true** if the user is a group leader
  */
 function isGroupLeader($userId, $roleId = 0)
 {
@@ -304,12 +304,12 @@ function admFuncProcessableImageSize()
  *                                          Datatype @b date expects a date that has the Admidio default format from the
  *                                          preferences or the english date format @b Y-m-d
  * @param array<string,mixed> $options      (optional) An array with the following possible entries:
- *                                          - @b defaultValue : A value that will be set if the variable has no value
- *                                          - @b requireValue : If set to @b true than a value is required otherwise the function
+ *                                          - Value : A value that will be set if the variable has no value
+ *                                          - @b requireValue : If set to **true** than a value is required otherwise the function
  *                                                              returns an error
  *                                          - @b validValues :  An array with all values that the variable could have. If another
  *                                                              value is found than the function returns an error
- *                                          - @b directOutput : If set to @b true the function returns only the error string, if set
+ *                                          - @b directOutput : If set to **true** the function returns only the error string, if set
  *                                                              to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *

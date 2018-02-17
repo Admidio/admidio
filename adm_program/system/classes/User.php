@@ -51,7 +51,7 @@ class User extends TableAccess
      */
     protected $rolesMembershipNoLeader = array();
     /**
-     * @var int the organization for which the rights are read, could be changed with method @b setOrganization
+     * @var int the organization for which the rights are read, could be changed with method **setOrganization**
      */
     protected $organizationId;
     /**
@@ -78,9 +78,9 @@ class User extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param Database      $database   Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database      $database   Object of the class Database. This should be the default global object **$gDb**.
      * @param ProfileFields $userFields An object of the ProfileFields class with the profile field structure
-     *                                  of the current organization. This could be the default object @b $gProfileFields.
+     *                                  of the current organization. This could be the default object **$gProfileFields**.
      * @param int           $userId     The id of the user who should be loaded. If id isn't set than an empty
      *                                  object with no specific user is created.
      */
@@ -89,7 +89,7 @@ class User extends TableAccess
         global $gCurrentOrganization;
 
         if ($userFields !== null)
-        {
+        {s
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
 
@@ -102,10 +102,10 @@ class User extends TableAccess
      * Checks if the current user is allowed to view a profile field of the user of the parameter.
      * It will check if the current user could view the profile field category. Within the own profile
      * you can view profile fields of hidden categories. We will also check if the current user
-     * could edit the @b $user profile so the current user could also view hidden fields.
+     * could edit the **$user** profile so the current user could also view hidden fields.
      * @param User   $user            User object of the user that should be checked if the current user can view his profile field.
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
-     * @return bool Return true if the current user is allowed to view this profile field of @b $user.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @return bool Return true if the current user is allowed to view this profile field of **$user**.
      */
     public function allowedViewProfileField(User $user, $fieldNameIntern)
     {
@@ -113,7 +113,7 @@ class User extends TableAccess
     }
 
     /**
-     * Assign the user to all roles that have set the flag @b rol_default_registration.
+     * Assign the user to all roles that have set the flag **rol_default_registration**.
      * These flag should be set if you want that every new user should get this role.
      */
     public function assignDefaultRoles()
@@ -151,11 +151,11 @@ class User extends TableAccess
      * @param string $mode      'set' or 'edit'
      * @param int $id           Id of the role for which the membership should be set,
      *                          or id of the current membership that should be edited.
-     * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
-     * @param string $endDate   New end date of the membership. Default will be @b 31.12.9999
-     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
+     * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
+     * @param string $endDate   New end date of the membership. Default will be **31.12.9999**
+     * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
-     * @return bool Return @b true if the membership was successfully added/edited.
+     * @return bool Return **true** if the membership was successfully added/edited.
      */
     private function changeRoleMembership($mode, $id, $startDate, $endDate, $leader)
     {
@@ -521,7 +521,7 @@ class User extends TableAccess
      * @param string $password             The password for the current user. This should not be encoded.
      * @param bool   $setAutoLogin         If set to true then this login will be stored in AutoLogin table
      *                                     and the user doesn't need to login another time with this browser.
-     *                                     To use this functionality @b $updateSessionCookies must be set to true.
+     *                                     To use this functionality **$updateSessionCookies** must be set to true.
      * @param bool   $updateSessionCookies The current session will be updated to a valid login.
      *                                     If set to false then the login is only valid for the current script.
      * @param bool   $updateHash           If set to true the code will check if the current password hash uses
@@ -636,7 +636,7 @@ class User extends TableAccess
     /**
      * Deletes the selected user of the table and all the many references in other tables.
      * After that the class will be initialize.
-     * @return bool @b true if no error occurred
+     * @return bool **true** if no error occurred
      */
     public function delete()
     {
@@ -815,11 +815,11 @@ class User extends TableAccess
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method is useful to end a membership earlier.
      * @param int    $memberId  Id of the current membership that should be edited.
-     * @param string $startDate New start date of the membership. Default will be @b DATE_NOW.
-     * @param string $endDate   New end date of the membership. Default will be @b DATE_MAX
-     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
+     * @param string $startDate New start date of the membership. Default will be **DATE_NOW**.
+     * @param string $endDate   New end date of the membership. Default will be **DATE_MAX**
+     * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
-     * @return bool Return @b true if the membership was successfully edited.
+     * @return bool Return **true** if the membership was successfully edited.
      */
     public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1053,14 +1053,14 @@ class User extends TableAccess
     }
 
     /**
-     * Get the value of a column of the database table if the column has the praefix @b usr_
+     * Get the value of a column of the database table if the column has the praefix **usr_**
      * otherwise the value of the profile field of the table adm_user_data will be returned.
-     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read or the internal unique profile field name
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**. @n
+     *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column or the value of adm_user_fields
-     *               If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @par Examples
      * @code  // reads data of adm_users column
      * $loginname = $gCurrentUser->getValue('usr_login_name');
@@ -1239,10 +1239,10 @@ class User extends TableAccess
     /**
      * Checks if the current user is allowed to edit the profile of the user of the parameter.
      * If will check if user can generally edit all users or if he is a group leader and can edit users
-     * of a special role where @b $user is a member or if it's the own profile and he could edit this.
+     * of a special role where **$user** is a member or if it's the own profile and he could edit this.
      * @param User  $user            User object of the user that should be checked if the current user can edit his profile.
-     * @param bool  $checkOwnProfile If set to @b false than this method don't check the role right to edit the own profile.
-     * @return bool Return @b true if the current user is allowed to edit the profile of the user from @b $user.
+     * @param bool  $checkOwnProfile If set to **false** than this method don't check the role right to edit the own profile.
+     * @return bool Return **true** if the current user is allowed to edit the profile of the user from **$user**.
      */
     public function hasRightEditProfile(User $user, $checkOwnProfile = true)
     {
@@ -1340,7 +1340,7 @@ class User extends TableAccess
     /**
      * Checks if the current user has the right to send an email to the role.
      * @param int $roleId Id of the role that should be checked.
-     * @return bool Return @b true if the user has the right to send an email to the role.
+     * @return bool Return **true** if the user has the right to send an email to the role.
      */
     public function hasRightSendMailToRole($roleId)
     {
@@ -1351,7 +1351,7 @@ class User extends TableAccess
      * Checks the necessary rights if this user could view former roles members. Therefore
      * the user must also have the right to view the role. So you must also check this right.
      * @param int $roleId Id of the role that should be checked.
-     * @return bool Return @b true if the user has the right to view former roles members
+     * @return bool Return **true** if the user has the right to view former roles members
      */
     public function hasRightViewFormerRolesMembers($roleId)
     {
@@ -1378,7 +1378,7 @@ class User extends TableAccess
      * If will check if user has edit rights with method editProfile or if the user is a member
      * of a role where the current user has the right to view profiles.
      * @param User $user User object of the user that should be checked if the current user can view his profile.
-     * @return bool Return @b true if the current user is allowed to view the profile of the user from @b $user.
+     * @return bool Return **true** if the current user is allowed to view the profile of the user from **$user**.
      */
     public function hasRightViewProfile(User $user)
     {
@@ -1444,7 +1444,7 @@ class User extends TableAccess
     /**
      * Check if the user of this object has the right to view the role that is set in the parameter.
      * @param int $roleId The id of the role that should be checked.
-     * @return bool Return @b true if the user has the right to view the role otherwise @b false.
+     * @return bool Return **true** if the user has the right to view the role otherwise **false**.
      */
     public function hasRightViewRole($roleId)
     {
@@ -1496,8 +1496,8 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the user is assigned to the role @b Administrator
-     * @return bool Returns @b true if the user is a member of the role @b Administrator
+     * Checks if the user is assigned to the role **Administrator**
+     * @return bool Returns **true** if the user is a member of the role **Administrator**
      */
     public function isAdministrator()
     {
@@ -1616,7 +1616,7 @@ class User extends TableAccess
     }
 
     /**
-     * If this method is called than all further calls of method @b setValue will not check the values.
+     * If this method is called than all further calls of method **setValue** will not check the values.
      * The values will be stored in database without any inspections!
      * @return void
      */
@@ -1627,9 +1627,9 @@ class User extends TableAccess
 
     /**
      * Reads a user record out of the table adm_users in database selected by the unique user id.
-     * Also all profile fields of the object @b mProfileFieldsData will be read.
+     * Also all profile fields of the object **mProfileFieldsData** will be read.
      * @param int $userId Unique id of the user that should be read
-     * @return bool Returns @b true if one record is found
+     * @return bool Returns **true** if one record is found
      */
     public function readDataById($userId)
     {
@@ -1688,8 +1688,8 @@ class User extends TableAccess
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * First save recordset and then save all user fields. After that the session of this got a renew for the user object.
      * If the user doesn't have the right to save data of this user than an exception will be thrown.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
+     *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @throws AdmException
      * @return bool
      */
@@ -1759,8 +1759,8 @@ class User extends TableAccess
 
     /**
      * Set the id of the organization which should be used in this user object.
-     * The organization is used to read the rights of the user. If @b setOrganization isn't called
-     * than the default organization @b gCurrentOrganization is set for the current user object.
+     * The organization is used to read the rights of the user. If **setOrganization** isn't called
+     * than the default organization **gCurrentOrganization** is set for the current user object.
      * @param int $organizationId Id of the organization
      * @return void
      */
@@ -1772,11 +1772,11 @@ class User extends TableAccess
 
     /**
      * Set a new value for a password column of the database table.
-     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $newPassword   The new value that should be stored in the database field
      * @param bool   $isNewPassword Should the column password or new_password be set
      * @param bool   $doHashing     Should the password get hashed before inserted. Default is true
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
     public function setPassword($newPassword, $isNewPassword = false, $doHashing = true)
     {
@@ -1816,11 +1816,11 @@ class User extends TableAccess
      * a future or past membership of the same role then the two memberships will be merged.
      * In opposite to setRoleMembership this method can't be used to end a membership earlier!
      * @param int    $roleId    Id of the role for which the membership should be set.
-     * @param string $startDate Start date of the membership. Default will be @b DATE_NOW.
-     * @param string $endDate   End date of the membership. Default will be @b 31.12.9999
-     * @param bool   $leader    If set to @b 1 then the member will be leader of the role and
+     * @param string $startDate Start date of the membership. Default will be **DATE_NOW**.
+     * @param string $endDate   End date of the membership. Default will be **31.12.9999**
+     * @param bool   $leader    If set to **1** then the member will be leader of the role and
      *                          might get more rights for this role.
-     * @return bool Return @b true if the membership was successfully added.
+     * @return bool Return **true** if the membership was successfully added.
      */
     public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = DATE_MAX, $leader = null)
     {
@@ -1828,16 +1828,16 @@ class User extends TableAccess
     }
 
     /**
-     * Set a new value for a column of the database table if the column has the prefix @b usr_
+     * Set a new value for a column of the database table if the column has the prefix **usr_**
      * otherwise the value of the profile field of the table adm_user_data will set.
-     * If the user log is activated than the change of the value will be logged in @b adm_user_log.
-     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * If the user log is activated than the change of the value will be logged in **adm_user_log**.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value or the
      *                           internal unique profile field name
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will
+     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @par Examples
      * @code
      * // set data of adm_users column
@@ -1924,7 +1924,7 @@ class User extends TableAccess
 
     /**
      * set value for column usd_value of field
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
      * @param mixed  $fieldValue
      * @return bool
      */
@@ -1969,7 +1969,7 @@ class User extends TableAccess
 
     /**
      * Checks if the user has the right to assign members to at least one role.
-     * @return bool Return @b true if the user can assign members to at least one role.
+     * @return bool Return **true** if the user can assign members to at least one role.
      */
     public function assignRoles()
     {
@@ -1980,8 +1980,8 @@ class User extends TableAccess
 
     /**
      * Checks if the user has the right to manage roles. Therefore he must be a member
-     * of a role with the right @b rol_manage_roles.
-     * @return bool Return @b true if the user can manage roles.
+     * of a role with the right **rol_manage_roles**.
+     * @return bool Return **true** if the user can manage roles.
      */
     public function manageRoles()
     {
@@ -2052,9 +2052,9 @@ class User extends TableAccess
     }
 
     /**
-     * Checks if the user is assigned to the role @b Administrator
+     * Checks if the user is assigned to the role **Administrator**
      * @deprecated 3.2.0:4.0.0 Use Method isAdministrator() instead
-     * @return bool Returns @b true if the user is a member of the role @b Administrator
+     * @return bool Returns **true** if the user is a member of the role **Administrator**
      * @see User#isAdministrator
      */
     public function isWebmaster()

@@ -49,7 +49,7 @@ class RolesRights extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_roles_rights.
      * If the id is set than the specific category will be loaded.
-     * @param Database $database       Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database       Object of the class Database. This should be the default global object **$gDb**.
      * @param string   $rolesRightName The recordset of the roles right with this name will be loaded.
      * @param int      $objectId       Id of the object of which the roles should be loaded.
      */
@@ -99,7 +99,7 @@ class RolesRights extends TableAccess
     /**
      * Deletes all assigned roles to the current object.
      * After that the class will be initialize.
-     * @return bool @b true if no error occurred
+     * @return bool **true** if no error occurred
      */
     public function delete()
     {
@@ -155,7 +155,7 @@ class RolesRights extends TableAccess
      * Check if one of the assigned roles is also a role of the current object.
      * Method will return true if at least one role was found.
      * @param array<int,int> $assignedRoles Array with all assigned roles of the user whose rights should be checked
-     * @return bool Return @b true if at least one role of the assigned roles exists at the current object.
+     * @return bool Return **true** if at least one role of the assigned roles exists at the current object.
      */
     public function hasRight(array $assignedRoles)
     {
@@ -164,11 +164,11 @@ class RolesRights extends TableAccess
 
     /**
      * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
-     * If the sql will find more than one record the method returns @b false.
+     * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
-     * @return bool Returns @b true if one record is found
+     * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */

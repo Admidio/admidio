@@ -30,7 +30,7 @@
  *     $e->showText();
  * }
  * @endcode
- * Now you can use the new object @b $gDb to send a query to the database
+ * Now you can use the new object **$gDb** to send a query to the database
  * @code
  * // send sql to database and assign the returned \PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
@@ -145,7 +145,7 @@ class Database
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
      * If the engine is invalid or the connection not possible an exception will be thrown.
-     * @param string $engine   The database type that is supported from Admidio. @b mysql and @b pgsql are valid values.
+     * @param string $engine   The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
      * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
      * @param int    $port     If you don't use the default port of the database then set your port here.
      * @param string $dbName   Name of the database you want to connect.
@@ -254,7 +254,7 @@ class Database
      * The method will commit an open transaction to the database. If the
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will performed.
-     * @return bool Returns @b true if the commit was successful otherwise @b false
+     * @return bool Returns **true** if the commit was successful otherwise **false**
      * @see Database#startTransaction
      * @see Database#rollback
      */
@@ -648,15 +648,15 @@ class Database
 
     /**
      * Send a sql statement to the database that will be executed. If debug mode is set
-     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
      * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
+     * @param bool   $showError  Default will be **true** and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
-     *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
-     *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
+     *                           **false** no error will be shown and the script will be continued.
+     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
     public function query($sql, $showError = true)
     {
@@ -699,16 +699,16 @@ class Database
 
     /**
      * Send a sql statement to the database that will be executed. If debug mode is set
-     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
      * @param string           $sql        A string with the sql statement that should be executed in database.
      * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
-     * @param bool             $showError  Default will be @b true and if an error the script will be terminated and
+     * @param bool             $showError  Default will be **true** and if an error the script will be terminated and
      *                                     occurred the error with a backtrace will be send to the browser. If set to
-     *                                     @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
-     *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
+     *                                     **false** no error will be shown and the script will be continued.
+     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
     public function queryPrepared($sql, array $params = array(), $showError = true)
     {
@@ -964,8 +964,8 @@ class Database
      *             and the method <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">fetch</a> instead.
      * @param \PDOStatement $pdoStatement An object of the class \PDOStatement. This should be set if multiple
      *                                    rows where selected and other sql statements are also send to the database.
-     * @param int           $fetchType    Set the result type. Can contain @b \PDO::FECTH_ASSOC for an associative array,
-     *                                    @b \PDO::FETCH_NUM for a numeric array or @b \PDO::FETCH_BOTH (Default).
+     * @param int           $fetchType    Set the result type. Can contain **\PDO::FECTH_ASSOC** for an associative array,
+     *                                    **\PDO::FETCH_NUM** for a numeric array or **\PDO::FETCH_BOTH** (Default).
      * @return mixed|null Returns an array that corresponds to the fetched row and moves the internal data pointer ahead.
      * @see <a href="https://secure.php.net/manual/en/pdostatement.fetch.php">\PDOStatement::fetch</a>
      */
@@ -1070,8 +1070,8 @@ class Database
      * Method gets all columns and their properties from the database table.
      * @deprecated 3.2.0:4.0.0 Switch to new methods (getTableColumnsProperties(), getTableColumns()).
      * @param string $table                Name of the database table for which the columns should be shown.
-     * @param bool   $showColumnProperties If this is set to @b false only the column names were returned.
-     * @return array<string,array<string,mixed>>|array<int,string> Returns an array with each column and their properties if $showColumnProperties is set to @b true.
+     * @param bool   $showColumnProperties If this is set to **false** only the column names were returned.
+     * @return array<string,array<string,mixed>>|array<int,string> Returns an array with each column and their properties if $showColumnProperties is set to **true**.
      */
     public function showColumns($table, $showColumnProperties = true)
     {

@@ -36,7 +36,7 @@ class TablePhotos extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_photos.
      * If the id is set than the specific photo album will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int      $phoId    The recordset of the photo album with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $phoId = 0)
@@ -102,7 +102,7 @@ class TablePhotos extends TableAccess
     /**
      * Deletes the selected photo album and all sub photo albums.
      * After that the class will be initialize.
-     * @return bool @b true if no error occurred
+     * @return bool **true** if no error occurred
      */
     public function delete()
     {
@@ -170,7 +170,7 @@ class TablePhotos extends TableAccess
 
     /**
      * Check if this album has one or more child albums.
-     * @return bool Return @b true if child albums exists.
+     * @return bool Return **true** if child albums exists.
      */
     public function hasChildAlbums()
     {
@@ -230,7 +230,7 @@ class TablePhotos extends TableAccess
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * The current organization will be set per default.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)

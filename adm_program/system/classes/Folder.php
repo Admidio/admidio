@@ -180,7 +180,7 @@ class Folder
     /**
      * Deletes the current folder recursive with all files and subfolders.
      * @param string $folder            Name of a folder that should be deleted. Default is always the current folder
-     * @param bool   $onlyDeleteContent If set to @b true then only files and folders in the current
+     * @param bool   $onlyDeleteContent If set to **true** then only files and folders in the current
      *                                  folder will be deleted. The current folder will not be deleted.
      * @return bool
      */
@@ -263,7 +263,7 @@ class Folder
      * Attempts to rename oldname to newname, moving it between directories if necessary.
      * If newname exists, it will be overwritten.
      * @param string $newName The new name of the folder.
-     * @return bool Returns @b true on success or @b false on failure.
+     * @return bool Returns **true** on success or **false** on failure.
      */
     public function rename($newName)
     {

@@ -342,7 +342,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string       $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
      * @param string       $col
-     * @return bool Returns @b false if tfoot element is already set
+     * @return bool Returns **false** if tfoot element is already set
      */
     public function addTableFooter($attribute = null, $value = null, $data = '', $col = 'td')
     {
@@ -371,7 +371,7 @@ class HtmlTableBasic extends HtmlElement
      * @param string       $value     Value of the attribute
      * @param string|array $data      Content for the element as string, or array
      * @param string       $col
-     * @return bool Returns @b false if thead element is already set
+     * @return bool Returns **false** if thead element is already set
      */
     public function addTableHeader($attribute = null, $value = null, $data = '', $col = 'td')
     {

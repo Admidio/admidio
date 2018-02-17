@@ -46,7 +46,7 @@ class ProfileFields
 
     /**
      * constructor that will initialize variables and read the profile field structure
-     * @param Database $database       Database object (should be @b $gDb)
+     * @param Database $database       Database object (should be **$gDb**)
      * @param int      $organizationId The id of the organization for which the profile field structure should be read
      */
     public function __construct(Database $database, $organizationId)
@@ -95,8 +95,8 @@ class ProfileFields
 
     /**
      * returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-     * @param string $column          The column name of @b adm_user_field for which you want the value
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of table **adm_user_fields**
+     * @param string $column          The column name of **adm_user_field** for which you want the value
      * @param string $format          Optional the format (is necessary for timestamps)
      * @return mixed
      */
@@ -117,8 +117,8 @@ class ProfileFields
 
     /**
      * returns for field id (usf_id) the value of the column from table adm_user_fields
-     * @param int    $fieldId Expects the @b usf_id of table @b adm_user_fields
-     * @param string $column  The column name of @b adm_user_field for which you want the value
+     * @param int    $fieldId Expects the **usf_id** of table **adm_user_fields**
+     * @param string $column  The column name of **adm_user_field** for which you want the value
      * @param string $format  Optional the format (is necessary for timestamps)
      * @return string
      */
@@ -349,8 +349,8 @@ class ProfileFields
      * format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
      * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
      * format = 'database' : returns the value that is stored in database with no format applied
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field whose value should be read
-     * @param string $format          Returns the field value in a special format @b text, @b html, @b database
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
+     * @param string $format          Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)
      * @return string|int|bool Returns the value for the column.
      */
@@ -440,8 +440,8 @@ class ProfileFields
      * This method checks if the current user is allowed to view this profile field of $fieldNameIntern
      * within the context of the user in this object. If no context is set than we only check if the
      * current user has the right to view the category of the profile field.
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should be checked.
-     * @param bool   $allowedToEditProfile Set to @b true if the current user has the right to edit the profile
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
+     * @param bool   $allowedToEditProfile Set to **true** if the current user has the right to edit the profile
      *                                    in which context the right should be checked. This param must not be
      *                                    set if you are not in a user context.
      * @return bool Return true if the current user is allowed to view this profile field
@@ -458,7 +458,7 @@ class ProfileFields
     }
 
     /**
-     * If this method is called than all further calls of method @b setValue will not check the values.
+     * If this method is called than all further calls of method **setValue** will not check the values.
      * The values will be stored in database without any inspections !
      */
     public function noValueCheck()
@@ -467,8 +467,8 @@ class ProfileFields
     }
 
     /**
-     * Reads the profile fields structure out of database table @b adm_user_fields
-     * and adds an object for each field structure to the @b mProfileFields array.
+     * Reads the profile fields structure out of database table **adm_user_fields**
+     * and adds an object for each field structure to the **mProfileFields** array.
      * @param int $organizationId The id of the organization for which the profile fields
      *                            structure should be read.
      */
@@ -499,8 +499,8 @@ class ProfileFields
     }
 
     /**
-     * Reads the user data of all profile fields out of database table @b adm_user_data
-     * and adds an object for each field data to the @b mUserData array.
+     * Reads the user data of all profile fields out of database table **adm_user_data**
+     * and adds an object for each field data to the **mUserData** array.
      * If profile fields structure wasn't read, this will be done before.
      * @param int $userId         The id of the user for which the user data should be read.
      * @param int $organizationId The id of the organization for which the profile fields
@@ -572,7 +572,7 @@ class ProfileFields
 
     /**
      * set value for column usd_value of field
-     * @param string $fieldNameIntern Expects the @b usf_name_intern of the field that should get a new value.
+     * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should get a new value.
      * @param mixed  $fieldValue
      * @return bool
      */

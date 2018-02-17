@@ -143,7 +143,7 @@ class Menu
      * Create the html menu from the internal array that must be filled before.
      * You have the option to create a simple menu with icon and link or
      * a more complex menu with submenu and description text.
-     * @param bool $complex Create a @b simple menu as default. If you set the param to @b true
+     * @param bool $complex Create a @b simple menu as default. If you set the param to **true**
      *                      then you will create a menu with submenus and description
      * @return string Return the html code of the form.
      */

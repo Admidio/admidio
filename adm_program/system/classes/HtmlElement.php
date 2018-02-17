@@ -366,7 +366,7 @@ abstract class HtmlElement
      * It logs the setted element in an array. Each time you define a new parent element, the function checks the log array, if the element already was set.
      * If the current element already was defined, then the function determines that the still opened tag must be closed first until it can be set again.
      * The method closeParentElement(); is called automatically to close the previous element.
-     * By default it is not allowed to define several elements from same type. If needed use option @b nesting @b mode @b true!
+     * By default it is not allowed to define several elements from same type. If needed use option @b nesting @b mode **true**!
      *
      * @param string $parentElement Parent element to be set
      * @param string $attrKey       Attribute name

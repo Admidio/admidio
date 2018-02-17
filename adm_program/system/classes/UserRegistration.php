@@ -45,9 +45,9 @@ class UserRegistration extends User
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
-     * @param Database      $database       Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database      $database       Object of the class Database. This should be the default global object **$gDb**.
      * @param ProfileFields $userFields     An object of the ProfileFields class with the profile field structure
-     *                                      of the current organization. This could be the default object @b $gProfileFields.
+     *                                      of the current organization. This could be the default object .
      * @param int           $userId         The id of the user who should be loaded. If id isn't set than an empty object
      *                                      with no specific user is created.
      * @param int           $organizationId The id of the organization for which the user should be registered.
@@ -69,9 +69,9 @@ class UserRegistration extends User
 
     /**
      * Deletes the registration record and set the user to valid. The user will also be assigned to all roles
-     * that have the flag @b rol_default_registration. After that a notification email is send to the user.
+     * that have the flag **rol_default_registration**. After that a notification email is send to the user.
      * If function returns true than the user can login for the organization of this object.
-     * @return true Returns @b true if the registration was successful
+     * @return true Returns **true** if the registration was successful
      */
     public function acceptRegistration()
     {
@@ -107,7 +107,7 @@ class UserRegistration extends User
      * Deletes the selected user registration. If user is not valid and has no other registrations than
      * delete user because he has no use for the system. After that a notification email is send to the user.
      * If the user is valid than only the registration will be deleted!
-     * @return bool @b true if no error occurred
+     * @return bool **true** if no error occurred
      */
     public function delete()
     {
@@ -163,8 +163,8 @@ class UserRegistration extends User
      * Save all changed columns of the recordset in table of database. If it's a new user
      * than the registration table will also be filled with a new recordset and optional a
      * notification mail will be send to all users of roles that have the right to confirm registrations
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
+     *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool
      */
     public function save($updateFingerPrint = true)

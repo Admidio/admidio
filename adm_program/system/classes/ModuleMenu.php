@@ -176,7 +176,7 @@ class ModuleMenu
      *                                this link the ID if the category will be added automatically, so you can add a
      *                                category parameter at last
      * @param string $text            Text of the selectbox
-     * @param bool   $admin           Set to @b true if user has admin rights in this category, than a link to
+     * @param bool   $admin           Set to **true** if user has admin rights in this category, than a link to
      *                                administrate the categories is shown.
      */
     public function addCategoryItem($id, $categoryType, $defaultCategory, $link, $text, $admin = false)

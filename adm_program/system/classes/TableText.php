@@ -22,7 +22,7 @@ class TableText extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_texts.
      * If the id is set than the specific text will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string   $name     The recordset of the text with this name will be loaded.
      *                           If name isn't set than an empty object of the table is created.
      */
@@ -33,12 +33,12 @@ class TableText extends TableAccess
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**. @n
+     *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|string Returns the value of the database column.
-     *                    If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -56,7 +56,7 @@ class TableText extends TableAccess
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the organization will be set per default.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)

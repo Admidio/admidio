@@ -53,7 +53,7 @@ class HtmlNavbar
      */
     protected $name;
     /**
-     * @var string Navbar type. There is the @b default and the @b filter type possible.
+     * @var string Navbar type. There is the  and the **filter** type possible.
      */
     protected $type;
     /**
@@ -121,13 +121,13 @@ class HtmlNavbar
 
     /**
      * Add a new item to the menu. This can be added to the left or right part of the navbar.
-     * You can also add another item to an existing dropdown item. Therefore use the @b $parentItem parameter.
+     * You can also add another item to an existing dropdown item. Therefore use the **$parentItem** parameter.
      * @param string $id          Html id of the item.
      * @param string $url         The url of the generated link of this item.
      * @param string $text        The text of the item and the generated link.
      * @param string $icon        Icon of the menu item, that will also be linked
-     * @param string $orientation The item can be shown at the @b left or @b right part of the navbar.
-     * @param string $parentItem  All items should be added to the @b navbar as parent. But if you
+     * @param string $orientation The item can be shown at the **left** or **right** part of the navbar.
+     * @param string $parentItem  All items should be added to the **navbar** as parent. But if you
      *                            have already added a dropdown than you can add the item to that
      *                            dropdown. Just commit the id of that item.
      * @param string $class       Optional a css class that will be set for the item.

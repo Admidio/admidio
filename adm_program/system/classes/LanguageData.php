@@ -55,10 +55,10 @@ class LanguageData
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
      * Therefore the language must be set and optional a path where the language files are stored.
-     * @param string $language           The ISO code of the language for which the texts should be read e.g. @b 'de'
+     * @param string $language           The ISO code of the language for which the texts should be read e.g. **'de'**
      *                                   If no language is set than the browser language will be determined.
      * @param string $languageFolderPath Optional a server path to the language files. If no path is set
-     *                                   than the default Admidio language path @b adm_program/languages will be set.
+     *                                   than the default Admidio language path **adm_program/languages** will be set.
      * @throws \UnexpectedValueException
      */
     public function __construct($language = '', $languageFolderPath = '')
@@ -167,7 +167,7 @@ class LanguageData
     /**
      * Returns the language code of the language of this object. This is the code that is set within
      * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     * @param bool $referenceLanguage If set to @b true than the language code of the reference language will returned.
+     * @param bool $referenceLanguage If set to **true** than the language code of the reference language will returned.
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguage($referenceLanguage = false)
