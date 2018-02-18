@@ -105,7 +105,7 @@ class HtmlPage
 
     /**
      * Adds a cascading style sheets file to the html page.
-     * @param string $cssFile The url with filename or the relative path starting with @i adm_program of the css file.
+     * @param string $cssFile The url with filename or the relative path starting with **adm_program** of the css file.
      */
     public function addCssFile($cssFile)
     {
@@ -141,7 +141,7 @@ class HtmlPage
 
     /**
      * Adds a javascript file to the html page.
-     * @param string $jsFile The url with filename or the relative path starting with @i adm_program of the javascript file.
+     * @param string $jsFile The url with filename or the relative path starting with **adm_program** of the javascript file.
      */
     public function addJavascriptFile($jsFile)
     {

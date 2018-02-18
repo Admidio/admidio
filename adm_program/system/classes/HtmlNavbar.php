@@ -183,7 +183,7 @@ class HtmlNavbar
 
     /**
      * Creates the html for the menu entry.
-     * @param array<string,string> $data An array with all data if the item. This will be @id, @url, @text and @icon.
+     * @param array<string,string> $data An array with all data if the item. This will be **id**, **url**, **text** and **icon**.
      * @return string Returns the html for the menu entry
      */
     protected function createHtmlLink(array $data)
