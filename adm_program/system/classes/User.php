@@ -1057,7 +1057,7 @@ class User extends TableAccess
      * otherwise the value of the profile field of the table adm_user_data will be returned.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read or the internal unique profile field name
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**. @n
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column or the value of adm_user_fields
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
@@ -1089,7 +1089,7 @@ class User extends TableAccess
     }
 
     /**
-     * Creates a vcard with all data of this user object @n
+     * Creates a vcard with all data of this user object
      * (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
      * @return string Returns the vcard as a string
      */

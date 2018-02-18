@@ -327,7 +327,7 @@ class TableRoles extends TableAccess
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**. @n
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return int|float|string|bool Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.

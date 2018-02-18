@@ -345,13 +345,13 @@ class ProfileFields
     }
 
     /**
-     * Returns the user value for this column @n
-     * format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
-     * format = 'html'  : returns the value in html-format if this is necessary for that field type @n
-     * format = 'database' : returns the value that is stored in database with no format applied
+     * Returns the user value for this column.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
      * @param string $format          Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)
+     *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function  
+     *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
+     *                                * 'database' : returns the value that is stored in database with no format applied
      * @return string|int|bool Returns the value for the column.
      */
     public function getValue($fieldNameIntern, $format = '')

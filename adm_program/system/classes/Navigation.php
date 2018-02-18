@@ -209,7 +209,7 @@ class Navigation
 
     /**
      * Returns html code that contain links to all previous added urls from the stack.
-     * The output will look like: @n FirstPage > SecondPage > ThirdPage ...@n
+     * The output will look like: `FirstPage > SecondPage > ThirdPage ...`
      * The last page of this list is always the current page.
      * @param string $id Optional you could set an id for the navigation bar
      * @return string Returns html code of the navigation bar.
