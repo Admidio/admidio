@@ -15,7 +15,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php')
 
 /**
  * Function checks if the user is a member of the role.
- * If @b userId is not set than this will be checked for the current user
+ * If **userId** is not set than this will be checked for the current user
  * @param string $roleName The name of the role where the membership of the user should be checked
  * @param int    $userId   The id of the user who should be checked if he is a member of the role.
  *                         If @userId is not set than this will be checked for the current user
@@ -81,7 +81,7 @@ function isMember($userId)
 
 /**
  * Function checks if the user is a group leader in a role of the current organization.
- * If you use the @b roleId parameter you can check if the user is group leader of that role.
+ * If you use the **roleId** parameter you can check if the user is group leader of that role.
  * @param int $userId The id of the user who should be checked if he is a group leader
  * @param int $roleId (optional) If set <> 0 than the function checks if the user is group leader of this role
  *                    otherwise it checks if the user is group leader in one role of the current organization
@@ -292,24 +292,24 @@ function admFuncProcessableImageSize()
 
 // Verify the content of an array element if it's the expected datatype
 /**
- * The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the
+ * The function is designed to check the content of **$_GET** and **$_POST** elements and should be used at the
  * beginning of a script. If the value of the defined datatype is not valid then an error will be shown. If no
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
  * @param array<string,mixed> $array        The array with the element that should be checked
  * @param string              $variableName Name of the array element that should be checked
- * @param string              $datatype     The datatype like @b string, @b numeric, @b int, @b float, @b bool, @b boolean, @b html,
- *                                          @b date or @b file that is expected and which will be checked.
- *                                          Datatype @b date expects a date that has the Admidio default format from the
- *                                          preferences or the english date format @b Y-m-d
+ * @param string              $datatype     The datatype like **string**, **numeric**, **int**, **float**, **bool**, **boolean**, **html**,
+ *                                          **date** or **file** that is expected and which will be checked.
+ *                                          Datatype **date** expects a date that has the Admidio default format from the
+ *                                          preferences or the english date format **Y-m-d**
  * @param array<string,mixed> $options      (optional) An array with the following possible entries:
  *                                          - Value : A value that will be set if the variable has no value
- *                                          - @b requireValue : If set to **true** than a value is required otherwise the function
+ *                                          - **requireValue** : If set to **true** than a value is required otherwise the function
  *                                                              returns an error
- *                                          - @b validValues :  An array with all values that the variable could have. If another
+ *                                          - **validValues** :  An array with all values that the variable could have. If another
  *                                                              value is found than the function returns an error
- *                                          - @b directOutput : If set to **true** the function returns only the error string, if set
+ *                                          - **directOutput** : If set to **true** the function returns only the error string, if set
  *                                                              to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
@@ -499,7 +499,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 /**
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
- * parameters. If userId is not set then the function will show @b deleted @b user.
+ * parameters. If userId is not set then the function will show **deleted user**.
  * @param int    $userIdCreated   Id of the user who create the recordset.
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
  * @param int    $userIdEdited    Id of the user last changed the recordset.
@@ -578,7 +578,7 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
 /**
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
- * parameters. If user name is not set then the function will show @b deleted @b user.
+ * parameters. If user name is not set then the function will show **deleted user**.
  * @param string $userNameCreated Id of the user who create the recordset.
  * @param string $timestampCreate Date and time of the moment when the user create the recordset.
  * @param string $userNameEdited  Id of the user last changed the recordset.
@@ -652,7 +652,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
 /**
  * Search all visible files or directories in the specified directory.
  * @param string $directory  The directory where the files or directories should be searched.
- * @param string $searchType This could be @b file, @b dir, @b both or @b all and represent
+ * @param string $searchType This could be **file**, **dir**, **both** or **all** and represent
  *                           the type of entries that should be searched.
  * @return false|array<string,string> Returns an array with all found entries or false if an error occurs.
  */

@@ -12,7 +12,7 @@
  * The function can be used to show or hide a element. Therefore a small
  * caret is used that will change his orientation if the element is hidden.
  * @param {string} elementId This is the id of the element you must click to show or hide another element.
- *                           The elements have the same id but the element to click has a prefix @b group_
+ *                           The elements have the same id but the element to click has a prefix **group_**
  */
 function showHideBlock(elementId) {
     var showHideElementId = elementId.substring(6);

@@ -35,11 +35,11 @@ class TableAccess
      */
     protected $additionalTables = array();
     /**
-     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
+     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. **demo_users**
      */
     protected $tableName;
     /**
-     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix **usr**
      */
     protected $columnPrefix;
     /**
@@ -72,8 +72,8 @@ class TableAccess
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
      * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
-     * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-     * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+     * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. **TBL_USERS**
+     * @param string     $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $tableName, $columnPrefix, $id = '')
@@ -102,7 +102,7 @@ class TableAccess
     /**
      * Initializes all class parameters and deletes all read data.
      * Also the database structure of the associated table will be
-     * read and stored in the arrays @b dbColumns and @b columnsInfos
+     * read and stored in the arrays **dbColumns** and **columnsInfos**
      */
     public function clear()
     {
@@ -306,7 +306,7 @@ class TableAccess
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record
@@ -550,7 +550,7 @@ class TableAccess
 
     /**
      * The method requires an array with all fields of one recordset of the table object.
-     * These fields will be add to the object as if you read one record with @b readDataById
+     * These fields will be add to the object as if you read one record with **readDataById**
      * but without a separate SQL. This method is useful if you have several recordsets of the
      * table and want to use an table object for each recordset. So you don't have to do an
      * separate sql read for each record. This is a performant way to fill the object with

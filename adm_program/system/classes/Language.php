@@ -15,7 +15,7 @@
  * text id out of an language xml file. The access will be manages with the
  * \SimpleXMLElement which search through xml files. An object of this class
  * can't be stored in a PHP session because it creates PHP core objects which
- * couldn't be stored in sessions. Therefore an object of @b LanguageData
+ * couldn't be stored in sessions. Therefore an object of **LanguageData**
  * should be assigned to this class that stored all necessary data and can be
  * stored in a session.
  * @par Examples
@@ -39,7 +39,7 @@
 class Language
 {
     /**
-     * @var LanguageData An object of the class @b LanguageData that stores all necessary language data in a session
+     * @var LanguageData An object of the class **LanguageData** that stores all necessary language data in a session
      */
     private $languageData;
     /**
@@ -47,17 +47,17 @@ class Language
      */
     private $languages = array();
     /**
-     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in @b $languageData.
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the language from all paths that are set in **$languageData**.
      */
     private $xmlLanguageObjects = array();
     /**
-     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in @b $languageData.
+     * @var array<string,\SimpleXMLElement> An array with all \SimpleXMLElement object of the reference language from all paths that are set in **$languageData**.
      */
     private $xmlRefLanguageObjects = array();
 
     /**
      * Language constructor.
-     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
+     * @param LanguageData $languageDataObject An object of the class **LanguageData**.
      */
     public function __construct(LanguageData $languageDataObject = null)
     {
@@ -88,8 +88,8 @@ class Language
      * than you must set more parameters to replace them.
      * @param string            $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @param array<int,string> $params Optional parameter to replace placeholders in the text.
-     *                                  $params[0] will replace @b #VAR1# or @b #VAR1_BOLD#,
-     *                                  $params[1] will replace @b #VAR2# or @b #VAR2_BOLD# etc.
+     *                                  $params[0] will replace **#VAR1#** or **#VAR1_BOLD#**,
+     *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      * @par Examples
      * @code
@@ -265,7 +265,7 @@ class Language
     /**
      * Returns the ISO code of the language of this object.
      * @param bool $referenceLanguage If set to **true** than the ISO code of the reference language will returned.
-     * @return string Returns the ISO code of the language of this object or the reference language e.g. @b de or @b en.
+     * @return string Returns the ISO code of the language of this object or the reference language e.g. **de** or **en**.
      */
     public function getLanguageIsoCode($referenceLanguage = false)
     {
@@ -514,7 +514,7 @@ class Language
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
      * @deprecated 3.3.0:4.0.0 "$gL10n->addLanguageData($languageData)" is deprecated. Use "$gL10n = new Language($languageData)" instead.
-     * @param LanguageData $languageDataObject An object of the class @b LanguageData.
+     * @param LanguageData $languageDataObject An object of the class **LanguageData**.
      */
     public function addLanguageData(LanguageData $languageDataObject)
     {

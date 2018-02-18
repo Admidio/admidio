@@ -295,7 +295,7 @@ class TableRoles extends TableAccess
     }
 
     /**
-     * Read the id of the default list of this role. The list is stored in the column @b rol_lst_id.
+     * Read the id of the default list of this role. The list is stored in the column **rol_lst_id**.
      * If there is no list stored then the system default list will be returned
      * @return int Returns the default list id of this role
      */

@@ -163,7 +163,7 @@ class RolesRights extends TableAccess
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record

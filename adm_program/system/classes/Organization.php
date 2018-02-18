@@ -392,8 +392,8 @@ class Organization extends TableAccess
      * Read all child and parent organizations of this organization and returns an array with them.
      * @param bool $child    If set to **true** (default) then all child organizations will be in the array
      * @param bool $parent   If set to **true** (default) then the parent organization will be in the array
-     * @param bool $longname If set to **true** then the value of the array will be the @b org_longname
-     *                       otherwise it will be @b org_shortname
+     * @param bool $longname If set to **true** then the value of the array will be the **org_longname**
+     *                       otherwise it will be **org_shortname**
      * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
@@ -509,7 +509,7 @@ class Organization extends TableAccess
      * @deprecated 3.3.0:4.0.0 Switch to new method "$this->getSettingsManager()->getAll()".
      * @param bool $update Should the preferences data be updated.
      * @return array<string,string> Returns an array with all preferences of this organization.
-     *                              Array key is the column @b prf_name and array value is the column @b prf_value.
+     *                              Array key is the column **prf_name** and array value is the column **prf_value**.
      */
     public function getPreferences($update = false)
     {
@@ -517,7 +517,7 @@ class Organization extends TableAccess
     }
 
     /**
-     * Writes all preferences of the array @b $preferences in the database table @b adm_preferences.
+     * Writes all preferences of the array **$preferences** in the database table **adm_preferences**.
      * The method will only insert or update changed preferences.
      * @deprecated 3.3.0:4.0.0 Switch to new method "$this->getSettingsManager()->setMulti()".
      * @param array<string,string> $settings Array with all preferences that should be stored in database. array('name_of_preference' => 'value')

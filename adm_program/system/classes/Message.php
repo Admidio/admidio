@@ -12,7 +12,7 @@
  * @brief Simple presentation of messages to the user
  *
  * This class creates a new html page with a simple headline and a message. It's
- * designed to easily integrate this class into your code. An object @b $gMessage
+ * designed to easily integrate this class into your code. An object **$gMessage**
  * of this class is created in the common.php. You can set a url that should be
  * open after user confirmed the message or you can show a question with two
  * default buttons yes and no. There is also an option to automatically leave the
@@ -107,9 +107,9 @@ class Message
     }
 
     /**
-     * Add two buttons with the labels @b yes and @b no to the message. If the user choose yes
+     * Add two buttons with the labels **yes** and **no** to the message. If the user choose yes
      * he will be redirected to the $url. If he chooses no he will be directed back to the previous page.
-     * @param string $url The full url to which the user should be directed if he chooses @b yes.
+     * @param string $url The full url to which the user should be directed if he chooses **yes**.
      */
     public function setForwardYesNo($url)
     {

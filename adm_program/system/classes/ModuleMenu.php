@@ -9,7 +9,7 @@
 
 /**
  * @class ModuleMenu
- * @brief Class manages display of menus in modules
+ * srief Class manages display of menus in modules
  *
  * This class manage the presentation of a module menu. You can add as many
  * items to the menu and the class tries to display them in the perfect
@@ -69,7 +69,7 @@ class ModuleMenu
     /**
      * add new entry to array and do some checks before so that link and icon get a valid url
      * @param string $id   Html id of the element
-     * @param string $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
+     * @param string $type The different type of menu that should be shown: **link** normal link with icon; **category** category select box
      * @param string $link Link to the page that will be called if menu item is clicked
      * @param string $text Link text
      * @param string $icon Icon of the menu item, that will also be linked
@@ -274,7 +274,7 @@ class ModuleMenu
 
     /**
      * Creates the html output of the module menu. Each added menu item will be displayed.
-     * If there are more menu items then in @b maxMenuLinkItem defined a dropdown menu
+     * If there are more menu items then in **maxMenuLinkItem** defined a dropdown menu
      * will be displayed and all other items will be displayed there.
      * @return string|false Returns the html output for the complete menu
      */

@@ -9,7 +9,7 @@
 
 /**
  * @class Modules
- * @brief This @b abstract @b class defines a parameter set for modules
+ * @brief This **abstract class** defines a parameter set for modules
  *
  * This abstract class sets the parameters used in Admidio modules.
  * The class gets a copy of the $_GET Array and validates the values

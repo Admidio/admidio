@@ -11,7 +11,7 @@
  * @class AutoLogin
  * @brief Handle auto login with Admidio and manage it in the database
  *
- * The class search in the database table @b adm_auto_login for the session id.
+ * The class search in the database table **adm_auto_login** for the session id.
  * If there is an entry for that id then it reads the user id and set this
  * user to the current session. Now the current session has become a valid user
  * that is automatically login.
@@ -99,7 +99,7 @@ class AutoLogin extends TableAccess
     }
 
     /**
-     * Method will clean the database table @b adm_auto_login.
+     * Method will clean the database table **adm_auto_login**.
      * All login that had their last login one year ago will be deleted.
      * All counted wrong auto login ids from this user will be reset.
      */
