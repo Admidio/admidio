@@ -170,7 +170,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
             $htmlStandardMenu,
             $menuAdministration
         );
-        $menuOverview->addRowByArray($columnValues, 'row_'. $menuRow->men_id);
+        $menuOverview->addRowByArray($columnValues, 'row_men_'. $menuRow->men_id);
     }
 }
 

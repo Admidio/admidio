@@ -15,9 +15,9 @@
  * component. It will read the database version from the component and set this as
  * source version. Then you should set the target version. The class will then search
  * search for specific update xml files in special directories. For the system this should be
- * @b adm_program/installation/db_scripts and for plugins there should be an install folder within the
+ * **adm_program/installation/db_scripts** and for plugins there should be an install folder within the
  * plugin directory. The xml files should have the prefix update and than the main und subversion
- * within their filename e.g. @b update_3_0.xml .
+ * within their filename e.g. **update_3_0.xml**.
  * @par Examples
  * @code // update the system module to the actual filesystem version
  * $componentUpdateHandle = new ComponentUpdate($gDb);
@@ -30,7 +30,7 @@ class ComponentUpdate extends Component
 
     /**
      * Constructor that will create an object for component updating.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      */
     public function __construct(Database $database)
     {
@@ -143,9 +143,9 @@ class ComponentUpdate extends Component
      * Will execute the specific update step that is set through the parameter $xmlNode.
      * If the step was successfully done the id will be stored in the component recordset
      * so if the whole update crashs later we know that this step was successfully executed.
-     * When the node has an attribute @b database than this sql statement will only executed
-     * if the value of the attribute is equal to your current @b DB_ENGINE . If the node has
-     * an attribute @b error and this is set to @b ignore than an sql error will not stop
+     * When the node has an attribute **database** than this sql statement will only executed
+     * if the value of the attribute is equal to your current **DB_ENGINE**. If the node has
+     * an attribute **error** and this is set to **ignore** than an sql error will not stop
      * the update script.
      * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      */

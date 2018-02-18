@@ -145,7 +145,7 @@ if((bool) $menu->getValue('men_standard'))
     $fieldDefault  = FIELD_DISABLED;
 }
 
-$menuList = array(0 => 'MAIN');
+$menuList = array();
 subMenu($menuList, null, 1, (int) $menu->getValue('men_id'));
 
 $form->addInput(
@@ -171,7 +171,6 @@ $form->addSelectBox(
     array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_men_id_parent'),
-        'showContextDependentFirstEntry' => false,
         'helpTextIdLabel'                => array('MEN_MENU_LEVEL_DESC', 'MAIN')
     )
 );

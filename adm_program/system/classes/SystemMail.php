@@ -53,7 +53,7 @@ class SystemMail extends Email
 
     /**
      * Constructor that will create an object of a SystemMail to handle all system notifications.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      */
     public function __construct(Database $database)
     {

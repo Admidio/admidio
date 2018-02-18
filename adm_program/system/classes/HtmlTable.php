@@ -41,7 +41,7 @@ class HtmlTable extends HtmlTableBasic
      */
     protected $rowsPerPage = 25;
     /**
-     * @var array<int,string> Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
+     * @var array<int,string> Array with entry for each column with the align of that column. Values are **right**, **left** or **center**.
      */
     protected $columnsAlign = array();
     /**
@@ -86,10 +86,10 @@ class HtmlTable extends HtmlTableBasic
      * @param string   $id         Id of the table
      * @param HtmlPage $htmlPage   (optional) A HtmlPage object that will be used to add javascript code
      *                             or files to the html output page.
-     * @param bool     $hoverRows  (optional) If set to @b true then the active selected row will be marked with special css code
-     * @param bool     $datatables (optional) If set to @b true then the jQuery plugin Datatables will be used to create the table.
+     * @param bool     $hoverRows  (optional) If set to **true** then the active selected row will be marked with special css code
+     * @param bool     $datatables (optional) If set to **true** then the jQuery plugin Datatables will be used to create the table.
      *                             Then column sort, search within the table and other features are possible.
-     * @param string   $class      (optional) An additional css classname. The class @b table
+     * @param string   $class      (optional) An additional css classname. The class **table**
      *                             is set as default and need not set with this parameter.
      */
     public function __construct($id, HtmlPage $htmlPage = null, $hoverRows = true, $datatables = false, $class = null)
@@ -421,7 +421,7 @@ class HtmlTable extends HtmlTableBasic
      * Specify a column that should be used to group data. Everytime the value of this column
      * changed then a new subheader row will be created with the name of the new value.
      * @param int $columnNumber Number of the column that should be grouped. The first column starts with 1.
-     *                          The columns were set with the method @b addRowByArray.
+     *                          The columns were set with the method **addRowByArray**.
      */
     public function setDatatablesGroupColumn($columnNumber)
     {
@@ -478,7 +478,7 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Set a text id of the translation files that should be shown if table has no rows.
      * @param string $messageId   Text id of the translation file.
-     * @param string $messageType (optional) As @b default the text will be shown. If @b warning or @b error
+     * @param string $messageType (optional) As **default** the text will be shown. If **warning** or **error**
      *                            is set then a box in yellow or red with the message will be shown.
      */
     public function setMessageIfNoRowsFound($messageId, $messageType = 'default')

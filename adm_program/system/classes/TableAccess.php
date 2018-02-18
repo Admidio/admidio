@@ -35,11 +35,11 @@ class TableAccess
      */
     protected $additionalTables = array();
     /**
-     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
+     * @var string Name of the database table of this object. This must be the table name with the installation specific praefix e.g. **demo_users**
      */
     protected $tableName;
     /**
-     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+     * @var string The praefix of each column that this table has. E.g. the table adm_users has the column praefix **usr**
      */
     protected $columnPrefix;
     /**
@@ -71,9 +71,9 @@ class TableAccess
     /**
      * Constructor that will create an object of a recordset of the specified table.
      * If the id is set than this recordset will be loaded.
-     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
-     * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-     * @param string     $columnPrefix The prefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+     * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
+     * @param string     $tableName    The name of the database table. Because of specific praefixes this should be the define value e.g. **TBL_USERS**
+     * @param string     $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
      * @param string|int $id           The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $tableName, $columnPrefix, $id = '')
@@ -102,7 +102,7 @@ class TableAccess
     /**
      * Initializes all class parameters and deletes all read data.
      * Also the database structure of the associated table will be
-     * read and stored in the arrays @b dbColumns and @b columnsInfos
+     * read and stored in the arrays **dbColumns** and **columnsInfos**
      */
     public function clear()
     {
@@ -180,7 +180,7 @@ class TableAccess
 
     /**
      * Deletes the selected record of the table and initializes the class
-     * @return true Returns @b true if no error occurred
+     * @return true Returns **true** if no error occurred
      */
     public function delete()
     {
@@ -197,12 +197,12 @@ class TableAccess
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
-     *               If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @see TableAccess#setValue
      */
     public function getValue($columnName, $format = '')
@@ -286,9 +286,9 @@ class TableAccess
 
     /**
      * If a column of the row in this object has changed throw setValue then this method
-     * will return @b true otherwise @false
-     * @return bool Returns @b true if at least one value of one column has changed
-     *              after the recordset was loaded otherwise @b false
+     * will return **true** otherwise @false
+     * @return bool Returns **true** if at least one value of one column has changed
+     *              after the recordset was loaded otherwise **false**
      */
     public function hasColumnsValueChanged()
     {
@@ -298,7 +298,7 @@ class TableAccess
     /**
      * If the recordset is new and wasn't read from database or was not stored in database
      * then this method will return true otherwise false
-     * @return bool Returns @b true if record is not stored in database
+     * @return bool Returns **true** if record is not stored in database
      */
     public function isNewRecord()
     {
@@ -306,12 +306,12 @@ class TableAccess
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
-     * If the sql will find more than one record the method returns @b false.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
-     * @return bool Returns @b true if one record is found
+     * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
@@ -374,7 +374,7 @@ class TableAccess
      * Reads a record out of the table in database selected by the unique id column in the table.
      * Per default all columns of the default table will be read and stored in the object.
      * @param int $id Unique id of id column of the table.
-     * @return bool Returns @b true if one record is found
+     * @return bool Returns **true** if one record is found
      * @see TableAccess#readData
      * @see TableAccess#readDataByColumns
      */
@@ -397,10 +397,10 @@ class TableAccess
      * Reads a record out of the table in database selected by different columns in the table.
      * The columns are commited with an array where every element index is the column name and the value is the column value.
      * The columns and values must be selected so that they identify only one record.
-     * If the sql will find more than one record the method returns @b false.
+     * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
-     * @return bool Returns @b true if one record is found
+     * @return bool Returns **true** if one record is found
      * @par Examples
      * @code // reads data not be mem_id but with combination of role and user id
      * $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
@@ -445,8 +445,8 @@ class TableAccess
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
+     *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -550,7 +550,7 @@ class TableAccess
 
     /**
      * The method requires an array with all fields of one recordset of the table object.
-     * These fields will be add to the object as if you read one record with @b readDataById
+     * These fields will be add to the object as if you read one record with **readDataById**
      * but without a separate SQL. This method is useful if you have several recordsets of the
      * table and want to use an table object for each recordset. So you don't have to do an
      * separate sql read for each record. This is a performant way to fill the object with
@@ -584,12 +584,12 @@ class TableAccess
 
     /**
      * Set a new value for a column of the database table. The value is only saved in the object.
-     * You must call the method @b save to store the new value to the database. If the unique key
+     * You must call the method **save** to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @see TableAccess#getValue
      */
     public function setValue($columnName, $newValue, $checkValue = true)

@@ -35,7 +35,7 @@ class ListConfiguration extends TableLists
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int      $lstId    The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $lstId = 0)
@@ -152,10 +152,10 @@ class ListConfiguration extends TableLists
     /**
      * Returns the column object with the corresponding number.
      * If that column doesn't exists the method try to repair the
-     * column list. If that won't help then @b null will be returned.
+     * column list. If that won't help then **null** will be returned.
      * @param int $number The internal number of the column.
      *                    This will be the position of the column in the list.
-     * @return TableAccess|null Returns a TableAccess object of the database table @b adm_list_columns.
+     * @return TableAccess|null Returns a TableAccess object of the database table **adm_list_columns**.
      */
     public function getColumnObject($number)
     {

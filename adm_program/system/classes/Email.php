@@ -352,7 +352,7 @@ class Email extends PHPMailer
     /**
      * Set the subject of the email
      * @param string $subject A text that should be the subject of the email
-     * @return bool Returns @b false if the parameter has no text
+     * @return bool Returns **false** if the parameter has no text
      */
     public function setSubject($subject)
     {

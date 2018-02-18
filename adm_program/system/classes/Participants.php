@@ -49,7 +49,7 @@ class Participants
 
     /**
      * Constructor that will initialize variables and check if $rolId is numeric
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int      $rolId    The role ID of a date
      */
     public function __construct(Database $database, $rolId = 0)

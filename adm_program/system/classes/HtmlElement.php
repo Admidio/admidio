@@ -9,7 +9,7 @@
 
 /**
  * @class HtmlElement
- * @brief  This @b abstract @b class parses html elements
+ * @brief  This **abstract class** parses html elements
  *
  * This abstract class is designed to parse html elements.
  * It is only allowed to use extensions of this class.
@@ -23,7 +23,7 @@
  * // Example content arrays
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
  * @endcode
- * @par Example_1: @b unorderedlist
+ * @par Example_1: **unorderedlist**
  * @code
  * // create as parent instance
  * parent::HtmlElement('ul','class', 'unordered');  // Parameters( element, attribute, value, nesting (true/false ))
@@ -271,7 +271,7 @@ abstract class HtmlElement
      * This method defines the next child element to be written in the output string.
      * If a parent element was defined before, the syntax with all setted attributes is written first from internal buffer to the string.
      * After that, the new element is defined.
-     * The method determines that the element has @b no @b own @b child @b elements and has a closing tag.
+     * The method determines that the element has **no own child elements** and has a closing tag.
      * If you need a parent element like a \<div\> with some \<p\> elements, use method addParentElement(); instead and then add the paragraph elements.
      * If nesting mode is active you are allowed to set the main element called with object instance again. Dafault: false
      *
@@ -366,7 +366,7 @@ abstract class HtmlElement
      * It logs the setted element in an array. Each time you define a new parent element, the function checks the log array, if the element already was set.
      * If the current element already was defined, then the function determines that the still opened tag must be closed first until it can be set again.
      * The method closeParentElement(); is called automatically to close the previous element.
-     * By default it is not allowed to define several elements from same type. If needed use option @b nesting @b mode @b true!
+     * By default it is not allowed to define several elements from same type. If needed use option **nesting mode true**!
      *
      * @param string $parentElement Parent element to be set
      * @param string $attrKey       Attribute name

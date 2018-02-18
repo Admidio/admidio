@@ -11,8 +11,8 @@
  * @class Component
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
  *
- * The class search in the database table @b adm_components for a specific component
- * and loads the data into this object. A component could be per default the @b SYSTEM
+ * The class search in the database table **adm_components** for a specific component
+ * and loads the data into this object. A component could be per default the **SYSTEM**
  * itself, a module or a plugin. There are methods to check the version of the system.
  * @par Examples
  * @code // check if database and filesystem have same version
@@ -32,7 +32,7 @@ class Component extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_component.
      * If the id is set than the specific component will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int      $comId    The recordset of the component with this id will be loaded.
      *                           If com_id isn't set than an empty object of the table is created.
      */

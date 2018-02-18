@@ -30,7 +30,7 @@
  *     $e->showText();
  * }
  * @endcode
- * Now you can use the new object @b $gDb to send a query to the database
+ * Now you can use the new object **$gDb** to send a query to the database
  * @code
  * // send sql to database and assign the returned \PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
@@ -142,7 +142,7 @@ class Database
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
      * If the engine is invalid or the connection not possible an exception will be thrown.
-     * @param string $engine   The database type that is supported from Admidio. @b mysql and @b pgsql are valid values.
+     * @param string $engine   The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
      * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
      * @param int    $port     If you don't use the default port of the database then set your port here.
      * @param string $dbName   Name of the database you want to connect.
@@ -210,7 +210,7 @@ class Database
 
             $this->setConnectionOptions();
         }
-        catch (\PDOException $e)
+        catch (\PDOException $exception)
         {
             $logContext = array(
                 'engine'   => $this->engine,
@@ -221,9 +221,9 @@ class Database
                 'password' => '******',
                 'options'  => $this->options
             );
-            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
+            $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $exception->getMessage(), $logContext);
 
-            throw new AdmException($e->getMessage()); // TODO: change exception class
+            throw new AdmException($exception->getMessage()); // TODO: change exception class
         }
     }
 
@@ -231,7 +231,7 @@ class Database
      * The method will commit an open transaction to the database. If the
      * transaction counter is greater 1 than only the counter will be
      * decreased and no commit will performed.
-     * @return bool Returns @b true if the commit was successful otherwise @b false
+     * @return bool Returns **true** if the commit was successful otherwise **false**
      * @see Database#startTransaction
      * @see Database#rollback
      */
@@ -610,15 +610,15 @@ class Database
 
     /**
      * Send a sql statement to the database that will be executed. If debug mode is set
-     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
      * @param string $sql        A string with the sql statement that should be executed in database.
-     * @param bool   $showError  Default will be @b true and if an error the script will be terminated and
+     * @param bool   $showError  Default will be **true** and if an error the script will be terminated and
      *                           occurred the error with a backtrace will be send to the browser. If set to
-     *                           @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
-     *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
+     *                           **false** no error will be shown and the script will be continued.
+     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
     public function query($sql, $showError = true)
     {
@@ -641,15 +641,18 @@ class Database
                 $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
         }
-        catch (\PDOException $e)
+        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        catch (\PDOException $exception)
         {
-            $gLogger->critical('PDOException: ' . $e->getMessage());
-
             if ($showError)
             {
+                $gLogger->critical('PDOException: ' . $exception->getMessage());
                 $this->showError();
                 // => EXIT
             }
+
+            $gLogger->warning('PDOException: ' . $exception->getMessage());
+
             return false;
         }
 
@@ -658,16 +661,16 @@ class Database
 
     /**
      * Send a sql statement to the database that will be executed. If debug mode is set
-     * then this statement will be written to the error log. If it's a @b SELECT statement
+     * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be send to the browser.
      * @param string           $sql        A string with the sql statement that should be executed in database.
      * @param array<int,mixed> $params     An array of parameters to bind to the prepared statement.
-     * @param bool             $showError  Default will be @b true and if an error the script will be terminated and
+     * @param bool             $showError  Default will be **true** and if an error the script will be terminated and
      *                                     occurred the error with a backtrace will be send to the browser. If set to
-     *                                     @b false no error will be shown and the script will be continued.
-     * @return \PDOStatement|false For @b SELECT statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
-     *                             This should be used to fetch the returned rows. If an error occurred then @b false will be returned.
+     *                                     **false** no error will be shown and the script will be continued.
+     * @return \PDOStatement|false For **SELECT** statements an object of <a href="https://secure.php.net/manual/en/class.pdostatement.php">\PDOStatement</a> will be returned.
+     *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      */
     public function queryPrepared($sql, array $params = array(), $showError = true)
     {
@@ -695,15 +698,18 @@ class Database
                 }
             }
         }
-        catch (\PDOException $e)
+        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        catch (\PDOException $exception)
         {
-            $gLogger->critical('PDOException: ' . $e->getMessage());
-
             if ($showError)
             {
+                $gLogger->critical('PDOException: ' . $exception->getMessage());
                 $this->showError();
                 // => EXIT
             }
+
+            $gLogger->warning('PDOException: ' . $exception->getMessage());
+
             return false;
         }
 

@@ -42,8 +42,8 @@ class AdmException extends Exception
     protected $params = array();
 
     /**
-     * Constructor that will @b rollback an open database translation
-     * @param string            $message Translation @b id that should be shown when exception is catched
+     * Constructor that will **rollback** an open database translation
+     * @param string            $message Translation **id** that should be shown when exception is catched
      * @param array<int,string> $params  Optional parameter for language string of translation id
      */
     public function __construct($message, $params = array())
@@ -84,7 +84,7 @@ class AdmException extends Exception
     /**
      * Set a new Admidio message id with their parameters. This method should be used
      * if during the exception processing a new better message should be set.
-     * @param string            $message Translation @b id that should be shown when exception is catched
+     * @param string            $message Translation **id** that should be shown when exception is catched
      * @param array<int,string> $params  Optional parameter for language string of translation id
      */
     public function setNewMessage($message, array $params = array())

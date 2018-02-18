@@ -18,7 +18,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'autoload.php')
  * for default autoload implementation. Therefore the class name must be the same
  * as the file name except for case sensitive.
  * @param string $className Name of the class for which the file should be loaded.
- * @return null|false Return @b false if the file for the class wasn't found.
+ * @return null|false Return **false** if the file for the class wasn't found.
  */
 function admFuncAutoload($className)
 {

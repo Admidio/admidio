@@ -184,9 +184,9 @@ function strNextLetter($letter, $reverse = false)
  * Check if a string contains only valid characters. Therefore the string is
  * compared with a hard coded list of valid characters for each datatype.
  * @param string $string    The string that should be checked.
- * @param string $checkType The type @b noSpecialChar, @b email, @b file, @b url or @b phone that will be checked.
+ * @param string $checkType The type **noSpecialChar**, **email**, **file**, **url** or **phone** that will be checked.
  *                          Each type has a different valid character list.
- * @return bool Returns @b true if all characters of @b string match the internal character list.
+ * @return bool Returns **true** if all characters of **string** match the internal character list.
  */
 function strValidCharacters($string, $checkType)
 {
@@ -280,7 +280,7 @@ function admIsTranslationStrId($string)
  * Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
  * In addition the function checks if the name contains .. or a . at the beginning.
  * @param string $filename     Name of the file that should be checked.
- * @param bool $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
+ * @param bool $checkExtension If set to **true** then the extension will be checked against a blacklist of extensions:
  *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
  * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
  *                      BAC_FILE_NAME_INVALID : Filename contains invalid characters

@@ -45,7 +45,7 @@ class Organization extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_organizations.
      * If the id is set than the specific organization will be loaded.
-     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
      * @param int|string $organization The recordset of the organization with this id will be loaded.
      *                                 The organization can be the table id or the organization shortname.
      *                                 If id isn't set than an empty object of the table is created.
@@ -390,10 +390,10 @@ class Organization extends TableAccess
 
     /**
      * Read all child and parent organizations of this organization and returns an array with them.
-     * @param bool $child    If set to @b true (default) then all child organizations will be in the array
-     * @param bool $parent   If set to @b true (default) then the parent organization will be in the array
-     * @param bool $longname If set to @b true then the value of the array will be the @b org_longname
-     *                       otherwise it will be @b org_shortname
+     * @param bool $child    If set to **true** (default) then all child organizations will be in the array
+     * @param bool $parent   If set to **true** (default) then the parent organization will be in the array
+     * @param bool $longname If set to **true** then the value of the array will be the **org_longname**
+     *                       otherwise it will be **org_shortname**
      * @return array<int,string> Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
      */
     public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
@@ -451,7 +451,7 @@ class Organization extends TableAccess
 
     /**
      * Method checks if the organization is configured as a child organization in the recordset.
-     * @return bool Return @b true if the organization is a child of another organization
+     * @return bool Return **true** if the organization is a child of another organization
      */
     public function isChildOrganization()
     {
@@ -460,7 +460,7 @@ class Organization extends TableAccess
 
     /**
      * Method checks if the organization is configured as a parent organization in the recordset.
-     * @return bool Return @b true if the organization is the parent of a least one other organization
+     * @return bool Return **true** if the organization is the parent of a least one other organization
      */
     public function isParentOrganization()
     {
@@ -469,11 +469,11 @@ class Organization extends TableAccess
 
     /**
      * Set a new value for a column of the database table.
-     * The value is only saved in the object. You must call the method @b save to store the new value to the database
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed  $newValue   The new value that should be stored in the database field
-     * @param bool   $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.
-     * @return bool Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {

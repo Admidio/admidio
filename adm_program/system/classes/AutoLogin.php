@@ -11,7 +11,7 @@
  * @class AutoLogin
  * @brief Handle auto login with Admidio and manage it in the database
  *
- * The class search in the database table @b adm_auto_login for the session id.
+ * The class search in the database table **adm_auto_login** for the session id.
  * If there is an entry for that id then it reads the user id and set this
  * user to the current session. Now the current session has become a valid user
  * that is automatically login.
@@ -28,7 +28,7 @@ class AutoLogin extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_auto_login.
      * If the id is set than the specific auto login will be loaded.
-     * @param Database   $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string|int $session  The recordset of the auto login with this session will be loaded.
      *                             If session isn't set than an empty object of the table is created.
      */
@@ -74,8 +74,8 @@ class AutoLogin extends TableAccess
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.
      * The current organization, last login and ip address will be set per default.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset
-     *                                if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
+     *                                if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -99,7 +99,7 @@ class AutoLogin extends TableAccess
     }
 
     /**
-     * Method will clean the database table @b adm_auto_login.
+     * Method will clean the database table **adm_auto_login**.
      * All login that had their last login one year ago will be deleted.
      * All counted wrong auto login ids from this user will be reset.
      */

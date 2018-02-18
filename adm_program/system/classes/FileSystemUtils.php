@@ -26,6 +26,9 @@ final class FileSystemUtils
     const ROOT_ID = 0;
     const ROOT_FOLDER = '/';
 
+    const DEFAULT_MODE_DIRECTORY = 0775;
+    const DEFAULT_MODE_FILE      = 0664;
+
     /**
      * @var array<int,string> The allowed directories
      */
@@ -464,7 +467,7 @@ final class FileSystemUtils
     /**
      * Creates a directory if it already did not exist
      * @param string              $directoryPath The directory to create
-     * @param array<string,mixed> $options       Operation options ([int] mode, [int] modeParents, [bool] createDirectoryStructure)
+     * @param array<string,mixed> $options       Operation options ([int] mode = 0775, [int] modeParents = 0775, [bool] createDirectoryStructure = true)
      * @throws \UnexpectedValueException Throws if the parent directory is not writable
      * @throws \RuntimeException         Throws if the mkdir process fails
      * @return bool Returns true if directory was successfully created or false if directory did already exist
@@ -474,7 +477,8 @@ final class FileSystemUtils
     {
         self::checkIsInAllowedDirectories($directoryPath);
 
-        $options = array_merge(array('mode' => 0777, 'modeParents' => 0777, 'createDirectoryStructure' => true), $options);
+        $defaultOptions = array('mode' => self::DEFAULT_MODE_DIRECTORY, 'modeParents' => self::DEFAULT_MODE_DIRECTORY, 'createDirectoryStructure' => true);
+        $options = array_merge($defaultOptions, $options);
 
         if (is_dir($directoryPath))
         {
@@ -742,7 +746,7 @@ final class FileSystemUtils
      * Checks if all preconditions are fulfilled
      * @param string             $oldDirectoryPath The source directory
      * @param string             $newDirectoryPath The destination directory
-     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure, [bool] overwriteContent)
+     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
      * @throws \UnexpectedValueException Throws if source directory is not readable, destination directory is not writable or a collision is detected
      * @throws \RuntimeException         Throws if the mkdir or opendir process fails
      * @return bool Returns true if content will get overwritten
@@ -752,7 +756,8 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($oldDirectoryPath);
         self::checkIsInAllowedDirectories($newDirectoryPath);
 
-        $options = array_merge(array('createDirectoryStructure' => true, 'overwriteContent' => false), $options);
+        $defaultOptions = array('createDirectoryStructure' => true, 'overwriteContent' => false);
+        $options = array_merge($defaultOptions, $options);
 
         if (!is_dir($oldDirectoryPath))
         {
@@ -871,7 +876,7 @@ final class FileSystemUtils
      * Copies a directory
      * @param string             $oldDirectoryPath The directory to copy
      * @param string             $newDirectoryPath The destination directory
-     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure, [bool] overwriteContent)
+     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the mkdir, copy or opendir process fails
      * @return bool Returns true if content was overwritten
@@ -889,7 +894,7 @@ final class FileSystemUtils
      * Moves a directory
      * @param string             $oldDirectoryPath The directory to move
      * @param string             $newDirectoryPath The destination directory
-     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure, [bool] overwriteContent)
+     * @param array<string,bool> $options          Operation options ([bool] createDirectoryStructure = true, [bool] overwriteContent = false)
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the mkdir, copy, rmdir, unlink or opendir process fails
      * @return bool Returns true if content was overwritten
@@ -908,14 +913,14 @@ final class FileSystemUtils
     /**
      * Chmod a directory and optional recursive all subdirectories and files
      * @param string $directoryPath   The directory to chmod
-     * @param int    $mode            The mode to set, in octal notation (e.g. 0755)
+     * @param int    $mode            The mode to set, in octal notation (e.g. 0775)
      * @param bool   $recursive       If true, subdirectories are chmod too
      * @param bool   $onlyDirectories If true, only directories gets chmod. If false all content gets chmod
      * @throws \UnexpectedValueException Throws if process is not directory owner
      * @throws \RuntimeException         Throws if the chmod or opendir process fails
      * @see https://secure.php.net/manual/en/function.chmod.php
      */
-    public static function chmodDirectory($directoryPath, $mode, $recursive = false, $onlyDirectories = true)
+    public static function chmodDirectory($directoryPath, $mode = self::DEFAULT_MODE_DIRECTORY, $recursive = false, $onlyDirectories = true)
     {
         self::checkIsInAllowedDirectories($directoryPath);
 
@@ -996,14 +1001,15 @@ final class FileSystemUtils
      * @param string             $mode        The operation mode (copy or move)
      * @param string             $oldFilePath The source path
      * @param string             $newFilePath The destination path
-     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure, [bool] overwrite)
+     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the destination folder could not be created
      * @return bool Returns true if the destination path will be overwritten
      */
     private static function checkFilePreconditions($mode, $oldFilePath, $newFilePath, array $options = array())
     {
-        $options = array_merge(array('createDirectoryStructure' => true, 'overwrite' => false), $options);
+        $defaultOptions = array('createDirectoryStructure' => true, 'overwrite' => false);
+        $options = array_merge($defaultOptions, $options);
 
         self::checkIsInAllowedDirectories($oldFilePath);
         self::checkIsInAllowedDirectories($newFilePath);
@@ -1064,7 +1070,7 @@ final class FileSystemUtils
      * Copies a file
      * @param string             $oldFilePath The file to copy
      * @param string             $newFilePath The path where to copy to
-     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure, [bool] overwrite)
+     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the copy process fails
      * @return bool Returns true if the destination path was overwritten
@@ -1087,7 +1093,7 @@ final class FileSystemUtils
      * Moves a file
      * @param string             $oldFilePath The file to move
      * @param string             $newFilePath The path where to move to
-     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure, [bool] overwrite)
+     * @param array<string,bool> $options     Operation options ([bool] createDirectoryStructure = true, [bool] overwrite = false)
      * @throws \UnexpectedValueException Throws if a precondition is not fulfilled
      * @throws \RuntimeException         Throws if the move process fails
      * @return bool Returns true if the destination path was overwritten
@@ -1108,12 +1114,12 @@ final class FileSystemUtils
 
     /**
      * @param string $filePath The file to chmod
-     * @param int    $mode     The mode to set in octal notation (e.g. 0755)
+     * @param int    $mode     The mode to set in octal notation (e.g. 0664)
      * @throws \UnexpectedValueException Throws if the file does not exist or is not chmod-able
      * @throws \RuntimeException         Throws if the chmod process fails
      * @see https://secure.php.net/manual/en/function.chmod.php
      */
-    public static function chmodFile($filePath, $mode)
+    public static function chmodFile($filePath, $mode = self::DEFAULT_MODE_FILE)
     {
         self::checkIsInAllowedDirectories($filePath);
 

@@ -52,8 +52,13 @@ if($getMode === 1)
     $postUrl      = admFuncVariableIsValid($_POST, 'men_url',           'string', array('default' => ''));
     $postIcon     = admFuncVariableIsValid($_POST, 'men_icon',          'string', array('default' => ''));
 
+    // within standard menu items the url should not be changed
+    if($menu->getValue('men_standard'))
+    {
+        $postUrl = $menu->getValue('men_url');
+    }
+
     // Check if mandatory fields are filled
-    // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($postName === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));

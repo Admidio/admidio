@@ -32,7 +32,7 @@ class TableFolder extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_folders.
      * If the id is set than the specific folder will be loaded.
-     * @param Database $database Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param int      $folId    The recordset of the folder with this id will be loaded. If id isn't set than an empty object of the table is created.
      */
     public function __construct(Database $database, $folId = 0)
@@ -129,7 +129,7 @@ class TableFolder extends TableAccess
      * roles will be assigned to the right that was set through parameter $rolesRightNameIntern.
      * @param string         $rolesRightNameIntern Name of the right where the roles should be added
      * @param array<int,int> $rolesArray
-     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
+     * @param bool           $recursive            If set to **true** than the rights will be set recursive to all subfolders
      */
     public function addRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
     {
@@ -165,7 +165,7 @@ class TableFolder extends TableAccess
      * Also all files, subfolders and the selected folder will be deleted in the file system.
      * After that the class will be initialize.
      * @param int $folderId
-     * @return bool @b true if no error occurred
+     * @return bool **true** if no error occurred
      */
     public function delete($folderId = 0)
     {
@@ -248,7 +248,7 @@ class TableFolder extends TableAccess
      * @param string         $mode                 "mode" could be "add" or "remove"
      * @param string         $rolesRightNameIntern Name of the right where the roles should be added
      * @param array<int,int> $rolesArray
-     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
+     * @param bool           $recursive            If set to **true** than the rights will be set recursive to all subfolders
      * @param int            $folderId             The folder id of the subfolder if this method is called recursive
      */
     private function editRolesOnFolder($mode, $rolesRightNameIntern, array $rolesArray, $recursive, $folderId = 0)
@@ -331,7 +331,7 @@ class TableFolder extends TableAccess
 
     /**
      * Set the public flag to a folder and all subfolders.
-     * @param bool $publicFlag If set to @b 1 then all users could see this folder.
+     * @param bool $publicFlag If set to **1** then all users could see this folder.
      * @param int  $folderId   The id of the folder where the public flag should be set.
      */
     public function editPublicFlagOnFolder($publicFlag, $folderId = 0)
@@ -444,11 +444,11 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Reads the folder recordset from database table @b adm_folders and throws an
+     * Reads the folder recordset from database table **adm_folders** and throws an
      * AdmException if the user has no right to see the folder or the folder id doesn't exists.
      * @param int $folderId The id of the folder. If the id is 0 then the root folder will be shown.
      * @throws AdmException
-     * @return true Returns @b true if everything is ok otherwise an AdmException is thrown.
+     * @return true Returns **true** if everything is ok otherwise an AdmException is thrown.
      */
     public function getFolderForDownload($folderId)
     {
@@ -686,12 +686,12 @@ class TableFolder extends TableAccess
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with @b setValue than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                           For text columns the format can be @b database that would return the original database value without any transformations
+     * @param string $format     For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
-     *         If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *         If the value was manipulated before with **setValue** than the manipulated value is returned.
      */
     public function getValue($columnName, $format = '')
     {
@@ -708,7 +708,7 @@ class TableFolder extends TableAccess
 
     /**
      * Checks if the current user has the right to upload files to the current folder.
-     * @return bool Return @b true if the user has the right to upload files
+     * @return bool Return **true** if the user has the right to upload files
      */
     public function hasUploadRight()
     {
@@ -719,7 +719,7 @@ class TableFolder extends TableAccess
 
     /**
      * Checks if the current user has the right to view files of the current folder.
-     * @return bool Return @b true if the user has the right to view files
+     * @return bool Return **true** if the user has the right to view files
      */
     public function hasViewRight()
     {
@@ -729,12 +729,12 @@ class TableFolder extends TableAccess
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
-     * If the sql will find more than one record the method returns @b false.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql will find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * @param string           $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams       The query params for the prepared statement
-     * @return bool Returns @b true if one record is found
+     * @return bool Returns **true** if one record is found
      * @see TableAccess#readDataById
      * @see TableAccess#readDataByColumns
      */
@@ -757,7 +757,7 @@ class TableFolder extends TableAccess
      * roles will be removed from the right that was set through parameter $rolesRightNameIntern.
      * @param string         $rolesRightNameIntern Name of the right where the roles should be removed
      * @param array<int,int> $rolesArray
-     * @param bool           $recursive            If set to @b true than the rights will be set recursive to all subfolders
+     * @param bool           $recursive            If set to **true** than the rights will be set recursive to all subfolders
      */
     public function removeRolesOnFolder($rolesRightNameIntern, array $rolesArray, $recursive = true)
     {
@@ -804,7 +804,7 @@ class TableFolder extends TableAccess
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the user, organization and timestamp will be set per default.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)

@@ -48,7 +48,7 @@ class Session extends TableAccess
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
-     * @param Database   $database     Object of the class Database. This should be the default global object @b $gDb.
+     * @param Database   $database     Object of the class Database. This should be the default global object **$gDb**.
      * @param int|string $session      The recordset of the session with this id will be loaded.
      *                                 The session can be the table id or the alphanumeric session id.
      *                                 If id isn't set than an empty object of the table is created.
@@ -82,7 +82,7 @@ class Session extends TableAccess
 
     /**
      * Adds an object to the object array of this class. Objects in this array
-     * will be stored in the session and could be read with the method @b getObject.
+     * will be stored in the session and could be read with the method **getObject**.
      * @param string $objectName Internal unique name of the object.
      * @param object $object     The object that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
@@ -114,7 +114,7 @@ class Session extends TableAccess
     /**
      * Returns a reference of an object that is stored in the session.
      * This is necessary because the old database connection is not longer valid.
-     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
+     * @param string $objectName Internal unique name of the object. The name was set with the method **addObject**
      * @return object|false Returns the reference to the object or false if the object was not found.
      */
     public function &getObject($objectName)
@@ -148,8 +148,8 @@ class Session extends TableAccess
 
     /**
      * Checks if the object with this name exists in the object array of this class.
-     * @param string $objectName Internal unique name of the object. The name was set with the method @b addObject
-     * @return bool Returns @b true if the object exits otherwise @b false
+     * @param string $objectName Internal unique name of the object. The name was set with the method **addObject**
+     * @return bool Returns **true** if the object exits otherwise **false**
      */
     public function hasObject($objectName)
     {
@@ -160,7 +160,7 @@ class Session extends TableAccess
      * Check if the current session has a valid user login. Therefore the user id must be stored
      * within the session and the timestamps must be valid
      * @param int $userId The user id must be stored in this session and will be checked if valid.
-     * @return bool Returns @b true if the user has a valid session login otherwise @b false;
+     * @return bool Returns **true** if the user has a valid session login otherwise **false**;
      */
     public function isValidLogin($userId)
     {
@@ -359,7 +359,7 @@ class Session extends TableAccess
      * the changed columns. If the table has columns for creator or editor than these column
      * with their timestamp will be updated.
      * For new records the organization, timestamp, begin date and ip address will be set per default.
-     * @param bool $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      */
     public function save($updateFingerPrint = true)
@@ -522,7 +522,7 @@ class Session extends TableAccess
     }
 
     /**
-     * Deletes all sessions in table admSessions that are inactive since @b $maxInactiveTime minutes..
+     * Deletes all sessions in table admSessions that are inactive since **$maxInactiveTime** minutes..
      * @param int $maxInactiveMinutes Time in Minutes after that a session will be deleted.
      */
     public function tableCleanup($maxInactiveMinutes = 30)

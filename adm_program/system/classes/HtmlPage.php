@@ -105,7 +105,7 @@ class HtmlPage
 
     /**
      * Adds a cascading style sheets file to the html page.
-     * @param string $cssFile The url with filename or the relative path starting with @i adm_program of the css file.
+     * @param string $cssFile The url with filename or the relative path starting with **adm_program** of the css file.
      */
     public function addCssFile($cssFile)
     {
@@ -141,7 +141,7 @@ class HtmlPage
 
     /**
      * Adds a javascript file to the html page.
-     * @param string $jsFile The url with filename or the relative path starting with @i adm_program of the javascript file.
+     * @param string $jsFile The url with filename or the relative path starting with **adm_program** of the javascript file.
      */
     public function addJavascriptFile($jsFile)
     {
@@ -161,7 +161,7 @@ class HtmlPage
     /**
      * Adds any javascript content to the page. The javascript will be added in the order you call this method.
      * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
-     * @param bool   $executeAfterPageLoad (optional) If set to @b true the javascript code will be executed after
+     * @param bool   $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
      *                                     the page is fully loaded.
      */
     public function addJavascript($javascriptCode, $executeAfterPageLoad = false)
@@ -347,8 +347,8 @@ class HtmlPage
     /**
      * The method will return the filename. If you are in debug mode than it will return the
      * not minified version of the filename otherwise it will return the minified version.
-     * Therefore you must provide 2 versions of the file. One with a @b min before the file extension
-     * and one version without the @b min.
+     * Therefore you must provide 2 versions of the file. One with a **min** before the file extension
+     * and one version without the **min**.
      * @param string $filepath Filename of the NOT minified file.
      * @return string Returns the filename in dependence of the debug mode.
      */
@@ -687,9 +687,9 @@ class HtmlPage
     /**
      * This method send the whole html code of the page to the browser. Call this method
      * if you have finished your page layout.
-     * @param bool $directOutput If set to @b true (default) the html page will be directly send
-     *                           to the browser. If set to @b false the html will be returned.
-     * @return string|void If $directOutput is set to @b false this method will return the html code of the page.
+     * @param bool $directOutput If set to **true** (default) the html page will be directly send
+     *                           to the browser. If set to **false** the html will be returned.
+     * @return string|void If $directOutput is set to **false** this method will return the html code of the page.
      */
     public function show($directOutput = true)
     {
