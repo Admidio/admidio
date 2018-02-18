@@ -853,7 +853,7 @@ function admFuncMaxUploadSize()
 }
 
 /**
- * @deprecated 3.3.0:4.0.0 "admFuncGetBytesFromSize()" is deprecated, there is no replacement.
+ * @deprecated 3.3.0:4.0.0 "admFuncGetBytesFromSize()" is deprecated, use "FileSystemUtils::getHumanReadableBytes()" instead.
  * @param string $data
  * @param bool   $decimalMulti
  * @return int
@@ -862,7 +862,7 @@ function admFuncGetBytesFromSize($data, $decimalMulti = false)
 {
     global $gLogger;
 
-    $gLogger->warning('DEPRECATED: "admFuncGetBytesFromSize()" is deprecated, there is no replacement!');
+    $gLogger->warning('DEPRECATED: "admFuncGetBytesFromSize()" is deprecated, use "FileSystemUtils::getHumanReadableBytes()" instead!');
 
     $value = (float) substr(trim($data), 0, -1);
     $unit  = strtoupper(substr(trim($data), -1));
