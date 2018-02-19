@@ -167,20 +167,10 @@ class LanguageData
     /**
      * Returns the language code of the language of this object. This is the code that is set within
      * Admidio with some specials like de_sie. If you only want the ISO code then call getLanguageIsoCode().
-     * @param bool $referenceLanguage If set to **true** than the language code of the reference language will returned.
      * @return string Returns the language code of the language of this object or the reference language.
      */
-    public function getLanguage($referenceLanguage = false)
+    public function getLanguage()
     {
-        global $gLogger;
-
-        if ($referenceLanguage)
-        {
-            $gLogger->warning('DEPRECATED: "$languageData->getLanguage(true)" is deprecated, use "LanguageData::REFERENCE_LANGUAGE" instead!');
-
-            return self::REFERENCE_LANGUAGE;
-        }
-
         return $this->language;
     }
 
