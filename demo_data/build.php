@@ -23,8 +23,7 @@ if (is_file($configPath))
 }
 elseif (is_file($rootPath . '/config.php'))
 {
-    // search in path of version 1.x and 2.x
-    require_once($rootPath . '/config.php');
+    exit('<div style="color: #cc0000;">Old v1.x or v2.x Config-File detected! Please update first to the latest v3.3 Version!</div>');
 }
 else
 {
