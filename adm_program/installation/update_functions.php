@@ -107,69 +107,6 @@ function toggleForeignKeyChecks($enable)
     }
 }
 
-/**
- * @param int $versionMain
- * @param int $versionMinor
- * @param int $versionPatch
- */
-function doVersion2Update(&$versionMain, &$versionMinor, &$versionPatch)
-{
-    global $gLogger, $gDb, $gL10n, $gSettingsManager;
-
-    // nun in einer Schleife alle Update-Scripte fuer Version 2 einspielen
-    while ($versionMain === 2)
-    {
-        // version 2 Admidio had sql and php files where the update statements where stored
-        // these files must be executed
-
-        // in der Schleife wird geschaut ob es Scripte fuer eine patch-version (3. Versionsstelle) gibt
-        // patch-version 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-        for ($tmpPatchVersion = $versionPatch; $tmpPatchVersion <= 14; ++$tmpPatchVersion)
-        {
-            // output of the version number for better debugging
-            $gLogger->notice('UPDATE: Start executing update steps to version '.$versionMain.'.'.$versionMinor.'.'.$tmpPatchVersion);
-
-            $dbScriptsPath = ADMIDIO_PATH . '/adm_program/installation/db_scripts/';
-            $version = $versionMain . '_' . $versionMinor . '_' . $tmpPatchVersion;
-            $sqlFileName = 'upd_' . $version . '_db.sql';
-            $phpFileName = 'upd_' . $version . '_conv.php';
-
-            if (is_file($dbScriptsPath . $sqlFileName))
-            {
-                $sqlQueryResult = querySqlFile($gDb, $sqlFileName);
-
-                if ($sqlQueryResult !== true)
-                {
-                    showNotice($sqlQueryResult, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
-                    // => EXIT
-                }
-            }
-
-            $phpUpdateFile = $dbScriptsPath . $phpFileName;
-            // check if an php update file exists and then execute the script
-            if (is_file($phpUpdateFile))
-            {
-                require($phpUpdateFile);
-            }
-
-            $gLogger->notice('UPDATE: Finish executing update steps to version '.$versionMain.'.'.$versionMinor.'.'.$tmpPatchVersion);
-        }
-
-        // update minor verion number
-        if ($versionMinor === 4) // we do not have more then 4 minor-versions with old updater
-        {
-            $versionMain = 3;
-            $versionMinor = 0;
-        }
-        else
-        {
-            ++$versionMinor;
-        }
-
-        $versionPatch = 0;
-    }
-}
-
 function doVersion3Update()
 {
     global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
@@ -204,25 +141,16 @@ function doAdmidioUpdate($installedDbVersion)
 
     updateOrgPreferences();
 
-    preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
-    $versionArray = array_map('intval', $versionArray);
-    list(, $versionMain, $versionMinor, $versionPatch) = $versionArray;
-
-    ++$versionPatch;
-
     // disable foreign key checks for mysql, so tables can easily deleted
     toggleForeignKeyChecks(false);
 
-    // in version 2 we had an other update mechanism which will be handled here
-    if ($versionMain === 2)
-    {
-        doVersion2Update($versionMain, $versionMinor, $versionPatch);
-    }
-
     disableSoundexSearchIfPgSql($gDb);
 
+    preg_match('/^(\d+)\.(\d+)\.(\d+)/', $installedDbVersion, $versionArray);
+    $versionArray = array_map('intval', $versionArray);
+
     // since version 3 we do the update with xml files and a new class model
-    if ($versionMain >= 3)
+    if ($versionArray[0] >= 3)
     {
         doVersion3Update();
     }
