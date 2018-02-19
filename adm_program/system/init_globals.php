@@ -31,9 +31,29 @@ if(!isset($g_tbl_praefix))
     $g_tbl_praefix = 'adm';
 }
 
+if(!isset($g_adm_srv))
+{
+    $g_adm_srv = null;
+}
+
 if (!isset($g_adm_port))
 {
     $g_adm_port = null;
+}
+
+if (!isset($g_adm_db))
+{
+    $g_adm_db = null;
+}
+
+if (!isset($g_adm_usr))
+{
+    $g_adm_usr = null;
+}
+
+if (!isset($g_adm_pw))
+{
+    $g_adm_pw = null;
 }
 
 // set default password-hash algorithm

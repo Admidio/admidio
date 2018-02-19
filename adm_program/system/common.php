@@ -15,7 +15,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
 }
 
 // load config and init bootstrapping
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
+$rootPath = dirname(dirname(__DIR__));
 require_once($rootPath . '/adm_my_files/config.php');
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 

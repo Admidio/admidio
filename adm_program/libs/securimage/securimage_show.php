@@ -79,7 +79,7 @@ if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
 
 
 // ***** START ADMIDIO CODE *****
-$captchaBackgroundImage = $gSettingsManger->getString('captcha_background_image');
+$captchaBackgroundImage = $gSettingsManager->getString('captcha_background_image');
 if($captchaBackgroundImage !== '')
 {
     $img->show(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/backgrounds/' . $captchaBackgroundImage);

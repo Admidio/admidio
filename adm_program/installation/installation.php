@@ -19,14 +19,15 @@
  ***********************************************************************************************
  */
 
+$rootPath = dirname(dirname(__DIR__));
+
 // if config file already exists then load file with their variables
-$configFile    = __DIR__ . '/../../adm_my_files/config.php';
-$configPathOld = __DIR__ . '/../../config.php';
-if (is_file($configFile))
+$configPath = $rootPath . '/adm_my_files/config.php';
+if (is_file($configPath))
 {
-    require_once($configFile);
+    require_once($configPath);
 }
-elseif (is_file($configPathOld))
+elseif (is_file($rootPath . '/config.php'))
 {
     // Config file found at location of version 2. Then go to update
     header('Location: update.php');
@@ -56,7 +57,6 @@ if (!isset($g_tbl_praefix))
     }
 }
 
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 

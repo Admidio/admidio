@@ -89,7 +89,7 @@ class User extends TableAccess
         global $gCurrentOrganization;
 
         if ($userFields !== null)
-        {s
+        {
             $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         }
 

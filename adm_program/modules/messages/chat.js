@@ -96,8 +96,7 @@ Chat.prototype.send = function(message) {
             url: "process.php",
             data: {
                 "function": "send",
-                "message": message,
-                "state": this.state
+                "message": message
             },
             dataType: "json",
             success: function() {
