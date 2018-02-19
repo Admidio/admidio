@@ -13,18 +13,18 @@
  ***********************************************************************************************
  */
 
+$rootPath = dirname(__DIR__);
+
 // embed config file
-$configPath    = __DIR__ . '/../adm_my_files/config.php';
-$configPathOld = __DIR__ . '/../config.php';
+$configPath = $rootPath . '/adm_my_files/config.php';
 if (is_file($configPath))
 {
-    // search in path of version 3.x
     require_once($configPath);
 }
-elseif (is_file($configPathOld))
+elseif (is_file($rootPath . '/config.php'))
 {
     // search in path of version 1.x and 2.x
-    require_once($configPathOld);
+    require_once($rootPath . '/config.php');
 }
 else
 {
@@ -39,7 +39,7 @@ if (!isset($gImportDemoData) || !$gImportDemoData)
     <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = true;</em></p>');
 }
 
-require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
+require_once($rootPath . '/adm_program/system/bootstrap.php');
 
 /**
  * parts of this function are from get_backtrace out of phpBB3

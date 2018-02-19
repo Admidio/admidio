@@ -15,17 +15,18 @@
  ***********************************************************************************************
  */
 
-// embed config and constants file
-$configPath    = __DIR__ . '/../../adm_my_files/config.php';
-$configPathOld = __DIR__ . '/../../config.php';
+$rootPath = dirname(dirname(__DIR__));
+
+// embed config file
+$configPath = $rootPath . '/adm_my_files/config.php';
 if (is_file($configPath))
 {
     require_once($configPath);
 }
-elseif (is_file($configPathOld))
+elseif (is_file($rootPath . '/config.php'))
 {
     // config file at destination of version 2.0 exists -> copy config file to new destination
-    if (!@copy($configPathOld, $configPath))
+    if (!@copy($rootPath . '/config.php', $configPath))
     {
         exit('<div style="color: #cc0000;">Error: The file <strong>config.php</strong> could not be copied to the folder <strong>adm_my_files</strong>.
             Please check if this folder has the necessary write rights. If it\'s not possible to set this right then copy the
@@ -40,7 +41,6 @@ else
     exit();
 }
 
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/update_functions.php');
