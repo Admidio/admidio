@@ -13,9 +13,6 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 $_SESSION['import_csv_request'] = $_POST;
 
-// setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
-PhpIniUtils::startNewExecutionTimeLimit(500);
-
 // create readable constants for user import mode
 define('USER_IMPORT_NOT_EDIT', '1');
 define('USER_IMPORT_DUPLICATE', '2');
@@ -68,6 +65,9 @@ if($firstRowTitle)
     $line = next($_SESSION['file_lines']);
     $startRow = 1;
 }
+
+// set execution time to 10 minutes because we have a lot to do
+PhpIniUtils::startNewExecutionTimeLimit(600);
 
 for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 {

@@ -104,28 +104,18 @@ function querySqlFile(Database $db, $sqlFileName)
         return $gL10n->get('INS_DATABASE_FILE_NOT_FOUND', array($sqlFileName, $sqlPath));
     }
 
-    $fileHandler = fopen($sqlFilePath, 'rb');
-
-    if ($fileHandler === false)
+    try
+    {
+        $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFilePath);
+    }
+    catch (\RuntimeException $exception)
     {
         return $gL10n->get('INS_ERROR_OPEN_FILE', array($sqlFilePath));
     }
 
-    $content = fread($fileHandler, filesize($sqlFilePath));
-    fclose($fileHandler);
-
-    $sqlArr = explode(';', $content);
-
-    foreach ($sqlArr as $sql)
+    foreach ($sqlStatements as $sqlStatement)
     {
-        $sql = trim($sql);
-        if ($sql !== '')
-        {
-            // replace prefix with installation specific table prefix
-            $sql = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
-            // now execute update sql
-            $db->queryPrepared($sql);
-        }
+        $db->queryPrepared($sqlStatement);
     }
 
     return true;

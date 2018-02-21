@@ -25,9 +25,6 @@ if (!is_file($pathConfigFile))
     // => EXIT
 }
 
-// set execution time to 5 minutes because we have a lot to do :)
-PhpIniUtils::startNewExecutionTimeLimit(300);
-
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['prefix'])
@@ -48,6 +45,9 @@ if (isset($_SESSION['prefix'])
     );
     // => EXIT
 }
+
+// set execution time to 5 minutes because we have a lot to do
+PhpIniUtils::startNewExecutionTimeLimit(300);
 
 // read data from sql script db.sql and execute all statements to the current database
 $sqlQueryResult = querySqlFile($db, 'db.sql');
@@ -83,22 +83,22 @@ $currUsrId = (int) $gCurrentUser->getValue('usr_id');
 $sql = 'INSERT INTO '.TBL_COMPONENTS.'
                (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES (\'MODULE\', \'ANN_ANNOUNCEMENTS\',       \'ANNOUNCEMENTS\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'BAC_DATABASE_BACKUP\',     \'BACKUP\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_CATEGORIES\',          \'CATEGORIES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'DAT_DATES\',               \'DATES\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'DOW_DOWNLOADS\',           \'DOWNLOADS\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'GBO_GUESTBOOK\',           \'GUESTBOOK\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'LNK_WEBLINKS\',            \'LINKS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'LST_LISTS\',               \'LISTS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'MEM_USER_MANAGEMENT\',     \'MEMBERS\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_MESSAGES\',            \'MESSAGES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_MENU\',                \'MENU\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'PHO_PHOTOS\',              \'PHOTOS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_SETTINGS\',            \'PREFERENCES\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'PRO_PROFILE\',             \'PROFILE\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_REGISTRATION\',        \'REGISTRATION\', \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'ROL_ROLE_ADMINISTRATION\', \'ROLES\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'ROO_ROOM_MANAGEMENT\',     \'ROOMS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
+             , (\'MODULE\', \'BAC_DATABASE_BACKUP\',     \'BACKUP\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_CATEGORIES\',          \'CATEGORIES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'DAT_DATES\',               \'DATES\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'DOW_DOWNLOADS\',           \'DOWNLOADS\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'GBO_GUESTBOOK\',           \'GUESTBOOK\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'LNK_WEBLINKS\',            \'LINKS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'LST_LISTS\',               \'LISTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'MEM_USER_MANAGEMENT\',     \'MEMBERS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_MESSAGES\',            \'MESSAGES\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_MENU\',                \'MENU\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'PHO_PHOTOS\',              \'PHOTOS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_SETTINGS\',            \'PREFERENCES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'PRO_PROFILE\',             \'PROFILE\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_REGISTRATION\',        \'REGISTRATION\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'ROL_ROLE_ADMINISTRATION\', \'ROLES\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'ROO_ROOM_MANAGEMENT\',     \'ROOMS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
 $db->query($sql); // TODO add more params
 
 // create organization independent categories

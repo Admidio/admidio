@@ -73,6 +73,9 @@ function updateOrgPreferences()
 {
     global $gDb, $gPasswordHashAlgorithm;
 
+    // set execution time to 2 minutes because we have a lot to do
+    PhpIniUtils::startNewExecutionTimeLimit(120);
+
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     require_once(__DIR__ . '/db_scripts/preferences.php');
 
@@ -111,6 +114,9 @@ function doVersion3Update()
 {
     global $gDb, $gL10n, $gProfileFields, $gCurrentUser;
 
+    // set execution time to 5 minutes because we have a lot to do
+    PhpIniUtils::startNewExecutionTimeLimit(300);
+
     // set system user as current user, but this user only exists since version 3
     $sql = 'SELECT usr_id
               FROM ' . TBL_USERS . '
@@ -135,9 +141,6 @@ function doAdmidioUpdate($installedDbVersion)
     $gLogger->info('UPDATE: Execute update');
 
     checkLogin();
-
-    // setzt die Ausfuehrungszeit des Scripts auf 5 Min., da hier teilweise sehr viel gemacht wird
-    PhpIniUtils::startNewExecutionTimeLimit(300);
 
     updateOrgPreferences();
 
