@@ -183,7 +183,7 @@ function prepareFileContent($fileContent)
         if ($sql !== '')
         {
             // set prefix for all tables and execute sql statement
-            $sqlStatements[] = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
+            $sqlStatements[] = Database::prepareSqlTablePrefix($sql);
         }
     }
 

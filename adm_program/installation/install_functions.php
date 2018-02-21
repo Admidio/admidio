@@ -121,10 +121,8 @@ function querySqlFile(Database $db, $sqlFileName)
         $sql = trim($sql);
         if ($sql !== '')
         {
-            // replace prefix with installation specific table prefix
-            $sql = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
             // now execute update sql
-            $db->queryPrepared($sql);
+            $db->queryPrepared(Database::prepareSqlTablePrefix($sql));
         }
     }
 

@@ -633,6 +633,16 @@ class Database
     }
 
     /**
+     * Replace the table prefixes in SQL statements
+     * @param string $sql
+     * @return string
+     */
+    public static function prepareSqlTablePrefix($sql)
+    {
+        return str_replace('%PREFIX%', TABLE_PREFIX, $sql);
+    }
+
+    /**
      * Prepares SQL statements in a log-able format
      * @param string $sql
      * @return string
