@@ -966,6 +966,32 @@ class Database
         return $result;
     }
 
+    /**
+     * Reads an prepares a SQL file to SQL statements
+     * @param string $sqlFilePath The path to the SQL file
+     * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
+     * @throws \RuntimeException         Throws if the read process fails
+     * @return array<int,string> Returns an array with all prepared SQL statements
+     */
+    public static function getSqlStatementsFromSqlFile($sqlFilePath)
+    {
+        $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
+
+        $sqlArray = explode(';', $sqlFileContent);
+
+        $sqlStatements = array();
+        foreach ($sqlArray as $sql)
+        {
+            $sql = self::prepareSqlTablePrefix(trim($sql));
+            if ($sql !== '')
+            {
+                $sqlStatements[] = $sql;
+            }
+        }
+
+        return $sqlStatements;
+    }
+
 
     /**
      * Fetch a result row as an associative array, a numeric array, or both.
