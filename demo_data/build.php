@@ -258,10 +258,14 @@ function getInstalledDbVersion()
 
 /**
  * @param string $language
+ * @throws \RuntimeException
  */
 function doInstallation($language)
 {
     global $gDb, $gL10n; // necessary for "data_edit.php"
+
+    // set runtime of script to 2 minutes because of the many work to do
+    PhpIniUtils::startNewExecutionTimeLimit(120);
 
     // disable foreign key checks for mysql, so tables can easily deleted
     toggleForeignKeyChecks(false);
@@ -285,9 +289,6 @@ function doInstallation($language)
 
 // Initialize and check the parameters
 $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
-
-// set runtime of script to 2 minutes because of the many work to do
-PhpIniUtils::startNewExecutionTimeLimit(1000);
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update

@@ -25,9 +25,6 @@ if (!is_file($pathConfigFile))
     // => EXIT
 }
 
-// set execution time to 5 minutes because we have a lot to do :)
-PhpIniUtils::startNewExecutionTimeLimit(300);
-
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['prefix'])
@@ -48,6 +45,9 @@ if (isset($_SESSION['prefix'])
     );
     // => EXIT
 }
+
+// set execution time to 5 minutes because we have a lot to do
+PhpIniUtils::startNewExecutionTimeLimit(300);
 
 // read data from sql script db.sql and execute all statements to the current database
 $sqlQueryResult = querySqlFile($db, 'db.sql');
