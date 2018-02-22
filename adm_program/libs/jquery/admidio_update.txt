@@ -1,4 +1,0 @@
-Short description to update the current lib
-
-1. Download uncompressed and min version 1.x of the new lib at https://jquery.com/
-   Maybe version 1.x can be found here https://code.jquery.com/

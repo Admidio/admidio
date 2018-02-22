@@ -136,7 +136,7 @@ class HtmlFormInstallation extends HtmlForm
             <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/bootstrap/css/bootstrap.min.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
 
-            <script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/jquery/jquery.min.js"></script>
+            <script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/jquery/dist/jquery.min.js"></script>
             <script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="'.ADMIDIO_URL.'/adm_program/system/js/common_functions.js"></script>
 
