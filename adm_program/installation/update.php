@@ -15,17 +15,18 @@
  ***********************************************************************************************
  */
 
-// embed config and constants file
-$configPath    = __DIR__ . '/../../adm_my_files/config.php';
-$configPathOld = __DIR__ . '/../../config.php';
+$rootPath = dirname(dirname(__DIR__));
+
+// embed config file
+$configPath = $rootPath . '/adm_my_files/config.php';
 if (is_file($configPath))
 {
     require_once($configPath);
 }
-elseif (is_file($configPathOld))
+elseif (is_file($rootPath . '/config.php'))
 {
     // config file at destination of version 2.0 exists -> copy config file to new destination
-    if (!@copy($configPathOld, $configPath))
+    if (!@copy($rootPath . '/config.php', $configPath))
     {
         exit('<div style="color: #cc0000;">Error: The file <strong>config.php</strong> could not be copied to the folder <strong>adm_my_files</strong>.
             Please check if this folder has the necessary write rights. If it\'s not possible to set this right then copy the
@@ -40,7 +41,6 @@ else
     exit();
 }
 
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/update_functions.php');
@@ -236,15 +236,19 @@ if ($getMode === 1)
         $form = new HtmlFormInstallation('update_login_form', safeUrl(ADMIDIO_URL . '/adm_program/installation/update.php', array('mode' => 2)));
         $form->setUpdateModus();
         $form->setFormDescription(
-            $gL10n->get('INS_WELCOME_TEXT_UPDATE', 
-                array(ADMIDIO_VERSION_TEXT, 
-                    $installedDbVersion, 
-                    '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update" target="_blank">', 
-                    '</a>', 
-                    '<a href="https://www.admidio.org/forum" target="_blank">', 
-                    '</a>')).
-                '<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>',
-            $gL10n->get('INS_WELCOME_TO_UPDATE'));
+            $gL10n->get(
+                'INS_WELCOME_TEXT_UPDATE',
+                array(ADMIDIO_VERSION_TEXT,
+                    $installedDbVersion,
+                    '<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update" target="_blank">',
+                    '</a>',
+                    '<a href="https://www.admidio.org/forum" target="_blank">',
+                    '</a>'
+                )
+            ).
+            '<h3>' . $gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', array($installedDbVersion, ADMIDIO_VERSION_TEXT)) . '</h3>',
+            $gL10n->get('INS_WELCOME_TO_UPDATE')
+        );
 
         if (!isset($gLoginForUpdate) || $gLoginForUpdate == 1)
         {

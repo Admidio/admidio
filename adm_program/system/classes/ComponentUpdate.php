@@ -128,15 +128,12 @@ class ComponentUpdate extends Component
 
     /**
      * Prepares and execute a sql statement
-     * @param string $updateSql
+     * @param string $sql
      * @param bool   $showError
      */
-    private function executeUpdateSql($updateSql, $showError)
+    private function executeUpdateSql($sql, $showError)
     {
-        // replace prefix with installation specific table prefix
-        $sql = str_replace('%PREFIX%', TABLE_PREFIX, $updateSql);
-
-        $this->db->queryPrepared($sql, array(), $showError);
+        $this->db->queryPrepared(Database::prepareSqlTablePrefix($sql), array(), $showError);
     }
 
     /**

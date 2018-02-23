@@ -333,7 +333,7 @@ switch($getMode)
             // => EXIT
         }
 
-        // set execution time to 2 minutes because we have a lot to do :)
+        // set execution time to 2 minutes because we have a lot to do
         PhpIniUtils::startNewExecutionTimeLimit(120);
 
         $gDb->startTransaction();

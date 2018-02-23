@@ -633,6 +633,16 @@ class Database
     }
 
     /**
+     * Replace the table prefixes in SQL statements
+     * @param string $sql
+     * @return string
+     */
+    public static function prepareSqlTablePrefix($sql)
+    {
+        return str_replace('%PREFIX%', TABLE_PREFIX, $sql);
+    }
+
+    /**
      * Prepares SQL statements in a log-able format
      * @param string $sql
      * @return string
@@ -954,6 +964,32 @@ class Database
         $this->transactions = 1;
 
         return $result;
+    }
+
+    /**
+     * Reads an prepares a SQL file to SQL statements
+     * @param string $sqlFilePath The path to the SQL file
+     * @throws \UnexpectedValueException Throws if the file does not exist or is not readable
+     * @throws \RuntimeException         Throws if the read process fails
+     * @return array<int,string> Returns an array with all prepared SQL statements
+     */
+    public static function getSqlStatementsFromSqlFile($sqlFilePath)
+    {
+        $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
+
+        $sqlArray = explode(';', $sqlFileContent);
+
+        $sqlStatements = array();
+        foreach ($sqlArray as $sql)
+        {
+            $sql = self::prepareSqlTablePrefix(trim($sql));
+            if ($sql !== '')
+            {
+                $sqlStatements[] = $sql;
+            }
+        }
+
+        return $sqlStatements;
     }
 
 

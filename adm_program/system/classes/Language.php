@@ -58,6 +58,7 @@ class Language
     /**
      * Language constructor.
      * @param LanguageData $languageDataObject An object of the class **LanguageData**.
+     * @throws \UnexpectedValueException
      */
     public function __construct(LanguageData $languageDataObject = null)
     {

@@ -13,18 +13,18 @@
  ***********************************************************************************************
  */
 
+$rootPath = dirname(__DIR__);
+
 // embed config file
-$configPath    = __DIR__ . '/../adm_my_files/config.php';
-$configPathOld = __DIR__ . '/../config.php';
+$configPath = $rootPath . '/adm_my_files/config.php';
 if (is_file($configPath))
 {
-    // search in path of version 3.x
     require_once($configPath);
 }
-elseif (is_file($configPathOld))
+elseif (is_file($rootPath . '/config.php'))
 {
     // search in path of version 1.x and 2.x
-    require_once($configPathOld);
+    require_once($rootPath . '/config.php');
 }
 else
 {
@@ -39,7 +39,7 @@ if (!isset($gImportDemoData) || !$gImportDemoData)
     <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = true;</em></p>');
 }
 
-require_once(__DIR__ . '/../adm_program/system/bootstrap.php');
+require_once($rootPath . '/adm_program/system/bootstrap.php');
 
 /**
  * parts of this function are from get_backtrace out of phpBB3
@@ -132,65 +132,6 @@ function toggleForeignKeyChecks($enable)
 }
 
 /**
- * @param string $filePath
- * @throws \RuntimeException
- * @throws \UnexpectedValueException
- * @return string
- */
-function readFileContent($filePath)
-{
-    if (!is_file($filePath))
-    {
-        throw new \UnexpectedValueException('File not found!');
-    }
-    if (!is_readable($filePath))
-    {
-        throw new \UnexpectedValueException('File not readable!');
-    }
-
-    // r = readonly; pointer on beginning of the file
-    // b = binary mode
-    $handle = fopen($filePath, 'rb');
-    if ($handle === false)
-    {
-        throw new \RuntimeException('File opening not possible!');
-    }
-
-    $content = fread($handle, filesize($filePath));
-
-    fclose($handle);
-
-    if ($content === false)
-    {
-        throw new \RuntimeException('File reading not possible!');
-    }
-
-    return $content;
-}
-
-/**
- * @param string $fileContent
- * @return array<int,string>
- */
-function prepareFileContent($fileContent)
-{
-    $sqlArray = explode(';', $fileContent);
-
-    $sqlStatements = array();
-    foreach ($sqlArray as $sql)
-    {
-        $sql = trim($sql);
-        if ($sql !== '')
-        {
-            // set prefix for all tables and execute sql statement
-            $sqlStatements[] = str_replace('%PREFIX%', TABLE_PREFIX, $sql);
-        }
-    }
-
-    return $sqlStatements;
-}
-
-/**
  * @param array<int,string> $sqlStatements
  * @param string $filename
  */
@@ -234,20 +175,18 @@ function executeSqlStatements(array $sqlStatements, $filename)
  */
 function readAndExecuteSQLFromFile($filename)
 {
-    $filePath = __DIR__ . '/' . $filename;
+    $sqlFilePath = __DIR__ . '/' . $filename;
 
     echo 'Reading file "'.$filename.'" ...<br />';
 
     try
     {
-        $fileContent = readFileContent($filePath);
+        $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFilePath);
     }
     catch (\RuntimeException $exception)
     {
-        exit('<p style="color: #cc0000;">' . $exception->getMessage() . ' File-Path: ' . $filePath . '</p>');
+        exit('<p style="color: #cc0000;">' . $exception->getMessage() . ' File-Path: ' . $sqlFilePath . '</p>');
     }
-
-    $sqlStatements = prepareFileContent($fileContent);
 
     echo 'Read file "'.$filename.'" finished!<br />';
     echo 'Executing "'.$filename.'" SQL-Statements ...<br />';
@@ -319,10 +258,14 @@ function getInstalledDbVersion()
 
 /**
  * @param string $language
+ * @throws \RuntimeException
  */
 function doInstallation($language)
 {
     global $gDb, $gL10n; // necessary for "data_edit.php"
+
+    // set runtime of script to 2 minutes because of the many work to do
+    PhpIniUtils::startNewExecutionTimeLimit(120);
 
     // disable foreign key checks for mysql, so tables can easily deleted
     toggleForeignKeyChecks(false);
@@ -346,9 +289,6 @@ function doInstallation($language)
 
 // Initialize and check the parameters
 $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
-
-// set runtime of script to 2 minutes because of the many work to do
-PhpIniUtils::startNewExecutionTimeLimit(1000);
 
 // start php session and remove session object with all data, so that
 // all data will be read after the update

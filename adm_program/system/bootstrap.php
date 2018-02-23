@@ -13,8 +13,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'bootstrap.php')
     exit('This page may not be called directly!');
 }
 
-// embed config and constants file
-$rootPath = substr(__FILE__, 0, strpos(__FILE__, DIRECTORY_SEPARATOR . 'adm_program'));
+$rootPath = dirname(dirname(__DIR__));
+
+// Add init_globals and constants file
 // TODO: In future require config.php here
 require_once($rootPath . '/adm_program/system/init_globals.php');
 require_once($rootPath . '/adm_program/system/constants.php');
