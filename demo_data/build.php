@@ -27,7 +27,8 @@ elseif (is_file($rootPath . '/config.php'))
 }
 else
 {
-    exit('<p style="color: #cc0000;">Error: Config file not found!</p>');
+    echo '<p style="color: #cc0000;">Error: Config file not found!</p>';
+    exit();
 }
 
 // import of demo data must be enabled in config.php

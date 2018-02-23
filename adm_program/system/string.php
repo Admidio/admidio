@@ -283,7 +283,7 @@ function admIsTranslationStrId($string)
  * @param bool $checkExtension If set to **true** then the extension will be checked against a blacklist of extensions:
  *                             php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
  * @throws AdmException SYS_FILENAME_EMPTY : Filename was empty
- *                      BAC_FILE_NAME_INVALID : Filename contains invalid characters
+ *                      SYS_FILENAME_INVALID : Filename contains invalid characters
  *                      DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
  * @return true Returns @true if filename contains only valid characters. Otherwise an AdmException is thrown
  */
@@ -298,7 +298,7 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     // filename should only contains valid characters and don't start with a dot
     if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || admStrStartsWith($filename, '.'))
     {
-        throw new AdmException('BAC_FILE_NAME_INVALID');
+        throw new AdmException('SYS_FILENAME_INVALID', array($filename));
     }
 
     if ($checkExtension)
