@@ -14,8 +14,16 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php')
     exit('This page may not be called directly!');
 }
 
-// load config and init bootstrapping
 $rootPath = dirname(dirname(__DIR__));
+
+// if config file doesn't exists, than show installation dialog
+if (!is_file($rootPath . '/adm_my_files/config.php'))
+{
+    header('Location: adm_program/installation/index.php');
+    exit();
+}
+
+// load config and init bootstrapping
 require_once($rootPath . '/adm_my_files/config.php');
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 
