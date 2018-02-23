@@ -17,7 +17,6 @@
     <string name="BAC_DATABASE_BACKUP">Datenbank-Backup</string>
     <string name="BAC_DATABASE_BACKUP_DESC">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</string>
     <string name="BAC_DAYS_VAR">#VAR1# Tagen</string>
-    <string name="BAC_FILE_NAME_INVALID">Der ausgewählte Dateiname enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-()&amp; .</string>
     <string name="BAC_HOURS_VAR">#VAR1# Stunden</string>
     <string name="BAC_MINUTES_VAR">#VAR1# Minuten</string>
     <string name="BAC_NO_BACKUP_FILE_EXISTS">Keine Backupdatei vorhanden!</string>
@@ -1179,6 +1178,7 @@
     <string name="SYS_FILE_TO_LARGE_SERVER">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von #VAR1# MB.</string>
     <string name="SYS_FILE_UPLOADS">Dateiuploads</string>
     <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
+    <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen $!?._+-()&amp; .</string>
     <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
     <string name="SYS_FILTER">Filter</string>
     <string name="SYS_FIRSTNAME">Vorname</string>

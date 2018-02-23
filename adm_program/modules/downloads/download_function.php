@@ -161,7 +161,7 @@ elseif ($getMode === 3)
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME'));
         }
-        if($e->getMessage() === 'BAC_FILE_NAME_INVALID')
+        if($e->getMessage() === 'SYS_FILENAME_INVALID')
         {
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
@@ -273,7 +273,7 @@ elseif ($getMode === 4)
         {
             $e->setNewMessage('SYS_FIELD_EMPTY', $gL10n->get('DOW_NEW_NAME'));
         }
-        if($e->getMessage() === 'BAC_FILE_NAME_INVALID' && $getFolderId > 0)
+        if($e->getMessage() === 'SYS_FILENAME_INVALID' && $getFolderId > 0)
         {
             $e->setNewMessage('DOW_FOLDER_NAME_INVALID');
         }
