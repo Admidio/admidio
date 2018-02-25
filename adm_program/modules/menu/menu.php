@@ -24,7 +24,7 @@ $page->enableModal();
 
 $page->addJavascript('
     function moveMenu(direction, menID) {
-        var actRow = document.getElementById("row_" + menID);
+        var actRow = document.getElementById("row_men_" + menID);
         var childs = actRow.parentNode.childNodes;
         var prevNode    = null;
         var nextNode    = null;
@@ -40,7 +40,7 @@ $page->addJavascript('
                     nextNode = childs[i];
                 }
 
-                if (childs[i].id === "row_" + menID) {
+                if (childs[i].id === "row_men_" + menID) {
                     actSequence = actRowCount;
                 }
 
@@ -131,12 +131,29 @@ while ($mainMen = $mainMenStatement->fetchObject())
         if(admIsTranslationStrId($menuRow->men_name))
         {
             $menuName = $gL10n->get($menuRow->men_name);
-            $menuNameDesc = $gL10n->get($menuRow->men_description);
         }
         else
         {
             $menuName = $menuRow->men_name;
+        }
+
+        if(admIsTranslationStrId($menuRow->men_description))
+        {
+            $menuNameDesc = $gL10n->get($menuRow->men_description);
+        }
+        else
+        {
             $menuNameDesc = $menuRow->men_description;
+        }
+
+        // add root path to link unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $menuRow->men_url) === 0)
+        {
+            $menuLink = ADMIDIO_URL . $menuRow->men_url;
+        }
+        else
+        {
+            $menuLink = $menuRow->men_url;
         }
 
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menuRow->men_id.')"><img
@@ -166,7 +183,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
         $columnValues = array(
             '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('men_id' => $menuRow->men_id)). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
             $htmlMoveRow,
-            '<a href="'.ADMIDIO_URL. $menuRow->men_url. '" title="'.$menuNameDesc.'">'. $menuRow->men_url. '</a>',
+            '<a href="'.$menuLink. '" title="'.$menuNameDesc.'">'. $menuRow->men_url. '</a>',
             $htmlStandardMenu,
             $menuAdministration
         );

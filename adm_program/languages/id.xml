@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--Phrases only in Announcementmodule-->
+  <string name="ANN_ANNOUNCEMENT">Pengumuman</string>
+  <string name="ANN_ANNOUNCEMENTS">Pengumuman</string>
+  <string name="ANN_ANNOUNCEMENTS_DESC">Menampilkan atau mengedit pengumuman, berita dan informasi lainnya.</string>
+  <string name="ANN_EDIT_ANNOUNCEMENTS">Edit pengumuman</string>
+  <string name="ANN_EMAIL_NOTIFICATION_TITLE">Pengumuman baru dibuat</string>
+  <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Pengumuman baru di #VAR1# telah dibuat\n\nJudul: #VAR2#\nDibuat oleh: #VAR3#\nDibuat di: #VAR4#</string>
+  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Pengumuman terbaru dari organisasi #VAR1#</string>
+  <!--Phrases only in Backupmodule-->
+  <string name="BAC_BACK_TO_BACKUP_PAGE">Kembali ke halaman cadangan</string>
+  <string name="BAC_BACKUP_COMPLETED">Cadangan dibuat di #VAR1#</string>
+  <string name="BAC_BACKUP_FILE">File cadangan</string>
+  <string name="BAC_BACKUP_FROM">Backup dibuat pada #VAR1# di #VAR2#</string>
+  <string name="BAC_CREATION_DATE">Dibuat pada</string>
+  <string name="BAC_DATABASE_BACKUP">Cadangan databse</string>
+  <string name="BAC_DATABASE_BACKUP_DESC">Membuat dan mendownload cadangan database tabel Admidio.</string>
+  <string name="BAC_DAYS_VAR">#VAR1# hari</string>
+  <string name="BAC_HOURS_VAR">#VAR1# jam</string>
+  <string name="BAC_MINUTES_VAR">#VAR1# menit</string>
+  <string name="BAC_NO_BACKUP_FILE_EXISTS">Tidak ada file cadangan yang ditemukan!</string>
+  <string name="BAC_ONLY_MYSQL">Modul cadangan hanya bisa digunakan dalam kombinasi dengan database MySQL.</string>
+  <string name="BAC_OVERALL_PROGRESS">Kemajuan</string>
+  <string name="BAC_START_BACKUP">Mulai proses cadangan</string>
+  <string name="BAC_SUM">Total</string>
+  <string name="BAC_SECONDS_VAR">#VAR1# detik</string>
+  <!--Phrases only in Category-Administration-->
+  <string name="CAT_ADMINISTRATORS_DESC">Anggota aturan ini adalah administrator modul dan memiliki akses terhadap semuanya. Anda dapat membuat, mengedit, menghapus data dan mengedit kategori dan hak-haknya. Peran dapat dilakukan administrator dengan menugaskannya dengan benar #VAR1_BOLD#.</string>
+  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Semua administrator modul organisasi induk</string>
+  <string name="CAT_ALL_THIS_ORGANIZATION">Semua anggota organisasi ini</string>
+  <string name="CAT_CATEGORY_EXIST">Nama kategori sudah ada di organisasi yang dipilih.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Jika opsi diaktifkan, kolom profil kategori ini akan muncul dan dapat diedit pada tampilan profil organisasi berikut: #VAR1#\n\n Harap dinonaktif, jika kolom hanya ditampilkan di organisasi Anda.</string>
+  <string name="CAT_DEFAULT_VAR">Standar #VAR1#</string>
+  <string name="CAT_DELETE_CATEGORY">Apakah Anda benar-benar ingin menghapus kategori #VAR1_BOLD# ?</string>
+  <string name="CAT_DONT_DELETE_CATEGORY">Tidak dapat menghapus kategori #VAR1_BOLD# karena #VAR2# tergantung entri</string>
+  <string name="CAT_MOVE_DOWN">Pindah ke bawah #VAR1#</string>
+  <string name="CAT_MOVE_UP">Pindah ke atas #VAR1#</string>
+  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Pengaturan ini hanya bisa ditentukan oleh organisasi induk.</string>
+  <string name="CAT_PROFILE_FIELDS_VISIBILITY">Visibilitas bidang profil dalam Kategori ini dapat dicegah untuk Pengguna lain, namun bidang profil tetap terlihat di profil mereka sendiri dan dapat diedit di sana.</string>
+  <string name="CAT_ONLY_PARENT_ORGANIZATION">Kategori ini dapat dilihat oleh semua organisasi dan karena alasan ini hanya dapat diedit oleh organisasi induk.</string>
+  <!--Phrases only in Datesmodule-->
+  <string name="DAT_ADD_DATE_TO_CALENDAR">Tambahkan Acara ke kalender</string>
+  <string name="DAT_ALL_DAY">Waktu penuh</string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Peserta bisa mendaftarkan tamu anonim</string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Peserta dapat menambahkan kursi tambahan untuk pendaftaran mereka. Ini kemudian dikurangkan dari jumlah maksimum peserta dan kursi bebas yang tersisa dikurangi. Ini mis. berguna jika peserta bisa mendatangkan lebih banyak pengunjung sehingga memerlukan jumlah tempat gratis.</string>
+  <string name="DAT_ALLOW_USER_COMMENTS">Izinkan komentar saat pendaftaran</string>
+  <string name="DAT_ALLOW_USER_COMMENTS_DESC">Peserta dapat mengomentari partisipasi mereka. Komentar dapat dilihat melalui daftar peserta</string>
+  <string name="DAT_ASSIGN_PARTICIPANTS">Tambahkan peserta</string>
+  <string name="DAT_ATTEND">Ikut serta</string>
+  <string name="DAT_ATTEND_DATE">Anda mendaftar untuk acara tersebut #VAR1_BOLD# di #VAR2#.</string>
+  <string name="DAT_ATTEND_POSSIBLY">Anda menandatangani tentatif untuk acara tersebut #VAR1_BOLD# di #VAR2#. </string>
+  <string name="DAT_CALENDAR">Kalender</string>
+  <string name="DAT_CANCEL">Batal</string>
+  <string name="DAT_CANCEL_DATE">Anda membatalkan partisipasi untuk acara tersebut #VAR1_BOLD# di #VAR2#.</string>
+  <string name="DAT_CURRENT_DATES_OF_ORGA">Acara terkini dari organisasi #VAR1#</string>
+  <string name="DAT_DATE">Acara</string>
+  <string name="DAT_DATES">Acara</string>
+  <string name="DAT_DATES_DESC">Anda dapat membuat dan mengedit acara di sini. Pengguna bisa mendaftarkan untuk acara ini.</string>
+  <string name="DAT_DEADLINE">Batas waktu</string>
+  <string name="DAT_DEADLINE_ATTENTION">Pendaftaran Anda tidak dapat diubah karena tanggal akhir pendaftaran telah selesai atau tanggalnya telah lewat. Silahkan hubungi pemimpin acara atau administrator!</string>
+  <string name="DAT_DEADLINE_DESC">Peserta dapat mendaftarkan sampai tanggal ini di acara tersebut. Pemimpin dan pengguna yang memiliki izin untuk mengedit acara masih dapat menugaskan peserta. Jika tidak ada nilai tanggal yang ditentukan, maka tanggal mulai acara diasumsikan sebagai nilai default.</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION">Konfigurasi standar dari daftar peserta</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Salah satu konfigurasi yang diberikan di sini dapat ditetapkan sebagai konfigurasi standar untuk daftar peserta pada acara organisasi ini. Peserta acara dilihat dengan konfigurasi ini.</string>
+  <string name="DAT_EDIT_CALENDAR_DESC">Di sini Anda bisa membuat dan mengedit kalender.</string>
+  <string name="DAT_EDIT_EVENTS">Edit acara</string>
+  <string name="DAT_EDIT_ROOMS">Edit ruangan</string>
+  <string name="DAT_EDIT_ROOMS_DESC">Di sini Anda bisa membuat dan mengedit ruangan untuk acara.</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_TITLE">Sebuah acara telah berubah</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART1">Acara di #VAR1# sudah berubah.\n\nJudul: #VAR2#\nTanggal: #VAR3#\nKalender: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART2">Lokasi: #VAR1#\nRuangan: #VAR2#\nPeserta: #VAR3#\nDiubah oleh: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_CHANGE_MESSAGE_PART3">Berubah pada: #VAR1#</string>
+  <string name="DAT_EMAIL_NOTIFICATION_TITLE">Sebuah acara baru telah dibuat</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1">Acara baru di #VAR1# telah dibuat.\n\nJudul: #VAR2#\nTanggal: #VAR3#\nKalender: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Lokasi: #VAR1#\nRuangan: #VAR2#\nPeserta: #VAR3#\nDibuat oleh: #VAR4#\n</string>
+  <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Dibuat pada: #VAR1#</string>
+  <string name="DAT_ENABLE_ICAL">Mengaktifkan fungsi iCal</string>
+  <string name="DAT_ENABLE_ICAL_DESC">Jika fungsi iCal diaktifkan, acara individual atau semua acara dalam jangka waktu tertentu dapat didownload. Selain itu, pengguna akan dapat berlangganan acara dengan menggunakan perangkat lunak klien kalender mereka sendiri. (standar: iya)</string>
+  <string name="DAT_ERROR_DELETE_DEFAULT_LIST">Daftar #VAR1_BOLD# adalah konfigurasi standar untuk daftar peserta dalam organisasi ini dan tidak dapat dihapus. Pada pengaturan modul, pilih konfigurasi yang berbeda untuk konfigurasi standar dan kemudian coba hapus konfigurasi ini.</string>
+  <!--Phrases only in Downloadsmodule-->
+  <!--Phrases only in Ecardsmodule-->
+  <!--Phrases only in Guestbookmodule-->
+  <!--Phrases only in Installation-->
+  <!--Phrases only in Linkmodule-->
+  <!--Phrases only in Listsmodule-->
+  <!--Phrases only in Mailmodule-->
+  <!--Phrases only in Membersadministration-->
+  <!--Phrases only in Menu-->
+  <!--Phrases only in Messagemodule-->
+  <!--Phrases only in New-User-Registration-->
+  <!--Phrases only in Organizationadministration-->
+  <!--Phrases only in Updatecheck-->
+  <!--Phrases only in Photomodule-->
+  <!--Phrases only in Profilemodule-->
+  <!--Phrases only in Relationssmodule-->
+  <!--Phrases only in Rolesmodule-->
+  <!--Phrases only in Roommodule-->
+  <!--System-Phrases for use in every module-->
+</resources>

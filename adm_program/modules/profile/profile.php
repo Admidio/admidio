@@ -200,8 +200,8 @@ $page->addJavascript('
     $("input[data-provide=\'datepicker\']").datepicker({
         language: "'.$gL10n->getLanguageIsoCode().'",
         format: "'.DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')).'",
-        todayHighlight: "true",
-        autoclose: "true"
+        todayHighlight: true,
+        autoclose: true
     });
     formSubmitEvent();',
     true

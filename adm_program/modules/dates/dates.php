@@ -123,7 +123,7 @@ if($getViewMode === 'html')
 
     $page->addJavascript('
         $("#sel_change_view").change(function() {
-            self.location.href = "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $dates->getParameter('dateStartFormatAdmidio'), 'date_to' => $dates->getParameter('dateEndFormatAdmidio'), 'cat_id' => $getCatId)) . '&view=" + $("#sel_change_view").val()";
+            self.location.href = "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates.php', array('mode' => $getMode, 'headline' => $getHeadline, 'date_from' => $dates->getParameter('dateStartFormatAdmidio'), 'date_to' => $dates->getParameter('dateEndFormatAdmidio'), 'cat_id' => $getCatId)) . '&view=" + $("#sel_change_view").val();
         });
 
         $("#menu_item_print_view").click(function() {
@@ -490,7 +490,7 @@ else
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
                         $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
-                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '" title="' . $gL10n->get('DAT_USER_MAYBE_PARTICPATE') . '"/>';
+                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
                         $buttonText = $gL10n->get('DAT_USER_ATTEND');
