@@ -860,7 +860,7 @@ class HtmlForm extends HtmlFormBasic
                         language: "' . $gL10n->getLanguageIsoCode() . '",
                         format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
                         ' . $datepickerOptions . '
-                        todayHighlight: "true"
+                        todayHighlight: true
                     });';
 
                 if ($optionsAll['type'] !== 'birthday')
