@@ -131,11 +131,18 @@ while ($mainMen = $mainMenStatement->fetchObject())
         if(admIsTranslationStrId($menuRow->men_name))
         {
             $menuName = $gL10n->get($menuRow->men_name);
-            $menuNameDesc = $gL10n->get($menuRow->men_description);
         }
         else
         {
             $menuName = $menuRow->men_name;
+        }
+
+        if(admIsTranslationStrId($menuRow->men_description))
+        {
+            $menuNameDesc = $gL10n->get($menuRow->men_description);
+        }
+        else
+        {
             $menuNameDesc = $menuRow->men_description;
         }
 
