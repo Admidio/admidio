@@ -479,11 +479,7 @@ class Language
             }
             catch (\OutOfBoundsException $exception)
             {
-                // continue searching
-                $gLogger->debug(
-                    'L10N: ' . $exception->getMessage(),
-                    array('languageFolderPath' => $languageFolderPath, 'language' => $language, 'textId' => $textId)
-                );
+                // continue searching, no debug output because this will be default way if you have several language path through plugins
             }
         }
 
