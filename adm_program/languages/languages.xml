@@ -29,6 +29,10 @@
         <name>German - Deutsch (Sie)</name>
     </language>
     <language>
+        <isocode>id</isocode>
+        <name>Indonesian - bahasa Indonesia</name>
+    </language>
+    <language>
         <isocode>it</isocode>
         <name>Italian - Italiano</name>
     </language>
