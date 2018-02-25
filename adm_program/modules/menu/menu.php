@@ -139,6 +139,16 @@ while ($mainMen = $mainMenStatement->fetchObject())
             $menuNameDesc = $menuRow->men_description;
         }
 
+        // add root path to link unless the full URL is given
+        if (preg_match('/^http(s?):\/\//', $menuRow->men_url) === 0)
+        {
+            $menuLink = ADMIDIO_URL . $menuRow->men_url;
+        }
+        else
+        {
+            $menuLink = $menuRow->men_url;
+        }
+
         $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:moveMenu(\'UP\', '.$menuRow->men_id.')"><img
                                 src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($headline)).'" /></a>
                            <a class="admidio-icon-link" href="javascript:moveMenu(\'DOWN\', '.$menuRow->men_id.')"><img
@@ -166,7 +176,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
         $columnValues = array(
             '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/menu/menu_new.php', array('men_id' => $menuRow->men_id)). '" title="'.$menuNameDesc.'">'.$menuName.'</a>',
             $htmlMoveRow,
-            '<a href="'.ADMIDIO_URL. $menuRow->men_url. '" title="'.$menuNameDesc.'">'. $menuRow->men_url. '</a>',
+            '<a href="'.$menuLink. '" title="'.$menuNameDesc.'">'. $menuRow->men_url. '</a>',
             $htmlStandardMenu,
             $menuAdministration
         );
