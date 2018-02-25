@@ -24,7 +24,7 @@ $page->enableModal();
 
 $page->addJavascript('
     function moveMenu(direction, menID) {
-        var actRow = document.getElementById("row_" + menID);
+        var actRow = document.getElementById("row_men_" + menID);
         var childs = actRow.parentNode.childNodes;
         var prevNode    = null;
         var nextNode    = null;
@@ -40,7 +40,7 @@ $page->addJavascript('
                     nextNode = childs[i];
                 }
 
-                if (childs[i].id === "row_" + menID) {
+                if (childs[i].id === "row_men_" + menID) {
                     actSequence = actRowCount;
                 }
 
