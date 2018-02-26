@@ -514,6 +514,17 @@ final class FileSystemUtils
             throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
+        if (!self::hasPathOwnerRight($directoryPath))
+        {
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
+        }
+
+        $chmodResult = chmod($directoryPath, $options['mode']);
+        if (!$chmodResult)
+        {
+            throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
+        }
+
         return true;
     }
 
