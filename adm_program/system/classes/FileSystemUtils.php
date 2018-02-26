@@ -934,8 +934,8 @@ final class FileSystemUtils
             throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
         }
 
-        $resultChmod = chmod($directoryPath, $mode);
-        if (!$resultChmod)
+        $chmodResult = chmod($directoryPath, $mode);
+        if (!$chmodResult)
         {
             throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
         }
