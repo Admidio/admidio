@@ -26,7 +26,7 @@ final class FileSystemUtils
     const ROOT_ID = 0;
     const ROOT_FOLDER = '/';
 
-    const DEFAULT_MODE_DIRECTORY = 0775;
+    const DEFAULT_MODE_DIRECTORY = 0777; // TODO: Security Issue! Change in v4.0 to 0775
     const DEFAULT_MODE_FILE      = 0664;
 
     /**
