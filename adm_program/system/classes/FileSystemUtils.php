@@ -26,7 +26,7 @@ final class FileSystemUtils
     const ROOT_ID = 0;
     const ROOT_FOLDER = '/';
 
-    const DEFAULT_MODE_DIRECTORY = 0775;
+    const DEFAULT_MODE_DIRECTORY = 0777; // TODO: Security Issue! Change in v4.0 to 0775
     const DEFAULT_MODE_FILE      = 0664;
 
     /**
@@ -514,6 +514,17 @@ final class FileSystemUtils
             throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
+        if (!self::hasPathOwnerRight($directoryPath))
+        {
+            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
+        }
+
+        $chmodResult = chmod($directoryPath, $options['mode']);
+        if (!$chmodResult)
+        {
+            throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
+        }
+
         return true;
     }
 
@@ -934,8 +945,8 @@ final class FileSystemUtils
             throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
         }
 
-        $resultChmod = chmod($directoryPath, $mode);
-        if (!$resultChmod)
+        $chmodResult = chmod($directoryPath, $mode);
+        if (!$chmodResult)
         {
             throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
         }
