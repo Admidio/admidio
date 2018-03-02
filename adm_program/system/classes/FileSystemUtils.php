@@ -29,6 +29,8 @@ final class FileSystemUtils
     const DEFAULT_MODE_DIRECTORY = 0777; // TODO: Security Issue! Change in v4.0 to 0775
     const DEFAULT_MODE_FILE      = 0664;
 
+    public static $isUnix = DIRECTORY_SEPARATOR === '/';
+
     /**
      * @var array<int,string> The allowed directories
      */
@@ -218,6 +220,7 @@ final class FileSystemUtils
 
     /**
      * Gets info about the php-process owner
+     * @throws \RuntimeException Throws if system does not support POSIX
      * @return array<string,string|int> Returns info about the php-process owner
      * @see https://secure.php.net/manual/en/function.posix-geteuid.php
      * @see https://secure.php.net/manual/en/function.posix-getpwuid.php
@@ -229,11 +232,17 @@ final class FileSystemUtils
      */
     public static function getProcessOwnerInfo()
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::getProcessOwnerInfo()" is only available on systems with POSIX support!');
+        }
+
         return posix_getpwuid(posix_geteuid());
     }
 
     /**
      * Gets info about the php-process group
+     * @throws \RuntimeException Throws if system does not support POSIX
      * @return array<string,string|int|array> Returns info about the php-process group
      * @see https://secure.php.net/manual/en/function.posix-getegid.php
      * @see https://secure.php.net/manual/en/function.posix-getgrgid.php
@@ -241,6 +250,11 @@ final class FileSystemUtils
      */
     public static function getProcessGroupInfo()
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::getProcessGroupInfo()" is only available on systems with POSIX support!');
+        }
+
         return posix_getgrgid(posix_getegid());
     }
 
@@ -248,12 +262,17 @@ final class FileSystemUtils
      * Gets info about the path owner
      * @param string $path The path from which to get the information
      * @throws \UnexpectedValueException Throws if path does not exist
-     * @throws \RuntimeException         Throws if the fileowner determination fails
+     * @throws \RuntimeException         Throws if the fileowner determination fails or system does not support POSIX
      * @return array<string,string|int> Returns info about the path owner
      * @see https://secure.php.net/manual/en/function.fileowner.php
      */
     public static function getPathOwnerInfo($path)
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::getPathOwnerInfo()" is only available on systems with POSIX support!');
+        }
+
         self::checkIsInAllowedDirectories($path);
 
         $parentDirectoryPath = dirname($path);
@@ -280,12 +299,17 @@ final class FileSystemUtils
      * Gets info about the path group
      * @param string $path The path from which to get the information
      * @throws \UnexpectedValueException Throws if path does not exist
-     * @throws \RuntimeException         Throws if the groupowner determination fails
+     * @throws \RuntimeException         Throws if the groupowner determination fails or system does not support POSIX
      * @return array<string,string|int|array> Returns info about the path group
      * @see https://secure.php.net/manual/en/function.filegroup.php
      */
     public static function getPathGroupInfo($path)
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::getPathGroupInfo()" is only available on systems with POSIX support!');
+        }
+
         self::checkIsInAllowedDirectories($path);
 
         $parentDirectoryPath = dirname($path);
@@ -312,7 +336,7 @@ final class FileSystemUtils
      * Checks if the php-process is the path owner
      * @param string $path The path from which to get the information
      * @throws \UnexpectedValueException Throws if path does not exist
-     * @throws \RuntimeException         Throws if the fileowner determination fails
+     * @throws \RuntimeException         Throws if the fileowner determination fails or system does not support POSIX
      * @return bool Returns true if php-process is the path owner
      * @see https://secure.php.net/manual/en/function.posix-geteuid.php
      * @see https://secure.php.net/manual/en/function.posix-getpwuid.php
@@ -320,6 +344,11 @@ final class FileSystemUtils
      */
     public static function hasPathOwnerRight($path)
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::hasPathOwnerRight()" is only available on systems with POSIX support!');
+        }
+
         self::checkIsInAllowedDirectories($path);
 
         $processOwnerInfo = self::getProcessOwnerInfo();
@@ -452,12 +481,21 @@ final class FileSystemUtils
             throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
         }
 
-        $ownerInfo = self::getPathOwnerInfo($path);
-        $groupInfo = self::getPathGroupInfo($path);
+        if (self::$isUnix)
+        {
+            $ownerInfo = self::getPathOwnerInfo($path);
+            $groupInfo = self::getPathGroupInfo($path);
+
+            return array(
+                'owner' => $ownerInfo['name'],
+                'group' => $groupInfo['name'],
+                'mode' => self::getPathMode($path)
+            );
+        }
 
         return array(
-            'owner' => $ownerInfo['name'],
-            'group' => $groupInfo['name'],
+            'owner' => null,
+            'group' => null,
             'mode' => self::getPathMode($path)
         );
     }
@@ -514,15 +552,18 @@ final class FileSystemUtils
             throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
-        if (!self::hasPathOwnerRight($directoryPath))
+        if (self::$isUnix)
         {
-            throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
-        }
+            if (!self::hasPathOwnerRight($directoryPath))
+            {
+                throw new \UnexpectedValueException('Directory "' . $directoryPath . '" owner is different to process owner!');
+            }
 
-        $chmodResult = chmod($directoryPath, $options['mode']);
-        if (!$chmodResult)
-        {
-            throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
+            $chmodResult = chmod($directoryPath, $options['mode']);
+            if (!$chmodResult)
+            {
+                throw new \RuntimeException('Directory "' . $directoryPath . '" mode cannot be changed!');
+            }
         }
 
         return true;
@@ -933,6 +974,11 @@ final class FileSystemUtils
      */
     public static function chmodDirectory($directoryPath, $mode = self::DEFAULT_MODE_DIRECTORY, $recursive = false, $onlyDirectories = true)
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::chmodDirectory()" is only available on systems with POSIX support!');
+        }
+
         self::checkIsInAllowedDirectories($directoryPath);
 
         if (!is_dir($directoryPath))
@@ -1132,6 +1178,11 @@ final class FileSystemUtils
      */
     public static function chmodFile($filePath, $mode = self::DEFAULT_MODE_FILE)
     {
+        if (!self::$isUnix)
+        {
+            throw new \RuntimeException('"FileSystemUtils::chmodFile()" is only available on systems with POSIX support!');
+        }
+
         self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);

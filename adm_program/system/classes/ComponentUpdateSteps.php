@@ -458,6 +458,11 @@ final class ComponentUpdateSteps
      */
     public static function updateStepRewriteFolderRights($folder = '')
     {
+        if (!FileSystemUtils::$isUnix)
+        {
+            return false;
+        }
+
         if ($folder === '')
         {
             $folder = ADMIDIO_PATH . FOLDER_DATA;
