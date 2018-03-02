@@ -452,7 +452,7 @@ final class ComponentUpdateSteps
     }
 
     /**
-     * Check all folders in adm_my_files and set the rights to 0777
+     * Check all folders in adm_my_files and set the rights to default folder mode-rights
      * @param string $folder
      * @return bool
      */
@@ -465,7 +465,7 @@ final class ComponentUpdateSteps
 
         try
         {
-            FileSystemUtils::chmodDirectory($folder, 0777, true);
+            FileSystemUtils::chmodDirectory($folder, FileSystemUtils::DEFAULT_MODE_DIRECTORY, true);
 
             return true;
         }

@@ -106,7 +106,7 @@ if (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FO
 {
     try
     {
-        FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA, 0777);
+        FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
     }
     catch (\RuntimeException $exception)
     {
