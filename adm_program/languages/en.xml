@@ -17,7 +17,6 @@
   <string name="BAC_DATABASE_BACKUP">Database backup</string>
   <string name="BAC_DATABASE_BACKUP_DESC">Create and download database backups of Admidio tables.</string>
   <string name="BAC_DAYS_VAR">#VAR1# days</string>
-  <string name="BAC_FILE_NAME_INVALID">The selected file name contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0-9 and special characters $!?._+-()&amp; are allowed.</string>
   <string name="BAC_HOURS_VAR">#VAR1# hours</string>
   <string name="BAC_MINUTES_VAR">#VAR1# minutes</string>
   <string name="BAC_NO_BACKUP_FILE_EXISTS">No Backup file found!</string>
@@ -1091,7 +1090,7 @@
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Checkbox status is saved automatically after marking.</string>
-  <string name="SYS_CITY">Location</string>
+  <string name="SYS_CITY">City</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CLOSE_WINDOW">Close window</string>
@@ -1179,6 +1178,7 @@
   <string name="SYS_FILE_TO_LARGE_SERVER">Size of uploaded file exceeds server defined maximum file size of #VAR1# MB.</string>
   <string name="SYS_FILE_UPLOADS">File uploads</string>
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
+  <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0-9 and special characters $!?._+-()&amp; are allowed.</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FIRSTNAME">First name</string>

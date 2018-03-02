@@ -257,8 +257,17 @@ class HtmlPage
 
             if ($menuStatement->rowCount() > 0)
             {
+                if(admIsTranslationStrId($mainMenu['men_name']))
+                {
+                    $menuName = $gL10n->get($mainMenu['men_name']);
+                }
+                else
+                {
+                    $menuName = $mainMenu['men_name'];
+                }
+
                 $this->menu->addItem(
-                    'menu_item_'.$mainMenu['men_name_intern'], null, $gL10n->get($mainMenu['men_name']),
+                    'menu_item_'.$mainMenu['men_name_intern'], null, $menuName,
                     'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
@@ -272,9 +281,17 @@ class HtmlPage
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
                         $rolesDisplayRight = $displayMenu->getRolesIds();
 
+                        if(admIsTranslationStrId($row['men_name']))
+                        {
+                            $menuName = $gL10n->get($row['men_name']);
+                        }
+                        else
+                        {
+                            $menuName = $row['men_name'];
+                        }
+
                         $menuUrl = $row['men_url'];
                         $menuIcon = $row['men_icon'];
-                        $menuName = $gL10n->get($row['men_name']);
 
                         // special case because there are different links if you are logged in or out for mail
                         if ($gValidLogin && $row['men_name_intern'] === 'mail')
@@ -738,17 +755,24 @@ class HtmlPage
 
                 while ($row = $menuStatement->fetch())
                 {
-                    $description = '';
-
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
-                        if (strlen($row['men_description']) > 2)
+                        if(admIsTranslationStrId($row['men_name']))
+                        {
+                            $menuName = $gL10n->get($row['men_name']);
+                        }
+                        else
+                        {
+                            $menuName = $row['men_name'];
+                        }
+
+                        if(admIsTranslationStrId($row['men_description']))
                         {
                             $description = $gL10n->get($row['men_description']);
-                            if ($description === '##' || $description[0] === '#')
-                            {
-                                $description = $row['men_description'];
-                            }
+                        }
+                        else
+                        {
+                            $description = $row['men_description'];
                         }
 
                         $menuUrl = $row['men_url'];
@@ -756,12 +780,6 @@ class HtmlPage
                         if (strlen($row['men_icon']) > 2)
                         {
                             $menuIcon = $row['men_icon'];
-                        }
-
-                        $menuName = $gL10n->get($row['men_name']);
-                        if ($menuName === '##' || $menuName[0] === '#')
-                        {
-                            $menuName = $row['men_name'];
                         }
 
                         // special case because there are different links if you are logged in or out for mail

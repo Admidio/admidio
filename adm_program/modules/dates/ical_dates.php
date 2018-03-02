@@ -42,8 +42,8 @@ if($getDateFrom == '')
     $now = new \DateTime();
     $dayOffsetPast   = new \DateInterval('P'.$gSettingsManager->getInt('dates_ical_days_past').'D');
     $dayOffsetFuture = new \DateInterval('P'.$gSettingsManager->getInt('dates_ical_days_future').'D');
-    $startDate = $now->sub($dayOffsetPast)->format('Y-m-d');
-    $endDate   = $now->add($dayOffsetFuture)->format('Y-m-d');
+    $getDateFrom = $now->sub($dayOffsetPast)->format('Y-m-d');
+    $getDateTo   = $now->add($dayOffsetFuture)->format('Y-m-d');
 }
 
 // Message if module is disabled

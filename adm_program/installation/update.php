@@ -95,11 +95,11 @@ if (!$gSettingsManager->has('system_language'))
 $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));
 $gL10n = new Language($gLanguageData);
 
-if (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA))
+if (FileSystemUtils::$isUnix && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA)))
 {
     try
     {
-        FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA, 0777);
+        FileSystemUtils::chmodDirectory(ADMIDIO_PATH . FOLDER_DATA);
     }
     catch (\RuntimeException $exception)
     {
