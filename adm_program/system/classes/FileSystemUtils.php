@@ -29,7 +29,7 @@ final class FileSystemUtils
     const DEFAULT_MODE_DIRECTORY = 0777; // TODO: Security Issue! Change in v4.0 to 0775
     const DEFAULT_MODE_FILE      = 0664;
 
-    public static $isUnix = DIRECTORY_SEPARATOR === '/';
+    public static $isUnix = true; //DIRECTORY_SEPARATOR === '/';
 
     /**
      * @var array<int,string> The allowed directories
