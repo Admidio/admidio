@@ -458,7 +458,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStepRewriteFolderRights($folder = '')
     {
-        if (!FileSystemUtils::$isUnix)
+        if (!FileSystemUtils::isUnix())
         {
             return false;
         }
