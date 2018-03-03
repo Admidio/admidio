@@ -75,7 +75,7 @@ while ($row = $statement->fetch())
         $guestbook->getValue('gbo_text'),
         safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $guestbook->getValue('gbo_id'))),
         $guestbook->getValue('gbo_name'),
-        \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );
 }
 

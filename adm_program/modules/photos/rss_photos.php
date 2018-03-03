@@ -161,7 +161,7 @@ while ($row = $statement->fetch())
         $description,
         safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('pho_id' => $phoId)),
         $row['create_name'],
-        \DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );
 }
 
