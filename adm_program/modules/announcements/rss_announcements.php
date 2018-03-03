@@ -49,7 +49,7 @@ $announcements = new ModuleAnnouncements();
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
-$rss = new RSSfeed(
+$rss = new RssFeed(
     $orgLongname.' - '.$getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', array($orgLongname)),
@@ -61,7 +61,7 @@ if($announcements->getDataSetCount() > 0)
 {
     $announcement = new TableAnnouncement($gDb);
     $rows = $announcements->getDataSet(0, 10);
-    // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+    // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
     foreach ($rows['recordset'] as $row)
     {
         // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben

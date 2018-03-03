@@ -52,7 +52,7 @@ $datesResult = $dates->getDataSet(0, 10);
 
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
 // create RSS feed object with channel information
-$rss  = new RSSfeed(
+$rss  = new RssFeed(
     $orgLongname . ' - ' . $getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', array($orgLongname)),
@@ -60,7 +60,7 @@ $rss  = new RSSfeed(
 );
 $date = new TableDate($gDb);
 
-// Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+// Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 if ($datesResult['numResults'] > 0)
 {
     $date = new TableDate($gDb);
