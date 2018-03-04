@@ -60,25 +60,6 @@ final class PhpIniUtils
     }
 
     /**
-     * Returns the calculated megabytes of a string with max 2 decimals or -1 if unlimited.
-     * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
-     *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
-     * @param int    $multi Factor to multiply. Default: 1024
-     * @return float Returns the megabytes of the data string.
-     */
-    private static function getMegaBytesFromSize($data, $multi = self::BYTES_UNIT_FACTOR_1024)
-    {
-        $value = self::getBytesFromSize($data, $multi);
-
-        if($value !== -1)
-        {
-            $value = round($value / $multi / $multi, 2);
-        }
-
-        return (float) $value;
-    }
-
-    /**
      * Returns the allowed base-dirs
      * @return array<string,string>
      * @see https://secure.php.net/manual/en/ini.core.php#ini.open-basedir
@@ -95,7 +76,7 @@ final class PhpIniUtils
      */
     public static function getMemoryLimit()
     {
-        return self::getMegaBytesFromSize(ini_get('memory_limit'));
+        return self::getBytesFromSize(ini_get('memory_limit'));
     }
 
     /**
@@ -105,7 +86,7 @@ final class PhpIniUtils
      */
     public static function getPostMaxSize()
     {
-        return self::getMegaBytesFromSize(ini_get('post_max_size'));
+        return self::getBytesFromSize(ini_get('post_max_size'));
     }
 
     /**
@@ -125,7 +106,7 @@ final class PhpIniUtils
      */
     public static function getFileUploadMaxFileSize()
     {
-        return self::getMegaBytesFromSize(ini_get('upload_max_filesize'));
+        return self::getBytesFromSize(ini_get('upload_max_filesize'));
     }
 
     /**
