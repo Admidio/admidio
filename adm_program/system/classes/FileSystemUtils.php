@@ -155,7 +155,7 @@ final class FileSystemUtils
 
         $unit = $units[$iteration];
 
-        return round($bytes, 3 - floor(log10($bytes))) . ' ' . $unit;
+        return round($bytes, 3 - (int) floor(log10($bytes))) . ' ' . $unit;
     }
 
     /**
