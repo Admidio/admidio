@@ -686,7 +686,7 @@ else
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
-if(PhpIniUtils::getPostMaxSize() === -1)
+if(PhpIniUtils::getPostMaxSize() !== -1)
 {
     $html = getStaticText('success', PhpIniUtils::getPostMaxSize());
 }
@@ -696,7 +696,7 @@ else
 }
 $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
 
-if(PhpIniUtils::getMemoryLimit() === -1)
+if(PhpIniUtils::getMemoryLimit() !== -1)
 {
     $html = getStaticText('success', PhpIniUtils::getMemoryLimit());
 }
@@ -716,7 +716,7 @@ else
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-if(PhpIniUtils::getFileUploadMaxFileSize() === -1)
+if(PhpIniUtils::getFileUploadMaxFileSize() !== -1)
 {
     $html = getStaticText('success', PhpIniUtils::getFileUploadMaxFileSize());
 }
