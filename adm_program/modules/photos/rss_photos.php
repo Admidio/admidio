@@ -89,14 +89,14 @@ $photoAlbum = new TablePhotos($gDb);
 
 // create RSS feed object with channel information
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
-$rss = new RSSfeed(
+$rss = new RssFeed(
     $orgLongname . ' - ' . $getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', array($orgLongname)),
     $orgLongname
 );
 
-// Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+// Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $statement->fetch())
 {
     // Daten in ein Photo-Objekt uebertragen
@@ -161,7 +161,7 @@ while ($row = $statement->fetch())
         $description,
         safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('pho_id' => $phoId)),
         $row['create_name'],
-        \DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );
 }
 

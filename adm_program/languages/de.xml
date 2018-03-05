@@ -1248,7 +1248,7 @@
     <string name="SYS_MASTER_DATA">Stammdaten</string>
     <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
     <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
-    <string name="SYS_MEGA_PIXEL">Mega Pixel</string>
+    <string name="SYS_MEGAPIXEL">Megapixel</string>
     <string name="SYS_MEMBER">Mitglied</string>
     <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
     <string name="SYS_MEMBERS">Mitglieder</string>

@@ -28,11 +28,11 @@ final class PhpIniUtils
     }
 
     /**
-     * Returns the calculated bytes of a string or -1 if unlimited
+     * Returns the calculated bytes of a string or -1 if unlimited.
      * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
      *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
      * @param int    $multi Factor to multiply. Default: 1024
-     * @return int
+     * @return int Returns the bytes of the data string.
      */
     private static function getBytesFromSize($data, $multi = self::BYTES_UNIT_FACTOR_1024)
     {

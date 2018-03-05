@@ -54,7 +54,7 @@ $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('or
 
 // create RSS feed object with channel information
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
-$rss = new RSSfeed(
+$rss = new RssFeed(
     $orgLongname . ' - ' . $getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', array($orgLongname)),
@@ -62,7 +62,7 @@ $rss = new RSSfeed(
 );
 $guestbook = new TableGuestbook($gDb);
 
-// Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+// Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $statement->fetch())
 {
     // ausgelesene Gaestebuchdaten in Guestbook-Objekt schieben
@@ -75,7 +75,7 @@ while ($row = $statement->fetch())
         $guestbook->getValue('gbo_text'),
         safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $guestbook->getValue('gbo_id'))),
         $guestbook->getValue('gbo_name'),
-        \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );
 }
 

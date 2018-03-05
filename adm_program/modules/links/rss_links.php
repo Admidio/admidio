@@ -79,7 +79,7 @@ $statement = $gDb->queryPrepared($sql, $queryParams);
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
-$rss = new RSSfeed(
+$rss = new RssFeed(
     $orgLongname.' - '.$getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('LNK_LINKS_FROM', array($orgLongname)),
@@ -88,7 +88,7 @@ $rss = new RSSfeed(
 
 $weblink = new TableWeblink($gDb);
 
-// Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+// Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $statement->fetch())
 {
     // submit links to object
@@ -103,7 +103,7 @@ while ($row = $statement->fetch())
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
         safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => $weblink->getValue('lnk_id'))),
         $row['create_name'],
-        \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create'))->format('r')
+        \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );
 }
 

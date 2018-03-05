@@ -29,12 +29,19 @@ final class FileSystemUtils
     const DEFAULT_MODE_DIRECTORY = 0775;
     const DEFAULT_MODE_FILE      = 0664;
 
-    public static $isUnix = DIRECTORY_SEPARATOR === '/';
-
     /**
      * @var array<int,string> The allowed directories
      */
     private static $allowedDirectories = array();
+
+    /**
+     * Checks if file-system is UNIX
+     * @return bool Returns true if file-system is UNIX
+     */
+    public static function isUnix()
+    {
+        return DIRECTORY_SEPARATOR === '/';
+    }
 
     /**
      * Get a generated filename with a timestamp and a secure random identifier
@@ -148,7 +155,7 @@ final class FileSystemUtils
 
         $unit = $units[$iteration];
 
-        return round($bytes, 3 - floor(log10($bytes))) . ' ' . $unit;
+        return round($bytes, 3 - (int) floor(log10($bytes))) . ' ' . $unit;
     }
 
     /**
@@ -232,7 +239,7 @@ final class FileSystemUtils
      */
     public static function getProcessOwnerInfo()
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::getProcessOwnerInfo()" is only available on systems with POSIX support!');
         }
@@ -250,12 +257,31 @@ final class FileSystemUtils
      */
     public static function getProcessGroupInfo()
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::getProcessGroupInfo()" is only available on systems with POSIX support!');
         }
 
         return posix_getgrgid(posix_getegid());
+    }
+
+    /**
+     * Checks if the parent directory is executable and the path exist
+     * @param string $path
+     * @throws \UnexpectedValueException Throws if path does not exist or parent directory is not executable
+     */
+    private static function checkParentDirExecAndPathExist($path)
+    {
+        $parentDirectoryPath = dirname($path);
+        if (!is_executable($parentDirectoryPath))
+        {
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
+        }
+
+        if (!file_exists($path))
+        {
+            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
+        }
     }
 
     /**
@@ -268,23 +294,14 @@ final class FileSystemUtils
      */
     public static function getPathOwnerInfo($path)
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::getPathOwnerInfo()" is only available on systems with POSIX support!');
         }
 
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         $fileOwnerResult = fileowner($path);
         if ($fileOwnerResult === false)
@@ -305,23 +322,14 @@ final class FileSystemUtils
      */
     public static function getPathGroupInfo($path)
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::getPathGroupInfo()" is only available on systems with POSIX support!');
         }
 
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         $fileGroupResult = filegroup($path);
         if ($fileGroupResult === false)
@@ -344,7 +352,7 @@ final class FileSystemUtils
      */
     public static function hasPathOwnerRight($path)
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::hasPathOwnerRight()" is only available on systems with POSIX support!');
         }
@@ -371,16 +379,7 @@ final class FileSystemUtils
     {
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         $perms = fileperms($path);
         if ($perms === false)
@@ -470,18 +469,9 @@ final class FileSystemUtils
     {
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
-
-        if (self::$isUnix)
+        if (self::isUnix())
         {
             $ownerInfo = self::getPathOwnerInfo($path);
             $groupInfo = self::getPathGroupInfo($path);
@@ -552,7 +542,7 @@ final class FileSystemUtils
             throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
-        if (self::$isUnix)
+        if (self::isUnix())
         {
             if (!self::hasPathOwnerRight($directoryPath))
             {
@@ -974,7 +964,7 @@ final class FileSystemUtils
      */
     public static function chmodDirectory($directoryPath, $mode = self::DEFAULT_MODE_DIRECTORY, $recursive = false, $onlyDirectories = true)
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::chmodDirectory()" is only available on systems with POSIX support!');
         }
@@ -1178,7 +1168,7 @@ final class FileSystemUtils
      */
     public static function chmodFile($filePath, $mode = self::DEFAULT_MODE_FILE)
     {
-        if (!self::$isUnix)
+        if (!self::isUnix())
         {
             throw new \RuntimeException('"FileSystemUtils::chmodFile()" is only available on systems with POSIX support!');
         }

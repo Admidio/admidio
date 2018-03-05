@@ -10,28 +10,28 @@
  */
 
 /**
- * @class RSSfeed
- * Diese Klasse erzeugt ein RSSfeed-Objekt nach RSS 2.0.
+ * @class RssFeed
+ * Diese Klasse erzeugt ein RssFeed-Objekt nach RSS 2.0.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
- * function RSSfeed($homepage, $title, $description)
+ * function RssFeed($homepage, $title, $description)
  * Parameters:  $homepage       - Link zur Homepage
  *              $title          - Titel des RSS-Feeds
  *              $description    - Ergaenzende Beschreibung zum Titel
  *
- * Dem RSSfeed koennen ueber die Funktion addItem Inhalt zugeordnet werden:
+ * Dem RssFeed koennen ueber die Funktion addItem Inhalt zugeordnet werden:
  * function addItem($title, $description, $date, $guid)
  * Parameters:  $title          - Titel des Items
  *              $description    - der Inhalt des Items
  *              $date           - Das Erstellungsdatum des Items
  *              $link           - Ein Link zum Termin/Newsbeitrag etc.
  *
- * Wenn alle benoetigten Items zugeordnet sind, wird der RSSfeed generiert mit:
+ * Wenn alle benoetigten Items zugeordnet sind, wird der RssFeed generiert mit:
  * function buildFeed()
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  */
-class RSSfeed
+class RssFeed
 {
     /**
      * @var array

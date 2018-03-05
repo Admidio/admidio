@@ -838,7 +838,8 @@ class User extends TableAccess
         if(($categoryType === 'ANN' && $this->editAnnouncements())
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
-        || ($categoryType === 'USF' && $this->editUsers()))
+        || ($categoryType === 'USF' && $this->editUsers())
+        || ($categoryType === 'ROL' && $this->assignRoles()))
         {
             $condition = '';
         }
@@ -916,7 +917,8 @@ class User extends TableAccess
         if(($categoryType === 'ANN' && $this->editAnnouncements())
         || ($categoryType === 'DAT' && $this->editDates())
         || ($categoryType === 'LNK' && $this->editWeblinksRight())
-        || ($categoryType === 'USF' && $this->editUsers()))
+        || ($categoryType === 'USF' && $this->editUsers())
+        || ($categoryType === 'ROL' && $this->assignRoles()))
         {
             $condition = '';
         }

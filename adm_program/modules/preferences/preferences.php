@@ -674,9 +674,9 @@ else
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
-if(PhpIniUtils::getPostMaxSize() === -1)
+if(PhpIniUtils::getPostMaxSize() !== -1)
 {
-    $html = getStaticText('success', PhpIniUtils::getPostMaxSize());
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getPostMaxSize(), true));
 }
 else
 {
@@ -684,9 +684,9 @@ else
 }
 $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
 
-if(PhpIniUtils::getMemoryLimit() === -1)
+if(PhpIniUtils::getMemoryLimit() !== -1)
 {
-    $html = getStaticText('success', PhpIniUtils::getMemoryLimit());
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getMemoryLimit(), true));
 }
 else
 {
@@ -704,9 +704,9 @@ else
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-if(PhpIniUtils::getFileUploadMaxFileSize() === -1)
+if(PhpIniUtils::getFileUploadMaxFileSize() !== -1)
 {
-    $html = getStaticText('success', PhpIniUtils::getFileUploadMaxFileSize());
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getFileUploadMaxFileSize(), true));
 }
 else
 {
@@ -714,7 +714,7 @@ else
 }
 $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
 
-$formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGA_PIXEL'));
+$formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGAPIXEL'));
 $html = '<a href="' . ADMIDIO_URL . '/adm_program/system/phpinfo.php' . '" target="_blank">phpinfo()</a>';
 $formSystemInformation->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
 

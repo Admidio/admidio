@@ -49,7 +49,7 @@ $announcements = new ModuleAnnouncements();
 $orgLongname = $gCurrentOrganization->getValue('org_longname');
 
 // create RSS feed object with channel information
-$rss = new RSSfeed(
+$rss = new RssFeed(
     $orgLongname.' - '.$getHeadline,
     $gCurrentOrganization->getValue('org_homepage'),
     $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', array($orgLongname)),
@@ -61,7 +61,7 @@ if($announcements->getDataSetCount() > 0)
 {
     $announcement = new TableAnnouncement($gDb);
     $rows = $announcements->getDataSet(0, 10);
-    // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
+    // Dem RssFeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
     foreach ($rows['recordset'] as $row)
     {
         // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben
@@ -74,7 +74,7 @@ if($announcements->getDataSetCount() > 0)
             $announcement->getValue('ann_description'),
             safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('id' => $announcement->getValue('ann_id'), 'headline' => $getHeadline)),
             $row['create_name'],
-            \DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create'))->format('r')
+            \DateTime::createFromFormat('Y-m-d H:i:s', $announcement->getValue('ann_timestamp_create', 'Y-m-d H:i:s'))->format('r')
         );
     }
 }
