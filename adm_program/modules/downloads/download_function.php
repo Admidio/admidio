@@ -248,7 +248,7 @@ elseif ($getMode === 4)
                 // Ordner umbenennen im Filesystem und in der Datenbank
                 try
                 {
-                    FileSystemUtils::moveFile($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder);
+                    FileSystemUtils::moveDirectory($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder);
                 }
                 catch (\RuntimeException $exception)
                 {
