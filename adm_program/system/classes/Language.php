@@ -104,12 +104,17 @@ class Language
     {
         global $gLogger;
 
+        $start = microtime(true);
+
         try
         {
             $text = $this->getTextFromTextId($textId);
+
+            $gLogger->debug('L10N: Lookup time ' . (microtime(true) - $start) . ' sec!');
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->debug('L10N: Lookup time ' . (microtime(true) - $start) . ' sec!');
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
             // no text found then write #undefined text#
