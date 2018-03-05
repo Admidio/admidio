@@ -713,7 +713,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Hvis denne mulighed er aktiveret, vil tidligere medlemmer og medlemmer af andre organisationer blive vist sammen med de aktive medlemmer af den nuværende organisation/forening. Ellers så vil kun medlemmer af den nuværende organisation/forening blive vist. Når der oprettes nye brugere eller der tildeles registreringer vil alle organisationer/foreninger blive checket for eksisterende brugere.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Vis organisations vælger</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</string>
-  <string name="ORG_SYSTEM_INFORMATIONS">Systemets informationer</string>
+  <string name="ORG_SYSTEM_INFORMATION">Systemets informationer</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-mail adresse</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Dette felt skal indeholde e-mail adressen på en administrator, da den vil blive brugt som afsender adresse for system beskeder, som f.eks. registrerings bekræftelser.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Besked om nye poster</string>

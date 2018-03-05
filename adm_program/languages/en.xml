@@ -767,7 +767,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">If this option is enabled, former members and members of other organizations will be displayed in addition to the active members of the current organization. Otherwise only members of the current organization will be displayed. When creating new users or assigning registrations all organizations will still be checked for existing users.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
-  <string name="ORG_SYSTEM_INFORMATIONS">System information</string>
+  <string name="ORG_SYSTEM_INFORMATION">System information</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Mail address</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">This field should contain the email address of an administrator as it will be used as sender address of system notifications, e.g. for registration confirmation.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notification for new entries</string>

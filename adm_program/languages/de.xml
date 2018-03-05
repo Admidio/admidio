@@ -767,7 +767,7 @@
     <string name="ORG_SHOW_ALL_USERS_DESC">Ist diese Einstellung gesetzt, so werden in der Benutzerverwaltung neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen angezeigt. Wird die Einstellung deaktiviert, werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Benutzer oder Zuordnen von Anmeldungen wird allerdings weiterhin im gesamten Benutzerbestand aller Organisationen nach bereits existierenden Benutzern geschaut.</string>
     <string name="ORG_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
     <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</string>
-    <string name="ORG_SYSTEM_INFORMATIONS">Systeminformationen</string>
+    <string name="ORG_SYSTEM_INFORMATION">Systeminformationen</string>
     <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mail-Adresse</string>
     <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung.</string>
     <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
