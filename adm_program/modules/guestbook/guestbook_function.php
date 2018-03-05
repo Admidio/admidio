@@ -351,12 +351,12 @@ elseif ($getMode === 4 || $getMode === 8)
         $gbComment->setValue('gbc_gbo_id', $getGboId);
     }
 
-    if ($gbComment->getValue('gbc_name') !== '')
+    if ($gbComment->getValue('gbc_name') === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME'))));
         // => EXIT
     }
-    elseif ($gbComment->getValue('gbc_text') !== '')
+    elseif ($gbComment->getValue('gbc_text') === '')
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_COMMENT'))));
         // => EXIT
