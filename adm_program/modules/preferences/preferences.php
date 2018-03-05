@@ -686,23 +686,25 @@ else
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
-if(PhpIniUtils::getPostMaxSize() !== -1)
+$postMaxSize = PhpIniUtils::getPostMaxSize();
+if($postMaxSize === -1)
 {
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getPostMaxSize(), true));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($postMaxSize));
 }
 $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
 
-if(PhpIniUtils::getMemoryLimit() !== -1)
+$memoryLimit = PhpIniUtils::getMemoryLimit();
+if($memoryLimit === -1)
 {
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getMemoryLimit(), true));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($memoryLimit));
 }
 $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
 
@@ -716,13 +718,14 @@ else
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-if(PhpIniUtils::getFileUploadMaxFileSize() !== -1)
+$fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
+if($fileUploadMaxFileSize === -1)
 {
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getFileUploadMaxFileSize(), true));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize));
 }
 $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
 
