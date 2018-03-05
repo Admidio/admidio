@@ -266,6 +266,25 @@ final class FileSystemUtils
     }
 
     /**
+     * Checks if the parent directory is executable and the path exist
+     * @param string $path
+     * @throws \UnexpectedValueException Throws if path does not exist or parent directory is not executable
+     */
+    private static function checkParentDirExecAndPathExist($path)
+    {
+        $parentDirectoryPath = dirname($path);
+        if (!is_executable($parentDirectoryPath))
+        {
+            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
+        }
+
+        if (!file_exists($path))
+        {
+            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
+        }
+    }
+
+    /**
      * Gets info about the path owner
      * @param string $path The path from which to get the information
      * @throws \UnexpectedValueException Throws if path does not exist
@@ -282,16 +301,7 @@ final class FileSystemUtils
 
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         $fileOwnerResult = fileowner($path);
         if ($fileOwnerResult === false)
@@ -319,16 +329,7 @@ final class FileSystemUtils
 
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         $fileGroupResult = filegroup($path);
         if ($fileGroupResult === false)
@@ -378,16 +379,7 @@ final class FileSystemUtils
     {
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         $perms = fileperms($path);
         if ($perms === false)
@@ -477,16 +469,7 @@ final class FileSystemUtils
     {
         self::checkIsInAllowedDirectories($path);
 
-        $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
-        {
-            throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
-        }
-
-        if (!file_exists($path))
-        {
-            throw new \UnexpectedValueException('Path "' . $path . '" does not exist!');
-        }
+        self::checkParentDirExecAndPathExist($path);
 
         if (self::isUnix())
         {
