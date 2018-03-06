@@ -422,7 +422,7 @@ class Language
      * @throws \OutOfBoundsException
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
-    public function searchLanguageText(array &$xmlLanguageObjects, $languageFilePath, $textId)
+    private function searchLanguageText(array &$xmlLanguageObjects, $languageFilePath, $textId)
     {
         global $gLogger;
 
