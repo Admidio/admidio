@@ -267,13 +267,13 @@ final class FileSystemUtils
 
     /**
      * Checks if the parent directory is executable and the path exist
-     * @param string $path
+     * @param string $path The path to check
      * @throws \UnexpectedValueException Throws if path does not exist or parent directory is not executable
      */
     private static function checkParentDirExecAndPathExist($path)
     {
         $parentDirectoryPath = dirname($path);
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
@@ -527,7 +527,7 @@ final class FileSystemUtils
                 throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" does not exist!');
             }
         }
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
@@ -749,7 +749,7 @@ final class FileSystemUtils
         }
 
         $parentDirectoryPath = dirname($directoryPath);
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
@@ -821,7 +821,7 @@ final class FileSystemUtils
 
             throw new \UnexpectedValueException('Destination directory "' . $newDirectoryPath . '" does not exist!');
         }
-        if (!is_executable($newDirectoryPath))
+        if (self::isUnix() && !is_executable($newDirectoryPath))
         {
             throw new \UnexpectedValueException('Destination directory "' . $newDirectoryPath . '" is not executable!');
         }
@@ -1020,7 +1020,7 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
@@ -1062,7 +1062,7 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($newFilePath);
 
         $oldParentDirectoryPath = dirname($oldFilePath);
-        if (!is_executable($oldParentDirectoryPath))
+        if (self::isUnix() && !is_executable($oldParentDirectoryPath))
         {
             throw new \UnexpectedValueException('Source parent directory "' . $oldParentDirectoryPath . '" is not executable!');
         }
@@ -1092,7 +1092,7 @@ final class FileSystemUtils
 
             throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" does not exist!');
         }
-        if (!is_executable($newParentDirectoryPath))
+        if (self::isUnix() && !is_executable($newParentDirectoryPath))
         {
             throw new \UnexpectedValueException('Destination parent directory "' . $newParentDirectoryPath . '" is not executable!');
         }
@@ -1176,7 +1176,7 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
@@ -1209,7 +1209,7 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
@@ -1247,7 +1247,7 @@ final class FileSystemUtils
         self::checkIsInAllowedDirectories($filePath);
 
         $parentDirectoryPath = dirname($filePath);
-        if (!is_executable($parentDirectoryPath))
+        if (self::isUnix() && !is_executable($parentDirectoryPath))
         {
             throw new \UnexpectedValueException('Parent directory "' . $parentDirectoryPath . '" is not executable!');
         }
