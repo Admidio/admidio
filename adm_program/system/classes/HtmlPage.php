@@ -750,24 +750,8 @@ class HtmlPage
                 {
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
-                        if(Language::isTranslationStringId($row['men_name']))
-                        {
-                            $menuName = $gL10n->get($row['men_name']);
-                        }
-                        else
-                        {
-                            $menuName = $row['men_name'];
-                        }
-
-                        if(Language::isTranslationStringId($row['men_description']))
-                        {
-                            $description = $gL10n->get($row['men_description']);
-                        }
-                        else
-                        {
-                            $description = $row['men_description'];
-                        }
-
+                        $menuName = Language::translateIfTranslationStrId($row['men_name']);
+                        $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
                         $menuUrl = $row['men_url'];
 
                         if (strlen($row['men_icon']) > 2)
@@ -785,7 +769,7 @@ class HtmlPage
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
-                        $menu->addItem($row['men_name_intern'], $menuUrl, $menuName, $menuIcon, $description);
+                        $menu->addItem($row['men_name_intern'], $menuUrl, $menuName, $menuIcon, $menuDescription);
 
                         if ($details)
                         {
