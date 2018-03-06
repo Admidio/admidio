@@ -593,7 +593,7 @@ $page->addHtml(getPreferencePanel('captcha', $gL10n->get('SYS_CAPTCHA'), 'captch
 
 // PANEL: SYSTEM INFORMATION
 
-$formSystemInformation = new HtmlForm('system_informations_preferences_form', null, $page);
+$formSystemInformation = new HtmlForm('system_information_preferences_form', null, $page);
 
 $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION_TEXT.'
             <a id="link_check_for_update" href="#link_check_for_update" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
@@ -674,23 +674,25 @@ else
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
-if(PhpIniUtils::getPostMaxSize() !== -1)
+$postMaxSize = PhpIniUtils::getPostMaxSize();
+if($postMaxSize === -1)
 {
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getPostMaxSize(), true));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($postMaxSize));
 }
 $formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
 
-if(PhpIniUtils::getMemoryLimit() !== -1)
+$memoryLimit = PhpIniUtils::getMemoryLimit();
+if($memoryLimit === -1)
 {
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getMemoryLimit(), true));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($memoryLimit));
 }
 $formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
 
@@ -704,13 +706,14 @@ else
 }
 $formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
 
-if(PhpIniUtils::getFileUploadMaxFileSize() !== -1)
+$fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
+if($fileUploadMaxFileSize === -1)
 {
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes(PhpIniUtils::getFileUploadMaxFileSize(), true));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize));
 }
 $formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
 
@@ -747,7 +750,7 @@ $html = '
     </div>';
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
-$page->addHtml(getPreferencePanel('system_informations', $gL10n->get('ORG_SYSTEM_INFORMATIONS'), 'info.png', $formSystemInformation->show(false)));
+$page->addHtml(getPreferencePanel('system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'info.png', $formSystemInformation->show(false)));
 
 $page->addHtml('
         </div>

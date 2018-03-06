@@ -157,8 +157,6 @@ class TableUserField extends TableAccess
      */
     public function getValue($columnName, $format = '')
     {
-        global $gL10n;
-
         if ($columnName === 'usf_description')
         {
             if (!isset($this->dbColumns['usf_description']))
@@ -191,10 +189,7 @@ class TableUserField extends TableAccess
                 case 'usf_name':
                 case 'cat_name':
                     // if text is a translation-id then translate it
-                    if (admIsTranslationStrId($value))
-                    {
-                        $value = $gL10n->get($value);
-                    }
+                    $value = Language::translateIfTranslationStrId($value);
 
                     break;
                 case 'usf_value_list':
@@ -227,10 +222,7 @@ class TableUserField extends TableAccess
                                     }
 
                                     // if text is a translation-id then translate it
-                                    if (admIsTranslationStrId($listValueText))
-                                    {
-                                        $listValueText = $gL10n->get($listValueText);
-                                    }
+                                    $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                                     if ($format === 'text')
                                     {
@@ -268,10 +260,7 @@ class TableUserField extends TableAccess
                             }
 
                             // if text is a translation-id then translate it
-                            if (admIsTranslationStrId($listValue))
-                            {
-                                $listValue = $gL10n->get($listValue);
-                            }
+                            $listValue = Language::translateIfTranslationStrId($listValue);
 
                             // save values in new array that starts with key = 1
                             $arrListValuesWithKeys[++$key] = $listValue;

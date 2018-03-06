@@ -642,18 +642,24 @@ class Database
         // if debug mode then log all sql statements
         $gLogger->info('SQL: ' . self::prepareSqlForLog($sql));
 
+        $startTime = microtime(true);
+
         try
         {
             $this->pdoStatement = $this->pdo->query($sql);
 
             if ($this->pdoStatement !== false && admStrStartsWith(strtoupper($sql), 'SELECT'))
             {
-                $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
+                $gLogger->debug('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
+
+            $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
         }
         // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (\PDOException $exception)
         {
+            $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
+
             if ($showError)
             {
                 $gLogger->critical('PDOException: ' . $exception->getMessage());
@@ -694,6 +700,8 @@ class Database
         // if debug mode then log all sql statements
         $gLogger->info('SQL: ' . self::prepareSqlForLog($sql), $params);
 
+        $startTime = microtime(true);
+
         try
         {
             $this->pdoStatement = $this->pdo->prepare($sql);
@@ -707,10 +715,14 @@ class Database
                     $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
                 }
             }
+
+            $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
         }
         // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (\PDOException $exception)
         {
+            $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
+
             if ($showError)
             {
                 $gLogger->critical('PDOException: ' . $exception->getMessage());

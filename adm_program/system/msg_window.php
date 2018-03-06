@@ -158,19 +158,7 @@ switch ($getMessageId)
     default:
         // In the standard case, the ID is used to read the text from the language file.
         // If the text variable is filled, check whether this is an ID from the language file.
-        $msgVar1 = '';
-        if($getMessageVar1 !== '')
-        {
-            if(admIsTranslationStrId($getMessageVar1))
-            {
-                $msgVar1 = $gL10n->get($getMessageVar1);
-            }
-            else
-            {
-                $msgVar1 = $getMessageVar1;
-            }
-        }
-        echo $gL10n->get(strtoupper($getMessageId), array($msgVar1));
+        echo $gL10n->get(strtoupper($getMessageId), array(Language::translateIfTranslationStrId($getMessageVar1)));
         break;
 }
 

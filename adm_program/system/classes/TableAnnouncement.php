@@ -65,13 +65,10 @@ class TableAnnouncement extends TableAccess
 
         $value = parent::getValue($columnName, $format);
 
-        if($columnName === 'cat_name')
+        // if text is a translation-id then translate it
+        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value))
         {
-            // if text is a translation-id then translate it
-            if ($format !== 'database' && admIsTranslationStrId($value))
-            {
-                $value = $gL10n->get($value);
-            }
+            $value = $gL10n->get($value);
         }
 
         return $value;

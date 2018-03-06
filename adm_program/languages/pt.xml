@@ -767,7 +767,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Se esta opção estiver ativa, ex-membros e membros das outras organizações serão exibidos junto aos membros ativos da atual organização. Caso contrário, apenas os membros da atual organização serão exibidos. Ao criar outros usuários ou atribuir registos, todas as organizações continuarão a ser verificadas quanto à existência de usuários.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Exibir seleção de organização</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
-  <string name="ORG_SYSTEM_INFORMATIONS">Informação do sistema</string>
+  <string name="ORG_SYSTEM_INFORMATION">Informação do sistema</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Endereço de e-mail</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Este campo deve conter um endereço de e-mail de um administrador, para que seja usado como remetente nas notificações do sistema, como por exemplo, as confirmações de registo.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificação de novas notas</string>

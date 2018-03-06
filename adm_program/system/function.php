@@ -817,3 +817,15 @@ function replaceValuesArrWithQM(array $valuesArray)
 {
     return implode(',', array_fill(0, count($valuesArray), '?'));
 }
+
+/**
+ * Calculates and formats the execution time
+ * @param float $startTime The start time
+ * @return string Returns the formated execution time
+ */
+function getExecutionTime($startTime)
+{
+    $stopTime = microtime(true);
+
+    return number_format(($stopTime - $startTime) * 1000, 6, '.', '') . ' ms';
+}

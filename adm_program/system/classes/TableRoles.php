@@ -339,7 +339,7 @@ class TableRoles extends TableAccess
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if ($columnName === 'cat_name' && $format !== 'database' && admIsTranslationStrId($value))
+        if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value))
         {
             $value = $gL10n->get($value);
         }

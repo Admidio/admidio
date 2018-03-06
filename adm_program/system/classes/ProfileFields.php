@@ -145,7 +145,7 @@ class ProfileFields
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
@@ -237,10 +237,7 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            if (admIsTranslationStrId($listValueText))
-                            {
-                                $listValueText = $gL10n->get($listValueText);
-                            }
+                            $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                             try
                             {
@@ -262,10 +259,7 @@ class ProfileFields
                         }
 
                         // if text is a translation-id then translate it
-                        if (admIsTranslationStrId($listValue))
-                        {
-                            $listValue = $gL10n->get($listValue);
-                        }
+                        $listValue = Language::translateIfTranslationStrId($listValue);
 
                         // save values in new array that starts with key = 1
                         $arrListValuesWithKeys[++$index] = $listValue;
@@ -349,7 +343,7 @@ class ProfileFields
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field whose value should be read
      * @param string $format          Returns the field value in a special format **text**, **html**, **database**
      *                                or datetime (detailed description in method description)
-     *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function  
+     *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
      * @return string|int|bool Returns the value for the column.

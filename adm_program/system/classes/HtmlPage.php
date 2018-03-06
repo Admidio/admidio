@@ -253,73 +253,61 @@ class HtmlPage
 
         while ($mainMenu = $mainMenuStatement->fetch())
         {
-            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
+            $menuItems = array();
 
-            if ($menuStatement->rowCount() > 0)
+            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
+            while ($row = $menuStatement->fetch())
             {
-                if(admIsTranslationStrId($mainMenu['men_name']))
+                if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                 {
-                    $menuName = $gL10n->get($mainMenu['men_name']);
+                    // Read current roles rights of the menu
+                    $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
+                    $rolesDisplayRight = $displayMenu->getRolesIds();
+
+                    // check for right to show the menu
+                    if (count($rolesDisplayRight) > 0 && !$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                    {
+                        continue;
+                    }
+
+                    // special case because there are different links if you are logged in or out for mail
+                    if ($gValidLogin && $row['men_name_intern'] === 'mail')
+                    {
+                        $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
+                        $menuIcon = '/icons/messages.png';
+                        $menuName = $gL10n->get('SYS_MESSAGES') . self::getUnreadMessagesBadge();
+                    }
+                    else
+                    {
+                        $menuUrl = $row['men_url'];
+                        $menuIcon = $row['men_icon'];
+                        $menuName = Language::translateIfTranslationStrId($row['men_name']);
+                    }
+
+                    $menuItems[] = array(
+                        'intern' => $row['men_name_intern'],
+                        'url'    => $menuUrl,
+                        'name'   => $menuName,
+                        'icon'   => $menuIcon
+                    );
                 }
-                else
-                {
-                    $menuName = $mainMenu['men_name'];
-                }
+            }
+
+            if (count($menuItems) > 0)
+            {
+                $menuName = Language::translateIfTranslationStrId($mainMenu['men_name']);
 
                 $this->menu->addItem(
                     'menu_item_'.$mainMenu['men_name_intern'], null, $menuName,
                     'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
-                while ($row = $menuStatement->fetch())
+                foreach ($menuItems as $menuItem)
                 {
-                    if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
-                    {
-                        $viewMenu = true;
-
-                        // Read current roles rights of the menu
-                        $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
-                        $rolesDisplayRight = $displayMenu->getRolesIds();
-
-                        if(admIsTranslationStrId($row['men_name']))
-                        {
-                            $menuName = $gL10n->get($row['men_name']);
-                        }
-                        else
-                        {
-                            $menuName = $row['men_name'];
-                        }
-
-                        $menuUrl = $row['men_url'];
-                        $menuIcon = $row['men_icon'];
-
-                        // special case because there are different links if you are logged in or out for mail
-                        if ($gValidLogin && $row['men_name_intern'] === 'mail')
-                        {
-                            $unreadBadge = self::getUnreadMessagesBadge();
-
-                            $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                            $menuIcon = '/icons/messages.png';
-                            $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                        }
-
-                        if (count($rolesDisplayRight) >= 1)
-                        {
-                            // check for right to show the menu
-                            if (!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-                            {
-                                $viewMenu = false;
-                            }
-                        }
-
-                        if ($viewMenu)
-                        {
-                            $this->menu->addItem(
-                                $row['men_name_intern'], $menuUrl, $menuName, $menuIcon, 'right',
-                                'menu_item_'.$mainMenu['men_name_intern'], 'admidio-default-menu-item'
-                            );
-                        }
-                    }
+                    $this->menu->addItem(
+                        $menuItem['intern'], $menuItem['url'], $menuItem['name'], $menuItem['icon'], 'right',
+                        'menu_item_'.$mainMenu['men_name_intern'], 'admidio-default-menu-item'
+                    );
                 }
             }
         }
@@ -757,24 +745,8 @@ class HtmlPage
                 {
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
-                        if(admIsTranslationStrId($row['men_name']))
-                        {
-                            $menuName = $gL10n->get($row['men_name']);
-                        }
-                        else
-                        {
-                            $menuName = $row['men_name'];
-                        }
-
-                        if(admIsTranslationStrId($row['men_description']))
-                        {
-                            $description = $gL10n->get($row['men_description']);
-                        }
-                        else
-                        {
-                            $description = $row['men_description'];
-                        }
-
+                        $menuName = Language::translateIfTranslationStrId($row['men_name']);
+                        $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
                         $menuUrl = $row['men_url'];
 
                         if (strlen($row['men_icon']) > 2)
@@ -792,7 +764,7 @@ class HtmlPage
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
-                        $menu->addItem($row['men_name_intern'], $menuUrl, $menuName, $menuIcon, $description);
+                        $menu->addItem($row['men_name_intern'], $menuUrl, $menuName, $menuIcon, $menuDescription);
 
                         if ($details)
                         {

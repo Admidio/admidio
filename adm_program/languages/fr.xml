@@ -411,7 +411,7 @@
   <string name="ORG_SECONDS">Secondes</string>
   <string name="ORG_SEND_PASSWORD">Envoyer le mot de passe</string>
   <string name="ORG_SEND_NEW_PASSWORD">Envoyer le nouveau mot de passe</string>
-  <string name="ORG_SYSTEM_INFORMATIONS">Informations système</string>
+  <string name="ORG_SYSTEM_INFORMATION">Informations système</string>
   <string name="ORG_TIME_FORMAT">Format du temps</string>
   <string name="ORG_TIME_FORMAT_DESC">Format respecté %VAR1 fonction PHP. (Par défaut: H: i)</string>
   <string name="ORG_URL">URL</string>
