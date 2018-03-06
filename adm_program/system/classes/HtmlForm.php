@@ -1354,7 +1354,7 @@ class HtmlForm extends HtmlFormBasic
                 }
 
                 // if value is a translation string we must translate it
-                if(admIsTranslationStrId($value[1]))
+                if(Language::isTranslationStringId($value[1]))
                 {
                     $value[1] = $gL10n->get($value[1]);
                 }
@@ -1383,7 +1383,7 @@ class HtmlForm extends HtmlFormBasic
                 }
 
                 // if value is a translation string we must translate it
-                if(admIsTranslationStrId($value))
+                if(Language::isTranslationStringId($value))
                 {
                     $value = $gL10n->get($value);
                 }
@@ -1531,7 +1531,7 @@ class HtmlForm extends HtmlFormBasic
             if(array_key_exists(2, $row))
             {
                 // translate category name
-                if (admIsTranslationStrId($row[2]))
+                if (Language::isTranslationStringId($row[2]))
                 {
                     $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get($row[2]));
                 }
@@ -1782,7 +1782,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if text is a translation-id then translate it
-            if (admIsTranslationStrId($row['cat_name']))
+            if (Language::isTranslationStringId($row['cat_name']))
             {
                 $categoriesArray[$row['cat_id']] = $gL10n->get($row['cat_name']);
             }
@@ -1896,7 +1896,7 @@ class HtmlForm extends HtmlFormBasic
         if ($helpTextId !== '')
         {
             // if text is a translation-id then translate it
-            if (admIsTranslationStrId($helpTextId))
+            if (Language::isTranslationStringId($helpTextId))
             {
                 foreach ($parameters as &$parameter)
                 {
@@ -1904,7 +1904,7 @@ class HtmlForm extends HtmlFormBasic
                     $parameter = (string) $parameter;
 
                     // if parameter is a translation-id then translate it
-                    if (admIsTranslationStrId($parameter))
+                    if (Language::isTranslationStringId($parameter))
                     {
                         $parameter = $gL10n->get($parameter);
                     }

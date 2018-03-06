@@ -237,7 +237,7 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            if (admIsTranslationStrId($listValueText))
+                            if (Language::isTranslationStringId($listValueText))
                             {
                                 $listValueText = $gL10n->get($listValueText);
                             }
@@ -262,7 +262,7 @@ class ProfileFields
                         }
 
                         // if text is a translation-id then translate it
-                        if (admIsTranslationStrId($listValue))
+                        if (Language::isTranslationStringId($listValue))
                         {
                             $listValue = $gL10n->get($listValue);
                         }

@@ -511,6 +511,16 @@ class Language
     }
 
     /**
+     * Checks if a given string is a translation-string-id
+     * @param string $string The string to check
+     * @return bool Returns true if the given string is a translation-string-id
+     */
+    public static function isTranslationStringId($string)
+    {
+        return (bool) preg_match('/^[A-Z]{3}_([A-Z0-9]_?)*[A-Z0-9]$/', $string);
+    }
+
+    /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
      * @deprecated 3.3.0:4.0.0 "$gL10n->addLanguageData($languageData)" is deprecated. Use "$gL10n = new Language($languageData)" instead.

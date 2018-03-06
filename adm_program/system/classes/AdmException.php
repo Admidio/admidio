@@ -92,7 +92,7 @@ class AdmException extends Exception
         global $gL10n;
 
         // if text is a translation-id then translate it
-        if (admIsTranslationStrId($this->message))
+        if (Language::isTranslationStringId($this->message))
         {
             return $gL10n->get($this->message, $this->params);
         }

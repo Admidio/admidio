@@ -267,16 +267,6 @@ function admStrEndsWith($string, $end)
 }
 
 /**
- * Checks if a given string is a translation-string-id
- * @param string $string The string to check
- * @return bool Returns true if the given string is a translation-string-id
- */
-function admIsTranslationStrId($string)
-{
-    return (bool) preg_match('/^[A-Z]{3}_([A-Z0-9]_?)*[A-Z0-9]$/', $string);
-}
-
-/**
  * Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
  * In addition the function checks if the name contains .. or a . at the beginning.
  * @param string $filename     Name of the file that should be checked.

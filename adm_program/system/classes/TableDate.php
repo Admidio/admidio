@@ -278,7 +278,7 @@ class TableDate extends TableAccess
             elseif ($columnName === 'cat_name')
             {
                 // if text is a translation-id then translate it
-                if (admIsTranslationStrId($value))
+                if (Language::isTranslationStringId($value))
                 {
                     $value = $gL10n->get($value);
                 }

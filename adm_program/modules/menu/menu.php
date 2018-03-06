@@ -128,7 +128,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
             $menuGroup = $menIdParent;
         }
 
-        if(admIsTranslationStrId($menuRow->men_name))
+        if(Language::isTranslationStringId($menuRow->men_name))
         {
             $menuName = $gL10n->get($menuRow->men_name);
         }
@@ -137,7 +137,7 @@ while ($mainMen = $mainMenStatement->fetchObject())
             $menuName = $menuRow->men_name;
         }
 
-        if(admIsTranslationStrId($menuRow->men_description))
+        if(Language::isTranslationStringId($menuRow->men_description))
         {
             $menuNameDesc = $gL10n->get($menuRow->men_description);
         }

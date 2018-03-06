@@ -257,7 +257,7 @@ class HtmlPage
 
             if ($menuStatement->rowCount() > 0)
             {
-                if(admIsTranslationStrId($mainMenu['men_name']))
+                if(Language::isTranslationStringId($mainMenu['men_name']))
                 {
                     $menuName = $gL10n->get($mainMenu['men_name']);
                 }
@@ -281,7 +281,7 @@ class HtmlPage
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
                         $rolesDisplayRight = $displayMenu->getRolesIds();
 
-                        if(admIsTranslationStrId($row['men_name']))
+                        if(Language::isTranslationStringId($row['men_name']))
                         {
                             $menuName = $gL10n->get($row['men_name']);
                         }
@@ -764,7 +764,7 @@ class HtmlPage
                 {
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
-                        if(admIsTranslationStrId($row['men_name']))
+                        if(Language::isTranslationStringId($row['men_name']))
                         {
                             $menuName = $gL10n->get($row['men_name']);
                         }
@@ -773,7 +773,7 @@ class HtmlPage
                             $menuName = $row['men_name'];
                         }
 
-                        if(admIsTranslationStrId($row['men_description']))
+                        if(Language::isTranslationStringId($row['men_description']))
                         {
                             $description = $gL10n->get($row['men_description']);
                         }
