@@ -427,11 +427,12 @@ class Language
     {
         global $gLogger;
 
+        $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
+
         // if not exists create a \SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
-        if (!array_key_exists($languageFolderPath, $xmlLanguageObjects))
+        if (!array_key_exists($languageFilePath, $xmlLanguageObjects))
         {
-            $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
             if (!is_file($languageFilePath))
             {
                 $gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
@@ -439,16 +440,16 @@ class Language
                 throw new \UnexpectedValueException('Language file does not exist!');
             }
 
-            $xmlLanguageObjects[$languageFolderPath] = new \SimpleXMLElement($languageFilePath, 0, true);
+            $xmlLanguageObjects[$languageFilePath] = new \SimpleXMLElement($languageFilePath, 0, true);
         }
 
         // text not in cache -> read from xml file in "Android Resource String" format
-        $xmlNodes = $xmlLanguageObjects[$languageFolderPath]->xpath('/resources/string[@name="'.$textId.'"]');
+        $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
         if ($xmlNodes === false || count($xmlNodes) === 0)
         {
             // fallback for old Admidio language format prior to version 3.1
-            $xmlNodes = $xmlLanguageObjects[$languageFolderPath]->xpath('/language/version/text[@id="'.$textId.'"]');
+            $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/language/version/text[@id="'.$textId.'"]');
 
             if ($xmlNodes === false || count($xmlNodes) === 0)
             {
@@ -471,10 +472,8 @@ class Language
      * @throws \UnexpectedValueException
      * @return string Returns the text string of the text id.
      */
-    private function searchTextIdInLangObject(array $xmlLanguageObjects, $language, $textId)
+    private function searchTextIdInLangObject(array &$xmlLanguageObjects, $language, $textId)
     {
-        global $gLogger;
-
         $languageFolderPaths = $this->languageData->getLanguageFolderPaths();
         foreach ($languageFolderPaths as $languageFolderPath)
         {
