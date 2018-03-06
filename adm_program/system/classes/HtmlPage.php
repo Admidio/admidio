@@ -257,14 +257,7 @@ class HtmlPage
 
             if ($menuStatement->rowCount() > 0)
             {
-                if(Language::isTranslationStringId($mainMenu['men_name']))
-                {
-                    $menuName = $gL10n->get($mainMenu['men_name']);
-                }
-                else
-                {
-                    $menuName = $mainMenu['men_name'];
-                }
+                $menuName = Language::translateIfTranslationStrId($mainMenu['men_name']);
 
                 $this->menu->addItem(
                     'menu_item_'.$mainMenu['men_name_intern'], null, $menuName,
@@ -281,14 +274,7 @@ class HtmlPage
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
                         $rolesDisplayRight = $displayMenu->getRolesIds();
 
-                        if(Language::isTranslationStringId($row['men_name']))
-                        {
-                            $menuName = $gL10n->get($row['men_name']);
-                        }
-                        else
-                        {
-                            $menuName = $row['men_name'];
-                        }
+                        $menuName = Language::translateIfTranslationStrId($row['men_name']);
 
                         $menuUrl = $row['men_url'];
                         $menuIcon = $row['men_icon'];

@@ -128,23 +128,8 @@ while ($mainMen = $mainMenStatement->fetchObject())
             $menuGroup = $menIdParent;
         }
 
-        if(Language::isTranslationStringId($menuRow->men_name))
-        {
-            $menuName = $gL10n->get($menuRow->men_name);
-        }
-        else
-        {
-            $menuName = $menuRow->men_name;
-        }
-
-        if(Language::isTranslationStringId($menuRow->men_description))
-        {
-            $menuNameDesc = $gL10n->get($menuRow->men_description);
-        }
-        else
-        {
-            $menuNameDesc = $menuRow->men_description;
-        }
+        $menuName = Language::translateIfTranslationStrId($menuRow->men_name);
+        $menuNameDesc = Language::translateIfTranslationStrId($menuRow->men_description);
 
         // add root path to link unless the full URL is given
         if (preg_match('/^http(s?):\/\//', $menuRow->men_url) === 0)

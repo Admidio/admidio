@@ -145,7 +145,7 @@ class ProfileFields
      */
     public function getHtmlValue($fieldNameIntern, $value, $value2 = null)
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager;
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields))
         {
@@ -237,10 +237,7 @@ class ProfileFields
                             }
 
                             // if text is a translation-id then translate it
-                            if (Language::isTranslationStringId($listValueText))
-                            {
-                                $listValueText = $gL10n->get($listValueText);
-                            }
+                            $listValueText = Language::translateIfTranslationStrId($listValueText);
 
                             try
                             {
@@ -262,10 +259,7 @@ class ProfileFields
                         }
 
                         // if text is a translation-id then translate it
-                        if (Language::isTranslationStringId($listValue))
-                        {
-                            $listValue = $gL10n->get($listValue);
-                        }
+                        $listValue = Language::translateIfTranslationStrId($listValue);
 
                         // save values in new array that starts with key = 1
                         $arrListValuesWithKeys[++$index] = $listValue;

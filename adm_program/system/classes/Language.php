@@ -521,6 +521,23 @@ class Language
     }
 
     /**
+     * Checks if a given string is a translation-string-id and translate it
+     * @param string $string The string to check for translation
+     * @return string Returns the translated or original string
+     */
+    public static function translateIfTranslationStrId($string)
+    {
+        global $gL10n;
+
+        if (self::isTranslationStringId($string))
+        {
+            return $gL10n->get($string);
+        }
+
+        return $string;
+    }
+
+    /**
      * Adds a language data object to this class. The object contains all necessary
      * language data that is stored in the PHP session.
      * @deprecated 3.3.0:4.0.0 "$gL10n->addLanguageData($languageData)" is deprecated. Use "$gL10n = new Language($languageData)" instead.

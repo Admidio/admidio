@@ -1354,10 +1354,7 @@ class HtmlForm extends HtmlFormBasic
                 }
 
                 // if value is a translation string we must translate it
-                if(Language::isTranslationStringId($value[1]))
-                {
-                    $value[1] = $gL10n->get($value[1]);
-                }
+                $value[1] = Language::translateIfTranslationStrId($value[1]);
 
                 // add option
                 if (!$optionsAll['multiselect'] && $optionsAll['defaultValue'] == $value[0])
@@ -1383,10 +1380,7 @@ class HtmlForm extends HtmlFormBasic
                 }
 
                 // if value is a translation string we must translate it
-                if(Language::isTranslationStringId($value))
-                {
-                    $value = $gL10n->get($value);
-                }
+                $value = Language::translateIfTranslationStrId($value);
 
                 if(is_array($optionsAll['valueAttributes']))
                 {
@@ -1509,8 +1503,6 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSelectBoxFromSql($id, $label, Database $database, $sql, array $options = array())
     {
-        global $gL10n;
-
         $selectBoxEntries = array();
 
         // execute the sql statement
@@ -1531,14 +1523,9 @@ class HtmlForm extends HtmlFormBasic
             if(array_key_exists(2, $row))
             {
                 // translate category name
-                if (Language::isTranslationStringId($row[2]))
-                {
-                    $selectBoxEntries[] = array($row[0], $row[1], $gL10n->get($row[2]));
-                }
-                else
-                {
-                    $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
-                }
+                $row[2] = Language::translateIfTranslationStrId($row[2]);
+
+                $selectBoxEntries[] = array($row[0], $row[1], $row[2]);
             }
             else
             {
@@ -1782,14 +1769,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             // if text is a translation-id then translate it
-            if (Language::isTranslationStringId($row['cat_name']))
-            {
-                $categoriesArray[$row['cat_id']] = $gL10n->get($row['cat_name']);
-            }
-            else
-            {
-                $categoriesArray[$row['cat_id']] = $row['cat_name'];
-            }
+            $categoriesArray[$row['cat_id']] = Language::translateIfTranslationStrId($row['cat_name']);
 
             // add label that this category is visible to all organizations
             if($row['cat_org_id'] === null)
@@ -1904,10 +1884,7 @@ class HtmlForm extends HtmlFormBasic
                     $parameter = (string) $parameter;
 
                     // if parameter is a translation-id then translate it
-                    if (Language::isTranslationStringId($parameter))
-                    {
-                        $parameter = $gL10n->get($parameter);
-                    }
+                    $parameter = Language::translateIfTranslationStrId($parameter);
                 }
                 unset($parameter);
 
