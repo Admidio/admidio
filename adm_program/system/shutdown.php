@@ -17,7 +17,10 @@ function admShutdown()
 {
     global $gLogger;
 
-    $gLogger->info('MEMORY USAGE: ' . round(memory_get_peak_usage() / 1024, 1) . ' KiB');
+    $gLogger->info('SHUTDOWN', array(
+        'execution_time' => getExecutionTime(SCRIPT_START_TIME),
+        'memory_usage' => FileSystemUtils::getHumanReadableBytes(memory_get_peak_usage())
+    ));
 }
 
 register_shutdown_function('admShutdown');

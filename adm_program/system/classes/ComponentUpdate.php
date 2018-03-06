@@ -159,6 +159,8 @@ class ComponentUpdate extends Component
 
         $updateStepContent = trim((string) $xmlNode);
 
+        $startTime = microtime(true);
+
         // if a method of this class was set in the update step
         // then call this function and don't execute a SQL statement
         if (admStrStartsWith($updateStepContent, 'ComponentUpdateSteps::'))
@@ -166,6 +168,8 @@ class ComponentUpdate extends Component
             $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
             self::executeUpdateMethod($updateStepContent);
+
+            $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
         }
         // only execute if sql statement is for all databases or for the used database
         elseif (!isset($xmlNode['database']) || (string) $xmlNode['database'] === $dbType)
@@ -180,6 +184,8 @@ class ComponentUpdate extends Component
             $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
             $this->executeUpdateSql($updateStepContent, $showError);
+
+            $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
         }
         elseif ((string) $xmlNode['database'] !== $dbType)
         {

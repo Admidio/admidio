@@ -13,6 +13,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'constants.php')
     exit('This page may not be called directly!');
 }
 
+define('SCRIPT_START_TIME', microtime(true));
+
 // ##################
 // ###  VERSIONS  ###
 // ##################
