@@ -691,12 +691,12 @@ class Database
                 $gLogger->debug('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
 
-            $gLogger->debug('SQL: Execution time ' . (microtime(true) - $start) . ' sec!');
+            $gLogger->debug('SQL: Execution time ' . number_format(microtime(true) - $start, 6) . ' sec!');
         }
         // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (\PDOException $exception)
         {
-            $gLogger->debug('SQL: Execution time ' . (microtime(true) - $start) . ' sec!');
+            $gLogger->debug('SQL: Execution time ' . number_format(microtime(true) - $start, 6) . ' sec!');
 
             if ($showError)
             {
@@ -754,12 +754,12 @@ class Database
                 }
             }
 
-            $gLogger->debug('SQL: Execution time ' . (microtime(true) - $start) . ' sec!');
+            $gLogger->debug('SQL: Execution time ' . number_format(microtime(true) - $start, 6) . ' sec!');
         }
         // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (\PDOException $exception)
         {
-            $gLogger->debug('SQL: Execution time ' . (microtime(true) - $start) . ' sec!');
+            $gLogger->debug('SQL: Execution time ' . number_format(microtime(true) - $start, 6) . ' sec!');
 
             if ($showError)
             {

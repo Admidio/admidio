@@ -110,11 +110,11 @@ class Language
         {
             $text = $this->getTextFromTextId($textId);
 
-            $gLogger->debug('L10N: Lookup time ' . (microtime(true) - $start) . ' sec!');
+            $gLogger->debug('L10N: Lookup time:', array('textId' => $textId, 'time' => number_format(microtime(true) - $start, 6)));
         }
         catch (\RuntimeException $exception)
         {
-            $gLogger->debug('L10N: Lookup time ' . (microtime(true) - $start) . ' sec!');
+            $gLogger->debug('L10N: Lookup time:', array('textId' => $textId, 'time' => number_format(microtime(true) - $start, 6)));
             $gLogger->error('L10N: ' . $exception->getMessage(), array('textId' => $textId));
 
             // no text found then write #undefined text#
