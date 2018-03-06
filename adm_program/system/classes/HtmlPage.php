@@ -253,9 +253,47 @@ class HtmlPage
 
         while ($mainMenu = $mainMenuStatement->fetch())
         {
-            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
+            $menuItems = array();
 
-            if ($menuStatement->rowCount() > 0)
+            $menuStatement = self::getMenuStatement($mainMenu['men_id']);
+            while ($row = $menuStatement->fetch())
+            {
+                if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
+                {
+                    // Read current roles rights of the menu
+                    $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
+                    $rolesDisplayRight = $displayMenu->getRolesIds();
+
+                    // check for right to show the menu
+                    if (count($rolesDisplayRight) > 0 && !$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                    {
+                        continue;
+                    }
+
+                    // special case because there are different links if you are logged in or out for mail
+                    if ($gValidLogin && $row['men_name_intern'] === 'mail')
+                    {
+                        $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
+                        $menuIcon = '/icons/messages.png';
+                        $menuName = $gL10n->get('SYS_MESSAGES') . self::getUnreadMessagesBadge();
+                    }
+                    else
+                    {
+                        $menuUrl = $row['men_url'];
+                        $menuIcon = $row['men_icon'];
+                        $menuName = Language::translateIfTranslationStrId($row['men_name']);
+                    }
+
+                    $menuItems[] = array(
+                        'intern' => $row['men_name_intern'],
+                        'url'    => $menuUrl,
+                        'name'   => $menuName,
+                        'icon'   => $menuIcon
+                    );
+                }
+            }
+
+            if (count($menuItems) > 0)
             {
                 $menuName = Language::translateIfTranslationStrId($mainMenu['men_name']);
 
@@ -264,48 +302,12 @@ class HtmlPage
                     'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
-                while ($row = $menuStatement->fetch())
+                foreach ($menuItems as $menuItem)
                 {
-                    if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
-                    {
-                        $viewMenu = true;
-
-                        // Read current roles rights of the menu
-                        $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
-                        $rolesDisplayRight = $displayMenu->getRolesIds();
-
-                        $menuName = Language::translateIfTranslationStrId($row['men_name']);
-
-                        $menuUrl = $row['men_url'];
-                        $menuIcon = $row['men_icon'];
-
-                        // special case because there are different links if you are logged in or out for mail
-                        if ($gValidLogin && $row['men_name_intern'] === 'mail')
-                        {
-                            $unreadBadge = self::getUnreadMessagesBadge();
-
-                            $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                            $menuIcon = '/icons/messages.png';
-                            $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
-                        }
-
-                        if (count($rolesDisplayRight) >= 1)
-                        {
-                            // check for right to show the menu
-                            if (!$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
-                            {
-                                $viewMenu = false;
-                            }
-                        }
-
-                        if ($viewMenu)
-                        {
-                            $this->menu->addItem(
-                                $row['men_name_intern'], $menuUrl, $menuName, $menuIcon, 'right',
-                                'menu_item_'.$mainMenu['men_name_intern'], 'admidio-default-menu-item'
-                            );
-                        }
-                    }
+                    $this->menu->addItem(
+                        $menuItem['intern'], $menuItem['url'], $menuItem['name'], $menuItem['icon'], 'right',
+                        'menu_item_'.$mainMenu['men_name_intern'], 'admidio-default-menu-item'
+                    );
                 }
             }
         }
