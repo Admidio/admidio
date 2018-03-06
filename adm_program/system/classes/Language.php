@@ -416,18 +416,15 @@ class Language
     /**
      * Search for text id in a language xml file and return the text. If no text was found than nothing is returned.
      * @param array<string,\SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
-     * @param string                          $languageFolderPath The path in which the different language xml files are.
-     * @param string                          $language           The ISO code of the language in which the text will be searched
+     * @param string                          $languageFilePath   The path of the language file to search in.
      * @param string                          $textId             The id of the text that will be searched in the file.
      * @throws \UnexpectedValueException
      * @throws \OutOfBoundsException
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
-    public function searchLanguageText(array &$xmlLanguageObjects, $languageFolderPath, $language, $textId)
+    public function searchLanguageText(array &$xmlLanguageObjects, $languageFilePath, $textId)
     {
         global $gLogger;
-
-        $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
         // if not exists create a \SimpleXMLElement of the language file in the language path
         // and add it to the array of language objects
@@ -479,7 +476,9 @@ class Language
         {
             try
             {
-                return $this->searchLanguageText($xmlLanguageObjects, $languageFolderPath, $language, $textId);
+                $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
+
+                return $this->searchLanguageText($xmlLanguageObjects, $languageFilePath, $textId);
             }
             catch (\OutOfBoundsException $exception)
             {
