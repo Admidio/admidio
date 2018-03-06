@@ -15,31 +15,6 @@ if (!is_file(__DIR__ . '/adm_my_files/config.php'))
     exit();
 }
 
-// include only bootstrap because we could not include common.php at this point
-// to be backward compatible with older versions
-require_once(__DIR__ . '/adm_my_files/config.php');
-require_once(__DIR__ . '/adm_program/system/bootstrap.php');
-
-// connect to database
-try
-{
-    $gDb = Database::createDatabaseInstance();
-}
-catch (AdmException $e)
-{
-    $e->showText();
-    // => EXIT
-}
-
-// if database doesn't contain the components table then link to update wizard
-// because database Admidio version is lower then 3.0
-$sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
-if ($gDb->queryPrepared($sql, array(), false) === false)
-{
-    admRedirect(ADMIDIO_URL . '/adm_program/installation/update.php');
-    // => EXIT
-}
-
 require_once(__DIR__ . '/adm_program/system/common.php');
 
 if (isset($gHomepage))
