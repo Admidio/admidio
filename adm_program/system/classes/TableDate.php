@@ -104,10 +104,11 @@ class TableDate extends TableAccess
     private function escapeIcalText($text)
     {
         $searchReplace = array(
-            '\\'   => '\\\\',
-            ','    => '\,',
-            ';'    => '\;',
-            "\r\n" => "\n"
+            '\\' => '\\\\',
+            ';'  => '\;',
+            ','  => '\,',
+            "\n" => '\n',
+            "\r" => ''
         );
 
         return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
