@@ -253,6 +253,7 @@ class HtmlPage
 
         while ($mainMenu = $mainMenuStatement->fetch())
         {
+            $menuIcon = '/dummy.png';
             $menuItems = array();
 
             $menuStatement = self::getMenuStatement($mainMenu['men_id']);
@@ -280,7 +281,10 @@ class HtmlPage
                     else
                     {
                         $menuUrl = $row['men_url'];
-                        $menuIcon = $row['men_icon'];
+                        if(strlen($row['men_icon']) > 2)
+                        {
+                            $menuIcon = $row['men_icon'];
+                        }
                         $menuName = Language::translateIfTranslationStrId($row['men_name']);
                     }
 
@@ -731,7 +735,7 @@ class HtmlPage
      */
     public function showMainMenu($details = true)
     {
-        global $gL10n, $gValidLogin, $gSettingsManager;
+        global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
         $menuIcon = '/dummy.png';
         $htmlMenu = '';
@@ -752,6 +756,16 @@ class HtmlPage
                 {
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
+                        // Read current roles rights of the menu
+                        $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
+                        $rolesDisplayRight = $displayMenu->getRolesIds();
+    
+                        // check for right to show the menu
+                        if (count($rolesDisplayRight) > 0 && !$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                        {
+                            continue;
+                        }
+                        
                         $menuName = Language::translateIfTranslationStrId($row['men_name']);
                         $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
                         $menuUrl = $row['men_url'];
