@@ -385,11 +385,11 @@ class Language
         {
             $paramNr = $index + 1;
 
-            $replaceArray = array(
+            $replaces = array(
                 '#VAR' . $paramNr . '#'      => $param,
                 '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
             );
-            $text = str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
+            $text = admStrMultiReplace($text, $replaces);
         }
 
         // replace square brackets with html tags
@@ -405,12 +405,12 @@ class Language
         // set line break with html
         // Within Android string resource all apostrophe are escaped so we must remove the escape char
         // replace highly comma, so there are no problems in the code later
-        $replaceArray = array(
+        $replaces = array(
             '\\n'  => '<br />',
             '\\\'' => '\'',
             '\''   => '&rsquo;'
         );
-        return str_replace(array_keys($replaceArray), array_values($replaceArray), $text);
+        return admStrMultiReplace($text, $replaces);
     }
 
     /**

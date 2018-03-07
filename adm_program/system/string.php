@@ -267,6 +267,17 @@ function admStrEndsWith($string, $end)
 }
 
 /**
+ * Easy way for multiple replacements in a string.
+ * @param string               $string   The string where to replace strings
+ * @param array<string,string> $replaces An array with search and replace values
+ * @return string The modified string
+ */
+function admStrMultiReplace($string, array $replaces)
+{
+    return str_replace(array_keys($replaces), array_values($replaces), $string);
+}
+
+/**
  * Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
  * In addition the function checks if the name contains .. or a . at the beginning.
  * @param string $filename     Name of the file that should be checked.

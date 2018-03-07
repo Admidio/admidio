@@ -598,16 +598,7 @@ final class ComponentUpdateSteps
         while($orgShortname = $pdoStatement->fetchColumn())
         {
             $path = ADMIDIO_PATH . FOLDER_DATA . '/download_';
-            $replaceArray = array(
-                ' '  => '_',
-                '.'  => '_',
-                ','  => '_',
-                '\'' => '_',
-                '"'  => '_',
-                '´'  => '_',
-                '`'  => '_'
-            );
-            $orgNameOld = str_replace(array_keys($replaceArray), array_values($replaceArray), $orgShortname);
+            $orgNameOld = str_replace(array(' ', '.', ',', '\'', '"', '´', '`'), '_', $orgShortname);
             $orgNameNew = FileSystemUtils::getSanitizedPathEntry($orgShortname);
 
             if ($orgNameOld !== $orgNameNew)

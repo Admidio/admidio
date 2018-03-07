@@ -103,7 +103,7 @@ class TableDate extends TableAccess
      */
     private function escapeIcalText($text)
     {
-        $searchReplace = array(
+        $replaces = array(
             '\\' => '\\\\',
             ';'  => '\;',
             ','  => '\,',
@@ -111,7 +111,7 @@ class TableDate extends TableAccess
             "\r" => ''
         );
 
-        return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
+        return trim(admStrMultiReplace($text, $replaces));
     }
 
     /**

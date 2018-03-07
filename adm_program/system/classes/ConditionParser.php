@@ -447,7 +447,7 @@ class ConditionParser
 
         $this->srcCond = admStrToUpper(trim($sourceCondition));
 
-        $replaceArray = array(
+        $replaces = array(
             '*' => '%',
             // valid 'not null' is '#'
             admStrToUpper($gL10n->get('SYS_NOT_EMPTY')) => ' # ',
@@ -479,7 +479,7 @@ class ConditionParser
             ' ODER ' => ' | ',
             '||'     => ' | '
         );
-        $this->srcCond = str_replace(array_keys($replaceArray), array_values($replaceArray), $this->srcCond);
+        $this->srcCond = admStrMultiReplace($this->srcCond, $replaces);
 
         return $this->srcCond;
     }

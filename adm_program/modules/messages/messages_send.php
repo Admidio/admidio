@@ -449,11 +449,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         $emailTemplate = '#message#';
     }
 
-    $emailTemplate = str_replace('#message#', $postBody, $emailTemplate);
-
-    // add sender and receiver to email if template include the variables
-    $emailTemplate = str_replace('#sender#', $postName, $emailTemplate);
-
     require_once(__DIR__ . '/messages_functions.php');
 
     if ($postListId > 0)
@@ -464,7 +459,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     }
 
     $receiverName = prepareReceivers($receiverString);
-    $emailTemplate = str_replace('#receiver#', $receiverName, $emailTemplate);
+
+    $replaces = array(
+        '#sender#'   => $postName,
+        '#message#'  => $postBody,
+        '#receiver#' => $receiverName
+    );
+    $emailTemplate = admStrMultiReplace($emailTemplate, $replaces);
 
     // prepare body of email with note of sender and homepage
     $email->setSenderInText($postName, $receiverName);

@@ -143,7 +143,7 @@ if (!admStrStartsWith($rootPath, 'http://') && !admStrStartsWith($rootPath, 'htt
 }
 
 // replace placeholders in configuration file structure with data of installation wizard
-$replaceArray = array(
+$replaces = array(
     '%PREFIX%'       => $_SESSION['prefix'],
     '%DB_TYPE%'      => $_SESSION['db_type'],
     '%SERVER%'       => $_SESSION['db_host'],
@@ -155,7 +155,7 @@ $replaceArray = array(
     '%ORGANIZATION%' => $_SESSION['orga_shortname'],
     '%TIMEZONE%'     => $_SESSION['orga_timezone']
 );
-$configFileContent = str_replace(array_keys($replaceArray), array_values($replaceArray), $configFileContent);
+$configFileContent = admStrMultiReplace($configFileContent, $replaces);
 
 $_SESSION['config_file_content'] = $configFileContent;
 
