@@ -1,8 +1,6 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages access to database table adm_categories
- *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -10,16 +8,32 @@
  */
 
 /**
- * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
- * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Creates a category object from the database table adm_categories
  *
- * Beside the methods of the parent class there are the following additional methods:
+ * With the given id a category object is created from the data in the database table **adm_categories**.
+ * The class will handle the communication with the database and give easy access to the data. New 
+ * category could be created or existing category could be edited. Special properties of 
+ * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
  *
- * getNewNameIntern($name, $index) - diese rekursive Methode ermittelt fuer den
- *                       uebergebenen Namen einen eindeutigen Namen dieser bildet sich
- *                       aus dem Namen in Grossbuchstaben und der naechsten freien Nummer
- * getNumberElements() - number of child recordsets
- * moveSequence($mode) - Kategorie wird um eine Position in der Reihenfolge verschoben
+ * **Code examples:**
+ * ```
+ * // get data from an existing category
+ * $category = new TableCategory($gDb, $categoryId);
+ * $name = $category->getValue('cat_name');
+ * $type = $category->getValue('cat_type');
+ *
+ * // change existing announcement
+ * $category = new TableCategory($gDb, $categoryId);
+ * $category->setValue('cat_name', 'My new name');
+ * $category->setValue('cat_type', 'ROL');
+ * $category->save();
+ *
+ * // create new announement
+ * $category = new TableCategory($gDb);
+ * $category->setValue('cat_name', 'My new headling');
+ * $category->setValue('cat_type', 'ROL');
+ * $category->save();
+ * ``` 
  */
 class TableCategory extends TableAccess
 {

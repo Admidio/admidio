@@ -1,8 +1,6 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages access to database table adm_dates
- *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -10,8 +8,32 @@
  */
 
 /**
- * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
- * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Creates an event object from the database table adm_dates
+ *
+ * With the given id an event object is created from the data in the database table **adm_dates**.
+ * The class will handle the communication with the database and give easy access to the data. New 
+ * event could be created or existing event could be edited. Special properties of 
+ * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
+ *
+ * **Code examples:**
+ * ```
+ * // get data from an existing event
+ * $event       = new TableDate($gDb, $dateId);
+ * $headline    = $event->getValue('dat_headline');
+ * $description = $event->getValue('dat_description');
+ *
+ * // change existing event
+ * $event = new TableDate($gDb, $dateId);
+ * $event->setValue('dat_headline', 'My new headling');
+ * $event->setValue('dat_description', 'This is the new description.');
+ * $event->save();
+ *
+ * // create new event
+ * $event = new TableDate($gDb);
+ * $event->setValue('dat_headline', 'My new headling');
+ * $event->setValue('dat_description', 'This is the new description.');
+ * $event->save();
+ * ``` 
  */
 class TableDate extends TableAccess
 {

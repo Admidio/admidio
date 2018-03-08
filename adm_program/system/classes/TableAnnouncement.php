@@ -1,8 +1,6 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages access to database table adm_announcements
- *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -10,8 +8,32 @@
  */
 
 /**
- * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen.
- * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Creates an announcement object from the database table adm_announcements
+ *
+ * With the given id an announcement object is created from the data in the database table **adm_announcements**.
+ * The class will handle the communication with the database and give easy access to the data. New 
+ * announcement could be created or existing announcements could be edited. Special properties of 
+ * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
+ *
+ * **Code examples:**
+ * ```
+ * // get data from an existing anncouncement
+ * $announcement = new TableAnnouncement($gDb, $announcementId);
+ * $headline = $announcement->getValue('ann_headline');
+ * $description = $announcement->getValue('ann_description');
+ *
+ * // change existing announcement
+ * $announcement = new TableAnnouncement($gDb, $announcementId);
+ * $announcement->setValue('ann_headline', 'My new headling');
+ * $announcement->setValue('ann_description', 'This is the new description.');
+ * $announcement->save();
+ *
+ * // create new announement
+ * $announcement = new TableAnnouncement($gDb);
+ * $announcement->setValue('ann_headline', 'My new headling');
+ * $announcement->setValue('ann_description', 'This is the new description.');
+ * $announcement->save();
+ * ``` 
  */
 class TableAnnouncement extends TableAccess
 {
