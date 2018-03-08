@@ -612,7 +612,7 @@ class Database
         }
         if (admStrContains($sqlCompare, 'create table') || admStrContains($sqlCompare, 'alter table'))
         {
-            $replaceArray = array(
+            $replaces = array(
                 // PostgreSQL doesn't know unsigned
                 'unsigned' => '',
                 // PostgreSQL interprets a boolean as string so transform it to a smallint
@@ -620,7 +620,7 @@ class Database
                 // A blob is in PostgreSQL a bytea datatype
                 'blob'     => 'bytea'
             );
-            $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
+            $sql = admStrMultiReplace($sql, $replaces);
 
             // Auto_Increment must be replaced with Serial
             $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');

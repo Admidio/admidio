@@ -102,14 +102,16 @@ class TableDate extends TableAccess
      */
     private function escapeIcalText($text)
     {
-        $searchReplace = array(
-            '\\'   => '\\\\',
-            ','    => '\,',
-            ';'    => '\;',
-            "\r\n" => "\n"
+        $replaces = array(
+            '\\' => '\\\\',
+            ';'  => '\;',
+            ','  => '\,',
+            "\n" => '\n',
+            "\r" => '',
+            '<br />' => '\n' // workaround
         );
 
-        return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
+        return trim(admStrMultiReplace($text, $replaces));
     }
 
     /**
@@ -195,7 +197,7 @@ class TableDate extends TableAccess
         // Semicolons herausfiltern
         $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
         $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline'));
-        $iCalVEvent[] = 'DESCRIPTION:' . $this->escapeIcalText($this->getValue('dat_description', 'database'));
+        $iCalVEvent[] = 'DESCRIPTION:' . strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
         $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
         $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText($this->getValue('dat_location'));
 

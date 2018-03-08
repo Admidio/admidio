@@ -187,7 +187,11 @@ class FunctionClass
             foreach (array_unique($matchArray[2]) as $match)
             {
                 // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
-                $imgServerPath = str_replace(array(THEME_URL, ADMIDIO_URL), array(THEME_ADMIDIO_PATH, ADMIDIO_PATH), $match);
+                $replaces = array(
+                    THEME_URL   => THEME_ADMIDIO_PATH,
+                    ADMIDIO_URL => ADMIDIO_PATH
+                );
+                $imgServerPath = admStrMultiReplace($match, $replaces);
 
                 // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
                 if (admStrContains($imgServerPath, 'photo_show.php'))
