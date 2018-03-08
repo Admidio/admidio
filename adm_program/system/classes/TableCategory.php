@@ -22,13 +22,13 @@
  * $name = $category->getValue('cat_name');
  * $type = $category->getValue('cat_type');
  *
- * // change existing announcement
+ * // change existing category
  * $category = new TableCategory($gDb, $categoryId);
  * $category->setValue('cat_name', 'My new name');
  * $category->setValue('cat_type', 'ROL');
  * $category->save();
  *
- * // create new announement
+ * // create new category
  * $category = new TableCategory($gDb);
  * $category->setValue('cat_name', 'My new headling');
  * $category->setValue('cat_type', 'ROL');
