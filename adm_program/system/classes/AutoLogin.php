@@ -8,20 +8,23 @@
  */
 
 /**
- * @class AutoLogin
- * @brief Handle auto login with Admidio and manage it in the database
+ * Handle auto login with Admidio and manage it in the database
  *
  * The class search in the database table **adm_auto_login** for the session id.
  * If there is an entry for that id then it reads the user id and set this
  * user to the current session. Now the current session has become a valid user
  * that is automatically login.
- * @par Examples
- * @code // create a valid user login for a Admidio session from auto login
+ * 
+ * **Code examples:**
+ * ```
+ * // create a valid user login for a Admidio session from auto login
  * $autoLogin = new AutoLogin($gDb, $gSessionId);
- * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);@endcode
- * @code // delete an auto login
+ * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);
+ * 
+ * // delete an auto login
  * $autoLogin = new AutoLogin($gDb, $gSessionId);
- * $autoLogin->delete(); @endcode
+ * $autoLogin->delete();
+ * ```
  */
 class AutoLogin extends TableAccess
 {

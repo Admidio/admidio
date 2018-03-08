@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TablePhotos
  * Diese Klasse dient dazu ein Fotoveranstaltungsobjekt zu erstellen.
  * Eine Fotoveranstaltung kann ueber diese Klasse in der Datenbank verwaltet werden.
  *

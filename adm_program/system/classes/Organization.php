@@ -8,19 +8,21 @@
  */
 
 /**
- * @class Organization
- * @brief Handle organization data of Admidio and is connected to database table adm_organizations
+ * Handle organization data of Admidio and is connected to database table adm_organizations
  *
  * This class creates the organization object and manages the access to the
  * organization specific preferences of the table adm_preferences. There
  * are also some method to read the relationship of organizations if the
  * database contains more then one organization.
- * @par Examples
- * @code // create object and read the value of the language preference
+ * 
+ * **Code example:**
+ * ```
+ * // create object and read the value of the language preference
  * $organization    = new Organization($gDb, $organizationId);
  * $settingsManager =& $organization->getSettingsManager();
  * $language        = $settingsManager->get('system_language');
- * // language = 'de' @endcode
+ * // language = 'de'
+ * ```
  ***********************************************************************************************
  */
 class Organization extends TableAccess

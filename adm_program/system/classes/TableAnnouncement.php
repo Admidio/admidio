@@ -10,8 +10,6 @@
  */
 
 /**
- * @class TableAnnouncement
- *
  * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen.
  * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
  */

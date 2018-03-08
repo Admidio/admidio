@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableUsers
  * @deprecated 3.2.0:4.0.0 This class is deprecated and should not be used anymore. The class Users should be used instead.
  */
 class TableUsers extends User

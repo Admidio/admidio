@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableDate
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  */

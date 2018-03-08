@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableUserRelationType
  * This class manages the set, update and delete in the table adm_user_relation_types
  */
 class TableUserRelationType extends TableAccess

@@ -8,8 +8,7 @@
  */
 
 /**
- * @class Modules
- * @brief This **abstract class** defines a parameter set for modules
+ * This **abstract class** defines a parameter set for modules
  *
  * This abstract class sets the parameters used in Admidio modules.
  * The class gets a copy of the $_GET Array and validates the values
@@ -19,8 +18,9 @@
  * If no values are available the daterange is set by default: date_from = DATE_NOW; date_to = 9999-12-31
  * The class provides methods to return all single Variables and arrays or returns an Array with all setted parameters
  * The returned array contains following settings:
- * @par Return parameter array:
- * @code
+ * 
+ * **Return parameter array:**
+ * ```
  * array('active_role'         => '1',
  *       'headline'            => 'string',
  *       'category-selection'  => '0',
@@ -35,7 +35,7 @@
  *                                         [english] (date_from => 'string', date_to => 'string'),
  *                                         [sytem] (date_from => 'string', date_to => 'string'))
  *                                      );
- * @endcode
+ * ```
  */
 abstract class Modules
 {

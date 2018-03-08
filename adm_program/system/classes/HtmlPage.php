@@ -8,21 +8,23 @@
  */
 
 /**
- * @class HtmlPage
- * @brief Creates an Admidio specific complete html page
+ * Creates an Admidio specific complete html page
  *
  * This class creates a html page with head and body and integrates some Admidio
  * specific elements like css files, javascript files and javascript code. It
  * also provides some methods to easily add new html data to the page. The generated
  * page will automatically integrate the choosen theme. You can optional disable the
  * integration of the theme files.
- * @par Examples
- * @code // create a simple html page with some text
+ *
+ * **Code example:**
+ * ```
+ * // create a simple html page with some text
  * $page = new HtmlPage();
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
- * $page->show(); @endcode
+ * $page->show();
+ * ```
  */
 class HtmlPage
 {

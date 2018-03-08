@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableFile
  * Diese Klasse dient dazu ein Fileobjekt zu erstellen.
  * Eine Datei kann ueber diese Klasse in der Datenbank verwaltet werden
  *

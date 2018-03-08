@@ -10,8 +10,6 @@
  */
 
 /**
- * @class TableWeblink
- *
  * This class creates objects of the database table links.
  * You can read, change and create weblinks in the database.
  */

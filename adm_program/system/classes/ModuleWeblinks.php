@@ -8,13 +8,13 @@
  */
 
 /**
- * @class ModuleWeblinks
- * @brief Class manages weblinks viewable for user
+ * Class manages weblinks viewable for user
  *
  * This class reads all available recordsets from table links.
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
- * @par Returned Array
- * @code
+ *
+ * **Returned Array:**
+ * ```
  * Array(
  *         [numResults] => 4
  *         [limit] => 0
@@ -97,7 +97,7 @@
  *             [view_mode] => Default
  *         )
  * )
- * @endcode
+ * ```
  */
 class ModuleWeblinks extends Modules
 {

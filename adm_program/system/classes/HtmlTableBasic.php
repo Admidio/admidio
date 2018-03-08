@@ -8,8 +8,7 @@
  */
 
 /**
- * @class HtmlTableBasic
- * @brief  Create html tables
+ * Create html tables
  *
  * This class creates html tables.
  * Create a table object, define the elements with optional attributes and pass your content.
@@ -18,12 +17,15 @@
  * You can define the class names and the row number for line change.
  * CSS classes are needed using this option for class change !
  * This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
- * @par Data array for example
- * @code
+ * 
+ * **Code example:**
+ * ```
+ * // Data array for example
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
- * @endcode
- * @par Example_1
- * @code
+ * ```
+ *
+ * **Code example:**
+ * ```
  * // Example without defining table head and table foot elements.
  * // Starting a row directly, all missing table elements are set automatically for semantic table.
  * // Create an table instance with optional table ID, table class.
@@ -32,9 +34,10 @@
  * $table->addRow($dataArray);
  * // get validated table
  * echo $table->getHtmlTable();
- * @endcode
- * @par Example_2
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
  * // Create an table instance with optional table ID, table class and border
  * $table = new HtmlTableBasic('Id_Example_2', 'tableClass', 1);
  * // we can also set further attributes for the table
@@ -63,9 +66,10 @@
  * $table->addColumn($dataArray);
  * // get validated table
  * echo $table->getHtmlTable();
- * @endcode
- * @par Example 3
- * @code
+ * ```
+ *
+ * **Code example:**
+ * ```
  * // Example with fixed columns width and changing classes for rows in body element and table border
  * $table = new HtmlTableBasic('Id_Example_3', 'tableClass', 1);
  * // Set table width to 600px. Ok, we should do this in the class or id in CSS ! However,...
@@ -103,7 +107,7 @@
  * $table->addRow($dataArray);
  * $table->addRow($dataArray);
  * echo $table->getHtmlTable();
- * @endcode
+ * ```
  */
 class HtmlTableBasic extends HtmlElement
 {

@@ -10,7 +10,6 @@
  */
 
 /**
- * @class Email
  * Mit dieser Klasse kann ein Email-Objekt erstellt
  * und anschliessend verschickt werden.
  *

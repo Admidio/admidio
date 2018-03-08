@@ -8,20 +8,23 @@
  */
 
 /**
- * @class HtmlFormBasic
- * @brief  Create html form elements
+ * Create html form elements
  *
  * This class creates html form elements.
  * Create an instance of an form element and set the input elements inline .
  * The class supports setting all form elements and allows you to configure all attributes programatically.
  * The parsed form object  is returned as string.
  *
- * @par Example of an array with further attributes
- * @code
+ * **Code examples:**
+ * ```
+ * // Example of an array with further attributes
  * $attrArray = array('class' => 'Classname');
- * @endcode
- * @par Example: Creating a form element
- * @code
+ * ```
+ *
+ * **Code examples:**
+ * ```
+ * // Example: Creating a form element
+ *
  * // Get the Instance for a new form element and set an action attribute
  * $form = new HtmlFormBasic('test.php');
  * // XHTML determines that the input elements are inline elements of a block element
@@ -60,7 +63,7 @@
  * $form->closeFieldSet();
  * // print the form
  * echo $form->getHtmlForm();
- * @endcode
+ * ```
  */
 class HtmlFormBasic extends HtmlElement
 {

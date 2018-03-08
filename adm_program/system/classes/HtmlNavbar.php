@@ -8,8 +8,7 @@
  */
 
 /**
- * @class HtmlNavbar
- * @brief Class manages display of navbar in modules
+ * Class manages display of navbar in modules
  *
  * This class manage the presentation of a module menu. You can add as many
  * items to the menu and the class tries to display them in the perfect
@@ -17,8 +16,9 @@
  * will create a menu button where you can find all the other menu items.
  * The position of the items is important. Only the first items will display
  * permanently in the module. The other items are summarized in a submenu.
- * @par Examples
- * @code
+ * 
+ * **Code example:**
+ * ```
  * // create module menu
  * $myNavbar = new HtmlNavbar('menu_my_module', 'My module');
  *
@@ -28,7 +28,7 @@
  *     $gL10n->get('SYS_CREATE'), 'add.png'
  * );
  * $myNavbar->show();
- * @endcode
+ * ´´´
  */
 class HtmlNavbar
 {

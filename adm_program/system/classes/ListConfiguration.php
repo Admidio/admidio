@@ -10,7 +10,6 @@
  */
 
 /**
- * @class ListConfiguration
  * This class creates a list configuration object. With this object it's possible
  * to manage the configuration in the database. You can easily create new lists,
  * add new columns or remove columns.

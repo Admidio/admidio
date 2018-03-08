@@ -8,13 +8,13 @@
  */
 
 /**
- * @class ModuleDates
- * @brief This class reads date recordsets from database
+ * This class reads date recordsets from database
  *
  * This class reads all available recordsets from table dates.
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
- * @par Returned Array
- * @code
+ * 
+ * **Returned array:**
+ * ```
  * array(
  *         [numResults] => 1
  *         [limit] => 10
@@ -125,7 +125,7 @@
  *         )
  *
  * )
- * @endcode
+ * ```
  */
 class ModuleDates extends Modules
 {

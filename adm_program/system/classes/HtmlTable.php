@@ -8,27 +8,33 @@
  */
 
 /**
- * @class HtmlTable
- * @brief Creates an Admidio specific table with special methods
+ * Creates an Admidio specific table with special methods
  *
  * This class inherits the common HtmlTableBasic class and extends their elements
  * with custom Admidio table methods. The class should be used to create the
  * html part of all Admidio tables. It has simple methods to add complete rows with
  * their column values to the table. It's also possible to add the jQuery plugin Datatables
  * to each table. Therefore you only need to set a flag when creating the object.
- * @par Examples
- * @code // create a simple table with one input field and a button
+ *
+ * **Code example:**
+ * ```
+ * // create a simple table with one input field and a button
  * $table = new HtmlTable('simple-table');
  * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Address', 'Phone', 'E-Mail'));
  * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '+49 342 59433', 'h.mustermann@example.org'));
  * $table->addRowByArray(array('Anne', 'Musterfrau', 'Seestraße 6', '+34 7433 7433', 'a.musterfrau@example.org'));
- * $table->show(); @endcode
- * @code // create a table with jQuery datatables and align columns to center or right
+ * $table->show();
+ * ```
+ *
+ * **Code example:**
+ * ```
+ * // create a table with jQuery datatables and align columns to center or right
  * $table = new HtmlTable('simple-table', null, true, true);
  * $table->setColumnAlignByArray(array('left', 'left', 'center', 'right'));
  * $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Birthday', 'Membership fee'));
  * $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
- * $table->show(); @endcode
+ * $table->show();
+ * ```
  */
 class HtmlTable extends HtmlTableBasic
 {
@@ -442,13 +448,16 @@ class HtmlTable extends HtmlTableBasic
      *                                                                of the table starts with 1 (not 0).
      *                                                                Optional this could also only be a numeric value than the
      *                                                                datatable will be ordered by the number of this column ascending.
-     * @par Examples
-     * @code $table = new HtmlTable('simple-table');
+     *
+     * **Code examples:**
+     * ```
+     * $table = new HtmlTable('simple-table');
      *
      * // sort all rows after first and third column ascending
      * $table->setDatatablesOrderColumns(array(1, 3));
      * // sort all rows after first column descending and third column ascending
-     * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc'))); @endcode
+     * $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));
+     * ```
      */
     public function setDatatablesOrderColumns(array $arrayOrderColumns)
     {

@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableFolder
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
  * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
  */

@@ -8,27 +8,27 @@
  */
 
 /**
- * @class Session
- * @brief Handle session data of Admidio and is connected to database table adm_sessions
+ * Handle session data of Admidio and is connected to database table adm_sessions
  *
  * This class should be used together with the PHP session handling. If you
  * create a PHP session than you should also create this session object. The
  * class will create a recordset in adm_sessions which stores the PHP session id.
  * With this class it should be easy to add other objects to the session and read
  * them out if you need them elsewhere.
- * @par Examples
- * @code script_a.php
+ *
+ * **Code examples:**
+ * ```
  * // add a new object to the session
  * $organization = new Organization($gDb, $organizationId);
  * $session = new Session($gDb, $sessionId);
  * $session->addObject('organization', $organization, true);
  *
- * script_b.php
  * // read object out of session
  * if($session->hasObject('organization'))
  * {
  *     $organization =& $session->getObject('organization');
- * } @endcode
+ * }
+ * ```
  */
 class Session extends TableAccess
 {

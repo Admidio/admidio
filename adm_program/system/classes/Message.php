@@ -8,8 +8,7 @@
  */
 
 /**
- * @class Message
- * @brief Simple presentation of messages to the user
+ * Simple presentation of messages to the user
  *
  * This class creates a new html page with a simple headline and a message. It's
  * designed to easily integrate this class into your code. An object **$gMessage**
@@ -17,8 +16,10 @@
  * open after user confirmed the message or you can show a question with two
  * default buttons yes and no. There is also an option to automatically leave the
  * message after some time.
- * @par Examples
- * @code // show a message with a back button, the object $gMessage is created in common.php
+ * 
+ * **Code example:**
+ * ```
+ * // show a message with a back button, the object $gMessage is created in common.php
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
  * // show a message and set a link to a page that should be shown after user click ok
@@ -27,7 +28,8 @@
  *
  * // show a message with yes and no button and set a link to a page that should be shown after user click yes
  * $gMessage->setForwardYesNo('https://www.example.com/mypage.php');
- * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID')); @endcode
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ * ```
  */
 class Message
 {

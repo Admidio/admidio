@@ -8,24 +8,31 @@
  */
 
 /**
- * @class RolesRights
- * @brief Manages a special right of the table adm_roles_rights for a special object.
+ * Manages the assignment of roles to an object.
  *
  * This class will manage roles rights for a specific object. The possible rights are defined
- * within the table adm_roles_rights. The assigned roles will be stored within the table
- * adm_roles_rights_data. There is also the link to the specific object. The assigned roles
+ * within the table **adm_roles_rights**. The assigned roles will be stored within the table
+ * **adm_roles_rights_data**. There is also the link to the specific object. The assigned roles
  * of the object could be managed with this class. You can add or remove roles and check if a
  * user has access to the specific right.
- * @par Examples
- * @code // check if the current user has the right to view a folder of the download module
+ *
+ * **Code examples:**
+ * ```
+ * // check if the current user has the right to view a folder of the download module
  * $folderViewRolesObject = new RolesRights($gDb, 'folder_view', $folderId);
  * if($folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
  * {
  *   // do something
- * } @endcode
- * @code // add new roles to the special roles right of a folder
+ * }
+ *
+ * // add new roles to the special roles right of a folder
  * $folderViewRolesObject = new RolesRights($gDb, 'folder_view', $folderId);
- * $folderViewRolesObject->addRoles(array(2, 5)); @endcode
+ * $folderViewRolesObject->addRoles(array(2, 5));
+ *
+ * // get ids of all assigned roles to an object
+ * $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $categoryId);
+ * $rolesArray = $categoryViewRolesObject->getRolesIds();
+ * ```
  */
 class RolesRights extends TableAccess
 {

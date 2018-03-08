@@ -8,20 +8,22 @@
  */
 
 /**
- * @class TableMembers
- * @brief Handle memberships of roles and manage it in the database table adm_members
+ * Handle memberships of roles and manage it in the database table adm_members
  *
  * The class search in the database table **adm_members** for role memberships of
  * users. It has easy methods to start or stop a membership.
- * @par Examples
- * @code // start membership without read data before
+ * 
+ * **Code example:**
+ * ```
+ * // start membership without read data before
  * $membership = new TableMembers($gDb);
  * $membership->startMembership($roleId, $userId);
  *
  * // read membership data and then stop membership
  * $membership = new TableMembers($gDb);
  * $membership->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
- * $membership->stopMembership(); @endcode
+ * $membership->stopMembership();
+ * ```
  */
 class TableMembers extends TableAccess
 {

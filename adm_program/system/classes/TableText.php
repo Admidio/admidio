@@ -10,8 +10,6 @@
  */
 
 /**
- * @class TableText
- *
  * Diese Klasse dient dazu ein Textobjekt zu erstellen.
  * Texte koennen ueber diese Klasse in der Datenbank verwaltet werden.
  *

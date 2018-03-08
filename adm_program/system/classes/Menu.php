@@ -10,7 +10,6 @@
  */
 
 /**
- * @class Menu
  * Create, modify and display menus. Each menu item is defined by
  *
  *      - $id   : identifier of the menu item

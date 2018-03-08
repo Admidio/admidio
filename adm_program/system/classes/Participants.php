@@ -8,8 +8,7 @@
  */
 
 /**
- * @class Participants
- * @brief This class gets information about participants and leaders of dates.
+ * This class gets information about participants and leaders of dates.
  *
  * This function is developed, to  read the participants and leaders of dates from database.
  * Participants and leaders can be counted or be written in an array with surname, firstname and leader-status.

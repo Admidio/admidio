@@ -8,8 +8,7 @@
  */
 
 /**
- * @class ProfileFields
- * @brief Reads the user fields structure out of database and give access to it
+ * Reads the user fields structure out of database and give access to it
  *
  * When an object is created than the actual profile fields structure will
  * be read. In addition to this structure you can read the user values for

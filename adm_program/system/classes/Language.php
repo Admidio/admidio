@@ -8,8 +8,7 @@
  */
 
 /**
- * @class Language
- * @brief Reads language specific texts that are identified with text ids out of language xml files
+ * Reads language specific texts that are identified with text ids out of language xml files
  *
  * The class will read a language specific text that is identified with their
  * text id out of an language xml file. The access will be manages with the
@@ -18,8 +17,9 @@
  * couldn't be stored in sessions. Therefore an object of **LanguageData**
  * should be assigned to this class that stored all necessary data and can be
  * stored in a session.
- * @par Examples
- * @code
+ * 
+ * **Code example:**
+ * ```
  * // show how to use this class with the language data class and sessions
  * script_a.php
  * // create a language data object and assign it to the language object
@@ -34,7 +34,7 @@
  *
  * // read and display a language specific text with placeholders for individual content
  * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
- * @endcode
+ * ```
  */
 class Language
 {
@@ -92,13 +92,14 @@ class Language
      *                                  $params[0] will replace **#VAR1#** or **#VAR1_BOLD#**,
      *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
      * @return string Returns the text string with replaced placeholders of the text id.
-     * @par Examples
-     * @code
+     * 
+     * **Code example:**
+     * ```
      * // display a text without placeholders
      * echo $gL10n->get('SYS_NUMBER');
      * // display a text with placeholders for individual content
      * echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', array('John Doe', 'Demo-Organization', 'Administrator'));
-     * @endcode
+     * ``
      */
     public function get($textId, $params = array())
     {

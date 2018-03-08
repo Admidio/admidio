@@ -8,16 +8,17 @@
  */
 
 /**
- * @class HtmlList
- * @brief  Create html lists
+ * Create html lists
  *
  * This class creates html list elements.
  * Create a list object for ordered, unordered or data list an add the list items.
  * The class supports data lists and lists and combination of nested lists and data lists.
  * The parsed list object is returned as string.
+ * 
+ * **Code example:**
+ * ```
+ * // Example 1: Creating datalist
  *
- * @par Example 1: Creating datalist
- * @code
  * // Get instance
  * $list = new HtmlList('dl', 'id_dl', 'class'); // Parameter for list type, id and class are optional ( Default list type = ul )
  * // In html strict a data list is determined to be nested in a list element if used in an ordered/unordered list
@@ -27,9 +28,12 @@
  * $list->addDataListItems('term_2', 'Listdata_2');
  * // get parsed datalist as string
  * echo $list->getHtmlList();
- * @endcode
- * @par Example 2: Creating  ordered list
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
+ * // Example 2: Creating  ordered list
+ * 
  * // Get Instance
  * $list = new HtmlList('ol', 'id_ol', 'class');
  * // Set type Attribute
@@ -51,7 +55,7 @@
  * list->addDataListItems('term_5.2', 'Listdata_5.2');
  * // get parsed datalist as string
  * echo $list->getHtmlList();
- * @endcode
+ * ```
  */
 class HtmlList extends HtmlElement
 {

@@ -10,7 +10,6 @@
  */
 
 /**
- * @class FileSystemUtils
  * This class handles the most necessary file-system operations like:
  * - Function: get normalized path, get human readable bytes, restrict all operations to specific directories
  * - Info: disk space, process owner/group info, path owner/group info, is path owner, path mode, path permissions

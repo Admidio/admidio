@@ -10,7 +10,6 @@
  */
 
 /**
- * @class SystemMail
  * Beside the methods of the parent class there are the following additional methods:
  *
  * getMailText($systemMailId, $user)

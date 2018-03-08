@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableGuestbook
  * Diese Klasse dient dazu ein Gaestebucheintragsobjekt zu erstellen.
  * Eine Gaestebucheintrag kann ueber diese Klasse in der Datenbank verwaltet werden
  *

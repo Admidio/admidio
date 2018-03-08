@@ -8,13 +8,13 @@
  */
 
 /**
- * @class ModuleLists
- * @brief Class manages lists viewable for user
+ * Class manages lists viewable for user
  *
  * This class reads all available recordsets from table lists.
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
- * @par Returned Array
- * @code
+ * 
+ * **Returned array:**
+ * ```
  * Array(
  *          [numResults] => 5
  *          [limit] => 10
@@ -162,7 +162,7 @@
  *                  [view_mode] => Default
  *              )
  * )
- * @endcode
+ * ```
  */
 class ModuleLists extends Modules
 {

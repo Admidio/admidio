@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableGuestbookComment
  * Diese Klasse dient dazu ein Gaestebuchkommentarobjekt zu erstellen.
  * Eine Gaestebuchkommentar kann ueber diese Klasse in der Datenbank verwaltet werden
  *

@@ -7,9 +7,6 @@
  ***********************************************************************************************
  */
 
-/**
- * @class ComponentUpdateSteps
- */
 final class ComponentUpdateSteps
 {
     /**

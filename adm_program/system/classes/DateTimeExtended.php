@@ -9,9 +9,6 @@
  ***********************************************************************************************
  */
 
-/**
- * @class DateTimeExtended
- */
 class DateTimeExtended extends DateTime
 {
     /**

@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableLists
  * Diese Klasse dient dazu ein Listenobjekt zu erstellen.
  * Eine Liste kann ueber diese Klasse in der Datenbank verwaltet werden
  *

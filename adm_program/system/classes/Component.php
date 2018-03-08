@@ -8,14 +8,15 @@
  */
 
 /**
- * @class Component
- * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
+ * Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
  *
  * The class search in the database table **adm_components** for a specific component
  * and loads the data into this object. A component could be per default the **SYSTEM**
  * itself, a module or a plugin. There are methods to check the version of the system.
- * @par Examples
- * @code // check if database and filesystem have same version
+ * 
+ * **Code example:**
+ * ```
+ * // check if database and filesystem have same version
  * try
  * {
  *     $systemComponent = new Component($gDb);
@@ -25,7 +26,8 @@
  * catch(AdmException $e)
  * {
  *     $e->showHtml();
- * } @endcode
+ * }
+ * ```
  */
 class Component extends TableAccess
 {

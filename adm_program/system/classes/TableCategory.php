@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableCategory
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
