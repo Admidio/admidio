@@ -9,29 +9,6 @@
  ***********************************************************************************************
  */
 
-/**
- * @class Image
- * Folgende Methoden stehen zur Verfuegung:
- *
- * setImageFromPath($pathAndFilename)
- *                  - setzt den Pfad zum Bild und liest Bildinformationen ein
- * setImageFromData($imageData)
- *                  - liest das Bild aus einem String ein und wird intern als PNG-Bild
- *                    weiter verarbeitet und ausgegeben
- * copyToFile($imageResource = null, $pathAndFilename = "", $quality = 95)
- *                  - kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der
- *                    hinterlegten Datei des Objekts
- * copyToBrowser($imageResource = null, $quality = 95)
- *                  - gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
- * getMimeType()    - gibt den Mime-Type (image/png) des Bildes zurueck
- * rotate($direction = "right")
- *                  - dreht das Bild um 90° in eine Richtung ("left"/"right")
- * scaleLargerSide($newMaxSize)
- *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
- * scale($newXSize, $newYSize, $maintainAspectRatio = true)
- *                  - das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
- * delete()         - entfernt das Bild aus dem Speicher
- */
 class Image
 {
     const ROTATE_DIRECTION_LEFT  = 'left';

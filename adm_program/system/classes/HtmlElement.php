@@ -8,8 +8,7 @@
  */
 
 /**
- * @class HtmlElement
- * @brief  This **abstract class** parses html elements
+ * This **abstract class** parses html elements
  *
  * This abstract class is designed to parse html elements.
  * It is only allowed to use extensions of this class.
@@ -18,13 +17,17 @@
  * or child elements. Also it is possible to define attributes and value for each added
  * element. Content data can be passed as string or as array.
  * The class supports also reading the data from assoc arrays and bi dimensional arrays.
- * @par Testarray with data
- * @code
+ * 
+ * **Code example:**
+ * ```
  * // Example content arrays
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
- * @endcode
- * @par Example_1: **unorderedlist**
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
+ * // Example_1: **unorderedlist**
+ * 
  * // create as parent instance
  * parent::HtmlElement('ul','class', 'unordered');  // Parameters( element, attribute, value, nesting (true/false ))
  * // we want to have further attributes for the element and set an id, for example
@@ -59,9 +62,12 @@
  * HtmlElement::closeParentElement('li');
  * $htmlList = HtmlElement::getHtmlElement();
  * echo $htmlList;
- * @endcode
- * @par Example_2 Nested Div Elements using nesting mode
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
+ * // Example_2 Nested Div Elements using nesting mode
+ * 
  * // Creating block elements with nested divs.
  * // Example using nesting mode for html elements
  * // Setting mode to true you are allowed to set the main element ('div' in this example) further times
@@ -80,18 +86,24 @@
  * // Get the block element
  * $htmlBlock = HtmlElement::getHtmlElement();
  * echo $htmlBlock;
- * @endcode
- * @par Example_3 Hyperlinks
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
+ * // Example_3 Hyperlinks
+ * 
  * parent::HtmlElement();
  * HtmlElement::addElement('a');
  * HtmlElement::addAttribute('href', 'https://www.admidio.org/');
  * HtmlElement::addData('Admidio Homepage');
  * $hyperlink = HtmlElement::getHtmlElement();
  * echo $hyperlink;
- * @endcode
- * @par Example_4 Form element
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
+ * // Example_4 Form element
+ * 
  * // Create a form element
  * parent::HtmlElement('form', 'name', 'testform');
  * HtmlElement::addAttribute('action', 'test.php');
@@ -119,7 +131,7 @@
  * HtmlElement::addData(' ', true);
  *
  * echo HtmlElement::getHtmlElement();
- * @endcode
+ * ```
  */
 abstract class HtmlElement
 {

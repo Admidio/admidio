@@ -8,20 +8,22 @@
  */
 
 /**
- * @class UploadHandlerPhoto
- * @brief Improved checks and update of database after upload of photos.
+ * Improved checks and update of database after upload of photos.
  *
  * This class extends the UploadHandler of the jquery-file-upload library. After
  * the upload of a photo we do some checks on the file and if no check fails then
  * the Admidio database will be updated. If you want do upload files for the download
  * module just create an instance of this class.
- * @par Examples
- * @code // create object and do upload
+ * 
+ * **Code example:**
+ * ```
+ * // create object and do upload
  * $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => $uploadDir,
  *                                               'upload_url' => $uploadUrl,
  *                                               'image_versions' => array(),
  *                                               'accept_file_types' => '/\.(jpe?g|png)$/i'), true,
- *                                               'array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID'))); @endcode
+ *                                               'array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
+ * ```
  */
 class UploadHandlerPhoto extends UploadHandler
 {

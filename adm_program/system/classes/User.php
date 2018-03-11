@@ -10,9 +10,8 @@
  */
 
 /**
- * @class User
- * Diese Klasse dient dazu ein Userobjekt zu erstellen.
- * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
+ *
  */
 class User extends TableAccess
 {
@@ -1063,11 +1062,14 @@ class User extends TableAccess
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column or the value of adm_user_fields
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @par Examples
-     * @code  // reads data of adm_users column
+     * 
+     * **Code example:**
+     * ```
+     * // reads data of adm_users column
      * $loginname = $gCurrentUser->getValue('usr_login_name');
      * // reads data of adm_user_fields
-     * $email = $gCurrentUser->getValue('EMAIL'); @endcode
+     * $email = $gCurrentUser->getValue('EMAIL');
+     * ```
      */
     public function getValue($columnName, $format = '')
     {
@@ -1830,13 +1832,14 @@ class User extends TableAccess
      * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @par Examples
-     * @code
+     * 
+     * **Code example:**
+     * ```
      * // set data of adm_users column
      * $gCurrentUser->getValue('usr_login_name', 'Admidio');
      * // reads data of adm_user_fields
      * $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org');
-     * @endcode
+     * ```
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {

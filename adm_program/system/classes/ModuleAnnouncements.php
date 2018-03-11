@@ -8,13 +8,13 @@
  */
 
 /**
- * @class ModuleAnnouncements
- * @brief This class reads announcement recordsets from database
+ * This class reads announcement recordsets from database
  *
  * This class reads all available recordsets from table announcements
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
- * @par Returned Array
- * @code
+ *
+ * **Returned array:**
+ * ```
  * Array
  * (
  *     [numResults] => 3
@@ -75,7 +75,7 @@
  *             [view_mode] => Default
  *         )
  * )
- * @endcode
+ * ```
  */
 class ModuleAnnouncements extends Modules
 {

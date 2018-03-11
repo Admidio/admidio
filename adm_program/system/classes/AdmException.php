@@ -8,15 +8,15 @@
  */
 
 /**
- * @class AdmException
- * @brief Admidio specific enhancements of the exception class
+ * Admidio specific enhancements of the exception class
  *
  * This class extends the default PHP exception class with an Admidio specific
  * output. The exception get's a language string as parameter and returns a
  * html or plain text message with the translated error if an exception is thrown
  *
- * @par Example
- * @code try
+ * **Code example:**
+ * ```
+ * try
  * {
  *    if($bla == 1)
  *    {
@@ -32,7 +32,8 @@
  *
  *    // show simply text message
  *    $e->showText();
- * } @endcode
+ * }
+ * ```
  */
 class AdmException extends Exception
 {

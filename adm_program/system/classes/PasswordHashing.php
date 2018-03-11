@@ -8,8 +8,6 @@
  */
 
 /**
- * @class PasswordHashing
- *
  * This class provides static functions for different tasks for passwords and hashing
  * It used the "random_compat" lib to provide forward compatibility with the random_* functions that ship with PHP 7.0
  * It used the "phpass" lib to provide backward compatibility to the old password hashing way

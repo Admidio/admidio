@@ -290,8 +290,9 @@ function admFuncProcessableImageSize()
     return (int) round($memoryLimit / ($bytesPerPixel * $factor));
 }
 
-// Verify the content of an array element if it's the expected datatype
 /**
+ * Verify the content of an array element if it's the expected datatype
+ *
  * The function is designed to check the content of **$_GET** and **$_POST** elements and should be used at the
  * beginning of a script. If the value of the defined datatype is not valid then an error will be shown. If no
  * value was set then the parameter will be initialized. The function can be used with every array and their elements.
@@ -313,8 +314,8 @@ function admFuncProcessableImageSize()
  *                                                              to false a html message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
- * @par Examples
- * @code
+ * **Code example:**
+ * ```
  * // numeric value that would get a default value 0 if not set
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
@@ -323,7 +324,7 @@ function admFuncProcessableImageSize()
  *
  * // string initialized with actual and the only allowed values are actual and old
  * $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old')));
- * @endcode
+ * ```
  */
 function admFuncVariableIsValid(array $array, $variableName, $datatype, array $options = array())
 {

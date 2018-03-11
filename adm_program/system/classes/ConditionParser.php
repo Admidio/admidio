@@ -8,19 +8,21 @@
  */
 
 /**
- * @class ConditionParser
- * @brief Creates from a custom condition syntax a sql condition
+ * Creates from a custom condition syntax a sql condition
  *
  * The user can write a condition in a special syntax. This class will parse
  * that condition and creates a valid SQL statement which can be used in
  * another SQL statement to select data with these conditions.
  * This class uses AdmExceptions when an error occurred. Make sure you catch these
  * exceptions when using the class.
- * @par Examples
- * @code // create a valid SQL condition out of the special syntax
+ *
+ * **Code example:**
+ * ```
+ * // create a valid SQL condition out of the special syntax
  * $parser = new ConditionParser();
  * $sqlCondition = $parser->makeSqlStatement('> 5 AND <= 100', 'usd_value', 'int');
- * $sql = 'SELECT * FROM '.TBL_USER_DATA.' WHERE usd_id > 0 AND '.$sqlCondition; @endcode
+ * $sql = 'SELECT * FROM '.TBL_USER_DATA.' WHERE usd_id > 0 AND '.$sqlCondition;
+ * ```
  */
 class ConditionParser
 {
@@ -162,8 +164,8 @@ class ConditionParser
      * This must bei a full subselect that starts with SELECT. The statement is used if
      * a condition with EMPTY or NOT EMPTY is used.
      * @param string $sqlStatement String with the full subselect
-     * @par Examples
-     * @code $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9'); @endcode
+     * **Code example:**
+     * ```$parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');```
      */
     public function setNotExistsStatement($sqlStatement)
     {
@@ -447,7 +449,7 @@ class ConditionParser
 
         $this->srcCond = admStrToUpper(trim($sourceCondition));
 
-        $replaceArray = array(
+        $replaces = array(
             '*' => '%',
             // valid 'not null' is '#'
             admStrToUpper($gL10n->get('SYS_NOT_EMPTY')) => ' # ',
@@ -479,7 +481,7 @@ class ConditionParser
             ' ODER ' => ' | ',
             '||'     => ' | '
         );
-        $this->srcCond = str_replace(array_keys($replaceArray), array_values($replaceArray), $this->srcCond);
+        $this->srcCond = admStrMultiReplace($this->srcCond, $replaces);
 
         return $this->srcCond;
     }

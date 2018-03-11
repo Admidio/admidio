@@ -8,8 +8,7 @@
  */
 
 /**
- * @class ComponentUpdate
- * @brief Manage the update of a component from the actual version to the target version
+ * Manage the update of a component from the actual version to the target version
  *
  * The class is an extension to the component class and will handle the update of a
  * component. It will read the database version from the component and set this as
@@ -18,11 +17,14 @@
  * **adm_program/installation/db_scripts** and for plugins there should be an install folder within the
  * plugin directory. The xml files should have the prefix update and than the main und subversion
  * within their filename e.g. **update_3_0.xml**.
- * @par Examples
- * @code // update the system module to the actual filesystem version
+ *
+ * **Code example:**
+ * ```
+ * // update the system module to the actual filesystem version
  * $componentUpdateHandle = new ComponentUpdate($gDb);
  * $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
- * $componentUpdateHandle->update(ADMIDIO_VERSION); @endcode
+ * $componentUpdateHandle->update(ADMIDIO_VERSION);
+ * ```
  */
 class ComponentUpdate extends Component
 {

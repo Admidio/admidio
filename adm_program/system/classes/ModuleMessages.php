@@ -8,14 +8,14 @@
  */
 
 /**
- * @class modulemessages
- * @brief some functions for the messages module
+ * Some functions for the messages module
  *
  * This class adds some functions that are used in the messages module to keep the
  * code easy to read and short
  *
- * @par Examples
- * @code // check the given Array for charecter and split it.
+ * **Code example:**
+ * ```
+ * // check the given Array for charecter and split it.
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
  * // show a message and set a link to a page that should be shown after user click ok
@@ -24,7 +24,8 @@
  *
  * // show a message with yes and no button and set a link to a page that should be shown after user click yes
  * $gMessage->setForwardYesNo('https://www.example.com/mypage.php');
- * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID')); @endcode
+ * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
+ * ```
  */
 class ModuleMessages
 {

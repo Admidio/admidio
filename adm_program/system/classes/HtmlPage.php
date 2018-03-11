@@ -8,21 +8,23 @@
  */
 
 /**
- * @class HtmlPage
- * @brief Creates an Admidio specific complete html page
+ * Creates an Admidio specific complete html page
  *
  * This class creates a html page with head and body and integrates some Admidio
  * specific elements like css files, javascript files and javascript code. It
  * also provides some methods to easily add new html data to the page. The generated
  * page will automatically integrate the choosen theme. You can optional disable the
  * integration of the theme files.
- * @par Examples
- * @code // create a simple html page with some text
+ *
+ * **Code example:**
+ * ```
+ * // create a simple html page with some text
  * $page = new HtmlPage();
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
- * $page->show(); @endcode
+ * $page->show();
+ * ```
  */
 class HtmlPage
 {
@@ -253,6 +255,7 @@ class HtmlPage
 
         while ($mainMenu = $mainMenuStatement->fetch())
         {
+            $menuIcon = '/dummy.png';
             $menuItems = array();
 
             $menuStatement = self::getMenuStatement($mainMenu['men_id']);
@@ -280,7 +283,10 @@ class HtmlPage
                     else
                     {
                         $menuUrl = $row['men_url'];
-                        $menuIcon = $row['men_icon'];
+                        if(strlen($row['men_icon']) > 2)
+                        {
+                            $menuIcon = $row['men_icon'];
+                        }
                         $menuName = Language::translateIfTranslationStrId($row['men_name']);
                     }
 
@@ -724,7 +730,7 @@ class HtmlPage
      */
     public function showMainMenu($details = true)
     {
-        global $gL10n, $gValidLogin, $gSettingsManager;
+        global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
         $menuIcon = '/dummy.png';
         $htmlMenu = '';
@@ -745,6 +751,16 @@ class HtmlPage
                 {
                     if ((int) $row['men_com_id'] === 0 || Component::isVisible($row['com_name_intern']))
                     {
+                        // Read current roles rights of the menu
+                        $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
+                        $rolesDisplayRight = $displayMenu->getRolesIds();
+    
+                        // check for right to show the menu
+                        if (count($rolesDisplayRight) > 0 && !$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
+                        {
+                            continue;
+                        }
+                        
                         $menuName = Language::translateIfTranslationStrId($row['men_name']);
                         $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
                         $menuUrl = $row['men_url'];

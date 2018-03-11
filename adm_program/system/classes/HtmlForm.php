@@ -8,8 +8,7 @@
  */
 
 /**
- * @class HtmlForm
- * @brief Creates an Admidio specific form with special elements
+ * Creates an Admidio specific form with special elements
  *
  * This class inherits the common HtmlFormBasic class and extends their elements
  * with custom Admidio form elements. The class should be used to create the
@@ -17,8 +16,10 @@
  * the label of fields and some other specific features like a identification
  * of mandatory fields, help buttons and special css classes for every
  * element.
- * @par Examples
- * @code // create a simple form with one input field and a button
+ *
+ * **Code examples:**
+ * ```
+ * // create a simple form with one input field and a button
  * $form = new HtmlForm('simple-form', 'next_page.php');
  * $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
  * $form->addInput('name', $gL10n->get('SYS_NAME'), $formName);
@@ -26,7 +27,8 @@
  *                     array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  * $form->closeGroupBox();
  * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
- * $form->show(); @endcode
+ * $form->show();
+ * ```
  */
 class HtmlForm extends HtmlFormBasic
 {
@@ -1494,12 +1496,14 @@ class HtmlForm extends HtmlFormBasic
      *                               - **icon** : An icon can be set. This will be placed in front of the label.
      *                               - **class** : An additional css classname. The class **admSelectbox**
      *                                 is set as default and need not set with this parameter.
-     * @par Examples
-     * @code // create a selectbox with all profile fields of a specific category
+     * **Code examples:**
+     * ```
+     * // create a selectbox with all profile fields of a specific category
      * $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
      * $form = new HtmlForm('simple-form', 'next_page.php');
      * $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
-     * $form->show(); @endcode
+     * $form->show();
+     * ```
      */
     public function addSelectBoxFromSql($id, $label, Database $database, $sql, array $options = array())
     {

@@ -10,7 +10,6 @@
  */
 
 /**
- * @class TableRoles
  * Diese Klasse dient dazu einen Rollenobjekt zu erstellen.
  * Eine Rolle kann ueber diese Klasse in der Datenbank verwaltet werden.
  * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie

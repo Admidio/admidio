@@ -8,16 +8,16 @@
  */
 
 /**
- * @class Navigation
- * @brief Handle the navigation within a module and could create a html navigation bar
+ * Handle the navigation within a module and could create a html navigation bar
  *
  * This class stores every url that you add to the object in a stack. From
  * there it's possible to return the last called url or a previous url. This
  * can be used to allow a navigation within a module. It's also possible
  * to create a html navigation bar. Therefore you should add a url and a link text
  * to the object everytime you submit a url.
- * @par Example 1
- * @code
+ * 
+ * **Code example:**
+ * ```
  * // start the navigation in a module (the object $gNavigation is created in common.php)
  * $gNavigation->addStartUrl('https://www.example.com/index.php', 'Example-Module');
  *
@@ -29,12 +29,13 @@
  *
  * // if you want to remove the last entry from the stack
  * $gNavigation->deleteLastUrl();
- * @endcode
- * @par Example 2
- * @code
+ * ```
+ * 
+ * **Code example:**
+ * ```
  * // show a navigation bar in your html code
  * ... <br /><?php echo $gNavigation->getHtmlNavigationBar('id-my-navigation'); ?><br /> ...
- * @endcode
+ * ```
  */
 class Navigation
 {

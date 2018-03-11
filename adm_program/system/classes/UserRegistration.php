@@ -8,28 +8,33 @@
  */
 
 /**
- * @class UserRegistration
- * @brief Creates, assign and update user registrations in database
+ * Creates, assign and update user registrations in database
  *
  * This class extends the User class with some special functions for new registrations.
  * If a new user is saved than there will be an additional table entry in the
  * registration table. This entry must be deleted if a registration is confirmed
  * or deleted. If a registration is confirmed or deleted then a notification SystemMail
  * will be send to the user. If email couldn't be send than an AdmException will be thrown.
- * @par Example 1
- * @code // create a valid registration
+ * 
+ * **Code example:**
+ * ```
+ * // create a valid registration
  * $user = new UserRegistration($gDb, $gProfileFields);
  * $user->setValue('LAST_NAME', 'Schmidt');
  * $user->setValue('FIRST_NAME', 'Franka');
  * ...
  * // save user data and create registration
- * $user->save(); @endcode
- * @par Example 2
- * @code // assign a registration
+ * $user->save();
+ * ´´´
+ * 
+ * **Code example:**
+ * ```
+ * // assign a registration
  * $userId = 4711;
  * $user = new UserRegistration($gDb, $gProfileFields, $userId);
  * // set user to valid and send notification email
- * $user->acceptRegistration(); @endcode
+ * $user->acceptRegistration();
+ * ```
  */
 class UserRegistration extends User
 {

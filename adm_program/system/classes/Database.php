@@ -8,8 +8,7 @@
  */
 
 /**
- * @class Database
- * @brief Handle the connection to the database, send all sql statements and handle the returned rows.
+ * Handle the connection to the database, send all sql statements and handle the returned rows.
  *
  * This class creates a connection to the database and provides several methods
  * to communicate with the database. There are methods to send sql statements
@@ -17,9 +16,10 @@
  * Just call Database#startTransaction and finish it with Database#endTransaction. If
  * you call this multiple times only 1 transaction will be open and it will be closed
  * after the last endTransaction was send.
- * @par Examples
- * To open a connection you can use the settings of the config.php of Admidio.
- * @code
+ *
+ * **Code example:**
+ * ```
+ * // To open a connection you can use the settings of the config.php of Admidio.
  * // create object and open connection to database
  * try
  * {
@@ -29,9 +29,11 @@
  * {
  *     $e->showText();
  * }
- * @endcode
- * Now you can use the new object **$gDb** to send a query to the database
- * @code
+ * ```
+ *
+ * **Code example:**
+ * ```
+ * // Now you can use the new object **$gDb** to send a query to the database
  * // send sql to database and assign the returned \PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
  *
@@ -54,7 +56,7 @@
  * {
  *     echo $organizationNames['shortname'].' '.$organizationNames['longname'];
  * }
- * @endcode
+ * ```
  */
 class Database
 {
@@ -572,7 +574,7 @@ class Database
         }
         if (admStrContains($sqlCompare, 'create table') || admStrContains($sqlCompare, 'alter table'))
         {
-            $replaceArray = array(
+            $replaces = array(
                 // PostgreSQL doesn't know unsigned
                 'unsigned' => '',
                 // PostgreSQL interprets a boolean as string so transform it to a smallint
@@ -580,7 +582,7 @@ class Database
                 // A blob is in PostgreSQL a bytea datatype
                 'blob'     => 'bytea'
             );
-            $sql = str_replace(array_keys($replaceArray), array_values($replaceArray), $sql);
+            $sql = admStrMultiReplace($sql, $replaces);
 
             // Auto_Increment must be replaced with Serial
             $posAutoIncrement = strpos($sql, 'AUTO_INCREMENT');

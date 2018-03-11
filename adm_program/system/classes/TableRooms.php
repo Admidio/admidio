@@ -10,8 +10,6 @@
  */
 
 /**
- * @class TableRooms
- *
  * Diese Klasse dient dazu, um ein neues Raumobjekt in der Datenbanktabelle
  * adm_rooms zu erstellen.
  */

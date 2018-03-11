@@ -10,8 +10,9 @@
  * This script will read all necessary users and their data from the database. It is optimized to
  * work with the javascript DataTables and will return the data in json format.
  *
- * @par Examples
- * @code // the returned json data string
+ * **Code example:**
+ * ```
+ * // the returned json data string
  * {
  *    "draw":1,
  *    "recordsTotal":"147",
@@ -26,7 +27,8 @@
  *                [ ... ],
  *             ],
  *    "recordsFiltered":"147"
- * } @endcode
+ * }
+ * ```
  *
  * Parameters:
  *

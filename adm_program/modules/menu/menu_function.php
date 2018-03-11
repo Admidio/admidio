@@ -102,8 +102,6 @@ if($getMode === 1)
         $menu->setValue('men_com_id', $postComId);
     }
 
-    $menId = (int) $menu->getValue('men_id');
-
     // save Data to Table
     $returnCode = $menu->save();
 
@@ -113,7 +111,7 @@ if($getMode === 1)
     }
 
     // Read current roles of the menu
-    $displayMenu = new RolesRights($gDb, 'menu_view', $menId);
+    $displayMenu = new RolesRights($gDb, 'menu_view', (int) $menu->getValue('men_id'));
     $rolesDisplayRight = $displayMenu->getRolesIds();
 
     if(!isset($_POST['menu_view']) || !is_array($_POST['menu_view']))

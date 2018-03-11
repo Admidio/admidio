@@ -8,16 +8,16 @@
  */
 
 /**
- * @class LanguageData
- * @brief Stores language data in a class object
+ * Stores language data in a class object
  *
  * This class stores data of the Language object. These are the paths to all
  * relevant language files, the configured language and the default language.
  * This object is designed to be stored in a PHP session. The Language
  * object itself couldn't be stored in a Session because it uses PHP objects
  * which couldn't stored in a PHP session.
- * @par Examples
- * @code
+ * 
+ * **Code example:**
+ * ```
  * // show how to use this class with the language class and sessions
  * script_a.php
  * // create a language data object and assign it to the language object
@@ -29,7 +29,7 @@
  * // read language data from session and add it to language object
  * $languageData = $session->getObject('languageData')
  * $language = new Language($languageData);
- * @endcode
+ * ```
  */
 class LanguageData
 {

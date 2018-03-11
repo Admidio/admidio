@@ -10,7 +10,6 @@
  */
 
 /**
- * @class RssFeed
  * Diese Klasse erzeugt ein RssFeed-Objekt nach RSS 2.0.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:

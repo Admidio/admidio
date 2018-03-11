@@ -8,18 +8,20 @@
  */
 
 /**
- * @class UploadHandlerDownload
- * @brief Improved checks and update of database after upload of files.
+ * Improved checks and update of database after upload of files.
  *
  * This class extends the UploadHandler of the jquery-file-upload library. After
  * the upload of the file we do some checks on the file and if no check fails then
  * the Admidio database will be updated. If you want do upload files for the download
  * module just create an instance of this class.
- * @par Examples
- * @code // create object and do upload
+ * 
+ * **Code example:**
+ * ```
+ * // create object and do upload
  * $uploadHandler = new UploadHandlerDownload(array('upload_dir' => $uploadDir,
  *                                                  'upload_url' => $uploadUrl,
- *                                                  'image_versions' => array())); @endcode
+ *                                                  'image_versions' => array()));
+ * ```
  */
 class UploadHandlerDownload extends UploadHandler
 {

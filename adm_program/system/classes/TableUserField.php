@@ -10,8 +10,6 @@
  */
 
 /**
- * @class TableUserField
- *
  * Diese Klasse dient dazu einen Benutzerdefiniertes Feldobjekt zu erstellen.
  * Eine Benutzerdefiniertes Feldobjekt kann ueber diese Klasse in der Datenbank
  * verwaltet werden

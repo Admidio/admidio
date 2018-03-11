@@ -1,8 +1,6 @@
 <?php
 /**
  ***********************************************************************************************
- * Class manages access to database table adm_dates
- *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -10,9 +8,32 @@
  */
 
 /**
- * @class TableDate
- * Diese Klasse dient dazu ein Terminobjekt zu erstellen.
- * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Creates an event object from the database table adm_dates
+ *
+ * With the given id an event object is created from the data in the database table **adm_dates**.
+ * The class will handle the communication with the database and give easy access to the data. New 
+ * event could be created or existing event could be edited. Special properties of 
+ * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
+ *
+ * **Code examples:**
+ * ```
+ * // get data from an existing event
+ * $event       = new TableDate($gDb, $dateId);
+ * $headline    = $event->getValue('dat_headline');
+ * $description = $event->getValue('dat_description');
+ *
+ * // change existing event
+ * $event = new TableDate($gDb, $dateId);
+ * $event->setValue('dat_headline', 'My new headling');
+ * $event->setValue('dat_description', 'This is the new description.');
+ * $event->save();
+ *
+ * // create new event
+ * $event = new TableDate($gDb);
+ * $event->setValue('dat_headline', 'My new headling');
+ * $event->setValue('dat_description', 'This is the new description.');
+ * $event->save();
+ * ``` 
  */
 class TableDate extends TableAccess
 {
@@ -103,14 +124,16 @@ class TableDate extends TableAccess
      */
     private function escapeIcalText($text)
     {
-        $searchReplace = array(
-            '\\'   => '\\\\',
-            ','    => '\,',
-            ';'    => '\;',
-            "\r\n" => "\n"
+        $replaces = array(
+            '\\' => '\\\\',
+            ';'  => '\;',
+            ','  => '\,',
+            "\n" => '\n',
+            "\r" => '',
+            '<br />' => '\n' // workaround
         );
 
-        return trim(str_replace(array_keys($searchReplace), array_values($searchReplace), $text));
+        return trim(admStrMultiReplace($text, $replaces));
     }
 
     /**
@@ -196,7 +219,7 @@ class TableDate extends TableAccess
         // Semicolons herausfiltern
         $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
         $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline'));
-        $iCalVEvent[] = 'DESCRIPTION:' . $this->escapeIcalText($this->getValue('dat_description', 'database'));
+        $iCalVEvent[] = 'DESCRIPTION:' . strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
         $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);
         $iCalVEvent[] = 'LOCATION:' . $this->escapeIcalText($this->getValue('dat_location'));
 

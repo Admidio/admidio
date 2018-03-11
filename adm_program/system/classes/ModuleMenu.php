@@ -8,8 +8,7 @@
  */
 
 /**
- * @class ModuleMenu
- * srief Class manages display of menus in modules
+ * Class manages display of menus in modules
  *
  * This class manage the presentation of a module menu. You can add as many
  * items to the menu and the class tries to display them in the perfect
@@ -17,8 +16,10 @@
  * will create a menu button where you can find all the other menu items.
  * The position of the items is important. Only the first items will display
  * permanently in the module. The other items are summarized in a submenu.
- * @par Examples
- * @code   // get module menu
+ * 
+ * **Code example:**
+ * ```
+ * // get module menu
  * $myModuleMenu = new ModuleMenu('admMenuMyModule');
  *
  * // show link to create new announcement
@@ -26,7 +27,8 @@
  *     'admMenuItemNewEntry', ADMIDIO_URL.FOLDER_MODULES.'/mymodule/mymodule_new.php',
  *     $gL10n->get('SYS_CREATE'), 'add.png'
  * );
- * $myModuleMenu->show(); @endcode
+ * $myModuleMenu->show();
+ * ```
  */
 class ModuleMenu
 {
