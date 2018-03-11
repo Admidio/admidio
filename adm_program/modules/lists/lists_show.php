@@ -446,7 +446,7 @@ if ($getMode !== 'csv')
             });
 
             $("#menu_item_mail_to_list").click(function() {
-                $("#page").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id: "'.$getListId.'", userIdList: "'.implode(',', $userIdList).'" });
+                $("body").load("'.ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php", {lst_id: "'.$getListId.'", userIdList: "'.implode(',', $userIdList).'" });
                 return false;
             });
 
