@@ -111,7 +111,7 @@ class Language
         {
             $text = $this->getTextFromTextId($textId);
 
-            $gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
+            //$gLogger->debug('L10N: Lookup time:', array('time' => getExecutionTime($startTime), 'textId' => $textId));
         }
         catch (\RuntimeException $exception)
         {
