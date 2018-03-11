@@ -237,6 +237,8 @@ final class ComponentUpdateSteps
     {
         global $gCurrentUser;
 
+        $usrId = (int) $gCurrentUser->getValue('usr_id');
+
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
                   FROM '.TBL_ROLES_RIGHTS.'
@@ -246,26 +248,30 @@ final class ComponentUpdateSteps
 
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
+                SELECT '.$rolesRightId.', dtr_rol_id, dtr_dat_id, ?, ? -- $usrId, DATETIME_NOW
                   FROM '.TABLE_PREFIX.'_date_role
                  WHERE dtr_rol_id IS NOT NULL';
-        self::$db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
+        self::$db->queryPrepared($sql, array($usrId, DATETIME_NOW));
 
         // if no roles were set than we must assign all default registration roles because now we need at least 1 role
         // so that someone could register to the event
         $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
                        (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-                SELECT '.$rolesRightId.', rol_id, dat_id, ?, ? -- $gCurrentUser->getValue(\'usr_id\'), DATETIME_NOW
+                SELECT '.$rolesRightId.', rol_id, dat_id, ?, ? -- $usrId, DATETIME_NOW
                   FROM '.TABLE_PREFIX.'_dates
-                 INNER JOIN '.TABLE_PREFIX.'_categories cdat ON cdat.cat_id = dat_cat_id
-                 INNER JOIN '.TABLE_PREFIX.'_date_role ON dtr_dat_id = dat_id
-                 INNER JOIN '.TABLE_PREFIX.'_categories rdat ON rdat.cat_org_id = cdat.cat_org_id
-                 INNER JOIN '.TABLE_PREFIX.'_roles ON rol_cat_id = rdat.cat_id
-                 WHERE dat_rol_id is not null
-                   AND dtr_rol_id is null
+            INNER JOIN '.TABLE_PREFIX.'_categories AS cdat
+                    ON cdat.cat_id = dat_cat_id
+            INNER JOIN '.TABLE_PREFIX.'_date_role
+                    ON dtr_dat_id = dat_id
+            INNER JOIN '.TABLE_PREFIX.'_categories AS rdat
+                    ON rdat.cat_org_id = cdat.cat_org_id
+            INNER JOIN '.TABLE_PREFIX.'_roles
+                    ON rol_cat_id = rdat.cat_id
+                 WHERE dat_rol_id IS NOT NULL
+                   AND dtr_rol_id IS NULL
                    AND rdat.cat_type = \'ROL\'
                    AND rol_default_registration = 1';
-        self::$db->queryPrepared($sql, array((int) $gCurrentUser->getValue('usr_id'), DATETIME_NOW));
+        self::$db->queryPrepared($sql, array($usrId, DATETIME_NOW));
     }
 
     /**
