@@ -15,7 +15,7 @@
  * an AdmException will be thrown. To catch this exception all method calls of this class should
  * be within a try and catch structure. Also all method are declared static.
  *
- * 
+ *
  * **Code example:**
  * ```
  * // validate the captcha code

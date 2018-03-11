@@ -17,7 +17,7 @@
  * couldn't be stored in sessions. Therefore an object of **LanguageData**
  * should be assigned to this class that stored all necessary data and can be
  * stored in a session.
- * 
+ *
  * **Code example:**
  * ```
  * // show how to use this class with the language data class and sessions
@@ -92,7 +92,7 @@ class Language
      *                                  $params[0] will replace **#VAR1#** or **#VAR1_BOLD#**,
      *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
      * @return string Returns the text string with replaced placeholders of the text id.
-     * 
+     *
      * **Code example:**
      * ```
      * // display a text without placeholders

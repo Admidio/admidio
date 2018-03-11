@@ -754,13 +754,13 @@ class HtmlPage
                         // Read current roles rights of the menu
                         $displayMenu = new RolesRights($gDb, 'menu_view', $row['men_id']);
                         $rolesDisplayRight = $displayMenu->getRolesIds();
-    
+
                         // check for right to show the menu
                         if (count($rolesDisplayRight) > 0 && !$displayMenu->hasRight($gCurrentUser->getRoleMemberships()))
                         {
                             continue;
                         }
-                        
+
                         $menuName = Language::translateIfTranslationStrId($row['men_name']);
                         $menuDescription = Language::translateIfTranslationStrId($row['men_description']);
                         $menuUrl = $row['men_url'];

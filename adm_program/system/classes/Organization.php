@@ -14,7 +14,7 @@
  * organization specific preferences of the table adm_preferences. There
  * are also some method to read the relationship of organizations if the
  * database contains more then one organization.
- * 
+ *
  * **Code example:**
  * ```
  * // create object and read the value of the language preference

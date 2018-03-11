@@ -14,13 +14,13 @@
  * If there is an entry for that id then it reads the user id and set this
  * user to the current session. Now the current session has become a valid user
  * that is automatically login.
- * 
+ *
  * **Code examples:**
  * ```
  * // create a valid user login for a Admidio session from auto login
  * $autoLogin = new AutoLogin($gDb, $gSessionId);
  * $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);
- * 
+ *
  * // delete an auto login
  * $autoLogin = new AutoLogin($gDb, $gSessionId);
  * $autoLogin->delete();

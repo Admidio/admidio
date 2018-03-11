@@ -14,7 +14,7 @@
  * Create a list object for ordered, unordered or data list an add the list items.
  * The class supports data lists and lists and combination of nested lists and data lists.
  * The parsed list object is returned as string.
- * 
+ *
  * **Code example:**
  * ```
  * // Example 1: Creating datalist
@@ -29,11 +29,11 @@
  * // get parsed datalist as string
  * echo $list->getHtmlList();
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // Example 2: Creating  ordered list
- * 
+ *
  * // Get Instance
  * $list = new HtmlList('ol', 'id_ol', 'class');
  * // Set type Attribute

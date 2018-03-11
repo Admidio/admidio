@@ -16,7 +16,7 @@
  * will create a menu button where you can find all the other menu items.
  * The position of the items is important. Only the first items will display
  * permanently in the module. The other items are summarized in a submenu.
- * 
+ *
  * **Code example:**
  * ```
  * // get module menu

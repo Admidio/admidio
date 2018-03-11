@@ -11,8 +11,8 @@
  * Creates an announcement object from the database table adm_announcements
  *
  * With the given id an announcement object is created from the data in the database table **adm_announcements**.
- * The class will handle the communication with the database and give easy access to the data. New 
- * announcement could be created or existing announcements could be edited. Special properties of 
+ * The class will handle the communication with the database and give easy access to the data. New
+ * announcement could be created or existing announcements could be edited. Special properties of
  * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
  *
  * **Code examples:**
@@ -33,7 +33,7 @@
  * $announcement->setValue('ann_headline', 'My new headling');
  * $announcement->setValue('ann_description', 'This is the new description.');
  * $announcement->save();
- * ``` 
+ * ```
  */
 class TableAnnouncement extends TableAccess
 {

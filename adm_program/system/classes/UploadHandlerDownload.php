@@ -14,7 +14,7 @@
  * the upload of the file we do some checks on the file and if no check fails then
  * the Admidio database will be updated. If you want do upload files for the download
  * module just create an instance of this class.
- * 
+ *
  * **Code example:**
  * ```
  * // create object and do upload

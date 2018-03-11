@@ -11,7 +11,6 @@
 
 /**
  * Handles all the user data and the rights. This is used for the current login user and for other users of the database.
- *
  */
 class User extends TableAccess
 {
@@ -1062,7 +1061,7 @@ class User extends TableAccess
      *                           For text columns the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column or the value of adm_user_fields
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * 
+     *
      * **Code example:**
      * ```
      * // reads data of adm_users column
@@ -1842,7 +1841,7 @@ class User extends TableAccess
      * @param bool   $checkValue The value will be checked if it's valid. If set to **false** than the value will
      *                           not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * 
+     *
      * **Code example:**
      * ```
      * // set data of adm_users column

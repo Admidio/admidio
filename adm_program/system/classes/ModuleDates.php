@@ -12,7 +12,7 @@
  *
  * This class reads all available recordsets from table dates.
  * and returns an Array with results, recordsets and validated parameters from $_GET Array.
- * 
+ *
  * **Returned array:**
  * ```
  * array(

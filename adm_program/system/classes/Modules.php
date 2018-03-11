@@ -18,7 +18,7 @@
  * If no values are available the daterange is set by default: date_from = DATE_NOW; date_to = 9999-12-31
  * The class provides methods to return all single Variables and arrays or returns an Array with all setted parameters
  * The returned array contains following settings:
- * 
+ *
  * **Return parameter array:**
  * ```
  * array('active_role'         => '1',
