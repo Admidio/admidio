@@ -1517,7 +1517,17 @@ class User extends TableAccess
      */
     private function isAdminOfOrganization($orgLongname)
     {
-        global $gLogger;
+        global $gLogger, $installedDbVersion;
+
+        // Deprecated: Fallback for updates from v3.0 and v3.1
+        if (version_compare($installedDbVersion, '3.2', '>='))
+        {
+            $administratorColumn = 'rol_administrator';
+        }
+        else
+        {
+            $administratorColumn = 'rol_webmaster';
+        }
 
         // Check if user is currently member of a role of an organisation
         $sql = 'SELECT mem_usr_id
@@ -1531,7 +1541,7 @@ class User extends TableAccess
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId
-                   AND rol_administrator = 1';
+                   AND '.$administratorColumn.' = 1';
         $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
