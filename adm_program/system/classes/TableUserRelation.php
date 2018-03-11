@@ -27,7 +27,7 @@ class TableUserRelation extends TableAccess
 
     /**
      * Returns the inverse relation.
-     * @return null|TableUserRelation Returns the inverse relation
+     * @return null|self Returns the inverse relation
      */
     public function getInverse()
     {
