@@ -14,11 +14,11 @@
  * Create an instance of an div element and nest the inline elements.
  * The class supports nesting of several div elements and allows you to configure all attributes programatically.
  * The parsed div object with inline elements is returned as string.
- * 
+ *
  * **Code example:**
  * ```
  * // Creating a div element
- * 
+ *
  * $testArray = array('Test_1', 'Test_2','Test_3');
  * // Get the Instance for a new division element
  * $div = new HtmlDiv('ID_Wrapper', 'Class_Wrapper');

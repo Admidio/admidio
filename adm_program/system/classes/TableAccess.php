@@ -16,7 +16,7 @@
  * be created with this class. The advantage of this class is that you are
  * independent from SQL. You can use @c getValue, @c setValue, @c readData
  * and @c save to handle the record.
- * 
+ *
  * **Code example:**
  * ```
  * // create an object for table adm_roles of role 4711
@@ -151,7 +151,7 @@ class TableAccess
      * @param string $table                     Database table name that should be connected. This can be the define of the table.
      * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
      * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
-     * 
+     *
      * **Code example:**
      * ```
      * // Constructor of adm_dates object where the category (calendar) is connected
@@ -406,7 +406,7 @@ class TableAccess
      * Per default all columns of the default table will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
-     * 
+     *
      * **Code example:**
      * ```
      * // reads data not be mem_id but with combination of role and user id
@@ -565,7 +565,7 @@ class TableAccess
      * the necessary data.
      * @param array $fieldArray An array with all fields and their values of the table. If the object has
      *                          more connected tables than you should add the fields of these tables, too.
-     * 
+     *
      * **Code example:**
      * ```
      * // read all announcements with their categories

@@ -17,17 +17,17 @@
  * or child elements. Also it is possible to define attributes and value for each added
  * element. Content data can be passed as string or as array.
  * The class supports also reading the data from assoc arrays and bi dimensional arrays.
- * 
+ *
  * **Code example:**
  * ```
  * // Example content arrays
  * $dataArray = array('Data 1', 'Data 2', 'Data 3');
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // Example_1: **unorderedlist**
- * 
+ *
  * // create as parent instance
  * parent::HtmlElement('ul','class', 'unordered');  // Parameters( element, attribute, value, nesting (true/false ))
  * // we want to have further attributes for the element and set an id, for example
@@ -63,11 +63,11 @@
  * $htmlList = HtmlElement::getHtmlElement();
  * echo $htmlList;
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // Example_2 Nested Div Elements using nesting mode
- * 
+ *
  * // Creating block elements with nested divs.
  * // Example using nesting mode for html elements
  * // Setting mode to true you are allowed to set the main element ('div' in this example) further times
@@ -87,11 +87,11 @@
  * $htmlBlock = HtmlElement::getHtmlElement();
  * echo $htmlBlock;
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // Example_3 Hyperlinks
- * 
+ *
  * parent::HtmlElement();
  * HtmlElement::addElement('a');
  * HtmlElement::addAttribute('href', 'https://www.admidio.org/');
@@ -99,11 +99,11 @@
  * $hyperlink = HtmlElement::getHtmlElement();
  * echo $hyperlink;
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // Example_4 Form element
- * 
+ *
  * // Create a form element
  * parent::HtmlElement('form', 'name', 'testform');
  * HtmlElement::addAttribute('action', 'test.php');

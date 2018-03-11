@@ -15,7 +15,7 @@
  * can be used to allow a navigation within a module. It's also possible
  * to create a html navigation bar. Therefore you should add a url and a link text
  * to the object everytime you submit a url.
- * 
+ *
  * **Code example:**
  * ```
  * // start the navigation in a module (the object $gNavigation is created in common.php)
@@ -30,7 +30,7 @@
  * // if you want to remove the last entry from the stack
  * $gNavigation->deleteLastUrl();
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // show a navigation bar in your html code

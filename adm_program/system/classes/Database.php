@@ -141,7 +141,7 @@ class Database
             );
         }
 
-        return new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
+        return new self(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
     }
 
     /**

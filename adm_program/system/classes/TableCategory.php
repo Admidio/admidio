@@ -11,8 +11,8 @@
  * Creates a category object from the database table adm_categories
  *
  * With the given id a category object is created from the data in the database table **adm_categories**.
- * The class will handle the communication with the database and give easy access to the data. New 
- * category could be created or existing category could be edited. Special properties of 
+ * The class will handle the communication with the database and give easy access to the data. New
+ * category could be created or existing category could be edited. Special properties of
  * data like save urls, checks for evil code or timestamps of last changes will be handled within this class.
  *
  * **Code examples:**
@@ -33,7 +33,7 @@
  * $category->setValue('cat_name', 'My new headling');
  * $category->setValue('cat_type', 'ROL');
  * $category->save();
- * ``` 
+ * ```
  */
 class TableCategory extends TableAccess
 {

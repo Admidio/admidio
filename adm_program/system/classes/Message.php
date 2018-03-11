@@ -16,7 +16,7 @@
  * open after user confirmed the message or you can show a question with two
  * default buttons yes and no. There is also an option to automatically leave the
  * message after some time.
- * 
+ *
  * **Code example:**
  * ```
  * // show a message with a back button, the object $gMessage is created in common.php

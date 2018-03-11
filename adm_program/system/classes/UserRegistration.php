@@ -15,7 +15,7 @@
  * registration table. This entry must be deleted if a registration is confirmed
  * or deleted. If a registration is confirmed or deleted then a notification SystemMail
  * will be send to the user. If email couldn't be send than an AdmException will be thrown.
- * 
+ *
  * **Code example:**
  * ```
  * // create a valid registration
@@ -26,7 +26,7 @@
  * // save user data and create registration
  * $user->save();
  * ´´´
- * 
+ *
  * **Code example:**
  * ```
  * // assign a registration

@@ -14,7 +14,7 @@
  * First you set the modus (update or installation) and then you can optional
  * add custom text to the page. The main configuration part will be the
  * form. You can use the complete methods of the Form class.
- * 
+ *
  * **Code example:**
  * ```
  * // create a simple installation form with a free text, a text field and a submit button

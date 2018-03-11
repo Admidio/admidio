@@ -13,7 +13,7 @@
  * The class search in the database table **adm_components** for a specific component
  * and loads the data into this object. A component could be per default the **SYSTEM**
  * itself, a module or a plugin. There are methods to check the version of the system.
- * 
+ *
  * **Code example:**
  * ```
  * // check if database and filesystem have same version

@@ -17,7 +17,7 @@
  * You can define the class names and the row number for line change.
  * CSS classes are needed using this option for class change !
  * This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
- * 
+ *
  * **Code example:**
  * ```
  * // Data array for example
@@ -35,7 +35,7 @@
  * // get validated table
  * echo $table->getHtmlTable();
  * ```
- * 
+ *
  * **Code example:**
  * ```
  * // Create an table instance with optional table ID, table class and border
