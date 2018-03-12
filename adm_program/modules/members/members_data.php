@@ -272,8 +272,8 @@ while($row = $mglStatement->fetch())
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
     }
 
-    $columnValues[] = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'"><img
-             src="'.THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
+    $columnValues[] = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.
+        '<img src="'.THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
     // Add "Lastname" and "Firstname"
     $columnValues[] = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'">'.$row['name'].'</a>';
