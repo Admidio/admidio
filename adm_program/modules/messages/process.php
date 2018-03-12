@@ -143,4 +143,5 @@ switch($postFunction)
         break;
 }
 
+header('Content-Type: application/json');
 echo json_encode($log);

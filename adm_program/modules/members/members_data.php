@@ -55,6 +55,8 @@ $getSearch  = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
 $jsonArray = array('draw' => $getDraw);
 
+header('Content-Type: application/json');
+
 // if only active members should be shown then set parameter
 if(!$gSettingsManager->getBool('members_show_all_users'))
 {
@@ -65,6 +67,7 @@ if(!$gSettingsManager->getBool('members_show_all_users'))
 if (!$gCurrentUser->editUsers())
 {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
+    exit();
 }
 
 // create order statement
