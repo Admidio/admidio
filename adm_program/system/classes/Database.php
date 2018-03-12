@@ -124,7 +124,7 @@ class Database
     /**
      * Simple way to create a database object with the default Admidio globals
      * @throws AdmException
-     * @return Database Returns a Database instance
+     * @return self Returns a Database instance
      */
     public static function createDatabaseInstance()
     {

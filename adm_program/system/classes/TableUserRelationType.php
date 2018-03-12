@@ -76,7 +76,7 @@ class TableUserRelationType extends TableAccess
 
     /**
      * Returns the inverse relationtype.
-     * @return null|TableUserRelationType Returns the inverse relationtype
+     * @return null|self Returns the inverse relationtype
      */
     public function getInverse()
     {
