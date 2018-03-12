@@ -417,13 +417,7 @@ class Language
 
         if ($xmlNodes === false || count($xmlNodes) === 0)
         {
-            // Deprecated: Fallback for update from v3.0
-            $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/language/version/text[@id="'.$textId.'"]');
-
-            if ($xmlNodes === false || count($xmlNodes) === 0)
-            {
-                throw new \OutOfBoundsException('Could not found text-id!');
-            }
+            throw new \OutOfBoundsException('Could not found text-id!');
         }
 
         $text = self::prepareXmlText((string) $xmlNodes[0]);
