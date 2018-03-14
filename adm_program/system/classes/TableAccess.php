@@ -102,6 +102,19 @@ class TableAccess
     }
 
     /**
+     * An wakeup add the current database object to this class
+     */
+    public function __wakeup()
+    {
+        global $gDb;
+
+        if ($gDb instanceof \Database)
+        {
+            $this->db = $gDb;
+        }
+    }
+
+    /**
      * Initializes all class parameters and deletes all read data.
      * Also the database structure of the associated table will be
      * read and stored in the arrays **dbColumns** and **columnsInfos**

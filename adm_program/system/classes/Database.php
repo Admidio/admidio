@@ -185,6 +185,8 @@ class Database
     }
 
     /**
+     * We need the sleep function at this place because otherwise the system will serialize a PDO-Statement
+     * which will lead to an exception.
      * @return array<int,string>
      */
     public function __sleep()
@@ -197,26 +199,6 @@ class Database
         }
 
         return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
-    }
-
-    /**
-     * @throws AdmException
-     */
-    public function __wakeup()
-    {
-        global $gLogger;
-
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug('DATABASE: wakeup/unserialize!');
-        }
-
-        $this->connect();
-
-        if ($gLogger instanceof \Psr\Log\LoggerInterface) // fix for non-object error in PHP 5.3
-        {
-            $gLogger->debug('DATABASE: reconnected!');
-        }
     }
 
     /**

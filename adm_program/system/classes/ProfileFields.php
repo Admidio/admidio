@@ -55,6 +55,20 @@ class ProfileFields
     }
 
     /**
+     * An wakeup add the current database object to this class
+     */
+    public function __wakeup()
+    {
+        global $gDb;
+
+        if ($gDb instanceof \Database)
+        {
+            $this->db = $gDb;
+        }
+
+    }
+
+    /**
      * user data of all profile fields will be initialized
      * the fields array will not be renewed
      */
