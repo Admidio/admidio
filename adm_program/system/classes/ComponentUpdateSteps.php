@@ -432,24 +432,6 @@ final class ComponentUpdateSteps
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ROLES\'), 2, 0, 3, 1, \'roladm\', \''.FOLDER_MODULES.'/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
         self::$db->query($sql);
-
-        // migrate adm_folder_roles to adm_roles_rights
-        $sql = 'SELECT ror_id
-                  FROM '.TBL_ROLES_RIGHTS.'
-                 WHERE ror_name_intern = \'menu_view\'';
-        $menuRightsStatement = self::$db->queryPrepared($sql);
-        $menuRightId = $menuRightsStatement->fetchColumn();
-
-        // Menu security data
-        $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
-                       (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_timestamp_create)
-                VALUES ('.$menuRightId.', 1, 13, \''. DATETIME_NOW.'\'),
-                       ('.$menuRightId.', 1, 14, \''. DATETIME_NOW.'\'),
-                       ('.$menuRightId.', 1, 16, \''. DATETIME_NOW.'\'),
-                       ('.$menuRightId.', 1, 17, \''. DATETIME_NOW.'\'),
-                       ('.$menuRightId.', 1, 18, \''. DATETIME_NOW.'\'),
-                       ('.$menuRightId.', 1, 19, \''. DATETIME_NOW.'\')';
-        self::$db->query($sql);
     }
 
     /**
