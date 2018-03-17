@@ -59,7 +59,8 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // set headline of the script
 if($getCopy)
 {
-    // if we want to copy the user than set id = 0 and also his name
+    // if we want to copy the user than set id = 0
+    $user->setValue('usr_id', 0);
     $getUserId = 0;
     $getNewUser = 1;
     $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));

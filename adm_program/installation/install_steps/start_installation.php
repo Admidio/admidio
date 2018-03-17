@@ -275,17 +275,6 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
 $db->query($sql);
 
-// Menu security data
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS_DATA.'
-               (rrd_ror_id, rrd_rol_id, rrd_object_id, rrd_usr_id_create, rrd_timestamp_create)
-        VALUES (3, 1, 13, 1, \''. DATETIME_NOW.'\'),
-               (3, 1, 14, 1, \''. DATETIME_NOW.'\'),
-               (3, 1, 16, 1, \''. DATETIME_NOW.'\'),
-               (3, 1, 17, 1, \''. DATETIME_NOW.'\'),
-               (3, 1, 18, 1, \''. DATETIME_NOW.'\'),
-               (3, 1, 19, 1, \''. DATETIME_NOW.'\')';
-$db->query($sql);
-
 // delete session data
 session_unset();
 

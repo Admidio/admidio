@@ -117,20 +117,27 @@ $menuCreateMenu = $page->getMenu();
 $menuCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // alle aus der DB aus lesen
-$sqlRoles = 'SELECT rol_id, rol_name, cat_name
+$sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
                FROM '.TBL_ROLES.'
          INNER JOIN '.TBL_CATEGORIES.'
                  ON cat_id = rol_cat_id
+         INNER JOIN '.TBL_ORGANIZATIONS.'
+                 ON org_id = cat_org_id
               WHERE rol_valid  = 1
                 AND rol_system = 0
-           ORDER BY rol_name';
+                AND cat_name_intern <> \'EVENTS\'
+           ORDER BY cat_name, rol_name';
 $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
 $parentRoleViewSet = array();
-while($rowViewRoles = $rolesViewStatement->fetchObject())
+while($rowViewRoles = $rolesViewStatement->fetch())
 {
     // Jede Rolle wird nun dem Array hinzugefuegt
-    $parentRoleViewSet[] = array($rowViewRoles->rol_id, $rowViewRoles->rol_name, $rowViewRoles->cat_name);
+    $parentRoleViewSet[] = array(
+        $rowViewRoles['rol_id'],
+        $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
+        $rowViewRoles['cat_name']
+    );
 }
 
 // show form

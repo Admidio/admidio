@@ -61,6 +61,8 @@ $gLogger->info('mem_show_all: ' . $getMembersShowAll);
 
 $jsonArray = array('draw' => $getDraw);
 
+header('Content-Type: application/json');
+
 // create object of the commited role
 $role = new TableRoles($gDb, $getRoleId);
 
@@ -68,17 +70,20 @@ $role = new TableRoles($gDb, $getRoleId);
 if((int) $role->getValue('cat_org_id') !== (int) $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
+    exit();
 }
 
 // check if user is allowed to assign members to this role
 if(!$role->allowedToAssignMembers($gCurrentUser))
 {
     echo json_encode(array('error' => $gL10n->get('SYS_NO_RIGHTS')));
+    exit();
 }
 
 if($getFilterRoleId > 0 && !$gCurrentUser->hasRightViewRole($getFilterRoleId))
 {
     echo json_encode(array('error' => $gL10n->get('LST_NO_RIGHTS_VIEW_LIST')));
+    exit();
 }
 
 // create order statement

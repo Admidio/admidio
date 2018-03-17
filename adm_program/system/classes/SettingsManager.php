@@ -45,7 +45,21 @@ class SettingsManager
      */
     public function __sleep()
     {
-        return array('db', 'orgId');
+        return array('orgId');
+    }
+
+    /**
+     * An wakeup add the current database object to this class
+     */
+    public function __wakeup()
+    {
+        global $gDb;
+
+        if ($gDb instanceof \Database)
+        {
+            $this->db = $gDb;
+        }
+
     }
 
     /**
