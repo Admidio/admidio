@@ -1351,7 +1351,8 @@ class HtmlForm extends HtmlFormBasic
                     {
                         $this->closeOptionGroup();
                     }
-                    $this->addOptionGroup($value[2]);
+
+                    $this->addOptionGroup(Language::translateIfTranslationStrId($value[2]));
                     $optionGroup = $value[2];
                 }
 
