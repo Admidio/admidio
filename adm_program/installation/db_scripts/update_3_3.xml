@@ -102,8 +102,8 @@
     <step id="620">ALTER TABLE %PREFIX%_menu ADD CONSTRAINT %PREFIX%_fk_men_com_id FOREIGN KEY (men_com_id) REFERENCES %PREFIX%_components (com_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
     <step id="630">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('menu_view', 'adm_menu')</step>
-    <step id="640">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>
-    <step id="650">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
+    <step id="640">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
+    <step id="650">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>
     <step id="660">ComponentUpdateSteps::updateStepDownloadOrgFolderName</step>
     <step>stop</step>
 </update>
