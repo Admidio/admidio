@@ -64,21 +64,14 @@ try
 
     FileSystemUtils::createDirectoryIfNotExists($imagesPath);
 
-    // create a filename with the unix timestamp,
-    // so we have a scheme for the filenames and the risk of duplicates is low
-    $extension = pathinfo($_FILES['upload']['name'], PATHINFO_EXTENSION);
-    $now = time();
-    $filename = $now . '.' . $extension;
-    $storagePath = $imagesPath . '/' . $filename;
-    if (is_file($storagePath))
-    {
-        // if file exists than create a random number and append it to the filename
-        $filename = $now . '_' . mt_rand() . '.' . $extension;
-        $storagePath = $imagesPath . '/' . $filename;
-    }
+    // create a filename with a timestamp and a 16 chars secure-random string,
+    // so we have a scheme for the filenames and the risk of duplicates is negligible.
+    // Format: 20180131-123456_0123456789abcdef.jpg
+    $filename = FileSystemUtils::getGeneratedFilename($_FILES['upload']['name']);
+
     $htmlUrl = safeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $filename));
 
-    move_uploaded_file($_FILES['upload']['tmp_name'], $storagePath);
+    move_uploaded_file($_FILES['upload']['tmp_name'], $imagesPath . '/' . $filename);
 }
 catch (\RuntimeException $exception)
 {
