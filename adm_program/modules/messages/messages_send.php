@@ -477,7 +477,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     $sendResult = $email->sendEmail();
 
     // within this mode an smtp protocol will be shown and the header was still send to browser
-    if ($gDebug)
+    if ($gDebug && headers_sent())
     {
         $email->isSMTP();
         $gMessage->showHtmlTextOnly(true);
