@@ -47,14 +47,14 @@ final class FileSystemUtils
      * @param string $filename The original filename
      * @throws AdmException Throws if secure random identifier could not be generated
      * @return string Returns the generated filename
-     * @example "IMG_123456.JPG" => "20180131-123456_abcdef0123456798.JPG"
+     * @example "IMG_123456.JPG" => "20180131-123456_0123456789abcdef.jpg"
      */
     public static function getGeneratedFilename($filename)
     {
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $now = new \DateTime();
 
-        return $now->format('Ymd-His') . '_' . PasswordHashing::genRandomPassword() . '.' . $extension;
+        return $now->format('Ymd-His') . '_' . PasswordHashing::genRandomPassword(16, $charset = '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . strtolower($extension);
     }
 
     /**
