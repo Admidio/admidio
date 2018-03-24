@@ -220,7 +220,7 @@ final class PasswordHashing
      * @param array<string,mixed> $options   The hash-options array
      * @return int
      */
-    private static function getPreparedCost($algorithm, $options)
+    private static function getPreparedCost($algorithm, array $options)
     {
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {

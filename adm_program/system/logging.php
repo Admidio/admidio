@@ -67,7 +67,7 @@ function createAdmidioLogger($logDirectory, $logLevel)
 /**
  * @param \Psr\Log\LoggerInterface $logger
  */
-function initLogging($logger)
+function initLogging(\Psr\Log\LoggerInterface $logger)
 {
     $logger->info('##################################################################################################');
     $logger->info('URL: ' . CURRENT_URL);
