@@ -61,7 +61,7 @@ class ProfileFields
     {
         global $gDb;
 
-        if ($gDb instanceof \Database)
+        if ($gDb instanceof Database)
         {
             $this->db = $gDb;
         }
