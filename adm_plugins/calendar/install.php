@@ -75,11 +75,11 @@ else
     $form->addInput('men_name', $gL10n->get('SYS_NAME'), 'Plugin - Calendar', array('maxLength' => 100, 'property' => FIELD_REQUIRED));
 
     $form->addInput('men_name_intern', $gL10n->get('SYS_NAME'), 'plg_calendar', array('property' => FIELD_DISABLED));
-    $form->addInput('men_name_intern', null, 'plg_calendar', array('type' => 'hidden'));
+    $form->addInput('men_name_intern', '', 'plg_calendar', array('type' => 'hidden'));
 
     $form->addSelectBox('menu_view', $gL10n->get('DAT_VISIBLE_TO'), $parentRoleViewSet, array('property'  => FIELD_REQUIRED, 'multiselect' => true));
 
-    $form->addInput('men_url', null, $pluginUrl, array('type' => 'hidden'));
+    $form->addInput('men_url', '', $pluginUrl, array('type' => 'hidden'));
     $form->addInput('men_url', $gL10n->get('ORG_URL'), $pluginUrl, array('property' => FIELD_DISABLED));
 
     $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
