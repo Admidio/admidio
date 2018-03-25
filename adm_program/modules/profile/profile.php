@@ -315,7 +315,7 @@ $page->addHtml('
     <div class="panel-body row">
         <div class="col-sm-8">');
             // create a static form
-            $form = new HtmlForm('profile_master_data_form', null);
+            $form = new HtmlForm('profile_master_data_form');
 
             // add lastname and firstname
             if(strlen($user->getValue('GENDER')) > 0 && $gCurrentUser->allowedViewProfileField($user, 'GENDER'))
@@ -520,7 +520,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     <div class="panel-body">');
 
             // create a static form
-            $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form', null);
+            $form = new HtmlForm('profile_'.$field->getValue('cat_name_intern').'_form');
         }
 
         // show html of field, if user has a value for that field or it's a checkbox field

@@ -971,7 +971,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             <div class="panel panel-default" id="adm_lists_infobox">
                 <div class="panel-heading">'.$gL10n->get('LST_INFOBOX').': '.$role->getValue('rol_name').'</div>
                 <div class="panel-body">';
-            $form = new HtmlForm('list_infobox_items', null);
+            $form = new HtmlForm('list_infobox_items');
             $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
 
             // Description
