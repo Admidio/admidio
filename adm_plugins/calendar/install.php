@@ -61,10 +61,10 @@ else
                ORDER BY rol_name';
     $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
 
-    while($rowViewRoles = $rolesViewStatement->fetchObject())
+    while($rowViewRoles = $rolesViewStatement->fetch())
     {
         // Jede Rolle wird nun dem Array hinzugefuegt
-        $parentRoleViewSet[] = array($rowViewRoles->rol_id, $rowViewRoles->rol_name, $rowViewRoles->cat_name);
+        $parentRoleViewSet[] = array($rowViewRoles['rol_id'], $rowViewRoles['rol_name'], $rowViewRoles['cat_name']);
     }
 
     // show form

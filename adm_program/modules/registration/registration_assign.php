@@ -129,41 +129,41 @@ $page->addHtml('
 
 // show all found users with their address who have a similar name and show link for further handling
 $i = 0;
-while($row = $usrStatement->fetchObject())
+while($row = $usrStatement->fetch())
 {
     if($i > 0)
     {
         $page->addHtml('<hr />');
     }
     $page->addHtml('<p>
-        <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row->usr_id)).'"><img
-            src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row->first_name.' '.$row->last_name.'</a><br />');
+        <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'"><img
+            src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />');
 
-        if($row->address !== '')
+        if($row['address'] !== '')
         {
-            $page->addHtml($row->address.'<br />');
+            $page->addHtml($row['address'].'<br />');
         }
-        if($row->zip_code !== '' || $row->city !== '')
+        if($row['zip_code'] !== '' || $row['city'] !== '')
         {
-            $page->addHtml($row->zip_code.' '.$row->city.'<br />');
+            $page->addHtml($row['zip_code'].' '.$row['city'].'<br />');
         }
-        if($row->email !== '')
+        if($row['email'] !== '')
         {
             if($gSettingsManager->getBool('enable_mail_module'))
             {
-                $page->addHtml('<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row->usr_id)).'">'.$row->email.'</a><br />');
+                $page->addHtml('<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('usr_id' => $row['usr_id'])).'">'.$row['email'].'</a><br />');
             }
             else
             {
-                $page->addHtml('<a href="mailto:'.$row->email.'">'.$row->email.'</a><br />');
+                $page->addHtml('<a href="mailto:'.$row['email'].'">'.$row['email'].'</a><br />');
             }
         }
     $page->addHtml('</p>');
 
-    if(isMember($row->usr_id))
+    if(isMember($row['usr_id']))
     {
         // found user is member of this organization
-        if(strlen($row->usr_login_name) > 0)
+        if(strlen($row['usr_login_name']) > 0)
         {
             // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_VALID_LOGIN'));
@@ -171,7 +171,7 @@ while($row = $usrStatement->fetchObject())
             {
                 $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
 
-                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row->usr_id, 'mode' => '6')).'\'"><img
+                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'"><img
                     src="'. THEME_URL. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
             }
         }
@@ -180,16 +180,16 @@ while($row = $usrStatement->fetchObject())
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row->usr_id, 'mode' => '1')).'\'"><img
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'"><img
                 src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
         }
     }
     else
     {
         // gefundene User ist noch KEIN Mitglied dieser Organisation
-        $link = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row->usr_id, 'mode' => '2'));
+        $link = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '2'));
 
-        if($row->usr_login_name !== '')
+        if($row['usr_login_name'] !== '')
         {
             // Logindaten sind bereits vorhanden
             $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>

@@ -38,25 +38,25 @@ function validateBBCodes($table, $idCol, $col)
     $bbcodeStatement = $gDb->query($sql);
 
     // walk through all results
-    while($row = $bbcodeStatement->fetchObject())
+    while($row = $bbcodeStatement->fetch())
     {
-        $sqlAppend = $row->$col;
+        $sqlAppend = $row[$col];
 
         // once for each bb-code-type
         foreach($bbcodes as $bbcode)
         {
             // comepare number of opening and closeing tags
-            $dif = substr_count($row->$col, $bbcode['o'])-substr_count($row->$col, $bbcode['c']);
+            $dif = substr_count($row[$col], $bbcode['o'])-substr_count($row[$col], $bbcode['c']);
             for($x = 0; $x < $dif; ++$x)
             {
                 $sqlAppend .= $bbcode['c'];
             }
         }
         // update if nessecary
-        if($sqlAppend != $row->$col)
+        if($sqlAppend != $row[$col])
         {
             $sqlUpdate = 'UPDATE '.$table. '
-                              SET '.$col.' = \''.$sqlAppend.'\' WHERE '.$idCol.' = \''.$row->$idCol.'\'';
+                              SET '.$col.' = \''.$sqlAppend.'\' WHERE '.$idCol.' = \''.$row[$idCol].'\'';
             $gDb->query($sqlUpdate);
         }
 
