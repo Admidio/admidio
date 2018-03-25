@@ -514,7 +514,7 @@ if ($getMode !== 'csv')
             'pdfl'   => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')',
             'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')'
         );
-        $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
+        $form->addSelectBox('export_list_to', '', $selectBoxEntries, array('showContextDependentFirstEntry' => false));
         $listsMenu->addForm($form->show(false));
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);

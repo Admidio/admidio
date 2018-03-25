@@ -136,7 +136,7 @@ else
         $dateRegistrationPossible = true;
     }
     // check if current user is assigned to this date
-    $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id'));
+    $dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id'));
 }
 
 if($date->getValue('dat_rol_id') > 0)

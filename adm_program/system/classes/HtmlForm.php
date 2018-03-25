@@ -676,7 +676,7 @@ class HtmlForm extends HtmlFormBasic
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
                                     $optionsAll['icon'], 'form-upload');
-        $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $optionsAll['maxUploadSize']);
+        $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', (string) $optionsAll['maxUploadSize']);
 
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
@@ -1170,7 +1170,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $this->addHtml('<label for="' . $id . '_' . $key . '" class="radio-inline">');
-            $this->addSimpleInput('radio', $id, $id . '_' . $key, $key, $attributes);
+            $this->addSimpleInput('radio', $id, $id . '_' . $key, (string) $key, $attributes);
             $this->addHtml($value . '</label>');
         }
 
