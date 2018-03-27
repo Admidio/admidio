@@ -180,6 +180,11 @@ class TableUserField extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
+        if ($value === null)
+        {
+            return '';
+        }
+
         if ($format !== 'database')
         {
             switch ($columnName)
@@ -297,10 +302,6 @@ class TableUserField extends TableAccess
             }
         }
 
-        if ($value === null)
-        {
-            return '';
-        }
         return $value;
     }
 

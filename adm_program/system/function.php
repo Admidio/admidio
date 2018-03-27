@@ -501,13 +501,13 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If userId is not set then the function will show **deleted user**.
- * @param int    $userIdCreated   Id of the user who create the recordset.
- * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param int    $userIdEdited    Id of the user last changed the recordset.
- * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
+ * @param int         $userIdCreated   Id of the user who create the recordset.
+ * @param string      $timestampCreate Date and time of the moment when the user create the recordset.
+ * @param int         $userIdEdited    Id of the user last changed the recordset.
+ * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = '')
+function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = null)
 {
     global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
