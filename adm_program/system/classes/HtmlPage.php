@@ -696,31 +696,20 @@ class HtmlPage
     }
 
     /**
-     * This method send the whole html code of the page to the browser. Call this method
-     * if you have finished your page layout.
-     * @param bool $directOutput If set to **true** (default) the html page will be directly send
-     *                           to the browser. If set to **false** the html will be returned.
-     * @return string|void If $directOutput is set to **false** this method will return the html code of the page.
+     * This method send the whole html code of the page to the browser.
+     * Call this method if you have finished your page layout.
      */
-    public function show($directOutput = true)
+    public function show()
     {
         $this->addMainFilesAndContent();
 
-        $html = '<!DOCTYPE html><html>';
-        $html .= $this->getHtmlHeader();
-        $html .= $this->getHtmlBody();
-        $html .= '</html>';
-
         // now show the complete html of the page
-        if ($directOutput)
-        {
-            header('Content-type: text/html; charset=utf-8');
-            echo $html;
-        }
-        else
-        {
-            return $html;
-        }
+        header('Content-type: text/html; charset=utf-8');
+
+        echo '<!DOCTYPE html><html>';
+        echo $this->getHtmlHeader();
+        echo $this->getHtmlBody();
+        echo '</html>';
     }
 
     /**
