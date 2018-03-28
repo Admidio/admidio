@@ -212,6 +212,6 @@ elseif($getMode === 'html')
             'btn_save', $gL10n->get('SYS_SAVE'),
             array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
         );
-        $form->show();
+        echo $form->show();
     echo '</div>';
 }

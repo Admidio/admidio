@@ -464,5 +464,5 @@ if($getNewUser === 0)
     ));
 }
 
-$page->addHtml($form->show(false));
+$page->addHtml($form->show());
 $page->show();

@@ -104,7 +104,7 @@ $navbarForm->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ANN', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId)
 );
-$announcementsMenu->addForm($navbarForm->show(false));
+$announcementsMenu->addForm($navbarForm->show());
 
 if($gCurrentUser->editAnnouncements())
 {

@@ -226,7 +226,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                             'btn_send_'.$memberId, $gL10n->get('SYS_OK'),
                             array('class' => 'button-membership-period-form', 'data-admidio' => $memberId)
                         );
-                        $roleMemHTML .= $form->show(false);
+                        $roleMemHTML .= $form->show();
                     $roleMemHTML .= '</div></li>
                     <li class="list-group-item" id="member_info_'.$memberId.'_Content" style="display: none;">';
                         // show information about user who creates the recordset and changed it

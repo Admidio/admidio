@@ -128,4 +128,4 @@ $participationForm->addButton(
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');
 // Output form
-$participationForm->show();
+echo $participationForm->show();

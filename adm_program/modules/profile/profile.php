@@ -458,7 +458,7 @@ $page->addHtml('
                     }
                 }
             }
-            $page->addHtml($form->show(false));
+            $page->addHtml($form->show());
         $page->addHtml('</div>
         <div class="col-sm-4" id="div_profile_photo">');
 
@@ -509,7 +509,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             if($category !== '')
             {
                 // new category then show last form and close div container
-                $page->addHtml($form->show(false));
+                $page->addHtml($form->show());
                 $page->addHtml('</div></div>');
             }
             $category = $field->getValue('cat_name');
@@ -538,7 +538,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 if($category !== '')
 {
     // new category then show last form and close div container
-    $page->addHtml($form->show(false));
+    $page->addHtml($form->show());
     $page->addHtml('</div></div>');
 }
 

@@ -271,5 +271,5 @@ $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon'
 $form->closeButtonGroup();
 
 // add form to html page and show page
-$page->addHtml($form->show(false));
+$page->addHtml($form->show());
 $page->show();

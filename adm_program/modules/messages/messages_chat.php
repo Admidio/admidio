@@ -52,7 +52,7 @@ $form = new HtmlForm('send-message-area', '', $page, array('enableFileUpload' =>
 $form->addMultilineTextInput('sendie', 'Enter Message:', null, 2, array('maxLength' => 100));
 
 // add form to html page
-$page->addHtml($form->show(false));
+$page->addHtml($form->show());
 
 // show page
 $page->show();

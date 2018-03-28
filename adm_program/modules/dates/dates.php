@@ -176,7 +176,7 @@ if($getViewMode === 'html')
             'sel_change_view', $gL10n->get('SYS_VIEW'), $selectBoxEntries,
             array('defaultValue' => $getView, 'showContextDependentFirstEntry' => false)
         );
-        $datesMenu->addForm($form->show(false));
+        $datesMenu->addForm($form->show());
 
         // show print button
         $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
@@ -231,7 +231,7 @@ if($getViewMode === 'html')
     );
     $form->addInput('view', '', $getView, array('property' => HtmlForm::FIELD_HIDDEN));
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-    $filterNavbar->addForm($form->show(false));
+    $filterNavbar->addForm($form->show());
     $page->addHtml($filterNavbar->show());
 }
 else // $getViewMode = 'print'

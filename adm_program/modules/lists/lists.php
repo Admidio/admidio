@@ -107,7 +107,7 @@ $navbarForm->addSelectBoxForCategories(
     'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_FILTER,
     array('defaultValue' => $getCatId)
 );
-$listsMenu->addForm($navbarForm->show(false));
+$listsMenu->addForm($navbarForm->show());
 
 if($gCurrentUser->isAdministrator())
 {
@@ -317,7 +317,7 @@ foreach($listsResult['recordset'] as $row)
                     $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods($role->getValue('rol_cost_period')));
                 }
 
-                $page->addHtml($form->show(false));
+                $page->addHtml($form->show());
             $page->addHtml('</div>
         </div>
     </div>');

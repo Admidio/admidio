@@ -77,5 +77,5 @@ echo '
         'btn_add', $gL10n->get('MEM_CREATE_USER'),
         array('icon' => THEME_URL.'/icons/add.png', 'class' => ' col-sm-offset-3')
     );
-    $form->show();
+    echo $form->show();
 echo '</div>';

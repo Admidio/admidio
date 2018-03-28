@@ -2055,21 +2055,19 @@ class HtmlForm extends HtmlFormBasic
 
 
     /**
-     * This method send the whole html code of the form to the browser. Call this method
+     * This method create the whole html code of the form. Call this method
      * if you have finished your form layout. If mandatory fields were set than a notice
      * which marker represents the mandatory will be shown before the form.
-     * @param bool $directOutput (optional) If set to **true** (default) the form html will be directly send
-     *                                   to the browser. If set to **false** the html will be returned.
-     * @return string|null If $directOutput is set to **false** this method will return the html code of the form.
+     * @return string Return the html code of the form.
      */
-    public function show($directOutput = true)
+    public function show()
     {
         global $gL10n;
 
         // if there are no elements in the form then return nothing
         if ($this->countElements === 0)
         {
-            return null;
+            return '';
         }
 
         $html = '';
@@ -2082,12 +2080,6 @@ class HtmlForm extends HtmlFormBasic
 
         // now get whole form html code
         $html .= $this->getHtmlForm();
-
-        if ($directOutput)
-        {
-            echo $html;
-            return null;
-        }
 
         return $html;
     }

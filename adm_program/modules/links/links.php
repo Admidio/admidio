@@ -118,7 +118,7 @@ if($weblinks->getId() === 0)
         'cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', HtmlForm::SELECT_BOX_MODUS_FILTER,
         array('defaultValue' => $getCatId)
     );
-    $linksMenu->addForm($navbarForm->show(false));
+    $linksMenu->addForm($navbarForm->show());
 }
 
 if ($weblinksCount === 0)

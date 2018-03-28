@@ -150,5 +150,5 @@ $form->addSubmitButton(
 );
 $form->addHtml(admFuncShowCreateChangeInfoById($createUserId, $createTimestamp));
 
-$page->addHtml($form->show(false));
+$page->addHtml($form->show());
 $page->show();

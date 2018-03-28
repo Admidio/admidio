@@ -169,7 +169,7 @@ $form->addInput('usr_id', '', $getUserId, array('property' => HtmlForm::FIELD_HI
 $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
 $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-$filterNavbar->addForm($form->show(false));
+$filterNavbar->addForm($form->show());
 $page->addHtml($filterNavbar->show());
 
 $table = new HtmlTable('profile_field_history_table', $page, true, true);

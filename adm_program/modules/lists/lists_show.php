@@ -431,7 +431,7 @@ if ($getMode !== 'csv')
             $form->addInput('rol_ids', '', $getRoleIds, array('property' => HtmlForm::FIELD_HIDDEN));
             $form->addCheckbox('show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-            $filterNavbar->addForm($form->show(false));
+            $filterNavbar->addForm($form->show());
             $page->addHtml($filterNavbar->show());
         }
 
@@ -515,7 +515,7 @@ if ($getMode !== 'csv')
             'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')'
         );
         $form->addSelectBox('export_list_to', null, $selectBoxEntries, array('showContextDependentFirstEntry' => false));
-        $listsMenu->addForm($form->show(false));
+        $listsMenu->addForm($form->show());
 
         $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
         $table->setDatatablesRowsPerPage($gSettingsManager->getInt('lists_members_per_page'));
@@ -1024,7 +1024,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             {
                 $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), $role->getValue('rol_max_members'));
             }
-            $htmlBox .= $form->show(false);
+            $htmlBox .= $form->show();
             $htmlBox .= '</div>
             </div>';
         } // end of infobox

@@ -308,7 +308,7 @@ switch($getMode)
         );
 
         // add form to html page and show page
-        $page->addHtml($form->show(false));
+        $page->addHtml($form->show());
         $page->show();
         break;
 
@@ -378,7 +378,7 @@ switch($getMode)
         $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
 
         // add form to html page and show page
-        $page->addHtml($form->show(false));
+        $page->addHtml($form->show());
         $page->show();
 
         // clean up

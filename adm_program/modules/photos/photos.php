@@ -519,7 +519,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         {
             $form->addStaticControl('pho_photographer', $gL10n->get('PHO_PHOTOGRAPHER'), $childPhotoAlbum->getValue('pho_photographers'));
         }
-        $page->addHtml($form->show(false));
+        $page->addHtml($form->show());
         $page->addHtml('</div></div>');
 
         // Notice for users with foto edit rights that the folder of the album doesn't exists

@@ -265,7 +265,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page
-    $page->addHtml($form->show(false));
+    $page->addHtml($form->show());
 }
 elseif (!isset($messageStatement))
 {
@@ -622,7 +622,7 @@ elseif (!isset($messageStatement))
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
 
     // add form to html page and show page
-    $page->addHtml($form->show(false));
+    $page->addHtml($form->show());
 }
 
 if (isset($messageStatement))

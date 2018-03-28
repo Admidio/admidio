@@ -159,7 +159,7 @@ elseif($getMode === 'create_backup')
         'btn_update_overview', $gL10n->get('BAC_BACK_TO_BACKUP_PAGE'),
         array('icon' => THEME_URL.'/icons/back.png')
     );
-    $page->addHtml($form->show(false));
+    $page->addHtml($form->show());
 
 }
 
