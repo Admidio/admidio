@@ -148,6 +148,11 @@ class Menu
      */
     public function show($complex = false)
     {
+        if (count($this->items) === 0)
+        {
+            return '';
+        }
+
         $html = '';
 
         if ($complex)
@@ -207,11 +212,6 @@ class Menu
 
         $html .= '</menu>'; // closes main-menu "menu.list-unstyled"
 
-        if (count($this->items) > 0)
-        {
-            return $html;
-        }
-
-        return '';
+        return $html;
     }
 }
