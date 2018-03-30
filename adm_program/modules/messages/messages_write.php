@@ -105,7 +105,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
          LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
+             WHERE rol_id IN ('.Database::getQmForValues($arrAllVisibleRoles).')
                AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id = ? -- $currOrgId
                    OR cat_org_id IS NULL )
@@ -357,7 +357,7 @@ elseif (!isset($messageStatement))
                         ON cat_id = rol_cat_id
                        AND (  cat_org_id = ? -- $currOrgId
                            OR cat_org_id IS NULL)
-                     WHERE rol_id IN ('.replaceValuesArrWithQM($sqlRoleIds).')
+                     WHERE rol_id IN ('.Database::getQmForValues($sqlRoleIds).')
                        AND rol_valid = 1
                            '.$sqlParticipationRoles.'
                   ORDER BY rol_name ASC';
@@ -407,7 +407,7 @@ elseif (!isset($messageStatement))
                        AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                      WHERE usr_id    <> ? -- $currUsrId
                        AND mem_begin <= ? -- DATE_NOW
-                       AND rol_id IN ('.replaceValuesArrWithQM($listVisibleRoleArray).')
+                       AND rol_id IN ('.Database::getQmForValues($listVisibleRoleArray).')
                            '.$sqlUserIds.'
                        AND usr_valid = 1
                   ORDER BY last_name, first_name, mem_end DESC';

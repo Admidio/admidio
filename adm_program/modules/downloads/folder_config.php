@@ -57,7 +57,7 @@ try
         $rolesViewRightParentFolder = $parentFolder->getRoleViewArrayOfFolder();
         if(count($rolesViewRightParentFolder) > 0)
         {
-            $sqlRolesViewRight = ' AND rol_id IN ('.replaceValuesArrWithQM($rolesViewRightParentFolder).')';
+            $sqlRolesViewRight = ' AND rol_id IN ('.Database::getQmForValues($rolesViewRightParentFolder).')';
         }
     }
 }

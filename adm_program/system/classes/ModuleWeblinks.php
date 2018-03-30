@@ -125,7 +125,7 @@ class ModuleWeblinks extends Modules
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                 WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                        '.$sqlConditions['sql'].'
               ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
 
@@ -165,7 +165,7 @@ class ModuleWeblinks extends Modules
                   FROM '.TBL_LINKS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = lnk_cat_id
-                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
+                 WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
                        '.$sqlConditions['sql'];
         $pdoStatement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
 

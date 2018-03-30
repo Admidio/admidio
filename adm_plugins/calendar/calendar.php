@@ -172,7 +172,7 @@ if($plg_ter_aktiv)
     else
     {
         // show only calendars of the parameter $plg_kal_cat
-        $sqlSyntax = ' AND cat_name IN (' . replaceValuesArrWithQM($plg_kal_cat) . ')';
+        $sqlSyntax = ' AND cat_name IN (' . Database::getQmForValues($plg_kal_cat) . ')';
         $queryParams = array_merge($queryParams, $plg_kal_cat);
     }
 
@@ -180,7 +180,7 @@ if($plg_ter_aktiv)
               FROM '.TBL_DATES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
-             WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+             WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                AND dat_begin <= ? -- $dateMonthEnd
                AND dat_end   >= ? -- $dateMonthStart
                    '.$sqlSyntax.'

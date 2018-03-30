@@ -1736,7 +1736,7 @@ class HtmlForm extends HtmlFormBasic
         $sql = 'SELECT DISTINCT cat_id, cat_org_id, cat_name, cat_default, cat_sequence
                   FROM ' . TBL_CATEGORIES . '
                        ' . $sqlTables . '
-                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
+                 WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
                    AND cat_type = ? -- $categoryType
                        ' . $sqlConditions . '
               ORDER BY cat_sequence ASC';

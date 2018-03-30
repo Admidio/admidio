@@ -146,7 +146,7 @@ class RolesRights extends TableAccess
         {
             $sql = 'SELECT rol_name
                       FROM '.TBL_ROLES.'
-                     WHERE rol_id IN ('.replaceValuesArrWithQM($this->rolesIds).') ';
+                     WHERE rol_id IN ('.Database::getQmForValues($this->rolesIds).') ';
             $rolesStatement = $this->db->queryPrepared($sql, $this->rolesIds);
 
             while ($rowRole = $rolesStatement->fetch())

@@ -808,16 +808,6 @@ function admRedirect($url, $statusCode = 303)
 }
 
 /**
- * Get an string with question marks that are comma separated.
- * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
- * @return string Question marks string
- */
-function replaceValuesArrWithQM(array $valuesArray)
-{
-    return implode(',', array_fill(0, count($valuesArray), '?'));
-}
-
-/**
  * Calculates and formats the execution time
  * @param float $startTime The start time
  * @return string Returns the formated execution time

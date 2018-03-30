@@ -852,7 +852,7 @@ class User extends TableAccess
                                     ON rrd_ror_id = ror_id
                                  WHERE ror_name_intern = \'category_edit\'
                                    AND rrd_object_id   = cat_id
-                                   AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                                   AND rrd_rol_id IN ('.Database::getQmForValues($rolIdParams).') )
                     )';
         }
 
@@ -931,7 +931,7 @@ class User extends TableAccess
                                   ON rrd_ror_id = ror_id
                                WHERE ror_name_intern = \'category_edit\'
                                  AND rrd_object_id   = cat_id
-                                 AND rrd_rol_id IN ('.replaceValuesArrWithQM($rolIdParams).') )
+                                 AND rrd_rol_id IN ('.Database::getQmForValues($rolIdParams).') )
                       OR NOT EXISTS (SELECT 1
                                        FROM ' . TBL_ROLES_RIGHTS . '
                                  INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . '

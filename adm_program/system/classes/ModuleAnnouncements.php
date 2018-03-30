@@ -99,7 +99,7 @@ class ModuleAnnouncements extends Modules
             INNER JOIN '.TBL_CATEGORIES.' AS cat
                     ON cat_id = ann_cat_id
                        '.$additional['tables'].'
-                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                 WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                        '.$sqlConditions['sql'].'
               ORDER BY ann_timestamp_create DESC';
 
@@ -141,7 +141,7 @@ class ModuleAnnouncements extends Modules
                   FROM '.TBL_ANNOUNCEMENTS.'
             INNER JOIN '.TBL_CATEGORIES.'
                     ON cat_id = ann_cat_id
-                 WHERE cat_id IN (' . replaceValuesArrWithQM($catIdParams) . ')
+                 WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
                        '.$sqlConditions['sql'];
 
         $pdoStatement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));

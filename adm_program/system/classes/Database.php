@@ -727,6 +727,16 @@ class Database
     }
 
     /**
+     * Get an string with question marks that are comma separated.
+     * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
+     * @return string Question marks string
+     */
+    public static function getQmForValues(array $valuesArray)
+    {
+        return implode(',', array_fill(0, count($valuesArray), '?'));
+    }
+
+    /**
      * If there is a open transaction than this method sends a rollback
      * to the database and will set the transaction counter to zero.
      * @return bool

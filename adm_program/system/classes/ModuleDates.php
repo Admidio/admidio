@@ -176,7 +176,7 @@ class ModuleDates extends Modules
                    AND mem.mem_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
                    AND mem.mem_begin <= ? -- DATE_NOW
                    AND mem.mem_end    > ? -- DATE_NOW
-                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                 WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                        ' . $sqlConditions['sql'] . '
               ORDER BY dat_begin ' . $this->order;
 
@@ -264,7 +264,7 @@ class ModuleDates extends Modules
                   FROM ' . TBL_DATES . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = dat_cat_id
-                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                 WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                        '. $sqlConditions['sql'];
 
         $statement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
@@ -466,7 +466,7 @@ class ModuleDates extends Modules
                                         ON rrd_ror_id = ror_id
                                      WHERE ror_name_intern = \'event_participation\'
                                        AND rrd_object_id = dat_id
-                                       AND rrd_rol_id IN ('.replaceValuesArrWithQM($roleMemberships).')) ';
+                                       AND rrd_rol_id IN ('.Database::getQmForValues($roleMemberships).')) ';
                     $params = array_merge($params, $roleMemberships);
                     break;
 

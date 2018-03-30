@@ -196,7 +196,7 @@ $sql = 'SELECT rol_id, rol_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_id IN ('.replaceValuesArrWithQM($arrayMailRoles).')
+         WHERE rol_id IN ('.Database::getQmForValues($arrayMailRoles).')
            AND cat_name_intern <> \'EVENTS\'
       ORDER BY rol_name';
 $statement = $gDb->queryPrepared($sql, $arrayMailRoles);

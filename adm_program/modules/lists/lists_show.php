@@ -62,7 +62,7 @@ if ($numberRoles > 1)
 {
     $sql = 'SELECT rol_id, rol_name, rol_valid
               FROM '.TBL_ROLES.'
-             WHERE rol_id IN ('.replaceValuesArrWithQM($roleIds).')';
+             WHERE rol_id IN ('.Database::getQmForValues($roleIds).')';
     $rolesStatement = $gDb->queryPrepared($sql, $roleIds);
     $rolesData      = $rolesStatement->fetchAll();
 
@@ -173,7 +173,7 @@ if (count($relationTypeIds) > 0)
 {
     $sql = 'SELECT urt_id, urt_name
               FROM '.TBL_USER_RELATION_TYPES.'
-             WHERE urt_id IN ('.replaceValuesArrWithQM($relationTypeIds).')
+             WHERE urt_id IN ('.Database::getQmForValues($relationTypeIds).')
           ORDER BY urt_name';
     $relationTypesStatement = $gDb->queryPrepared($sql, $relationTypeIds);
 
