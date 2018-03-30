@@ -129,7 +129,7 @@ while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
 
 if(!is_file($picPath))
 {
-    $picPath = THEME_PATH . '/images/nopix.jpg';
+    $picPath = THEME_PATH . '/images/no_photo_found.png';
 }
 
 if($plg_photos_show_link && $plg_max_char_per_word > 0)

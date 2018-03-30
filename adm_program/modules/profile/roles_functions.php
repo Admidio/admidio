@@ -202,7 +202,6 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 {
                                     $roleMemHTML .= '<a class="admidio-icon-link"><img src="'.THEME_URL.'/icons/dummy.png" alt=""/></a>';
                                 }
-
                             }
 
                             // only show info if system setting is activated

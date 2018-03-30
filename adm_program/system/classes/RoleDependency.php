@@ -106,16 +106,16 @@ class RoleDependency
                    AND rld_rol_id_parent = ? -- $parentRoleId';
         $roleDependenciesStatement = $this->db->queryPrepared($sql, array($childRoleId, $parentRoleId));
 
-        $row = $roleDependenciesStatement->fetchObject();
+        $row = $roleDependenciesStatement->fetch();
         if ($row)
         {
-            $this->roleIdParent     = $row->rld_rol_id_parent;
-            $this->roleIdChild      = $row->rld_rol_id_child;
-            $this->comment          = $row->rld_comment;
-            $this->timestamp        = $row->rld_timestamp;
-            $this->usrId            = $row->rld_usr_id;
-            $this->roleIdParentOrig = $row->rld_rol_id_parent;
-            $this->roleIdChildOrig  = $row->rld_rol_id_child;
+            $this->roleIdParent     = $row['rld_rol_id_parent'];
+            $this->roleIdChild      = $row['rld_rol_id_child'];
+            $this->comment          = $row['rld_comment'];
+            $this->timestamp        = $row['rld_timestamp'];
+            $this->usrId            = $row['rld_usr_id'];
+            $this->roleIdParentOrig = $row['rld_rol_id_parent'];
+            $this->roleIdChildOrig  = $row['rld_rol_id_child'];
 
             return true;
         }

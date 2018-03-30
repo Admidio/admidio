@@ -114,7 +114,7 @@ if ($getThumbnail)
     else
     {
         // kein Bild uebergeben, dann NoPix anzeigen
-        $image = new Image(THEME_PATH . '/images/nopix.jpg');
+        $image = new Image(THEME_PATH . '/images/no_photo_found.png');
         $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
     }
 }
@@ -122,7 +122,7 @@ else
 {
     if (!is_file($picPath))
     {
-        $picPath = THEME_PATH . '/images/nopix.jpg';
+        $picPath = THEME_PATH . '/images/no_photo_found.png';
     }
     // Bild einlesen und scalieren
     $image = new Image($picPath);

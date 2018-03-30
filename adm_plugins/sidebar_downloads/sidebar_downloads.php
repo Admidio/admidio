@@ -91,7 +91,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
 
     if($filesStatement->rowCount() > 0)
     {
-        while($rowFile = $filesStatement->fetchObject())
+        while($rowFile = $filesStatement->fetch())
         {
             $errorCode = '';
 
@@ -101,7 +101,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
             {
                 // get recordset of current file from database
                 $file = new TableFile($gDb);
-                $file->getFileForDownload($rowFile->fil_id);
+                $file->getFileForDownload($rowFile['fil_id']);
             }
             catch(AdmException $e)
             {
@@ -118,9 +118,9 @@ if ($gSettingsManager->getBool('enable_download_module'))
             if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
             {
                 // get filename without extension and extension separatly
-                $fileName      = substr($rowFile->fil_name, 0, strrpos($rowFile->fil_name, '.'));
-                $fileExtension = admStrToLower(substr($rowFile->fil_name, strrpos($rowFile->fil_name, '.') + 1));
-                $fullFolderFileName = $rowFile->fol_path. '/'. $rowFile->fol_name. '/'.$rowFile->fil_name;
+                $fileName      = substr($rowFile['fil_name'], 0, strrpos($rowFile['fil_name'], '.'));
+                $fileExtension = admStrToLower(substr($rowFile['fil_name'], strrpos($rowFile['fil_name'], '.') + 1));
+                $fullFolderFileName = $rowFile['fol_path']. '/'. $rowFile['fol_name']. '/'.$rowFile['fil_name'];
                 $tooltip            = $fullFolderFileName;
                 ++$countVisibleDownloads;
 
@@ -141,13 +141,13 @@ if ($gSettingsManager->getBool('enable_download_module'))
                 if($plg_show_upload_timestamp)
                 {
                     // Vorname und Nachname abfragen (Upload der Datei)
-                    $user = new User($gDb, $gProfileFields, $rowFile->fil_usr_id);
+                    $user = new User($gDb, $gProfileFields, $rowFile['fil_usr_id']);
 
-                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile->fil_timestamp));
+                    $tooltip .= '<br />'. $gL10n->get('PLG_DOWNLOADS_UPLOAD_FROM_AT', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $rowFile['fil_timestamp']));
                 }
 
                 echo '
-                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php', array('file_id' => $rowFile->fil_id)). '"><img
+                <a class="btn admidio-icon-link '.$plg_link_class_downl.'" data-toggle="tooltip" data-html="true" title="'. $tooltip. '" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/downloads/get_file.php', array('file_id' => $rowFile['fil_id'])). '"><img
                     src="'. THEME_URL. '/icons/'.$iconFile.'" alt="'. $fullFolderFileName. '/" />'.$fileName.'.'.$fileExtension. '</a>';
 
                 if($countVisibleDownloads === $plg_downloads_count)

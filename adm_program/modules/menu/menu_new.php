@@ -30,11 +30,11 @@ if(!$gCurrentUser->isAdministrator())
 
 /**
  * @param array<int,string> $menuList
- * @param int               $parentId
  * @param int               $level
  * @param int               $menId
+ * @param int               $parentId
  */
-function subMenu(&$menuList, $parentId, $level, $menId)
+function subMenu(&$menuList, $level, $menId, $parentId = null)
 {
     global $gDb;
 
@@ -70,7 +70,7 @@ function subMenu(&$menuList, $parentId, $level, $menId)
         // add entry to array of all menus
         $menuList[$parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
 
-        subMenu($menuList, $parentMenu->getValue('men_id'), ++$level, $menId);
+        subMenu($menuList, ++$level, $menId, $parentMenu->getValue('men_id'));
     }
 }
 
@@ -107,7 +107,7 @@ if(isset($_SESSION['menu_request']))
     unset($_SESSION['menu_request']);
 }
 
-$gNavigation->addUrl(CURRENT_URL, array($headline));
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -153,7 +153,7 @@ if((bool) $menu->getValue('men_standard'))
 }
 
 $menuList = array();
-subMenu($menuList, null, 1, (int) $menu->getValue('men_id'));
+subMenu($menuList, 1, (int) $menu->getValue('men_id'));
 
 $form->addInput(
     'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'),

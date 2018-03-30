@@ -280,11 +280,11 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     }
 
                     // all role members will be attached as BCC
-                    while ($row = $statement->fetchObject())
+                    while ($row = $statement->fetch())
                     {
-                        if (strValidCharacters($row->email, 'email'))
+                        if (strValidCharacters($row['email'], 'email'))
                         {
-                            $receiver[] = array($row->email, $row->firstName . ' ' . $row->lastName);
+                            $receiver[] = array($row['email'], $row['firstName'] . ' ' . $row['lastName']);
                         }
                     }
                 }

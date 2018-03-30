@@ -304,7 +304,7 @@ class HtmlPage
                 $menuName = Language::translateIfTranslationStrId($mainMenu['men_name']);
 
                 $this->menu->addItem(
-                    'menu_item_'.$mainMenu['men_name_intern'], null, $menuName,
+                    'menu_item_'.$mainMenu['men_name_intern'], '', $menuName,
                     'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 

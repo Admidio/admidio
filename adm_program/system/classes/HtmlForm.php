@@ -98,7 +98,7 @@ class HtmlForm extends HtmlFormBasic
      *                           - **class** : An additional css classname. The class **form-horizontal**
      *                             is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action, HtmlPage $htmlPage = null, array $options = array())
+    public function __construct($id, $action = null, HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -219,7 +219,7 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['data-admidio'] !== '')
         {
-            $this->addAttribute('data-admidio', $optionsAll['data-admidio']);
+            $this->addAttribute('data-admidio', (string) $optionsAll['data-admidio']);
         }
 
         if ($optionsAll['onClickText'] !== '')
@@ -676,7 +676,7 @@ class HtmlForm extends HtmlFormBasic
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
                                     $optionsAll['icon'], 'form-upload');
-        $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $optionsAll['maxUploadSize']);
+        $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', (string) $optionsAll['maxUploadSize']);
 
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
@@ -1170,7 +1170,7 @@ class HtmlForm extends HtmlFormBasic
             }
 
             $this->addHtml('<label for="' . $id . '_' . $key . '" class="radio-inline">');
-            $this->addSimpleInput('radio', $id, $id . '_' . $key, $key, $attributes);
+            $this->addSimpleInput('radio', $id, $id . '_' . $key, (string) $key, $attributes);
             $this->addHtml($value . '</label>');
         }
 
@@ -1367,11 +1367,11 @@ class HtmlForm extends HtmlFormBasic
 
                 if(is_array($optionsAll['valueAttributes']))
                 {
-                    $this->addOption($value[0], $value[1], null, $defaultEntry, false, $optionsAll['valueAttributes'][$value[0]]);
+                    $this->addOption((string) $value[0], $value[1], null, $defaultEntry, false, $optionsAll['valueAttributes'][$value[0]]);
                 }
                 else
                 {
-                    $this->addOption($value[0], $value[1], null, $defaultEntry);
+                    $this->addOption((string) $value[0], $value[1], null, $defaultEntry);
                 }
             }
             else
@@ -1387,11 +1387,11 @@ class HtmlForm extends HtmlFormBasic
 
                 if(is_array($optionsAll['valueAttributes']))
                 {
-                    $this->addOption($key, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
-            }
+                    $this->addOption((string) $key, $value, null, $defaultEntry, false, $optionsAll['valueAttributes'][$key]);
+                }
                 else
                 {
-                    $this->addOption($key, $value, null, $defaultEntry);
+                    $this->addOption((string) $key, $value, null, $defaultEntry);
                 }
             }
         }

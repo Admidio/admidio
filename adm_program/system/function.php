@@ -169,11 +169,11 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
         {
             if ($i === $page)
             {
-                $pageNavString .= getListElementString($i, 'active');
+                $pageNavString .= getListElementString((string) $i, 'active');
             }
             else
             {
-                $pageNavString .= getListElementString($i, '', $url, $paramName, ($i - 1) * $itemsPerPage);
+                $pageNavString .= getListElementString((string) $i, '', $url, $paramName, ($i - 1) * $itemsPerPage);
             }
         }
 
@@ -185,10 +185,10 @@ function admFuncGeneratePagination($baseUrl, $itemsCount, $itemsPerPage, $pageSt
      * @param string $className
      * @param string $url
      * @param string $paramName
-     * @param string $paramValue
+     * @param int    $paramValue
      * @return string
      */
-    function getListElementString($linkText, $className = '', $url = '', $paramName = '', $paramValue = '')
+    function getListElementString($linkText, $className = '', $url = '', $paramName = '', $paramValue = null)
     {
         $classString = '';
         if ($className !== '')
@@ -495,13 +495,13 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If userId is not set then the function will show **deleted user**.
- * @param int    $userIdCreated   Id of the user who create the recordset.
- * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param int    $userIdEdited    Id of the user last changed the recordset.
- * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
+ * @param int         $userIdCreated   Id of the user who create the recordset.
+ * @param string      $timestampCreate Date and time of the moment when the user create the recordset.
+ * @param int         $userIdEdited    Id of the user last changed the recordset.
+ * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = '')
+function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited = 0, $timestampEdited = null)
 {
     global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
@@ -574,17 +574,17 @@ function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $user
  * Creates a html fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore all necessary data must be set in the function
  * parameters. If user name is not set then the function will show **deleted user**.
- * @param string $userNameCreated Id of the user who create the recordset.
- * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param string $userNameEdited  Id of the user last changed the recordset.
- * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
- * @param int    $userIdCreated   (optional) The id of the user who create the recordset.
- *                                If id is set than a link to the user profile will be created
- * @param int    $userIdEdited    (optional) The id of the user last changed the recordset.
- *                                If id is set than a link to the user profile will be created
+ * @param string      $userNameCreated Id of the user who create the recordset.
+ * @param string      $timestampCreate Date and time of the moment when the user create the recordset.
+ * @param string|null $userNameEdited  Id of the user last changed the recordset.
+ * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
+ * @param int         $userIdCreated   (optional) The id of the user who create the recordset.
+ *                                     If id is set than a link to the user profile will be created
+ * @param int         $userIdEdited    (optional) The id of the user last changed the recordset.
+ *                                     If id is set than a link to the user profile will be created
  * @return string Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited, $timestampEdited, $userIdCreated = 0, $userIdEdited = 0)
+function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited = null, $timestampEdited = null, $userIdCreated = 0, $userIdEdited = 0)
 {
     global $gL10n, $gValidLogin, $gSettingsManager;
 

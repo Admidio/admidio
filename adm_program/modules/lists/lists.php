@@ -236,7 +236,7 @@ foreach($listsResult['recordset'] as $row)
         <div id="collapse_'.$rolId.'" class="panel-collapse collapse">
             <div class="panel-body" id="admRoleDetails'.$rolId.'">');
                 // create a static form
-                $form = new HtmlForm('lists_static_form', null);
+                $form = new HtmlForm('lists_static_form');
 
                 // show combobox with lists if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)

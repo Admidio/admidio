@@ -391,9 +391,9 @@ class TableFolder extends TableAccess
         $filesStatement = $this->db->queryPrepared($sqlFiles, array($this->getValue('fol_id')));
 
         // jetzt noch die Dateien ins Array packen:
-        while ($rowFiles = $filesStatement->fetchObject())
+        while ($rowFiles = $filesStatement->fetch())
         {
-            $filePath = $this->getFullFolderPath() . '/' . $rowFiles->fil_name;
+            $filePath = $this->getFullFolderPath() . '/' . $rowFiles['fil_name'];
             $fileExists = is_file($filePath);
 
             $fileSize = 0;
@@ -405,7 +405,7 @@ class TableFolder extends TableAccess
             $addToArray = false;
 
             // If file exists and file isn't locked or user has editDownloadRight, show it
-            if (($fileExists && !$rowFiles->fil_locked) || $gCurrentUser->editDownloadRight())
+            if (($fileExists && !$rowFiles['fil_locked']) || $gCurrentUser->editDownloadRight())
             {
                 $addToArray = true;
             }
@@ -413,14 +413,14 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $files[] = array(
-                    'fil_id'          => $rowFiles->fil_id,
-                    'fil_name'        => $rowFiles->fil_name,
-                    'fil_description' => $rowFiles->fil_description,
-                    'fil_timestamp'   => $rowFiles->fil_timestamp,
-                    'fil_locked'      => $rowFiles->fil_locked,
+                    'fil_id'          => $rowFiles['fil_id'],
+                    'fil_name'        => $rowFiles['fil_name'],
+                    'fil_description' => $rowFiles['fil_description'],
+                    'fil_timestamp'   => $rowFiles['fil_timestamp'],
+                    'fil_locked'      => $rowFiles['fil_locked'],
                     'fil_exists'      => $fileExists,
                     'fil_size'        => $fileSize,
-                    'fil_counter'     => $rowFiles->fil_counter
+                    'fil_counter'     => $rowFiles['fil_counter']
                 );
             }
         }
@@ -536,15 +536,15 @@ class TableFolder extends TableAccess
                                    FROM '.TBL_FOLDERS.'
                                   WHERE fol_id = ? -- $folderId';
             $currentFolderStatement = $this->db->queryPrepared($sqlCurrentFolder, array($folderId));
-            $currentFolderRow = $currentFolderStatement->fetchObject();
+            $currentFolderRow = $currentFolderStatement->fetch();
 
-            if ($currentFolderRow->fol_fol_id_parent)
+            if ($currentFolderRow['fol_fol_id_parent'])
             {
-                $currentNavigation = '<li><a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $currentFolderRow->fol_id)).
-                    '">'.$currentFolderRow->fol_name.'</a></li>'.$currentNavigation;
+                $currentNavigation = '<li><a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $currentFolderRow['fol_id'])).
+                    '">'.$currentFolderRow['fol_name'].'</a></li>'.$currentNavigation;
 
                 // Next call with parent folder
-                return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
+                return $this->getNavigationForDownload($currentFolderRow['fol_fol_id_parent'], $currentNavigation);
             }
 
             return $currentNavigation;
@@ -634,9 +634,9 @@ class TableFolder extends TableAccess
 
         $folders = array();
 
-        while ($rowFolders = $foldersStatement->fetchObject())
+        while ($rowFolders = $foldersStatement->fetch())
         {
-            $folderExists = is_dir(ADMIDIO_PATH . $rowFolders->fol_path . '/' . $rowFolders->fol_name);
+            $folderExists = is_dir(ADMIDIO_PATH . $rowFolders['fol_path'] . '/' . $rowFolders['fol_name']);
 
             $addToArray = false;
 
@@ -649,14 +649,14 @@ class TableFolder extends TableAccess
             elseif ($folderExists)
             {
                 // If folder is public and not locked, show it
-                if ($rowFolders->fol_public && !$rowFolders->fol_locked)
+                if ($rowFolders['fol_public'] && !$rowFolders['fol_locked'])
                 {
                     $addToArray = true;
                 }
                 // If user has a membership in a role that is assigned to the current subfolder, show it
                 elseif ($gValidLogin)
                 {
-                    $subfolderViewRolesObject = new RolesRights($this->db, 'folder_view', $rowFolders->fol_id);
+                    $subfolderViewRolesObject = new RolesRights($this->db, 'folder_view', $rowFolders['fol_id']);
 
                     if ($subfolderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships()))
                     {
@@ -668,14 +668,14 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $folders[] = array(
-                    'fol_id'          => $rowFolders->fol_id,
-                    'fol_name'        => $rowFolders->fol_name,
-                    'fol_description' => $rowFolders->fol_description,
-                    'fol_path'        => $rowFolders->fol_path,
-                    'fol_timestamp'   => $rowFolders->fol_timestamp,
-                    'fol_public'      => $rowFolders->fol_public,
+                    'fol_id'          => $rowFolders['fol_id'],
+                    'fol_name'        => $rowFolders['fol_name'],
+                    'fol_description' => $rowFolders['fol_description'],
+                    'fol_path'        => $rowFolders['fol_path'],
+                    'fol_timestamp'   => $rowFolders['fol_timestamp'],
+                    'fol_public'      => $rowFolders['fol_public'],
                     'fol_exists'      => $folderExists,
-                    'fol_locked'      => $rowFolders->fol_locked
+                    'fol_locked'      => $rowFolders['fol_locked']
                 );
             }
         }
@@ -788,10 +788,10 @@ class TableFolder extends TableAccess
 
         $subfoldersStatement = $this->getSubfolderStatement($folderId, array('fol_id', 'fol_name'));
 
-        while ($rowSubfolders = $subfoldersStatement->fetchObject())
+        while ($rowSubfolders = $subfoldersStatement->fetch())
         {
             // recursive call with every subfolder
-            $this->rename($rowSubfolders->fol_name, $newPath . '/' . $newName, $rowSubfolders->fol_id);
+            $this->rename($rowSubfolders['fol_name'], $newPath . '/' . $newName, $rowSubfolders['fol_id']);
         }
 
         $this->db->endTransaction();
