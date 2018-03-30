@@ -335,7 +335,6 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     $optionsAll     = array_replace($optionsDefault, $options);
 
     $errorMessage = '';
-    $datatype = strtolower($datatype);
     $value = null;
 
     // set default value for each datatype if no value is given and no value was required

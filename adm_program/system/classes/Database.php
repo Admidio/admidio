@@ -552,15 +552,13 @@ class Database
      */
     private function preparePgSqlQuery($sql)
     {
-        $sqlCompare = strtolower($sql);
-
         // prepare the sql statement to be compatible with PostgreSQL
-        if (StringUtils::strContains($sqlCompare, 'create table'))
+        if (StringUtils::strContains($sql, 'CREATE TABLE', false))
         {
             // on a create-table-statement if necessary cut existing MySQL table options
             $sql = substr($sql, 0, strrpos($sql, ')') + 1);
         }
-        if (StringUtils::strContains($sqlCompare, 'create table') || StringUtils::strContains($sqlCompare, 'alter table'))
+        if (StringUtils::strContains($sql, 'CREATE TABLE', false) || StringUtils::strContains($sql, 'ALTER TABLE', false))
         {
             $replaces = array(
                 // PostgreSQL doesn't know unsigned
