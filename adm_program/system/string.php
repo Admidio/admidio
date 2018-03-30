@@ -165,26 +165,26 @@ function strValidCharacters($string, $checkType)
     switch ($checkType)
     {
         case 'noSpecialChar': // a simple e-mail address should still be possible (like username)
-            $validRegex = '/^[\w.@+-]+$/';
+            $validRegex = '/^[\w.@+-]+$/i';
             break;
         case 'email':
-            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/';
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/i';
             break;
         case 'file':
-            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() .@+-]+$/';
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() .@+-]+$/i';
             break;
         case 'url':
-            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/';
+            $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?() \/%=#:~.@+-]+$/i';
             break;
         case 'phone':
-            $validRegex = '/^[\d() \/+-]+$/';
+            $validRegex = '/^[\d() \/+-]+$/i';
             break;
         default:
             return false;
     }
 
     // check if string contains only valid characters
-    if (!preg_match($validRegex, StringUtils::strToLower($string)))
+    if (!preg_match($validRegex, $string))
     {
         return false;
     }
