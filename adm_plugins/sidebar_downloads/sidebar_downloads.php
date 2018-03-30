@@ -15,22 +15,12 @@
  ***********************************************************************************************
  */
 
-// create path to plugin
-$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
-$pluginFilePos   = strpos(__FILE__, 'sidebar_downloads.php');
-$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
+$rootPath = dirname(dirname(__DIR__));
+$pluginFolder = basename(__DIR__);
 
-if(!defined('PLUGIN_PATH'))
-{
-    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
-}
-
-require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
-require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
-
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
+require_once($rootPath . '/adm_program/system/common.php');
+require_once($rootPath . '/adm_program/system/file_extension_icons.php');
+require_once(__DIR__ . '/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -57,9 +47,6 @@ if(!isset($plg_show_upload_timestamp))
 {
     $plg_show_upload_timestamp = true;
 }
-
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // check if the module is enabled
 if ($gSettingsManager->getBool('enable_download_module'))

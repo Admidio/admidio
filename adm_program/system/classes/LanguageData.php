@@ -74,11 +74,40 @@ class LanguageData
         {
             $languageFolderPath = ADMIDIO_PATH . FOLDER_LANGUAGES;
         }
-        if (!is_dir($languageFolderPath))
+
+        $this->addLanguageFolderPath($languageFolderPath);
+        foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
         {
-            throw new \UnexpectedValueException('Invalid folder path!');
+            $this->addLanguageFolderPath($pluginLanguageFolderPath);
         }
-        $this->languageFolderPaths[] = $languageFolderPath;
+    }
+
+    /**
+     * Search and returns all plugin language folder paths
+     * @return array<int,string> Returns all plugin language folder paths
+     */
+    private static function getPluginLanguageFolderPaths()
+    {
+        try
+        {
+            $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+        }
+        catch (\RuntimeException $exception)
+        {
+            return array();
+        }
+
+        $languageFolders = array();
+        foreach ($pluginFolders as $pluginFolder => $type)
+        {
+            $languageFolder = $pluginFolder . '/languages';
+            if (is_dir($languageFolder))
+            {
+                $languageFolders[] = $languageFolder;
+            }
+        }
+
+        return $languageFolders;
     }
 
     /**
