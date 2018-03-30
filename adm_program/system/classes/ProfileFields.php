@@ -621,7 +621,7 @@ class ProfileFields
                     break;
                 case 'EMAIL':
                     // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
-                    if (!$this->noValueCheck && !strValidCharacters(StringUtils::strToLower($fieldValue), 'email'))
+                    if (!$this->noValueCheck && !strValidCharacters($fieldValue, 'email'))
                     {
                         return false;
                     }
