@@ -14,39 +14,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'string.php')
 }
 
 /**
- * In case the multibyte functions are not supported, we fallback to a no-multibyte function
- * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
- * admStrToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
- * @param string $string
- * @return string
- */
-function admStrToLower($string)
-{
-    if(function_exists('mb_strtolower'))
-    {
-        return mb_strtolower($string, 'UTF-8');
-    }
-
-    return strtolower($string);
-}
-
-/**
- * In case the multibyte functions are not supported, we fallback to a no-multibyte function
- * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
- * @param string $string
- * @return string
- */
-function admStrToUpper($string)
-{
-    if(function_exists('mb_strtoupper'))
-    {
-        return mb_strtoupper($string, 'UTF-8');
-    }
-
-    return strtoupper($string);
-}
-
-/**
  * removes html, php code and blancs at beginning and end
  * of string or all elements of array without ckeditor variables !!!
  * @param array<string,string|array<mixed,string>> $srcArray
@@ -231,50 +198,6 @@ function strValidCharacters($string, $checkType)
         default:
             return true;
     }
-}
-
-/**
- * Checks if a string contains another given string
- * @param string $string   The string to check
- * @param string $contains The containing string pattern
- * @return bool Returns true if the string contains the other string
- */
-function admStrContains($string, $contains)
-{
-    return strpos($string, $contains) !== false;
-}
-
-/**
- * Checks if a string starts with another given string
- * @param string $string The string to check
- * @param string $start  The starting string pattern
- * @return bool Returns true if the string starts with the other string
- */
-function admStrStartsWith($string, $start)
-{
-    return strpos($string, $start) === 0;
-}
-
-/**
- * Checks if a string ends with another given string
- * @param string $string The string to check
- * @param string $end    The ending string pattern
- * @return bool Returns true if the string ends with the other string
- */
-function admStrEndsWith($string, $end)
-{
-    return strrpos($string, $end) === strlen($string) - strlen($end);
-}
-
-/**
- * Easy way for multiple replacements in a string.
- * @param string               $string   The string where to replace strings
- * @param array<string,string> $replaces An array with search and replace values
- * @return string The modified string
- */
-function admStrMultiReplace($string, array $replaces)
-{
-    return str_replace(array_keys($replaces), array_values($replaces), $string);
 }
 
 /**
