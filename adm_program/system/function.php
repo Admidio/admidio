@@ -382,8 +382,8 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
     // check if parameter has a valid value
     // do a strict check with in_array because the function don't work properly
     if ($optionsAll['validValues'] !== null
-    && !in_array(admStrToUpper($value), $optionsAll['validValues'], true)
-    && !in_array(admStrToLower($value), $optionsAll['validValues'], true))
+    && !in_array(StringUtils::strToUpper($value), $optionsAll['validValues'], true)
+    && !in_array(StringUtils::strToLower($value), $optionsAll['validValues'], true))
     {
         $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
     }
@@ -699,8 +699,8 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 function admFuncCheckUrl($url)
 {
     // Homepage url have to start with "http://"
-    if (strpos(admStrToLower($url), 'http://')  !== 0
-    &&  strpos(admStrToLower($url), 'https://') !== 0)
+    if (strpos(StringUtils::strToLower($url), 'http://')  !== 0
+    &&  strpos(StringUtils::strToLower($url), 'https://') !== 0)
     {
         $url = 'http://' . $url;
     }

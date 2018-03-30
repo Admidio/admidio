@@ -244,7 +244,7 @@ if($getMode === 2)
         // POST Variablen in das Role-Objekt schreiben
         foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(admStrStartsWith($key, 'rol_'))
+            if(StringUtils::strStartsWith($key, 'rol_'))
             {
                 $role->setValue($key, $value);
             }

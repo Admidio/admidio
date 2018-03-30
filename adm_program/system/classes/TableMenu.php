@@ -89,7 +89,7 @@ class TableMenu extends TableAccess
         // if text is a translation-id then translate it
         if($columnName === 'men_name' && $format !== 'database')
         {
-            $value = $gL10n->get(admStrToUpper($value));
+            $value = $gL10n->get(StringUtils::strToUpper($value));
         }
 
         return $value;

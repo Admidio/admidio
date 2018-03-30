@@ -133,7 +133,7 @@ class TableDate extends TableAccess
             '<br />' => '\n' // workaround
         );
 
-        return trim(admStrMultiReplace($text, $replaces));
+        return trim(StringUtils::strMultiReplace($text, $replaces));
     }
 
     /**

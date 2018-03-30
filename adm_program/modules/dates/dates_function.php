@@ -369,7 +369,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // write all POST parameters into the date object
         foreach($_POST as $key => $value) // TODO possible security issue
         {
-            if(admStrStartsWith($key, 'dat_'))
+            if(StringUtils::strStartsWith($key, 'dat_'))
             {
                 $date->setValue($key, $value);
             }
@@ -547,7 +547,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
 
         // only change name of role if no custom name was set
-        if(admStrContains($role->getValue('rol_name'), $gL10n->get('DAT_DATE')))
+        if(StringUtils::strContains($role->getValue('rol_name'), $gL10n->get('DAT_DATE')))
         {
             $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$datId;
         }

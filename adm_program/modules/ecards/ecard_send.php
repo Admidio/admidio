@@ -68,7 +68,7 @@ $arrayUsers = array();
 
 foreach($_POST['ecard_recipients'] as $value)
 {
-    if(admStrContains($value, 'groupID'))
+    if(StringUtils::strContains($value, 'groupID'))
     {
         $roleId = (int) substr($value, 9);
         if($gCurrentUser->hasRightSendMailToRole($roleId))

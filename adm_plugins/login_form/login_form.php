@@ -82,7 +82,7 @@ echo '<div id="plugin_'. $pluginFolder. '" class="admidio-plugin-content">';
 
 if($gValidLogin)
 {
-    if($plg_link_target === '' || admStrStartsWith($plg_link_target, '_'))
+    if($plg_link_target === '' || StringUtils::strStartsWith($plg_link_target, '_'))
     {
         $jsContentNextPage = 'self.location.href = \''. ADMIDIO_URL. '/adm_program/system/logout.php\';';
     }

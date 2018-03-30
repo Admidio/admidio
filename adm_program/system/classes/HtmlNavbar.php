@@ -145,7 +145,7 @@ class HtmlNavbar
         // add THEME_URL to images unless the full URL is given
         if ($icon !== '' && preg_match($urlStartRegex, $icon) === 0)
         {
-            if (admStrStartsWith($icon, '/icons/'))
+            if (StringUtils::strStartsWith($icon, '/icons/'))
             {
                 $icon = THEME_URL . $icon;
             }

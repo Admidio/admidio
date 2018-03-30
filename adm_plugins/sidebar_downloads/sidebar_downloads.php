@@ -106,7 +106,7 @@ if ($gSettingsManager->getBool('enable_download_module'))
             {
                 // get filename without extension and extension separatly
                 $fileName      = substr($rowFile['fil_name'], 0, strrpos($rowFile['fil_name'], '.'));
-                $fileExtension = admStrToLower(substr($rowFile['fil_name'], strrpos($rowFile['fil_name'], '.') + 1));
+                $fileExtension = StringUtils::strToLower(substr($rowFile['fil_name'], strrpos($rowFile['fil_name'], '.') + 1));
                 $fullFolderFileName = $rowFile['fol_path']. '/'. $rowFile['fol_name']. '/'.$rowFile['fil_name'];
                 $tooltip            = $fullFolderFileName;
                 ++$countVisibleDownloads;

@@ -46,7 +46,7 @@ function prepareReceivers($receiversString)
     $receiversSplit = explode('|', $receiversString);
     foreach ($receiversSplit as $receivers)
     {
-        if (admStrStartsWith($receivers, 'list '))
+        if (StringUtils::strStartsWith($receivers, 'list '))
         {
             $receiverNames .= '; ' . substr($receivers, 5);
         }

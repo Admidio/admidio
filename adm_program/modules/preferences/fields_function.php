@@ -90,12 +90,12 @@ if($getMode === 1)
         // => EXIT
     }
 
-    if($_POST['usf_icon'] !== '' && admStrStartsWith($_POST['usf_icon'], 'http') && !strValidCharacters($_POST['usf_icon'], 'url'))
+    if($_POST['usf_icon'] !== '' && StringUtils::strStartsWith($_POST['usf_icon'], 'http') && !strValidCharacters($_POST['usf_icon'], 'url'))
     {
         $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_ICON'))));
         // => EXIT
     }
-    elseif($_POST['usf_icon'] !== '' && !admStrStartsWith($_POST['usf_icon'], 'http'))
+    elseif($_POST['usf_icon'] !== '' && !StringUtils::strStartsWith($_POST['usf_icon'], 'http'))
     {
         try
         {
@@ -175,7 +175,7 @@ if($getMode === 1)
         // POST Variablen in das UserField-Objekt schreiben
         foreach($_POST as $key => $value)
         {
-            if(admStrStartsWith($key, 'usf_')) // TODO possible security issue
+            if(StringUtils::strStartsWith($key, 'usf_')) // TODO possible security issue
             {
                 $userField->setValue($key, $value);
             }

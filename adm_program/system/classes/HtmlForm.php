@@ -406,7 +406,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['icon'] !== '')
         {
             // create html for icon
-            if (admStrStartsWith(admStrToLower($optionsAll['icon']), 'http') && strValidCharacters($optionsAll['icon'], 'url'))
+            if (StringUtils::strStartsWith($optionsAll['icon'], 'http', false) && strValidCharacters($optionsAll['icon'], 'url'))
             {
                 $htmlIcon = '<img class="admidio-icon-info" src="' . $optionsAll['icon'] . '" title="' . $label . '" alt="' . $label . '" />';
             }
@@ -1995,7 +1995,7 @@ class HtmlForm extends HtmlFormBasic
         if ($icon !== '')
         {
             // create html for icon
-            if (admStrStartsWith(admStrToLower($icon), 'http') && strValidCharacters($icon, 'url'))
+            if (StringUtils::strStartsWith($icon, 'http', false) && strValidCharacters($icon, 'url'))
             {
                 $htmlIcon = '<img class="admidio-icon-info" src="' . $icon . '" title="' . $label . '" alt="' . $label . '" />';
             }

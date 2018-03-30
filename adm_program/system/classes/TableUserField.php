@@ -209,7 +209,7 @@ class TableUserField extends TableAccess
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
                             {
                                 // if value is imagefile or imageurl then show image
-                                if (admStrContains(admStrToLower($listValue), '.png') || admStrContains(admStrToLower($listValue), '.jpg'))
+                                if (StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))
                                 {
                                     // if there is imagefile and text separated by | then explode them
                                     $listValues = explode('|', $listValue);
@@ -243,7 +243,7 @@ class TableUserField extends TableAccess
                                     {
                                         try
                                         {
-                                            if (!admStrStartsWith(admStrToLower($listValueImage), 'http') || !strValidCharacters($listValueImage, 'url'))
+                                            if (!StringUtils::strStartsWith($listValueImage, 'http', false) || !strValidCharacters($listValueImage, 'url'))
                                             {
                                                 if (admStrIsValidFileName($listValueImage, true))
                                                 {
@@ -275,11 +275,11 @@ class TableUserField extends TableAccess
                     break;
                 case 'usf_icon':
                     // if value is imagefile or imageurl then show image
-                    if(admStrContains(admStrToLower($value), '.png') || admStrContains(admStrToLower($value), '.jpg'))
+                    if(StringUtils::strContains($value, '.png', false) || StringUtils::strContains($value, '.jpg', false))
                     {
                         try
                         {
-                            if (!admStrStartsWith(admStrToLower($value), 'http') || !strValidCharacters($value, 'url'))
+                            if (!StringUtils::strStartsWith($value, 'http', false) || !strValidCharacters($value, 'url'))
                             {
                                 if (admStrIsValidFileName($value, true))
                                 {

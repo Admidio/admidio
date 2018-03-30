@@ -217,7 +217,7 @@ function strValidCharacters($string, $checkType)
     }
 
     // check if string contains only valid characters
-    if (!preg_match($validRegex, admStrToLower($string)))
+    if (!preg_match($validRegex, StringUtils::strToLower($string)))
     {
         return false;
     }
@@ -297,7 +297,7 @@ function admStrIsValidFileName($filename, $checkExtension = false)
     }
 
     // filename should only contains valid characters and don't start with a dot
-    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || admStrStartsWith($filename, '.'))
+    if (basename($filename) !== $filename || !strValidCharacters($filename, 'file') || StringUtils::strStartsWith($filename, '.'))
     {
         throw new AdmException('SYS_FILENAME_INVALID', array($filename));
     }

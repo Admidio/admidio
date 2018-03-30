@@ -28,7 +28,7 @@ if (!array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE))
 }
 
 // remove login page from navigation stack
-if (admStrEndsWith($gNavigation->getUrl(), '/login.php'))
+if (StringUtils::strEndsWith($gNavigation->getUrl(), '/login.php'))
 {
     $gNavigation->deleteLastUrl();
 }

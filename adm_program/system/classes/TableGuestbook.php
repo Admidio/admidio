@@ -134,7 +134,7 @@ class TableGuestbook extends TableAccess
         {
             if ($columnName === 'gbo_email')
             {
-                $newValue = admStrToLower($newValue);
+                $newValue = StringUtils::strToLower($newValue);
 
                 // If Email has a invalid format, it won't be set
                 if (!strValidCharacters($newValue, 'email'))

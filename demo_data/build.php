@@ -149,7 +149,7 @@ function executeSqlStatements(array $sqlStatements, $filename)
             foreach ($results[0] as $value)
             {
                 // if it's a string of a systemmail then html linefeeds must be replaced
-                if (admStrStartsWith($value, 'SYS_SYSMAIL_'))
+                if (StringUtils::strStartsWith($value, 'SYS_SYSMAIL_'))
                 {
                     // convert <br /> to a normal line feed
                     $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));

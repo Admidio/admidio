@@ -361,7 +361,7 @@ class Language
                 '#VAR' . $paramNr . '#'      => $param,
                 '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
             );
-            $text = admStrMultiReplace($text, $replaces);
+            $text = StringUtils::strMultiReplace($text, $replaces);
         }
 
         // replace square brackets with html tags
@@ -382,7 +382,7 @@ class Language
             '\\\'' => '\'',
             '\''   => '&rsquo;'
         );
-        return admStrMultiReplace($text, $replaces);
+        return StringUtils::strMultiReplace($text, $replaces);
     }
 
     /**

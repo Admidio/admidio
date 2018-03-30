@@ -51,7 +51,7 @@ if (isset($_POST['user_last_name']))
     }
 
     // email should only have valid chars
-    $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
+    $_SESSION['user_email'] = StringUtils::strToLower($_SESSION['user_email']);
 
     if (!strValidCharacters($_SESSION['user_email'], 'email'))
     {
@@ -130,7 +130,7 @@ if ($_SESSION['db_port'])
 // detect root path
 $rootPath = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
-if (!admStrStartsWith($rootPath, 'http://') && !admStrStartsWith($rootPath, 'https://'))
+if (!StringUtils::strStartsWith($rootPath, 'http://') && !StringUtils::strStartsWith($rootPath, 'https://'))
 {
     if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     {
@@ -155,7 +155,7 @@ $replaces = array(
     '%ORGANIZATION%' => $_SESSION['orga_shortname'],
     '%TIMEZONE%'     => $_SESSION['orga_timezone']
 );
-$configFileContent = admStrMultiReplace($configFileContent, $replaces);
+$configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces);
 
 $_SESSION['config_file_content'] = $configFileContent;
 

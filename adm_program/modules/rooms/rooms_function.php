@@ -55,7 +55,7 @@ if ($getMode === 1)
     // POST Variablen in das Termin-Objekt schreiben
     foreach ($_POST as $key => $value) // TODO possible security issue
     {
-        if (admStrStartsWith($key, 'room_'))
+        if (StringUtils::strStartsWith($key, 'room_'))
         {
             $room->setValue($key, $value);
         }

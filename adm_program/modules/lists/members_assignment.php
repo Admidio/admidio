@@ -136,7 +136,7 @@ else
     $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
     // add current url to navigation stack if last url was not the same page
-    if(!admStrContains($gNavigation->getUrl(), 'members_assignment.php'))
+    if(!StringUtils::strContains($gNavigation->getUrl(), 'members_assignment.php'))
     {
         $gNavigation->addUrl(CURRENT_URL, $headline);
     }

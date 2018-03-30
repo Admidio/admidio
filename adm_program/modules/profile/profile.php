@@ -452,7 +452,7 @@ $page->addHtml('
                             $field = getFieldCode($fieldNameIntern, $user);
                             if(is_array($field) && $field['value'] !== '')
                             {
-                                $form->addStaticControl(admStrToLower($fieldNameIntern), $field['label'], $field['value']);
+                                $form->addStaticControl(StringUtils::strToLower($fieldNameIntern), $field['label'], $field['value']);
                             }
                             break;
                     }
@@ -529,7 +529,7 @@ foreach($gProfileFields->getProfileFields() as $field)
             $field = getFieldCode($fieldNameIntern, $user);
             if(is_array($field) && $field['value'] !== '')
             {
-                $form->addStaticControl(admStrToLower($fieldNameIntern), $field['label'], $field['value']);
+                $form->addStaticControl(StringUtils::strToLower($fieldNameIntern), $field['label'], $field['value']);
             }
         }
     }
