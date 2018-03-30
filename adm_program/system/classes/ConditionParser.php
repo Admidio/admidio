@@ -453,10 +453,10 @@ class ConditionParser
             '*' => '%',
             // valid 'not null' is '#'
             StringUtils::strToUpper($gL10n->get('SYS_NOT_EMPTY')) => ' # ',
-            ' NOT NULL '                                => ' # ',
+            ' NOT NULL '                                          => ' # ',
             // valid 'null' is '_'
             StringUtils::strToUpper($gL10n->get('SYS_EMPTY')) => ' _ ',
-            ' NULL '                                => ' _ ',
+            ' NULL '                                          => ' _ ',
             // valid 'is not' is '!'
             '{}'     => ' ! ',
             '!='     => ' ! ',
