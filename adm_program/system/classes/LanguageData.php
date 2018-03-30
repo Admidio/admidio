@@ -90,7 +90,7 @@ class LanguageData
     {
         try
         {
-            $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . PLUGIN_PATH, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+            $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
         }
         catch (\RuntimeException $exception)
         {
