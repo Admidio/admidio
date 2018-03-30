@@ -117,9 +117,6 @@ else
     $sqlRoleIds = ' IN '.$plg_rolle_sql;
 }
 
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
-
 // Nun noch einige Variablen initialisieren
 
 $gebLink = '';

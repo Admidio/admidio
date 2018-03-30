@@ -29,9 +29,6 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
 require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
 
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
-
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
 if(!isset($plg_downloads_count) || !is_numeric($plg_downloads_count))
@@ -57,9 +54,6 @@ if(!isset($plg_show_upload_timestamp))
 {
     $plg_show_upload_timestamp = true;
 }
-
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
 
 // check if the module is enabled
 if ($gSettingsManager->getBool('enable_download_module'))
