@@ -638,7 +638,7 @@ class Database
         {
             $this->pdoStatement = $this->pdo->query($sql);
 
-            if ($this->pdoStatement !== false && StringUtils::strStartsWith(strtoupper($sql), 'SELECT'))
+            if ($this->pdoStatement !== false && StringUtils::strStartsWith($sql, 'SELECT', false))
             {
                 $gLogger->debug('SQL: Found rows: ' . $this->pdoStatement->rowCount());
             }
@@ -700,7 +700,7 @@ class Database
             {
                 $this->pdoStatement->execute($params);
 
-                if (StringUtils::strStartsWith(strtoupper($sql), 'SELECT'))
+                if (StringUtils::strStartsWith($sql, 'SELECT', false))
                 {
                     $gLogger->info('SQL: Found rows: ' . $this->pdoStatement->rowCount());
                 }

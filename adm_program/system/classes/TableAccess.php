@@ -348,7 +348,7 @@ class TableAccess
         }
 
         // if condition starts with AND then remove this
-        if (StringUtils::strStartsWith(strtoupper(ltrim($sqlWhereCondition)), 'AND'))
+        if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false))
         {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }

@@ -699,8 +699,7 @@ function admFuncGetDirectoryEntries($directory, $searchType = 'file')
 function admFuncCheckUrl($url)
 {
     // Homepage url have to start with "http://"
-    if (strpos(StringUtils::strToLower($url), 'http://')  !== 0
-    &&  strpos(StringUtils::strToLower($url), 'https://') !== 0)
+    if (!StringUtils::strStartsWith($url, 'http://', false) && !StringUtils::strStartsWith($url, 'https://', false))
     {
         $url = 'http://' . $url;
     }
