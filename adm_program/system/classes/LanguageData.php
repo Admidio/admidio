@@ -55,13 +55,11 @@ class LanguageData
     /**
      * Creates an object that stores all necessary language data and can be handled in session.
      * Therefore the language must be set and optional a path where the language files are stored.
-     * @param string $language           The ISO code of the language for which the texts should be read e.g. **'de'**
-     *                                   If no language is set than the browser language will be determined.
-     * @param string $languageFolderPath Optional a server path to the language files. If no path is set
-     *                                   than the default Admidio language path **adm_program/languages** will be set.
+     * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
+     *                         If no language is set than the browser language will be determined.
      * @throws \UnexpectedValueException
      */
-    public function __construct($language = '', $languageFolderPath = '')
+    public function __construct($language = '')
     {
         if ($language === '')
         {
@@ -70,12 +68,7 @@ class LanguageData
         }
         $this->language = $language;
 
-        if ($languageFolderPath === '')
-        {
-            $languageFolderPath = ADMIDIO_PATH . FOLDER_LANGUAGES;
-        }
-
-        $this->addLanguageFolderPath($languageFolderPath);
+        $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
         foreach (self::getPluginLanguageFolderPaths() as $pluginLanguageFolderPath)
         {
             $this->addLanguageFolderPath($pluginLanguageFolderPath);
