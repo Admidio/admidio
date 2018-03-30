@@ -543,7 +543,7 @@ class User extends TableAccess
             throw new AdmException($gL10n->get('SYS_LOGIN_MAX_INVALID_LOGIN'));
         }
 
-        if (!PasswordHashing::verify($password, $this->getValue('usr_password')))
+        if (!PasswordUtils::verify($password, $this->getValue('usr_password')))
         {
             $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
 
@@ -1655,7 +1655,7 @@ class User extends TableAccess
     {
         global $gLogger;
 
-        if (!PasswordHashing::needsRehash($this->getValue('usr_password')))
+        if (!PasswordUtils::needsRehash($this->getValue('usr_password')))
         {
             return false;
         }
@@ -1804,7 +1804,7 @@ class User extends TableAccess
             $cost = (int) $gSettingsManager->getInt('system_hashing_cost');
         }
 
-        $newPasswordHash = PasswordHashing::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
+        $newPasswordHash = PasswordUtils::hash($newPassword, $gPasswordHashAlgorithm, array('cost' => $cost));
 
         if ($newPasswordHash === false)
         {

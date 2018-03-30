@@ -651,7 +651,7 @@ $formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'
 
 try
 {
-    PasswordHashing::genRandomInt(0, 1, true);
+    PasswordUtils::genRandomInt(0, 1, true);
     $html = getStaticText('success', $gL10n->get('SYS_SECURE'));
 }
 catch (AdmException $e)

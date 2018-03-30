@@ -69,13 +69,13 @@ if($getMode === 'change')
     {
         if(strlen($newPassword) >= PASSWORD_MIN_LENGTH)
         {
-            if (PasswordHashing::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
+            if (PasswordUtils::passwordStrength($newPassword, $user->getPasswordUserData()) >= $gSettingsManager->getInt('password_min_strength'))
             {
                 if ($newPassword === $newPasswordConfirm)
                 {
                     // check if old password is correct.
                     // Administrator could change password of other users without this verification.
-                    if (PasswordHashing::verify($oldPassword, $user->getValue('usr_password'))
+                    if (PasswordUtils::verify($oldPassword, $user->getValue('usr_password'))
                     || ($gCurrentUser->isAdministrator() && $currUsrId !== $getUserId))
                     {
                         $user->saveChangesWithoutRights();

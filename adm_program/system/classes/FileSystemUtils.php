@@ -54,7 +54,7 @@ final class FileSystemUtils
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         $now = new \DateTime();
 
-        return $now->format('Ymd-His') . '_' . PasswordHashing::genRandomPassword(16, $charset = '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . $extension;
+        return $now->format('Ymd-His') . '_' . PasswordUtils::genRandomPassword(16, $charset = '0123456789abcdefghijklmnopqrstuvwxyz') . '.' . $extension;
     }
 
     /**

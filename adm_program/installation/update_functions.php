@@ -80,7 +80,7 @@ function updateOrgPreferences()
     require_once(__DIR__ . '/db_scripts/preferences.php');
 
     // calculate the best cost value for your server performance
-    $benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
+    $benchmarkResults = PasswordUtils::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
     $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['cost']);
 
     $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;

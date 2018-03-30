@@ -183,7 +183,7 @@ elseif($getMode === 4)
         try
         {
             // neues Passwort generieren und abspeichern
-            $password = PasswordHashing::genRandomPassword(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
+            $password = PasswordUtils::genRandomPassword(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
             $user->setPassword($password);
             $user->save();
 

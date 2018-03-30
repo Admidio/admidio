@@ -84,7 +84,7 @@ if (isset($_POST['user_last_name']))
         $_SESSION['user_login']
     );
     // Admin Password should have a minimum strength of 1
-    if (PasswordHashing::passwordStrength($_SESSION['user_password'], $userData) < 1)
+    if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1)
     {
         showNotice(
             $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),

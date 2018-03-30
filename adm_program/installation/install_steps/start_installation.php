@@ -215,7 +215,7 @@ $defaultOrgPreferences['email_administrator'] = $_SESSION['orga_email'];
 $defaultOrgPreferences['system_language']     = $language;
 
 // calculate the best cost value for your server performance
-$benchmarkResults = PasswordHashing::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
+$benchmarkResults = PasswordUtils::costBenchmark(0.35, 'password', $gPasswordHashAlgorithm);
 $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 
 // create all necessary data for this organization

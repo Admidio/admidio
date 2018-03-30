@@ -23,7 +23,7 @@
  * passwordStrength()   shows the strength of the given password
  * costBenchmark()      run a benchmark to get the best fitting cost value
  */
-final class PasswordHashing
+final class PasswordUtils
 {
     const HASH_ALGORITHM_DEFAULT = 'DEFAULT';
     const HASH_ALGORITHM_BCRYPT = 'BCRYPT';

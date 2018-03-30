@@ -109,7 +109,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check password
-    $zxcvbnScore = PasswordHashing::passwordStrength($_SESSION['db_password']);
+    $zxcvbnScore = PasswordUtils::passwordStrength($_SESSION['db_password']);
     if ($zxcvbnScore <= 2)
     {
         $gLogger->warning('Database password is weak! (zxcvbn lib)', array('score' => $zxcvbnScore));
