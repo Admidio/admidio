@@ -230,9 +230,9 @@ function admStrIsValidFileName($filename, $checkExtension = false)
         // check if the extension is not blacklisted
         $extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
                                     'js', 'vbs', 'asp', 'cgi', 'ssi');
-        $fileExtension = substr($filename, strrpos($filename, '.') + 1);
+        $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        if (in_array(strtolower($fileExtension), $extensionBlacklist, true))
+        if (in_array($fileExtension, $extensionBlacklist, true))
         {
             throw new AdmException('DOW_FILE_EXTENSION_INVALID');
         }

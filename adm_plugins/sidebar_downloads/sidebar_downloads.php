@@ -105,8 +105,8 @@ if ($gSettingsManager->getBool('enable_download_module'))
             if($errorCode !== 'DOW_FOLDER_NO_RIGHTS')
             {
                 // get filename without extension and extension separatly
-                $fileName      = substr($rowFile['fil_name'], 0, strrpos($rowFile['fil_name'], '.'));
-                $fileExtension = StringUtils::strToLower(substr($rowFile['fil_name'], strrpos($rowFile['fil_name'], '.') + 1));
+                $fileName      = pathinfo($rowFile['fil_name'], PATHINFO_FILENAME);
+                $fileExtension = strtolower(pathinfo($rowFile['fil_name'], PATHINFO_EXTENSION));
                 $fullFolderFileName = $rowFile['fol_path']. '/'. $rowFile['fol_name']. '/'.$rowFile['fil_name'];
                 $tooltip            = $fullFolderFileName;
                 ++$countVisibleDownloads;

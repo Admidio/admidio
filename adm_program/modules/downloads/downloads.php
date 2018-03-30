@@ -194,7 +194,7 @@ if (isset($folderContent['files']))
     foreach ($folderContent['files'] as $nextFile)
     {
         // Check filetyp
-        $fileExtension  = StringUtils::strToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.') + 1));
+        $fileExtension = strtolower(pathinfo($nextFile['fil_name'], PATHINFO_EXTENSION));
 
         // Choose icon for the file
         $iconFile = 'page_white_question.png';
@@ -304,7 +304,7 @@ if ($gCurrentUser->editDownloadRight())
             foreach ($folderContent['additionalFiles'] as $nextFile)
             {
                 // Get filetyp
-                $fileExtension = StringUtils::strToLower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.') + 1));
+                $fileExtension = strtolower(pathinfo($nextFile['fil_name'], PATHINFO_EXTENSION));
 
                 // Choose icon for the file
                 $iconFile = 'page_white_question.png';
