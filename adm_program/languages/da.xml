@@ -691,7 +691,7 @@
   <string name="ORG_PARENT_ORGANIZATION">Forældre organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Definér forældre organisation her. Forældre organisationer kan f.eks. oprette events og beskeder der så vises i de valgte (børne) organisationer.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Kodeords styrke</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Her kan du specificere hvor sikre og komplekse kodeord som minimum skal være.\nVærdien i parentes indikerer hvor mange forsøg der skal til for at knække koden.\n\n No: risikabelt kodeord (&lt;10^3)\n Lav: Beskyttelse imod automatiserede online angreb. (&lt;10^6)\n Middel: Beskyttelse imod ubegrænsede online angreb.(&lt;10^8)\n Høj: Moderat beskyttelse imod offline hashing angreb. (&lt;10 ^10)\n Ekstrem: Stærk beskyttelse imod offline hashing angreb. (&gt;= 10^10)</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Her kan du specificere hvor sikre og komplekse kodeord som minimum skal være.\nVærdien i parentes indikerer hvor mange forsøg der skal til for at knække koden.\n\n No: risikabelt kodeord (&lt;10^3)\n Lav: Beskyttelse imod automatiserede online angreb. (&lt;10^6)\n Middel: Beskyttelse imod ubegrænsede online angreb.(&lt;10^8)\n Høj: Moderat beskyttelse imod offline hashing angreb. (&lt;10 ^10)\n Meget høj: Stærk beskyttelse imod offline hashing angreb. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ingen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Lav</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middel</string>
