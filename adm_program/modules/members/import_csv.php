@@ -78,7 +78,6 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
     {
         // Hochkomma und Spaces entfernen
         $columnValue = trim(strip_tags(str_replace('"', '', $columnValue)));
-        $columnValueToLower = StringUtils::strToLower($columnValue);
 
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
@@ -109,6 +108,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                     switch ($field->getValue('usf_type'))
                     {
                         case 'CHECKBOX':
+                            $columnValueToLower = StringUtils::strToLower($columnValue);
                             if(in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true))
                             {
                                 $user->setValue($usfNameIntern, '1');

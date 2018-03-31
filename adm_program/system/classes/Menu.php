@@ -65,7 +65,7 @@ class Menu
 
         // if icon is imagefile or imageurl then show image
         if (preg_match('/^http(s?):\/\//', $icon) === 0 && admStrIsValidFileName($icon, true)
-        && (strpos(StringUtils::strToLower($icon), '.png') > 0 || strpos(StringUtils::strToLower($icon), '.jpg') > 0))
+        && (StringUtils::strEndsWith($icon, '.png', false) || StringUtils::strEndsWith($icon, '.jpg', false)))
         {
             $icon = THEME_URL . '/icons/' . $icon;
         }

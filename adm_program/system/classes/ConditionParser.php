@@ -81,7 +81,7 @@ class ConditionParser
         global $gSettingsManager;
 
         // if last char is Y or J then user searches for age
-        $lastDateChar = StringUtils::strToUpper(substr($date, -1));
+        $lastDateChar = strtoupper(substr($date, -1));
 
         if ($lastDateChar === 'J' || $lastDateChar === 'Y')
         {
@@ -154,9 +154,7 @@ class ConditionParser
      */
     private static function isDateSearch($columnType, $sourceCondition)
     {
-        $sourceCondition = StringUtils::strToUpper($sourceCondition);
-
-        return $columnType === 'date' && (StringUtils::strContains($sourceCondition, 'J') || StringUtils::strContains($sourceCondition, 'Y'));
+        return $columnType === 'date' && (StringUtils::strContains($sourceCondition, 'J', false) || StringUtils::strContains($sourceCondition, 'Y', false));
     }
 
     /**
