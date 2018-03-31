@@ -380,9 +380,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
 
     // check if parameter has a valid value
     // do a strict check with in_array because the function don't work properly
-    if ($optionsAll['validValues'] !== null
-    && !in_array(StringUtils::strToUpper($value), $optionsAll['validValues'], true)
-    && !in_array(StringUtils::strToLower($value), $optionsAll['validValues'], true))
+    if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true))
     {
         $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
     }
