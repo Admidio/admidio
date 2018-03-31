@@ -113,7 +113,6 @@ switch($getMode)
 
                     if($_POST['mail_sendmail_address'] !== '')
                     {
-                        $_POST['mail_sendmail_address'] = StringUtils::strToLower($_POST['mail_sendmail_address']);
                         if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
                         {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('MAI_SENDER_EMAIL'))));
@@ -132,7 +131,6 @@ switch($getMode)
                     }
                     else
                     {
-                        $_POST['email_administrator'] = StringUtils::strToLower($_POST['email_administrator']);
                         if(!strValidCharacters($_POST['email_administrator'], 'email'))
                         {
                             $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'))));

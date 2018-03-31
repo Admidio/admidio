@@ -50,9 +50,6 @@ if (isset($_POST['user_last_name']))
         // => EXIT
     }
 
-    // email should only have valid chars
-    $_SESSION['user_email'] = StringUtils::strToLower($_SESSION['user_email']);
-
     if (!strValidCharacters($_SESSION['user_email'], 'email'))
     {
         showNotice(

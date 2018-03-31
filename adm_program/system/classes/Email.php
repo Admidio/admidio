@@ -148,8 +148,6 @@ class Email extends PHPMailer
      */
     public function addRecipient($address, $name = '')
     {
-        $address = StringUtils::strToLower($address);
-
         try
         {
             $this->addAddress($address, $name);
@@ -172,8 +170,6 @@ class Email extends PHPMailer
      */
     public function addCopy($address, $name = '')
     {
-        $address = StringUtils::strToLower($address);
-
         try
         {
             $this->addCC($address, $name);
@@ -197,7 +193,6 @@ class Email extends PHPMailer
      */
     public function addBlindCopy($address, $name = '')
     {
-        $address = StringUtils::strToLower($address);
         // Blindcopy must be Ascii-US formated, so encode in MimeHeader
         $asciiName = stripslashes($name);
 
@@ -311,8 +306,6 @@ class Email extends PHPMailer
     public function setSender($address, $name = '')
     {
         global $gSettingsManager;
-
-        $address = StringUtils::strToLower($address);
 
         // save sender if a copy of the mail should be send to him
         $this->emSender = array('address' => $address, 'name' => $name);
