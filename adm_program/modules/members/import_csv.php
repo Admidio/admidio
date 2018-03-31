@@ -109,19 +109,11 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
                     switch ($field->getValue('usf_type'))
                     {
                         case 'CHECKBOX':
-                            if($columnValueToLower === 'j'
-                                || $columnValueToLower === StringUtils::strToLower($gL10n->get('SYS_YES'))
-                                || $columnValueToLower === 'y'
-                                || $columnValueToLower === 'yes'
-                                || $columnValueToLower === '1')
+                            if(in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true))
                             {
                                 $user->setValue($usfNameIntern, '1');
                             }
-                            if($columnValueToLower === 'n'
-                                || $columnValueToLower === StringUtils::strToLower($gL10n->get('SYS_NO'))
-                                || $columnValueToLower === 'no'
-                                || $columnValueToLower === '0'
-                                || $columnValue === '')
+                            if(in_array($columnValueToLower, array('n', 'no', '0', '', StringUtils::strToLower($gL10n->get('SYS_NO'))), true))
                             {
                                 $user->setValue($usfNameIntern, '0');
                             }
