@@ -12,7 +12,7 @@ final class StringUtils
     /**
      * In case the multibyte functions are not supported, we fallback to a no-multibyte function
      * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
-     * admStrToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
+     * StringUtils::strToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
      * @param string $string
      * @return string
      */
