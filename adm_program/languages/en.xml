@@ -744,7 +744,7 @@
   <string name="ORG_PARENT_ORGANIZATION">Parent organization</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Define parent organization here. Parent organizations are able to create events and announcements for example which will be displayed in selected (child) organization.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Password strength</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Here you can specify how safe and complex passwords must be at least.\nThe value in brackets indicates how many attempts are required on average until the password is determined.\n\n No: risky password (&lt;10^3)\n Low: Protection against throttled online attacks. (&lt;10^6)\n Middle: protection against unrestricted online attacks.(&lt;10^8)\n High: Moderate protection against offline hashing. (&lt;10 ^10)\n Extreme: Strong protection against offline hashing. (&gt;= 10^10)</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Here you can specify how safe and complex passwords must be at least.\nThe value in brackets indicates how many attempts are required on average until the password is determined.\n\n No: risky password (&lt;10^3)\n Low: Protection against throttled online attacks. (&lt;10^6)\n Middle: protection against unrestricted online attacks.(&lt;10^8)\n High: Moderate protection against offline hashing. (&lt;10 ^10)\n Very high: Strong protection against offline hashing. (&gt;= 10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">None</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Low</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middle</string>
