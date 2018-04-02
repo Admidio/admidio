@@ -163,7 +163,7 @@ if($plgDatesResult['numResults'] > 0)
         // show preview text
         if($plgShowFullDescription === 1)
         {
-            echo '<div>'.$plg_date->getValue('dat_description').'</div>';
+            echo '<div>'.$plgDate->getValue('dat_description').'</div>';
         }
         elseif($plg_dates_show_preview > 0)
         {
