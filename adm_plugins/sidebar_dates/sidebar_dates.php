@@ -184,7 +184,7 @@ if($plgDatesResult['numResults'] > 0)
         echo '<hr />';
     }
 
-    // forward to $plg_link_url without any addional parameters
+    // forward to $plg_link_url without any additional parameters
     echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
 }
 else
