@@ -163,7 +163,7 @@ if($plgDatesResult['numResults'] > 0)
         // show preview text
         if($plgShowFullDescription === 1)
         {
-            echo '<div>'.$plg_date->getValue('dat_description').'</div>';
+            echo '<div>'.$plgDate->getValue('dat_description').'</div>';
         }
         elseif($plg_dates_show_preview > 0)
         {
@@ -184,7 +184,7 @@ if($plgDatesResult['numResults'] > 0)
         echo '<hr />';
     }
 
-    // forward to $plg_link_url without any addional parameters
+    // forward to $plg_link_url without any additional parameters
     echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
 }
 else
@@ -202,24 +202,24 @@ echo '</div>';
 function pluginDatesCloseTags($html)
 {
     preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
-    $openedtags = $result[1];
+    $openedTags = $result[1];
     preg_match_all('#</([a-z]+)>#iU', $html, $result);
-    $closedtags = $result[1];
-    $lenOpened = count($openedtags);
-    if (count($closedtags) === $lenOpened)
+    $closedTags = $result[1];
+    $lenOpened = count($openedTags);
+    if (count($closedTags) === $lenOpened)
     {
         return $html;
     }
-    $openedtags = array_reverse($openedtags);
+    $openedTags = array_reverse($openedTags);
     for ($i = 0; $i < $lenOpened; ++$i)
     {
-        if (!in_array($openedtags[$i], $closedtags, true))
+        if (!in_array($openedTags[$i], $closedTags, true))
         {
-            $html .= '</'.$openedtags[$i].'>';
+            $html .= '</'.$openedTags[$i].'>';
         }
         else
         {
-            unset($closedtags[array_search($openedtags[$i], $closedtags, true)]);
+            unset($closedTags[array_search($openedTags[$i], $closedTags, true)]);
         }
     }
     return $html;
