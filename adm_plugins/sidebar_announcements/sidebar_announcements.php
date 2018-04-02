@@ -132,7 +132,7 @@ else
         // show preview text
         if($plgShowFullDescription === 1)
         {
-            echo '<div>'.$plg_announcement->getValue('ann_description').'</div>';
+            echo '<div>'.$plgAnnouncement->getValue('ann_description').'</div>';
         }
         elseif($plg_show_preview > 0)
         {
