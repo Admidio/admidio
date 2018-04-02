@@ -980,7 +980,7 @@
     <string name="ROL_DEPENDENCIES">Abhängigkeiten</string>
     <string name="ROL_DEPENDENT">Abhängig</string>
     <string name="ROL_DISABLE_ROLE">Rolle deaktivieren</string>
-    <string name="ROL_DISABLE_ROLE_DESC">Wenn du #VAR1_BOLD# auswählst, wird die Rolle und alle Mitgliedszuordnungen endgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</string>
+    <string name="ROL_DISABLE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# deaktivierst, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
     <string name="ROL_EDIT_ROLE">Rolle bearbeiten</string>
     <string name="ROL_ENABLE_ROLE">Rolle aktivieren</string>
     <string name="ROL_ENABLE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
