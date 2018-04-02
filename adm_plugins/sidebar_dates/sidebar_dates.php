@@ -202,24 +202,24 @@ echo '</div>';
 function pluginDatesCloseTags($html)
 {
     preg_match_all('#<(?!meta|img|br|hr|input\b)\b([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
-    $openedtags = $result[1];
+    $openedTags = $result[1];
     preg_match_all('#</([a-z]+)>#iU', $html, $result);
-    $closedtags = $result[1];
-    $lenOpened = count($openedtags);
-    if (count($closedtags) === $lenOpened)
+    $closedTags = $result[1];
+    $lenOpened = count($openedTags);
+    if (count($closedTags) === $lenOpened)
     {
         return $html;
     }
-    $openedtags = array_reverse($openedtags);
+    $openedTags = array_reverse($openedTags);
     for ($i = 0; $i < $lenOpened; ++$i)
     {
-        if (!in_array($openedtags[$i], $closedtags, true))
+        if (!in_array($openedTags[$i], $closedTags, true))
         {
-            $html .= '</'.$openedtags[$i].'>';
+            $html .= '</'.$openedTags[$i].'>';
         }
         else
         {
-            unset($closedtags[array_search($openedtags[$i], $closedtags, true)]);
+            unset($closedTags[array_search($openedTags[$i], $closedTags, true)]);
         }
     }
     return $html;
