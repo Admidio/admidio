@@ -514,4 +514,17 @@ class TableRoles extends TableAccess
 
         return false;
     }
+
+    /**
+     * This method checks if the current user is allowed to view this role. Therefore
+     * the view properties of the role will be checked. If it's an event role than
+     * we also check if the user is a member of the roles that could participate to the event.
+     * @deprecated 3.3.0:4.0.0 Switch to new method (isVisible()).
+     */
+    public function viewRole()
+    {
+        $gLogger->warning('DEPRECATED: "role->viewRole()" is deprecated, use "role->isVisible()" instead!');
+
+        return self::isVisible();
+    }
 }
