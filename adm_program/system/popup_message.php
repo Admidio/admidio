@@ -116,15 +116,15 @@ switch ($getType)
         $callbackFunction = 'callbackFormerRoles';
         break;
     case 'rol':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles_function.php', array('mode' => 4, 'rol_id' => $getDatabaseId));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/roles/roles_function.php', array('mode' => 4, 'rol_id' => $getDatabaseId));
         $text = 'ROL_ROLE_DELETE_DESC';
         break;
     case 'rol_enable':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles_function.php', array('mode' => 5, 'rol_id' => $getDatabaseId));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/roles/roles_function.php', array('mode' => 5, 'rol_id' => $getDatabaseId));
         $text = 'ROL_ENABLE_ROLE_DESC';
         break;
     case 'rol_disable':
-        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles_function.php', array('mode' => 3, 'rol_id' => $getDatabaseId));
+        $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/roles/roles_function.php', array('mode' => 3, 'rol_id' => $getDatabaseId));
         $text = 'ROL_DISABLE_ROLE_DESC';
         break;
     case 'room':

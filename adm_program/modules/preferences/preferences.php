@@ -601,7 +601,7 @@ $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION_TEXT.'
 $formSystemInformation->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
 
 // if database version is different to file version, then show database version
-if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) !== 0)
+if($gSystemComponent->getValue('com_version') !== ADMIDIO_VERSION)
 {
     $formSystemInformation->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
 }

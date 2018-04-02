@@ -253,13 +253,10 @@ if($gCurrentUser->isAdministrator() || $getNewUser > 0)
                      WHERE usr_login_name = ?';
             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
-            if($pdoStatement->rowCount() > 0)
+            if($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $getUserId)
             {
-                if(strcmp($pdoStatement->fetchColumn(), $getUserId) !== 0)
-                {
-                    $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
-                    // => EXIT
-                }
+                $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
+                // => EXIT
             }
         }
 

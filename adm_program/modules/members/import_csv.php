@@ -126,7 +126,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
 
                             foreach($arrListValues as $value)
                             {
-                                if(strcmp(StringUtils::strToLower($columnValue), StringUtils::strToLower(trim($arrListValues[$position]))) === 0)
+                                if(StringUtils::strToLower($columnValue) === StringUtils::strToLower(trim($arrListValues[$position])))
                                 {
                                     // if col_value is text than save position if text is equal to text of position
                                     $user->setValue($usfNameIntern, $position);
