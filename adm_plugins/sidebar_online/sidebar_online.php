@@ -14,20 +14,11 @@
  ***********************************************************************************************
  */
 
-// create path to plugin
-$pluginFolderPos = strpos(__FILE__, 'adm_plugins') + 11;
-$pluginFilePos   = strpos(__FILE__, 'sidebar_online.php');
-$pluginFolder    = substr(__FILE__, $pluginFolderPos + 1, $pluginFilePos - $pluginFolderPos - 2);
+$rootPath = dirname(dirname(__DIR__));
+$pluginFolder = basename(__DIR__);
 
-if(!defined('PLUGIN_PATH'))
-{
-    define('PLUGIN_PATH', substr(__FILE__, 0, $pluginFolderPos));
-}
-require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(PLUGIN_PATH. '/'.$pluginFolder.'/config.php');
-
-// Sprachdatei des Plugins einbinden
-$gL10n->addLanguageFolderPath(PLUGIN_PATH. '/'.$pluginFolder.'/languages');
+require_once($rootPath . '/adm_program/system/common.php');
+require_once(__DIR__ . '/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -110,14 +101,14 @@ if($onlineUsersStatement->rowCount() > 0)
     $usrIdMerker   = 0;
     $countVisitors = 0;
 
-    while($row = $onlineUsersStatement->fetchObject())
+    while($row = $onlineUsersStatement->fetch())
     {
-        if($row->ses_usr_id > 0)
+        if($row['ses_usr_id'] > 0)
         {
-            if((int) $row->ses_usr_id !== $usrIdMerker)
+            if((int) $row['ses_usr_id'] !== $usrIdMerker)
             {
                 echo '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
-                    href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row->ses_usr_id)). '">'. $row->usr_login_name. '</a></strong>';
+                    href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['ses_usr_id'])). '">'. $row['usr_login_name']. '</a></strong>';
 
                 // User neben-/untereinander anzeigen
                 if($plg_show_users_side_by_side)
@@ -128,7 +119,7 @@ if($onlineUsersStatement->rowCount() > 0)
                 {
                     echo '<br />';
                 }
-                $usrIdMerker = (int) $row->ses_usr_id;
+                $usrIdMerker = (int) $row['ses_usr_id'];
             }
         }
         else

@@ -112,22 +112,22 @@ $gDb->query($sql);
 $sql = 'SELECT * FROM '.TBL_USERS;
 $usrStatement = $gDb->query($sql);
 
-while($rowUsr = $usrStatement->fetchObject())
+while($rowUsr = $usrStatement->fetch())
 {
     $sql = 'INSERT INTO '.TBL_USER_DATA.' (usd_usr_id, usd_usf_id, usd_value)
-                                   VALUES ('.$rowUsr->usr_id.', '.$usfIdLastName.',  \''.addslashes($rowUsr->usr_last_name).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdFirstName.', \''.addslashes($rowUsr->usr_first_name).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdAddress.',   \''.addslashes($rowUsr->usr_address).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdZipCode.',   \''.addslashes($rowUsr->usr_zip_code).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdCity.',      \''.addslashes($rowUsr->usr_city).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdCountry.',   \''.addslashes($rowUsr->usr_country).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdPhone.',     \''.addslashes($rowUsr->usr_phone).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdMobile.',    \''.addslashes($rowUsr->usr_mobile).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdFax.',       \''.addslashes($rowUsr->usr_fax).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdBirthday.',  \''.addslashes($rowUsr->usr_birthday).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdGender.',    \''.addslashes($rowUsr->usr_gender).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdEmail.',     \''.addslashes($rowUsr->usr_email).'\')
-                                        , ('.$rowUsr->usr_id.', '.$usfIdHomepage.',  \''.addslashes($rowUsr->usr_homepage).'\')';
+                                   VALUES ('.$rowUsr['usr_id'].', '.$usfIdLastName.',  \''.addslashes($rowUsr['usr_last_name']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdFirstName.', \''.addslashes($rowUsr['usr_first_name']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdAddress.',   \''.addslashes($rowUsr['usr_address']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdZipCode.',   \''.addslashes($rowUsr['usr_zip_code']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdCity.',      \''.addslashes($rowUsr['usr_city']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdCountry.',   \''.addslashes($rowUsr['usr_country']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdPhone.',     \''.addslashes($rowUsr['usr_phone']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdMobile.',    \''.addslashes($rowUsr['usr_mobile']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdFax.',       \''.addslashes($rowUsr['usr_fax']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdBirthday.',  \''.addslashes($rowUsr['usr_birthday']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdGender.',    \''.addslashes($rowUsr['usr_gender']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdEmail.',     \''.addslashes($rowUsr['usr_email']).'\')
+                                        , ('.$rowUsr['usr_id'].', '.$usfIdHomepage.',  \''.addslashes($rowUsr['usr_homepage']).'\')';
     $result = $gDb->query($sql);
 }
 
@@ -149,12 +149,12 @@ $gDb->query($sql);
 $sql = 'SELECT * FROM '.TBL_ORGANIZATIONS;
 $orgaStatement = $gDb->query($sql);
 
-while($rowOrga = $orgaStatement->fetchObject())
+while($rowOrga = $orgaStatement->fetch())
 {
     if($orgaStatement->rowCount() > 1)
     {
         $sql = 'INSERT INTO '.TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                        VALUES ('.$rowOrga->org_id.', \'USF\', \'Zusätzliche Daten\', 0, 2)';
+                                        VALUES ('.$rowOrga['org_id'].', \'USF\', \'Zusätzliche Daten\', 0, 2)';
     }
     else
     {
@@ -174,18 +174,18 @@ while($rowOrga = $orgaStatement->fetchObject())
     $gDb->query($sql);
 
     $sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_cat_id = '.$catIdData.'
-             WHERE usf_org_shortname = '.$rowOrga->org_shortname;
+             WHERE usf_org_shortname = '.$rowOrga['org_shortname'];
     $gDb->query($sql);
 
     // Datenbank-Versionsnummer schreiben
     $sql = 'INSERT INTO '.TBL_PREFERENCES.' (prf_org_id, prf_name, prf_value)
-                                     VALUES ('.$rowOrga->org_id.', \'db_version\', \'2.0.0\')';
+                                     VALUES ('.$rowOrga['org_id'].', \'db_version\', \'2.0.0\')';
     $gDb->query($sql);
 
     // Fuer das neue Downloadmodul wird der Root-Ordner in die DB eingetragen
     $sql = 'INSERT INTO '.TBL_FOLDERS.' (fol_org_id, fol_type, fol_name, fol_path, fol_locked, fol_public, fol_timestamp)
-                                 VALUES ('.$rowOrga->org_id.', \'DOWNLOAD\', \'download\', \'' . FOLDER_DATA . '\',
-                                          0, 1, \''.date('Y-m-d h:i:s', time()).'\')';
+                                 VALUES ('.$rowOrga['org_id'].', \'DOWNLOAD\', \'download\', \'' . FOLDER_DATA . '\',
+                                          0, 1, \''.date('Y-m-d h:i:s').'\')';
     $gDb->query($sql);
 }
 

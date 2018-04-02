@@ -744,7 +744,7 @@
   <string name="ORG_PARENT_ORGANIZATION">Organização pai</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Defina as organizações pai aqui. Organizações pai podem, por exemplo, criar eventos e anúncios, que seriam exibidos na organização filha.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Força da palavra-passe</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Especifique a segurança mínima de uma palavra-passe. \nO valor entre parênteses indica quantas tentativas seriam necessárias para alguém acertar a palavra-passe. \n\nNenhuma: palavra-passe arriscada. (&lt;10^3)\nBaixa: proteção contra ataques online de força-bruta. (&lt;10^6)\nMédia: proteção contra ataques online sem restrições. (&lt;10^8)\nAlta: proteção padrão contra ataques offline-hash. (&lt;10^10)\nExtrema: Forte proteção contra ataques offline-hash. (&gt;=10^10)</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Especifique a segurança mínima de uma palavra-passe. \nO valor entre parênteses indica quantas tentativas seriam necessárias para alguém acertar a palavra-passe. \n\nNenhuma: palavra-passe arriscada. (&lt;10^3)\nBaixa: proteção contra ataques online de força-bruta. (&lt;10^6)\nMédia: proteção contra ataques online sem restrições. (&lt;10^8)\nAlta: proteção padrão contra ataques offline-hash. (&lt;10^10)\nMuito alta: Forte proteção contra ataques offline-hash. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Nenhuma</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Baixa</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Razoável</string>

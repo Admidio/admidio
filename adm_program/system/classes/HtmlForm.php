@@ -219,7 +219,7 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['data-admidio'] !== '')
         {
-            $this->addAttribute('data-admidio', $optionsAll['data-admidio']);
+            $this->addAttribute('data-admidio', (string) $optionsAll['data-admidio']);
         }
 
         if ($optionsAll['onClickText'] !== '')

@@ -455,7 +455,7 @@ class TableRoles extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        global $gCurrentOrganization, $gL10n;
+        global $gCurrentOrganization, $gL10n, $gCurrentUser;
 
         if($columnName === 'rol_cat_id' && isset($gCurrentUser))
         {
