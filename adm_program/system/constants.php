@@ -78,8 +78,8 @@ define('CURRENT_URL', SCHEME . '://' . HOST . $_SERVER['REQUEST_URI']); // https
 // FOLDERS
 define('FOLDER_DATA', '/adm_my_files');
 define('FOLDER_CLASSES', '/adm_program/system/classes');
-define('FOLDER_LIBS_SERVER', '/adm_program/libs'); // PHP libs
-define('FOLDER_LIBS_CLIENT', '/adm_program/libs'); // JS/CSS libs
+define('FOLDER_LIBS_SERVER', '/adm_program/libs/server'); // PHP libs
+define('FOLDER_LIBS_CLIENT', '/adm_program/libs/client'); // JS/CSS libs
 define('FOLDER_LANGUAGES', '/adm_program/languages');
 define('FOLDER_THEMES', '/adm_themes');
 define('FOLDER_MODULES', '/adm_program/modules');
