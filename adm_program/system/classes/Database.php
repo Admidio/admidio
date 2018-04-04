@@ -563,7 +563,7 @@ class Database
     /**
      * Returns the ID of the unique id column of the last INSERT operation.
      * This method replace the old method Database#insert_id.
-     * @return string Return ID value of the last INSERT operation.
+     * @return int Return ID value of the last INSERT operation.
      * @see Database#insert_id
      */
     public function lastInsertId()
@@ -572,10 +572,10 @@ class Database
         {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
 
-            return $lastValStatement->fetchColumn();
+            return (int) $lastValStatement->fetchColumn();
         }
 
-        return $this->pdo->lastInsertId();
+        return (int) $this->pdo->lastInsertId();
     }
 
     /**
@@ -1056,7 +1056,7 @@ class Database
      * Returns the ID of the unique id column of the last INSERT operation.
      * @deprecated 3.1.0:4.0.0 Renamed method to camelCase style.
      *             Please use methods Database#lastInsertId instead.
-     * @return string Return ID value of the last INSERT operation.
+     * @return int Return ID value of the last INSERT operation.
      * @see Database#lastInsertId
      */
     public function insert_id()
