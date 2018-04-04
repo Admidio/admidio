@@ -121,7 +121,7 @@ class ProfileFields
         }
 
         // if id-field not exists then return zero
-        if (admStrContains($column, '_id'))
+        if (StringUtils::strContains($column, '_id'))
         {
             return 0;
         }
@@ -238,7 +238,7 @@ class ProfileFields
                         && (StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)))
                         {
                             // if there is imagefile and text separated by | then explode them
-                            if (admStrContains($listValue, '|'))
+                            if (StringUtils::strContains($listValue, '|'))
                             {
                                 list($listValueImage, $listValueText) = explode('|', $listValue);
                             }

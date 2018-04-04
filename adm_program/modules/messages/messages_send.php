@@ -173,7 +173,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         foreach ($postTo as $value)
         {
             // check if role or user is given
-            if (admStrContains($value, ':'))
+            if (StringUtils::strContains($value, ':'))
             {
                 $moduleMessages = new ModuleMessages();
                 $group = $moduleMessages->msgGroupSplit($value);
