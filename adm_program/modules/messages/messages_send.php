@@ -173,7 +173,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         foreach ($postTo as $value)
         {
             // check if role or user is given
-            if (strpos($value, ':') > 0)
+            if (admStrContains($value, ':'))
             {
                 $moduleMessages = new ModuleMessages();
                 $group = $moduleMessages->msgGroupSplit($value);
@@ -300,9 +300,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
                 }
             }
-            $receiverString .= ' | ' . $value;
         }
-        $receiverString = substr($receiverString, 3);
+        $receiverString = implode(' | ', $postTo);
     }
     else
     {

@@ -1233,10 +1233,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control');
         $name = $id;
 
-        if (count($values) > 0)
-        {
-            ++$this->countElements;
-        }
+        ++$this->countElements;
 
         // create array with all options
         $optionsDefault = array(
@@ -1258,7 +1255,8 @@ class HtmlForm extends HtmlFormBasic
         $optionsAll = array_replace($optionsDefault, $options);
 
         // disable field
-        if ($optionsAll['property'] === self::FIELD_DISABLED)
+        if ($optionsAll['property'] === self::FIELD_DISABLED ||
+            ($optionsAll['firstEntry'] === '' && !$optionsAll['showContextDependentFirstEntry'] && count($values) === 0))
         {
             $attributes['disabled'] = 'disabled';
         }
@@ -1332,6 +1330,10 @@ class HtmlForm extends HtmlFormBasic
             {
                 $this->addOption('', ' ', null, $defaultEntry);
             }
+        }
+        elseif (count($values) === 0)
+        {
+            $this->addOption('', '');
         }
 
         $optionGroup = null;

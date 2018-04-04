@@ -50,7 +50,7 @@ function prepareReceivers($receiversString)
         {
             $receiverNames .= '; ' . substr($receivers, 5);
         }
-        elseif (strpos($receivers, ':') > 0)
+        elseif (admStrContains($receivers, ':'))
         {
             $moduleMessages = new ModuleMessages();
             $receiverNames .= '; ' . $moduleMessages->msgGroupNameSplit($receivers);
