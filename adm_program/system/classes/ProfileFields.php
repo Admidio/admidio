@@ -240,8 +240,7 @@ class ProfileFields
                             // if there is imagefile and text separated by | then explode them
                             if (admStrContains($listValue, '|'))
                             {
-                                $listValueImage = substr($listValue, 0, strpos($listValue, '|'));
-                                $listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+                                list($listValueImage, $listValueText) = explode('|', $listValue);
                             }
                             else
                             {

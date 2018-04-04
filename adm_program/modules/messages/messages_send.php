@@ -300,9 +300,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                     $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
                 }
             }
-            $receiverString .= ' | ' . $value;
         }
-        $receiverString = substr($receiverString, 3);
+        $receiverString = implode(' | ', $postTo);
     }
     else
     {
