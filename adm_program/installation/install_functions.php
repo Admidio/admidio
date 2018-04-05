@@ -52,17 +52,15 @@ function checkDatabaseVersion(Database $database)
 {
     global $gL10n;
 
-    $message = '';
-
     // check database version
     if (version_compare($database->getVersion(), $database->getMinimumRequiredVersion(), '<'))
     {
-        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_MYSQL_VERSION', array(ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
-                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
+        return $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
+               $gL10n->get('INS_WRONG_MYSQL_VERSION', array(ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
+                           '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
     }
 
-    return $message;
+    return '';
 }
 
 /**
@@ -73,17 +71,15 @@ function checkPhpVersion()
 {
     global $gL10n;
 
-    $message = '';
-
     // check PHP version
     if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
     {
-        $message = $gL10n->get('SYS_PHP_VERSION') . ': <strong>' . PHP_VERSION . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_PHP_VERSION', array(ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
-                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
+        return $gL10n->get('SYS_PHP_VERSION') . ': <strong>' . PHP_VERSION . '</strong><br /><br />' .
+               $gL10n->get('INS_WRONG_PHP_VERSION', array(ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
+                           '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
     }
 
-    return $message;
+    return '';
 }
 
 /**

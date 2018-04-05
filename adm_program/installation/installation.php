@@ -84,11 +84,8 @@ if (!in_array($step, $availableSteps, true))
     // => EXIT
 }
 
-$message = '';
-
 // create language and language data object to handle translations
 $language = '';
-
 if (isset($_SESSION['language']))
 {
     $language = $_SESSION['language'];
@@ -122,7 +119,7 @@ if (is_file($pathConfigFile))
         // => EXIT
     }
 
-    // now check if a valid installation exists.
+    // now check if a valid installation exists
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->queryPrepared($sql, array(), false);
 

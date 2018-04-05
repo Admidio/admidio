@@ -49,7 +49,6 @@ require_once(ADMIDIO_PATH . '/adm_program/installation/update_functions.php');
 
 define('THEME_URL', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'int', array('defaultValue' => 1));
-$message = '';
 
 // connect to database
 try
