@@ -16,19 +16,19 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php')
 if (isset($_POST['db_host']))
 {
     // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-    $_SESSION['db_type']     = $_POST['db_type'];
-    $_SESSION['db_host']     = $_POST['db_host'];
-    $_SESSION['db_port']     = $_POST['db_port'];
-    $_SESSION['db_database'] = $_POST['db_database'];
-    $_SESSION['db_user']     = $_POST['db_user'];
-    $_SESSION['db_password'] = $_POST['db_password'];
-    $_SESSION['prefix']      = $_POST['db_prefix'];
+    $_SESSION['db_engine']    = $_POST['db_engine'];
+    $_SESSION['db_host']      = $_POST['db_host'];
+    $_SESSION['db_port']      = $_POST['db_port'];
+    $_SESSION['db_name']      = $_POST['db_name'];
+    $_SESSION['db_username']  = $_POST['db_username'];
+    $_SESSION['db_password']  = $_POST['db_password'];
+    $_SESSION['table_prefix'] = $_POST['table_prefix'];
 
-    if ($_SESSION['db_type']     === ''
-    ||  $_SESSION['db_host']     === ''
-    ||  $_SESSION['db_database'] === ''
-    ||  $_SESSION['db_user']     === ''
-    ||  $_SESSION['prefix']      === '')
+    if ($_SESSION['db_engine']    === ''
+    ||  $_SESSION['db_host']      === ''
+    ||  $_SESSION['db_name']      === ''
+    ||  $_SESSION['db_username']  === ''
+    ||  $_SESSION['table_prefix'] === '')
     {
         showNotice(
             $gL10n->get('INS_DATABASE_CONNECTION_NOT_COMPLETELY'),
@@ -40,7 +40,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check DB-type
-    if (!in_array($_SESSION['db_type'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true))
+    if (!in_array($_SESSION['db_engine'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true))
     {
         showNotice(
             $gL10n->get('INS_DATABASE_TYPE_INVALID'),
@@ -85,7 +85,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check database
-    if (strlen($_SESSION['db_database']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_database']) !== 1)
+    if (strlen($_SESSION['db_name']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_name']) !== 1)
     {
         showNotice(
             $gL10n->get('INS_DATABASE_NAME_INVALID'),
@@ -97,7 +97,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check user
-    if (strlen($_SESSION['db_user']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_user']) !== 1)
+    if (strlen($_SESSION['db_username']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_username']) !== 1)
     {
         showNotice(
             $gL10n->get('INS_DATABASE_USER_INVALID'),
@@ -116,7 +116,7 @@ if (isset($_POST['db_host']))
     }
 
     // Check prefix
-    if (strlen($_SESSION['prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['prefix']) !== 1)
+    if (strlen($_SESSION['table_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['table_prefix']) !== 1)
     {
         showNotice(
             $gL10n->get('INS_TABLE_PREFIX_INVALID'),
@@ -133,7 +133,7 @@ if (isset($_POST['db_host']))
         // check database connections
         try
         {
-            $db = new Database($_SESSION['db_type'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_database'], $_SESSION['db_user'], $_SESSION['db_password']);
+            $db = new Database($_SESSION['db_engine'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
         }
         catch (AdmException $e)
         {
@@ -155,7 +155,7 @@ if (isset($_POST['db_host']))
         }
 
         // now check if a valid installation exists.
-        $sql = 'SELECT org_id FROM ' . $_SESSION['prefix'] . '_organizations';
+        $sql = 'SELECT org_id FROM ' . $_SESSION['table_prefix'] . '_organizations';
         $pdoStatement = $db->queryPrepared($sql, array(), false);
 
         if ($pdoStatement !== false && $pdoStatement->rowCount() > 0)

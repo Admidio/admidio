@@ -46,9 +46,9 @@ if (!isset($_SESSION['create_config_file']))
 
 if (!isset($g_tbl_praefix))
 {
-    if (isset($_SESSION['prefix']))
+    if (isset($_SESSION['table_prefix']))
     {
-        $g_tbl_praefix = $_SESSION['prefix'];
+        $g_tbl_praefix = $_SESSION['table_prefix'];
     }
     else
     {
@@ -148,13 +148,13 @@ if (is_file($pathConfigFile))
     if ($step === 'welcome')
     {
         // save database parameters of config.php in session variables
-        $_SESSION['db_type']     = DB_ENGINE;
-        $_SESSION['db_host']     = DB_HOST;
-        $_SESSION['db_port']     = DB_PORT;
-        $_SESSION['db_database'] = DB_NAME;
-        $_SESSION['db_user']     = DB_USERNAME;
-        $_SESSION['db_password'] = DB_PASSWORD;
-        $_SESSION['prefix']      = TABLE_PREFIX;
+        $_SESSION['db_engine']    = DB_ENGINE;
+        $_SESSION['db_host']      = DB_HOST;
+        $_SESSION['db_port']      = DB_PORT;
+        $_SESSION['db_name']      = DB_NAME;
+        $_SESSION['db_username']  = DB_USERNAME;
+        $_SESSION['db_password']  = DB_PASSWORD;
+        $_SESSION['table_prefix'] = TABLE_PREFIX;
 
         admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
         // => EXIT
