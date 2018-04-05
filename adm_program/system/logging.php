@@ -50,7 +50,7 @@ function createAdmidioLogger($logDirectory, $logLevel)
     // Params: format, dateFormat, allowInlineLineBreaks, ignoreEmptyContextAndExtra
     $formatter = new LineFormatter(null, 'Y-m-d H:i:s.u', false, true);
 
-    $rotatingFileHandler = new RotatingFileHandler($logDirectory . '/admidio.log', 0, $logLevel, true, 0666);
+    $rotatingFileHandler = new RotatingFileHandler($logDirectory . '/admidio.log', 0, $logLevel, true, FileSystemUtils::DEFAULT_MODE_FILE);
     $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
 
     $rotatingFileHandler->setFormatter($formatter);
