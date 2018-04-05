@@ -206,6 +206,7 @@ $administrator->setPassword($_SESSION['user_password']);
 $administrator->setValue('usr_usr_id_create', $currUsrId);
 $administrator->setValue('usr_timestamp_create', DATETIME_NOW);
 $administrator->save(false); // no registered user -> UserIdCreate couldn't be filled
+$adminUsrId = (int) $administrator->getValue('usr_id');
 
 // write all preferences from preferences.php in table adm_preferences
 require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
@@ -221,7 +222,7 @@ $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 // create all necessary data for this organization
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 $gSettingsManager->setMulti($defaultOrgPreferences, false);
-$gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
+$gCurrentOrganization->createBasicData($adminUsrId);
 
 // create default room for room module in database
 $sql = 'INSERT INTO '.TBL_ROOMS.'
@@ -237,7 +238,7 @@ $db->queryPrepared($sql, $params);
 
 // first create a user object "current user" with administrator rights
 // because administrator is allowed to edit firstname and lastname
-$gCurrentUser = new User($db, $gProfileFields, $administrator->getValue('usr_id'));
+$gCurrentUser = new User($db, $gProfileFields, $adminUsrId);
 $gCurrentUser->setValue('LAST_NAME',  $_SESSION['user_last_name']);
 $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
 $gCurrentUser->setValue('EMAIL',      $_SESSION['user_email']);
