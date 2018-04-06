@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Redirect to choosen weblink
+ * Redirect to chosen weblink
  *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
