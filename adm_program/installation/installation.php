@@ -42,18 +42,6 @@ else
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 
-// start PHP session
-try
-{
-    Session::start('ADMIDIO_INSTALLATION');
-}
-catch (\RuntimeException $exception)
-{
-    // TODO
-}
-
-define('THEME_URL', 'layout');
-
 $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');
 
 if (empty($_GET['step']))
@@ -70,6 +58,18 @@ if (!in_array($step, $availableSteps, true))
     admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')));
     // => EXIT
 }
+
+// start PHP session
+try
+{
+    Session::start('ADMIDIO_INSTALLATION');
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
+}
+
+define('THEME_URL', 'layout');
 
 // create language and language data object to handle translations
 $language = '';
