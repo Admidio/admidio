@@ -128,7 +128,7 @@ if (isset($_POST['db_host']))
     }
 
     // for security reasons only check database connection if no config file exists
-    if (!is_file($pathConfigFile))
+    if (!is_file($configPath))
     {
         // check database connections
         try

@@ -109,7 +109,7 @@ if (isset($_POST['user_last_name']))
 }
 
 // if config file exists than don't create a new one
-if (is_file($pathConfigFile))
+if (is_file($configPath))
 {
     admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'start_installation')));
     // => EXIT
@@ -160,7 +160,7 @@ $configFileContent = admStrMultiReplace($configFileContent, $replaces);
 $_SESSION['config_file_content'] = $configFileContent;
 
 // now save new configuration file in Admidio folder if user has write access to this folder
-$configFileHandle = @fopen($pathConfigFile, 'ab');
+$configFileHandle = @fopen($configPath, 'ab');
 
 if ($configFileHandle)
 {

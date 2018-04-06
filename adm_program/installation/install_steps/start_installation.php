@@ -14,7 +14,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
 }
 
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-if (!is_file($pathConfigFile))
+if (!is_file($configPath))
 {
     showNotice(
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),

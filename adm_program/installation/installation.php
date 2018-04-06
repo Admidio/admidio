@@ -96,13 +96,11 @@ $gL10n = new Language($gLanguageData);
 
 $language = $gL10n->getLanguage();
 
-$pathConfigFile = ADMIDIO_PATH . FOLDER_DATA . '/config.php';
-
 $hostnameRegex = '/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/';
 $sqlIdentifiersRegex = '/^[a-zA-Z]([a-zA-Z0-9_]*[a-zA-Z0-9])?$/';
 
 // if config file exists then connect to database
-if (is_file($pathConfigFile))
+if (is_file($configPath))
 {
     try
     {
