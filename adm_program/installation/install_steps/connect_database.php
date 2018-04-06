@@ -19,7 +19,7 @@ if (!isset($_SESSION['language']))
     if (!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
     {
         showNotice(
-            $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
+            $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
             $gL10n->get('SYS_BACK'),
             'layout/back.png'

@@ -289,7 +289,7 @@
   <string name="INS_INSTALLATION_VERSION">Instalación de la versión #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">La instalación se ha realizado con éxito</string>
   <string name="INS_INTERN">interno</string>
-  <string name="INS_LANGUAGE_NOT_CHOOSEN">no se ha seleccionado un lenguaje.</string>
+  <string name="INS_LANGUAGE_NOT_CHOSEN">no se ha seleccionado un lenguaje.</string>
   <string name="INS_MEMBERSHIP">membresía</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">No se pudo encontrar la instalación actual. Si usted usó Admidio 1.x actualice primero a Admidio 2.x  Después podrá actualizar la versión a #VAR1#. Si ya está usando Admidio 2.x o superior, por favor revise la consistencia de su base de datos.</string>

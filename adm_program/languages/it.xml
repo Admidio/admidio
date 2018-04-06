@@ -216,7 +216,7 @@
   <string name="INS_INSTALLATION_VERSION">Installazione dell vaersione #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">L\'installazione ha avuto successo</string>
   <string name="INS_INTERN">Interno</string>
-  <string name="INS_LANGUAGE_NOT_CHOOSEN">Nessuna lingua è stata selezionata.</string>
+  <string name="INS_LANGUAGE_NOT_CHOSEN">Nessuna lingua è stata selezionata.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Non è stato possibile trovare l\'installazione corrente. Se hai usato Admidio 1.x aggiorna prima a Admidio 2.x. Solo successivamente puoi aggiornare l\'installazione alla versione #VAR1#. Se stai già usando Admidio 2.x o una versione superiore per favore verifica la correttezza del tuo database.</string>
@@ -682,7 +682,7 @@
   <string name="PRO_PHOTO_DELETED">L\'immagine del profilo è stata eliminata.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">La dimensione della foto caricata eccede la dimensione consentita dal server di #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Solo foto di formato JPG e PNG sono consentite.</string>
-  <string name="PRO_PHOTO_NOT_CHOOSEN">Nessun file di immagine selezionato.</string>
+  <string name="PRO_PHOTO_NOT_CHOSEN">Nessun file di immagine selezionato.</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">La dimensione dell\'immagine caricata eccede la risoluzione consentita dal server di #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">La nuova immagine del profilo è stata salvata con successo.</string>
   <string name="PRO_PROFILE">Profilo</string>

@@ -264,7 +264,7 @@
   <string name="INS_INSTALLATION_VERSION">Installation af version #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installationen blev afsluttet med sucess</string>
   <string name="INS_INTERN">Intern</string>
-  <string name="INS_LANGUAGE_NOT_CHOOSEN">Der er ikke valgt noget sprog.</string>
+  <string name="INS_LANGUAGE_NOT_CHOSEN">Der er ikke valgt noget sprog.</string>
   <string name="INS_MEMBERSHIP">Medlemskab</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Kunne ikke finde den nuværende installation. Hvis du bruger Admidio 1.x, skal du updatere til version 2.x først. Herefter kan du opdatere til version #VAR1#. Hvis du allerede bruger Admidio 2.x eller højere skal du checke forbindelsen til samt integriteten af din database.</string>
@@ -861,7 +861,7 @@
   <string name="PRO_PHOTO_DELETED">Profil billede er blevet slettet.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Størrelsen af det overførte billede overskrider den filstørrelse der er tilladt her som er #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Kun JPG og PNG billedeformater er tilladt.</string>
-  <string name="PRO_PHOTO_NOT_CHOOSEN">Ingen billed fil valgt.</string>
+  <string name="PRO_PHOTO_NOT_CHOSEN">Ingen billed fil valgt.</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Det overførte billede overskrider den opløsning som er tilladt her som er #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">Nyt profil billede er blevet gemt.</string>
   <string name="PRO_PROFILE">Profil</string>

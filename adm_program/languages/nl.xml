@@ -235,7 +235,7 @@
   <string name="INS_INSTALLATION_VERSION">Installatie van versie #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installatie succesvol</string>
   <string name="INS_INTERN">Interne</string>
-  <string name="INS_LANGUAGE_NOT_CHOOSEN">Geen taal geselecteerd.</string>
+  <string name="INS_LANGUAGE_NOT_CHOSEN">Geen taal geselecteerd.</string>
   <string name="INS_MEMBERSHIP">Lidmaatschap</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organisatie #VAR1_BOLD# bestaat reeds. Gelieve een andere naam te gebruiken.</string>
@@ -768,7 +768,7 @@
   <string name="PRO_PHOTO_DELETED">Profielfoto is verwijderd.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Grootte van geuploade foto is groter dan toegestane grootte van #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Alleen foto\'s in JPG en PNG formaat zijn toegestaan.</string>
-  <string name="PRO_PHOTO_NOT_CHOOSEN">Geen fotobestand geselecteerd.</string>
+  <string name="PRO_PHOTO_NOT_CHOSEN">Geen fotobestand geselecteerd.</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Grootte van geuploade foto is groter dan toegestane resolutie van #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">Nieuwe profielfoto is succesvol opgeslagen.</string>
   <string name="PRO_PROFILE">Profiel</string>

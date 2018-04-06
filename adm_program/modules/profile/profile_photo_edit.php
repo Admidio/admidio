@@ -219,7 +219,7 @@ elseif($getMode === 'upload')
     // Kontrolle ob Fotos ausgewaehlt wurden
     if(!is_file($_FILES['userfile']['tmp_name'][0]))
     {
-        $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
+        $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOSEN'));
         // => EXIT
     }
 
