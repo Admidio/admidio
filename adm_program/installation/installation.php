@@ -39,19 +39,6 @@ else
     $g_root_path    = '../..';
 }
 
-if (!isset($g_tbl_praefix))
-{
-    if (isset($_SESSION['table_prefix']))
-    {
-        $g_tbl_praefix = $_SESSION['table_prefix'];
-    }
-    else
-    {
-        // default praefix is "adm" because of compatibility to older versions
-        $g_tbl_praefix = 'adm';
-    }
-}
-
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 
