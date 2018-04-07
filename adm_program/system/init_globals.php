@@ -22,38 +22,38 @@ if(!isset($gDebug) || !$gDebug)
 // create database object and establish connection to database
 if(!isset($gDbType))
 {
-    $gDbType = 'mysql';
+    $gDbType = 'mysql'; // DB_ENGINE
+}
+
+if(!isset($g_adm_srv))
+{
+    $g_adm_srv = null; // DB_HOST
+}
+
+if (!isset($g_adm_port))
+{
+    $g_adm_port = null; // DB_PORT
+}
+
+if (!isset($g_adm_db))
+{
+    $g_adm_db = null; // DB_NAME
+}
+
+if (!isset($g_adm_usr))
+{
+    $g_adm_usr = null; // DB_USERNAME
+}
+
+if (!isset($g_adm_pw))
+{
+    $g_adm_pw = null; // DB_PASSWORD
 }
 
 // default prefix is set to 'adm' because of compatibility to old versions
 if(!isset($g_tbl_praefix))
 {
-    $g_tbl_praefix = 'adm';
-}
-
-if(!isset($g_adm_srv))
-{
-    $g_adm_srv = null;
-}
-
-if (!isset($g_adm_port))
-{
-    $g_adm_port = null;
-}
-
-if (!isset($g_adm_db))
-{
-    $g_adm_db = null;
-}
-
-if (!isset($g_adm_usr))
-{
-    $g_adm_usr = null;
-}
-
-if (!isset($g_adm_pw))
-{
-    $g_adm_pw = null;
+    $g_tbl_praefix = 'adm'; // TABLE_PREFIX
 }
 
 // set default password-hash algorithm

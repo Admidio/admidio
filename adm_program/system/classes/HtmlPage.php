@@ -13,7 +13,7 @@
  * This class creates a html page with head and body and integrates some Admidio
  * specific elements like css files, javascript files and javascript code. It
  * also provides some methods to easily add new html data to the page. The generated
- * page will automatically integrate the choosen theme. You can optional disable the
+ * page will automatically integrate the chosen theme. You can optional disable the
  * integration of the theme files.
  *
  * **Code example:**

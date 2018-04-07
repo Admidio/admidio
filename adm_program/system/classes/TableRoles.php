@@ -457,7 +457,7 @@ class TableRoles extends TableAccess
     {
         global $gCurrentOrganization, $gL10n, $gCurrentUser;
 
-        if($columnName === 'rol_cat_id' && isset($gCurrentUser))
+        if($columnName === 'rol_cat_id' && isset($gCurrentUser) && $gCurrentUser instanceof User)
         {
             $category = new TableCategory($this->db, $newValue);
 

@@ -19,7 +19,7 @@ if (!isset($_SESSION['language']))
     if (!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
     {
         showNotice(
-            $gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'),
+            $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
             $gL10n->get('SYS_BACK'),
             'layout/back.png'
@@ -33,54 +33,55 @@ if (!isset($_SESSION['language']))
     }
 }
 
-// initialize form data
-if (isset($_SESSION['db_host']))
-{
-    $dbType   = $_SESSION['db_type'];
-    $host     = $_SESSION['db_host'];
-    $port     = $_SESSION['db_port'];
-    $database = $_SESSION['db_database'];
-    $user     = $_SESSION['db_user'];
-    $prefix   = $_SESSION['prefix'];
-}
-else
-{
-    $dbType   = '';
-    $host     = '';
-    $port     = '';
-    $database = '';
-    $user     = '';
-    $prefix   = 'adm';
-}
-
+// HTML-Form Regex-Patterns
 $hostnameRegex = '(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])';
 $ipv4Regex = '(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
 $ipv6Regex = '(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}';
 $hostRegex = '^(' . $hostnameRegex . '|' . $ipv4Regex . '|' . $ipv6Regex . ')$';
 $sqlIdentifiersRegex = '^[a-zA-Z]([a-zA-Z0-9_]*[a-zA-Z0-9])?$';
 
+// initialize form data
+if (isset($_SESSION['db_host']))
+{
+    $dbEngine    = $_SESSION['db_engine'];
+    $dbHost      = $_SESSION['db_host'];
+    $dbPort      = $_SESSION['db_port'];
+    $dbName      = $_SESSION['db_name'];
+    $dbUsername  = $_SESSION['db_username'];
+    $tablePrefix = $_SESSION['table_prefix'];
+}
+else
+{
+    $dbEngine    = '';
+    $dbHost      = '';
+    $dbPort      = '';
+    $dbName      = '';
+    $dbUsername  = '';
+    $tablePrefix = 'adm';
+}
+
 // create a page to enter all necessary database connection information
 $form = new HtmlFormInstallation('installation-form', safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
 $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
 $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
 $form->addSelectBoxFromXml(
-    'db_type', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
-    'identifier', 'name', array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $dbType)
+    'db_engine', $gL10n->get('INS_DATABASE_SYSTEM'), ADMIDIO_PATH.'/adm_program/system/databases.xml',
+    'identifier', 'name', array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
 );
 $form->addInput(
-    'db_host', $gL10n->get('SYS_HOST'), $host,
+    'db_host', $gL10n->get('SYS_HOST'), $dbHost,
     array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'INS_DATABASE_HOST_INFO')
 );
 $form->addInput(
-    'db_port', $gL10n->get('SYS_PORT'), $port,
+    'db_port', $gL10n->get('SYS_PORT'), $dbPort,
     array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 65535, 'step' => 1, 'helpTextIdLabel' => 'INS_DATABASE_PORT_INFO')
 );
 $form->addInput(
-    'db_database', $gL10n->get('SYS_DATABASE'), $database,
+    'db_name', $gL10n->get('SYS_DATABASE'), $dbName,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'db_user', $gL10n->get('SYS_USERNAME'), $user,
+    'db_username', $gL10n->get('SYS_USERNAME'), $dbUsername,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
@@ -88,7 +89,7 @@ $form->addInput(
     array('type' => 'password')
 );
 $form->addInput(
-    'db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix,
+    'table_prefix', $gL10n->get('INS_TABLE_PREFIX'), $tablePrefix,
     array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
 );
 $form->closeGroupBox();

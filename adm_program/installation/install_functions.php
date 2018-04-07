@@ -52,38 +52,15 @@ function checkDatabaseVersion(Database $database)
 {
     global $gL10n;
 
-    $message = '';
-
     // check database version
     if (version_compare($database->getVersion(), $database->getMinimumRequiredVersion(), '<'))
     {
-        $message = $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_MYSQL_VERSION', array(ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
-                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
+        return $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
+               $gL10n->get('INS_WRONG_MYSQL_VERSION', array(ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
+                           '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
     }
 
-    return $message;
-}
-
-/**
- * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
- * @return string
- */
-function checkPhpVersion()
-{
-    global $gL10n;
-
-    $message = '';
-
-    // check PHP version
-    if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
-    {
-        $message = $gL10n->get('SYS_PHP_VERSION') . ': <strong>' . PHP_VERSION . '</strong><br /><br />' .
-                   $gL10n->get('INS_WRONG_PHP_VERSION', array(ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
-                               '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
-    }
-
-    return $message;
+    return '';
 }
 
 /**
@@ -137,11 +114,38 @@ function disableSoundexSearchIfPgSql(Database $db)
 }
 
 /**
+ * prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
+ * @deprecated 3.3.0:4.0.0 Dropped without replacement.
+ * @return string
+ */
+function checkPhpVersion()
+{
+    global $gL10n, $gLogger;
+
+    $gLogger->warning('DEPRECATED: "checkPhpVersion()" is deprecated without replacement!');
+
+    // check PHP version
+    if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
+    {
+        return $gL10n->get('SYS_PHP_VERSION') . ': <strong>' . PHP_VERSION . '</strong><br /><br />' .
+            $gL10n->get('INS_WRONG_PHP_VERSION', array(ADMIDIO_VERSION_TEXT, MIN_PHP_VERSION,
+                '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));
+    }
+
+    return '';
+}
+
+/**
+ * @deprecated 3.3.0:4.0.0 Dropped without replacement.
  * @param string $message
  * @return string
  */
 function getErrorMessage($message)
 {
+    global $gLogger;
+
+    $gLogger->warning('DEPRECATED: "getErrorMessage()" is deprecated without replacement!');
+
     return '
         <div class="alert alert-danger alert-small" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign"></span>

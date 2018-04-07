@@ -10,7 +10,7 @@
  * Parameters:
  *
  * pho_id:      Id of photo album whose image you want to send
- * photo_nr:    Number of the photo of the choosen album
+ * photo_nr:    Number of the photo of the chosen album
  * usr_id:      (optional) Id of the user who should receive the ecard
  ***********************************************************************************************
  */

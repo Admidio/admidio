@@ -37,38 +37,8 @@ else
     $g_root_path    = '../..';
 }
 
-if (!isset($_SESSION['create_config_file']))
-{
-    $_SESSION['create_config_file'] = true;
-}
-
-if (!isset($g_tbl_praefix))
-{
-    if (isset($_SESSION['prefix']))
-    {
-        $g_tbl_praefix = $_SESSION['prefix'];
-    }
-    else
-    {
-        // default praefix is "adm" because of compatibility to older versions
-        $g_tbl_praefix = 'adm';
-    }
-}
-
 require_once($rootPath . '/adm_program/system/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
-
-// start PHP session
-try
-{
-    Session::start('ADMIDIO_INSTALLATION');
-}
-catch (\RuntimeException $exception)
-{
-    // TODO
-}
-
-define('THEME_URL', 'layout');
 
 $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');
 
@@ -87,11 +57,20 @@ if (!in_array($step, $availableSteps, true))
     // => EXIT
 }
 
-$message = '';
+// start PHP session
+try
+{
+    Session::start('ADMIDIO_INSTALLATION');
+}
+catch (\RuntimeException $exception)
+{
+    // TODO
+}
+
+define('THEME_URL', 'layout');
 
 // create language and language data object to handle translations
 $language = '';
-
 if (isset($_SESSION['language']))
 {
     $language = $_SESSION['language'];
@@ -102,13 +81,8 @@ $gL10n = new Language($gLanguageData);
 
 $language = $gL10n->getLanguage();
 
-$pathConfigFile = ADMIDIO_PATH . FOLDER_DATA . '/config.php';
-
-$hostnameRegex = '/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/';
-$sqlIdentifiersRegex = '/^[a-zA-Z]([a-zA-Z0-9_]*[a-zA-Z0-9])?$/';
-
 // if config file exists then connect to database
-if (is_file($pathConfigFile))
+if (is_file($configPath))
 {
     try
     {
@@ -125,7 +99,7 @@ if (is_file($pathConfigFile))
         // => EXIT
     }
 
-    // now check if a valid installation exists.
+    // now check if a valid installation exists
     $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
     $pdoStatement = $db->queryPrepared($sql, array(), false);
 
@@ -146,13 +120,13 @@ if (is_file($pathConfigFile))
     if ($step === 'welcome')
     {
         // save database parameters of config.php in session variables
-        $_SESSION['db_type']     = DB_ENGINE;
-        $_SESSION['db_host']     = DB_HOST;
-        $_SESSION['db_port']     = DB_PORT;
-        $_SESSION['db_database'] = DB_NAME;
-        $_SESSION['db_user']     = DB_USERNAME;
-        $_SESSION['db_password'] = DB_PASSWORD;
-        $_SESSION['prefix']      = TABLE_PREFIX;
+        $_SESSION['db_engine']    = DB_ENGINE;
+        $_SESSION['db_host']      = DB_HOST;
+        $_SESSION['db_port']      = DB_PORT;
+        $_SESSION['db_name']      = DB_NAME;
+        $_SESSION['db_username']  = DB_USERNAME;
+        $_SESSION['db_password']  = DB_PASSWORD;
+        $_SESSION['table_prefix'] = TABLE_PREFIX;
 
         admRedirect(safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')));
         // => EXIT

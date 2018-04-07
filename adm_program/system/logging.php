@@ -50,7 +50,7 @@ function createAdmidioLogger($logDirectory, $logLevel)
     // Params: format, dateFormat, allowInlineLineBreaks, ignoreEmptyContextAndExtra
     $formatter = new LineFormatter(null, 'Y-m-d H:i:s.u', false, true);
 
-    $rotatingFileHandler = new RotatingFileHandler($logDirectory . '/admidio.log', 0, $logLevel, true, 0666);
+    $rotatingFileHandler = new RotatingFileHandler($logDirectory . '/admidio.log', 0, $logLevel, true, FileSystemUtils::DEFAULT_MODE_FILE);
     $errorLogHandler = new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, Logger::ERROR);
 
     $rotatingFileHandler->setFormatter($formatter);
@@ -78,7 +78,7 @@ function initLogging(\Psr\Log\LoggerInterface $logger)
             'ADMIDIO' => ADMIDIO_VERSION_TEXT,
             'PHP'     => PHP_VERSION
         ),
-        'ADMIDIO_HOMEPAGE' => ADMIDIO_HOMEPAGE,
+        'SCHEME'           => SCHEME,
         'HTTPS'            => HTTPS,
         'PORT'             => PORT,
         'HOST'             => HOST,
@@ -93,16 +93,6 @@ function initLogging(\Psr\Log\LoggerInterface $logger)
             'SERVER_PATH'  => SERVER_PATH,
             'ADMIDIO_PATH' => ADMIDIO_PATH,
             'CURRENT_PATH' => CURRENT_PATH
-        ),
-        'FOLDERS' => array(
-            'FOLDER_DATA'        => FOLDER_DATA,
-            'FOLDER_CLASSES'     => FOLDER_CLASSES,
-            'FOLDER_LIBS_SERVER' => FOLDER_LIBS_SERVER,
-            'FOLDER_LIBS_CLIENT' => FOLDER_LIBS_CLIENT,
-            'FOLDER_LANGUAGES'   => FOLDER_LANGUAGES,
-            'FOLDER_THEMES'      => FOLDER_THEMES,
-            'FOLDER_MODULES'     => FOLDER_MODULES,
-            'FOLDER_PLUGINS'     => FOLDER_PLUGINS
         )
     );
     $logger->info('CONSTANTS: URLS & PATHS & FOLDERS', $constants);

@@ -178,7 +178,7 @@
   <string name="INS_INSTALLATION_VERSION">Installation de la version #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">L\'installation est terminée</string>
   <string name="INS_INTERN">Interne</string>
-  <string name="INS_LANGUAGE_NOT_CHOOSEN">Aucun language n\'a sélectionné.</string>
+  <string name="INS_LANGUAGE_NOT_CHOSEN">Aucun language n\'a sélectionné.</string>
   <string name="INS_MEMBERSHIP">Adhésion</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Le nom de l\'organisation n\'est pas complété !</string>
@@ -501,7 +501,7 @@
   <string name="PRO_PHOTO_DELETED">l\'image de profil a été supprimé.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">La taille de la photo téléchargé excède la taille du fichier du serveur permis: #VAR1#.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Seuls les fichiers JPG et PNG formaté photos sont autorisés.</string>
-  <string name="PRO_PHOTO_NOT_CHOOSEN">Aucun fichier image sélectionné.</string>
+  <string name="PRO_PHOTO_NOT_CHOSEN">Aucun fichier image sélectionné.</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">La taille de la photo téléchargée dépasse la résolution du serveur permis: #VAR1#.</string>
   <string name="PRO_PHOTO_SAVED">La nouvelle photo de profil a bien été enregistré.</string>
   <string name="PRO_PROFILE">Profil</string>

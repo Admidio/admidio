@@ -14,7 +14,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'start_installation.php')
 }
 
 // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-if (!is_file($pathConfigFile))
+if (!is_file($configPath))
 {
     showNotice(
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
@@ -27,14 +27,14 @@ if (!is_file($pathConfigFile))
 
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
-if (isset($_SESSION['prefix'])
-&&    ($_SESSION['prefix']         !== TABLE_PREFIX
-    || $_SESSION['db_type']        !== DB_ENGINE
+if (isset($_SESSION['table_prefix'])
+&&    ($_SESSION['db_engine']      !== DB_ENGINE
     || $_SESSION['db_host']        !== DB_HOST
     || $_SESSION['db_port']        !== DB_PORT
-    || $_SESSION['db_database']    !== DB_NAME
-    || $_SESSION['db_user']        !== DB_USERNAME
+    || $_SESSION['db_name']        !== DB_NAME
+    || $_SESSION['db_username']    !== DB_USERNAME
     || $_SESSION['db_password']    !== DB_PASSWORD
+    || $_SESSION['table_prefix']   !== TABLE_PREFIX
     || $_SESSION['orga_shortname'] !== $g_organization))
 {
     showNotice(
@@ -206,6 +206,7 @@ $administrator->setPassword($_SESSION['user_password']);
 $administrator->setValue('usr_usr_id_create', $currUsrId);
 $administrator->setValue('usr_timestamp_create', DATETIME_NOW);
 $administrator->save(false); // no registered user -> UserIdCreate couldn't be filled
+$adminUsrId = (int) $administrator->getValue('usr_id');
 
 // write all preferences from preferences.php in table adm_preferences
 require_once(ADMIDIO_PATH . '/adm_program/installation/db_scripts/preferences.php');
@@ -221,7 +222,7 @@ $defaultOrgPreferences['system_hashing_cost'] = $benchmarkResults['cost'];
 // create all necessary data for this organization
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 $gSettingsManager->setMulti($defaultOrgPreferences, false);
-$gCurrentOrganization->createBasicData((int) $administrator->getValue('usr_id'));
+$gCurrentOrganization->createBasicData($adminUsrId);
 
 // create default room for room module in database
 $sql = 'INSERT INTO '.TBL_ROOMS.'
@@ -237,7 +238,7 @@ $db->queryPrepared($sql, $params);
 
 // first create a user object "current user" with administrator rights
 // because administrator is allowed to edit firstname and lastname
-$gCurrentUser = new User($db, $gProfileFields, $administrator->getValue('usr_id'));
+$gCurrentUser = new User($db, $gProfileFields, $adminUsrId);
 $gCurrentUser->setValue('LAST_NAME',  $_SESSION['user_last_name']);
 $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
 $gCurrentUser->setValue('EMAIL',      $_SESSION['user_email']);
