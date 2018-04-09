@@ -147,19 +147,20 @@ function getStaticText($type, $text, $info = '')
 }
 
 /**
+ * @param string $group
  * @param string $id
  * @param string $title
  * @param string $icon
  * @param string $body
  * @return string
  */
-function getPreferencePanel($id, $title, $icon, $body)
+function getPreferencePanel($group, $id, $title, $icon, $body)
 {
     return '
         <div class="panel panel-default" id="panel_' . $id . '">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion_common" href="#collapse_' . $id . '">
+                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
                         <img class="admidio-panel-heading-icon" src="' . THEME_URL . '/icons/' . $icon . '" alt="' . $title . '" />' . $title . '
                     </a>
                 </h4>
@@ -262,7 +263,7 @@ $formCommon->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', $gL10n->get('SYS_COMMON'), 'options.png', $formCommon->show()));
+$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'options.png', $formCommon->show()));
 
 // PANEL: ORGANIZATION
 
@@ -317,7 +318,7 @@ $formOrganization->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('organization', $gL10n->get('SYS_ORGANIZATION'), 'chart_organisation.png', $formOrganization->show()));
+$page->addHtml(getPreferencePanel('common', 'organization', $gL10n->get('SYS_ORGANIZATION'), 'chart_organisation.png', $formOrganization->show()));
 
 // PANEL: REGIONAL SETTINGS
 
@@ -355,7 +356,7 @@ $formRegionalSettings->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'world.png', $formRegionalSettings->show()));
+$page->addHtml(getPreferencePanel('common', 'regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'world.png', $formRegionalSettings->show()));
 
 // PANEL: REGISTRATION
 
@@ -381,7 +382,7 @@ $formRegistration->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('registration', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png', $formRegistration->show()));
+$page->addHtml(getPreferencePanel('common', 'registration', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png', $formRegistration->show()));
 
 // PANEL: EMAIL DISPATCH
 
@@ -460,7 +461,7 @@ $formEmailDispatch->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'system_mail.png', $formEmailDispatch->show()));
+$page->addHtml(getPreferencePanel('common', 'email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'system_mail.png', $formEmailDispatch->show()));
 
 // PANEL: SYSTEM NOTIFICATION
 
@@ -517,7 +518,7 @@ $formSystemNotification->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'system_notification.png', $formSystemNotification->show()));
+$page->addHtml(getPreferencePanel('common', 'system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'system_notification.png', $formSystemNotification->show()));
 
 // PANEL: CAPTCHA
 
@@ -589,7 +590,7 @@ $formCaptcha->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('captcha', $gL10n->get('SYS_CAPTCHA'), 'captcha.png', $formCaptcha->show()));
+$page->addHtml(getPreferencePanel('common', 'captcha', $gL10n->get('SYS_CAPTCHA'), 'captcha.png', $formCaptcha->show()));
 
 // PANEL: SYSTEM INFORMATION
 
@@ -750,7 +751,7 @@ $html = '
     </div>';
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
-$page->addHtml(getPreferencePanel('system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'info.png', $formSystemInformation->show()));
+$page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'info.png', $formSystemInformation->show()));
 
 $page->addHtml('
         </div>
@@ -790,7 +791,7 @@ $formAnnouncements->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'announcements.png', $formAnnouncements->show()));
+$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'announcements.png', $formAnnouncements->show()));
 
 // PANEL: USER MANAGEMENT
 
@@ -821,7 +822,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'user_administration.png', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'user_administration.png', $formUserManagement->show()));
 
 // PANEL: DOWNLOADS
 
@@ -843,7 +844,7 @@ $formDownloads->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('downloads', $gL10n->get('DOW_DOWNLOADS'), 'download.png', $formDownloads->show()));
+$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'download.png', $formDownloads->show()));
 
 // PANEL: PHOTOS
 
@@ -915,7 +916,7 @@ $formPhotos->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('photos', $gL10n->get('PHO_PHOTOS'), 'photo.png', $formPhotos->show()));
+$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'photo.png', $formPhotos->show()));
 
 // PANEL: GUESTBOOK
 
@@ -967,7 +968,7 @@ $formGuestbook->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('guestbook', $gL10n->get('GBO_GUESTBOOK'), 'guestbook.png', $formGuestbook->show()));
+$page->addHtml(getPreferencePanel('modules', 'guestbook', $gL10n->get('GBO_GUESTBOOK'), 'guestbook.png', $formGuestbook->show()));
 
 // PANEL: ECARDS
 
@@ -1012,7 +1013,7 @@ $formEcards->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('ecards', $gL10n->get('ECA_GREETING_CARDS'), 'ecard.png', $formEcards->show()));
+$page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'ecard.png', $formEcards->show()));
 
 // PANEL: LISTS
 
@@ -1068,7 +1069,7 @@ $formLists->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('lists', $gL10n->get('LST_LISTS'), 'list.png', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'list.png', $formLists->show()));
 
 // PANEL: MESSAGES
 
@@ -1127,7 +1128,7 @@ $formMessages->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('messages', $gL10n->get('SYS_MESSAGES'), 'messages.png', $formMessages->show()));
+$page->addHtml(getPreferencePanel('modules', 'messages', $gL10n->get('SYS_MESSAGES'), 'messages.png', $formMessages->show()));
 
 // PANEL: PROFILE
 
@@ -1175,7 +1176,7 @@ $formProfile->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('profile', $gL10n->get('PRO_PROFILE'), 'profile.png', $formProfile->show()));
+$page->addHtml(getPreferencePanel('modules', 'profile', $gL10n->get('PRO_PROFILE'), 'profile.png', $formProfile->show()));
 
 // PANEL: EVENTS
 
@@ -1268,7 +1269,7 @@ $formEvents->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('events', $gL10n->get('DAT_DATES'), 'dates.png', $formEvents->show()));
+$page->addHtml(getPreferencePanel('modules', 'events', $gL10n->get('DAT_DATES'), 'dates.png', $formEvents->show()));
 
 // PANEL: WEBLINKS
 
@@ -1311,7 +1312,7 @@ $formWeblinks->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('links', $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', $formWeblinks->show()));
+$page->addHtml(getPreferencePanel('modules', 'links', $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', $formWeblinks->show()));
 
 $page->addHtml('
         </div>

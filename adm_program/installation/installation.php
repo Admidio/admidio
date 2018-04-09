@@ -91,10 +91,10 @@ if (is_file($configPath))
     catch (AdmException $e)
     {
         showNotice(
-            $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
+            $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
-            $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            $gL10n->get('INS_CONTINUE_INSTALLATION'),
+            'layout/forward.png'
         );
         // => EXIT
     }

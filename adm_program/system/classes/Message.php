@@ -184,7 +184,7 @@ class Message
                 if($this->showYesNoButtons)
                 {
                     $htmlButtons .= '
-                        <button id="admButtonYes" class="btn" type="button" onclick="self.location.href = \"'. $this->forwardUrl. '\"">
+                        <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'">
                             <img src="'. THEME_URL. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />
                             &nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;
                         </button>

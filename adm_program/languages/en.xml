@@ -980,7 +980,7 @@
   <string name="ROL_DEPENDENCIES">Dependencies</string>
   <string name="ROL_DEPENDENT">Dependent</string>
   <string name="ROL_DISABLE_ROLE">Turn off the role</string>
-  <string name="ROL_DISABLE_ROLE_DESC">If you select #VAR1_BOLD#, the role and all member mappings will be permanently removed from the database, and can not been seen anymore.</string>
+  <string name="ROL_DISABLE_ROLE_DESC">If you disable role #VAR1_BOLD#, the role can no longer be used and assigned to objects. Likewise, all rights of this role are no longer effective. However, the role with its setting and all member mappings remains and can be reactivated at a later date.</string>
   <string name="ROL_EDIT_ROLE">Edit role</string>
   <string name="ROL_ENABLE_ROLE">Activate role</string>
   <string name="ROL_ENABLE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selectable in all lists.\n\nDo you want to re-activate the roles?</string>
