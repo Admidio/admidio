@@ -224,7 +224,7 @@ class Organization extends TableAccess
 
         // Create role administrator
         $roleAdministrator = new TableRoles($this->db);
-        $roleAdministrator->setValue('rol_cat_id', $categoryCommon);
+        $roleAdministrator->setValue('rol_cat_id', $categoryCommon, false);
         $roleAdministrator->setValue('rol_name', $gL10n->get('SYS_ADMINISTRATOR'));
         $roleAdministrator->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_ADMINISTRATOR'));
         $roleAdministrator->setValue('rol_assign_roles', 1);
@@ -247,7 +247,7 @@ class Organization extends TableAccess
 
         // Create role member
         $roleMember = new TableRoles($this->db);
-        $roleMember->setValue('rol_cat_id', $categoryCommon);
+        $roleMember->setValue('rol_cat_id', $categoryCommon, false);
         $roleMember->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
         $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
         $roleMember->setValue('rol_mail_this_role', 2);
@@ -258,7 +258,7 @@ class Organization extends TableAccess
 
         // Create role board
         $roleManagement = new TableRoles($this->db);
-        $roleManagement->setValue('rol_cat_id', $categoryCommon);
+        $roleManagement->setValue('rol_cat_id', $categoryCommon, false);
         $roleManagement->setValue('rol_name', $gL10n->get('INS_BOARD'));
         $roleManagement->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
         $roleManagement->setValue('rol_announcements', 1);
