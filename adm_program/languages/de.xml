@@ -1122,7 +1122,7 @@
     <string name="SYS_DATABASE">Datenbank</string>
     <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
     <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
-    <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nPrüfe bitte die Zugangsdaten in der Datei config.php im Order adm_my_files. Sollte die Datei noch von einer anderen Installation stammen, so entferne die config.php bitte aus dem Ordner, da über den Installationsassistenten eine neue Datei erzeugt wird. Danach kannst du die Installation fortsetzen.\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
+    <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nBitte prüfe die Zugangsdaten in der Datei config.php im Order adm_my_files. Sollte die Datei noch von einer anderen Installation stammen, so entferne die config.php bitte aus dem Ordner, da über den Installationsassistenten eine neue Datei erzeugt wird. Danach kann die Installation fortgesetzt werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
     <string name="SYS_DATABASE_VERSION">Datenbank-Version</string>
     <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühre bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
     <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
