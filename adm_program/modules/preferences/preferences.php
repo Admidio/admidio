@@ -744,23 +744,33 @@ else
 }
 $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
 
-$diskSpace = FileSystemUtils::getDiskSpace(ADMIDIO_PATH . '/');
-$diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
-$progressBarClass = '';
-if ($diskUsagePercent > 90)
+try
 {
-    $progressBarClass = ' progress-bar-danger';
-}
-elseif ($diskUsagePercent > 70)
-{
-    $progressBarClass = ' progress-bar-warning';
-}
-$html = '
+    $diskSpace = FileSystemUtils::getDiskSpace(ADMIDIO_PATH . '/');
+
+    $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
+    $progressBarClass = '';
+    if ($diskUsagePercent > 90)
+    {
+        $progressBarClass = ' progress-bar-danger';
+    }
+    elseif ($diskUsagePercent > 70)
+    {
+        $progressBarClass = ' progress-bar-warning';
+    }
+    $html = '
     <div class="progress">
         <div class="progress-bar' . $progressBarClass . '" role="progressbar" aria-valuenow="' . $diskSpace['used'] . '" aria-valuemin="0" aria-valuemax="' . $diskSpace['total'] . '" style="width: ' . $diskUsagePercent . '%;">
             ' . FileSystemUtils::getHumanReadableBytes($diskSpace['used']) . ' / ' . FileSystemUtils::getHumanReadableBytes($diskSpace['total']) . '
         </div>
     </div>';
+}
+catch (\RuntimeException $exception)
+{
+    $gLogger->error('FILE-SYSTEM: Disk space could not be determined!');
+
+    $html = getStaticText('danger', $gL10n->get('SYS_DISK_SPACE_ERROR'), $exception->getMessage());
+}
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
 $page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'info.png', $formSystemInformation->show(false)));
