@@ -240,7 +240,8 @@ class TableCategory extends TableAccess
             }
 
             // if category belongs to all organizations only parent organization could edit it
-            if((int) $this->getValue('cat_org_id') === 0 && $gCurrentOrganization->isParentOrganization())
+            if((int) $this->getValue('cat_org_id') === 0 
+            && ($gCurrentOrganization->isParentOrganization() || $gCurrentOrganization->countAllRecords() === 1))
             {
                 return true;
             }

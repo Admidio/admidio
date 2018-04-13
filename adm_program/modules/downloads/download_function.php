@@ -195,7 +195,7 @@ elseif ($getMode === 4)
             $newPath = $file->getFullFolderPath() . '/';
             $newFile = $newName . '.' . pathinfo($oldFile, PATHINFO_EXTENSION);
 
-            // Test ob die Datei schon existiert im Filesystem
+            // check if file already exists in filesystem
             if ($newFile !== $file->getValue('fil_name') && is_file($newPath . $newFile))
             {
                 $gMessage->show($gL10n->get('DOW_FILE_EXIST', array($newFile)));
@@ -205,16 +205,19 @@ elseif ($getMode === 4)
             {
                 $oldName = $file->getValue('fil_name');
 
-                // Datei umbenennen im Filesystem und in der Datenbank
-                try
-                {
-                    FileSystemUtils::moveFile($oldFile, $newPath . $newFile);
-                }
-                catch (\RuntimeException $exception)
-                {
-                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                    $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', array($oldName)));
-                    // => EXIT
+                if($newFile !== $file->getValue('fil_name'))
+                {    
+                    // rename file in filesystem and database
+                    try
+                    {
+                        FileSystemUtils::moveFile($oldFile, $newPath . $newFile);
+                    }
+                    catch (\RuntimeException $exception)
+                    {
+                        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
+                        $gMessage->show($gL10n->get('DOW_FILE_RENAME_ERROR', array($oldName)));
+                        // => EXIT
+                    }
                 }
 
                 $file->setValue('fil_name', $newFile);
@@ -234,7 +237,7 @@ elseif ($getMode === 4)
             $oldFolder = $folder->getFullFolderPath();
             $newFolder = $newName;
 
-            // Test ob der Ordner schon existiert im Filesystem
+            // check if folder already exists in filesystem
             if ($newFolder !== $folder->getValue('fol_name')
             && is_dir(ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
@@ -245,20 +248,25 @@ elseif ($getMode === 4)
             {
                 $oldName = $folder->getValue('fol_name');
 
-                // Ordner umbenennen im Filesystem und in der Datenbank
-                try
-                {
-                    FileSystemUtils::moveDirectory($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder);
-                }
-                catch (\RuntimeException $exception)
-                {
-                    $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
-                    $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', array($oldName)));
-                    // => EXIT
+                if($newFolder !== $folder->getValue('fol_name'))
+                {    
+                    // rename folder in filesystem and database
+                    try
+                    {
+                        FileSystemUtils::moveDirectory($oldFolder, ADMIDIO_PATH. $folder->getValue('fol_path'). '/'.$newFolder);
+
+                        $folder->rename($newFolder, $folder->getValue('fol_path'));
+                    }
+                    catch (\RuntimeException $exception)
+                    {
+                        $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
+                        $gMessage->show($gL10n->get('DOW_FOLDER_RENAME_ERROR', array($oldName)));
+                        // => EXIT
+                    }
                 }
 
                 $folder->setValue('fol_description', $newDescription);
-                $folder->rename($newFolder, $folder->getValue('fol_path'));
+                $folder->save();
 
                 $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/back.php');
                 $gMessage->show($gL10n->get('DOW_FOLDER_RENAME', array($oldName)));
