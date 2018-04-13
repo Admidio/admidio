@@ -286,7 +286,14 @@ while($catRow = $categoryStatement->fetch())
             }
             else
             {
-                $htmlViewRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                if($getType === 'USF')
+                {
+                    $htmlViewRolesNames = $gL10n->get('CAT_ALL_THIS_ORGANIZATION');
+                }
+                else
+                {
+                    $htmlViewRolesNames = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                }
             }
         }
     }
