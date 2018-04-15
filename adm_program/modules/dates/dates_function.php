@@ -161,7 +161,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     // das Land nur zusammen mit dem Ort abspeichern
     if(strlen($_POST['dat_location']) === 0)
     {
-        $_POST['dat_country'] = '';
+        $_POST['dat_country'] = null;
     }
 
     // ------------------------------------------------

@@ -398,7 +398,7 @@ else
                 $urlParam = $dateLocation;
 
                 $dateCountry = $date->getValue('dat_country');
-                if($dateCountry !== '')
+                if($dateCountry)
                 {
                     // Better results with additional country information
                     $urlParam .= ', ' . $dateCountry;

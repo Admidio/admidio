@@ -270,7 +270,7 @@ if($gSettingsManager->getBool('dates_show_map_link'))
         array('maxLength' => 100, 'helpTextIdLabel' => 'DAT_LOCATION_LINK')
     );
 
-    if($date->getValue('dat_country') === '' && $getDateId === 0)
+    if(!$date->getValue('dat_country') && $getDateId === 0)
     {
         $date->setValue('dat_country', $gSettingsManager->getString('default_country'));
     }
