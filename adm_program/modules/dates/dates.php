@@ -358,7 +358,7 @@ else
                 // Create Google-Maps-Link for location
                 $location_url = 'https://maps.google.com/?q='.$date->getValue('dat_location');
 
-                if($date->getValue('dat_country') !== '')
+                if($date->getValue('dat_country'))
                 {
                     // Better results with additional country information
                     $location_url .= ',%20'.$date->getValue('dat_country');
@@ -390,7 +390,7 @@ else
 
                     $route_url .= '&amp;daddr='.urlencode($date->getValue('dat_location'));
 
-                    if($date->getValue('dat_country') !== '')
+                    if($date->getValue('dat_country'))
                     {
                         // With information about country Google finds the location much better
                         $route_url .= ',%20'.$date->getValue('dat_country');
@@ -788,8 +788,8 @@ else
                 if(is_array($participantsArray))
                 {
                     // Only show participants if user has right to view the list, is leader or has permission to create/edit events
-                    if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id')) 
-                        || $row['mem_leader'] == 1 
+                    if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
+                        || $row['mem_leader'] == 1
                         || $gCurrentUser->editDates())
                     {
                         foreach($participantsArray as $participant)

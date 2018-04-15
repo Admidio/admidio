@@ -140,7 +140,7 @@ if($getMode === 1 || $getMode === 5)  // Neuen Termin anlegen/aendern
     // das Land nur zusammen mit dem Ort abspeichern
     if(strlen($_POST['dat_location']) === 0)
     {
-        $_POST['dat_country'] = '';
+        $_POST['dat_country'] = null;
     }
 
     // ------------------------------------------------
