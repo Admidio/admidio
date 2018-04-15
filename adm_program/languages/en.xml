@@ -1122,6 +1122,7 @@
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
+  <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">No connection to the database could be created!\n\nPlease check the access data in the file config.php in the folder adm_my_files. If the file is still from another installation, please remove the config.php from the folder, because a new file will be created via the installation wizard. After that you can continue the installation.\n\nThe following error occurred: \n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Database version</string>
   <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">The database version #VAR1# is lower than the version of the Admidio scripts #VAR2#.\n\nPlease perform #VAR3# database update to version #VAR4#.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
@@ -1145,7 +1146,7 @@
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
-  <string name="SYS_DISK_SPACE_ERROR">Disk space usage could not be determined. Error message:</string>
+  <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>

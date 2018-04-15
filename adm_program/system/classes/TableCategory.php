@@ -240,7 +240,7 @@ class TableCategory extends TableAccess
             }
 
             // if category belongs to all organizations only parent organization could edit it
-            if((int) $this->getValue('cat_org_id') === 0 
+            if((int) $this->getValue('cat_org_id') === 0
             && ($gCurrentOrganization->isParentOrganization() || $gCurrentOrganization->countAllRecords() === 1))
             {
                 return true;
@@ -486,21 +486,23 @@ class TableCategory extends TableAccess
     {
         global $gCurrentOrganization;
 
-        // Systemkategorien duerfen nicht umbenannt werden
-        if ($columnName === 'cat_name' && (int) $this->getValue('cat_system') === 1)
+        if($checkValue)
         {
-            return false;
-        }
-
-        if ($columnName === 'cat_default' && $newValue == '1')
-        {
-            // es darf immer nur eine Default-Kategorie je Bereich geben
-            $sql = 'UPDATE '.TBL_CATEGORIES.'
-                       SET cat_default = 0
-                     WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
-                       AND (  cat_org_id IS NOT NULL
-                           OR cat_org_id = ?) -- $gCurrentOrganization->getValue(\'org_id\')';
-            $this->db->queryPrepared($sql, array($this->getValue('cat_type'), $gCurrentOrganization->getValue('org_id')));
+            // Systemkategorien duerfen nicht umbenannt werden
+            if ($columnName === 'cat_name' && (int) $this->getValue('cat_system') === 1)
+            {
+                return false;
+            }
+            elseif ($columnName === 'cat_default' && $newValue == '1')
+            {
+                // es darf immer nur eine Default-Kategorie je Bereich geben
+                $sql = 'UPDATE '.TBL_CATEGORIES.'
+                           SET cat_default = 0
+                         WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
+                           AND (  cat_org_id IS NOT NULL
+                               OR cat_org_id = ?) -- $gCurrentOrganization->getValue(\'org_id\')';
+                $this->db->queryPrepared($sql, array($this->getValue('cat_type'), $gCurrentOrganization->getValue('org_id')));
+            }
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);

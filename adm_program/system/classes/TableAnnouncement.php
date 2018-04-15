@@ -149,18 +149,21 @@ class TableAnnouncement extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if ($columnName === 'ann_description')
+        if($checkValue)
         {
-            return parent::setValue($columnName, $newValue, false);
-        }
-        elseif($columnName === 'ann_cat_id')
-        {
-            $category = new TableCategory($this->db, $newValue);
-
-            if(!$category->isVisible() || $category->getValue('cat_type') !== 'ANN')
+            if ($columnName === 'ann_description')
             {
-                throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
-                    because the category is not visible to the current user and current organization.');
+                return parent::setValue($columnName, $newValue, false);
+            }
+            elseif($columnName === 'ann_cat_id')
+            {
+                $category = new TableCategory($this->db, $newValue);
+
+                if(!$category->isVisible() || $category->getValue('cat_type') !== 'ANN')
+                {
+                    throw new AdmException('Category of the announcement '. $this->getValue('ann_name'). ' could not be set
+                        because the category is not visible to the current user and current organization.');
+                }
             }
         }
 

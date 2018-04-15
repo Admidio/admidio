@@ -107,19 +107,22 @@ class TableGuestbookComment extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if ($columnName === 'gbc_text')
+        if($checkValue)
         {
-            return parent::setValue($columnName, $newValue, false);
-        }
-
-        if ($columnName === 'gbc_email' && $newValue !== '')
-        {
-            $newValue = admStrToLower($newValue);
-
-            // If Email has a invalid format, it won't be set
-            if (!strValidCharacters($newValue, 'email'))
+            if ($columnName === 'gbc_text')
             {
-                return false;
+                return parent::setValue($columnName, $newValue, false);
+            }
+
+            if ($columnName === 'gbc_email' && $newValue !== '')
+            {
+                $newValue = admStrToLower($newValue);
+
+                // If Email has a invalid format, it won't be set
+                if (!strValidCharacters($newValue, 'email'))
+                {
+                    return false;
+                }
             }
         }
 
