@@ -1864,7 +1864,7 @@ class User extends TableAccess
             }
 
             // username should not contain special characters
-            if ($columnName === 'usr_login_name' && $newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
+            if ($checkValue && $columnName === 'usr_login_name' && $newValue !== '' && !strValidCharacters($newValue, 'noSpecialChar'))
             {
                 return false;
             }

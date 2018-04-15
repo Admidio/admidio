@@ -479,21 +479,24 @@ class Organization extends TableAccess
      */
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        // org_shortname shouldn't be edited
-        if($columnName === 'org_shortname' && !$this->newRecord)
+        if($checkValue)
         {
-            return false;
-        }
-
-        if($columnName === 'org_homepage' && $newValue !== '')
-        {
-            $newValue = admFuncCheckUrl($newValue);
-
-            if ($newValue === false)
+            // org_shortname shouldn't be edited
+            if($columnName === 'org_shortname' && !$this->newRecord)
             {
                 return false;
             }
+            elseif($columnName === 'org_homepage' && $newValue !== '')
+            {
+                $newValue = admFuncCheckUrl($newValue);
+
+                if ($newValue === false)
+                {
+                    return false;
+                }
+            }
         }
+
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 
