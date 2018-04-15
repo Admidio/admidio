@@ -371,7 +371,7 @@ class TableAccess
                 {
                     if ($value === null)
                     {
-                        $this->dbColumns[$key] = '';
+                        $this->dbColumns[$key] = ''; // TODO: remove
                     }
                     else
                     {

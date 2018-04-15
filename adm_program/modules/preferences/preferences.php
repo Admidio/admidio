@@ -757,7 +757,7 @@ catch (\RuntimeException $exception)
 {
     $gLogger->error('FILE-SYSTEM: Disk space could not be determined!');
 
-    $html = getStaticText('danger', $gL10n->get('SYS_DISK_SPACE_ERROR'), $exception->getMessage());
+    $html = getStaticText('danger', $gL10n->get('SYS_DISK_SPACE_ERROR', array($exception->getMessage())));
 }
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 

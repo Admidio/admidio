@@ -13,24 +13,20 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php')
     exit('This page may not be called directly!');
 }
 
-if (!isset($_SESSION['language']))
+if (isset($_POST['system_language']) && trim($_POST['system_language']) !== '')
 {
-    // check if a language string was committed
-    if (!isset($_POST['system_language']) || trim($_POST['system_language']) === '')
-    {
-        showNotice(
-            $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
-            safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
-            $gL10n->get('SYS_BACK'),
-            'layout/back.png'
-        );
-        // => EXIT
-    }
-    else
-    {
-        $_SESSION['language'] = $_POST['system_language'];
-        $gL10n->setLanguage($_SESSION['language']);
-    }
+    $_SESSION['language'] = $_POST['system_language'];
+    $gL10n->setLanguage($_SESSION['language']);
+}
+elseif (!isset($_SESSION['language']))
+{
+    showNotice(
+        $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
+        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
+        $gL10n->get('SYS_BACK'),
+        'layout/back.png'
+    );
+    // => EXIT
 }
 
 // HTML-Form Regex-Patterns

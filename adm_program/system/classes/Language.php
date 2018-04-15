@@ -390,7 +390,6 @@ class Language
      * @param array<string,\SimpleXMLElement> $xmlLanguageObjects The reference to an array where every SimpleXMLElement of each language path is stored
      * @param string                          $languageFilePath   The path of the language file to search in.
      * @param string                          $textId             The id of the text that will be searched in the file.
-     * @throws \UnexpectedValueException
      * @throws \OutOfBoundsException
      * @return string Return the text in the language or nothing if text id wasn't found.
      */
@@ -406,7 +405,7 @@ class Language
             {
                 $gLogger->error('L10N: Language file does not exist!', array('languageFilePath' => $languageFilePath));
 
-                throw new \UnexpectedValueException('Language file does not exist!');
+                throw new \OutOfBoundsException('Language file does not exist!');
             }
 
             $xmlLanguageObjects[$languageFilePath] = new \SimpleXMLElement($languageFilePath, 0, true);
