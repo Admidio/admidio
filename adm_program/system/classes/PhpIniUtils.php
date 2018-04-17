@@ -15,6 +15,26 @@ final class PhpIniUtils
     const BYTES_UNIT_FACTOR_1000 = 1000;
 
     /**
+     * @var array<int,string> The disabled function names
+     */
+    private static $disabledFunctions;
+
+    /**
+     * Returns the disabled function names
+     * @return array<int,string> Returns the disabled function names
+     * @see https://secure.php.net/manual/en/ini.core.php#ini.disable-functions
+     */
+    public static function getDisabledFunctions()
+    {
+        if (self::$disabledFunctions === null)
+        {
+            self::$disabledFunctions = explode(',', ini_get('disable_functions'));
+        }
+
+        return self::$disabledFunctions;
+    }
+
+    /**
      * Checks if the size limits have valid values because they depend on each other
      * @return bool
      */
@@ -234,6 +254,11 @@ final class PhpIniUtils
      */
     public static function startNewExecutionTimeLimit($seconds)
     {
+        if (!in_array('set_time_limit', self::getDisabledFunctions(), true))
+        {
+            return;
+        }
+
         // @ prevents error output in safe-mode
         $result = @set_time_limit($seconds);
         if (!$result)
