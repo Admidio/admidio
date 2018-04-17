@@ -746,7 +746,7 @@ $formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MO
 
 try
 {
-    $diskSpace = FileSystemUtils::getDiskSpace(ADMIDIO_PATH . '/');
+    $diskSpace = FileSystemUtils::getDiskSpace();
 
     $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
     $progressBarClass = '';
