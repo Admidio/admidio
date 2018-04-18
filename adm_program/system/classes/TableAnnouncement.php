@@ -116,7 +116,7 @@ class TableAnnouncement extends TableAccess
 
             // parent organizations could edit global announcements,
             // child organizations could only edit their own announcements
-            if ($gCurrentOrganization->isParentOrganization()
+            if (($gCurrentOrganization->isParentOrganization() || $gCurrentOrganization->countAllRecords() === 1)
             || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
             {
                 return true;
