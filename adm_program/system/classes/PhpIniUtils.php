@@ -254,7 +254,7 @@ final class PhpIniUtils
      */
     public static function startNewExecutionTimeLimit($seconds)
     {
-        if (!in_array('set_time_limit', self::getDisabledFunctions(), true))
+        if (in_array('set_time_limit', self::getDisabledFunctions(), true))
         {
             return;
         }
