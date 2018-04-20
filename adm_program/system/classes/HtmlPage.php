@@ -752,7 +752,7 @@ class HtmlPage
 
             if ($menuStatement->rowCount() > 0)
             {
-                $menu = new Menu($mainMenu['men_name_intern'], $gL10n->get($mainMenu['men_name']));
+                $menu = new Menu($mainMenu['men_name_intern'], Language::translateIfTranslationStrId($mainMenu['men_name']));
 
                 while ($row = $menuStatement->fetch())
                 {
