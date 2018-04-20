@@ -30,7 +30,7 @@ elseif (!isset($_SESSION['language']))
 }
 
 // HTML-Form Regex-Patterns
-$hostnameRegex = '(((?=[a-z0-9-]{1,63}\.)(xn--)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63})';
+$hostnameRegex = '(?:[a-z0-9-]{1,63}\.)*(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z]{2,63})?';
 $ipv4Regex = '(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
 $ipv6Regex = '(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}';
 $hostRegex = '^(' . $hostnameRegex . '|' . $ipv4Regex . '|' . $ipv6Regex . ')$';
