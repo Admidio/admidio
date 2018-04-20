@@ -63,6 +63,13 @@ switch ($getType)
         $rolesRightsName    = 'ROL_RIGHT_DATES';
         break;
 
+    case 'AWA':
+        $headline = $gL10n->get('SYS_CATEGORY_VAR', 'Awards');
+        $rolesRightEditName = 'Not used, leave empty';
+        $rolesRightsColumn  = 'rol_edit_user';
+        $rolesRightsName    = 'ROL_RIGHT_EDIT_USER';
+        break;
+
     default:
         $headline = $gL10n->get('SYS_CATEGORY');
         break;
