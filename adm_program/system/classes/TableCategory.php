@@ -232,6 +232,12 @@ class TableCategory extends TableAccess
 
         if($this->isVisible())
         {
+            // a new record will always be visible until all data is saved
+            if($this->newRecord)
+            {
+                return true;
+            }
+
             // if category belongs to current organization than it's editable
             if($this->getValue('cat_org_id') > 0
             && (int) $this->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
@@ -242,12 +248,6 @@ class TableCategory extends TableAccess
             // if category belongs to all organizations only parent organization could edit it
             if((int) $this->getValue('cat_org_id') === 0
             && ($gCurrentOrganization->isParentOrganization() || $gCurrentOrganization->countAllRecords() === 1))
-            {
-                return true;
-            }
-
-            // a new record will always be visible until all data is saved
-            if($this->newRecord)
             {
                 return true;
             }

@@ -105,5 +105,6 @@
     <step id="640">UPDATE %PREFIX%_components SET com_name_intern = 'ANNOUNCEMENTS' WHERE com_name_intern = 'ANNOUCEMENTS'</step>
     <step id="650">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>
     <step id="660">ComponentUpdateSteps::updateStepDownloadOrgFolderName</step>
+    <step id="670">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE usf_name_intern IN ('LAST_NAME', 'FIRST_NAME', 'EMAIL')</step>
     <step>stop</step>
 </update>

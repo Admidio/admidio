@@ -16,8 +16,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_organization.php')
 if (isset($_POST['db_host']))
 {
     // PHP-Check Regex-Patterns
-    $hostnameRegex = '/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/';
-    $sqlIdentifiersRegex = '/^[a-zA-Z]([a-zA-Z0-9_]*[a-zA-Z0-9])?$/';
+    $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$]+$/';
 
     // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
     $_SESSION['db_engine']    = $_POST['db_engine'];
@@ -57,7 +56,7 @@ if (isset($_POST['db_host']))
 
     // Check host
     // TODO: unix_server is currently not supported
-    if (preg_match($hostnameRegex, $_SESSION['db_host']) !== 1 && filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) === false)
+    if (filter_var($_SESSION['db_host'], FILTER_VALIDATE_DOMAIN) === false && filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) === false)
     {
         showNotice(
             $gL10n->get('INS_HOST_INVALID'),

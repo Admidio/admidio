@@ -344,15 +344,16 @@ class TableDate extends TableAccess
         if($gCurrentUser->editDates()
         || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('DAT'), true))
         {
-            if ($gCurrentOrganization->countAllRecords() === 1)
+            // if category belongs to current organization than events are editable
+            if($this->getValue('cat_org_id') > 0
+            && (int) $this->getValue('cat_org_id') === (int) $gCurrentOrganization->getValue('org_id'))
             {
                 return true;
             }
 
-            // parent organizations could edit global events,
-            // child organizations could only edit their own events
-            if ($gCurrentOrganization->isParentOrganization()
-            || ($gCurrentOrganization->isChildOrganization() && (int) $gCurrentOrganization->getValue('org_id') == (int) $this->getValue('cat_org_id')))
+            // if category belongs to all organizations only parent organization could edit events
+            if((int) $this->getValue('cat_org_id') === 0
+            && ($gCurrentOrganization->isParentOrganization() || $gCurrentOrganization->countAllRecords() === 1))
             {
                 return true;
             }
