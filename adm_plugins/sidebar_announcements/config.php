@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdatei fuer Admidio-Plugin Sidebar-Announcements
+ * Configuration file for Admidio plugin Sidebar-Announcements
  *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
