@@ -3,4 +3,6 @@
   <string name="PLG_ONLINE_HEADLINE">Online</string>
   <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">No visitors are on the website..</string>
   <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Visitors</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# Member</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# Members</string>
 </resources>

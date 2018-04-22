@@ -3,4 +3,6 @@
   <string name="PLG_ONLINE_HEADLINE">On-line</string>
   <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">Lige nu er der ikke nogen besøgende på hjemmesiden</string>
   <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# Gæster</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# Medlem</string>
+  <string name="PLG_ONLINE_VAR_NUM_MEMBERS">#VAR1# Medlemmer</string>
 </resources>

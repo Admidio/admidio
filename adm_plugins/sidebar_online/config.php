@@ -17,6 +17,12 @@ $plg_time_online = 10;
 // 1 = (Default) Anzahl der Besucher wird aufgelistet
 $plg_show_visitors = 1;
 
+// Sollen für Besucher (nicht eingeloggte Benutzer) eingloggte Mitglieder angezeigt werden
+// 0 = eingeloggte Mitglieder werden nicht angezeigt
+// 1 = (Default) die eingeloggten Mitglieder werden angezeigt
+// 2 = nur Anzahl der eingeloggten Mitglieder wird angezeigt
+$plg_show_members = 2;
+
 // soll das eigene Login angezeigt werden
 // 0 = das eigene Login (auch ausgeloggt) wird nicht angezeigt
 // 1 = (Default) das eigene Login (auch ausgeloggt) wird angezeigt
