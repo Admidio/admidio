@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdatei fuer Admidio-Plugin Sidebar-Online
+ * Configuration file for Admidio plugin Sidebar-Online
  *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
@@ -9,36 +9,39 @@
  ***********************************************************************************************
  */
 
-// Zeit in der die User noch als Aktiv gelten (Default = 10)
+// Time in minutes in which the users are still active (Default = 10)
 $plg_time_online = 10;
 
-// Sollen Besucher (nicht eingeloggte Benutzer) auch angezeigt werden
-// 0 = nur eingeloggte Mitglieder werden angezeigt
-// 1 = (Default) Anzahl der Besucher wird aufgelistet
+// Should visitors (users who are not logged in) also be displayed
+// 0 = only logged in members will be shown
+// 1 = (Default) Number of visitors is listed
 $plg_show_visitors = 1;
 
-// soll das eigene Login angezeigt werden
-// 0 = das eigene Login (auch ausgeloggt) wird nicht angezeigt
-// 1 = (Default) das eigene Login (auch ausgeloggt) wird angezeigt
+// Should logged in members be displayed to visitors (users who are not logged in)
+// 0 = logged in members are not displayed
+// 1 = logged in members are displayed
+// 2 = (Default) only number of logged in members is displayed
+$plg_show_members = 2;
+
+// The own login should be displayed
+// 0 = the own login (also logged out) will not be displayed
+// 1 = (Default) the own login (also logged out) will be displayed
 $plg_show_self = 1;
 
-// Anzeige der Benutzernamen untereinander bzw. nebeneinander
-// 0 = (Default) Benutzernamen untereinander auflisten (1 Name pro Zeile)
-// 1 = Benutzernamen nebeneinander auflisten
+// Display of user names with each other or side by side
+// 0 = (Default) List user names (1 name per line)
+// 1 = List user names side by side
 $plg_show_users_side_by_side = 0;
 
-// Name einer CSS-Klasse fuer Links
-// Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
+// Name of a CSS class for links
+// Only necessary, if the links should get a different look
 $plg_link_class = '';
 
-// Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
-// Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
+// Specification of the target in which the contents of the links are to be opened
+// You can insert specified values of the html target attribut
 $plg_link_target = '_self';
 
-// Text der über den angezeigten Benutzern steht (Default = "Online sind:<br />"
-$plg_online_text = 'Online sind:<br />';
-
-// Soll die Überschrift des Plugins angezeigt werden
-// 1 = (Default) Überschrift wird angezeigt
-// 0 = Überschrift wird nicht angezeigt
+// Should the header of the plugin be displayed
+// 1 = (Default) Headline is displayed
+// 0 = Headline is not displayed
 $plg_show_headline = 1;

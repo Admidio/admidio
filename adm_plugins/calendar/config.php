@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdatei fuer Sidebar-Kalender
+ * Configuration file for Admidio plugin Calendar
  *
  * Version 2.0.3
  *

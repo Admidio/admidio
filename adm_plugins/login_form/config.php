@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdatei fuer das Admidio-Plugin Login Form
+ * Configuration file for Admidio plugin Login Form
  *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/

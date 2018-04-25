@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Konfigurationsdatei fuer Admidio-Plugin Random Photo
+ * Configuration file for Admidio plugin Random Photo
  *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/

@@ -3,10 +3,9 @@
  ***********************************************************************************************
  * Sidebar Online
  *
- * Version 1.7.0
  * Plugin shows visitors and registered members of the homepage
  *
- * Compatible with Admidio version 3.2
+ * Compatible with Admidio version 3.3
  *
  * @copyright 2004-2018 The Admidio Team
  * @see https://www.admidio.org/
@@ -30,6 +29,11 @@ if(!isset($plg_time_online) || !is_numeric($plg_time_online))
 if(!isset($plg_show_visitors) || !is_numeric($plg_show_visitors))
 {
     $plg_show_visitors = 1;
+}
+
+if(!isset($plg_show_members) || !is_numeric($plg_show_members))
+{
+    $plg_show_members = 1;
 }
 
 if(!isset($plg_show_self) || !is_numeric($plg_show_self))
@@ -96,31 +100,24 @@ if($plg_show_headline)
 
 if($onlineUsersStatement->rowCount() > 0)
 {
-    echo $plg_online_text;
-
     $usrIdMerker   = 0;
+    $countMembers  = 0;
     $countVisitors = 0;
+    $allVisibleOnlineUsers = array();
+    $textOnlineVisitors = '';
 
     while($row = $onlineUsersStatement->fetch())
     {
         if($row['ses_usr_id'] > 0)
         {
-            if((int) $row['ses_usr_id'] !== $usrIdMerker)
+            if(((int) $row['ses_usr_id'] !== $usrIdMerker) 
+            && ($plg_show_members == 1 || $gValidLogin))
             {
-                echo '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
+                $allVisibleOnlineUsers[] = '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
                     href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['ses_usr_id'])). '">'. $row['usr_login_name']. '</a></strong>';
-
-                // User neben-/untereinander anzeigen
-                if($plg_show_users_side_by_side)
-                {
-                    echo ', ';
-                }
-                else
-                {
-                    echo '<br />';
-                }
                 $usrIdMerker = (int) $row['ses_usr_id'];
             }
+            ++$countMembers;
         }
         else
         {
@@ -128,9 +125,41 @@ if($onlineUsersStatement->rowCount() > 0)
         }
     }
 
+    if(!$gValidLogin && $plg_show_members == 2 && $countMembers > 0)
+    {
+        if($countMembers > 1) 
+        {
+            $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBERS', $countMembers);
+        }
+        else
+        {
+            $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBER', $countMembers);
+        }
+
+        $usrIdMerker = (int) $row['ses_usr_id'];
+	}
+
     if($plg_show_visitors && $countVisitors > 0)
     {
-        echo $gL10n->get('PLG_ONLINE_VAR_NUM_VISITORS', array($countVisitors));
+        $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_VISITORS', array($countVisitors));
+    }
+
+    if($plg_show_users_side_by_side)
+    {
+        $textOnlineVisitors = implode(', ', $allVisibleOnlineUsers);
+    }
+    else
+    {
+        $textOnlineVisitors = '<br />'. implode('<br />', $allVisibleOnlineUsers);
+    }
+
+    if($onlineUsersStatement->rowCount() === 1)
+    {
+        echo $gL10n->get('PLG_ONLINE_VAR_ONLINE_IS', array($textOnlineVisitors));
+    }
+    else
+    {
+        echo $gL10n->get('PLG_ONLINE_VAR_ONLINE_ARE', array($textOnlineVisitors));
     }
 }
 else
