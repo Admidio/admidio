@@ -254,6 +254,8 @@ final class PhpIniUtils
      */
     public static function startNewExecutionTimeLimit($seconds)
     {
+        global $gDebug, $gLogger;
+
         if (in_array('set_time_limit', self::getDisabledFunctions(), true))
         {
             return;
@@ -261,9 +263,9 @@ final class PhpIniUtils
 
         // @ prevents error output in safe-mode
         $result = @set_time_limit($seconds);
-        if (!$result)
+        if (!$result && $gDebug)
         {
-            throw new \RuntimeException('Starting a new execution time limit failed!');
+            $gLogger->warning('Function set_time_limit failed');
         }
     }
 }
