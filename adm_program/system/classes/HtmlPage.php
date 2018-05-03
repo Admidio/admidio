@@ -496,7 +496,7 @@ class HtmlPage
                       "theme": "classic",
                       "position": "bottom",
                       "content": {
-                        "message": "' . $gL10n->get('SYS_COOKIE_DESC', array('SYS_REMEMBER_ME')) . '",
+                        "message": "' . $gL10n->get('SYS_COOKIE_DESC') . '",
                         "dismiss": "' . $gL10n->get('SYS_OK') . '",
                         "link": "' . $gL10n->get('SYS_FURTHER_INFORMATIONS') . '"}
                     });

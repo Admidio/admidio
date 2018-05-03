@@ -223,8 +223,8 @@ $formCommon->addCheckbox(
     array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
 );
 $formCommon->addCheckbox(
-    'enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'],
-    array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
+    'enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), (bool) $formValues['enable_rss'],
+    array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC')
 );
 $formCommon->addCheckbox(
     'system_cookie_note', $gL10n->get('SYS_COOKIE_NOTE'), (bool) $formValues['system_cookie_note'],
