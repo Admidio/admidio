@@ -331,7 +331,10 @@ elseif ($getMode === 2)
     {
         // TODO
     }
-    unset($_SESSION['gCurrentSession']);
+    
+    // delete session data
+    session_unset();
+    session_destroy();
 
     // show notice that update was successful
     $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE . 'donate.php');

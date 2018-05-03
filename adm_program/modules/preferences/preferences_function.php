@@ -48,7 +48,7 @@ switch($getMode)
             {
                 case 'common':
                     $checkboxes = array(
-                        'enable_rss', 'enable_auto_login', 'enable_password_recovery',
+                        'enable_auto_login', 'enable_password_recovery', 'system_cookie_note', 'enable_rss', 
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
                     );
 
@@ -354,6 +354,10 @@ switch($getMode)
         $settingsManager =& $newOrganization->getSettingsManager();
         $settingsManager->setMulti($defaultOrgPreferences, false);
         $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
+
+        // now refresh the session organization object because of the new organization
+        $currentOrganizationId = (int) $gCurrentOrganization->getValue('org_id');
+        $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
 
         // if installation of second organization than show organization select at login
         if($gCurrentOrganization->countAllRecords() === 2)

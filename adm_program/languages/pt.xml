@@ -288,7 +288,7 @@
   <string name="INS_INSTALLATION_VERSION">Instalação da versão #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">A instalação está completa</string>
   <string name="INS_INTERN">Interno</string>
-  <string name="INS_LANGUAGE_NOT_CHOSEN">Nenhum idioma selecionado.</string>
+  <string name="INS_LANGUAGE_NOT_CHOSEN">Nenhum idioma selecionado</string>
   <string name="INS_MEMBERSHIP">Filiação</string>
   <string name="INS_MESSENGER">Mensageiro</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Não foi possível encontrar a instalação atual. Se a versão for Admidio 1.x atualize-o para Admidio 2.x primeiro, e então atualize a versão para #VAR1#. Se a versão for Admidio 2.x ou superior, por favor verifique a consistência da sua base de dados.</string>
@@ -744,7 +744,6 @@
   <string name="ORG_PARENT_ORGANIZATION">Organização pai</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Defina as organizações pai aqui. Organizações pai podem, por exemplo, criar eventos e anúncios, que seriam exibidos na organização filha.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Força da palavra-passe</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Especifique a segurança mínima de uma palavra-passe. \nO valor entre parênteses indica quantas tentativas seriam necessárias para alguém acertar a palavra-passe. \n\nNenhuma: palavra-passe arriscada. (&lt;10^3)\nBaixa: proteção contra ataques online de força-bruta. (&lt;10^6)\nMédia: proteção contra ataques online sem restrições. (&lt;10^8)\nAlta: proteção padrão contra ataques offline-hash. (&lt;10^10)\nMuito alta: Forte proteção contra ataques offline-hash. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Nenhuma</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Baixa</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Razoável</string>
@@ -767,6 +766,7 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Se esta opção estiver ativa, ex-membros e membros das outras organizações serão exibidos junto aos membros ativos da atual organização. Caso contrário, apenas os membros da atual organização serão exibidos. Ao criar outros usuários ou atribuir registos, todas as organizações continuarão a ser verificadas quanto à existência de usuários.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Exibir seleção de organização</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Caso haja várias organizações guardadas na base de dados, o ecrã de início de sessão exibirá uma caixa de seleção com todas as organizações disponíveis. O usuário poderá então, ao iniciar a sessão, selecionar outra organização (outra que não esteja definida no config.php). Entretanto, o usuário deve ser um membro registado da organização selecionada.</string>
+  <string name="ORG_SYSTEM_INFORMATION">Informações do sistema</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Endereço de e-mail</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Este campo deve conter um endereço de e-mail de um administrador, para que seja usado como remetente nas notificações do sistema, como por exemplo, as confirmações de registo.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificação de novas notas</string>
@@ -925,7 +925,7 @@
   <string name="PRO_PHOTO_DELETED">A foto de perfil foi alterada.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">O tamanho da foto enviada excede o tamanho permitido pelo servidor, que é de #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Apenas imagens JPG e PNG são permitidas.</string>
-  <string name="PRO_PHOTO_NOT_CHOSEN">Nenhum ficheiro de imagem selecionado.</string>
+  <string name="PRO_PHOTO_NOT_CHOSEN">Nenhuma imagem selecionada</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">O tamanho da foto enviada excede a resolução permitida do servidor, que é de #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">A nova foto de perfil foi guardada com sucesso.</string>
   <string name="PRO_PROFILE">Perfil</string>
@@ -979,7 +979,6 @@
   <string name="ROL_DEPENDENCIES">Dependências</string>
   <string name="ROL_DEPENDENT">Dependente</string>
   <string name="ROL_DISABLE_ROLE">Desabilitar o cargo</string>
-  <string name="ROL_DISABLE_ROLE_DESC">Ao selecionar #VAR1_BOLD#, o cargo e todos os mapeamentos de membros serão permanentemente apagados da base de dados, e não poderão mais ser vistos.</string>
   <string name="ROL_EDIT_ROLE">Editar cargo</string>
   <string name="ROL_ENABLE_ROLE">Ativar cargo</string>
   <string name="ROL_ENABLE_ROLE_DESC">Se reabilitar o cargo #VAR1_BOLD#, os membros do cargo serão atribuídos novamente com permissões e o cargo será selecionável em todas as listas.\n\nDeseja reabilitar o cargo?</string>
@@ -1145,6 +1144,7 @@
   <string name="SYS_DIRECTORY_PROTECTION">Proteção de diretório</string>
   <string name="SYS_CREATE_HTACCESS">Criar .htaccess</string>
   <string name="SYS_DISK_SPACE">Espaço em disco</string>
+  <string name="SYS_DISK_SPACE_ERROR">Não foi possível verificar o uso do disco.\n\nMensagem de erro:\n#VAR1#</string>
   <string name="SYS_DONATE">Doar</string>
   <string name="SYS_DONT_SHOW">Não exibir</string>
   <string name="SYS_DROPDOWN_LISTBOX">Caixa de listagem suspensa</string>
@@ -1248,6 +1248,7 @@
   <string name="SYS_MASTER_DATA">Informações básicas</string>
   <string name="SYS_MAX_PARTICIPANTS">Máx. participantes</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">tamanho máx processável de imagem</string>
+  <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Membro</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membro da organização #VAR1#</string>
   <string name="SYS_MEMBERS">Membros</string>
