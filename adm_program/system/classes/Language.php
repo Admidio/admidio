@@ -375,16 +375,24 @@ class Language
     }
 
     /**
-     * @param string            $text
-     * @param array<int,string> $params
-     * @return string
+     * Replaces all placeholders of the translation string with their values that are set through the array **$params**.
+     * If the value of the array is a translation id the method will automatically try to replace this id with the 
+     * translation string.
+     * @param string            $text   The tranlsation string with the static placeholders
+     * @param array<int,string> $params An array with values for each placeholder of the string.
+     * @return string           Returns the translation string with the replaced placeholders.
      */
-    private static function prepareTextPlaceholders($text, array $params)
+    private function prepareTextPlaceholders($text, array $params)
     {
         // replace placeholder with value of parameters
         foreach ($params as $index => $param)
         {
             $paramNr = $index + 1;
+
+            if(self::isTranslationStringId($param))
+            {
+                $param = $this->get($param);
+            }
 
             $replaces = array(
                 '#VAR' . $paramNr . '#'      => $param,
