@@ -278,6 +278,7 @@ $db->query($sql);
 
 // delete session data
 session_unset();
+session_destroy();
 
 // text for dialog
 $text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');

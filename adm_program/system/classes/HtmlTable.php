@@ -167,6 +167,21 @@ class HtmlTable extends HtmlTableBasic
     }
 
     /**
+     * Adds a complete row with all columns to the table. This will be the column footer row.
+     * Each value of the array represents the heading text for each column.
+     * @param array<int,string>    $arrColumnValues Array with the values for each column.
+     * @param string               $id              (optional) Set an unique id for the column.
+     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param int                  $colspan         (optional) Number of columns that should be join together.
+     * @param int                  $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
+     */
+    public function addRowFooterByArray(array $arrColumnValues, $id = null, array $arrAttributes = null, $colspan = 1, $colspanOffset = 1)
+    {
+        $this->addTableFooter();
+        $this->addRowTypeByArray('td', $arrColumnValues, $id, $arrAttributes, $colspan, $colspanOffset);
+    }
+
+    /**
      * Adds a complete row with all columns to the table. This will be the column heading row.
      * Each value of the array represents the heading text for each column.
      * @param array<int,string>    $arrColumnValues Array with the values for each column.

@@ -110,7 +110,7 @@ if($onlineUsersStatement->rowCount() > 0)
     {
         if($row['ses_usr_id'] > 0)
         {
-            if(((int) $row['ses_usr_id'] !== $usrIdMerker) 
+            if(((int) $row['ses_usr_id'] !== $usrIdMerker)
             && ($plg_show_members == 1 || $gValidLogin))
             {
                 $allVisibleOnlineUsers[] = '<strong><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'"
@@ -127,7 +127,7 @@ if($onlineUsersStatement->rowCount() > 0)
 
     if(!$gValidLogin && $plg_show_members == 2 && $countMembers > 0)
     {
-        if($countMembers > 1) 
+        if($countMembers > 1)
         {
             $allVisibleOnlineUsers[] = $gL10n->get('PLG_ONLINE_VAR_NUM_MEMBERS', $countMembers);
         }
@@ -137,7 +137,7 @@ if($onlineUsersStatement->rowCount() > 0)
         }
 
         $usrIdMerker = (int) $row['ses_usr_id'];
-	}
+    }
 
     if($plg_show_visitors && $countVisitors > 0)
     {

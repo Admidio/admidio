@@ -94,6 +94,8 @@ class Organization extends TableAccess
 
         $this->bCheckChildOrganizations = false;
         $this->childOrganizations       = array();
+        $this->countOrganizations       = 0;
+
         if ($this->settingsManager instanceof SettingsManager)
         {
             $this->settingsManager->clearAll();
