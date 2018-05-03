@@ -104,7 +104,7 @@ if($getMode === 'show_list')
     );
 
     // Define table
-    $table = new HtmlTable('tableList', $page, true);
+    $table = new HtmlTable('tableList', $page, true, true);
     $table->setMessageIfNoRowsFound('BAC_NO_BACKUP_FILE_EXISTS');
 
     // create array with all column heading values
@@ -116,6 +116,7 @@ if($getMode === 'show_list')
     );
     $table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
     $table->addRowHeadingByArray($columnHeading);
+    $table->setDatatablesOrderColumns(array(array(2, 'desc')));
 
     $backupSizeSum = 0;
 
@@ -139,7 +140,7 @@ if($getMode === 'show_list')
     if(count($existingBackupFiles) > 0)
     {
         $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), round($backupSizeSum / 1024) .' kB', '&nbsp;');
-        $table->addRowByArray($columnValues);
+        $table->addRowFooterByArray($columnValues);
     }
 
     $page->addHtml($table->show());
