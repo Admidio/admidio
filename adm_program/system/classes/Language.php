@@ -389,10 +389,7 @@ class Language
         {
             $paramNr = $index + 1;
 
-            if (self::isTranslationStringId($param))
-            {
-                $param = $this->get($param);
-            }
+            $param = self::translateIfTranslationStrId($param);
 
             $replaces = array(
                 '#VAR' . $paramNr . '#'      => $param,
