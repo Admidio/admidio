@@ -477,29 +477,30 @@ class HtmlPage
             </script>';
         }
 
-        if((bool) $gSettingsManager->get('system_cookie_note'))
+        if ($gSettingsManager->getBool('system_cookie_note'))
         {
             // add cookie approval to the page
             $headerContent .= '<link rel="stylesheet" type="text/css" href="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/cookieconsent/cookieconsent.min.css" />
             <script src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/cookieconsent/cookieconsent.min.js"></script>
             <script>
-                window.addEventListener("load", function(){
-                window.cookieconsent.initialise({
-                  "palette": {
-                    "popup": {
-                      "background": "#252e39"
-                    },
-                    "button": {
-                      "background": "#409099"
-                    }
-                  },
-                  "theme": "classic",
-                  "position": "bottom",
-                  "content": {
-                    "message": "' . $gL10n->get('SYS_COOKIE_DESC', array('SYS_REMEMBER_ME')) . '",
-                    "dismiss": "' . $gL10n->get('SYS_OK') . '",
-                    "link": "' . $gL10n->get('SYS_FURTHER_INFORMATIONS') . '"}
-                })});
+                window.addEventListener("load", function() {
+                    window.cookieconsent.initialise({
+                      "palette": {
+                        "popup": {
+                          "background": "#252e39"
+                        },
+                        "button": {
+                          "background": "#409099"
+                        }
+                      },
+                      "theme": "classic",
+                      "position": "bottom",
+                      "content": {
+                        "message": "' . $gL10n->get('SYS_COOKIE_DESC', array('SYS_REMEMBER_ME')) . '",
+                        "dismiss": "' . $gL10n->get('SYS_OK') . '",
+                        "link": "' . $gL10n->get('SYS_FURTHER_INFORMATIONS') . '"}
+                    });
+                });
             </script>';
         }
 

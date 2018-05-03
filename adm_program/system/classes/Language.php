@@ -140,7 +140,7 @@ class Language
             );
         }
 
-        return self::prepareTextPlaceholders($text, $paramsArray);
+        return $this->prepareTextPlaceholders($text, $paramsArray);
     }
 
     /**
@@ -376,11 +376,11 @@ class Language
 
     /**
      * Replaces all placeholders of the translation string with their values that are set through the array **$params**.
-     * If the value of the array is a translation id the method will automatically try to replace this id with the 
+     * If the value of the array is a translation id the method will automatically try to replace this id with the
      * translation string.
-     * @param string            $text   The tranlsation string with the static placeholders
+     * @param string            $text   The translation string with the static placeholders
      * @param array<int,string> $params An array with values for each placeholder of the string.
-     * @return string           Returns the translation string with the replaced placeholders.
+     * @return string Returns the translation string with the replaced placeholders.
      */
     private function prepareTextPlaceholders($text, array $params)
     {
@@ -389,7 +389,7 @@ class Language
         {
             $paramNr = $index + 1;
 
-            if(self::isTranslationStringId($param))
+            if (self::isTranslationStringId($param))
             {
                 $param = $this->get($param);
             }
