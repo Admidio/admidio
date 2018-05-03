@@ -358,7 +358,7 @@ switch($getMode)
         $newOrganization->createBasicData((int) $gCurrentUser->getValue('usr_id'));
 
         // now refresh the session organization object because of the new organization
-        $currentOrganizationId = $gCurrentOrganization->getValue('org_id');
+        $currentOrganizationId = (int) $gCurrentOrganization->getValue('org_id');
         $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);
 
         // if installation of second organization than show organization select at login
