@@ -1103,6 +1103,9 @@
     <string name="SYS_CONTENT">Inhalt</string>
     <string name="SYS_CONTRIBUTION">Beitrag</string>
     <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
+    <string name="SYS_COOKIE_NOTE">Hinweis auf Nutzung von Cookies anzeigen</string>
+    <string name="SYS_COOKIE_NOTE_DESC">Besucher und angemeldete Benutzer erhalten beim erstmaligen Aufruf der Webseite einen Hinweis, dass diese Seite Cookies nutzt. Dieser Hinweis muss vom Benutzer einmalig bestätigt werden, danach erhalt der Benutzer auf diesem Gerät und Browser keinen Hinweis mehr.</string>
+    <string name="SYS_COOKIE_DESC">Diese Webseite nutzt Cookies zur Verbesserung der Benutzerfreundlichkeit. Der Nutzer kann sich auf der Seite bewegen ohne die Anmeldung erneut vorzunehmen. Sofern die automatische Anmeldung nicht aktiviert ist, wird das Cookie beim Beenden der Browsersitzung gelöscht.</string>
     <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
     <string name="SYS_COPY">Kopieren</string>
     <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
@@ -1196,6 +1199,7 @@
     <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
     <string name="SYS_FRIDAY">Freitag</string>
     <string name="SYS_FULL_SCREEN">Vollbild</string>
+    <string name="SYS_FURTHER_INFORMATIONS">Weitere Informationen</string>
     <string name="SYS_GENDER">Geschlecht</string>
     <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
     <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>

@@ -48,7 +48,7 @@ switch($getMode)
             {
                 case 'common':
                     $checkboxes = array(
-                        'enable_rss', 'enable_auto_login', 'enable_password_recovery',
+                        'enable_auto_login', 'enable_password_recovery', 'system_cookie_note', 'enable_rss', 
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
                     );
 

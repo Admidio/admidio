@@ -210,21 +210,25 @@ $formCommon->addInput(
     'homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $formValues['homepage_login'],
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS')
 );
-$formCommon->addCheckbox(
-    'enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), (bool) $formValues['enable_rss'],
-    array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC')
-);
-$formCommon->addCheckbox(
-    'enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'],
-    array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
-);
 $formCommon->addInput(
     'logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
 );
 $formCommon->addCheckbox(
+    'enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'],
+    array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
+);
+$formCommon->addCheckbox(
     'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
     array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
+);
+$formCommon->addCheckbox(
+    'enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), (bool) $formValues['enable_rss'],
+    array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC')
+);
+$formCommon->addCheckbox(
+    'system_cookie_note', $gL10n->get('SYS_COOKIE_NOTE'), (bool) $formValues['system_cookie_note'],
+    array('helpTextIdInline' => 'SYS_COOKIE_NOTE_DESC')
 );
 $formCommon->addCheckbox(
     'system_search_similar', $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'), (bool) $formValues['system_search_similar'],
@@ -234,10 +238,6 @@ $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('S
 $formCommon->addSelectBox(
     'system_show_create_edit', $gL10n->get('ORG_SHOW_CREATE_EDIT'), $selectBoxEntries,
     array('defaultValue' => $formValues['system_show_create_edit'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_SHOW_CREATE_EDIT_DESC')
-);
-$formCommon->addCheckbox(
-    'system_js_editor_enabled', $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'), (bool) $formValues['system_js_editor_enabled'],
-    array('helpTextIdInline' => 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC')
 );
 $formCommon->addInput(
     'system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $formValues['system_js_editor_color'],
@@ -253,6 +253,10 @@ $selectBoxEntries = array(
 $formCommon->addSelectBox(
     'password_min_strength', $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'), $selectBoxEntries,
     array('defaultValue' => $formValues['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PASSWORD_MIN_STRENGTH_DESC')
+);
+$formCommon->addCheckbox(
+    'system_js_editor_enabled', $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'), (bool) $formValues['system_js_editor_enabled'],
+    array('helpTextIdInline' => 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC')
 );
 $formCommon->addCheckbox(
     'system_browser_update_check', $gL10n->get('ORG_BROWSER_UPDATE_CHECK'), (bool) $formValues['system_browser_update_check'],
