@@ -1105,7 +1105,7 @@
     <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
     <string name="SYS_COOKIE_NOTE">Hinweis auf Nutzung von Cookies anzeigen</string>
     <string name="SYS_COOKIE_NOTE_DESC">Besucher und angemeldete Benutzer erhalten beim erstmaligen Aufruf der Webseite einen Hinweis, dass diese Seite Cookies nutzt. Dieser Hinweis muss vom Benutzer einmalig bestätigt werden, danach erhalt der Benutzer auf diesem Gerät und Browser keinen Hinweis mehr.</string>
-    <string name="SYS_COOKIE_DESC">Diese Webseite nutzt Cookies zur Verbesserung der Benutzerfreundlichkeit. Durch das Setzen eines mit dem Anmeldenamen verknüpften Cookies wird dem Nutzer die Möglichkeit eingeräumt, sich frei auf der Seite zu bewegen ohne die Anmeldung erneut vorzunehmen zu müssen. Sofern die automatische Anmeldung nicht aktiviert wird, erfolgt eine Löschung des Cookies beim Beenden der Browsersitzung</string>
+    <string name="SYS_COOKIE_DESC">Diese Webseite nutzt Cookies zur Verbesserung der Benutzerfreundlichkeit. Der Nutzer kann sich auf der Seite bewegen ohne die Anmeldung erneut vorzunehmen. Sofern die automatische Anmeldung nicht aktiviert ist, wird das Cookie beim Beenden der Browsersitzung gelöscht.</string>
     <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
     <string name="SYS_COPY">Kopieren</string>
     <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
