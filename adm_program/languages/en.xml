@@ -1103,6 +1103,9 @@
   <string name="SYS_CONTENT">Content</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Contribution period</string>
+  <string name="SYS_COOKIE_NOTE">Show notice of use of cookies</string>
+  <string name="SYS_COOKIE_NOTE_DESC">Visitors and registered users receive a notice when using the website for the first time that this site uses cookies. This note must be confirmed once by the user, after that the user no longer receives any information on this device and browser.</string>
+  <string name="SYS_COOKIE_DESC">This website uses cookies to ensure that you get the best experience on our website. By using this website you agree that we use cookies.</string>
   <string name="SYS_COOKIE_NOT_SET">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, configure your browser to accept cookies from #VAR1_BOLD#.</string>
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
@@ -1196,6 +1199,7 @@
   <string name="SYS_FORGOT_MY_PASSWORD">I forgot my password!</string>
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FULL_SCREEN">Full screen</string>
+  <string name="SYS_FURTHER_INFORMATIONS">Further informations</string>
   <string name="SYS_GENDER">Gender</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
