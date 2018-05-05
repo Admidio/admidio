@@ -100,23 +100,24 @@ We want to thank the people behind these projects for contributing
 and sharing great software.
 
 - [Admidio Team](https://github.com/Admidio/admidio/graphs/contributors): The core developers of this project
-- [Icon Bibliothek famfamfam, Silk Icons](http://www.famfamfam.com/): Icon Bibliothek
-- [Tango Desktop Project](http://tango.freedesktop.org/): Icon Bibliothek Tango
 - [Bootstrap](https://getbootstrap.com/): HTML, CSS and JS framework
-- [jQuery](https://jquery.com/): JavaScript-Library
-- [CKEditor](http://ckeditor.com/): Javascript-Editor
-- [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
-- [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
-- [Datatables](https://www.datatables.net/): Table plugin for jQuery
-- [Select2](https://select2.github.io/): jQuery replacement for select boxes
-- [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
+- [CKEditor](http://ckeditor.com/): Javascript-Editor
+- [Cookie Consent](https://cookieconsent.insites.com/): The most popular solution to the EU cookie law
+- [Datatables](https://www.datatables.net/): Table plugin for jQuery
+- [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
+- [Icon Bibliothek famfamfam, Silk Icons](http://www.famfamfam.com/): Icon Bibliothek
+- [James Heinrich](http://www.silisoftware.com/): backupDB
+- [jQuery](https://jquery.com/): JavaScript-Library
+- [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Lightbox](https://ashleydw.github.io/lightbox/): Lightbox for bootstrap 3
 - [Moment](http://momentjs.com/): Parse, validate, manipulate, and display dates in JavaScript
 - [NobleCount](https://tpgblog.com/NobleCount/): NobleCount… for a more ‘proper’ count of the characters remaining.
-- [James Heinrich](http://www.silisoftware.com/): backupDB
-- [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
 - [phpass](http://www.openwall.com/phpass/): Portable PHP password hashing framework
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
+- [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
+- [Select2](https://select2.github.io/): jQuery replacement for select boxes
+- [Tango Desktop Project](http://tango.freedesktop.org/): Icon Bibliothek Tango
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
