@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.0', 0, 660)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.0', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.0', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.0', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.0', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.0', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.0', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.0', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.0', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.0', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.0', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.0', 0, 0)
-                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.0', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.0', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.0', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.0', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.0', 0, 0)
-                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.0', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.2', 0, 660)
+                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.2', 0, 0)
+                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.2', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.2', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.2', 0, 0)
+                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.2', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.2', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.2', 0, 0)
+                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.2', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.2', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.2', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.2', 0, 0)
+                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.2', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.2', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.2', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.2', 0, 0)
+                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.2', 0, 0)
+                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.2', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -35,7 +35,7 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 -- Data for table adm_menu
 --
 
-INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES 
+INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES
 (NULL, NULL, 1, 1, 1, 'modules', NULL, '', 'SYS_MODULES', ''),
 (NULL, NULL, 1, 2, 1, 'administration', NULL, '', 'SYS_ADMINISTRATION', ''),
 (NULL, NULL, 1, 3, 1, 'plugins', NULL, '', 'MEN_PLUGIN', ''),
@@ -156,6 +156,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (9100, 1, 'weblinks_redirect_seconds', '10'),
 (9200, 1, 'weblinks_target', '_blank'),
 (9300, 1, 'system_currency', '€'),
+(9305, 1, 'system_cookie_note', '1'),
 (9310, 1, 'system_date', 'd.m.Y'),
 (9320, 1, 'system_js_editor_enabled', '1'),
 (9330, 1, 'system_js_editor_color', '#96c4cb'),
@@ -263,6 +264,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (91001, 2, 'weblinks_redirect_seconds', '10'),
 (92001, 2, 'weblinks_target', '_blank'),
 (93010, 2, 'system_currency', '€'),
+(93015, 2, 'system_cookie_note', '1'),
 (93020, 2, 'system_date', 'd.m.Y'),
 (93030, 2, 'system_js_editor_enabled', '1'),
 (93040, 2, 'system_js_editor_color', '#96c4cb'),
