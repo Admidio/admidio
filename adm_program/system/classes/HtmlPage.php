@@ -477,7 +477,7 @@ class HtmlPage
             </script>';
         }
 
-        if ((bool) $gSettingsManager->get('system_cookie_note'))
+        if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note'))
         {
             if ($gSetCookieForDomain)
             {
