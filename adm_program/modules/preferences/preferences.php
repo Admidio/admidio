@@ -289,24 +289,24 @@ $formOrganization->addInput(
     array('maxLength' => 60)
 );
 
-// Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-if(!$gCurrentOrganization->isParentOrganization())
-{
-    $sqlData = array();
-    $sqlData['query'] = 'SELECT org_id, org_longname
-                           FROM '.TBL_ORGANIZATIONS.'
-                          WHERE org_id <> ? -- $orgId
-                            AND org_org_id_parent IS NULL
-                       ORDER BY org_longname ASC, org_shortname ASC';
-    $sqlData['params'] = array($orgId);
-    $formOrganization->addSelectBoxFromSql(
-        'org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sqlData,
-        array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC')
-    );
-}
-
 if($gCurrentOrganization->countAllRecords() > 1)
 {
+    // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
+    if(!$gCurrentOrganization->isParentOrganization())
+    {
+        $sqlData = array();
+        $sqlData['query'] = 'SELECT org_id, org_longname
+                               FROM '.TBL_ORGANIZATIONS.'
+                              WHERE org_id <> ? -- $orgId
+                                AND org_org_id_parent IS NULL
+                           ORDER BY org_longname ASC, org_shortname ASC';
+        $sqlData['params'] = array($orgId);
+        $formOrganization->addSelectBoxFromSql(
+            'org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sqlData,
+            array('defaultValue' => $formValues['org_org_id_parent'], 'helpTextIdInline' => 'ORG_PARENT_ORGANIZATION_DESC')
+        );
+    }
+
     $formOrganization->addCheckbox(
         'system_organization_select', $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'), (bool) $formValues['system_organization_select'],
         array('helpTextIdInline' => 'ORG_SHOW_ORGANIZATION_SELECT_DESC')
