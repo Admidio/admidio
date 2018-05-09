@@ -351,9 +351,8 @@ class TableDate extends TableAccess
                 return true;
             }
 
-            // if category belongs to all organizations only parent organization could edit events
-            if((int) $this->getValue('cat_org_id') === 0
-            && ($gCurrentOrganization->isParentOrganization() || $gCurrentOrganization->countAllRecords() === 1))
+            // if category belongs to all organizations, child organization couldn't edit it
+            if((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization())
             {
                 return true;
             }
