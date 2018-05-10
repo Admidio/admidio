@@ -319,7 +319,7 @@ if($plg_geb_aktiv)
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
-          ORDER BY '.$sqlYearOfBirthday.' DESC,' . $sqlMonthOfBirthday.' ASC, '.$sqlDayOfBirthday.' ASC, '. $sqlOrderName;
+          ORDER BY '.$sqlYearOfBirthday.' DESC,' . $sqlMonthOfBirthday.' DESC, '.$sqlDayOfBirthday.' DESC, '. $sqlOrderName;
 
     $queryParams = array(
         $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
