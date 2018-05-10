@@ -1417,7 +1417,7 @@ class User extends TableAccess
                    AND mem_end    > ? -- DATE_NOW
                    AND (  cat_org_id = ? -- $this->organizationId
                        OR cat_org_id IS NULL ) ';
-        $queryParams = array($this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $listViewStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($listViewStatement->rowCount() > 0)
