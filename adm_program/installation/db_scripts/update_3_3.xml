@@ -106,5 +106,6 @@
     <step id="650">ComponentUpdateSteps::updateStepMigrateToStandardMenu</step>
     <step id="660">ComponentUpdateSteps::updateStepDownloadOrgFolderName</step>
     <step id="670">UPDATE %PREFIX%_user_fields SET usf_registration = 1 WHERE usf_name_intern IN ('LAST_NAME', 'FIRST_NAME', 'EMAIL')</step>
+    <step id="680">UPDATE %PREFIX%_members SET mem_begin = '2018-04-01' WHERE mem_begin = '0000-00-00'</step>
     <step>stop</step>
 </update>
