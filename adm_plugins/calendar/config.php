@@ -32,7 +32,7 @@ $plg_link_target_geb = '_self';
 $plg_ter_aktiv = 1;
 
 // Anzeige der Termine nur für Mitglieder (eingeloggt) (1) oder alle (0)
-$plg_ter_login = 0;
+$plg_ter_login = 1;
 
 // Anzeige der Geburtstage aktiviert (1) oder deaktiviert (0)
 $plg_geb_aktiv = 1;
@@ -42,6 +42,9 @@ $plg_geb_login = 1;
 
 // Anzeige der Geburtstage mit Icon (1) oder ohne Icon (0)
 $plg_geb_icon = 1;
+
+// Anzeige des "Nachname, Vorname" (0) oder "Vorname" (1) andere Werte erzeugen "Nachname" (x)
+$plg_geb_displayNames = 1;
 
 // Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
 // Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
