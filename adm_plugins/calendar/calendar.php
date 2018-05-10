@@ -272,26 +272,28 @@ if($plg_geb_aktiv)
 {
     if(DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
     {
-        $sqlYearOfBirthday = ' date_part(\'year\', timestamp birthday.usd_value) ';
+        $sqlYearOfBirthday  = ' date_part(\'year\', timestamp birthday.usd_value) ';
         $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
         $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';
     }
     else
     {
-        $sqlYearOfBirthday = ' YEAR(birthday.usd_value) ';
+        $sqlYearOfBirthday  = ' YEAR(birthday.usd_value) ';
         $sqlMonthOfBirthday = ' MONTH(birthday.usd_value) ';
         $sqlDayOfBirthday   = ' DayOfMonth(birthday.usd_value) ';
     }
 
-    switch($plg_geb_displayNames) {
-        case 1: $sqlOrderName = 'first_name';
+    switch ($plg_geb_displayNames)
+    {
+        case 1:
+            $sqlOrderName = 'first_name';
             break;
-        case 2: $sqlOrderName = 'last_name';
+        case 2:
+            $sqlOrderName = 'last_name';
             break;
         case 0:
         default:
-                $sqlOrderName = 'last_name, first_name';
-            break;
+            $sqlOrderName = 'last_name, first_name';
     }
 
     // database query for all birthdays of this month
@@ -319,7 +321,11 @@ if($plg_geb_aktiv)
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
-          ORDER BY '.$sqlYearOfBirthday.' DESC,' . $sqlMonthOfBirthday.' DESC, '.$sqlDayOfBirthday.' DESC, '. $sqlOrderName;
+          ORDER BY ' .
+        $sqlYearOfBirthday . ' DESC,' .
+        $sqlMonthOfBirthday . ' DESC, ' .
+        $sqlDayOfBirthday . ' DESC, ' .
+        $sqlOrderName;
 
     $queryParams = array(
         $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
@@ -336,15 +342,17 @@ if($plg_geb_aktiv)
     {
         $birthdayDate = new \DateTime($row['birthday']);
 
-        switch($plg_geb_displayNames) {
-            case 1: $name = $row['first_name'];
-                    break;
-            case 2: $name = $row['last_name'];
-
+        switch($plg_geb_displayNames)
+        {
+            case 1:
+                $name = $row['first_name'];
+                break;
+            case 2:
+                $name = $row['last_name'];
+                break;
             case 0:
             default:
-                $name = $row['last_name']. ($row['last_name']?', ':'') . $row['first_name'];
-                break;
+                $name = $row['last_name'] . ($row['last_name'] ? ', ' : '') . $row['first_name'];
         }
 
         $birthdaysMonthDayArray[$birthdayDate->format('j')][] = array(
