@@ -627,6 +627,11 @@ if (in_array($getMode, array(3, 4, 7), true))
         $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
 
+        if ($member->isNewRecord())
+        {
+            $member->setValue('mem_begin', DATE_NOW);
+        }
+
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)
         {
