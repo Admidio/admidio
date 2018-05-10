@@ -170,7 +170,7 @@ if($plg_ter_aktiv)
     else
     {
         // show only calendars of the parameter $plg_kal_cat
-        $sqlSyntax = ' AND cat_name IN (' . Database::getQmForValues($plg_kal_cat) . ')';
+        $sqlSyntax = ' AND cat_name IN (' . replaceValuesArrWithQM($plg_kal_cat) . ')';
         $queryParams = array_merge($queryParams, $plg_kal_cat);
     }
 
@@ -178,7 +178,7 @@ if($plg_ter_aktiv)
               FROM '.TBL_DATES.'
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = dat_cat_id
-             WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
+             WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
                AND dat_begin <= ? -- $dateMonthEnd
                AND dat_end   >= ? -- $dateMonthStart
                    '.$sqlSyntax.'
@@ -270,7 +270,7 @@ if($plg_ter_aktiv)
 // query of all birthdays
 if($plg_geb_aktiv)
 {
-    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL)
+    if(DB_ENGINE === Database::PDO_ENGINE_PGSQL || DB_ENGINE === 'postgresql') // for backwards compatibility "postgresql"
     {
         $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
         $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';
@@ -361,9 +361,9 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 
 <table border="0" id="plgCalendarTable">
     <tr>';
-        if($plg_ajax_change)
-        {
-            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
+if($plg_ajax_change)
+{
+    echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
                 url: \'' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/calendar.php\',
                 cache: false,
                 data: \'ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth - 1, 1, $currentYear)).'\',
@@ -372,8 +372,8 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                     $(\'.admidio-calendar-link\').popover();
                 }
             }); return false;">&laquo;</a></th>';
-            echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
-            echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
+    echo '<th colspan="5" style="text-align: center;" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
+    echo '<th style="text-align: center;" class="plgCalendarHeader"><a href="#" onclick="$.get({
                 url: \'' . ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/calendar.php\',
                 cache: false,
                 data: \'ajax_change&amp;date_id='.date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)).'\',
@@ -382,12 +382,12 @@ echo '<div id="plgCalendarContent" class="admidio-plugin-content">
                     $(\'.admidio-calendar-link\').popover();
                 }
             }); return false;">&raquo;</a></th>';
-        }
-        else
-        {
-            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
-        }
-    echo '</tr>
+}
+else
+{
+    echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$months[$currentMonth - 1].' '.$currentYear.'</th>';
+}
+echo '</tr>
     <tr>
         <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_MONDAY_SHORT').'</strong></td>
         <td class="plgCalendarWeekday"><strong>'.$gL10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</strong></td>
