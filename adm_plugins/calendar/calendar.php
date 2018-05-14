@@ -375,22 +375,6 @@ if($firstWeekdayOfMonth === 0)
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
 
-<script type="text/javascript">
-    if (typeof gTranslations === "undefined") {
-        var gTranslations = [
-            "'.$gL10n->get('SYS_MON').'",
-            "'.$gL10n->get('SYS_TUE').'",
-            "'.$gL10n->get('SYS_WED').'",
-            "'.$gL10n->get('SYS_THU').'",
-            "'.$gL10n->get('SYS_FRI').'",
-            "'.$gL10n->get('SYS_SAT').'",
-            "'.$gL10n->get('SYS_SUN').'",
-            "'.$gL10n->get('SYS_TODAY').'",
-            "'.$gL10n->get('SYS_LOADING_CONTENT').'"
-        ];
-    }
-</script>
-
 <table border="0" id="plgCalendarTable">
     <tr>';
         if($plg_ajax_change)
