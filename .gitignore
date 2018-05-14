@@ -24,3 +24,5 @@
 
 # For custom configuration
 /.php_cs
+
+.idea/*
