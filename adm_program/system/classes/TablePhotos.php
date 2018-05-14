@@ -220,6 +220,8 @@ class TablePhotos extends TableAccess
             return false;
         }
 
+        // Magic goes here..
+
         return true;
     }
 
