@@ -447,7 +447,6 @@ class HtmlPage
         global $gL10n, $gSettingsManager, $gSetCookieForDomain;
 
         $headerContent = '';
-        $htmlMyHeader  = '';
 
         // add css files to page
         foreach ($this->cssFiles as $cssFile)
