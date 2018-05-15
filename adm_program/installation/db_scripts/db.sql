@@ -144,6 +144,7 @@ CREATE TABLE %PREFIX%_dates
     dat_location                varchar(100),
     dat_country                 varchar(100),
     dat_deadline                timestamp           NULL        DEFAULT NULL,
+    dat_photo_id                integer unsigned    NULL        DEFAULT NULL,
     dat_headline                varchar(100)        NOT NULL,
     dat_max_members             integer             NOT NULL    DEFAULT 0,
     dat_usr_id_create           integer unsigned,

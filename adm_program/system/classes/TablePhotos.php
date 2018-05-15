@@ -217,41 +217,37 @@ class TablePhotos extends TableAccess
         // locked photo album could only be viewed by module administrators
         elseif((int) $this->getValue('pho_locked') === 1 && !$gCurrentUser->editPhotoRight())
         {
+
             return false;
         }
 
-        if($gCurrentUser->isAdministrator()) {
-            error_log("[admin - allow access]");
-            return true;
-        }
-        //echo "pho_id:[".$this->getValue('pho_id')."]";
         $sql = 'SELECT * 
                       FROM '.TBL_DATES.'
                      WHERE dat_photo_id = '.$this->getValue('pho_id');
         $eventsTiedToPhotoAlbums = $this->db->query($sql)->fetchAll();
-        if(!sizeof($eventsTiedToPhotoAlbums)) {
-            // no event is tid to a phot album - so return true
-//            error_log("[no events have photo id - allow access]");
+        if($eventsTiedToPhotoAlbums->rowCount() === 0)
+        {
+            // no event is tid to a photo album - so return true
+
             return true;
         }
 
-        foreach($eventsTiedToPhotoAlbums as $event){
-            $sql = 'SELECT * from ' . TBL_MEMBERS . ' M '.
-            'JOIN ' . TBL_ROLES . ' R ON M.mem_rol_id = R.rol_id '.
-            ' WHERE M.mem_usr_id = '.$gCurrentUser->getValue('usr_id').
-            ' AND M.mem_approved = 2 '.
-            ' AND R.rol_id = '.$event['dat_rol_id'];
-            //echo $sql;
+        foreach($eventsTiedToPhotoAlbums as $event)
+        {
+            $sql  = 'SELECT * from ' . TBL_MEMBERS . ' M ';
+            $sql .= 'JOIN ' . TBL_ROLES . ' R ON M.mem_rol_id = R.rol_id ';
+            $sql .= ' WHERE M.mem_usr_id = '.$gCurrentUser->getValue('usr_id');
+            $sql .= ' AND M.mem_approved = 2 ';
+            $sql .= ' AND R.rol_id = '.$event['dat_rol_id'];
 
             $result = $this->db->query($sql)->fetchAll();
 
-            if(sizeof($result)) {
+            if($result->rowCount() > 0) {
                 // user was part of event...
-//                error_log("[User is member of party..]".$this->getValue('pho_id'));
+
                 return true;
             }
         }
-//        error_log("[User is not member of party..]");
 
         return false;
     }
