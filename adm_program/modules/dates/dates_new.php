@@ -178,6 +178,7 @@ $page->addJavascript('
             $("#dat_allow_comments_group").show("slow");
             $("#dat_additional_guests_group").show("slow");
             $("#date_deadline_group").show("slow");
+            $("#dat_photo_id_group").show("slow");
         } else {
             $("#adm_event_participation_right_group").hide();
             $("#date_current_user_assigned_group").hide();
@@ -187,6 +188,7 @@ $page->addJavascript('
             $("#dat_allow_comments_group").hide();
             $("#dat_additional_guests_group").hide();
             $("#date_deadline_group").hide("slow");
+            $("#dat_photo_id_group").hide("slow");
         }
     }
 
@@ -376,6 +378,15 @@ $form->addInput(
     'date_deadline', $gL10n->get('DAT_DEADLINE'), $date->getValue('dat_deadline', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
     array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
 );
+
+$form->addSelectBoxFromSql('dat_photo_id',
+    'zugeordnetes Photoalbum',
+    $gDb,
+    'select pho_id, pho_name from ' . TBL_PHOTOS,
+    array('defaultValue' => $date->getValue('dat_photo_id'), 'helpTextIdLabel' => 'DAT_PHOTO_RIGHTS')
+);
+
+
 $form->addCheckbox('date_right_list_view', $gL10n->get('DAT_RIGHT_VIEW_PARTICIPANTS'), (bool) $role->getValue('rol_this_list_view'));
 $form->addCheckbox('date_right_send_mail', $gL10n->get('DAT_RIGHT_MAIL_PARTICIPANTS'), (bool) $role->getValue('rol_mail_this_role'));
 $form->closeGroupBox();

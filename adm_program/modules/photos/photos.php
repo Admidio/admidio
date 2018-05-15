@@ -448,8 +448,13 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
     $ordner = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
     // show album if album is not locked or it has child albums or the user has the photo module edit right
-    if ((is_dir($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0)
-    || $childPhotoAlbum->hasChildAlbums() || $gCurrentUser->editPhotoRight())
+    if ($childPhotoAlbum->isVisible() && (
+        (is_dir($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0)
+        ||
+        $childPhotoAlbum->hasChildAlbums()
+        ||
+        $gCurrentUser->editPhotoRight()
+        ))
     {
         // Zufallsbild fuer die Vorschau ermitteln
         $shuffleImage = $childPhotoAlbum->shuffleImage();
@@ -470,98 +475,99 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
             $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'));
         }
 
-        $page->addHtml('
-            <div class="col-sm-6 admidio-album-card" id="panel_pho_'.$childPhotoAlbum->getValue('pho_id').'">
+        if($childPhotoAlbum->isVisible()) {
+            $page->addHtml('
+            <div class="col-sm-6 admidio-album-card" id="panel_pho_' . $childPhotoAlbum->getValue('pho_id') . '">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <div class="pull-left"><h4 class="panel-title">'.$albumTitle.'</h4></div>
+                        <div class="pull-left"><h4 class="panel-title">' . $albumTitle . '</h4></div>
                         <div class="pull-right text-right">
-        ');
-
-        // check if download option is enabled
-        if ($gSettingsManager->getBool('photo_download_enabled') && $childPhotoAlbum->getValue('pho_quantity') > 0)
-        {
-            $page->addHtml('
-                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
-                        src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>
             ');
-        }
+            // check if download option is enabled
+            if ($gSettingsManager->getBool('photo_download_enabled') && $childPhotoAlbum->getValue('pho_quantity') > 0)
+            {
+                $page->addHtml('
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
+                            src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>
+                ');
+            }
 
-        // if user has admin rights for photo module then show some functions
-        if ($gCurrentUser->editPhotoRight())
-        {
+            // if user has admin rights for photo module then show some functions
+            if ($gCurrentUser->editPhotoRight())
+            {
+                $page->addHtml('
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'"><img
+                        src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.$childPhotoAlbum->getValue('pho_id'),
+                        'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
+                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
+                ');
+            }
+
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'"><img
-                    src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.$childPhotoAlbum->getValue('pho_id'),
-                    'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
-                    src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
-            ');
-        }
-
-        $page->addHtml('
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
-                        <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
-                            class="thumbnail" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">
-        ');
-
-        $form = new HtmlForm('form_album_'.$childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
-        $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
-        $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
-        if (strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
-        {
-            $form->addStaticControl('pho_photographer', $gL10n->get('PHO_PHOTOGRAPHER'), $childPhotoAlbum->getValue('pho_photographers'));
-        }
-        $page->addHtml($form->show(false));
-        $page->addHtml('</div></div>');
-
-        // Notice for users with foto edit rights that the folder of the album doesn't exists
-        if (!is_dir($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
-        {
-            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
-        }
-
-        // Notice for users with foto edit right that this album is locked
-        if ($childPhotoAlbum->getValue('pho_locked') == 1 && is_dir($ordner))
-        {
-            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
-        }
-
-        // if user has admin rights for photo module then show some functions
-        if ($gCurrentUser->editPhotoRight())
-        {
-            if ($childPhotoAlbum->getValue('pho_locked') == 1)
-            {
-                $lockBtnName = $gL10n->get('PHO_ALBUM_UNLOCK');
-                $lockMode    = 'unlock';
-            }
-            else
-            {
-                $lockBtnName = $gL10n->get('PHO_ALBUM_LOCK');
-                $lockMode    = 'lock';
-            }
-
-            $page->addHtml('
-                <div class="btn-group" role="group" style="width: 100%;">
-                    <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;"
-                        data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal"><img
-                        src="'. THEME_URL. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
-                    </button>
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'"><img
-                        src="'. THEME_URL. '/icons/key.png"  alt="'.$lockBtnName.'" />'.$lockBtnName.'
-                    </button>
                 </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
+                            <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
+                                class="thumbnail" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">
             ');
-        }
 
-        $page->addHtml('</div></div></div>');
+            $form = new HtmlForm('form_album_'.$childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
+            $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
+            $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
+            if (strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
+            {
+                $form->addStaticControl('pho_photographer', $gL10n->get('PHO_PHOTOGRAPHER'), $childPhotoAlbum->getValue('pho_photographers'));
+            }
+            $page->addHtml($form->show(false));
+            $page->addHtml('</div></div>');
+
+            // Notice for users with foto edit rights that the folder of the album doesn't exists
+            if (!is_dir($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
+            {
+                $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
+            }
+
+            // Notice for users with foto edit right that this album is locked
+            if ($childPhotoAlbum->getValue('pho_locked') == 1 && is_dir($ordner))
+            {
+                $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
+            }
+
+            // if user has admin rights for photo module then show some functions
+            if ($gCurrentUser->editPhotoRight())
+            {
+                if ($childPhotoAlbum->getValue('pho_locked') == 1)
+                {
+                    $lockBtnName = $gL10n->get('PHO_ALBUM_UNLOCK');
+                    $lockMode    = 'unlock';
+                }
+                else
+                {
+                    $lockBtnName = $gL10n->get('PHO_ALBUM_LOCK');
+                    $lockMode    = 'lock';
+                }
+
+                $page->addHtml('
+                    <div class="btn-group" role="group" style="width: 100%;">
+                        <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;"
+                            data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal"><img
+                            src="'. THEME_URL. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
+                        </button>
+                        <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'"><img
+                            src="'. THEME_URL. '/icons/key.png"  alt="'.$lockBtnName.'" />'.$lockBtnName.'
+                        </button>
+                    </div>
+                ');
+            }
+
+            $page->addHtml('</div></div></div>');
+        }
     }//Ende wenn Ordner existiert
 }//for
 
@@ -569,7 +575,7 @@ $page->addHtml('</div>');
 
 /****************************Leeres Album****************/
 // Falls das Album weder Fotos noch Unterordner enthaelt
-if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0))  // alle vorhandenen Albumen werden ignoriert
+if ($photoAlbum->isVisible() && $albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0))  // alle vorhandenen Albumen werden ignoriert
 {
     $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));
 }

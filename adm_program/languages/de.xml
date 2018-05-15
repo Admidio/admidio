@@ -125,6 +125,7 @@
     <string name="DAT_VIEW_MODE_DETAIL">Detailliert</string>
     <string name="DAT_VIEW_MODE_COMPACT">Kompakt</string>
     <string name="DAT_VISIBILITY">Sichtbarkeit</string>
+    <string name="DAT_PHOTO_RIGHTS">Bei Auswahl eines Albums können nur noch Teilnehmer dieses Events an dieses Photoalbum</string>
     <!-- Phrases only in Downloadsmodule -->
     <string name="DOW_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
     <string name="DOW_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
