@@ -135,6 +135,11 @@ class ModuleDates extends Modules
     const MEMBER_APPROVAL_STATE_REFUSED   = 3;
 
     /**
+     * @var array An array with all names of the calendars whose events should be shown
+     */
+    protected $calendarNames = array();
+
+    /**
      * Constructor that will create an object of a parameter set needed in modules to get the recordsets.
      * Initialize parameters
      */
@@ -212,6 +217,34 @@ class ModuleDates extends Modules
     }
 
     /**
+     * Get number of available dates.
+     * @return int
+     */
+    public function getDataSetCount()
+    {
+        global $gDb, $gCurrentUser;
+
+        if ($this->id > 0)
+        {
+            return 1;
+        }
+
+        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
+        $sqlConditions = $this->getSqlConditions();
+
+        $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
+                  FROM ' . TBL_DATES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = dat_cat_id
+                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                       '. $sqlConditions['sql'];
+
+        $statement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
      * Returns a module specific headline
      * @param string $headline The initial headline of the module.
      * @return string Returns the full headline of the module
@@ -245,31 +278,97 @@ class ModuleDates extends Modules
     }
 
     /**
-     * Get number of available dates.
-     * @return int
+     * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
+     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions and it's query params.
      */
-    public function getDataSetCount()
+    private function getSqlConditions()
     {
-        global $gDb, $gCurrentUser;
+        global $gCurrentUser;
 
-        if ($this->id > 0)
+        $sqlConditions = '';
+        $params = array();
+
+        $id = (int) $this->getParameter('id');
+        // In case ID was permitted and user has rights
+        if ($id > 0)
         {
-            return 1;
+            $sqlConditions .= ' AND dat_id = ? '; // $id
+            $params[] = $id;
+        }
+        // ...otherwise get all additional events for a group
+        else
+        {
+            if (!$this->getParameter('dateStartFormatEnglish'))
+            {
+                $this->setDateRange(); // TODO Exception handling
+            }
+
+            // add 1 second to end date because full time events to until next day
+            $sqlConditions .= ' AND dat_begin <= ? AND dat_end > ? '; // $this->getParameter('dateEndFormatEnglish') . ' 23:59:59' AND $this->getParameter('dateStartFormatEnglish') . ' 00:00:00'
+            $params[] = $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59';
+            $params[] = $this->getParameter('dateStartFormatEnglish') . ' 00:00:00';
+
+            $catId = (int) $this->getParameter('cat_id');
+            // show all events from category
+            if ($catId > 0)
+            {
+                $sqlConditions .= ' AND cat_id = ? '; // $catId
+                $params[] = $catId;
+            }
         }
 
-        $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('DAT'));
-        $sqlConditions = $this->getSqlConditions();
+        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
+        // add conditions for role permission
+        if ($currUsrId > 0)
+        {
+            switch ($this->getParameter('show'))
+            {
+                case 'maybe_participate':
+                    $roleMemberships = $gCurrentUser->getRoleMemberships();
+                    $sqlConditions .= '
+                        AND dat_rol_id IS NOT NULL
+                        AND EXISTS (SELECT 1
+                                      FROM '. TBL_ROLES_RIGHTS .'
+                                INNER JOIN '. TBL_ROLES_RIGHTS_DATA .'
+                                        ON rrd_ror_id = ror_id
+                                     WHERE ror_name_intern = \'event_participation\'
+                                       AND rrd_object_id = dat_id
+                                       AND rrd_rol_id IN ('.replaceValuesArrWithQM($roleMemberships).')) ';
+                    $params = array_merge($params, $roleMemberships);
+                    break;
 
-        $sql = 'SELECT COUNT(DISTINCT dat_id) AS count
-                  FROM ' . TBL_DATES . '
-            INNER JOIN ' . TBL_CATEGORIES . '
-                    ON cat_id = dat_cat_id
-                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
-                       '. $sqlConditions['sql'];
+                case 'only_participate':
+                    $sqlConditions .= '
+                        AND dat_rol_id IS NOT NULL
+                        AND dat_rol_id IN (SELECT mem_rol_id
+                                             FROM ' . TBL_MEMBERS . ' AS mem2
+                                            WHERE mem2.mem_usr_id = ? -- $currUsrId
+                                              AND mem2.mem_begin <= dat_begin
+                                              AND mem2.mem_end   >= dat_end) ';
+                    $params[] = $currUsrId;
+                    break;
+            }
+        }
 
-        $statement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
+        // add valid calendars
+        if(count($this->calendarNames) > 0)
+        {
+            $sqlConditions .= ' AND cat_name IN (\''. implode($this->calendarNames) . '\')'; 
+        }
 
-        return (int) $statement->fetchColumn();
+        return array(
+            'sql'    => $sqlConditions,
+            'params' => $params
+        );
+    }
+
+    /**
+     * Method will set an array with all names of the calendars whose events should be shown
+     * @param array $arrCalendarNames An array with all names of the calendars whose events should be shown
+     */
+    public function setCalendarNames($arrCalendarNames)
+    {
+        $this->calendarNames = $arrCalendarNames;
     }
 
     /**
@@ -407,85 +506,6 @@ class ModuleDates extends Modules
             'fields' => $additionalFields,
             'tables' => $additionalTables,
             'params' => $additionalParams
-        );
-    }
-
-    /**
-     * Add several conditions to an SQL string that could later be used as additional conditions in other SQL queries.
-     * @return array<string,string|array<int,mixed>> Returns an array of a SQL string with additional conditions and it's query params.
-     */
-    private function getSqlConditions()
-    {
-        global $gCurrentUser;
-
-        $sqlConditions = '';
-        $params = array();
-
-        $id = (int) $this->getParameter('id');
-        // In case ID was permitted and user has rights
-        if ($id > 0)
-        {
-            $sqlConditions .= ' AND dat_id = ? '; // $id
-            $params[] = $id;
-        }
-        // ...otherwise get all additional events for a group
-        else
-        {
-            if (!$this->getParameter('dateStartFormatEnglish'))
-            {
-                $this->setDateRange(); // TODO Exception handling
-            }
-
-            // add 1 second to end date because full time events to until next day
-            $sqlConditions .= ' AND dat_begin <= ? AND dat_end > ? '; // $this->getParameter('dateEndFormatEnglish') . ' 23:59:59' AND $this->getParameter('dateStartFormatEnglish') . ' 00:00:00'
-            $params[] = $this->getParameter('dateEndFormatEnglish')   . ' 23:59:59';
-            $params[] = $this->getParameter('dateStartFormatEnglish') . ' 00:00:00';
-
-            $catId = (int) $this->getParameter('cat_id');
-            // show all events from category
-            if ($catId > 0)
-            {
-                $sqlConditions .= ' AND cat_id = ? '; // $catId
-                $params[] = $catId;
-            }
-        }
-
-        $currUsrId = (int) $gCurrentUser->getValue('usr_id');
-        // add conditions for role permission
-        if ($currUsrId > 0)
-        {
-            switch ($this->getParameter('show'))
-            {
-                case 'maybe_participate':
-                    $roleMemberships = $gCurrentUser->getRoleMemberships();
-                    $sqlConditions .= '
-                        AND dat_rol_id IS NOT NULL
-                        AND EXISTS (SELECT 1
-                                      FROM '. TBL_ROLES_RIGHTS .'
-                                INNER JOIN '. TBL_ROLES_RIGHTS_DATA .'
-                                        ON rrd_ror_id = ror_id
-                                     WHERE ror_name_intern = \'event_participation\'
-                                       AND rrd_object_id = dat_id
-                                       AND rrd_rol_id IN ('.replaceValuesArrWithQM($roleMemberships).')) ';
-                    $params = array_merge($params, $roleMemberships);
-                    break;
-
-                case 'only_participate':
-                    $sqlConditions .= '
-                        AND dat_rol_id IS NOT NULL
-                        AND dat_rol_id IN (SELECT mem_rol_id
-                                             FROM ' . TBL_MEMBERS . ' AS mem2
-                                            WHERE mem2.mem_usr_id = ? -- $currUsrId
-                                              AND mem2.mem_begin <= dat_begin
-                                              AND mem2.mem_end   >= dat_end) ';
-                    $params[] = $currUsrId;
-                    break;
-            }
-        }
-
-        return array(
-            'sql'    => $sqlConditions,
-            'params' => $params
         );
     }
 
