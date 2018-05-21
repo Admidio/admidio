@@ -1903,7 +1903,8 @@ class User extends TableAccess
         if (($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
         ||  (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
         || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
-            && $gCurrentUser->hasRightEditProfile($this, false)))
+            && $gCurrentUser->hasRightEditProfile($this, false))
+        || $this->saveChangesWithoutRights === true)
         {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
         }
