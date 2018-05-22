@@ -433,13 +433,13 @@ $page->addHtml('
                                 && (strlen($postcode) > 0 || strlen($city) > 0))
                                 {
                                     $address .= '
-                                        <a class="btn" href="'. $mapUrl. '" target="_blank"><img src="'. THEME_URL. '/icons/map.png"
+                                        <a class="btn" href="'. $mapUrl. '" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_HOME_DESC').'"><img src="'. THEME_URL. '/icons/map.png"
                                         alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>';
 
                                     // show route link if its not the profile of CurrentUser
                                     if($userId !== $currUsrId)
                                     {
-                                        $address .= ' - <a href="'.$routeUrl.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
+                                        $address .= ' - <a href="'.$routeUrl.'" target="_blank" title="'.$gL10n->get('SYS_MAP_LINK_ROUTE_DESC').'">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                     }
                                 }
 
