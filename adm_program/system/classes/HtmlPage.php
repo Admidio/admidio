@@ -88,6 +88,19 @@ class HtmlPage
      * @var string Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
      */
     protected $javascriptContentExecute = '';
+    /**
+     * @var string Contains the custom html code of the header theme file. This will be added to the header part of the page.
+     */
+    protected $htmlMyHeader = '';
+    /**
+     * @var string Contains the custom html code of the top body theme file. This will be added to the top of the body part of the page.
+     */
+    protected $htmlMyBodyTop = '';
+    /**
+     * @var string Contains the custom html code of the bottom body theme file. This will be added to the end of thebody part of the page.
+     */
+    protected $htmlMyBodyBottom = '';
+
 
     /**
      * Constructor creates the page object and initialized all parameters
@@ -241,6 +254,14 @@ class HtmlPage
                     </div>
                 </div>'
             );
+        }
+
+        // load content of theme files at this point so that files could add css and js files
+        if ($this->showThemeHtml)
+        {
+            $this->htmlMyHeader     = $this->getFileContent('my_header.php');
+            $this->htmlMyBodyTop    = $this->getFileContent('my_body_top.php');
+            $this->htmlMyBodyBottom = $this->getFileContent('my_body_bottom.php');
         }
     }
 
@@ -425,7 +446,6 @@ class HtmlPage
         global $gL10n, $gSettingsManager, $gSetCookieForDomain;
 
         $headerContent = '';
-        $htmlMyHeader  = '';
 
         // add css files to page
         foreach ($this->cssFiles as $cssFile)
@@ -512,12 +532,6 @@ class HtmlPage
             </script>';
         }
 
-        // load content of theme files
-        if ($this->showThemeHtml)
-        {
-            $htmlMyHeader = $this->getFileContent('my_header.php');
-        }
-
         $htmlHeader = '<head>
             <!-- (c) 2004 - 2018 The Admidio Team - ' . ADMIDIO_HOMEPAGE . ' -->
 
@@ -534,7 +548,7 @@ class HtmlPage
 
         $htmlHeader .= $headerContent;
         $htmlHeader .= $this->header;
-        $htmlHeader .= $htmlMyHeader;
+        $htmlHeader .= $this->htmlMyHeader;
         $htmlHeader .= '</head>';
 
         return $htmlHeader;
@@ -546,8 +560,6 @@ class HtmlPage
      */
     private function getHtmlBody()
     {
-        $htmlMyBodyTop    = '';
-        $htmlMyBodyBottom = '';
         $htmlMenu         = '';
         $htmlHeadline     = '';
 
@@ -571,21 +583,14 @@ class HtmlPage
             }
         }
 
-        // load content of theme files
-        if ($this->showThemeHtml)
-        {
-            $htmlMyBodyTop    = $this->getFileContent('my_body_top.php');
-            $htmlMyBodyBottom = $this->getFileContent('my_body_bottom.php');
-        }
-
         $htmlBody = '<body>';
-        $htmlBody .= $htmlMyBodyTop;
+        $htmlBody .= $this->htmlMyBodyTop;
         $htmlBody .= '<div class="admidio-content">';
         $htmlBody .= $htmlHeadline;
         $htmlBody .= $htmlMenu;
         $htmlBody .= $this->pageContent;
         $htmlBody .= '</div>';
-        $htmlBody .= $htmlMyBodyBottom;
+        $htmlBody .= $this->htmlMyBodyBottom;
         $htmlBody .= '</body>';
 
         return $htmlBody;

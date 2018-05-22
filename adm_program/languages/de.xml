@@ -940,7 +940,7 @@
     <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften anzeigen</string>
     <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)</string>
     <string name="PRO_SHOW_MAP_LINK">Kartenlink anzeigen</string>
-    <string name="PRO_SHOW_MAP_LINK_DESC">Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt, welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
+    <string name="PRO_SHOW_MAP_LINK_DESC">Ist die Adresse im Profil hinterlegt, so werden neben der Adresse zwei Links zu Google-Maps angezeigt. Es wird der Wohnort des Benutzers verlinkt und es wird die Route vom eigenen Wohnort zum Wohnort des angezeigten Benutzers verlinkt. Beim Aufruf der Links werden folgende Informationen der Profile an Google übertragen: Straße, Postleitzahl, Ort und Land. (Standard: nein)</string>
     <string name="PRO_SHOW_ROLE_MEMBERSHIP">Rollenmitgliedschaften anzeigen</string>
     <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</string>
     <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
@@ -1251,6 +1251,8 @@
     <string name="SYS_MALE">Männlich</string>
     <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
     <string name="SYS_MAP">Karte</string>
+    <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
+    <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
     <string name="SYS_MASTER_DATA">Stammdaten</string>
     <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
     <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>

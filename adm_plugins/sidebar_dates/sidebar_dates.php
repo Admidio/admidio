@@ -65,9 +65,9 @@ else
     $plg_link_target = '_self';
 }
 
-if(!isset($plg_kal_cat))
+if(!isset($plg_kal_cat) || (isset($plg_kal_cat[0]) && $plg_kal_cat[0] === 'all'))
 {
-    $plg_kal_cat = array('all');
+    $plg_kal_cat = array();
 }
 
 if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
@@ -87,6 +87,7 @@ $plgDates = new ModuleDates();
 
 // read events for output
 $plgDates->setDateRange();
+$plgDates->setCalendarNames($plg_kal_cat);
 $plgDatesResult = $plgDates->getDataSet(0, $plg_dates_count);
 
 $plgDate = new TableDate($gDb);

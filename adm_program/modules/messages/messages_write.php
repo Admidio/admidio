@@ -523,17 +523,18 @@ elseif (!isset($messageStatement))
 
         if($possibleEmails > 1)
         {
-            $sqlData['params'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
-                                    FROM '.TBL_USERS.'
-                              INNER JOIN '.TBL_USER_DATA.' AS email
-                                      ON email.usd_usr_id = usr_id
-                                     AND LENGTH(email.usd_value) > 0
-                              INNER JOIN '.TBL_USER_FIELDS.' AS field
-                                      ON field.usf_id = email.usd_usf_id
-                                     AND field.usf_type = \'EMAIL\'
-                                   WHERE usr_id = ? -- $currUsrId
-                                     AND usr_valid = 1
-                                GROUP BY email.usd_value, email.usd_value';
+            $sqlData = array();
+            $sqlData['query'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
+                                   FROM '.TBL_USERS.'
+                             INNER JOIN '.TBL_USER_DATA.' AS email
+                                     ON email.usd_usr_id = usr_id
+                                    AND LENGTH(email.usd_value) > 0
+                             INNER JOIN '.TBL_USER_FIELDS.' AS field
+                                     ON field.usf_id = email.usd_usf_id
+                                    AND field.usf_type = \'EMAIL\'
+                                  WHERE usr_id = ? -- $currUsrId
+                                    AND usr_valid = 1
+                               GROUP BY email.usd_value, email.usd_value';
             $sqlData['params'] = array($currUsrId);
 
             $form->addSelectBoxFromSql(

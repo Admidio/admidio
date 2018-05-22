@@ -111,27 +111,27 @@ else
             }
         }
     }
-}
 
-// check if user has right to view role
-// only users with the right to assign roles can view inactive roles
-if (!$gCurrentUser->hasRightViewRole($roleIds[0])
-|| ((int) $role->getValue('rol_valid') === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    // => EXIT
-}
+    // check if user has right to view role
+    // only users with the right to assign roles can view inactive roles
+    if (!$gCurrentUser->hasRightViewRole($roleIds[0])
+    || ((int) $role->getValue('rol_valid') === 0 && !$gCurrentUser->checkRolesRight('rol_assign_roles')))
+    {
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        // => EXIT
+    }
 
-// check if user has right to send mail to role
-if (!$gCurrentUser->hasRightSendMailToRole($roleIds[0]))
-{
-    $showLinkMailToList = false;
-    // => do not show the link
-}
+    // check if user has right to send mail to role
+    if (!$gCurrentUser->hasRightSendMailToRole($roleIds[0]))
+    {
+        $showLinkMailToList = false;
+        // => do not show the link
+    }
 
-$roleName         = $role->getValue('rol_name');
-$htmlSubHeadline .= $role->getValue('cat_name');
-$hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
+    $roleName         = $role->getValue('rol_name');
+    $htmlSubHeadline .= $role->getValue('cat_name');
+    $hasRightViewFormerMembers = $gCurrentUser->hasRightViewFormerRolesMembers($roleIds[0]);
+}
 
 // if user should not view former roles members then disallow it
 if(!$hasRightViewFormerMembers)

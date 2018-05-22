@@ -32,9 +32,10 @@ $plgShowFullDescription = 0;
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert))
 $plg_max_char_per_word = 0;
 
-// Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
-// Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
-$plg_kal_cat =  array('all');
+// If you only want to show events of a special calendar you can list the calendars in this parameter
+// just use the following syntax $plg_kal_cat = array('calendar-name-1','calendar-name-2')
+// If you want to view all events just set $plg_kal_cat = array();
+$plg_kal_cat =  array('');
 
 // Soll die Überschrift des Plugins angezeigt werden
 // 1 = (Default) Überschrift wird angezeigt

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_ONLINE_HEADLINE">线上</string>
+  <string name="PLG_ONLINE_HEADLINE">当前谁在线？</string>
   <string name="PLG_ONLINE_NO_VISITORS_ON_WEBSITE">还没有访客。</string>
   <string name="PLG_ONLINE_VAR_NUM_VISITORS">#VAR1# 访客</string>
   <string name="PLG_ONLINE_VAR_NUM_MEMBER">#VAR1# 会员</string>

@@ -272,13 +272,28 @@ if($plg_geb_aktiv)
 {
     if(DB_ENGINE === Database::PDO_ENGINE_PGSQL)
     {
+        $sqlYearOfBirthday  = ' date_part(\'year\', timestamp birthday.usd_value) ';
         $sqlMonthOfBirthday = ' date_part(\'month\', timestamp birthday.usd_value) ';
         $sqlDayOfBirthday   = ' date_part(\'day\', timestamp birthday.usd_value) ';
     }
     else
     {
+        $sqlYearOfBirthday  = ' YEAR(birthday.usd_value) ';
         $sqlMonthOfBirthday = ' MONTH(birthday.usd_value) ';
         $sqlDayOfBirthday   = ' DayOfMonth(birthday.usd_value) ';
+    }
+
+    switch ($plg_geb_displayNames)
+    {
+        case 1:
+            $sqlOrderName = 'first_name';
+            break;
+        case 2:
+            $sqlOrderName = 'last_name';
+            break;
+        case 0:
+        default:
+            $sqlOrderName = 'last_name, first_name';
     }
 
     // database query for all birthdays of this month
@@ -306,7 +321,11 @@ if($plg_geb_aktiv)
                AND rol_id '.$sqlRoleIds.'
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
-          ORDER BY '.$sqlMonthOfBirthday.' ASC, '.$sqlMonthOfBirthday.' ASC, last_name, first_name';
+          ORDER BY ' .
+        $sqlYearOfBirthday . ' DESC,' .
+        $sqlMonthOfBirthday . ' DESC, ' .
+        $sqlDayOfBirthday . ' DESC, ' .
+        $sqlOrderName;
 
     $queryParams = array(
         $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
@@ -323,10 +342,23 @@ if($plg_geb_aktiv)
     {
         $birthdayDate = new \DateTime($row['birthday']);
 
+        switch($plg_geb_displayNames)
+        {
+            case 1:
+                $name = $row['first_name'];
+                break;
+            case 2:
+                $name = $row['last_name'];
+                break;
+            case 0:
+            default:
+                $name = $row['last_name'] . ($row['last_name'] ? ', ' : '') . $row['first_name'];
+        }
+
         $birthdaysMonthDayArray[$birthdayDate->format('j')][] = array(
             'year' => $birthdayDate->format('Y'),
             'age'  => $currentYear - $birthdayDate->format('Y'),
-            'name' => $row['last_name']. ', '. $row['first_name']
+            'name' => $name
         );
     }
 }
@@ -342,22 +374,6 @@ if($firstWeekdayOfMonth === 0)
 
 echo '<div id="plgCalendarContent" class="admidio-plugin-content">
 <h3>'.$gL10n->get('DAT_CALENDAR').'</h3>
-
-<script type="text/javascript">
-    if (typeof gTranslations === "undefined") {
-        var gTranslations = [
-            "'.$gL10n->get('SYS_MON').'",
-            "'.$gL10n->get('SYS_TUE').'",
-            "'.$gL10n->get('SYS_WED').'",
-            "'.$gL10n->get('SYS_THU').'",
-            "'.$gL10n->get('SYS_FRI').'",
-            "'.$gL10n->get('SYS_SAT').'",
-            "'.$gL10n->get('SYS_SUN').'",
-            "'.$gL10n->get('SYS_TODAY').'",
-            "'.$gL10n->get('SYS_LOADING_CONTENT').'"
-        ];
-    }
-</script>
 
 <table border="0" id="plgCalendarTable">
     <tr>';
@@ -660,3 +676,8 @@ if($currentMonth.$currentYear !== date('mY'))
         }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
 echo '</div>';
+echo '<script type="text/javascript"><!--
+    $(document).ready(function() {
+        $(".admidio-calendar-link").popover();
+    });
+    --></script>';

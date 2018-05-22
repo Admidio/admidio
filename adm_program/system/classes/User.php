@@ -1753,6 +1753,7 @@ class User extends TableAccess
 
     /**
      * If this method is set then a user can save changes to the user if he hasn't the necessary rights
+     * to edit the whole profile or a special profile field of that user.
      * @return void
      */
     public function saveChangesWithoutRights()
@@ -1903,7 +1904,8 @@ class User extends TableAccess
         if (($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
         ||  (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
         || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
-            && $gCurrentUser->hasRightEditProfile($this, false)))
+            && $gCurrentUser->hasRightEditProfile($this, false))
+        || $this->saveChangesWithoutRights === true)
         {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
         }
