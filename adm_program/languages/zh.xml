@@ -4,9 +4,10 @@
   <string name="ANN_ANNOUNCEMENT">公告</string>
   <string name="ANN_ANNOUNCEMENTS">公告</string>
   <string name="ANN_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
+  <string name="ANN_EDIT_ANNOUNCEMENTS">编辑公告</string>
   <string name="ANN_EMAIL_NOTIFICATION_TITLE">已创建新公告</string>
   <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">在#VAR1#创建了新公告\n\n标题: #VAR2#\n创建者: #VAR3#\n创建于: #VAR4#</string>
-  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">组织最新公告 #VAR1#</string>
+  <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">部门最新公告 #VAR1#</string>
   <!--Phrases only in Backupmodule-->
   <string name="BAC_BACK_TO_BACKUP_PAGE">返回备份页面</string>
   <string name="BAC_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
@@ -16,7 +17,6 @@
   <string name="BAC_DATABASE_BACKUP">数据库备份</string>
   <string name="BAC_DATABASE_BACKUP_DESC">创建和下载系统表的数据库备份。</string>
   <string name="BAC_DAYS_VAR">#VAR1# 天</string>
-  <string name="BAC_FILE_NAME_INVALID">所选文件名包含无效字符。\n\n只允许输入字母字符，0-9的数字和特殊字符 $!?._+-()&amp;.</string>
   <string name="BAC_HOURS_VAR">#VAR1# 小时</string>
   <string name="BAC_MINUTES_VAR">#VAR1# 分钟</string>
   <string name="BAC_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
@@ -26,12 +26,17 @@
   <string name="BAC_SUM">总共</string>
   <string name="BAC_SECONDS_VAR">#VAR1# 秒</string>
   <!--Phrases only in Category-Administration-->
-  <string name="CAT_CATEGORY_EXIST">类别名称已存在于所选机构中。</string>
+  <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">上级部门模块的所有管理员</string>
+  <string name="CAT_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
+  <string name="CAT_CATEGORY_EXIST">类别名称已存在于所选部门中。</string>
+  <string name="CAT_CATEGORY_GLOBAL">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n 如果字段只应显示在您的部门中，请停用。</string>
   <string name="CAT_DEFAULT_VAR">标准 #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">你真的想删除部门 #VAR1_BOLD# 么?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
   <string name="CAT_MOVE_DOWN">下移 #VAR1#</string>
   <string name="CAT_MOVE_UP">上移 #VAR1#</string>
+  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">此首选项只能由上级部门设置。</string>
+  <string name="CAT_ONLY_PARENT_ORGANIZATION">此类别对所有部门都可见, 因此可能只能由上级部门编辑。</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">将活动添加到日程表</string>
   <string name="DAT_ALL_DAY">全职</string>
@@ -39,12 +44,12 @@
   <string name="DAT_ATTEND">参与</string>
   <string name="DAT_CALENDAR">日程表</string>
   <string name="DAT_CANCEL">取消</string>
-  <string name="DAT_CURRENT_DATES_OF_ORGA">组织的当前活动 #VAR1#</string>
+  <string name="DAT_CURRENT_DATES_OF_ORGA">部门的当前活动 #VAR1#</string>
   <string name="DAT_DATE">项目</string>
   <string name="DAT_DATES">项目</string>
   <string name="DAT_DATES_DESC">您可以在此处创建和编辑项目。用户可以申请参与该项目。</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">参与者列表中的标准配置</string>
-  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">这里的预设的配置可用于本机构的参与者在事件列表中的默认配置。只有被任命的参与者显示有这个配置。</string>
+  <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">这里的预设的配置可用于本部门的参与者在事件列表中的默认配置。只有被任命的参与者显示有这个配置。</string>
   <string name="DAT_EDIT_CALENDAR_DESC">你可以在这里创建和编辑日程表。</string>
   <string name="DAT_EDIT_ROOMS">编辑房间</string>
   <string name="DAT_EDIT_ROOMS_DESC">在这里您可以为项目创建和编辑房间。</string>
@@ -52,12 +57,11 @@
   <string name="DAT_EMAIL_NOTIFICATION_TITLE">创建了一个新项目</string>
   <string name="DAT_ENABLE_ICAL">启用iCal功能</string>
   <string name="DAT_ENABLE_ICAL_DESC">如果启用iCal，则可以下载给定时间段内的个别事件或所有事件。此外，用户将能够通过使用自己的日历客户端软件订阅事件。(默认值：yes)</string>
+  <string name="DAT_ERROR_DELETE_DEFAULT_LIST">列表 #VAR1_BOLD#  是此部门中参与者的默认配置列表, 无法删除。在模块设置中, 为默认配置选择不同的配置, 然后尝试删除此配置。</string>
   <string name="DAT_EXPORT_ICAL">导出(iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">高亮显示日期</string>
   <string name="DAT_ICAL_DAYS_FUTURE">未来的iCal天数</string>
-  <string name="DAT_ICAL_DAYS_FUTURE_DESC">此值定义将来应有多少天包括在iCal下载或订阅中。(默认值：365)</string>
   <string name="DAT_ICAL_DAYS_PAST">过去的iCal天数</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">此值定义了过去多少天应包括在iCal下载或订阅中。(默认值：30)</string>
   <string name="DAT_LOCATION">位置</string>
   <string name="DAT_LOCATION_LINK">如果提供了足够多关于位置的信息(街道，城市，位置)，Google地图就能计算到达该位置的路线。</string>
   <string name="DAT_LOGIN_POSSIBLE">你想激活注册项目的功能吗？\nIf项目被删除，所有注册的参与者也将被删除。\n如果你要阻止接下来的注册，请减少允许参与者的数量。</string>
@@ -138,14 +142,25 @@
   <string name="ECA_VIEW_PICTURE_FULL_SIZED">显示原图</string>
   <!--Phrases only in Guestbookmodule-->
   <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
+  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">部门的最新留言条目 #VAR1#</string>
   <!--Phrases only in Installation-->
+  <string name="INS_ADD_ANOTHER_ORGANIZATION">添加其他部门</string>
+  <string name="INS_ADD_ORGANIZATION">添加部门</string>
+  <string name="INS_DATA_OF_ORGANIZATION">部门的数据</string>
+  <string name="INS_DESCRIPTION_MEMBER">所有部门成员</string>
+  <string name="INS_ORGA_SHORTNAME_EXISTS">部门 “#VAR1_BOLD#” 已经存在，请选择其他部门名称。</string>
+  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">提供的部门名称不完整!</string>
+  <string name="INS_SET_ORGANIZATION">定义部门</string>
+  <string name="INS_SET_UP_ORGANIZATION">设置部门</string>
   <!--Phrases only in Linkmodule-->
   <string name="LNK_SAME_WINDOW">相同的窗口</string>
   <string name="LNK_WEBLINKS">网页链接</string>
   <string name="LNK_WEBLINKS_DESC">按类别创建和组织有兴趣的超链接。</string>
   <!--Phrases only in Listsmodule-->
   <string name="LST_A_TO_Z">A到Z</string>
+  <string name="LST_CONFIGURATION_DEFAULT">是否将选定的配置标记为该部门的默认配置？</string>
   <string name="LST_DEFAULT_CONFIGURATION">默认配置</string>
+  <string name="LST_DEFAULT_CONFIGURATION_DESC">此处给出的配置之一可以设置为该部门列表的默认配置。此配置将显示没有列表配置的角色的成员列表。</string>
   <string name="LST_DELETE_CONFIGURATION">删除配置</string>
   <string name="LST_EMAIL_TO_MEMBERS">向成员发送电子邮件</string>
   <string name="LST_EMAIL_TO_LIST">向列表发送电子邮件</string>
@@ -183,6 +198,7 @@
   <string name="MEM_REMOVE_USER">删除用户</string>
   <string name="MEM_REPLACE">替换</string>
   <string name="MEM_SEND_USERNAME_PASSWORD">发送电子邮件（使用用户名和密码）。</string>
+  <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <!--Phrases only in New-User-Registration-->
   <!--Phrases only in Organizationadministration-->
@@ -196,12 +212,14 @@
   <string name="ROL_ROLE_NAME_EXISTS">在这个类别中已经有相同角色。</string>
   <!--Phrases only in Roommodule-->
   <!--System-Phrases for use in every module-->
+  <string name="SYS_ALL_ORGANIZATIONS">所有部门</string>
   <string name="SYS_CATEGORIES">类别</string>
   <string name="SYS_CATEGORIES_VAR">#VAR1# - 类别</string>
   <string name="SYS_CATEGORY"> 类别</string>
   <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
   <string name="SYS_MAINTAIN_CATEGORIES">管理类别</string>
+  <string name="SYS_ORGANIZATION">部门</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">切换到类别管理</string>
   <string name="SYS_SYSTEM">系统</string>
   <string name="SYS_SYSTEM_MAILS">系统通知</string>
