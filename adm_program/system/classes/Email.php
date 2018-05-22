@@ -409,9 +409,16 @@ class Email extends PHPMailer
             $senderText .= self::CRLF . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
         }
 
-        $senderText .= self::CRLF .
-            '*****************************************************************************************************************************' .
-            self::CRLF . self::CRLF;
+        if($this->emSendAsHTML)
+        {
+            $senderText .= self::CRLF . '<hr style="border-width: 1px; border-style: solid;" />' . self::CRLF . self::CRLF;            
+        }
+        else
+        {
+            $senderText .= self::CRLF .
+                '*****************************************************************************************************************************' .
+                self::CRLF . self::CRLF;
+        }
 
         $this->emText .= $senderText;
         $this->emHtmlText .= nl2br($senderText);
