@@ -1753,6 +1753,7 @@ class User extends TableAccess
 
     /**
      * If this method is set then a user can save changes to the user if he hasn't the necessary rights
+     * to edit the whole profile or a special profile field of that user.
      * @return void
      */
     public function saveChangesWithoutRights()
