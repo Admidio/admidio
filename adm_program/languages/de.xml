@@ -1361,6 +1361,7 @@
     <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
     <string name="SYS_SECONDS">Sekunden</string>
     <string name="SYS_SECURE">Sicher</string>
+    <string name="SYS_SECURITY">Sicherheit</string>
     <string name="SYS_SECURITY_ERROR">Sicherheitsfehler</string>
     <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
     <string name="SYS_SEND">Abschicken</string>

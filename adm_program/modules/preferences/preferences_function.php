@@ -48,7 +48,7 @@ switch($getMode)
             {
                 case 'common':
                     $checkboxes = array(
-                        'enable_auto_login', 'enable_password_recovery', 'system_cookie_note', 'enable_rss', 
+                        'system_cookie_note', 'enable_rss', 
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
                     );
 
@@ -58,6 +58,12 @@ switch($getMode)
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                         // => EXIT
                     }
+                    break;
+
+                case 'security':
+                    $checkboxes = array(
+                        'enable_auto_login', 'enable_password_recovery'
+                    );
 
                     if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
                     {
