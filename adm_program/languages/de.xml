@@ -910,7 +910,7 @@
     <string name="PRO_LOGIN_NAME_EXIST">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</string>
     <string name="PRO_MAINTAIN_ITEM_FIELDS">Artikelfelder verwalten</string>
     <string name="PRO_MAINTAIN_PROFILE_FIELDS">Profilfelder pflegen</string>
-    <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</string>
+    <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
     <string name="PRO_MY_PROFILE">Mein Profil</string>
     <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
     <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
@@ -1248,6 +1248,7 @@
     <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
     <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
     <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
+    <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) zwischen einzelnen Benutzern definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
     <string name="SYS_MALE">Männlich</string>
     <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
     <string name="SYS_MAP">Karte</string>
