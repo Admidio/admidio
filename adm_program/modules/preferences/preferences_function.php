@@ -48,7 +48,7 @@ switch($getMode)
             {
                 case 'common':
                     $checkboxes = array(
-                        'system_cookie_note', 'enable_rss', 
+                        'system_cookie_note', 'enable_rss',
                         'system_search_similar', 'system_js_editor_enabled', 'system_browser_update_check'
                     );
 
@@ -56,6 +56,16 @@ switch($getMode)
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $_POST['theme'] . '/index.html'))
                     {
                         $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
+                        // => EXIT
+                    }
+                    if($_POST['system_url_imprint'] !== '' && !strValidCharacters($_POST['system_url_imprint'], 'url'))
+                    {
+                        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_IMPRINT'))));
+                        // => EXIT
+                    }
+                    if($_POST['system_url_data_protection'] !== '' && !strValidCharacters($_POST['system_url_data_protection'], 'url'))
+                    {
+                        $gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', array($gL10n->get('SYS_DATA_PROTECTION'))));
                         // => EXIT
                     }
                     break;

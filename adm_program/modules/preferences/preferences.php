@@ -228,6 +228,14 @@ $formCommon->addSelectBox(
     array('defaultValue' => $formValues['system_show_create_edit'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_SHOW_CREATE_EDIT_DESC')
 );
 $formCommon->addInput(
+    'system_url_data_protection', $gL10n->get('SYS_DATA_PROTECTION'), $formValues['system_url_data_protection'],
+    array('maxLength' => 250, 'helpTextIdInline' => 'SYS_DATA_PROTECTION_DESC')
+);
+$formCommon->addInput(
+    'system_url_imprint', $gL10n->get('SYS_IMPRINT'), $formValues['system_url_imprint'],
+    array('maxLength' => 250, 'helpTextIdInline' => 'SYS_IMPRINT_DESC')
+);
+$formCommon->addInput(
     'system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $formValues['system_js_editor_color'],
     array('maxLength' => 10, 'helpTextIdInline' => array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', array('SYS_REMEMBER_ME')), 'class' => 'form-control-small')
 );

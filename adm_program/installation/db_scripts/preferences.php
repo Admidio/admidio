@@ -34,6 +34,8 @@ $defaultOrgPreferences = array(
     'system_search_similar'          => '1',
     'system_show_create_edit'        => '1',
     'system_time'                    => 'H:i',
+    'system_url_imprint'             => '',
+    'system_url_data_protection'     => '',
     'password_min_strength'          => '1',
 
     // Registration
