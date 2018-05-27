@@ -522,7 +522,7 @@ class HtmlPage
                         "content": {
                             "message": "' . $gL10n->get('SYS_COOKIE_DESC') . '",
                             "dismiss": "' . $gL10n->get('SYS_OK') . '",';
-                            if(strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
+                            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
                             {
                                 $headerContent .= ' "href": "'. $gSettingsManager->getString('system_url_data_protection') .'", ';
                             }
