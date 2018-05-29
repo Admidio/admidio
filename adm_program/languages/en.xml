@@ -910,7 +910,7 @@
   <string name="PRO_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Maintain article fields</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS">Manage profile fields</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">You can create and edit profile fields which can be merged in categories.</string>
+  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">New profile fields and their properties can be defined as well as changes to existing profile fields. The fields can be assigned to categories and provided with rights, which roles can see or edit which profile fields.</string>
   <string name="PRO_MY_PROFILE">My profile</string>
   <string name="PRO_NEW_PASSWORD">New password</string>
   <string name="PRO_NEW_PICTURE">New profile picture</string>
@@ -940,7 +940,7 @@
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Display former role memberships</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Membership start and end date will be displayed. (default: yes)</string>
   <string name="PRO_SHOW_MAP_LINK">Show map link</string>
-  <string name="PRO_SHOW_MAP_LINK_DESC">When address information is complete, a link to Google Maps is being created in order to show location map and route from own location to user\'s location. (default: yes)</string>
+  <string name="PRO_SHOW_MAP_LINK_DESC">If the address is stored in the profile, two links to Google Maps are displayed next to the address. The user\'s place of residence is linked and the route from his own place of residence to the place of residence of the user displayed is linked. When accessing the links, the following profile information will be transmitted to Google: street, postcode, city, and country. (Default: no)</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP">Show role memberships</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Permissions and registration date will be displayed. (default: yes)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Display role of other organizations</string>
@@ -1113,15 +1113,18 @@
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
   <string name="SYS_CREATE">Create</string>
   <string name="SYS_CREATE_ENTRY">Add entry</string>
-  <string name="SYS_CREATE_VAR">Create #VAR1#</string>
+  <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_CREATE_NEW_USER">Add new user</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">If the new user is not listed among the users found, you can create it.</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
+  <string name="SYS_CREATE_VAR">Create #VAR1#</string>
   <string name="SYS_CREATED_BY">Created by #VAR1# on #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR1#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, weblinks ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD# </string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
+  <string name="SYS_DATA_PROTECTION">Data protection</string>
+  <string name="SYS_DATA_PROTECTION_DESC">Here, the URL to your page with the privacy policy can be deposited. This page is linked to the use of cookies for further information. If the selected theme supports this, a link will also be displayed on the Admidio pages. (Example: https://www.example.com/data_protection.html)</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_ERROR">Database error</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
@@ -1147,7 +1150,6 @@
   <string name="SYS_DESCRIPTION">Description</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
-  <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DONATE">Donate</string>
@@ -1213,6 +1215,8 @@
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Important</string>
+  <string name="SYS_IMPRINT">Imprint</string>
+  <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">information</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
@@ -1248,9 +1252,12 @@
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Manage categories</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Maintain relationship types</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
   <string name="SYS_MAP">Map</string>
+  <string name="SYS_MAP_LINK_HOME_DESC">Displays the location on Google Maps. The street, postal code, city and country are transferred to Google.</string>
+  <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MASTER_DATA">Basic information</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. processable image size</string>
@@ -1359,6 +1366,7 @@
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
   <string name="SYS_SECONDS">Seconds</string>
   <string name="SYS_SECURE">Secure</string>
+  <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SEND">Send</string>
