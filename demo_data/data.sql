@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.2', 0, 660)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.2', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.2', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.2', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.2', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.2', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.2', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.2', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.2', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.2', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.2', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.2', 0, 0)
-                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.2', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.2', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.2', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.2', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.2', 0, 0)
-                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.2', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.4', 0, 660)
+                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.4', 0, 0)
+                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.4', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.4', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.4', 0, 0)
+                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.4', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.4', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.4', 0, 0)
+                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.4', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.4', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.4', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.4', 0, 0)
+                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.4', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.4', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.4', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.4', 0, 0)
+                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.4', 0, 0)
+                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.4', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -165,6 +165,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (9360, 1, 'system_search_similar', '1'),
 (9365, 1, 'system_show_create_edit', '1'),
 (9370, 1, 'system_time', 'H:i'),
+(9375, 1, 'system_url_imprint', ''),
+(9380, 1, 'system_url_data_protection', ''),
 (9400, 1, 'captcha_background_color', '#FFEFC4'),
 (9420, 1, 'captcha_fonts', 'AHGBold.ttf'),
 (9430, 1, 'captcha_width', '250'),
@@ -273,6 +275,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (93070, 2, 'system_search_similar', '1'),
 (93080, 2, 'system_time', 'H:i'),
 (93650, 2, 'system_show_create_edit', '2'),
+(93750, 2, 'system_url_imprint', ''),
+(93800, 2, 'system_url_data_protection', ''),
 (94000, 2, 'captcha_background_color', '#FFEFC4'),
 (94020, 2, 'captcha_fonts', 'AHGBold.ttf'),
 (94030, 2, 'captcha_width', '250'),
