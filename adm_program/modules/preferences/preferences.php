@@ -210,18 +210,6 @@ $formCommon->addInput(
     'homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $formValues['homepage_login'],
     array('maxLength' => 250, 'property' => HtmlForm::FIELD_REQUIRED, 'helpTextIdInline' => 'ORG_HOMEPAGE_REGISTERED_USERS')
 );
-$formCommon->addInput(
-    'logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
-);
-$formCommon->addCheckbox(
-    'enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'],
-    array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
-);
-$formCommon->addCheckbox(
-    'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
-    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
-);
 $formCommon->addCheckbox(
     'enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), (bool) $formValues['enable_rss'],
     array('helpTextIdInline' => 'ORG_ENABLE_RSS_FEEDS_DESC')
@@ -240,19 +228,16 @@ $formCommon->addSelectBox(
     array('defaultValue' => $formValues['system_show_create_edit'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_SHOW_CREATE_EDIT_DESC')
 );
 $formCommon->addInput(
+    'system_url_data_protection', $gL10n->get('SYS_DATA_PROTECTION'), $formValues['system_url_data_protection'],
+    array('maxLength' => 250, 'helpTextIdInline' => 'SYS_DATA_PROTECTION_DESC')
+);
+$formCommon->addInput(
+    'system_url_imprint', $gL10n->get('SYS_IMPRINT'), $formValues['system_url_imprint'],
+    array('maxLength' => 250, 'helpTextIdInline' => 'SYS_IMPRINT_DESC')
+);
+$formCommon->addInput(
     'system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $formValues['system_js_editor_color'],
     array('maxLength' => 10, 'helpTextIdInline' => array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', array('SYS_REMEMBER_ME')), 'class' => 'form-control-small')
-);
-$selectBoxEntries = array(
-    0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
-    1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
-    2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
-    3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
-    4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH')
-);
-$formCommon->addSelectBox(
-    'password_min_strength', $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'), $selectBoxEntries,
-    array('defaultValue' => $formValues['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PASSWORD_MIN_STRENGTH_DESC')
 );
 $formCommon->addCheckbox(
     'system_js_editor_enabled', $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'), (bool) $formValues['system_js_editor_enabled'],
@@ -268,6 +253,46 @@ $formCommon->addSubmitButton(
 );
 
 $page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'options.png', $formCommon->show(false)));
+
+// PANEL: SECURITY
+
+$formSecurity = new HtmlForm(
+    'organization_preferences_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php', array('form' => 'security')),
+    $page, array('class' => 'form-preferences')
+);
+
+$formSecurity->addInput(
+    'logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
+);
+$selectBoxEntries = array(
+    0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
+    1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
+    2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
+    3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
+    4 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH')
+);
+$formSecurity->addSelectBox(
+    'password_min_strength', $gL10n->get('ORG_PASSWORD_MIN_STRENGTH'), $selectBoxEntries,
+    array('defaultValue' => $formValues['password_min_strength'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => 'ORG_PASSWORD_MIN_STRENGTH_DESC')
+);
+$formSecurity->addCheckbox(
+    'enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), (bool) $formValues['enable_auto_login'],
+    array('helpTextIdInline' => 'ORG_LOGIN_AUTOMATICALLY_DESC')
+);
+$formSecurity->addCheckbox(
+    'enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), (bool) $formValues['enable_password_recovery'],
+    array('helpTextIdInline' => array('ORG_SEND_PASSWORD_DESC', array('ORG_ACTIVATE_SYSTEM_MAILS')))
+);
+
+
+$formSecurity->addSubmitButton(
+    'btn_save_security', $gL10n->get('SYS_SAVE'),
+    array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+);
+
+$page->addHtml(getPreferencePanel('common', 'security', $gL10n->get('SYS_SECURITY'), 'shield.png', $formSecurity->show(false)));
+
 
 // PANEL: ORGANIZATION
 
@@ -843,6 +868,11 @@ $formUserManagement->addCheckbox(
     'members_enable_user_relations', $gL10n->get('MEM_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
     array('helpTextIdInline' => 'MEM_ENABLE_USER_RELATIONS_DESC')
 );
+$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php"><img
+            src="'. THEME_URL. '/icons/user_administration.png" alt="'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'" />'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'</a>';
+$htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$formUserManagement->addCustomContent($gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), $html, array('helpTextIdInline' => $htmlDesc));
+
 $formUserManagement->addSubmitButton(
     'btn_save_user_management', $gL10n->get('SYS_SAVE'),
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')

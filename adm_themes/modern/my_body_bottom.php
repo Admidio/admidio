@@ -29,5 +29,16 @@
              title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>"
              style="border: 0; vertical-align: bottom;" />
     </a><br />
-    <span style="font-size: 9pt; padding-left: 8px;">&copy; 2004 - 2018&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
+    <span style="font-size: 9pt; padding-left: 8px;">&copy; 2004 - 2018&nbsp;&nbsp;
+        <?php echo $gL10n->get('SYS_ADMIDIO_TEAM'). '<br />';
+            if ($gSettingsManager->has('system_url_data_protection') && strlen($gSettingsManager->getString('system_url_data_protection')) > 0)
+            {
+                echo '<a href="'.$gSettingsManager->getString('system_url_data_protection').'">'.$gL10n->get('SYS_DATA_PROTECTION').'</a>';
+            }
+            if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0)
+            {
+                echo '&nbsp;&nbsp;&nbsp;<a href="'.$gSettingsManager->getString('system_url_imprint').'">'.$gL10n->get('SYS_IMPRINT').'</a>';
+            }
+        ?>
+    </span>
 </p>
