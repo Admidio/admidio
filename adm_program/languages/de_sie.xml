@@ -910,7 +910,7 @@
   <string name="PRO_LOGIN_NAME_EXIST">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Artikelfelder verwalten</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS">Profilfelder pflegen</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</string>
+  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
   <string name="PRO_MY_PROFILE">Mein Profil</string>
   <string name="PRO_NEW_PASSWORD">Neues Passwort</string>
   <string name="PRO_NEW_PICTURE">Neues Profilfoto</string>
@@ -940,7 +940,7 @@
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften anzeigen</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)</string>
   <string name="PRO_SHOW_MAP_LINK">Kartenlink anzeigen</string>
-  <string name="PRO_SHOW_MAP_LINK_DESC">Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt, welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</string>
+  <string name="PRO_SHOW_MAP_LINK_DESC">Ist die Adresse im Profil hinterlegt, so werden neben der Adresse zwei Links zu Google-Maps angezeigt. Es wird der Wohnort des Benutzers verlinkt und es wird die Route vom eigenen Wohnort zum Wohnort des angezeigten Benutzers verlinkt. Beim Aufruf der Links werden folgende Informationen der Profile an Google übertragen: Straße, Postleitzahl, Ort und Land. (Standard: nein)</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP">Rollenmitgliedschaften anzeigen</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Rollen anderer Organisationen anzeigen</string>
@@ -1113,15 +1113,18 @@
   <string name="SYS_COUNTRY_EG" translation="edited">DEU</string>
   <string name="SYS_CREATE">Anlegen</string>
   <string name="SYS_CREATE_ENTRY">Eintrag anlegen</string>
-  <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
+  <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
   <string name="SYS_CREATE_NEW_USER">Neuen Benutzer anlegen</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</string>
   <string name="SYS_CREATE_ROLE">Rolle anlegen</string>
+  <string name="SYS_CREATE_VAR">#VAR1# anlegen</string>
   <string name="SYS_CREATED_BY">Angelegt von #VAR1# am #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Sie haben keine gültige E-Mail-Adresse hinterlegt!\n\nTragen Sie bitte in Ihrem #VAR1#Profil#VAR1# eine E-Mail-Adresse ein.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Termine, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
+  <string name="SYS_DATA_PROTECTION">Datenschutz</string>
+  <string name="SYS_DATA_PROTECTION_DESC">Hier kann die URL zu deiner Seite mit den Datenschutzhinweisen hinterlegt werden. Diese Seite wird innerhalb des Hinweises auf die Verwendung von Cookies für weitere Informationen verlinkt. Sofern das gewählte Theme dies unterstützt, wird auch ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/data_protection.html)</string>
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_ERROR">Datenbankfehler</string>
   <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
@@ -1147,7 +1150,6 @@
   <string name="SYS_DESCRIPTION">Beschreibung</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
-  <string name="SYS_CREATE_HTACCESS">.htaccess erstellen</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DONATE">Spenden</string>
@@ -1213,6 +1215,8 @@
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
+  <string name="SYS_IMPRINT">Impressum</string>
+  <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
@@ -1248,9 +1252,12 @@
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
+  <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
   <string name="SYS_MAP">Karte</string>
+  <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
+  <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
@@ -1359,6 +1366,7 @@
   <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
   <string name="SYS_SECONDS">Sekunden</string>
   <string name="SYS_SECURE">Sicher</string>
+  <string name="SYS_SECURITY">Sicherheit</string>
   <string name="SYS_SECURITY_ERROR">Sicherheitsfehler</string>
   <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
   <string name="SYS_SEND">Abschicken</string>

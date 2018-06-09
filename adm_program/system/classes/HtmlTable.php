@@ -306,11 +306,11 @@ class HtmlTable extends HtmlTableBasic
             $javascriptGroupFunction = '
                 // Order by the grouping
                 $("#' . $this->id . ' tbody").on("click", "tr.admidio-group-heading", function() {
-                    var currentOrder = table.order()[0];
+                    var currentOrder = admidioTable.order()[0];
                     if (currentOrder[0] === ' . $this->groupedColumn . ' && currentOrder[1] === "asc") {
-                        table.order([' . $this->groupedColumn . ', "desc"]).draw();
+                        admidioTable.order([' . $this->groupedColumn . ', "desc"]).draw();
                     } else {
-                        table.order([' . $this->groupedColumn . ', "asc"]).draw();
+                        admidioTable.order([' . $this->groupedColumn . ', "asc"]).draw();
                     }
                 });';
         }
