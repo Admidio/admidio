@@ -87,7 +87,6 @@ class AutoLogin extends TableAccess
 
         // Insert & Update
         $this->setValue('atl_last_login', DATETIME_NOW);
-        $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
 
         if ($this->newRecord)
         {
