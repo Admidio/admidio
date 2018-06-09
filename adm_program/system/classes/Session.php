@@ -371,7 +371,8 @@ class Session extends TableAccess
             // Insert
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('ses_begin', DATETIME_NOW);
-            $this->setValue('ses_ip_address', $_SERVER['REMOTE_ADDR']);
+            // save IP address and remove the last part because auf privacy (GDPR)
+            $this->setValue('ses_ip_address', preg_replace(['/\.\d*$/','/[\da-f]*:[\da-f]*$/'],['.XXX','XXXX:XXXX'],$_SERVER['REMOTE_ADDR']));
         }
 
         // Insert & Update
