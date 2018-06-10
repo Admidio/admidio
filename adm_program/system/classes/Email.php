@@ -495,9 +495,17 @@ class Email extends PHPMailer
         $this->Subject = $gL10n->get('MAI_CARBON_COPY') . ': ' . $this->Subject;
 
         // Kopie Header ergänzen
-        $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF .
-            '*****************************************************************************************************************************' .
-            self::CRLF . self::CRLF;
+        if($this->emSendAsHTML)
+        {
+            $senderText .= $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF . '<hr style="border-width: 1px; border-style: solid;" />' . 
+                self::CRLF . self::CRLF;            
+        }
+        else
+        {
+            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF .
+                '*****************************************************************************************************************************' .
+                self::CRLF . self::CRLF;
+        }
 
         // Falls das listRecipientsFlag gesetzt ist werden in der Kopie
         // die einzelnen Empfaenger aufgelistet:
