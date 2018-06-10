@@ -409,12 +409,6 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
     if (isset($postCarbonCopy) && $postCarbonCopy)
     {
         $email->setCopyToSenderFlag();
-
-        // if mail was send to user than show recipients in copy of mail if current user has a valid login
-        if ($gValidLogin)
-        {
-            $email->setListRecipientsFlag();
-        }
     }
 
     // get array with unique receivers
