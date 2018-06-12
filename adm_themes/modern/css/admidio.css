@@ -301,6 +301,10 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
+.btn .fas {
+    margin-right: 6px;
+}
+
 .admidio-icon-link img,
 .admidio-icon-info,
 .admidio-icon-help,

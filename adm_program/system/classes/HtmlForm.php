@@ -212,7 +212,14 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['icon'] !== '')
         {
-            $value = '<img src="' . $optionsAll['icon'] . '" alt="' . $text . '" />' . $value;
+            if(StringUtils::strStartsWith($optionsAll['icon'], 'fa-'))
+            {
+                $value = '<i class="fas ' . $optionsAll['icon'] . '"></i>' . $value;
+            }
+            else
+            {
+                $value = '<img src="' . $optionsAll['icon'] . '" alt="' . $text . '" />' . $value;
+            }
         }
         $this->addElement('button');
         $this->addAttribute('class', 'btn btn-default');
