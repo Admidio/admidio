@@ -301,7 +301,8 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
-.btn .fas {
+.btn .fas,
+.panel-title .fas {
     margin-right: 6px;
 }
 

@@ -207,11 +207,9 @@ if((bool) $menu->getValue('men_node') === false)
     );
 }
 
-$arrayIcons  = admFuncGetDirectoryEntries(THEME_PATH . '/icons');
-$defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons, true);
-$form->addSelectBox(
-    'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons,
-    array('defaultValue' => $defaultIcon, 'showContextDependentFirstEntry' => true)
+$form->addInput(
+    'men_icon', $gL10n->get('SYS_ICON'), $menu->getValue('men_icon', 'database'),
+    array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_FONT_AWESOME_DESC', 'class' => 'form-control-small')
 );
 
 $form->addSubmitButton(

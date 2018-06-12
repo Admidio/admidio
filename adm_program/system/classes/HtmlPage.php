@@ -819,7 +819,7 @@ class HtmlPage
                             $unreadBadge = self::getUnreadMessagesBadge();
 
                             $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                            $menuIcon = 'messages.png';
+                            $menuIcon = 'fa-comments';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
@@ -859,7 +859,7 @@ class HtmlPage
 
             $this->menu->addItem(
                 'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
-                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
+                'fa-comments', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
 

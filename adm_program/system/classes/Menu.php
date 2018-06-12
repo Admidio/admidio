@@ -175,7 +175,7 @@ class Menu
                     <li class="media">
                         <div class="media-left">
                             <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
-                                <img class="media-object" src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />
+                                <i class="fas '.$item['icon'].' fa-2x"></i>
                             </a>
                         </div>
                         <div class="media-body">
@@ -204,7 +204,7 @@ class Menu
                 $html .= '
                     <li>
                         <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn" href="'.$item['link'].'">
-                            <img src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />'.$item['text'].'
+                            <i class="fas '.$item['icon'].'"></i>'.$item['text'].'
                         </a>
                     </li>';
             }
