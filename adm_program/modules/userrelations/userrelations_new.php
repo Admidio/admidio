@@ -175,7 +175,7 @@ $form->addSelectBoxFromSql(
     'usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true)
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 // add form to html page and show page
 $page->addHtml($form->show());

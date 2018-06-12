@@ -140,7 +140,7 @@ $form->addCheckbox(
     array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $relationtype1->getValue('urt_usr_id_create'), $relationtype1->getValue('urt_timestamp_create'),
     (int) $relationtype1->getValue('urt_usr_id_change'), $relationtype1->getValue('urt_timestamp_change')

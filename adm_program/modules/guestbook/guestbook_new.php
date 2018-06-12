@@ -165,7 +165,7 @@ if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha'))
 }
 
 // show information about user who creates the recordset and changed it
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $guestbook->getValue('gbo_usr_id_create'), $guestbook->getValue('gbo_timestamp_create'),
     (int) $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')

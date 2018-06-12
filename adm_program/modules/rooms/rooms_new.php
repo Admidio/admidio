@@ -83,7 +83,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->addEditor('room_description', '', $room->getValue('room_description'), array('height' => '150px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $room->getValue('room_usr_id_create'), $room->getValue('room_timestamp_create'),
     (int) $room->getValue('dat_usr_id_change'),  $room->getValue('room_timestamp_change')

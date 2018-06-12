@@ -641,11 +641,11 @@ $form->openButtonGroup();
 $form->addButton('btn_add_column', $gL10n->get('LST_ADD_COLUMN'), array('icon' => THEME_URL.'/icons/add.png'));
 if($getListId > 0 && $list->getValue('lst_name') !== '')
 {
-    $form->addButton('btn_save_changes', $gL10n->get('LST_SAVE_CHANGES'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addButton('btn_save_changes', $gL10n->get('LST_SAVE_CHANGES'), array('icon' => 'fa-check'));
 }
 else
 {
-    $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => 'fa-check'));
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
 if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)

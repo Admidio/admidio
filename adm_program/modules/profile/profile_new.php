@@ -452,7 +452,7 @@ if($getNewUser === 2)
 }
 else
 {
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 }
 
 if($getNewUser === 0)

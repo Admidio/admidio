@@ -357,7 +357,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     $form->closeGroupBox();
 }
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'),
     (int) $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')

@@ -159,7 +159,7 @@ $form->addStaticControl(
 );
 $form->addSubmitButton(
     'btn_save', $gL10n->get('SYS_SAVE'),
-    array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
 // add form to html page and show page

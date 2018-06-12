@@ -210,7 +210,7 @@ elseif($getMode === 'html')
         );
         $form->addSubmitButton(
             'btn_save', $gL10n->get('SYS_SAVE'),
-            array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+            array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
         );
         echo $form->show();
     echo '</div>';

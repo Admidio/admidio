@@ -105,7 +105,7 @@ $form->addEditor(
     'ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'height' => '400')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
     (int) $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')
