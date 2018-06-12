@@ -302,7 +302,8 @@ a.btn {
 /**************************/
 
 .btn .fas,
-.panel-title .fas {
+.panel-title .fas,
+.navbar-link .fas {
     margin-right: 6px;
 }
 

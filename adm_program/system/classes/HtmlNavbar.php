@@ -149,7 +149,7 @@ class HtmlNavbar
             {
                 $icon = THEME_URL . $icon;
             }
-            else
+            elseif (!StringUtils::strStartsWith($icon, 'fa-'))
             {
                 $icon = THEME_URL . '/icons/' . $icon;
             }
@@ -192,7 +192,14 @@ class HtmlNavbar
 
         if ($data['icon'] !== '')
         {
-            $icon = '<img src="' . $data['icon'] . '" alt="' . strip_tags($data['text']) . '" />';
+            if (StringUtils::strStartsWith($data['icon'], 'fa-'))
+            {
+                $icon = '<i class="fas '.$data['icon'].'"></i>';
+            }
+            else
+            {
+                $icon = '<img src="' . $data['icon'] . '" alt="' . strip_tags($data['text']) . '" />';
+            }
         }
 
         $html = '

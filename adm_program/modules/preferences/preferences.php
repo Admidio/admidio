@@ -156,13 +156,20 @@ function getStaticText($type, $text, $info = '')
  */
 function getPreferencePanel($group, $id, $title, $icon, $body)
 {
-    return '
+    $html = '
         <div class="panel panel-default" id="panel_' . $id . '">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
-                        <img class="admidio-panel-heading-icon" src="' . THEME_URL . '/icons/' . $icon . '" alt="' . $title . '" />' . $title . '
-                    </a>
+                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">';
+                        if(StringUtils::strStartsWith($icon, 'fa-'))
+                        {
+                            $html .= '<i class="fas ' . $icon . '"></i>' . $title;
+                        }
+                        else
+                        {
+                            $html .= '<img class="admidio-panel-heading-icon" src="' . THEME_URL . '/icons/' . $icon . '" alt="' . $title . '" />' . $title;
+                        }
+                    $html .= '</a>
                 </h4>
             </div>
             <div id="collapse_' . $id . '" class="panel-collapse collapse">
@@ -172,6 +179,7 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
             </div>
         </div>
     ';
+    return $html;
 }
 
 $page->addHtml('
@@ -829,7 +837,7 @@ $formAnnouncements->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'announcements.png', $formAnnouncements->show()));
+$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'fa-newspaper', $formAnnouncements->show()));
 
 // PANEL: USER MANAGEMENT
 
