@@ -179,7 +179,10 @@ class Database
     {
         global $gLogger;
 
-        $gLogger->debug('DATABASE: sleep/serialize!');
+        if ($gLogger instanceof \Psr\Log\LoggerInterface)
+        {
+            $gLogger->debug('DATABASE: sleep/serialize!');
+        }
 
         return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
     }
