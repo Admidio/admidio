@@ -475,25 +475,33 @@ class Email extends PHPMailer
     }
 
     /**
-     * Sends a copy of the mail back to the sender
+     * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
+     * recipients will be listed in the mail.
      * @throws phpmailerException
      */
     private function sendCopyMail()
     {
         global $gL10n;
 
-        // Alle Empfänger entfernen
+        // remove all recipients
         $this->clearAllRecipients();
 
         $this->Subject = $gL10n->get('MAI_CARBON_COPY') . ': ' . $this->Subject;
 
-        // Kopie Header ergänzen
-        $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF .
-            '*****************************************************************************************************************************' .
-            self::CRLF . self::CRLF;
+        // add a separate header with info of the copy mail
+        if($this->emSendAsHTML)
+        {
+            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF . '<hr style="border-width: 1px; border-style: solid;" />' . 
+                self::CRLF . self::CRLF;            
+        }
+        else
+        {
+            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF .
+                '*****************************************************************************************************************************' .
+                self::CRLF . self::CRLF;
+        }
 
-        // Falls das listRecipientsFlag gesetzt ist werden in der Kopie
-        // die einzelnen Empfaenger aufgelistet:
+        // if the flag emListRecipients is set than list all recipients of the mail
         if ($this->emListRecipients)
         {
             $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':' . self::CRLF . self::CRLF .
@@ -503,7 +511,7 @@ class Email extends PHPMailer
         $this->emText = $copyHeader . $this->emText;
         $this->emHtmlText = nl2br($copyHeader) . $this->emHtmlText;
 
-        // Text in Nachricht einfügen
+        // add the text of the message
         if ($this->emSendAsHTML)
         {
             $this->msgHTML($this->emHtmlText);
@@ -513,7 +521,7 @@ class Email extends PHPMailer
             $this->Body = $this->emText;
         }
 
-        // neuer Empänger
+        // now set the sender of the original mail as the recipients of the copy mail
         $this->addAddress($this->emSender['address'], $this->emSender['name']);
 
         $this->send();
