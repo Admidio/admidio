@@ -359,7 +359,6 @@
     <string name="LNK_EDIT_WEBLINKS">Weblinks bearbeiten</string>
     <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
     <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-    <string name="LNK_GO_TO">Gehe zu #VAR1#</string>
     <string name="LNK_LINK_ADDRESS">Linkadresse</string>
     <string name="LNK_LINK_NAME">Linkname</string>
     <string name="LNK_LINK_TARGET">Linkziel</string>
