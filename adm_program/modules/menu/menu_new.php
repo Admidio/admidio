@@ -178,7 +178,7 @@ $form->addSelectBox(
     array(
         'property'                       => FIELD_REQUIRED,
         'defaultValue'                   => $menu->getValue('men_men_id_parent'),
-        'helpTextIdLabel'                => array('MEN_MENU_LEVEL_DESC', 'MAIN')
+        'helpTextIdLabel'                => 'MEN_MENU_LEVEL_DESC'
     )
 );
 
