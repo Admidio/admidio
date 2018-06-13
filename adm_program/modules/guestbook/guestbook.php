@@ -178,7 +178,7 @@ if($getGboId > 0 || $getModeration)
     // show link to navigate back to guestbook
     $guestbookMenu->addItem(
         'admMenuItemNavigateBack', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline)),
-        $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png'
+        $gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'fa-arrow-circle-left'
     );
 }
 

@@ -144,7 +144,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $ecardMenu = $page->getMenu();
-$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if($gCurrentUser->isAdministrator())
 {

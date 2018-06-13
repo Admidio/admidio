@@ -79,7 +79,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $linksCreateMenu = $page->getMenu();
-$linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // Html des Modules ausgeben
 if($getLinkId > 0)

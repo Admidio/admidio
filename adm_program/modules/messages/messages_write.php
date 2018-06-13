@@ -207,7 +207,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // add back link to module menu
 $messagesWriteMenu = $page->getMenu();
-$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {

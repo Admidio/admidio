@@ -122,7 +122,7 @@ else
 
     // add back link to module menu
     $rolesMenu = $page->getMenu();
-    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // show headline of module

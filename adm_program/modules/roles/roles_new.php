@@ -139,7 +139,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $rolesEditMenu = $page->getMenu();
-$rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('roles_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);

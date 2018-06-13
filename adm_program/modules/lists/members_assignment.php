@@ -221,7 +221,7 @@ else
 
     // get module menu
     $membersAssignmentMenu = $page->getMenu();
-    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
     if ($gCurrentUser->editUsers())
     {
         $membersAssignmentMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'fa-plus-circle');

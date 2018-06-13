@@ -67,7 +67,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $folderNewMenu = $page->getMenu();
-$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 

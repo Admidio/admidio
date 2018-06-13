@@ -116,7 +116,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $photoAlbumMenu = $page->getMenu();
-$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if ($getMode === 'new')
 {

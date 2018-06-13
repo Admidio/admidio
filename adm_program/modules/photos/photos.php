@@ -159,7 +159,7 @@ $photosMenu = $page->getMenu();
 
 if ($photoAlbum->getValue('pho_id') > 0)
 {
-    $photosMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $photosMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 if ($gCurrentUser->editPhotoRight())

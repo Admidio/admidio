@@ -35,7 +35,7 @@ $page->enableModal();
 $relationtypesMenu = $page->getMenu();
 
 // show back link
-$relationtypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$relationtypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // define link to create new category
 $relationtypesMenu->addItem(

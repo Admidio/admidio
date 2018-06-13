@@ -125,7 +125,7 @@ if($showOption !== '')
 
     // add back link to module menu
     $preferencesMenu = $page->getMenu();
-    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 else
 {

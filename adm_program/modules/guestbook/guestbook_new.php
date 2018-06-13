@@ -114,7 +114,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $guestbookCreateMenu = $page->getMenu();
-$guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // Html des Modules ausgeben
 if ($getGboId > 0)

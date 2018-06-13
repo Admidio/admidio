@@ -179,7 +179,7 @@ if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 
 // add back link to module menu
 $categoryCreateMenu = $page->getMenu();
-$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('categories_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_id' => $getCatId, 'type' => $getType, 'mode' => '1')), $page);
