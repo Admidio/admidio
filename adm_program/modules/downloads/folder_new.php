@@ -83,7 +83,7 @@ $form->addMultilineTextInput(
 );
 $form->addSubmitButton(
     'btn_create', $gL10n->get('DOW_CREATE_FOLDER'),
-    array('icon' => THEME_URL.'/icons/folder_create.png', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-plus-circle', 'class' => ' col-sm-offset-3')
 );
 
 // add form to html page and show page

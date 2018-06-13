@@ -9,7 +9,7 @@
     <step id="70">UPDATE %PREFIX%_menu SET men_icon = 'fa-list' WHERE men_icon = 'lists.png'</step>
     <step id="80">UPDATE %PREFIX%_menu SET men_icon = 'fa-calendar-alt' WHERE men_icon = 'dates.png'</step>
     <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'fa-link' WHERE men_icon = 'weblinks.png'</step>
-    <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'fa-list-ol' WHERE men_icon = 'mylist.png'</step>
+    <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'fa-list-alt' WHERE men_icon = 'mylist.png'</step>
     <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'fa-address-card' WHERE men_icon = 'new_registrations.png'</step>
     <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-friends' WHERE men_icon = 'user_administration.png'</step>
     <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'fa-database' WHERE men_icon = 'backup.png'</step>

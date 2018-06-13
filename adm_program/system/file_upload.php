@@ -33,7 +33,6 @@ $textUploadSuccessful    = '';
 $textUploadNotSuccessful = '';
 $textUploadDescription   = '';
 $textSelectFiles         = '';
-$iconUploadPath          = '';
 
 // module specific checks
 if($getModule === 'photos')
@@ -79,7 +78,6 @@ if($getModule === 'photos')
     $textUploadNotSuccessful = $gL10n->get('PHO_PHOTO_UPLOAD_NOT_SUCCESSFUL');
     $textUploadDescription = $gL10n->get('PHO_PHOTO_UPLOAD_DESC', array($photoAlbum->getValue('pho_name')));
     $textSelectFiles = $gL10n->get('PHO_SELECT_FOTOS');
-    $iconUploadPath = THEME_URL. '/icons/photo_upload.png';
 }
 elseif($getModule === 'downloads')
 {
@@ -125,7 +123,6 @@ elseif($getModule === 'downloads')
     $textUploadNotSuccessful = $gL10n->get('DOW_FILES_UPLOAD_NOT_SUCCESSFUL');
     $textUploadDescription = $gL10n->get('DOW_FILES_UPLOAD_DESC', array($folder->getValue('fol_name')));
     $textSelectFiles = $gL10n->get('DOW_SELECT_FILES');
-    $iconUploadPath = THEME_URL. '/icons/page_white_upload.png';
 }
 
 // check if the server allow file uploads
@@ -213,8 +210,8 @@ if($getMode === 'choose_files')
         <div class="modal-body">
             <p class="lead">'.$textUploadDescription.'</p>
 
-            <span class="btn btn-primary fileinput-button"><img
-                src="'. $iconUploadPath .'" alt="'.$textSelectFiles.'" />'.$textSelectFiles.'
+            <span class="btn btn-primary fileinput-button">
+                <i class="fas fa-upload"></i>'.$textSelectFiles.'
                 <input id="fileupload" type="file" name="files[]" multiple>
             </span>
             <br />

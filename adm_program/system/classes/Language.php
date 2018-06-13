@@ -296,6 +296,16 @@ class Language
     }
 
     /**
+     * Checks if a given string is a translation-string-id
+     * @param string $string The string to check
+     * @return bool Returns true if the given string is a translation-string-id
+     */
+    public static function isTranslationStringId($string)
+    {
+        return (bool) preg_match('/^[A-Z]{3}_([A-Z0-9]_?)*[A-Z0-9]$/', $string);
+    }
+
+    /**
      * Creates an array with all languages that are possible in Admidio.
      * The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
      * @return array<string,string>
@@ -478,16 +488,6 @@ class Language
         $this->languageData->setLanguage($language);
 
         return true;
-    }
-
-    /**
-     * Checks if a given string is a translation-string-id
-     * @param string $string The string to check
-     * @return bool Returns true if the given string is a translation-string-id
-     */
-    public static function isTranslationStringId($string)
-    {
-        return (bool) preg_match('/^[A-Z]{3}_([A-Z0-9]_?)*[A-Z0-9]$/', $string);
     }
 
     /**

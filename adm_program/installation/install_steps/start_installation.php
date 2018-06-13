@@ -261,7 +261,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOWNLOADS\'), 1, 0, 3, 1, \'download\', \''.FOLDER_MODULES.'/downloads/downloads.php\', \'fa-download\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \''.FOLDER_MODULES.'/lists/lists.php\', \'fa-list\', \'LST_LISTS\', \'LST_LISTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'fa-list-ol\', \'LST_MY_LIST\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'fa-list-alt\', \'LST_MY_LIST\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'fa-newspaper\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'fa-image\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'fa-book\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')

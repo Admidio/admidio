@@ -1926,7 +1926,14 @@ class HtmlForm extends HtmlFormBasic
 
         if ($parameter === null)
         {
-            $text = $gL10n->get($textId);
+            if(Language::isTranslationStringId($textId))
+            {
+                $text = $gL10n->get($textId);
+            }
+            else
+            {
+                $text = $textId;
+            }
         }
         else
         {
@@ -1940,9 +1947,8 @@ class HtmlForm extends HtmlFormBasic
             }
         }
 
-        return '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
-            title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
-            data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
+        return '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . htmlspecialchars($text) . '"></i>';
     }
 
     /**

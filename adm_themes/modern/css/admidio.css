@@ -308,6 +308,16 @@ a.btn {
     margin-right: 6px;
 }
 
+.fa-exclamation-triangle {
+    color:#dacc32;
+}
+
+.admidio-info-icon {
+    color:#4496dd;
+    cursor: help;
+    margin-left: 6px;
+}
+
 .admidio-icon-link img,
 .admidio-icon-info,
 .admidio-icon-help,

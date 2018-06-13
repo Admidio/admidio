@@ -155,7 +155,7 @@ $form->addSelectBoxFromSql(
 );
 $form->addStaticControl(
     'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-    array('helpTextIdLabel' => array('DOW_ADMINISTRATORS_DESC', $gL10n->get('ROL_RIGHT_DOWNLOAD')))
+    array('helpTextIdLabel' => $gL10n->get('DOW_ADMINISTRATORS_DESC', array($gL10n->get('ROL_RIGHT_DOWNLOAD'))))
 );
 $form->addSubmitButton(
     'btn_save', $gL10n->get('SYS_SAVE'),
