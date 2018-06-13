@@ -92,12 +92,12 @@ $rolesMenu = $page->getMenu();
 // define link to create new profile field
 $rolesMenu->addItem(
     'menu_item_new_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
-    $gL10n->get('SYS_CREATE_ROLE'), 'add.png'
+    $gL10n->get('SYS_CREATE_ROLE'), 'fa-plus-circle'
 );
 // define link to maintain categories
 $rolesMenu->addItem(
     'menu_item_maintain_category', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
 );
 // define link to show inactive roles
 $rolesMenu->addItem(

@@ -146,7 +146,7 @@ if($getViewMode === 'html')
     {
         $datesMenu->addItem(
             'admMenuItemAdd', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)),
-            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'add.png'
+            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'fa-plus-circle'
         );
     }
 
@@ -200,7 +200,7 @@ if($getViewMode === 'html')
             // if no calendar selectbox is shown, then show link to edit calendars
             $datesMenu->addItem(
                 'admMenuItemCategories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))),
-                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras'
+                $gL10n->get('DAT_MANAGE_CALENDARS'), 'fa-th-large', 'right', 'menu_item_extras'
             );
         }
 
@@ -209,7 +209,7 @@ if($getViewMode === 'html')
             // show link to system preferences of weblinks
             $datesMenu->addItem(
                 'admMenuItemPreferencesLinks', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'events')),
-                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+                $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
             );
         }
     }

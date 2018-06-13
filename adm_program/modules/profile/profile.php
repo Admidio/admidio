@@ -301,7 +301,7 @@ if($gCurrentUser->isAdministrator())
     // show link to system preferences of weblinks
     $profileMenu->addItem(
         'menu_item_preferences_links', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'profile')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
     );
 }
 

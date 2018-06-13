@@ -109,7 +109,7 @@ if($gCurrentUser->isAdministrator())
     // show link to system preferences of weblinks
     $downloadsMenu->addItem(
         'admMenuItemPreferencesLinks', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'downloads')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
     );
 }
 

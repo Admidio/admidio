@@ -529,7 +529,7 @@ $myListMenu = $page->getMenu();
 if($gCurrentUser->isAdministrator())
 {
     $myListMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
 }
 
 // if mylist was not called directly then show link to navigate to previous page

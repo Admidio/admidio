@@ -84,7 +84,7 @@ if($weblinks->getId() === 0)
         // show link to create new weblink
         $linksMenu->addItem(
             'menu_item_new_link', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('headline' => $getHeadline)),
-            $gL10n->get('LNK_CREATE_LINK'), 'add.png'
+            $gL10n->get('LNK_CREATE_LINK'), 'fa-plus-circle'
         );
     }
 
@@ -93,7 +93,7 @@ if($weblinks->getId() === 0)
         // show link to maintain categories
         $linksMenu->addItem(
             'menu_item_maintain_categories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK', 'title' => $getHeadline)),
-            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
         );
     }
 
@@ -102,7 +102,7 @@ if($weblinks->getId() === 0)
         // show link to system preferences of weblinks
         $linksMenu->addItem(
             'menu_items_links_preferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'links')),
-            $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+            $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
         );
     }
 

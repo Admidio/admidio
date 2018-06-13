@@ -77,7 +77,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // define link to create new menu
 $menuMenu->addItem(
     'admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',
-    $gL10n->get('GBO_CREATE_VAR_ENTRY', array($gL10n->get('SYS_MENU'))), 'add.png'
+    $gL10n->get('GBO_CREATE_VAR_ENTRY', array($gL10n->get('SYS_MENU'))), 'fa-plus-circle'
 );
 
 // Create table object

@@ -180,7 +180,7 @@ $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10
 // define link to create new category
 $categoriesMenu->addItem(
     'admMenuItemNewCategory', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('type' => $getType, 'title' => $getTitle)),
-    $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 'add.png'
+    $gL10n->get('SYS_CREATE_VAR', array($addButtonText)), 'fa-plus-circle'
 );
 
 // Create table object

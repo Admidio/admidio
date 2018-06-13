@@ -489,7 +489,7 @@ if ($getMode !== 'csv')
                 $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
 
                 $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $role->getValue('rol_id'))),
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png', 'left', 'menu_item_extras');
+                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'fa-plus-circle', 'left', 'menu_item_extras');
             }
         }
 

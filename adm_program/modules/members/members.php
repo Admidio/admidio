@@ -60,7 +60,7 @@ $membersAdministrationMenu = $page->getMenu();
 
 $membersAdministrationMenu->addItem(
     'menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
-    $gL10n->get('MEM_CREATE_USER'), 'add.png'
+    $gL10n->get('MEM_CREATE_USER'), 'fa-plus-circle'
 );
 
 if($gSettingsManager->getBool('profile_log_edit_fields'))
@@ -108,7 +108,7 @@ if($gCurrentUser->isAdministrator())
     // show link to system preferences of weblinks
     $membersAdministrationMenu->addItem(
         'menu_item_preferences_links', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'user_management')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
     );
 }
 

@@ -167,7 +167,7 @@ if ($gCurrentUser->editPhotoRight())
     // show link to create new album
     $photosMenu->addItem(
         'menu_item_new_album', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('mode' => 'new', 'pho_id' => $getPhotoId)),
-        $gL10n->get('PHO_CREATE_ALBUM'), 'add.png'
+        $gL10n->get('PHO_CREATE_ALBUM'), 'fa-plus-circle'
     );
 
     if ($getPhotoId > 0)
@@ -195,7 +195,7 @@ if ($gCurrentUser->isAdministrator())
     // show link to system preferences of photos
     $photosMenu->addItem(
         'menu_item_preferences_photos', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'photos')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
     );
 }
 

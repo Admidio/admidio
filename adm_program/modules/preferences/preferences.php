@@ -260,7 +260,7 @@ $formCommon->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'options.png', $formCommon->show(false)));
+$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'fa-cog', $formCommon->show(false)));
 
 // PANEL: SECURITY
 

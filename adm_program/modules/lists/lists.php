@@ -91,14 +91,14 @@ if($gCurrentUser->manageRoles())
 {
     // show link to create new role
     $listsMenu->addItem('admMenuItemNewRole', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
-                        $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+                        $gL10n->get('SYS_CREATE_ROLE'), 'fa-plus-circle');
 }
 
 if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 {
     // show link to maintain categories
     $listsMenu->addItem('menu_item_maintain_categories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large');
 }
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
@@ -113,7 +113,7 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of roles
     $listsMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
 }
 
 $previousCategoryId = 0;
