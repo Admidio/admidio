@@ -176,7 +176,7 @@ else
                 // show weblink
                 $page->addHtml('
                 <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/links/links_redirect.php', array('lnk_id' => $lnkId)).'" target="'. $gSettingsManager->getString('weblinks_target'). '"><img src="'. THEME_URL. '/icons/weblinks.png"
-                    alt="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" title="'.$gL10n->get('LNK_GO_TO', array($lnkName)).'" />'.$lnkName.'</a>');
+                    alt="'.$lnkName.'" />'.$lnkName.'</a>');
 
                 // change and delete only users with rights
                 if ($weblink->isEditable())
