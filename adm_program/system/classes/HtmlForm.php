@@ -655,6 +655,11 @@ class HtmlForm extends HtmlFormBasic
             $attributes['accept'] = implode(',', $optionsAll['allowedMimeTypes']);
         }
 
+        if ($optionsAll['icon'] === '')
+        {
+            $optionsAll['icon'] = 'fa-upload';
+        }
+
         // set specific css class for this field
         if ($optionsAll['class'] !== '')
         {
@@ -682,7 +687,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
-                                    $optionsAll['icon'], 'form-upload');
+                                    '', 'form-upload');
         $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', (string) $optionsAll['maxUploadSize']);
 
         // if multi uploads are enabled then the file upload field could be hidden
@@ -697,9 +702,8 @@ class HtmlForm extends HtmlFormBasic
             // show button to add new upload field to form
             $this->addHtml(
                 '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-default">
-                    <img src="' . THEME_URL . '/icons/add.png" alt="' . $optionsAll['multiUploadLabel'] . '" />'
-                    . $optionsAll['multiUploadLabel'] .
-                '</button>'
+                    <i class="fas ' . $optionsAll['icon'] . '"></i>' . $optionsAll['multiUploadLabel'] . '
+                </button>'
             );
         }
         $this->closeControlStructure($optionsAll['helpTextIdInline']);

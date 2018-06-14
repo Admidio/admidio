@@ -592,7 +592,8 @@ elseif (!isset($messageStatement))
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
                 'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
                 'hideUploadField'    => true,
-                'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))
+                'helpTextIdLabel'    => $gL10n->get('MAI_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
+                'icon'               => 'fa-paperclip'
             )
         );
     }
