@@ -56,7 +56,7 @@ return array(
     // example UTF-8 charset (TTF file must support symbols being used
     // 'charset'          => "абвгдeжзийклмнопрстуфхцчшщъьюяАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯ",
 
-    'ttf_file'         => '../../system/fonts/'.$gSettingsManager->getString('captcha_fonts'),
+    'ttf_file'         => '../../../system/fonts/'.$gSettingsManager->getString('captcha_fonts'),
 
     /**** Code Storage & Database Options ****/
 
