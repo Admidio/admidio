@@ -1441,5 +1441,7 @@
     <string name="SYS_WEDNESDAY">Mittwoch</string>
     <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
     <string name="SYS_WIDTH">Breite</string>
+    <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
+    <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
     <string name="SYS_YES">Ja</string>
 </resources>
