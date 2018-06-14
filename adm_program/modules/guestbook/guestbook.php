@@ -205,7 +205,7 @@ if(!$getModeration && $gCurrentUser->editGuestbookRight() && (int) $gSettingsMan
     {
         $guestbookMenu->addItem(
             'admMenuItemModerate', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook.php', array('moderation' => '1', 'headline' => $getHeadline)),
-            $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'star.png'
+            $gL10n->get('GBO_MODERATE_ENTRIES').'<span class="badge">'.$countLockedEntries.'</span>', 'fa-tasks'
         );
     }
 }
@@ -304,10 +304,10 @@ else
                 {
                     $page->addHtml('
                     <div class="btn-group" role="group">
-                        <button class="btn btn-default" onclick="callUrlHideElement(\'gbo_'.$gboId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 9, 'id' => $gboId)).'\')"><img
-                            src="'. THEME_URL. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
-                        <button class="btn btn-default" onclick="callUrlHideElement(\'gbo_'.$gboId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 2, 'id' => $gboId)).'\')"><img
-                            src="'. THEME_URL. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
+                        <button class="btn btn-default" onclick="callUrlHideElement(\'gbo_'.$gboId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 9, 'id' => $gboId)).'\')">
+                            <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                        <button class="btn btn-default" onclick="callUrlHideElement(\'gbo_'.$gboId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 2, 'id' => $gboId)).'\')">
+                            <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                     </div>');
                 }
 

@@ -466,7 +466,7 @@ if ($getMode !== 'csv')
             $listsMenu->addItem(
                 'menu_item_normal_picture',
                 safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'false', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png'
+                $gL10n->get('SYS_NORMAL_PICTURE'), 'fa-compress'
             );
         }
         else
@@ -474,12 +474,12 @@ if ($getMode !== 'csv')
             $listsMenu->addItem(
                 'menu_item_full_screen',
                 safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('lst_id' => $getListId, 'rol_ids' => $getRoleIds, 'mode' => 'html', 'show_former_members' => $getShowFormerMembers, 'full_screen' => 'true', 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png'
+                $gL10n->get('SYS_FULL_SCREEN'), 'fa-expand-arrows-alt'
             );
         }
 
         // link to print overlay and exports
-        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
 
         if ($numberRoles === 1)
         {
@@ -489,7 +489,7 @@ if ($getMode !== 'csv')
                 $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
 
                 $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $role->getValue('rol_id'))),
-                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'fa-plus-circle', 'left', 'menu_item_extras');
+                    $gL10n->get('SYS_ASSIGN_MEMBERS'), 'fa-user-plus', 'left', 'menu_item_extras');
             }
         }
 
@@ -498,11 +498,11 @@ if ($getMode !== 'csv')
         {
             if ($numberRoles === 1 && $role->allowedToAssignMembers($gCurrentUser))
             {
-                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png', 'left', 'menu_item_extras');
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'fa-envelope', 'left', 'menu_item_extras');
             }
             else
             {
-                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'email.png');
+                $listsMenu->addItem('menu_item_mail_to_list', '', $gL10n->get('LST_EMAIL_TO_LIST'), 'fa-envelope');
             }
         }
 
@@ -866,14 +866,14 @@ foreach ($membersList as $member)
     {
         // Get the matching event
         $sql = 'SELECT dat_id
-                    FROM '.TBL_DATES.'
-                    WHERE dat_rol_id = ? -- $roleIds[0]';
+                  FROM '.TBL_DATES.'
+                 WHERE dat_rol_id = ? -- $roleIds[0]';
         $datesStatement = $gDb->queryPrepared($sql, $roleIds);
-        $dateId      = $datesStatement->fetchColumn();
+        $dateId         = $datesStatement->fetchColumn();
         // prepare edit icon
         $columnValues[] = '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                 href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId, 'usr_id' => $member['usr_id'])) . '">
-                                    <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
+                                <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     }
 
     if ($getMode === 'csv')
