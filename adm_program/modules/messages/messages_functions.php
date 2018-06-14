@@ -20,7 +20,7 @@ function getMessageIcon($msgId, $icon, $title)
 {
     return '
         <a class="admidio-icon-link" href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_id' => $msgId)) . '">
-            <img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $icon . '" alt="' . $title . '" title="' . $title . '" />
+            <i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $title . '"></i>
         </a>';
 }
 
@@ -99,6 +99,6 @@ function getAdministrationLink($rowIndex, $msgId, $msgSubject)
     return '
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
             href="' . safeUrl(ADMIDIO_URL . '/adm_program/system/popup_message.php', array('type' => 'msg', 'element_id' => 'row_message_' . $rowIndex, 'name' => $msgSubject, 'database_id' => $msgId)) . '">
-            <img src="' . THEME_URL . '/icons/delete.png" alt="' . $gL10n->get('MSG_REMOVE') . '" title="' . $gL10n->get('MSG_REMOVE') . '" />
+            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('MSG_REMOVE').'"></i>
         </a>';
 }

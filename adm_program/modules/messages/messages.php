@@ -63,7 +63,7 @@ if ($gSettingsManager->getBool('enable_mail_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
-        $gL10n->get('MAI_SEND_EMAIL'), '/email.png'
+        $gL10n->get('MAI_SEND_EMAIL'), 'fa-envelope-open'
     );
 }
 // link to write new PM
@@ -71,7 +71,7 @@ if ($gSettingsManager->getBool('enable_pm_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewPm', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
-        $gL10n->get('PMS_SEND_PM'), '/pm.png'
+        $gL10n->get('PMS_SEND_PM'), 'fa-comment-alt'
     );
 }
 
@@ -80,7 +80,7 @@ if ($gSettingsManager->getBool('enable_chat_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewChat', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_chat.php',
-        $gL10n->get('MSG_CHAT'), '/chat.png'
+        $gL10n->get('MSG_CHAT'), 'fa-comments'
     );
 }
 
@@ -97,7 +97,7 @@ $table = new HtmlTable('adm_lists_table', $page, true, true);
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
 
 $table->addRowHeadingByArray(array(
-    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png" alt="'.$gL10n->get('SYS_CATEGORY').'" title="'.$gL10n->get('SYS_CATEGORY').'" />',
+    '<i class="fas fa-envelope" data-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
     $gL10n->get('MAI_SUBJECT'),
     $gL10n->get('MSG_OPPOSITE'),
     $gL10n->get('SYS_DATE'),
@@ -121,7 +121,7 @@ while ($row = $allEmailsStatement->fetch())
 
     $table->addRowByArray(
         array(
-            getMessageIcon($msgId, 'email.png', $gL10n->get('SYS_EMAIL')),
+            getMessageIcon($msgId, 'fa-envelope', $gL10n->get('SYS_EMAIL')),
             getMessageLink($msgId, $msgSubject),
             prepareReceivers($row['user']),
             $message->getValue('msg_timestamp'),
@@ -142,7 +142,7 @@ while ($row = $pmUnreadStatement->fetch())
 
     $table->addRowByArray(
         array(
-            getMessageIcon($msgId, 'pm.png', $gL10n->get('PMS_MESSAGE')),
+            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('PMS_MESSAGE')),
             getMessageLink($msgId, $msgSubject),
             getReceiverName($row, $usrId),
             $message->getValue('msg_timestamp'),
@@ -164,7 +164,7 @@ while ($row = $pwReadOrOwnStatement->fetch())
 
     $table->addRowByArray(
         array(
-            getMessageIcon($msgId, 'pm.png', $gL10n->get('PMS_MESSAGE')),
+            getMessageIcon($msgId, 'fa-comment-alt', $gL10n->get('PMS_MESSAGE')),
             getMessageLink($msgId, $msgSubject),
             getReceiverName($row, $usrId),
             $message->getValue('msg_timestamp'),
