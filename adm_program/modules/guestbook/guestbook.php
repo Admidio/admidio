@@ -169,7 +169,7 @@ if($getGboId === 0 && !$getModeration)
     // show link to create new guestbook entry
     $guestbookMenu->addItem(
         'admMenuItemNewEntry', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_new.php', array('headline' => $getHeadline)),
-        $gL10n->get('GBO_CREATE_ENTRY'), 'add.png'
+        $gL10n->get('SYS_WRITE_ENTRY'), 'add.png'
     );
 }
 
