@@ -322,7 +322,7 @@ while($user = $userStatement->fetch())
     // create string with user address
     if(strlen($user['country']) > 0 && $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
     {
-        $addressText .= $gL10n->getCountryByCode($user['country']);
+        $addressText .= $gL10n->getCountryName($user['country']);
     }
     if((strlen($user['zip_code']) > 0 && $gProfileFields->isVisible('POSTCODE', $gCurrentUser->editUsers()))
     || (strlen($user['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())))
