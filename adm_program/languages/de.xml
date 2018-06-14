@@ -805,7 +805,7 @@
     <string name="PHO_ALBUM_DELETE">Album Löschen</string>
     <string name="PHO_ALBUM_LOCK">Album sperren</string>
     <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
-    <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</string>
+    <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt.</string>
     <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
     <string name="PHO_ALBUM_WRITE_SUCCESS">Das Album wurde erfolgreich angelegt / geändert</string>
     <string name="PHO_BACK_TO_ALBUM">zurück zum Album</string>
