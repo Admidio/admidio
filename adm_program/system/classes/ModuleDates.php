@@ -236,7 +236,7 @@ class ModuleDates extends Modules
                   FROM ' . TBL_DATES . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = dat_cat_id
-                 WHERE cat_id IN ('.replaceValuesArrWithQM($catIdParams).')
+                 WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                        '. $sqlConditions['sql'];
 
         $statement = $gDb->queryPrepared($sql, array_merge($catIdParams, $sqlConditions['params']));
@@ -333,7 +333,7 @@ class ModuleDates extends Modules
                                         ON rrd_ror_id = ror_id
                                      WHERE ror_name_intern = \'event_participation\'
                                        AND rrd_object_id = dat_id
-                                       AND rrd_rol_id IN ('.replaceValuesArrWithQM($roleMemberships).')) ';
+                                       AND rrd_rol_id IN ('.Database::getQmForValues($roleMemberships).')) ';
                     $params = array_merge($params, $roleMemberships);
                     break;
 
@@ -353,7 +353,7 @@ class ModuleDates extends Modules
         // add valid calendars
         if(count($this->calendarNames) > 0)
         {
-            $sqlConditions .= ' AND cat_name IN (\''. implode($this->calendarNames) . '\')'; 
+            $sqlConditions .= ' AND cat_name IN (\''. implode($this->calendarNames) . '\')';
         }
 
         return array(
