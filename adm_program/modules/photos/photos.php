@@ -186,7 +186,7 @@ if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValu
     // show link to download photos
     $photosMenu->addItem(
         'menu_item_download_photos', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId)),
-        $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png'
+        $gL10n->get('SYS_DOWNLOAD_ALBUM'), 'page_white_compressed.png'
     );
 }
 
@@ -313,7 +313,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                     // show link to download photo
                     $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId, 'photo_nr' => $actThumbnail)).'"><img
-                            src="'. THEME_URL. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
+                            src="'. THEME_URL. '/icons/disk.png" alt="'.$gL10n->get('SYS_DOWNLOAD_PHOTO').'" title="'.$gL10n->get('SYS_DOWNLOAD_PHOTO').'"  /></a>';
                 }
 
                 if ($gCurrentUser->editPhotoRight() || ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module')) || $gSettingsManager->getBool('photo_download_enabled'))
@@ -483,7 +483,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         {
             $page->addHtml('
                 <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
-                        src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>
+                        src="'. THEME_URL. '/icons/page_white_compressed.png" alt="'.$gL10n->get('SYS_DOWNLOAD_ALBUM').'" title="'.$gL10n->get('SYS_DOWNLOAD_ALBUM').'"  /></a>
             ');
         }
 
