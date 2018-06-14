@@ -63,7 +63,7 @@ if ($gSettingsManager->getBool('enable_mail_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewEmail', ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php',
-        $gL10n->get('MAI_SEND_EMAIL'), '/email.png'
+        $gL10n->get('SYS_WRITE_EMAIL'), '/email.png'
     );
 }
 // link to write new PM
@@ -71,7 +71,7 @@ if ($gSettingsManager->getBool('enable_pm_module'))
 {
     $messagesMenu->addItem(
         'admMenuItemNewPm', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM')),
-        $gL10n->get('PMS_SEND_PM'), '/pm.png'
+        $gL10n->get('SYS_WRITE_PM'), '/pm.png'
     );
 }
 

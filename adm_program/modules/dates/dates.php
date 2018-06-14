@@ -635,14 +635,14 @@ else
                         {
                             $outputButtonParticipantsEmail = '
                                 <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                    <img src="'.THEME_URL.'/icons/email.png" alt="' . $gL10n->get('MAI_SEND_EMAIL') . '" />' . $gL10n->get('MAI_SEND_EMAIL') . '
+                                    <img src="'.THEME_URL.'/icons/email.png" alt="' . $gL10n->get('SYS_WRITE_EMAIL') . '" />' . $gL10n->get('SYS_WRITE_EMAIL') . '
                                 </button>';
                         }
                         else
                         {
                             $outputButtonParticipantsEmail = '
                                 <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                    <img src="'.THEME_URL.'/icons/email.png" alt="' . $gL10n->get('MAI_SEND_EMAIL') . '" title="' . $gL10n->get('MAI_SEND_EMAIL') . '" />
+                                    <img src="'.THEME_URL.'/icons/email.png" alt="' . $gL10n->get('SYS_WRITE_EMAIL') . '" title="' . $gL10n->get('SYS_WRITE_EMAIL') . '" />
                                 </a>';
                         }
                     }
