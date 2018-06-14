@@ -289,15 +289,15 @@ while($user = $userStatement->fetch())
     // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
     if($user['member_this_orga'] > 0)
     {
-        $icon = 'profile.png';
+        $icon = 'fa-user';
         $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     }
     else
     {
-        $icon = 'no_profile.png';
+        $icon = 'fa-user-times';
         $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname')));
     }
-    $arrContent[] = '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />';
+    $arrContent[] = '<i class="fas ' . $icon . '" data-toggle="tooltip" title="' . $iconText . '"></i>';
 
     // set flag if user is member of the current organization or not
     if($user['member_this_role'])
@@ -349,7 +349,7 @@ while($user = $userStatement->fetch())
     {
         if(strlen($addressText) > 0)
         {
-            $arrContent[] = '<img class="admidio-icon-info" src="'. THEME_URL.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+            $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . $addressText . '"></i>';
         }
         else
         {

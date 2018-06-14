@@ -250,35 +250,34 @@ else
 
     // create column header to assign role leaders
     $htmlLeaderColumn = $gL10n->get('SYS_LEADER');
+    $htmlLeaderText   = '';
 
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
-            alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
+        $htmlLeaderText .= $gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS');
     }
 
     // show icon with edit user right if leader has this right
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
-            alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+        $htmlLeaderText .= $gL10n->get('ROL_LEADER_EDIT_MEMBERS');
     }
 
     // show icon with assign role right if leader has this right
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
-            alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+        $htmlLeaderText .= $gL10n->get('ROL_LEADER_ASSIGN_MEMBERS');
     }
+
+    $htmlLeaderColumn .= '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . htmlspecialchars($htmlLeaderText) . '"></i>';
 
     // create array with all column heading values
     $columnHeading = array(
-        '<img class="admidio-icon-info"
-            src="'. THEME_URL. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"
-            title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'" />',
+        '<i class="fas fa-user" data-toggle="tooltip" title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))).'"></i>',
         $gL10n->get('SYS_MEMBER'));
     $columnAlignment = array('left', 'left');
 
@@ -297,8 +296,7 @@ else
     || $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())
     || $gProfileFields->isVisible('COUNTRY', $gCurrentUser->editUsers()))
     {
-        $columnHeading[] = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/map.png"
-                                alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />';
+        $columnHeading[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_ADDRESS').'"></i>';
         $columnAlignment[] = 'left';
     }
     if($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->editUsers()))
