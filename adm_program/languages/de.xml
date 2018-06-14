@@ -815,8 +815,6 @@
     <string name="PHO_CREATE_ALBUM">Album anlegen</string>
     <string name="PHO_DISPLAY_PHOTOS">Fotodarstellung</string>
     <string name="PHO_DISPLAY_PHOTOS_DESC">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Standard: Modales Fenster)</string>
-    <string name="PHO_DOWNLOAD_PHOTOS">Fotos herunterladen</string>
-    <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto speichern</string>
     <string name="PHO_DOWNLOAD_ENABLED">Download aktivieren</string>
     <string name="PHO_DOWNLOAD_ENABLED_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-Datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
     <string name="PHP_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
@@ -1155,6 +1153,8 @@
     <string name="SYS_DONATE">Spenden</string>
     <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
     <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
+    <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
+    <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
     <string name="SYS_EDIT">Bearbeiten</string>
     <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
     <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
