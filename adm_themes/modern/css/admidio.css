@@ -607,6 +607,7 @@ input[type="time"] {
 .panel-heading {
     display: inline-block;
     width: 100%;
+    font-size: 12pt;
 }
 
 .panel-heading a:link,
@@ -662,7 +663,6 @@ input[type="time"] {
 
 .panel-primary > .panel-heading {
     color: #333333;
-    font-size: 12pt;
     font-weight: bold;
     letter-spacing: 0.1em;
     background-color: transparent;

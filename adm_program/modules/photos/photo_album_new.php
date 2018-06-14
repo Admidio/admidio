@@ -140,7 +140,7 @@ $form->addSelectBox(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $parentAlbumId,
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))
+        'helpTextIdLabel'                => $gL10n->get('PHO_PARENT_ALBUM_DESC', array('PHO_PHOTO_ALBUMS'))
     )
 );
 $form->addInput(
