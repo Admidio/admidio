@@ -334,7 +334,7 @@ $page->addHtml('
                 if ($userId !== $currUsrId && $gSettingsManager->getBool('enable_pm_module'))
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
-                        '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('PMS_SEND_PM').'" />
+                        '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('SYS_WRITE_PM').'" />
                         <a href='.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'usr_id' => $userId)).'>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else
