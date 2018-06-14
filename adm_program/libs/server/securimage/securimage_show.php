@@ -50,7 +50,7 @@
 require_once dirname(__FILE__) . '/securimage.php';
 
 // ***** START ADMIDIO CODE *****
-require_once(__DIR__ . '/../../system/common.php');
+require_once(dirname(__FILE__) . '/../../../../adm_program/system/common.php');
 // ***** END ADMIDIO CODE *****
 
 $img = new Securimage();
@@ -76,7 +76,6 @@ $img = new Securimage();
 
 // set namespace if supplied to script via HTTP GET
 if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
-
 
 // ***** START ADMIDIO CODE *****
 $captchaBackgroundImage = $gSettingsManager->getString('captcha_background_image');

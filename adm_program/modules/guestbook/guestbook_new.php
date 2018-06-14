@@ -35,11 +35,11 @@ elseif((int) $gSettingsManager->get('enable_guestbook_module') === 2)
 // set headline of the script
 if ($getGboId > 0)
 {
-    $headline = $gL10n->get('GBO_EDIT_ENTRY', array($getHeadline));
+    $headline = $getHeadline . ' - ' . $gL10n->get('SYS_EDIT_ENTRY');
 }
 else
 {
-    $headline = $gL10n->get('GBO_CREATE_VAR_ENTRY', array($getHeadline));
+    $headline = $getHeadline . ' - ' . $gL10n->get('SYS_WRITE_ENTRY');
 }
 
 // add current url to navigation stack

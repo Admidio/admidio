@@ -200,10 +200,7 @@
     <string name="GBO_COMMENTS4ALL">Anonyme Kommentare erlauben</string>
     <string name="GBO_COMMENTS4ALL_DESC">Nicht angemeldete Benutzer können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Standard: nein)</string>
     <string name="GBO_CREATE_COMMENT">Kommentar anlegen</string>
-    <string name="GBO_CREATE_ENTRY">Eintrag anlegen</string>
-    <string name="GBO_CREATE_VAR_ENTRY">#VAR1#-Eintrag anlegen</string>
     <string name="GBO_EDIT_COMMENT">Kommentar bearbeiten</string>
-    <string name="GBO_EDIT_ENTRY">#VAR1#-Eintrag bearbeiten</string>
     <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Ein neuer Gästebuchkommentar wurde angelegt</string>
     <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Es wurde ein neuer Gästebuchkommentar bei #VAR1# angelegt.\n\nText: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
     <string name="GBO_EMAIL_NOTIFICATION_TITLE">Ein neuer Gästebucheintrag wurde angelegt</string>
@@ -1442,6 +1439,7 @@
     <string name="SYS_WHAT_TO_DO">Was ist zu tun?</string>
     <string name="SYS_WIDTH">Breite</string>
     <string name="SYS_WRITE_EMAIL">E-Mail schreiben</string>
+    <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
     <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
     <string name="SYS_YES">Ja</string>
 </resources>
