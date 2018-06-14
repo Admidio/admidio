@@ -175,7 +175,7 @@ if ($gCurrentUser->editPhotoRight())
         // show link to upload photos
         $photosMenu->addItem(
             'menu_item_upload_photo', safeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => 'photos', 'id' => $getPhotoId)),
-            $gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png'
+            $gL10n->get('PHO_UPLOAD_PHOTOS'), 'fa-upload'
         );
     }
 }
@@ -186,7 +186,7 @@ if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValu
     // show link to download photos
     $photosMenu->addItem(
         'menu_item_download_photos', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $getPhotoId)),
-        $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png'
+        $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'fa-download'
     );
 }
 
@@ -223,7 +223,7 @@ if ($getPhotoId > 0)
     $page->addHtml('
         <ol class="breadcrumb">
             <li>
-                <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php"><img src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
+                <i class="fas fa-image"></i>
                 <a href="'.ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>
             </li>'.
             $navilink.'&nbsp;&gt;&nbsp;'.$photoAlbum->getValue('pho_name').'
@@ -291,14 +291,14 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
                 if ($gCurrentUser->editPhotoRight())
                 {
                     $photoThumbnailTable .= '
-                        <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'left\')"><img
-                            src="'. THEME_URL. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'right\')"><img
-                            src="'. THEME_URL. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
+                        <a class="admidio-icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'left\')">
+                            <i class="fas fa-undo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'"></i></a>
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="return imgrotate('.$actThumbnail.', \'right\')">
+                            <i class="fas fa-redo-alt" data-toggle="tooltip" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'"></i></a>
                         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                             href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho', 'element_id' => 'div_image_'.$actThumbnail,
-                            'database_id' => $actThumbnail, 'database_id_2' => $getPhotoId)).'"><img
-                            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                            'database_id' => $actThumbnail, 'database_id_2' => $getPhotoId)).'">
+                            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
                 }
 
                 if ($gValidLogin && $gSettingsManager->getBool('enable_ecard_module'))
