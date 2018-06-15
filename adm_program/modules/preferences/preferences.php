@@ -160,16 +160,9 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
         <div class="panel panel-default" id="panel_' . $id . '">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">';
-                        if(StringUtils::strStartsWith($icon, 'fa-'))
-                        {
-                            $html .= '<i class="fas ' . $icon . '"></i>' . $title;
-                        }
-                        else
-                        {
-                            $html .= '<img class="admidio-panel-heading-icon" src="' . THEME_URL . '/icons/' . $icon . '" alt="' . $title . '" />' . $title;
-                        }
-                    $html .= '</a>
+                    <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
+                        <i class="fas ' . $icon . '"></i>' . $title . '
+                    </a>
                 </h4>
             </div>
             <div id="collapse_' . $id . '" class="panel-collapse collapse">
@@ -299,7 +292,7 @@ $formSecurity->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'security', $gL10n->get('SYS_SECURITY'), 'shield.png', $formSecurity->show()));
+$page->addHtml(getPreferencePanel('common', 'security', $gL10n->get('SYS_SECURITY'), 'fa-shield-alt', $formSecurity->show()));
 
 // PANEL: ORGANIZATION
 
@@ -345,8 +338,8 @@ if($gCurrentOrganization->countAllRecords() > 1)
     );
 }
 
-$html = '<a id="add_another_organization" class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'"><img
-            src="'. THEME_URL. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
+$html = '<a id="add_another_organization" class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'">
+            <i class="fas fa-plus-circle"></i>'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
 $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $htmlDesc));
 $formOrganization->addSubmitButton(
@@ -354,7 +347,7 @@ $formOrganization->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'organization', $gL10n->get('SYS_ORGANIZATION'), 'chart_organisation.png', $formOrganization->show()));
+$page->addHtml(getPreferencePanel('common', 'organization', $gL10n->get('SYS_ORGANIZATION'), 'fa-sitemap', $formOrganization->show()));
 
 // PANEL: REGIONAL SETTINGS
 
@@ -392,7 +385,7 @@ $formRegionalSettings->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'world.png', $formRegionalSettings->show()));
+$page->addHtml(getPreferencePanel('common', 'regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'fa-globe', $formRegionalSettings->show()));
 
 // PANEL: REGISTRATION
 
@@ -418,7 +411,7 @@ $formRegistration->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'registration', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png', $formRegistration->show()));
+$page->addHtml(getPreferencePanel('common', 'registration', $gL10n->get('SYS_REGISTRATION'), 'fa-address-card', $formRegistration->show()));
 
 // PANEL: EMAIL DISPATCH
 
@@ -497,7 +490,7 @@ $formEmailDispatch->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'system_mail.png', $formEmailDispatch->show()));
+$page->addHtml(getPreferencePanel('common', 'email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'fa-envelope', $formEmailDispatch->show()));
 
 // PANEL: SYSTEM NOTIFICATION
 
@@ -554,7 +547,7 @@ $formSystemNotification->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'system_notification.png', $formSystemNotification->show()));
+$page->addHtml(getPreferencePanel('common', 'system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'fa-broadcast-tower', $formSystemNotification->show()));
 
 // PANEL: CAPTCHA
 
@@ -613,9 +606,9 @@ $formCaptcha->addInput(
     'captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $formValues['captcha_signature'],
     array('maxLength' => 60, 'helpTextIdInline' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
 );
-$html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
-         <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?\' + Math.random(); return false"><img
-            src="'.THEME_URL.'/icons/view-refresh.png" alt="'.$gL10n->get('SYS_RELOAD').'" title="'.$gL10n->get('SYS_RELOAD').'" /></a>';
+$html = '<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
+         <a class="admidio-icon-link" href="#" onclick="document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php?\' + Math.random(); return false">
+            <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>';
 $formCaptcha->addCustomContent(
     $gL10n->get('ORG_CAPTCHA_PREVIEW'), $html,
     array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT')
@@ -626,7 +619,7 @@ $formCaptcha->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'captcha', $gL10n->get('SYS_CAPTCHA'), 'captcha.png', $formCaptcha->show()));
+$page->addHtml(getPreferencePanel('common', 'captcha', $gL10n->get('SYS_CAPTCHA'), 'fa-font', $formCaptcha->show()));
 
 // PANEL: SYSTEM INFORMATION
 
@@ -797,7 +790,7 @@ catch (\RuntimeException $exception)
 }
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
-$page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'info.png', $formSystemInformation->show()));
+$page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'fa-info-circle', $formSystemInformation->show()));
 
 $page->addHtml('
         </div>
@@ -825,8 +818,8 @@ $formAnnouncements->addInput(
     'announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $formValues['announcements_per_page'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
 );
-$html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')).'"><img
-            src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
+$html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')).'">
+            <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formAnnouncements->addCustomContent(
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html,
@@ -863,8 +856,8 @@ $formUserManagement->addCheckbox(
     'members_enable_user_relations', $gL10n->get('MEM_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
     array('helpTextIdInline' => 'MEM_ENABLE_USER_RELATIONS_DESC')
 );
-$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php"><img
-            src="'. THEME_URL. '/icons/user_administration.png" alt="'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'" />'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'</a>';
+$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
+            <i class="fas fa-users-cog"></i>'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'</a>';
 $htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formUserManagement->addCustomContent($gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), $html, array('helpTextIdInline' => $htmlDesc));
 
@@ -873,7 +866,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'user_administration.png', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fa-user-friends', $formUserManagement->show()));
 
 // PANEL: DOWNLOADS
 
@@ -895,7 +888,7 @@ $formDownloads->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'download.png', $formDownloads->show()));
+$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'fa-download', $formDownloads->show()));
 
 // PANEL: PHOTOS
 
@@ -967,7 +960,7 @@ $formPhotos->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'photo.png', $formPhotos->show()));
+$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'fa-image', $formPhotos->show()));
 
 // PANEL: GUESTBOOK
 
@@ -1019,7 +1012,7 @@ $formGuestbook->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'guestbook', $gL10n->get('GBO_GUESTBOOK'), 'guestbook.png', $formGuestbook->show()));
+$page->addHtml(getPreferencePanel('modules', 'guestbook', $gL10n->get('GBO_GUESTBOOK'), 'fa-book', $formGuestbook->show()));
 
 // PANEL: ECARDS
 
@@ -1064,7 +1057,7 @@ $formEcards->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'ecard.png', $formEcards->show()));
+$page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'fa-file-image', $formEcards->show()));
 
 // PANEL: LISTS
 
@@ -1111,8 +1104,8 @@ $formLists->addSelectBox(
     'lists_show_former_members', $gL10n->get('LST_SHOW_FORMER_MEMBERS'), $selectBoxEntries,
     array('defaultValue' => $formValues['lists_show_former_members'], 'showContextDependentFirstEntry' => false, 'helpTextIdInline' => array('LST_SHOW_FORMER_MEMBERS_DESC', array($gL10n->get('LST_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('ROL_RIGHT_EDIT_USER'))))))
 );
-$html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'"><img
-            src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
+$html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
+            <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formLists->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
 $formLists->addSubmitButton(
@@ -1120,7 +1113,7 @@ $formLists->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'list.png', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'fa-list', $formLists->show()));
 
 // PANEL: MESSAGES
 
@@ -1179,7 +1172,7 @@ $formMessages->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'messages', $gL10n->get('SYS_MESSAGES'), 'messages.png', $formMessages->show()));
+$page->addHtml(getPreferencePanel('modules', 'messages', $gL10n->get('SYS_MESSAGES'), 'fa-comments', $formMessages->show()));
 
 // PANEL: PROFILE
 
@@ -1188,8 +1181,8 @@ $formProfile = new HtmlForm(
     $page, array('class' => 'form-preferences')
 );
 
-$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/preferences/fields.php"><img
-            src="'. THEME_URL. '/icons/application_form_edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" />'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
+$html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/preferences/fields.php">
+            <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
 $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formProfile->addCustomContent($gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formProfile->addCheckbox(
@@ -1227,7 +1220,7 @@ $formProfile->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'profile', $gL10n->get('PRO_PROFILE'), 'profile.png', $formProfile->show()));
+$page->addHtml(getPreferencePanel('modules', 'profile', $gL10n->get('PRO_PROFILE'), 'fa-user', $formProfile->show()));
 
 // PANEL: EVENTS
 
@@ -1320,7 +1313,7 @@ $formEvents->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'events', $gL10n->get('DAT_DATES'), 'dates.png', $formEvents->show()));
+$page->addHtml(getPreferencePanel('modules', 'events', $gL10n->get('DAT_DATES'), 'fa-calendar-alt', $formEvents->show()));
 
 // PANEL: WEBLINKS
 
@@ -1351,8 +1344,8 @@ $formWeblinks->addInput(
     'weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $formValues['weblinks_redirect_seconds'],
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'LNK_DISPLAY_REDIRECT_DESC')
 );
-$html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'"><img
-            src="'. THEME_URL. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
+$html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'">
+            <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
 $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formWeblinks->addCustomContent(
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html,
@@ -1363,7 +1356,7 @@ $formWeblinks->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'links', $gL10n->get('LNK_WEBLINKS'), 'weblinks.png', $formWeblinks->show()));
+$page->addHtml(getPreferencePanel('modules', 'links', $gL10n->get('LNK_WEBLINKS'), 'fa-link', $formWeblinks->show()));
 
 $page->addHtml('
         </div>
