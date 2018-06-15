@@ -259,8 +259,8 @@ foreach($gProfileFields->getProfileFields() as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'"><img src="'. THEME_URL. '/icons/key.png"
-                                alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
+                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
+                                <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
                 $form->addLine();
@@ -290,7 +290,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 
         if(strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0)
         {
-            $helpId = array('user_field_description', $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'));
+            $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
         }
 
         // code for different field types
@@ -448,7 +448,7 @@ if($getNewUser === 2 && $gSettingsManager->getBool('enable_registration_captcha'
 if($getNewUser === 2)
 {
     // Registrierung
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 }
 else
 {

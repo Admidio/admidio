@@ -304,8 +304,14 @@ a.btn {
 .btn .fas,
 .panel-title .fas,
 .navbar-link .fas,
-.panel-heading .pull-left .fas {
+.panel-heading .pull-left .fas,
+.admidio-profile-user-right .fas {
     margin-right: 6px;
+}
+
+.admidio-list-roles-assign .fas,
+.table td .fas {
+    margin-left: 6px;
 }
 
 .fa-exclamation-triangle {

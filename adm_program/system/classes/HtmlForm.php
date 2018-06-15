@@ -1941,14 +1941,7 @@ class HtmlForm extends HtmlFormBasic
         }
         else
         {
-            if ($textId === 'user_field_description')
-            {
-                $text = $gProfileFields->getProperty($parameter, 'usf_description');
-            }
-            else
-            {
-                $text = $gL10n->get($textId, array($parameter));
-            }
+            $text = $gL10n->get($textId, array($parameter));
         }
 
         return '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"

@@ -265,25 +265,22 @@ while($row = $statement->fetch())
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
-                             alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-                                 <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
+                            <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
     }
 
     // show icon with edit user right if leader has this right
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
-                             alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+        $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
-                             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+        $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights
