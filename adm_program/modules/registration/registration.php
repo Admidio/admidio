@@ -119,11 +119,11 @@ while($row = $usrStatement->fetch())
         $datetimeCreate,
         $row['usr_login_name'],
         $mailLink,
-        '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_id' => $row['usr_id'])).'"><img
-            src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
+        '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_assign.php', array('new_user_id' => $row['usr_id'])).'">
+            <i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'"></i></a>
         <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_id'])).'"><img
-            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'nwu', 'element_id' => 'row_user_'.$row['usr_id'], 'name' => $row['first_name'].' '.$row['last_name'], 'database_id' => $row['usr_id'])).'">
+            <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>');
 
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);
 }
