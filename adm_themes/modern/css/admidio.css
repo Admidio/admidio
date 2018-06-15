@@ -312,6 +312,18 @@ a.btn {
     color:#dacc32;
 }
 
+.admidio-btn-event-attend {
+    color: green !important;
+}
+
+.admidio-btn-event-tentative {
+    color: purple !important;
+}
+
+.admidio-btn-event-cancel {
+    color: red !important;
+}
+
 .admidio-info-icon {
     color:#4496dd;
     cursor: help;
