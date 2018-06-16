@@ -122,10 +122,12 @@ $columnHeading = array(
     $gL10n->get('SYS_CATEGORY'),
     $listDescription,
     $gL10n->get('SYS_PERMISSIONS'),
-    $gL10n->get('ROL_PREF'),
+    $gL10n->get('ROL_SEND_MAILS'),
+    $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_LEADER'),
     $gL10n->get('SYS_FEATURES')
 );
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
+$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
 $table->disableDatatablesColumnsSort(array(3, 4, 5));
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
@@ -158,13 +160,13 @@ while($row = $rolStatement->fetch())
     {
         $assignRoles .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'"></i>';
     }
-    if($role->getValue('rol_approve_users') == 1)
-    {
-        $assignRoles .= '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'"></i>';
-    }
     if($role->getValue('rol_all_lists_view') == 1)
     {
         $assignRoles .= '<i class="fas fa-list" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'"></i>';
+    }
+    if($role->getValue('rol_approve_users') == 1)
+    {
+        $assignRoles .= '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'"></i>';
     }
     if($role->getValue('rol_mail_to_all') == 1)
     {
@@ -213,35 +215,53 @@ while($row = $rolStatement->fetch())
         $assignRoles = '&nbsp;';
     }
 
-    if($role->getValue('rol_this_list_view') == 1)
+    $viewEmail = '';
+    $viewRole  = '';
+    $leaderRights = '';
+
+    switch ($role->getValue('rol_mail_this_role'))
     {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/list_role.png"
-                        alt="'.$gL10n->get('ROL_VIEW_LIST_ROLE').'" title="'.$gL10n->get('ROL_VIEW_LIST_ROLE').'" />';
+        case 0:
+            $viewEmail = 'SYS_NOBODY';
+            break;
+        case 1:
+            $viewEmail = 'SYS_ROLE_MEMBERS';
+            break;
+        case 2:
+            $viewEmail = 'ORG_REGISTERED_USERS';
+            break;
+        case 3:
+            $viewEmail = 'SYS_ALSO_VISITORS';
+            break;
     }
-    if($role->getValue('rol_this_list_view') == 2)
+
+    switch ($role->getValue('rol_this_list_view'))
     {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/list_key.png"
-                        alt="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" title="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" />';
+        case 0:
+            $viewRole = 'SYS_NOBODY';
+            break;
+        case 1:
+            $viewRole = 'SYS_ROLE_MEMBERS';
+            break;
+        case 2:
+            $viewRole = 'ORG_REGISTERED_USERS';
+            break;
     }
-    if($role->getValue('rol_mail_this_role') == 1 && $gSettingsManager->getBool('enable_mail_module'))
+
+    switch ($role->getValue('rol_leader_rights'))
     {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_role.png"
-                        alt="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" title="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" />';
-    }
-    if($role->getValue('rol_mail_this_role') == 2 && $gSettingsManager->getBool('enable_mail_module'))
-    {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_key.png"
-                        alt="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" title="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" />';
-    }
-    if($role->getValue('rol_mail_this_role') == 3 && $gSettingsManager->getBool('enable_mail_module'))
-    {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png"
-                        alt="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" />';
-    }
-    // if no matches for list view
-    if($listView === '')
-    {
-        $listView = '&nbsp;';
+        case 0:
+            $leaderRights = 'ROL_NO_ADDITIONAL_RIGHTS';
+            break;
+        case 1:
+            $leaderRights = 'SYS_ASSIGN_MEMBERS';
+            break;
+        case 2:
+            $leaderRights = 'SYS_EDIT_MEMBERS';
+            break;
+        case 3:
+            $leaderRights = 'ROL_ASSIGN_EDIT_MEMBERS';
+            break;
     }
 
     $rolId = (int) $role->getValue('rol_id');
@@ -291,7 +311,9 @@ while($row = $rolStatement->fetch())
         array('value' => $role->getValue('cat_name'), 'order' => $role->getValue('cat_sequence')),
         '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'" title="'.$role->getValue('rol_description').'">'.$rolName.'</a>',
         $assignRoles,
-        $listView,
+        $gL10n->get($viewEmail),
+        $gL10n->get($viewRole),
+        $gL10n->get($leaderRights),
         $linkAdministration
     );
 

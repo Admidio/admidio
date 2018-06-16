@@ -960,8 +960,6 @@
     <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
     <!-- Phrases only in Rolesmodule -->
     <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
-    <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
-    <string name="ROL_ALL_MEMBERS">Alle angemeldeten Benutzer</string>
     <string name="ROL_ANNUALLY">Jährlich</string>
     <string name="ROL_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
     <string name="ROL_DELETE_NO_DEFAULT_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
@@ -992,8 +990,6 @@
     <string name="ROL_NEW_ROLE">Neue Rolle</string>
     <string name="ROL_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
     <string name="ROL_NO_DEFAULT_ROLE">Du kannst die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
-    <string name="ROL_ONLY_ROLE_MEMBERS">Nur Rollenmitglieder</string>
-    <string name="ROL_PREF" description="Abbreviation for Preferences">Einst.</string>
     <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für #VAR1# #VAR2#</string>
     <string name="ROL_QUARTERLY">Vierteljährlich</string>
     <string name="ROL_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
@@ -1026,17 +1022,12 @@
     <string name="ROL_SAVE_ROLES">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</string>
     <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
     <string name="ROL_SEMIYEARLY">Halbjährlich</string>
-    <string name="ROL_SEND_MAIL_GUESTS">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</string>
-    <string name="ROL_SEND_MAIL_MEMBERS">Angemeldete Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
-    <string name="ROL_SEND_MAIL_ROLE">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</string>
     <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
     <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
     <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
     <string name="ROL_UNIQUELY">Einmalig</string>
     <string name="ROL_VALID_FROM" description="Date valid from">Gültig von</string>
     <string name="ROL_VALID_TO" description="Date valid to">Gültig bis</string>
-    <string name="ROL_VIEW_LIST_MEMBERS">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</string>
-    <string name="ROL_VIEW_LIST_ROLE">Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.</string>
     <string name="ROL_WEEKDAY">Wochentag</string>
     <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
     <!-- Phrases only in Roommodule -->
@@ -1353,6 +1344,7 @@
     <string name="SYS_RESTRICTIONS">Einschränkungen</string>
     <string name="SYS_ROLE">Rolle</string>
     <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
+    <string name="SYS_ROLE_MEMBERS">Rollenmitglieder</string>
     <string name="SYS_ROLES">Rollen</string>
     <string name="SYS_ROOM">Raum</string>
     <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
