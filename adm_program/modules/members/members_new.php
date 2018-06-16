@@ -75,7 +75,7 @@ echo '
     );
     $form->addSubmitButton(
         'btn_add', $gL10n->get('MEM_CREATE_USER'),
-        array('icon' => THEME_URL.'/icons/add.png', 'class' => ' col-sm-offset-3')
+        array('icon' => 'fa-plus-circle', 'class' => ' col-sm-offset-3')
     );
     echo $form->show();
 echo '</div>';

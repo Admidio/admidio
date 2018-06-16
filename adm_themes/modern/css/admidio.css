@@ -310,6 +310,7 @@ a.btn {
 }
 
 .admidio-list-roles-assign .fas,
+.table th .fas,
 .table td .fas {
     margin-left: 6px;
 }

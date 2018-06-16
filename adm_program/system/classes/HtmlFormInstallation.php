@@ -20,7 +20,7 @@
  * // create a simple installation form with a free text, a text field and a submit button
  * $form = new HtmlFormInstallation('installation-form', 'next_html_page.php');
  * $form->setText('This is an example.');
- * $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png', 'type' => 'button'));
+ * $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right', 'type' => 'button'));
  * $form->show();
  * ```
  */

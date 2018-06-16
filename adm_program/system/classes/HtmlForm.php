@@ -26,7 +26,7 @@
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
  *                     array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  * $form->closeGroupBox();
- * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
+ * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right'));
  * $form->show();
  * ```
  */
