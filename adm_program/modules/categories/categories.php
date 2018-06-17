@@ -190,7 +190,7 @@ $categoriesOverview = new HtmlTable('tbl_categories', $page, true);
 $columnHeading = array(
     $gL10n->get('SYS_TITLE'),
     '&nbsp;',
-    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" />',
+    '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)) . '"></i>',
     $visibleHeadline,
     $editableHeadline,
     '&nbsp;'
@@ -245,16 +245,16 @@ while($catRow = $categoryStatement->fetch())
     $htmlMoveRow = '&nbsp;';
     if($category->getValue('cat_system') == 0 || $getType !== 'USF')
     {
-        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_UP.'\', '.$catId.')"><img
-                                src="'. THEME_URL. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_UP', array($addButtonText)).'" /></a>
-                           <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_DOWN.'\', '.$catId.')"><img
-                                src="'. THEME_URL. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" title="'.$gL10n->get('CAT_MOVE_DOWN', array($addButtonText)).'" /></a>';
+        $htmlMoveRow = '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_UP.'\', '.$catId.')">'.
+                            '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array($addButtonText)) . '"></i></a>
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableCategory::MOVE_DOWN.'\', '.$catId.')">'.
+                            '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_DOWN', array($addButtonText)) . '"></i></a>';
     }
 
     $htmlDefaultCategory = '&nbsp;';
     if($category->getValue('cat_default') == 1)
     {
-        $htmlDefaultCategory = '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)).'" />';
+        $htmlDefaultCategory = '<i class="fas fa-star" data-toggle="tooltip" title="' . $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)) . '"></i>';
     }
 
     // create list with all roles that could view the category
@@ -324,23 +324,23 @@ while($catRow = $categoryStatement->fetch())
 
     if($category->isEditable())
     {
-        $categoryAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'"><img
-                                        src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+        $categoryAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_new.php', array('cat_id' => $catId, 'type' => $getType, 'title' => $getTitle)).'">'.
+                                    '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
         if($category->getValue('cat_system') == 1)
         {
-            $categoryAdministration .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+            $categoryAdministration .= '<i class="fas fa-trash" style="opacity: 0.0;"></i>';
         }
         else
         {
             $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'"><img
-                                               src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
+                                            '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     }
     else
     {
-        $categoryAdministration = '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" /><img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $categoryAdministration = '<i class="fas fa-trash" style="opacity: 0.0;"></i><i class="fas fa-trash" style="opacity: 0.0;"></i>';
     }
 
     // create array with all column values
