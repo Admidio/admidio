@@ -1,4 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_DOWNLOADS_HEADLINE">Downloads</string>
+  <string name="PLG_DOWNLOADS_MORE_DOWNLOADS">Meer Downloads</string>
+  <string name="PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE">Er zijn geen bestanden beschikbaar om te downloaden.</string>
+  <string name="PLG_DOWNLOADS_UPLOAD_FROM_AT">Geüpload door #VAR1# op #VAR2#</string>
 </resources>

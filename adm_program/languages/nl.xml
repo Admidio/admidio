@@ -4,6 +4,7 @@
   <string name="ANN_ANNOUNCEMENT">Mededeling</string>
   <string name="ANN_ANNOUNCEMENTS">Mededelingen</string>
   <string name="ANN_ANNOUNCEMENTS_DESC">Plaats of bewerk mededelingen, nieuws of andere informatie.</string>
+  <string name="ANN_EDIT_ANNOUNCEMENTS">Aankondiging bewerken</string>
   <string name="ANN_EMAIL_NOTIFICATION_TITLE">Een nieuwe mededeling is gemaakt</string>
   <string name="ANN_EMAIL_NOTIFICATION_MESSAGE">Nieuwe mededeling op #VAR1#.\n\nTitel: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
   <string name="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA">Nieuwste mededelingen van organisatie #VAR1#</string>
@@ -16,7 +17,6 @@
   <string name="BAC_DATABASE_BACKUP">Backup database</string>
   <string name="BAC_DATABASE_BACKUP_DESC">Hier kunt u een backup van de database maken of downloaden.</string>
   <string name="BAC_DAYS_VAR">#VAR1# dagen</string>
-  <string name="BAC_FILE_NAME_INVALID">De gekozen bestandsnaam bevat niet toegestane tekens.\n\nToegestaan zijn alleen letters, trema\'s, getallen 0-9 en de speciale tekens $!?._+-()&amp; .</string>
   <string name="BAC_HOURS_VAR">#VAR1# uren</string>
   <string name="BAC_MINUTES_VAR">#VAR1# minuten</string>
   <string name="BAC_NO_BACKUP_FILE_EXISTS">Geen backup bestand aanwezig!</string>
@@ -26,6 +26,7 @@
   <string name="BAC_SUM">Totaal</string>
   <string name="BAC_SECONDS_VAR">#VAR1# seconden</string>
   <!--Phrases only in Category-Administration-->
+  <string name="CAT_ALL_THIS_ORGANIZATION">Alle medewerkers van deze organisatie</string>
   <string name="CAT_CATEGORY_EXIST">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
   <string name="CAT_DEFAULT_VAR">Standaard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Bent u zeker dat u categorie #VAR1_BOLD# wenst te verwijderen?</string>
@@ -59,9 +60,7 @@
   <string name="DAT_EXPORT_ICAL">Exporteer (iCal)</string>
   <string name="DAT_HIGHLIGHT_DATE">Markeer datum</string>
   <string name="DAT_ICAL_DAYS_FUTURE">Aantal toekomstige iCal dagen</string>
-  <string name="DAT_ICAL_DAYS_FUTURE_DESC">Deze waarde bepaalt hoeveel dagen in de toekomst een iCal download of abonnement moet bevatten. (standaard: 365)</string>
   <string name="DAT_ICAL_DAYS_PAST">Aantal iCal dagen in het verleden</string>
-  <string name="DAT_ICAL_DAYS_PAST_DESC">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 60)</string>
   <string name="DAT_LOCATION">Locatie</string>
   <string name="DAT_LOCATION_LINK">Als er genoeg informatie over de locatie wordt opgegeven (straat, plaats, etc), kan Google Maps de route berekenen.</string>
   <string name="DAT_LOGIN_POSSIBLE">Wilt u registratie van evenementen inschakelen?\nAls een evenement wordt verwijderd zullen alle deelnemers ook verwijderd worden.\nAls u verdere aanmeldingen wilt blokkeren, kunt u het aantal toegestane deelnemers beperken.</string>
@@ -157,10 +156,7 @@
   <string name="GBO_COMMENT_BY">Reactie van #VAR1#</string>
   <string name="GBO_COMMENTS4ALL">Anonieme reacties toestaan</string>
   <string name="GBO_CREATE_COMMENT">Plaats reactie</string>
-  <string name="GBO_CREATE_ENTRY">Plaats bericht</string>
-  <string name="GBO_CREATE_VAR_ENTRY">Plaats #VAR1# bericht</string>
   <string name="GBO_EDIT_COMMENT">Bewerk reactie</string>
-  <string name="GBO_EDIT_ENTRY">Bewerk #VAR1# bericht</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Nieuwe reactie in gastenboek aangemaakt</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Nieuwe reactie in gastenboek van #VAR1# aangemaakt.\n\nTekst: #VAR2#\nGemaakt door: #VAR3#\nGemaakt op: #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">Nieuwe bericht in gastenboek aangemaakt</string>
@@ -203,7 +199,6 @@
   <string name="INS_DATABASE_IS_UPDATED">Updating database</string>
   <string name="INS_DATABASE_LOGIN">Database informatie doorgeven</string>
   <string name="INS_DATABASE_LOGIN_DESC">Vul hier je inloggegevens voor de database in. Hier kun je de prefix van de tabel naar wens wijzigen. Dit is nodig als je voor meerdere Admidio-installaties eenzelfde database wilt gebruiken.</string>
-  <string name="INS_DATABASE_NEEDS_UPDATED_VERSION">Uw database versie is #VAR1#.\nUpdate naar versie #VAR2# is noodzakelijk</string>
   <string name="INS_DATABASE_PORT_INFO">Indien dit veld niet gebruikt wordt, wordt de Standaardpoort van de database (MySQL: 3306, PostgreSQL: 5432) gebruikt. Gebruik jij of jouw Webhost een speciale poort dan kan deze hier ingevuld worden.</string>
   <string name="INS_DATABASE_SYSTEM">Database systeem</string>
   <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Database maken</string>
@@ -235,7 +230,6 @@
   <string name="INS_INSTALLATION_VERSION">Installatie van versie #VAR1#</string>
   <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installatie succesvol</string>
   <string name="INS_INTERN">Interne</string>
-  <string name="INS_LANGUAGE_NOT_CHOSEN">Geen taal geselecteerd.</string>
   <string name="INS_MEMBERSHIP">Lidmaatschap</string>
   <string name="INS_MESSENGER">Messenger</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organisatie #VAR1_BOLD# bestaat reeds. Gelieve een andere naam te gebruiken.</string>
@@ -509,6 +503,7 @@
   <string name="MEM_USER_MANAGEMENT_DESC">Hier worden alle actieve en voormalige leden getoond. U kunt leden importeren uit een bestand, aanmaken of beheren.</string>
   <string name="MEM_USERS_PER_PAGE">Aantal gebruikers per pagina</string>
   <string name="MEM_USERS_PER_PAGE_DESC">Aantal gebruikers die op een pagina in een lijst weergegeven worden. Zijn er meer gebruikers, dan kan er gebladerd worden. (Standaard: 25)</string>
+  <!--Phrases only in Menu-->
   <!--Phrases only in Messagemodule-->
   <string name="MSG_ACTIVATE_CHAT_MODULE">Chat activeren</string>
   <string name="MSG_ACTIVATE_PM_MODULE">Privé berichten activeren</string>
@@ -610,10 +605,9 @@
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Bij het wisselen van weergave gaan alle niet opgeslagen instellingen verloren.</string>
   <string name="ORG_NOTIFY_ADMINISTRATOR">Administrator informeren over nieuwe registraties</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal items per pagina</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: #VAR1#)</string>
+  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
   <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">De organisatie #VAR1_BOLD# is toegevoegd. Bij de aanmelding kun je deze nu kiezen. \n\nAls je voor deze organisatie een aparte homepage hebt gemaakt, moet je enkel nog op de desbetreffende pagina deze organisatie aan het config.php bestand toevoegen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Hoofd organisatie</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofd organisatie. Hoofd organisatie kan bijvoorbeeld evenementen en mededelingen maken, die worden getoond in de geselecteerde (sub) organisatie.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Wachtwoord sterkte</string>
@@ -637,7 +631,6 @@
   <string name="ORG_SHOW_ALL_USERS_DESC">Indien geactiveerd, zullen naast de actieve leden van de huidige organisatie ook de voormalige leden en leden van andere organisaties getoond worden. Anders worden alleen leden van de huidige organisatie weergegeven. Tijdens het aanmaken van nieuwe gebruikers of bij het toewijzen van nieuwe registraties, zullen alle organisaties gecontroleerd worden op bestaande gebruikers.</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT">Toon selectie van organisatie</string>
   <string name="ORG_SHOW_ORGANIZATION_SELECT_DESC">Als er meerdere organisaties in de database staan, zal in het inlog scherm een selectiebox getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker moet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</string>
-  <string name="ORG_SYSTEM_INFORMATION">Systeem informatie</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Meldingen van nieuwe inzendingen</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier kunnen alle systeem berichten aangepast worden. De berichten zijn onderverdeeld in 2 stukken (onderwerp en inhoud) en worden geïndentificeerd bij #subject# en #content#. Deze worden gevolgd door de inhoud van deze velden.\n\nDe volgende wildcards kunnen worden gebruikt in elke e-mail. Zij zullen worden vervangen door de desbetreffende inhoud bij het uitvoeren</string>
@@ -674,8 +667,6 @@
   <string name="PHO_BACK_TO_ALBUM">terug naar album</string>
   <string name="PHO_CREATE_ALBUM">Album maken</string>
   <string name="PHO_DISPLAY_PHOTOS">Hoe foto\'s te tonen</string>
-  <string name="PHO_DOWNLOAD_PHOTOS">Foto\'s downloaden</string>
-  <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Foto opslaan</string>
   <string name="PHO_DOWNLOAD_ENABLED">Download toestaan</string>
   <string name="PHO_EDIT_ALBUM">Bewerk album</string>
   <string name="PHO_EMAIL_NOTIFICATION_TITLE">Nieuw foto album is gemaakt</string>
@@ -768,7 +759,6 @@
   <string name="PRO_PHOTO_DELETED">Profielfoto is verwijderd.</string>
   <string name="PRO_PHOTO_FILE_TO_LARGE">Grootte van geuploade foto is groter dan toegestane grootte van #VAR1# B.</string>
   <string name="PRO_PHOTO_FORMAT_INVALID">Alleen foto\'s in JPG en PNG formaat zijn toegestaan.</string>
-  <string name="PRO_PHOTO_NOT_CHOSEN">Geen fotobestand geselecteerd.</string>
   <string name="PRO_PHOTO_RESOLUTION_TO_LARGE">Grootte van geuploade foto is groter dan toegestane resolutie van #VAR1# megapixels.</string>
   <string name="PRO_PHOTO_SAVED">Nieuwe profielfoto is succesvol opgeslagen.</string>
   <string name="PRO_PROFILE">Profiel</string>
@@ -782,7 +772,6 @@
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Toon voormalige rol lidmaatschappen</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Er wordt een box getoond met alle rollen die gebruiker in huidige organisatie heeft. Begin- en einddatum van lidmaatschap worden getoond. (standaard: ja)</string>
   <string name="PRO_SHOW_MAP_LINK">Show map link</string>
-  <string name="PRO_SHOW_MAP_LINK_DESC">Als adres informatie volledig is, wordt er een link naar Google Maps gemaakt om locatie en route te tonen. (standaard: ja)</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP">Toon rol lidmaatschappen</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Een box wordt getoond met allen rollen van gebruiker in huidige organisatie. Rechten en registratie data worden ook getoond. (standaard: ja)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Toon rol van andere organisaties</string>
@@ -928,10 +917,10 @@
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">BEL</string>
   <string name="SYS_CREATE">Maak</string>
-  <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
   <string name="SYS_CREATE_NEW_USER">Voeg nieuwe gebruiker toe</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">U kunt nieuwe gebruiker aanmaken, als deze gebruiker niet voorkomt in de lijst met gevonden gebruikers.</string>
   <string name="SYS_CREATE_ROLE">Maak rol</string>
+  <string name="SYS_CREATE_VAR">Maak #VAR1#</string>
   <string name="SYS_CREATED_BY">Gemaakt door #VAR1# op #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mail adres doorgegeven!\n\nGeef svp een e-mail adres door voor uw #VAR1#profiel#VAR1#.</string>
@@ -1012,7 +1001,6 @@
   <string name="SYS_IMPORTANT">Belangrijk</string>
   <string name="SYS_INFORMATIONS">informatie</string>
   <string name="SYS_INTERNAL_NAME">Interne naam</string>
-  <string name="SYS_INTERNAL_NAME_DESC">De interne naam wordt gebruikt om een bepaald veld te identificeren. Het is echter niet relevant tijdens het gebruik van het programma. Tijdens de software ontwikkeling moet deze naam echter gebruikt worden om bijvoorbeeld een veld middels de getValue methode aan te spreken. De interne naam wordt automatisch ingevuld tijdens het maken van een veld.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ongeldige pagina weergave</string>
   <string name="SYS_IO_ERROR">I/O fout</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1048,7 +1036,6 @@
   <string name="SYS_MASTER_DATA">Basis informatie</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. deelnemers</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. grootte van afbeelding</string>
-  <string name="SYS_MEGA_PIXEL">Megapixels</string>
   <string name="SYS_MEMBER">Lid</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Lid van organisatie #VAR1#</string>
   <string name="SYS_MEMBERS">Leden</string>
