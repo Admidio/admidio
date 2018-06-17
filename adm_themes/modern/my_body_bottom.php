@@ -10,6 +10,7 @@
                 <?php
 
                 require(ADMIDIO_PATH . FOLDER_PLUGINS . '/login_form/login_form.php');
+                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/sidebar_downloads/sidebar_downloads.php');
 
                 // create html page object and display Menu
                 $page = new HtmlPage();
