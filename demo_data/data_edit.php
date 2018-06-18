@@ -24,15 +24,33 @@ function addDaysToDate($days, $sub = false)
 }
 
 // set birthday of user to today 25 years ago
+$years25 = new \DateInterval('P25Y');
+$years32 = new \DateInterval('P32Y');
+$years46 = new \DateInterval('P46Y');
+$days2   = new \DateInterval('P2D');
+
 $now = new \DateTime();
-$yearsBack = new \DateInterval('P25Y');
-$birthday = $now->sub($yearsBack)->format('Y-m-d');
+$birthdayToday   = $now->sub($years25)->format('Y-m-d');
+$now = new \DateTime();
+$birthdayIn2Days = $now->sub($years46)->add($days2)->format('Y-m-d');
+$now = new \DateTime();
+$birthdayBefore2Days = $now->sub($years32)->sub($days2)->format('Y-m-d');
 
 $sqlQueries = array();
 
 $sqlQueries[] = 'UPDATE '.TBL_USER_DATA.'
-                    SET usd_value = \''.$birthday.'\'
+                    SET usd_value = \''.$birthdayToday.'\'
                   WHERE usd_usr_id = 202
+                    AND usd_usf_id = 10 ';
+
+$sqlQueries[] = 'UPDATE '.TBL_USER_DATA.'
+                    SET usd_value = \''.$birthdayIn2Days.'\'
+                  WHERE usd_usr_id = 290
+                    AND usd_usf_id = 10 ';
+
+$sqlQueries[] = 'UPDATE '.TBL_USER_DATA.'
+                    SET usd_value = \''.$birthdayBefore2Days.'\'
+                  WHERE usd_usr_id = 219
                     AND usd_usf_id = 10 ';
 
 // set name of role to 4 days in future
