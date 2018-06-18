@@ -199,39 +199,39 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
 $form->addCheckbox(
     'usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), (bool) $userField->getValue('usf_hidden'),
-    array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png')
+    array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'fa-eye')
 );
 $form->addCheckbox(
     'usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', array($gL10n->get('ROL_RIGHT_EDIT_USER'))), (bool) $userField->getValue('usf_disabled'),
-    array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png')
+    array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'fa-key')
 );
 
 if($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME')
 {
     $form->addCheckbox(
         'usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
-        array('property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png')
+        array('property' => HtmlForm::FIELD_DISABLED, 'helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
     );
 }
 else
 {
     $form->addCheckbox(
         'usf_mandatory', $gL10n->get('ORG_FIELD_REQUIRED'), (bool) $userField->getValue('usf_mandatory'),
-        array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'asterisk_yellow.png')
+        array('helpTextIdLabel' => 'ORG_FIELD_REQUIRED_DESC', 'icon' => 'fa-asterisk')
     );
 }
 if($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME' || $usfNameIntern === 'EMAIL')
 {
     $form->addCheckbox(
         'usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
-        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'new_registrations.png')
+        array('property' => HtmlForm::FIELD_DISABLED, 'icon' => 'fa-address-card')
     );
 }
 else
 {
     $form->addCheckbox(
         'usf_registration', $gL10n->get('ORG_FIELD_REGISTRATION'), (bool) $userField->getValue('usf_registration'),
-        array('icon' => 'new_registrations.png')
+        array('icon' => 'fa-address-card')
     );
 }
 $form->closeGroupBox();
