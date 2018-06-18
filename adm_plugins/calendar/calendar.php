@@ -531,7 +531,7 @@ while($currentDay <= $lastDayCurrentMonth)
 
                 if($plg_geb_icon)
                 {
-                    $icon = '<img src=\''.ADMIDIO_URL . FOLDER_PLUGINS . '/' . $pluginFolder . '/cake.png\' alt=\'Birthday\' /> ';
+                    $icon = '<i class="fas fa-birthday-cake"></i>';
                 }
                 else
                 {
