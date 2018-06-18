@@ -185,7 +185,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 }
                                 else
                                 {
-                                    $roleMemHTML .= '<a class="admidio-icon-link"><img src="'.THEME_URL.'/icons/dummy.png" alt=""/></a>';
+                                    $roleMemHTML .= '<i class="fas fa-trash admidio-opacity-0"></i>';
                                 }
 
                                 // You are not allowed to delete your own administrator membership, other roles could be deleted
@@ -198,8 +198,7 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
                                 }
                                 else
                                 {
-                                    $roleMemHTML .= '
-                                    <a class="admidio-icon-link"><img src="'.THEME_URL.'/icons/dummy.png" alt=""/></a>';
+                                    $roleMemHTML .= '<i class="fas fa-trash admidio-opacity-0"></i>';
                                 }
                             }
 

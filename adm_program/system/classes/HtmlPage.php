@@ -277,7 +277,7 @@ class HtmlPage
 
         while ($mainMenu = $mainMenuStatement->fetch())
         {
-            $menuIcon = '/dummy.png';
+            $menuIcon = 'fa-trash-alt admidio-opacity-0';
             $menuItems = array();
 
             $menuStatement = self::getMenuStatement($mainMenu['men_id']);
@@ -775,7 +775,7 @@ class HtmlPage
     {
         global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
-        $menuIcon = '/dummy.png';
+        $menuIcon = 'fa-trash-alt admidio-opacity-0';
         $htmlMenu = '';
 
         $mainMenuStatement = self::getMainMenuStatement();

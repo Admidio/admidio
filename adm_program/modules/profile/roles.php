@@ -266,7 +266,7 @@ while($row = $statement->fetch())
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
         $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
-                            <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+                          <i class="fas fa-trash admidio-opacity-0"></i>';
     }
 
     // show icon with edit user right if leader has this right
@@ -286,7 +286,7 @@ while($row = $statement->fetch())
     // show dummy icon if leader has not all rights
     if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $leaderRights .= '<i class="fas fa-trash admidio-opacity-0"></i>';
     }
     $columnValues[] = $leaderRights;
 

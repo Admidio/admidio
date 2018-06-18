@@ -128,7 +128,7 @@ $columnHeading = array(
     $gL10n->get('SYS_FEATURES')
 );
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
-$table->disableDatatablesColumnsSort(array(3, 4, 5));
+$table->disableDatatablesColumnsSort(array(3, 7));
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
 
@@ -297,7 +297,7 @@ while($row = $rolStatement->fetch())
 
     if($role->getValue('rol_administrator') == 1)
     {
-        $linkAdministration .= '<a class="admidio-icon-link"><img src="'. THEME_URL. '/icons/dummy.png" alt="dummy" /></a>';
+        $linkAdministration .= '<i class="fas fa-trash admidio-opacity-0"></i>';
     }
     else
     {
