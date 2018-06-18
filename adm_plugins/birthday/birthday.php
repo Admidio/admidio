@@ -46,22 +46,22 @@ else
     $plg_link_target = '_self';
 }
 
-if(!isset($plg_show_hinweis_keiner) || !is_numeric($plg_show_names_extern))
+if(!isset($plg_show_hinweis_keiner) || !is_numeric($plg_show_hinweis_keiner))
 {
-    $plg_show_names_extern = 0;
+    $plg_show_hinweis_keiner = 0;
 }
 
-if(!isset($plg_show_alter_anrede) || !is_numeric($plg_show_names_extern))
+if(!isset($plg_show_alter_anrede) || !is_numeric($plg_show_alter_anrede))
 {
-    $plg_show_names_extern = 18;
+    $plg_show_alter_anrede = 18;
 }
 
-if(!isset($plg_show_zeitraum) || !is_numeric($plg_show_names_extern))
+if(!isset($plg_show_zeitraum) || !is_numeric($plg_show_zeitraum))
 {
     $plg_show_zeitraum = 5;
 }
 
-if(!isset($plg_show_future) || !is_numeric($plg_show_names_extern))
+if(!isset($plg_show_future) || !is_numeric($plg_show_future))
 {
     $plg_show_future = 10;
 }
