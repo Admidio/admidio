@@ -105,8 +105,8 @@ and sharing great software.
 - [CKEditor](http://ckeditor.com/): Javascript-Editor
 - [Cookie Consent](https://cookieconsent.insites.com/): The most popular solution to the EU cookie law
 - [Datatables](https://www.datatables.net/): Table plugin for jQuery
+- [Font Awesome](https://fontawesome.com/): Vector icons and social logos
 - [htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/): PHP code to purify & filter HTML
-- [Icon Bibliothek famfamfam, Silk Icons](http://www.famfamfam.com/): Icon Bibliothek
 - [James Heinrich](http://www.silisoftware.com/): backupDB
 - [jQuery](https://jquery.com/): JavaScript-Library
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
@@ -117,7 +117,6 @@ and sharing great software.
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP
 - [SecurImage](https://www.phpcaptcha.org/): PHP CAPTCHA script for generating complex images and CAPTCHA codes to protect forms from spam and abuse.
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
-- [Tango Desktop Project](http://tango.freedesktop.org/): Icon Bibliothek Tango
 - [zxcvbn](https://github.com/dropbox/zxcvbn): Add password strength indicator
 - [zxcvbn-php](https://github.com/bjeavons/zxcvbn-php): Test password strength in the backend
 
