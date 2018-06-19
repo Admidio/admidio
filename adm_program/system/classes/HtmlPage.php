@@ -299,7 +299,7 @@ class HtmlPage
                     if ($gValidLogin && $row['men_name_intern'] === 'mail')
                     {
                         $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                        $menuIcon = '/icons/messages.png';
+                        $menuIcon = 'fa-comments';
                         $menuName = $gL10n->get('SYS_MESSAGES') . self::getUnreadMessagesBadge();
                     }
                     else
@@ -327,7 +327,7 @@ class HtmlPage
 
                 $this->menu->addItem(
                     'menu_item_'.$mainMenu['men_name_intern'], '', $menuName,
-                    'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
+                    'fa-align-justify', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
                 foreach ($menuItems as $menuItem)
@@ -345,12 +345,12 @@ class HtmlPage
             // show link to own profile
             $this->menu->addItem(
                 'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
-                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-user', 'right', 'navbar', 'admidio-default-menu-item'
             );
             // show logout link
             $this->menu->addItem(
                 'menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
-                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-sign-out-alt', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
         else
@@ -358,12 +358,12 @@ class HtmlPage
             // show registration link
             $this->menu->addItem(
                 'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-address-card', 'right', 'navbar', 'admidio-default-menu-item'
             );
             // show login link
             $this->menu->addItem(
                 'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
-                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-key', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
     }

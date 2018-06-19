@@ -318,7 +318,7 @@ switch($getMode)
         );
         $form->addSubmitButton(
             'btn_forward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
-            array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3')
+            array('icon' => 'fa-wrench', 'class' => ' col-sm-offset-3')
         );
 
         // add form to html page and show page

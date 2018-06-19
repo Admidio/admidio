@@ -786,7 +786,6 @@
     <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
     <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen E-Mailkontext</string>
     <!-- Phrases only in Updatecheck -->
-    <string name="UPD_ADMIDIO">Zur Admidio-Updateseite wechseln</string>
     <string name="UPD_BETA_VERSION">Verfügbare Beta</string>
     <string name="UPD_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
     <string name="UPD_CURRENT_VERSION">Installiert</string>
@@ -947,7 +946,6 @@
     <string name="PRO_YEARS">Jahre</string>
     <!-- Phrases only in Relationssmodule -->
     <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
-    <string name="REL_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung bearbeiten</string>
     <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
     <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
     <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
@@ -1040,6 +1038,7 @@
     <string name="SYS_ACTIVATED">Aktiviert</string>
     <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
     <string name="SYS_ADDRESS">Adresse</string>
+    <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
     <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
     <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
     <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
@@ -1143,6 +1142,7 @@
     <string name="SYS_EDIT">Bearbeiten</string>
     <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
     <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
+    <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
     <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
     <string name="SYS_EDITED_BY">Geändert von</string>
     <string name="SYS_EMAIL">E-Mail</string>

@@ -67,7 +67,7 @@ $form->addInput(
     array('maxLength' => 100)
 );
 $form->addCheckbox(
-    'urt_edit_user', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'),
+    'urt_edit_user', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'),
     array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
@@ -136,7 +136,7 @@ $form->addInput(
     array('maxLength' => 100)
 );
 $form->addCheckbox(
-    'urt_edit_user_inverse', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'),
+    'urt_edit_user_inverse', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'),
     array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 

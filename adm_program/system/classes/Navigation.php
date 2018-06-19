@@ -202,8 +202,7 @@ class Navigation
         return '
         <div id="'.$id.'" class="admNavigation admNavigationBack">
             <a class="btn" href="'.$url.'">'.
-                '<img src="'.THEME_URL.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />'
-                .$gL10n->get('SYS_BACK').
+                '<i class="fas fa-arrow-circle-left"></i>'.$gL10n->get('SYS_BACK').
             '</a>
         </div>';
     }

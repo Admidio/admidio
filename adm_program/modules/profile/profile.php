@@ -334,8 +334,8 @@ $page->addHtml('
                 if ($userId !== $currUsrId && $gSettingsManager->getBool('enable_pm_module'))
                 {
                     $form->addStaticControl('username', $gL10n->get('SYS_USERNAME'),
-                        '<img src="'.THEME_URL.'/icons/pm.png" alt="'.$gL10n->get('SYS_WRITE_PM').'" />
-                        <a href='.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'usr_id' => $userId)).'>'.$user->getValue('usr_login_name').'</a>');
+                        '<a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('msg_type' => 'PM', 'usr_id' => $userId)).'" title="' . $gL10n->get('SYS_WRITE_PM') . '">'.
+                            '<i class="fas fa-comment-alt"></i>'.$user->getValue('usr_login_name').'</a>');
                 }
                 else
                 {
@@ -969,7 +969,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
             if($gCurrentUser->hasRightEditProfile($otherUser))
             {
                 $editUserIcon = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $otherUser->getValue('usr_id'))) . '"><i
-                    class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'"></i></a>';
+                    class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
             }
 
             $page->addHtml('<li id="row_ure_'.$relation->getValue('ure_id').'" class="list-group-item">');

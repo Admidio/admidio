@@ -198,7 +198,7 @@ if($getMode === 'choose')
     );
     $form->addSubmitButton(
         'btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'),
-        array('icon' => THEME_URL.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3')
+        array('icon' => 'fa-upload', 'class' => ' col-sm-offset-3')
     );
 
     // add form to html page and show page
@@ -285,8 +285,8 @@ elseif($getMode === 'upload')
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId)).'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addCustomContent($gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_show.php', array('usr_id' => $getUserId, 'new_photo' => 1)).'" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
     $form->addLine();
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_URL.'/icons/database_in.png'));
-    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_URL.'/icons/error.png'));
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => 'fa-upload'));
+    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => 'fa-cancel'));
 
     // add form to html page and show page
     $page->addHtml($form->show());
