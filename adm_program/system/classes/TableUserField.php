@@ -439,7 +439,7 @@ class TableUserField extends TableAccess
             }
         }
 
-        if ($columnName === 'usf_cat_id' && $this->getValue($columnName) !== $newValue)
+        if ($columnName === 'usf_cat_id' && (int) $this->getValue($columnName) !== (int) $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) AS count
