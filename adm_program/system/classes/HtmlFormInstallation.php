@@ -134,6 +134,7 @@ class HtmlFormInstallation extends HtmlForm
             <link rel="apple-touch-icon" type="image/png" href="layout/apple-touch-icon.png" sizes="180x180" />
 
             <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/fontawesome/css/fontawesome-all.min.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
 
             <script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/jquery/dist/jquery.min.js"></script>

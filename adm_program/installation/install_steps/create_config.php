@@ -33,7 +33,7 @@ if (isset($_POST['user_last_name']))
             $gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -45,7 +45,7 @@ if (isset($_POST['user_last_name']))
             $gL10n->get('SYS_FIELD_INVALID_CHAR', array($gL10n->get('SYS_USERNAME'))),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -56,7 +56,7 @@ if (isset($_POST['user_last_name']))
             $gL10n->get('SYS_EMAIL_INVALID', array($gL10n->get('SYS_EMAIL'))),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -68,7 +68,7 @@ if (isset($_POST['user_last_name']))
             $gL10n->get('PRO_PASSWORD_LENGTH'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -87,7 +87,7 @@ if (isset($_POST['user_last_name']))
             $gL10n->get('PRO_PASSWORD_NOT_STRONG_ENOUGH'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -99,7 +99,7 @@ if (isset($_POST['user_last_name']))
             $gL10n->get('INS_PASSWORDS_NOT_EQUAL'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -170,7 +170,7 @@ if ($configFileHandle)
     $form->setFormDescription($gL10n->get('INS_DATA_FULLY_ENTERED'), $gL10n->get('INS_INSTALL_ADMIDIO'));
     $form->addSubmitButton(
         'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
+        array('icon' => 'fa-wrench', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
     );
     echo $form->show();
 }
@@ -181,15 +181,15 @@ else
     $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE')));
     $form->addButton(
         'previous_page', $gL10n->get('SYS_BACK'),
-        array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')))
+        array('icon' => 'fa-arrow-circle-left', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_administrator')))
     );
     $form->addButton(
         'download_config', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE'),
-        array('icon' => 'layout/page_white_download.png', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config')))
+        array('icon' => 'fa-download', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'download_config')))
     );
     $form->addSubmitButton(
         'next_page', $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
+        array('icon' => 'fa-wrench', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'))
     );
     echo $form->show();
 }

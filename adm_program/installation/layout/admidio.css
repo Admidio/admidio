@@ -159,26 +159,18 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
-.admidio-icon-link img,
-.admidio-icon-info,
-.admidio-icon-help,
-.btn img {
-    border: none;
-    vertical-align: text-top;
-    margin-left: 3px;
-    height: 16px;
+.btn .fas {
+    margin-right: 6px;
 }
 
-.navbar-link img,
-.btn img,
-.alert .glyphicon,
-.btn {
+.alert .glyphicon {
     margin-right: 5px;
 }
 
-.admidio-icon-info {
+.admidio-info-icon {
+    color:#4496dd;
     cursor: help;
-    margin-right: 2px;
+    margin-left: 6px;
 }
 
 .pagination img {

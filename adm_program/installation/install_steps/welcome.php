@@ -49,6 +49,6 @@ $form->addSelectBoxFromXml(
 
 $form->addHtml($messageWarning);
 
-$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'fa-arrow-circle-right'));
 
 echo $form->show();

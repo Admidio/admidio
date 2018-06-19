@@ -346,21 +346,7 @@ a.btn {
     margin-left: 6px;
 }
 
-.admidio-icon-link img,
-.admidio-icon-info,
-.admidio-icon-help,
-.btn img,
-.dropdown-toggle span.glyphicon {
-    border: none;
-    vertical-align: text-top;
-    margin-left: 3px;
-    height: 16px;
-}
-
-.navbar-link img,
-.btn img,
 .alert .glyphicon,
-.btn,
 .dropdown-toggle span.glyphicon {
     margin-right: 5px;
 }

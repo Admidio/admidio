@@ -20,7 +20,7 @@ if (!is_file($configPath))
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
         safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
-        'layout/back.png'
+        'fa-arrow-circle-left'
     );
     // => EXIT
 }
@@ -41,7 +41,7 @@ if (isset($_SESSION['table_prefix'])
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
         safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
-        'layout/back.png'
+        'fa-arrow-circle-left'
     );
     // => EXIT
 }
@@ -54,7 +54,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'layout/back.png');
+    showNotice($sqlQueryResult, safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
     // => EXIT
 }
 
@@ -303,10 +303,10 @@ $form->setFormDescription(
     </div>'
 );
 $form->openButtonGroup();
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
+$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
 $form->addButton(
     'main_page', $gL10n->get('SYS_LATER'),
-    array('icon' => 'layout/application_view_list.png', 'link' => ADMIDIO_URL . '/adm_program/index.php')
+    array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/index.php')
 );
 $form->closeButtonGroup();
 echo $form->show();
