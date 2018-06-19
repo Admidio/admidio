@@ -9,56 +9,61 @@
  ***********************************************************************************************
  */
 
-// Die Namen der Geburtstagskinder koennen nur fuer registrierte User angezeigt werden
-// 0 = Name und Alter der Geb-Kinder wird nur fuer registrierte Benutzer angezeigt
-//     Besucher erhalten nur einen Hinweis das X Leute Geburtstag haben
-// 1 = Name und Alter werden auch fuer Besucher angezeigt
-// 2 = (Default) Name ohne Alter wird für Besucher angezeigt
-$plg_show_names_extern = 2;
+// What should visitors of the page see?
+// 0 = (Default) Visitors will only see the number of persons who have birthday today, nothing more.
+// 1 = Visitors will see all names (not the age) of birthday persons today, in the future and in the past
+$plg_show_names_extern = 0;
 
-// Wie soll der Name des Geburtstagskindes angezeigt werden ?
-// 1 = (Default) Vorname Nachname  (Hans Mustermann)
-// 2 = Nachname, Vorname (Mustermann, Hans)
-// 3 = Vorname (Hans)
+// How should the name of the birthday child be displayed?
+// 1 = (Default) First name Last name  (Hans Mustermann)
+// 2 = Last name, First name (Mustermann, Hans)
+// 3 = First name (Hans)
 // 4 = Loginname (Hansi)
-$plg_show_names = 1;
+$plg_show_names = 0;
 
-// Ab welchem Alter soll bei Geburtstagskindern für Besucher der Vorname durch
-// die Anrede ersetzt werden?
-// Falls nicht festgelegt, wird im PlugIn 18 als Default gesetzt.
-// Falls Funktion nicht gewünscht, Alter einfach z.B. auf 99 setzen.
+// Show the age of the birthday person (only for registered users)
+// 0 - Don't show the age
+// 1 - Show the age
+$plg_show_age = 0;
+
+// From which age of the birthday children the first name will be replaced
+// by the salutation for visitors?
+// 18 = (Default)
+// If you don't want to use this functio set the value to 99
 $plg_show_alter_anrede = 18;
 
-// Soll der Hinweis darauf, dass es keine Geburtstagskinder gibt, entfallen?
-// 0 = (Default) Hinweis wird angezeigt
-// 1 = Hinweis wird nicht angezeigt
+// Should the reference to the fact that there are no birthday children be omitted?
+// 0 = (Default) The reference will be shown
+// 1 = The reference will not be shown
 $plg_show_hinweis_keiner = 0;
 
-// zeige alle geburtstage in den letzten x tagen
+// Show all birthdays in the last x days
 $plg_show_zeitraum = 5;
-// zeige zukünftige geburtstage
+
+// Show all birthdays of the next x days
 $plg_show_future = 10;
 
-// Soll die E-Mail-Adresse fuer Besucher verlinkt sein ?
-// Bei registrierten Benutzern wird immer ein Link auf das Mailmodul gesetzt
-// 0 = (Default) Es wird nur der Name ohne Link mit E-Mail-Adresse angezeigt
-// 1 = E-Mail-Adresse ist fuer Besucher verlinkt
-// 2 = keine Verlinkung fuer Besucher und registrierte Benutzer
+// Should the e-mail address be linked to visitors?
+// Registered users always have a link to the mail module
+// 0 = (Default) Only the name of visitors without e-mail will be shown
+// 1 = Name with e-mail will be shown for visitors
+// 2 = Only the name without e-mail will be shown for visitors and registered users
 $plg_show_email_extern = 0;
 
-// Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
-// Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
+// Specification of the target in which the contents of the links are to be opened
+// You can insert specified values of the html target attribut
 $plg_link_target = '_self';
 
-// Angabe welche Rollen selektiert werden sollen
-// Aufzählung mit Komma vornehmen "(4,5)"
+// You can list role ids (comma separated) from which the birthday persons should
+// be searched. If no role is set than the plugin will search for all active members.
+// example value: '2,5,13'
 $plg_rolle_sql = '';
 
-// Angabe in welcher Sortierfolge die Geburtstage dargestellt werden sollen
-// Aufsteigend bzw. absteigend "ASC bzw. DESC"
+// In which sort order should the birthdays be listed?
+// The values could be ascendend = 'ASC' or descendend = 'DESC'
 $plg_sort_sql = 'DESC';
 
-// Soll die Überschrift des Plugins angezeigt werden
-// 1 = (Default) Überschrift wird angezeigt
-// 0 = Überschrift wird nicht angezeigt
+// Should the header of the plugin be displayed?
+// 1 = (Default) Header should be shown
+// 0 = Header should not be shown
 $plg_show_headline = 1;

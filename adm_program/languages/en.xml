@@ -200,10 +200,7 @@
   <string name="GBO_COMMENTS4ALL">Allow anonyme comments</string>
   <string name="GBO_COMMENTS4ALL_DESC">Users who are not logged in can comment on the entries in the guestbook after activating this option. The rights assignment for this function via role management is then ignored. (Default: no)</string>
   <string name="GBO_CREATE_COMMENT">Leave comment</string>
-  <string name="GBO_CREATE_ENTRY">Leave entry</string>
-  <string name="GBO_CREATE_VAR_ENTRY">Leave #VAR1# entry</string>
   <string name="GBO_EDIT_COMMENT">Edit comment</string>
-  <string name="GBO_EDIT_ENTRY">Edit #VAR1# entry</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">New guestbook comment was created</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">New guestbook comment at #VAR1# was created.\n\nText: #VAR2#\nCreated by: #VAR3#\nCreated at: #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">New guestbook entry was created</string>
@@ -605,7 +602,7 @@
   <string name="MEN_NAME_DESC">The name of the entry in the menu. Here you can also enter the name of a translation string.</string>
   <string name="MEN_MENU_ITEM">Menu item</string>
   <string name="MEN_MENU_LEVEL">Menu level</string>
-  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible. If you want to display the menu item at the top level, select # VAR1_BOLD #.</string>
+  <string name="MEN_MENU_LEVEL_DESC">A menu item is always subordinate to another menu item. In the selection list, select a menu level in which the new menu item should be visible. </string>
   <string name="MEN_MODULE_RIGHTS">Module rights</string>
   <string name="MEN_MODULE_RIGHTS_DESC">If you specify a module here, the menu item will only be displayed if the user also has the right to see this module.</string>
   <string name="MEN_PLUGIN">Plugins</string>
@@ -815,8 +812,6 @@
   <string name="PHO_CREATE_ALBUM">Create album</string>
   <string name="PHO_DISPLAY_PHOTOS">Photo display</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">With this option you can define how the images will be displayed within the foto module. This can be done with a modal window which will be opened as separate browser window. The image preview will stay active in the background. If the image should be displayed in the same window the current image preview will be closed. The third option allows to show the image in a popup window which can be used in addition to the image preview. (Default: Modal window)</string>
-  <string name="PHO_DOWNLOAD_PHOTOS">Download photos</string>
-  <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Save photo</string>
   <string name="PHO_DOWNLOAD_ENABLED">Activate download</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
@@ -1155,6 +1150,8 @@
   <string name="SYS_DONATE">Donate</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
+  <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_EDIT">Edit</string>
   <string name="SYS_EDIT_ENTRY">Edit entry</string>
   <string name="SYS_EDIT_MEMBERS">Edit members</string>
@@ -1440,5 +1437,8 @@
   <string name="SYS_WEDNESDAY">Wednesday</string>
   <string name="SYS_WHAT_TO_DO">What to do?</string>
   <string name="SYS_WIDTH">Width</string>
+  <string name="SYS_WRITE_EMAIL">Write e-mail</string>
+  <string name="SYS_WRITE_ENTRY">Write entry</string>
+  <string name="SYS_WRITE_PM">Write private message</string>
   <string name="SYS_YES">Yes</string>
 </resources>
