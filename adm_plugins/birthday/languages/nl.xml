@@ -8,7 +8,7 @@
   <string name="PLG_BIRTHDAY_ONE_USER">Vandaag is één gebruiker jarig!</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# werd #VAR2# dagen geleden #VAR3# jaar, op #VAR4#</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# wordt vandaag #VAR2#</string>
-  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# wordt morgen #VAR3#, op #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# wordt morgen #VAR3# jaar, op #VAR4#</string>
   <string name="PLG_BIRTHDAY_WOMAN_VAR">Mevrouw #VAR1#</string>
   <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# werd gisteren #VAR3# jaar, op #VAR4#</string>
 </resources>
