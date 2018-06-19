@@ -22,9 +22,9 @@ require_once(__DIR__ . '/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
-if(!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern))
+if(!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern) || $plg_show_names_extern !== 1)
 {
-    $plg_show_names_extern = 1;
+    $plg_show_names_extern = 0;
 }
 
 if(!isset($plg_show_email_extern) || !is_numeric($plg_show_email_extern))
@@ -35,6 +35,11 @@ if(!isset($plg_show_email_extern) || !is_numeric($plg_show_email_extern))
 if(!isset($plg_show_names) || !is_numeric($plg_show_names))
 {
     $plg_show_names = 1;
+}
+
+if(!isset($plg_show_age) || !is_numeric($plg_show_age))
+{
+    $plg_show_age = 0;
 }
 
 if(isset($plg_link_target))
@@ -89,7 +94,7 @@ else
 if($plg_show_names_extern === 0 && !$gValidLogin)
 {
     $plg_show_zeitraum = 0;
-    $plg_show_future = 0;
+    $plg_show_future   = 0;
 }
 
 // if page object is set then integrate css file of this plugin
@@ -184,26 +189,26 @@ if($numberBirthdays > 0)
 {
     if($plg_show_names_extern === 1 || $gValidLogin)
     {
-
         echo '<ul id="plgBirthdayNameList">';
+
             while($row = $birthdayStatement->fetch())
             {
-                // Anzeigeart des Namens beruecksichtigen
+                // the display type of the name
                 switch ($plg_show_names)
                 {
-                    case 1:  // Vorname, Nachname
+                    case 1:  // first name, last name
                         $plgShowName = $row['first_name']. ' '. $row['last_name'];
                         break;
-                    case 2:  // Nachname, Vorname
+                    case 2:  // last name, first name
                         $plgShowName = $row['last_name']. ', '. $row['first_name'];
                         break;
-                    case 3:  // Vorname
+                    case 3:  // first name
                         $plgShowName = $row['first_name'];
                         break;
                     case 4:  // Loginname
                         $plgShowName = $row['usr_login_name'];
                         break;
-                    default: // Vorname, Nachname
+                    default: // first name, last name
                         $plgShowName = $row['first_name']. ' '. $row['last_name'];
                 }
 
@@ -220,7 +225,7 @@ if($numberBirthdays > 0)
                     }
                 }
 
-                // Namen mit Alter und Mail-Link anzeigen
+                // show name and e-mail link for registered users
                 if($gValidLogin)
                 {
                     $plgShowName = '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $row['usr_id'])) . '"
@@ -241,54 +246,55 @@ if($numberBirthdays > 0)
                         src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('SYS_WRITE_EMAIL').'" title="'.$gL10n->get('SYS_WRITE_EMAIL').'" /></a>';
                 }
 
-                // Soll das Alter auch für nicht angemeldete Benutzer angezeigt werden?
-                if($plg_show_names_extern < 2 || $gValidLogin)
+                // set css class and string for birthday today, in the future or in the past
+                $birthayDate  = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
+                $plgDays      = ' ';
+                $plgCssClass  = '';
+                $birthdayText = '';
+
+                if ($row['days_to_bdate'] === 0)
                 {
-                    // Geburtstagskinder am aktuellen Tag bekommen anderen Text
-                    if((int) $row['days_to_bdate'] === 0)
+                    $plgCssClass  = 'plgBirthdayNameHighlight';
+                    $birthdayText = 'PLG_BIRTHDAY_TODAY';
+                    $plgDays      = $row['age'];
+                }
+                if ($row['days_to_bdate'] < 0)
+                {
+                    $plgCssClass = 'plgBirthdayNameHighlightAgo';
+                    if($row['days_to_bdate'] == -1)
                     {
-                        // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
-                        echo '<li><span id="plgBirthdayNameHighlight">'.$gL10n->get('PLG_BIRTHDAY_TODAY', array($plgShowName, $row['age'])).'</span></li>';
+                        $birthdayText = 'PLG_BIRTHDAY_YESTERDAY';
                     }
                     else
                     {
-                        $birthayDate  = \DateTime::createFromFormat('Y-m-d', $row['birthday']);
-                        $plgDays      = ' ';
-                        $plgCssClass  = '';
-                        $birthdayText = '';
-
-                        if ($row['days_to_bdate'] < 0)
-                        {
-                            $plgCssClass = 'plgBirthdayNameHighlightAgo';
-                            if($row['days_to_bdate'] == -1)
-                            {
-                                $birthdayText = 'PLG_BIRTHDAY_YESTERDAY';
-                            }
-                            else
-                            {
-                                $birthdayText = 'PLG_BIRTHDAY_PAST';
-                                $plgDays = -$row['days_to_bdate'];
-                            }
-                        }
-                        elseif ($row['days_to_bdate'] > 0)
-                        {
-                            $plgCssClass = 'plgBirthdayNameHighlightFuture';
-                            if($row['days_to_bdate'] == 1)
-                            {
-                                $birthdayText = 'PLG_BIRTHDAY_TOMORROW';
-                            }
-                            else
-                            {
-                                $birthdayText = 'PLG_BIRTHDAY_FUTURE';
-                                $plgDays = $row['days_to_bdate'];
-                            }
-                        }
-                        // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
-                        echo '<li><span id="'.$plgCssClass.'">'.
-                            $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthayDate->format($gSettingsManager->getString('system_date')))).
-                        '</span></li>';
+                        $birthdayText = 'PLG_BIRTHDAY_PAST';
+                        $plgDays = -$row['days_to_bdate'];
                     }
                 }
+                elseif ($row['days_to_bdate'] > 0)
+                {
+                    $plgCssClass = 'plgBirthdayNameHighlightFuture';
+                    if($row['days_to_bdate'] == 1)
+                    {
+                        $birthdayText = 'PLG_BIRTHDAY_TOMORROW';
+                    }
+                    else
+                    {
+                        $birthdayText = 'PLG_BIRTHDAY_FUTURE';
+                        $plgDays = $row['days_to_bdate'];
+                    }
+                }
+
+                // don't show age of birthday person if preference is set
+                if($plg_show_age === 0 || !$gValidLogin)
+                {
+                    $birthdayText .= '_NO_AGE';
+                }
+
+                // now show string with the birthday person
+                echo '<li><span id="'.$plgCssClass.'">'.
+                    $gL10n->get($birthdayText, array($plgShowName, $plgDays, $row['age'], $birthayDate->format($gSettingsManager->getString('system_date')))).
+                '</span></li>';
             }
         echo '</ul>';
     }
