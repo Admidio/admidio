@@ -157,8 +157,7 @@ $db->query($sql); // TODO add more params
 // create profile fields of category social networks
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
                (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdSocialNetworks.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \'INS_AOL_INSTANT_MESSENGER\', NULL,                              \'aim.png\',         NULL,                                             0, 1, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'FACEBOOK\',              \'INS_FACEBOOK\',    \''.$gL10n->get('INS_FACEBOOK_DESC').'\',    \'facebook.png\',    \'https://www.facebook.com/#user_content#\',      0, 2, '.$currUsrId.', \''. DATETIME_NOW.'\')
+        VALUES ('.$categoryIdSocialNetworks.', \'TEXT\', \'FACEBOOK\',              \'INS_FACEBOOK\',    \''.$gL10n->get('INS_FACEBOOK_DESC').'\',    \'facebook.png\',    \'https://www.facebook.com/#user_content#\',      0, 2, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'GOOGLE_PLUS\',           \'INS_GOOGLE_PLUS\', \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\', \'google_plus.png\', \'https://plus.google.com/#user_content#/posts\', 0, 3, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'ICQ\',                   \'INS_ICQ\',         \''.$gL10n->get('INS_ICQ_DESC').'\',         \'icq.png\',         \'https://www.icq.com/people/#user_content#\',    0, 4, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'TEXT\', \'SKYPE\',                 \'INS_SKYPE\',       \''.$gL10n->get('INS_SKYPE_DESC').'\',       \'skype.png\',       NULL,                                             0, 5, '.$currUsrId.', \''. DATETIME_NOW.'\')
