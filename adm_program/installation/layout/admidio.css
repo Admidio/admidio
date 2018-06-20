@@ -357,10 +357,15 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     color: #ffffff;
 }
 
-.admidio-form-group-required label:after, .admidio-form-required-notice span:after {
-    content: url('../layout/bullet_red.png');
+.admidio-form-group-required label:after,
+.admidio-form-required-notice span:after {
+    font-family: "Font Awesome 5 Free";
+    font-size: 6pt;
+    content: "\f111";
+    color: #d91515;
     white-space: nowrap;
-    vertical-align: top;
+    vertical-align: super;
+    margin-left: 3px;
 }
 
 .admidio-form-required-notice {
