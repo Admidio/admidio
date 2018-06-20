@@ -148,8 +148,8 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, NULL, 0, 0, 0, 0, 8,  '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'PHONE\',        \'FAX\',        \'SYS_FAX\',       NULL, NULL, 0, 0, 0, 0, 9,  '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, NULL, 0, 0, 0, 0, 10, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'male.png|SYS_MALE
-female.png|SYS_FEMALE\', 0, 0, 0, 0, 11, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'fa-mars|SYS_MALE
+fa-venus|SYS_FEMALE\', 0, 0, 0, 0, 11, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, 1, 0, 1, 1, 12, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, 0, 0, 0, 0, 13, '.$currUsrId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params

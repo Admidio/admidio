@@ -235,7 +235,9 @@ class ProfileFields
                     {
                         // if value is imagefile or imageurl then show image
                         if ($usfType === 'RADIO_BUTTON'
-                        && (StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)))
+                        && (StringUtils::strContains($listValue, '.png', false)
+                            || StringUtils::strContains($listValue, '.jpg', false)
+                            || StringUtils::strStartsWith($listValue, 'fa-')))
                         {
                             // if there is imagefile and text separated by | then explode them
                             if (StringUtils::strContains($listValue, '|'))
@@ -254,13 +256,17 @@ class ProfileFields
                             try
                             {
                                 // create html for optionbox entry
-                                if (strValidCharacters($listValueImage, 'url') && StringUtils::strStartsWith($listValueImage, 'http', false))
+                                if (StringUtils::strStartsWith($listValueImage, 'fa-'))
                                 {
-                                    $listValue = '<img class="admidio-icon-info" src="' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
+                                    $listValue = '<i class="fas fab ' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '"></i>';
+                                }
+                                elseif (strValidCharacters($listValueImage, 'url') && StringUtils::strStartsWith($listValueImage, 'http', false))
+                                {
+                                    $listValue = '<img class="admidio-icon-info" src="' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '" alt="' . $listValueText . '" />';
                                 }
                                 elseif (admStrIsValidFileName($listValueImage, true))
                                 {
-                                    $listValue = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $listValueImage . '" title="' . $listValueText . '" alt="' . $listValueText . '" />';
+                                    $listValue = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '" alt="' . $listValueText . '" />';
                                 }
                             }
                             catch (AdmException $e)

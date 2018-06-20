@@ -351,8 +351,7 @@ a.btn {
     margin-right: 5px;
 }
 
-.admidio-icon-info,
-.admidio-icon-help {
+.admidio-icon-info {
     cursor: help;
     margin-right: 2px;
 }

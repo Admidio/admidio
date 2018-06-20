@@ -16,5 +16,7 @@
     <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'fa-cog' WHERE men_icon = 'options.png'</step>
     <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-tie' WHERE men_icon = 'roles.png'</step>
     <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'fa-stream' WHERE men_icon = 'application_view_tile.png'</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_value_list = 'fa-mars|SYS_MALE
+fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'male.png|%'</step>
     <step>stop</step>
 </update>

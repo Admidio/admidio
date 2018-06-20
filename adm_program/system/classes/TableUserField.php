@@ -209,7 +209,9 @@ class TableUserField extends TableAccess
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON')
                             {
                                 // if value is imagefile or imageurl then show image
-                                if (StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))
+                                if (StringUtils::strContains($listValue, '.png', false)
+                                || StringUtils::strContains($listValue, '.jpg', false)
+                                || StringUtils::strStartsWith($listValue, 'fa-'))
                                 {
                                     // if there is imagefile and text separated by | then explode them
                                     $listValues = explode('|', $listValue);
@@ -243,15 +245,22 @@ class TableUserField extends TableAccess
                                     {
                                         try
                                         {
-                                            if (!StringUtils::strStartsWith($listValueImage, 'http', false) || !strValidCharacters($listValueImage, 'url'))
+                                            if (StringUtils::strStartsWith($listValueImage, 'fa-'))
                                             {
-                                                if (admStrIsValidFileName($listValueImage, true))
-                                                {
-                                                    $listValueImage = THEME_URL . '/icons/' . $listValueImage;
-                                                }
+                                                $listValue = '<i class="fas fab ' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '"></i>';
                                             }
+                                            else
+                                            {
+                                                if (!StringUtils::strStartsWith($listValueImage, 'http', false) || !strValidCharacters($listValueImage, 'url'))
+                                                {
+                                                    if (admStrIsValidFileName($listValueImage, true))
+                                                    {
+                                                        $listValueImage = THEME_URL . '/icons/' . $listValueImage;
+                                                    }
+                                                }
 
-                                            $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                                $listValue = '<img class="admidio-icon-info" src="'.$listValueImage.'" data-toggle="tooltip" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                            }
                                         }
                                         catch (AdmException $e)
                                         {
