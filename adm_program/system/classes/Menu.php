@@ -63,13 +63,6 @@ class Menu
             $link = ADMIDIO_URL . $link;
         }
 
-        // if icon is imagefile or imageurl then show image
-        if (preg_match('/^http(s?):\/\//', $icon) === 0 && admStrIsValidFileName($icon, true)
-        && (StringUtils::strEndsWith($icon, '.png', false) || StringUtils::strEndsWith($icon, '.jpg', false)))
-        {
-            $icon = THEME_URL . '/icons/' . $icon;
-        }
-
         return array(
             'id'       => $id,
             'link'     => $link,
@@ -201,10 +194,11 @@ class Menu
             }
             else
             {
+                $iconHtml = TableUserField::getIconHtml($item['icon'], $item['text']);
                 $html .= '
                     <li>
                         <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn" href="'.$item['link'].'">
-                            <i class="fas '.$item['icon'].'"></i>'.$item['text'].'
+                            ' . $iconHtml . $item['text'] . '
                         </a>
                     </li>';
             }

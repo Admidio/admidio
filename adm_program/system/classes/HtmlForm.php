@@ -413,18 +413,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['icon'] !== '')
         {
             // create html for icon
-            if(StringUtils::strStartsWith($optionsAll['icon'], 'fa-'))
-            {
-                $htmlIcon = '<i class="fas ' . $optionsAll['icon'] . '"></i>';
-            }
-            elseif (StringUtils::strStartsWith($optionsAll['icon'], 'http', false) && strValidCharacters($optionsAll['icon'], 'url'))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . $optionsAll['icon'] . '" data-toggle="tooltip" title="' . $label . '" alt="' . $label . '" />';
-            }
-            elseif (admStrIsValidFileName($optionsAll['icon'], true))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $optionsAll['icon'] . '" data-toggle="tooltip" title="' . $label . '" alt="' . $label . '" />';
-            }
+            $htmlIcon = TableUserField::getIconHtml($optionsAll['icon'], $label);
         }
 
         if ($optionsAll['helpTextIdLabel'] !== '')
@@ -2011,14 +2000,7 @@ class HtmlForm extends HtmlFormBasic
         if ($icon !== '')
         {
             // create html for icon
-            if (StringUtils::strStartsWith($icon, 'http', false) && strValidCharacters($icon, 'url'))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . $icon . '" data-toggle="tooltip" title="' . $label . '" alt="' . $label . '" />';
-            }
-            elseif (admStrIsValidFileName($icon, true))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $icon . '" data-toggle="tooltip" title="' . $label . '" alt="' . $label . '" />';
-            }
+            $htmlIcon = TableUserField::getIconHtml($icon, $label);
         }
 
         if ($helpTextId !== '')

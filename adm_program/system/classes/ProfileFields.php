@@ -237,6 +237,8 @@ class ProfileFields
                         if ($usfType === 'RADIO_BUTTON'
                         && (StringUtils::strContains($listValue, '.png', false)
                             || StringUtils::strContains($listValue, '.jpg', false)
+                            || StringUtils::strStartsWith($listValue, 'fas ')
+                            || StringUtils::strStartsWith($listValue, 'fab ')
                             || StringUtils::strStartsWith($listValue, 'fa-')))
                         {
                             // if there is imagefile and text separated by | then explode them
@@ -253,27 +255,8 @@ class ProfileFields
                             // if text is a translation-id then translate it
                             $listValueText = Language::translateIfTranslationStrId($listValueText);
 
-                            try
-                            {
-                                // create html for optionbox entry
-                                if (StringUtils::strStartsWith($listValueImage, 'fa-'))
-                                {
-                                    $listValue = '<i class="fas fab ' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '"></i>';
-                                }
-                                elseif (strValidCharacters($listValueImage, 'url') && StringUtils::strStartsWith($listValueImage, 'http', false))
-                                {
-                                    $listValue = '<img class="admidio-icon-info" src="' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '" alt="' . $listValueText . '" />';
-                                }
-                                elseif (admStrIsValidFileName($listValueImage, true))
-                                {
-                                    $listValue = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $listValueImage . '" data-toggle="tooltip" title="' . $listValueText . '" alt="' . $listValueText . '" />';
-                                }
-                            }
-                            catch (AdmException $e)
-                            {
-                                $e->showText();
-                                // => EXIT
-                            }
+                            // get html snippet with image tag
+                            $listValue = TableUserField::getIconHtml($listValueImage, $listValueText);
                         }
 
                         // if text is a translation-id then translate it

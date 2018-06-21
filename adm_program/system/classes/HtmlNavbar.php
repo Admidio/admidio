@@ -142,19 +142,6 @@ class HtmlNavbar
             $url = ADMIDIO_URL . '/' . $url;
         }
 
-        // add THEME_URL to images unless the full URL is given
-        if ($icon !== '' && preg_match($urlStartRegex, $icon) === 0)
-        {
-            if (StringUtils::strStartsWith($icon, '/icons/'))
-            {
-                $icon = THEME_URL . $icon;
-            }
-            elseif (!StringUtils::strStartsWith($icon, 'fa-'))
-            {
-                $icon = THEME_URL . '/icons/' . $icon;
-            }
-        }
-
         $item = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);
 
         if ($orientation === 'left')
@@ -188,23 +175,16 @@ class HtmlNavbar
      */
     protected function createHtmlLink(array $data)
     {
-        $icon = '';
+        $iconHtml = '';
 
         if ($data['icon'] !== '')
         {
-            if (StringUtils::strStartsWith($data['icon'], 'fa-'))
-            {
-                $icon = '<i class="fas '.$data['icon'].'"></i>';
-            }
-            else
-            {
-                $icon = '<img src="' . $data['icon'] . '" alt="' . strip_tags($data['text']) . '" />';
-            }
+            $iconHtml = TableUserField::getIconHtml($data['icon'], $data['text']);
         }
 
         $html = '
             <li class="' . $data['class'] . '">
-                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $icon . $data['text'] . '</a>
+                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>
             </li>';
 
         return $html;

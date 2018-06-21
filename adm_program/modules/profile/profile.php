@@ -59,7 +59,7 @@ function getFieldCode($fieldNameIntern, User $user)
     }
     elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
     {
-        $value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;&nbsp;'. $value;
+        $value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon') . $value;
     }
 
     // show html of field, if user has a value for that field or it's a checkbox field

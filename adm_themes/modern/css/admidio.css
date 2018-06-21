@@ -310,12 +310,22 @@ a.btn {
 /**************************/
 
 .btn .fas,
+.btn .fab,
 .panel-title .fas,
 .navbar-link .fas,
 .checkbox .fas,
 .panel-heading .pull-left .fas,
 .admidio-profile-user-right .fas {
     margin-right: 6px;
+}
+
+.control-label .fas,
+.control-label .fab,
+.control-label img,
+.form-control-static .fab,
+.form-control-static img {
+    margin-right: 6px;
+    font-size: 11pt;
 }
 
 .admidio-list-roles-assign .fas,

@@ -39,7 +39,7 @@ function checkLogin()
                 <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
             </div>';
 
-        showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+        showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', true);
         // => EXIT
     }
     else
@@ -63,7 +63,7 @@ function checkLogin()
                     <strong>' . $e->getText() . '</strong>
                 </div>';
 
-            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', true);
             // => EXIT
         }
     }
