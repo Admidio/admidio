@@ -260,7 +260,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOWNLOADS\'), 1, 0, 3, 1, \'download\', \''.FOLDER_MODULES.'/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \''.FOLDER_MODULES.'/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'SYS_MYLIST_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
@@ -272,7 +272,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ROLES\'), 2, 0, 3, 1, \'roladm\', \''.FOLDER_MODULES.'/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 
 // delete session data

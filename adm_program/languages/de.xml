@@ -92,7 +92,7 @@
     <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
     <string name="DAT_PARTICIPATE_NO_RIGHTS">Du besitzt nicht das Recht dich für diesen Termin anzumelden.</string>
     <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
-    <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhältst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</string>
+    <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Du wirst Organisator des Termins und erhältst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren ernennen.</string>
     <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
     <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
     <string name="DAT_REGISTRATION_POSSIBLE_FOR">Anmeldung möglich für</string>
@@ -410,7 +410,7 @@
     <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
     <string name="LST_LIST">Liste</string>
     <string name="LST_LISTS">Listen</string>
-    <string name="LST_LISTS_DESC">Unterschiedliche Listen zu einzelnen Rollen können hier angezeigt werden. Außerdem können von den Benutzern individuelle Listen erstellt und gespeichert werden.</string>
+    <string name="LST_LISTS_DESC">Übersicht über alle Rollen mit der Möglichkeit verschiedene Listen anzuzeigen. Die Listen können gedruckt und exportiert werden.</string>
     <string name="LST_LIST_VIEW">Listenübersicht</string>
     <string name="LST_MAX">von max. #VAR1#</string>
     <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
@@ -1264,6 +1264,7 @@
     <string name="SYS_MEMBERS">Mitglieder</string>
     <string name="SYS_MEMORY_LIMIT">Arbeitsspeicher</string>
     <string name="SYS_MENU">Menü</string>
+    <string name="SYS_MENU_DESC">Das Menü kann hier konfiguriert werden. Neben der URL kann eine Beschreibung und ein Icon hinterlegt werden. Zusätzlich kann festgelegt werden, wer den Menüeintrag sehen darf.</string>
     <string name="SYS_MESSAGE">Nachricht</string>
     <string name="SYS_MESSAGES">Nachrichten</string>
     <string name="SYS_MINUTES">Minuten</string>
@@ -1273,6 +1274,7 @@
     <string name="SYS_MODULES">Module</string>
     <string name="SYS_MONDAY">Montag</string>
     <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
+    <string name="SYS_MYLIST_DESC">Neue Listenkonfigurationen können hier erstellt und gespeichert werden. Außerdem können Listen über mehrere Rollen angezeigt werden.</string>
     <string name="SYS_NAME">Name</string>
     <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
     <string name="SYS_NEW_VALUE">Neuer Wert</string>
