@@ -24,5 +24,6 @@ fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'm
     <step id="210">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-twitter' WHERE usf_name_intern = 'TWITTER' AND usf_icon = 'twitter.png'</step>
     <step id="220">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-xing' WHERE usf_name_intern = 'XING' AND usf_icon = 'xing.png'</step>
     <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-yahoo' WHERE usf_name_intern = 'YAHOO_MESSENGER' AND usf_icon = 'yahoo.png'</step>
+    <step id="240">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_icon = 'aim.png'</step>
     <step>stop</step>
 </update>

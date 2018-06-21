@@ -98,7 +98,7 @@ $page->addJavascript('
     $("#link_check_for_update").click(function() {
         var admVersionContent = $("#admidio_version_content");
 
-        admVersionContent.html("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
+        admVersionContent.html("<i class=\"fas fa-spinner fa-spin\"></i>").show();
         $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/update_check.php", {mode: "2"}, function(htmlVersion) {
             admVersionContent.html(htmlVersion);
         });
@@ -108,7 +108,7 @@ $page->addJavascript('
     $("#link_directory_protection").click(function() {
         var dirProtectionStatus = $("#directory_protection_status");
 
-        dirProtectionStatus.html("<img src=\"'.THEME_URL.'/icons/loader_inline.gif\" id=\"loadindicator\"/>").show();
+        dirProtectionStatus.html("<i class=\"fas fa-spinner fa-spin\"></i>").show();
         $.get("'.ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences_function.php", {mode: "4"}, function(statusText) {
             var directoryProtection = dirProtectionStatus.parent().parent().parent();
             directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
