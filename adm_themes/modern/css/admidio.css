@@ -223,6 +223,11 @@ hr {
     margin-bottom: 15px;
 }
 
+.admidio-media-menu .media-left {
+    min-width: 45px;
+    max-width: 45px;
+}
+
 .ekko-lightbox-nav-overlay a:link,
 .ekko-lightbox-nav-overlay a:visited,
 .ekko-lightbox-nav-overlay a:hover,

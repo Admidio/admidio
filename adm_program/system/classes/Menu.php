@@ -164,33 +164,36 @@ class Menu
         {
             if ($complex)
             {
-                $html .= '
-                    <li class="media">
-                        <div class="media-left">
-                            <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
-                                <i class="fas '.$item['icon'].' fa-2x"></i>
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">
-                                <a id="lmenu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">'.$item['text'].'</a>
-                            </h4>';
-
-                // adding submenus if any
-                if ($item['subitems'])
+                if($item['id'] !== 'overview')
                 {
-                    $html .= '<menu id="lsubmenu_'.$this->id.'_'.$item['id'].'" class="list-inline admidio-media-submenu">';
+                    $html .= '
+                        <li class="media">
+                            <div class="media-left">
+                                <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
+                                    <i class="fas '.$item['icon'].' fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a id="lmenu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">'.$item['text'].'</a>
+                                </h4>';
 
-                    foreach($item['subitems'] as $subitem)
+                    // adding submenus if any
+                    if ($item['subitems'])
                     {
-                        $html .= '<li><a href="'.$subitem['link'].'">'.$subitem['text'].'</a></li>';
+                        $html .= '<menu id="lsubmenu_'.$this->id.'_'.$item['id'].'" class="list-inline admidio-media-submenu">';
+
+                        foreach($item['subitems'] as $subitem)
+                        {
+                            $html .= '<li><a href="'.$subitem['link'].'">'.$subitem['text'].'</a></li>';
+                        }
+
+                        $html .= '</menu>'; // closes sub-menu "menu.admidio-media-submenu"
                     }
 
-                    $html .= '</menu>'; // closes sub-menu "menu.admidio-media-submenu"
+                    $html .= '<p>'.$item['desc'].'</p>';
+                    $html .= '</div></li>'; // closes "div.media-body" and "li.media"
                 }
-
-                $html .= '<p>'.$item['desc'].'</p>';
-                $html .= '</div></li>'; // closes "div.media-body" and "li.media"
             }
             else
             {
