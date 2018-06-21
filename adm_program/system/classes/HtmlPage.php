@@ -830,10 +830,6 @@ class HtmlPage
                             if ($gValidLogin && $row['men_name_intern'] === 'lists')
                             {
                                 $menu->addSubItem(
-                                    'lists', 'mylist', ADMIDIO_URL . FOLDER_MODULES . '/lists/mylist.php',
-                                    $gL10n->get('LST_MY_LIST')
-                                );
-                                $menu->addSubItem(
                                     'lists', 'rolinac', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/lists/lists.php', array('active_role' => 0)),
                                     $gL10n->get('ROL_INACTIV_ROLE')
                                 );
