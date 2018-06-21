@@ -1183,7 +1183,7 @@
     <string name="SYS_FORMER">Ehemaliger</string>
     <string name="SYS_FORMER_PL">Ehemalige</string>
     <string name="SYS_FONT">Schriftart</string>
-    <string name="SYS_FONT_AWESOME_DESC">Hier kannst du den Namen eines Icons von der Schriftbibliothek Font Awesome angeben (z.B. fa-user). Das gewählte Icon wird dann bei dem Menüpunkt angezeigt. Eine Auswahl der möglichen Icons findest du aus der Webseite von Font Awesome.</string>
+    <string name="SYS_FONT_AWESOME_DESC">Du kannst auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts "Font Awesome". Gehe dazu auf #VAR1#http://fontawesome.com#VAR2# und wähle ein kostenloses Icon der Sammlung "Solid" oder "Brands" aus. Als Präfix musst du noch fa- davor setzen. Wählst du also das Icon "user" aus, musst du hier "fa-user" eintragen.\n2. Eine jpg oder png Icon. Trage dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ kannst du das Icon auch im Theme im Ordner "icons" ablegen, dann brauchst du nur den Dateinamen anzugeben.</string>
     <string name="SYS_FORGOT_MY_PASSWORD">Ich habe mein Passwort vergessen!</string>
     <string name="SYS_FRIDAY">Freitag</string>
     <string name="SYS_FULL_SCREEN">Vollbild</string>

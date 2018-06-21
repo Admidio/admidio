@@ -209,7 +209,11 @@ if((bool) $menu->getValue('men_node') === false)
 
 $form->addInput(
     'men_icon', $gL10n->get('SYS_ICON'), $menu->getValue('men_icon', 'database'),
-    array('maxLength' => 100, 'helpTextIdLabel' => 'SYS_FONT_AWESOME_DESC', 'class' => 'form-control-small')
+    array(
+        'maxLength' => 100,
+        'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
+        'class' => 'form-control-small'
+    )
 );
 
 $form->addSubmitButton(

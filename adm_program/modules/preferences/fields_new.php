@@ -189,7 +189,10 @@ $form->addMultilineTextInput(
 );
 $form->addInput(
     'usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'),
-    array('maxLength' => 2000)
+    array(
+        'maxLength' => 2000,
+        'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
+    )
 );
 $form->addInput(
     'usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'),
