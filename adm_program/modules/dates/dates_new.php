@@ -380,7 +380,7 @@ $form->addInput(
 );
 
 $form->addSelectBoxFromSql('dat_photo_id',
-    'zugeordnetes Photoalbum',
+    $gL10n->get('DAT_ASSOCIATED_PHOTO_ALBUM'),
     $gDb,
     'select pho_id, pho_name from ' . TBL_PHOTOS,
     array('defaultValue' => $date->getValue('dat_photo_id'), 'helpTextIdLabel' => 'DAT_PHOTO_RIGHTS')
