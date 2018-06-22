@@ -125,6 +125,7 @@
   <string name="DAT_VIEW_MODE_DETAIL">Detailed</string>
   <string name="DAT_VIEW_MODE_COMPACT">Compact</string>
   <string name="DAT_VISIBILITY">Visibility</string>
+  <string name="DAT_PHOTO_RIGHTS">The selected album can only be seen by participants of this event.</string>
   <!--Phrases only in Downloadsmodule-->
   <string name="DOW_ADD_TO_DATABASE">Add to database</string>
   <string name="DOW_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
