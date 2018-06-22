@@ -208,24 +208,24 @@ class Language
      */
     public function getCountryName($countryIsoCode)
     {
-        if(!empty($countryIsoCode))
+        if (empty($countryIsoCode))
         {
-            if (!preg_match('/^[A-Z]{3}$/', $countryIsoCode))
-            {
-                throw new \UnexpectedValueException('Invalid country-iso-code!');
-            }
-
-            $countries = $this->getCountries();
-
-            if (!array_key_exists($countryIsoCode, $countries))
-            {
-                throw new \OutOfBoundsException('Country-iso-code does not exist!');
-            }
-
-            return $countries[$countryIsoCode];
+            return '';
         }
 
-        return '';
+        if (!preg_match('/^[A-Z]{3}$/', $countryIsoCode))
+        {
+            throw new \UnexpectedValueException('Invalid country-iso-code!');
+        }
+
+        $countries = $this->getCountries();
+
+        if (!array_key_exists($countryIsoCode, $countries))
+        {
+            throw new \OutOfBoundsException('Country-iso-code does not exist!');
+        }
+
+        return $countries[$countryIsoCode];
     }
 
     /**
