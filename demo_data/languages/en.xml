@@ -19,6 +19,7 @@
     <string name="DEMO_DAT_COMPUTER_COURSE">Computer course</string>
     <string name="DEMO_DAT_COMPUTER_COURSE_LOCATION">Munich Marienplatz</string>
     <string name="DEMO_DAT_COMPUTER_COURSE_CONTENT">The focus of this course lies with the Office products.</string>
+    <string name="DEMO_DAT_TEAM_EVENING">Team evening</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM">Trip to Amsterdam</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM_LOCATION">Amsterdam Gracht</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM_CONTENT">On this hopefully sunny day it goes to Amsterdam.\n\nA canal cruise and a shopping trip are planned.</string>

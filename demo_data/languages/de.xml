@@ -19,6 +19,7 @@
     <string name="DEMO_DAT_COMPUTER_COURSE">EDV-Kurs</string>
     <string name="DEMO_DAT_COMPUTER_COURSE_LOCATION">München Marienplatz</string>
     <string name="DEMO_DAT_COMPUTER_COURSE_CONTENT">Der Schwerpunkt dieses Kurses liegt bei den Office-Produkten.</string>
+    <string name="DEMO_DAT_TEAM_EVENING">Mannschaftsabend</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM">Ausflug nach Amsterdam</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM_LOCATION">Amsterdam Gracht</string>
     <string name="DEMO_DAT_TRIP_AMSTERDAM_CONTENT">An diesem hoffentlich sonnigen Tag geht es nach Amsterdam.\n\nEine Grachtenfahrt, sowie ein Einkaufsbummel sind geplant.</string>
