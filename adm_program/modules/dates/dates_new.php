@@ -379,10 +379,13 @@ $form->addInput(
     array('type' => 'datetime', 'helpTextIdLabel' => 'DAT_DEADLINE_DESC')
 );
 
+// Display only albums of the current organisation
+// The table adm_photos has the org_id as column.
+$orgId = $gCurrentOrganization->getValue('org_id');
 $form->addSelectBoxFromSql('dat_photo_id',
     $gL10n->get('DAT_ASSOCIATED_PHOTO_ALBUM'),
     $gDb,
-    'select pho_id, pho_name from ' . TBL_PHOTOS,
+    'select pho_id, pho_name from ' . TBL_PHOTOS . ' where org_id = ' . (int) $orgId,
     array('defaultValue' => $date->getValue('dat_photo_id'), 'helpTextIdLabel' => 'DAT_PHOTO_RIGHTS')
 );
 
