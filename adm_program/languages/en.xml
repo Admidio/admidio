@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">All members of this organization</string>
   <string name="CAT_CATEGORY_EXIST">Category name already exists in selected organization.</string>
-  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\n Please deactivate, if fields should only be shown in your organization. </string>
+  <string name="CAT_CATEGORY_GLOBAL">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization. </string>
   <string name="CAT_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Could not delete category #VAR1_BOLD# because of #VAR2# depending entries.</string>
@@ -92,7 +92,7 @@
   <string name="DAT_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">You do not have the right to sign up for this appointment.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Join the event as organizer</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the event and receive the right to add or remove further participants. In addition, you can make other people organizers.</string>
+  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">You become the organizer of the appointment and receive the right to add or remove additional participants. You can also appoint other people as organizers.</string>
   <string name="DAT_PERIOD_FROM_TO">Time period from #VAR1# to #VAR2# </string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Previous #VAR1#</string>
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registration possible for</string>
@@ -410,7 +410,7 @@
   <string name="LST_KONFIGURATION_OWN_LIST">Configuration of own listings</string>
   <string name="LST_LIST">List</string>
   <string name="LST_LISTS">Lists</string>
-  <string name="LST_LISTS_DESC">Role specific list can be displayed here. Furthermore users are able to generate and save own lists, too.</string>
+  <string name="LST_LISTS_DESC">Overview of all roles with the possibility to display different lists. The lists can be printed and exported.</string>
   <string name="LST_LIST_VIEW">List overview</string>
   <string name="LST_MAX">of maximum. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Member assignment</string>
@@ -445,14 +445,14 @@
   <string name="LST_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="LST_SEARCH_AGE_DESC">Searching for all users older than 18 years</string>
   <string name="LST_SEARCH_DATE_EXAMPLE">01.03.1986</string>
-  <string name="LST_SEARCH_DATE_DESC">Searching for all users born after 1st January 1986</string>
+  <string name="LST_SEARCH_DATE_DESC">Searching for all users born after 01.03.1986</string>
   <string name="LST_SEARCH_GENDER_DESC">Searching for all male users</string>
   <string name="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE">Mei*</string>
   <string name="LST_SEARCH_LASTNAME_BEGINS_DESC">Searching for all users with name beginning with \'Mei\'</string>
   <string name="LST_SEARCH_LASTNAME_EXAMPLE">Schmitz</string>
   <string name="LST_SEARCH_LASTNAME_DESC">Searching for users with family name \'Schmitz\'</string>
   <string name="LST_SEARCH_LOCATION_EXAMPLE">Cologne or Berlin</string>
-  <string name="LST_SEARCH_LOCATION_DESC">Searching for users with from Cologne or Berlin</string>
+  <string name="LST_SEARCH_LOCATION_DESC">Look for all users coming from Cologne or Berlin</string>
   <string name="LST_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
   <string name="LST_SEARCH_TELEFON_DESC">Searching for users with phone number including 241 and ending with 54</string>
   <string name="LST_SEARCH_YES_NO_FIELD">yes/no field</string>
@@ -1016,7 +1016,7 @@
   <string name="ROL_RIGHT_THIS_LIST_VIEW_DESC">Define which user should be able to see several lists and certain user profiles of members of the current role. Role permission #VAR1_BOLD# is parent configuration is the current permission level.</string>
   <string name="ROL_RIGHT_WEBLINKS">Manage web links</string>
   <string name="ROL_ROLE_ADMINISTRATION">Role administration</string>
-  <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</string>
+  <string name="ROL_ROLE_ADMINISTRATION_DESC">Roles, which can be groups, courses or departments, can be created and edited here. The rights of the individual roles are also defined here.</string>
   <string name="ROL_ROLE_DELETE">Deleting role</string>
   <string name="ROL_ROLE_DELETE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="ROL_ROLE_DEPENDENCIES">A member of a dependent role will become automatically a member of #VAR1#!\n\nWhen this dependency is set all existing members of the dependent role will become a member of #VAR1#. When a dependency is going to be deleted, memberships will remain the same!</string>
@@ -1264,6 +1264,7 @@
   <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMORY_LIMIT">Memory limit</string>
   <string name="SYS_MENU">Menu</string>
+  <string name="SYS_MENU_DESC">The menu can be configured here. Beside the URL a description and an icon can be deposited. In addition, it can be determined who is allowed to view the menu entry.</string>
   <string name="SYS_MESSAGE">Message</string>
   <string name="SYS_MESSAGES">Messages</string>
   <string name="SYS_MINUTES">Minutes</string>
@@ -1273,6 +1274,7 @@
   <string name="SYS_MODULES">Modules</string>
   <string name="SYS_MONDAY">Monday</string>
   <string name="SYS_MORE_FEATURES">Additional functions</string>
+  <string name="SYS_MYLIST_DESC">New list configurations can be created and saved here. In addition, lists can be displayed over several roles.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Short name</string>
   <string name="SYS_NEW_VALUE">New value</string>
@@ -1389,10 +1391,10 @@
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nGreetings,\nThe administrators</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Login details for #organization_homepage#\n#content# Hello #user_first_name#,\n\nyour new login details for the #organization_long_name# website:\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\ntherefore you should log in at #organization_homepage# to change it under \"My profile\".\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Your requested password for #organization_short_name# website\n#content# Hello #user_first_name#,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: #user_login_name#\nPassword: #variable1#\n\nTo activate your password, please follow this link:\n\n#variable2#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nGreetings,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Credentials for #organization_long_name#\n#content# Hello #user_first_name#,\n\nYou receive your credentials for the website #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThe password was generated automatically,\nYou should change it after logging in to #organization_homepage# in your profile.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# in registration at #organization_long_name# rejected.\n#content#Hello #user_first_name# your application at #organization_homepage# was rejected.\n\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\n\nRegards,\nThe administrators</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration on #organization_long_name# website approved\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# is approved.\n\nNow you may log in with your username: #user_login_name#\nand your password.\n\nIn case of any questions, please don\'t hesitate to contact the administrator via email to #administrator_email# .\n\nCheers,\nThe administrators</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nCheers,\nThe administrators</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# New registration at #organization_long_name# website\n#content# A new user registered himself on #organization_homepage#.\n\nSurname: #user_last_name#\nFirst Name: #user_first_name#\nE-Mail: #user_email#\n\n\nThis message was generated automatically.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
