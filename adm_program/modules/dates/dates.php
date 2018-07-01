@@ -460,14 +460,21 @@ else
             }
         }
 
-        // if current user is allowed to participate then show buttons for participation
-        if($date->allowedToParticipate())
+        // check the rights if the user is allowed to view the participiants or he is allowed to participate
+        if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
+            || $row['mem_leader'] == 1
+            || $gCurrentUser->editDates()
+            || $date->allowedToParticipate())
         {
             $participants = new Participants($gDb, $dateRolId);
             $outputNumberMembers = $participants->getCount();
             $outputNumberLeaders = $participants->getNumLeaders();
             $participantsArray   = $participants->getParticipantsArray($dateRolId);
+        }
 
+        // if current user is allowed to participate then show buttons for participation
+        if($date->allowedToParticipate())
+        {
             if($date->getValue('dat_deadline') !== null)
             {
                 $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
