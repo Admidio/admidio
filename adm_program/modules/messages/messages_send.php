@@ -159,6 +159,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 {
     $receiver = array();
     $receiverString = '';
+    $sqlConditions  = '';
+    $sqlEmailField  = '';
 
     if (isset($postTo))
     {
@@ -172,6 +174,13 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
         foreach ($postTo as $value)
         {
+            // set condition if email should only send to the email address of the user field
+            // with the internal name 'EMAIL'
+            if(!(bool) $gSettingsManager->get('mail_send_to_all_addresses'))
+            {
+                $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
+            }
+
             // check if role or user is given
             if (admStrContains($value, ':'))
             {
@@ -180,8 +189,8 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
 
                 // check if role rights are granted to the User
                 $sql = 'SELECT rol_mail_this_role, rol_id
-                          FROM '.TBL_ROLES.'
-                    INNER JOIN '.TBL_CATEGORIES.'
+                          FROM ' . TBL_ROLES . '
+                    INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
                            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                OR cat_org_id IS NULL)
@@ -229,33 +238,34 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 }
 
                 $sql = 'SELECT first_name.usd_value AS firstName, last_name.usd_value AS lastName, email.usd_value AS email
-                          FROM '.TBL_MEMBERS.'
-                    INNER JOIN '.TBL_ROLES.'
+                          FROM ' . TBL_MEMBERS . '
+                    INNER JOIN ' . TBL_ROLES . '
                             ON rol_id = mem_rol_id
-                    INNER JOIN '.TBL_CATEGORIES.'
+                    INNER JOIN ' . TBL_CATEGORIES . '
                             ON cat_id = rol_cat_id
-                    INNER JOIN '.TBL_USERS.'
+                    INNER JOIN ' . TBL_USERS . '
                             ON usr_id = mem_usr_id
-                    INNER JOIN '.TBL_USER_DATA.' AS email
+                    INNER JOIN ' . TBL_USER_DATA . ' AS email
                             ON email.usd_usr_id = usr_id
                            AND LENGTH(email.usd_value) > 0
-                    INNER JOIN '.TBL_USER_FIELDS.' AS field
+                    INNER JOIN ' . TBL_USER_FIELDS . ' AS field
                             ON field.usf_id = email.usd_usf_id
                            AND field.usf_type = \'EMAIL\'
-                     LEFT JOIN '.TBL_USER_DATA.' AS last_name
+                               ' . $sqlEmailField . '
+                     LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
                             ON last_name.usd_usr_id = usr_id
                            AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                     LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                     LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
                             ON first_name.usd_usr_id = usr_id
                            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                          WHERE rol_id    = ? -- $group[\'id\']
                            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                OR cat_org_id IS NULL )
                            AND usr_valid = 1
-                               '.$sqlConditions;
+                               ' . $sqlConditions;
 
-                // Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen,
-                // damit er die Mail nicht an sich selber schickt.
+                // if current user is logged in the user id must be excluded because we don't want
+                // to send the email to himself
                 if ($gValidLogin)
                 {
                     $sql .= '
@@ -297,7 +307,32 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                 // only send email to user if current user is allowed to view this user and he has a valid email address
                 if ($gCurrentUser->hasRightViewProfile($user) && strValidCharacters($user->getValue('EMAIL'), 'email'))
                 {
-                    $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                    $sql = 'SELECT first_name.usd_value AS firstName, last_name.usd_value AS lastName, email.usd_value AS email
+                              FROM ' . TBL_USERS . '
+                        INNER JOIN ' . TBL_USER_DATA . ' AS email
+                                ON email.usd_usr_id = usr_id
+                               AND LENGTH(email.usd_value) > 0
+                        INNER JOIN ' . TBL_USER_FIELDS . ' AS field
+                                ON field.usf_id = email.usd_usf_id
+                               AND field.usf_type = \'EMAIL\'
+                                   ' . $sqlEmailField . '
+                         LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                                ON last_name.usd_usr_id = usr_id
+                               AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+                         LEFT JOIN '.TBL_USER_DATA.' AS first_name
+                                ON first_name.usd_usr_id = usr_id
+                               AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                             WHERE usr_id = ? -- $user->getValue(\'usr_id\')
+                               AND usr_valid = 1 ';
+                    $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $user->getValue('usr_id')));
+
+                    while ($row = $statement->fetch())
+                    {
+                        if (strValidCharacters($row['email'], 'email'))
+                        {
+                            $receiver[] = array($row['email'], $row['firstName'] . ' ' . $row['lastName']);
+                        }
+                    }
                 }
             }
         }

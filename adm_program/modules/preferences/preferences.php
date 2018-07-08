@@ -1155,6 +1155,10 @@ $formMessages->addInput(
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => 'MAI_MAX_RECEIVER_DESC')
 );
 $formMessages->addCheckbox(
+    'mail_send_to_all_addresses', $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'), (bool) $formValues['mail_send_to_all_addresses'],
+    array('helpTextIdInline' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
+);
+$formMessages->addCheckbox(
     'mail_show_former', $gL10n->get('MSG_SHOW_FORMER'), (bool) $formValues['mail_show_former'],
     array('helpTextIdInline' => 'MSG_SHOW_FORMER_DESC')
 );
