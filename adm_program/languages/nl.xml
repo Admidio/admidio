@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle beheerders van de module van de hoofdorganisatie.</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">Alle medewerkers van deze organisatie</string>
   <string name="CAT_CATEGORY_EXIST">Naam van categorie bestaat al in de geselecteerde organisatie.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zullen profielvelden van deze categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties: #VAR1#.\n\n Svp deactiveren als velden alleen in uw eigen organisatie getoond moeten worden.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zullen profielvelden van deze categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties: #VAR1#.\n\nSvp deactiveren als velden alleen in uw eigen organisatie getoond moeten worden.</string>
   <string name="CAT_DEFAULT_VAR">Standaard #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Bent u zeker dat u categorie #VAR1_BOLD# wenst te verwijderen?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Kon categorie #VAR1_BOLD# niet verwijderen omdat die nog #VAR2# afhankelijke berichten bevat.</string>
@@ -1009,7 +1009,6 @@
   <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen met deze rechten kunnen alle gebruikersgegevens (behalve wachtwoorden) van andere leden bewerken. \nU hebt ook toegang tot het gebruikersbeheer en kunt nieuwe gebruikers maken of oude gebruikers verwijderen.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Berichten gastenboek bewerken en verwijderen</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Reacties plaatsen in gastenboek</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Deze instelling bepaalt wie het recht heeft om e-mails naar deze rol te sturen via de e-mailmodule. Het recht van de rol #VAR1_BOLD# staat nog steeds boven deze instelling.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">E-mail naar alle rollen sturen</string>
   <string name="ROL_RIGHT_PHOTO">Foto\'s uploaden en bewerken</string>
   <string name="ROL_RIGHT_PROFILE">Bewerk eigen profiel</string>
@@ -1391,7 +1390,7 @@
   <string name="SYS_STREET">Straat</string>
   <string name="SYS_SUNDAY">Zondag</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Ga naar categoriebeheer</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Het opgevraagde wachtwoord voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nu heeft een nieuw wachtwoord aangevraagd!\n\nHier zijn uw gegevens:\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nOm het wachtwoord te activeren klik op de volgende link:\n\n #variable2#\n\nHet wachtwoord is automatisch gegenereerd.\nU moet dit wijzigen in uw profiel nadat u bent ingelogd op #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Het opgevraagde wachtwoord voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nU heeft een nieuw wachtwoord aangevraagd!\n\nHier zijn uw gegevens:\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nOm het wachtwoord te activeren klik op de volgende link:\n\n #variable2#\n\nHet wachtwoord is automatisch gegenereerd.\nU moet dit wijzigen in uw profiel nadat u bent ingelogd op #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
   <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggegevens voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nUw nieuwe inloggegevens voor de website #organization_homepage#\nGebruikersnaam: #user_login_name#\nWachtwoord: #variable1#\n\nHet wachtwoord is automatisch gegenereerd.\nU moet dit wijzigen in je profiel nadat u bent ingelogd op #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registratie bij #organization_long_name# geweigerd.\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# werd afgewezen.\n\nRegistraties worden alleen geaccepteerd voor leden. Als u lid bent maar uw registratie werd toch geweigerd, is het mogelijk dat u niet werd herkend als lid.\nVoor meer info omtrent de weigering, gelieve contact op te nemen met de beheerder #webmaster_email# van #organization_homepage#.\n\nHartelijke groeten,\nDe beheerders</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registratie voor #organization_long_name# bevestigd\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# is goedgekeurd.\n\nU kunt nu inloggen met gebruikersnaam #user_login_name# en uw wachtwoord.\n\nAls u vragen heeft neem gerust contact op met de beheerder via: #webmaster_email#.\n\nHartelijke groeten,\nDe beheerders</string>
