@@ -132,6 +132,7 @@ $defaultOrgPreferences = array(
     'mail_sendmail_name'          => '',
     'mail_html_registered_users'  => '1',
     'mail_delivery_confirmation'  => '0',
+    'mail_send_to_all_addresses'  => '1',
 
     // E-Cards
     'enable_ecard_module'       => '1',

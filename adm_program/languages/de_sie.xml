@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="CAT_CATEGORY_EXIST">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\n Möchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="CAT_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Möchten Sie die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
@@ -52,13 +52,13 @@
   <string name="DAT_ATTEND_POSSIBLY">Sie haben die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt. </string>
   <string name="DAT_CALENDAR">Kalender</string>
   <string name="DAT_CANCEL">Absagen</string>
-  <string name="DAT_CANCEL_DATE">Sie ahben die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt. </string>
+  <string name="DAT_CANCEL_DATE">Sie haben die Teilnahme für den Termin #VAR1_BOLD# am #VAR2# wieder abgesagt. </string>
   <string name="DAT_CURRENT_DATES_OF_ORGA">Aktuelle Termine der Organisation #VAR1#</string>
   <string name="DAT_DATE">Termin</string>
   <string name="DAT_DATES">Termine</string>
   <string name="DAT_DATES_DESC">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</string>
   <string name="DAT_DEADLINE">Anmeldeschluss</string>
-  <string name="DAT_DEADLINE_ATTENTION">Ihre Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wenden Sie sich dich an die Leiter des Termins oder einen Administrator!</string>
+  <string name="DAT_DEADLINE_ATTENTION">Ihre Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder der Termin in der Vergangenheit liegt. Bitte wenden Sie sich an die Leiter des Termins oder einen Administrator!</string>
   <string name="DAT_DEADLINE_DESC">Teilnehmer können sich bis zu diesem Datum am Termin anmelden. Leiter und Benutzer mit dem Recht Termine zu bearbeiten können weiterhin Teilnehmer zuordnen. Wenn kein Datumswert angegeben wird, dann wird als Default das Startdatum des Termins als Anmeldeschluss angenommen.</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION">Standardkonfiguration  der Teilnehmerliste</string>
   <string name="DAT_DEFAULT_LIST_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für die Teilnehmerliste an Terminen dieser Organisation gemacht werden. Teilnehmer von Terminen werden mit dieser Konfiguration angezeigt.</string>
@@ -92,7 +92,7 @@
   <string name="DAT_PARTICIPANTS_LIMIT">Teilnehmerbegrenzung</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">Sie besitzen nicht das Recht sich für diesen Termin anzumelden.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">An Termin als Organisator teilnehmen</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren machen.</string>
+  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren ernennen.</string>
   <string name="DAT_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2# </string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">Vergangene #VAR1#</string>
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Anmeldung möglich für</string>
@@ -410,7 +410,7 @@
   <string name="LST_KONFIGURATION_OWN_LIST">Konfiguration eigene Liste</string>
   <string name="LST_LIST">Liste</string>
   <string name="LST_LISTS">Listen</string>
-  <string name="LST_LISTS_DESC">Unterschiedliche Listen zu einzelnen Rollen können hier angezeigt werden. Außerdem können von den Benutzern individuelle Listen erstellt und gespeichert werden.</string>
+  <string name="LST_LISTS_DESC">Übersicht über alle Rollen mit der Möglichkeit verschiedene Listen anzuzeigen. Die Listen können gedruckt und exportiert werden.</string>
   <string name="LST_LIST_VIEW">Listenübersicht</string>
   <string name="LST_MAX">von max. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
@@ -506,7 +506,7 @@
   <string name="MAI_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfänger die Namen und E-Mail-Adressen der anderen Empfänger sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger zu antworten. (Standard: Deaktiviert)</string>
   <string name="MAI_MAX_ATTACHMENT_SIZE">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen #VAR1# MB nicht überschreiten.</string>
   <string name="MAI_MAX_RECEIVER">Maximale Empfänger für E-Mails</string>
-  <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden</string>
+  <string name="MAI_MAX_RECEIVER_DESC">Dieser Wert gibt an, wieviele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
   <string name="MAI_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
   <string name="MAI_PHP_MAIL">PHP mail()</string>
   <string name="MAI_RECIPIENTS_WITH_ROLES">Empfänger bei Rollen</string>
@@ -768,7 +768,7 @@
   <string name="ORG_SYSTEM_MAIL_ADDRESS">E-Mail-Adresse</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Benachrichtigung bei neuen Einträgen</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Standard: nein)</string>
+  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Modulen per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mail-Adresse #VAR1# versendet. (Standard: nein)</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</string>
   <string name="ORG_THEME_FOLDER_OPEN">Themes Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="ORG_TIME_FORMAT">Zeitformat</string>
@@ -1264,6 +1264,7 @@
   <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMORY_LIMIT">Arbeitsspeicher</string>
   <string name="SYS_MENU">Menü</string>
+  <string name="SYS_MENU_DESC">Das Menü kann hier konfiguriert werden. Neben der URL kann eine Beschreibung und ein Icon hinterlegt werden. Zusätzlich kann festgelegt werden, wer den Menüeintrag sehen darf.</string>
   <string name="SYS_MESSAGE">Nachricht</string>
   <string name="SYS_MESSAGES">Nachrichten</string>
   <string name="SYS_MINUTES">Minuten</string>
@@ -1273,6 +1274,7 @@
   <string name="SYS_MODULES">Module</string>
   <string name="SYS_MONDAY">Montag</string>
   <string name="SYS_MORE_FEATURES">Weitere Funktionen</string>
+  <string name="SYS_MYLIST_DESC">Neue Listenkonfigurationen können hier erstellt und gespeichert werden. Außerdem können Listen über mehrere Rollen angezeigt werden.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEW_VALUE">Neuer Wert</string>
@@ -1389,10 +1391,10 @@
   <string name="SYS_STREET">Straße</string>
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorienverwaltung</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Anmeldedaten für #organization_homepage#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Anmeldedaten für #organization_homepage# .\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Ihr angefordertes Passwort für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie haben ein neues Passwort angefordert!\n\nHier sind Ihre Daten:\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDamit Sie Ihr neues Passwort benutzen können, müssen Sie es über den folgenden Link freischalten:\n\n#variable2#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Anmeldedaten für #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nSie erhalten Ihre Anmeldedaten für die Webseite #organization_homepage#.\nBenutzername: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nSie sollten es nach Ihrer Anmeldung auf #organization_homepage# in Ihrem Profil ändern.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name# #user_first_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls Sie Mitglied sind und Ihre Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass Sie als Mitglied nicht identifiziert wurden.\nZur Klärung der Gründe für die Ablehnung wenden Sie sich bitte an den Administrator #administrator_email# von #organization_homepage#.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name#\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen : #user_login_name#\nund dem Passwort auf der Homepage einloggen.\n\nSollten Sie noch Fragen haben, schreiben Sie bitte eine E-Mail an #administrator_email# .\n\nMit freundlichen Grüßen\nDie Administratoren</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name# #user_last_name#,\n\nIhre Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun können Sie sich mit Ihrem Benutzernamen #user_login_name# und Ihrem Passwort auf der Homepage anmelden.\n\nSollten Sie noch Fragen haben, schreiben Sie eine E-Mail an #administrator_email#.\n\nMit freundlichen Grüßen\nDie Administratoren</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname: #user_first_name#\nE-Mail: #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>

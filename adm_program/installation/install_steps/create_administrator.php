@@ -19,11 +19,12 @@ if (isset($_POST['orga_shortname']))
     $_SESSION['orga_shortname'] = strStripTags($_POST['orga_shortname']);
     $_SESSION['orga_longname']  = strStripTags($_POST['orga_longname']);
     $_SESSION['orga_email']     = strStripTags($_POST['orga_email']);
-    $_SESSION['orga_timezone']  = strStripTags($_POST['orga_timezone']);
+    $_SESSION['orga_timezone']  = $_POST['orga_timezone'];
 
     if ($_SESSION['orga_shortname'] === ''
     ||  $_SESSION['orga_longname']  === ''
-    ||  $_SESSION['orga_email']     === '')
+    ||  $_SESSION['orga_email']     === ''
+    ||  !in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true))
     {
         showNotice(
             $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'),
