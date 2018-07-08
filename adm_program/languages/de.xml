@@ -1372,7 +1372,7 @@
     <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
     <string name="SYS_SEARCH">Suche</string>
     <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen des Benutzers</string>
-    <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse mit der internen Namen EMAIL gesendet. (Standard: Aktiviert)</string>
+    <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Standard: Aktiviert)</string>
     <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
     <string name="SYS_SENDER">Absender</string>
     <string name="SYS_SERVER">Server</string>
