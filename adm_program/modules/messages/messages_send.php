@@ -176,7 +176,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
         {
             // set condition if email should only send to the email address of the user field
             // with the internal name 'EMAIL'
-            if(!(bool) $gSettingsManager->get('mail_send_to_all_addresses'))
+            if (!$gSettingsManager->getBool('mail_send_to_all_addresses'))
             {
                 $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
             }
