@@ -364,7 +364,9 @@ class Session extends TableAccess
      */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentOrganization;
+        global $gCurrentOrganization, $gLogger;
+
+        $gLogger->error($_SERVER['REMOTE_ADDR']);
 
         if ($this->newRecord)
         {
@@ -372,7 +374,7 @@ class Session extends TableAccess
             $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('ses_begin', DATETIME_NOW);
             // save IP address and remove the last part because auf privacy (GDPR)
-            $this->setValue('ses_ip_address', preg_replace(['/\.\d*$/','/[\da-f]*:[\da-f]*$/'],['.XXX','XXXX:XXXX'],$_SERVER['REMOTE_ADDR']));
+            $this->setValue('ses_ip_address', preg_replace(array('/\.\d*$/','/[\da-f]*:[\da-f]*$/'),array('.XXX','XXXX:XXXX'),$_SERVER['REMOTE_ADDR']));
         }
 
         // Insert & Update
