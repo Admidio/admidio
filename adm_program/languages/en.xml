@@ -1009,7 +1009,7 @@
   <string name="ROL_RIGHT_EDIT_USER_DESC">Roles having this permission can edit the data of other users (except passwords).\n In addition they have access to the user administration and can add/delete users.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Edit and delete guestbook entries</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Create comments of guestbook entries</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send e-mails to this role via the e-mail module. However, the role right #VAR1_BOLD# is still above this setting.</string>
+  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">This setting controls who has the right to send emails to this role via the message module. The role right #VAR1_BOLD# is still above this setting.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">Send e-mails to all roles</string>
   <string name="ROL_RIGHT_PHOTO">Upload and edit photos</string>
   <string name="ROL_RIGHT_PROFILE">Edit own profile</string>
@@ -1371,6 +1371,8 @@
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
   <string name="SYS_SEARCH">Search</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_NEW_PW">Send new password</string>
   <string name="SYS_SENDER">Sender</string>
   <string name="SYS_SERVER">Server</string>

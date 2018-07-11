@@ -1009,7 +1009,7 @@
   <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können alle Benutzerdaten (außer Passwörter) anderer Mitglieder bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Gästebucheinträge bearbeiten und löschen</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Kommentare zu Gästebucheinträgen anlegen</string>
-  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das E-Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
+  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Nachrichtenmodul E-Mails an diese Rolle zu versenden. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">E-Mails an alle Rollen schreiben</string>
   <string name="ROL_RIGHT_PHOTO">Fotos hochladen und bearbeiten</string>
   <string name="ROL_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
@@ -1371,6 +1371,8 @@
   <string name="SYS_SEND">Abschicken</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEARCH">Suche</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Sende E-Mails an alle E-Mail Adressen des Benutzers</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen des Benutzer gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Standard: Aktiviert)</string>
   <string name="SYS_SEND_NEW_PW">Neues Passwort zusenden</string>
   <string name="SYS_SENDER">Absender</string>
   <string name="SYS_SERVER">Server</string>
