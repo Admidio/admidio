@@ -164,6 +164,11 @@ $sqlQueries[] = 'UPDATE '.TBL_DATES.'
                       , dat_end   = \''.addDaysToDate(32).' 22:00:00\'
                   WHERE dat_id = 16 ';
 
+$sqlQueries[] = 'UPDATE '.TBL_DATES.'
+                    SET dat_begin = \''.addDaysToDate(8).' 19:00:00\'
+                      , dat_end   = \''.addDaysToDate(8).' 23:30:00\'
+                  WHERE dat_id = 17 ';
+
 $sqlQueries[] = 'UPDATE '.TBL_FOLDERS.'
                     SET fol_timestamp = \''.addDaysToDate(7, true).'\'
                   WHERE fol_id = 1 ';

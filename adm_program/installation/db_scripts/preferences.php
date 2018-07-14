@@ -92,11 +92,11 @@ $defaultOrgPreferences = array(
     'enable_photo_module'    => '1',
     'photo_show_mode'        => '1',
     'photo_albums_per_page'  => '10',
-    'photo_save_scale'       => '640',
+    'photo_save_scale'       => '800',
     'photo_thumbs_page'      => '16',
     'photo_thumbs_scale'     => '160',
-    'photo_show_width'       => '640',
-    'photo_show_height'      => '400',
+    'photo_show_width'       => '800',
+    'photo_show_height'      => '600',
     'photo_image_text'       => '© '.DOMAIN,
     'photo_image_text_size'  => '40',
     'photo_keep_original'    => '0',
@@ -132,6 +132,7 @@ $defaultOrgPreferences = array(
     'mail_sendmail_name'          => '',
     'mail_html_registered_users'  => '1',
     'mail_delivery_confirmation'  => '0',
+    'mail_send_to_all_addresses'  => '1',
 
     // E-Cards
     'enable_ecard_module'       => '1',

@@ -81,12 +81,16 @@ class LanguageData
      */
     private static function getPluginLanguageFolderPaths()
     {
+        global $gLogger;
+
         try
         {
             $pluginFolders = FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_PLUGINS, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->error('L10N: Plugins folder content could not be loaded!', array('errorMessage' => $exception->getMessage()));
+
             return array();
         }
 

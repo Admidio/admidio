@@ -30,7 +30,7 @@
   <string name="CAT_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Todos os administradores do módulo da organização pai</string>
   <string name="CAT_ALL_THIS_ORGANIZATION">Todos os membros desta organização</string>
   <string name="CAT_CATEGORY_EXIST">Já existe uma categoria com esse nome nesta organização.</string>
-  <string name="CAT_CATEGORY_GLOBAL">Esta opção fará com que os campos de perfil desta categoria apareçam para visualização e edição na exibição de perfil das seguintes organizações:#VAR1#\n\n Desative se deseja que estes campos apareçam somente na sua organização.</string>
+  <string name="CAT_CATEGORY_GLOBAL">Esta opção fará com que os campos de perfil desta categoria apareçam para visualização e edição na exibição de perfil das seguintes organizações:#VAR1#\n\nDesative se deseja que estes campos apareçam somente na sua organização.</string>
   <string name="CAT_DEFAULT_VAR">Predefinição #VAR1#</string>
   <string name="CAT_DELETE_CATEGORY">Deseja eliminar a categoria #VAR1_BOLD#?</string>
   <string name="CAT_DONT_DELETE_CATEGORY">Não foi possível eliminar a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
@@ -92,7 +92,6 @@
   <string name="DAT_PARTICIPANTS_LIMIT">Número limitado de participantes</string>
   <string name="DAT_PARTICIPATE_NO_RIGHTS">Não tens permissão para se inscrever nesse compromisso.</string>
   <string name="DAT_PARTICIPATE_AT_DATE">Participar do evento como organizador</string>
-  <string name="DAT_PARTICIPATE_AT_DATE_DESC" translation="edited">Você se tornou um organizador do evento e recebeu as permissões para adicionar ou remover futuros participantes, e promovê-los a organizadores.</string>
   <string name="DAT_PERIOD_FROM_TO">Período entre #VAR1# e #VAR2#</string>
   <string name="DAT_PREVIOUS_DATES" description="Vergangene Termine">#VAR1# anterior</string>
   <string name="DAT_REGISTRATION_POSSIBLE_FOR">Registro possível para</string>
@@ -200,10 +199,7 @@
   <string name="GBO_COMMENTS4ALL">Permitir comentários anônimos</string>
   <string name="GBO_COMMENTS4ALL_DESC">Com esta opção, usuários que não estão em sessão podem responder aos comentários no livro de visitas. A atribuição de permissões para esta função através do gerenciamento de cargos é ignorada. (padrão: não)</string>
   <string name="GBO_CREATE_COMMENT">Comentar</string>
-  <string name="GBO_CREATE_ENTRY">Adicionar nota</string>
-  <string name="GBO_CREATE_VAR_ENTRY">Adicionar nota #VAR1# </string>
   <string name="GBO_EDIT_COMMENT">Editar comentário</string>
-  <string name="GBO_EDIT_ENTRY">Editar nota #VAR1# </string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_TITLE">Um novo comentário no livro de visitas foi criado</string>
   <string name="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE">Novo comentário de livro de visitas foi criado em #VAR1#.\n\nTexto: #VAR2#\nCriado por: #VAR3#\nCriado às #VAR4#</string>
   <string name="GBO_EMAIL_NOTIFICATION_TITLE">Uma nota no livro de visitas foi criada</string>
@@ -413,7 +409,6 @@
   <string name="LST_KONFIGURATION_OWN_LIST">Configuração das listas personalizadas</string>
   <string name="LST_LIST">Lista</string>
   <string name="LST_LISTS">Listas</string>
-  <string name="LST_LISTS_DESC">Listas de cargos específicos podem ser exibidas aqui. Futuramente usuários poderão gerar e guardar as próprias também.</string>
   <string name="LST_LIST_VIEW">Visão geral das listas</string>
   <string name="LST_MAX">do máximo. #VAR1#</string>
   <string name="LST_MEMBER_ASSIGNMENT">Atribuição de membro</string>
@@ -605,7 +600,6 @@
   <string name="MEN_NAME_DESC">O nome da entrada no menu. Aqui também pode inserir o nome de uma cadeia de tradução.</string>
   <string name="MEN_MENU_ITEM">Item de menu</string>
   <string name="MEN_MENU_LEVEL">Nível de menu</string>
-  <string name="MEN_MENU_LEVEL_DESC">Um item de menu está sempre subordinado a outro item de menu. Na lista de seleção, defina um nível de menu em que o novo item de menu será visível. Se deseja mostrar o item de menu no topo, selecione #VAR1_BOLD#.</string>
   <string name="MEN_MODULE_RIGHTS">Permissões do módulo</string>
   <string name="MEN_MODULE_RIGHTS_DESC">Se especificar um módulo aqui, o item de menu apenas será mostrado se o usuário também tem permissão para ver este módulo.</string>
   <string name="MEN_PLUGIN">Plugins</string>
@@ -771,7 +765,7 @@
   <string name="ORG_SYSTEM_MAIL_ADDRESS">Endereço de e-mail</string>
   <string name="ORG_SYSTEM_MAIL_ADDRESS_DESC">Este campo deve conter um endereço de e-mail de um administrador, para que seja usado como remetente nas notificações do sistema, como por exemplo, as confirmações de registo.</string>
   <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES">Notificação de novas notas</string>
-  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Aqui é possível ativar notificações de sistema para novas entradas de módulos. Essas notificações serão usadas para monitoramento interno do Admidio. Assim, o administrador pode ser informado sobre novas entradas de módulo (apenas novas entradas serão consideradas). As notificações de sistema serão enviadas para o seguinte endereço de e-mail #VAR1# (padrão: não).</string>
+  <string name="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC">Aqui é possível ativar notificações de sistema para novas entradas de módulos. Essas notificações serão usadas para monitoramento interno do Admidio. Assim, o administrador pode ser informado sobre novas entradas de módulos (apenas novas entradas serão consideradas). As notificações de sistema serão enviadas para o seguinte endereço de e-mail #VAR1# (padrão: não).</string>
   <string name="ORG_SYSTEM_MAIL_TEXTS_DESC">Justifique aqui o texto de cada notificação de sistema. Os textos estão divididos em 2 partes (assunto e conteúdo) e são identificados por #subject# e #content#. A ser seguido pelo respetivo conteúdo para esta seção.\n\nEm cada envio os seguintes coringas serão usados. Eles serão substituídos pelos conteúdos correspondentes durante a execução.</string>
   <string name="ORG_THEME_FOLDER_OPEN">O diretório de temas não pode ser aberto/lido.</string>
   <string name="ORG_TIME_FORMAT">Formato de hora</string>
@@ -815,8 +809,6 @@
   <string name="PHO_CREATE_ALBUM">Criar álbum</string>
   <string name="PHO_DISPLAY_PHOTOS">Visualização de fotos</string>
   <string name="PHO_DISPLAY_PHOTOS_DESC">Defina como as imagens serão exibidas no módulo de fotografias. Isto pode ser feito com uma janela modal que será aberta em uma nova aba do navegador. A pré-visualização de imagem permanecerá ativa no segundo plano. Se a imagem for exibida na mesma aba, a pré-visualização atual será fechada. A terceira opção permite exibir a imagem numa janela pop-up que pode ser usada junto com a pré-visualização. (padrão: Janela modal)</string>
-  <string name="PHO_DOWNLOAD_PHOTOS">Transferir fotografias</string>
-  <string name="PHO_DOWNLOAD_SINGLE_PHOTO">Guardar fotografia</string>
   <string name="PHO_DOWNLOAD_ENABLED">Ativar transferências</string>
   <string name="PHO_DOWNLOAD_ENABLED_DESC">Permite baixar fotos ou álbuns como um arquivo zip. Um link será mostrado para cada foto ou álbum. Se a opção #VAR1_BOLD# estiver ativa, apenas fotos originais serão baixadas.</string>
   <string name="PHP_DOWNLOAD_ZIP_ERROR">Houve um problema ao criar o arquivo zip.</string>
@@ -910,7 +902,6 @@
   <string name="PRO_LOGIN_NAME_EXIST">O nome de usuário selecionado já existe.\n\nPor favor, selecione outro nome.</string>
   <string name="PRO_MAINTAIN_ITEM_FIELDS">Manter campos de artigo</string>
   <string name="PRO_MAINTAIN_PROFILE_FIELDS">Gerenciar campos de perfil</string>
-  <string name="PRO_MAINTAIN_PROFILE_FIELDS_DESC">É possível criar e editar campos de perfil que podem ser mesclados em categorias.</string>
   <string name="PRO_MY_PROFILE">Meu perfil</string>
   <string name="PRO_NEW_PASSWORD">Nova palavra passe</string>
   <string name="PRO_NEW_PICTURE">Nova foto de perfil</string>
@@ -940,7 +931,6 @@
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP">Exibir ex-filiações de cargo</string>
   <string name="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Uma caixa será exibida com todos os cargos do usuário na atual organização. A data de início e fim da filiação serão exibidas. (padrão: sim)</string>
   <string name="PRO_SHOW_MAP_LINK">Exibir link para o mapa</string>
-  <string name="PRO_SHOW_MAP_LINK_DESC">Quando as informações de endereço estão completas, um link para o Google Mapas será criado para exibir a localização no mapa e uma rota da localização atual até a localização do usuário. (padrão: sim)</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP">Exibir filiações de cargo</string>
   <string name="PRO_SHOW_ROLE_MEMBERSHIP_DESC">Uma caixa será exibida com todos os cargos do usuário na atual organização. Permissões data de registro serão exibidas. (padrão: sim)</string>
   <string name="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS">Exibir cargos de outras organizações</string>
@@ -1110,15 +1100,17 @@
   <string name="SYS_COUNTRY_EG" translation="edited">ALE</string>
   <string name="SYS_CREATE">Criar</string>
   <string name="SYS_CREATE_ENTRY">Adicionar nota</string>
-  <string name="SYS_CREATE_VAR">Criar #VAR1#</string>
+  <string name="SYS_CREATE_HTACCESS">Criar .htaccess</string>
   <string name="SYS_CREATE_NEW_USER">Adicionar novo usuário</string>
   <string name="SYS_CREATE_NOT_FOUND_USER">Se o novo usuário não estiver na lista, podes criá-lo.</string>
   <string name="SYS_CREATE_ROLE">Criar cargo</string>
+  <string name="SYS_CREATE_VAR">Criar #VAR1#</string>
   <string name="SYS_CREATED_BY">Criado por #VAR1# em #VAR2#</string>
   <string name="SYS_CSV">CSV</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Nenhum endereço de e-mail válido foi inserido!\n\nPor favor, insira um endereço válido no teu #VAR1#pefil#VAR1#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Se esta opção estiver ativa, os dados (eventos, anúncios, links ...) nesta categoria também aparecerão nas páginas web das seguintes organizações:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Dados visíveis para várias organizações</string>
+  <string name="SYS_DATA_PROTECTION">Política de Privacidade</string>
   <string name="SYS_DATABASE">Base de dados</string>
   <string name="SYS_DATABASE_ERROR">Erro na base de dados</string>
   <string name="SYS_DATABASE_NO_LOGIN">A conexão com a base de dados falhou!\n\nDetalhes:\n#VAR1#.</string>
@@ -1144,12 +1136,13 @@
   <string name="SYS_DESCRIPTION">Descrição</string>
   <string name="SYS_DESIGNATION">Nome</string>
   <string name="SYS_DIRECTORY_PROTECTION">Proteção de diretório</string>
-  <string name="SYS_CREATE_HTACCESS">Criar .htaccess</string>
   <string name="SYS_DISK_SPACE">Espaço em disco</string>
   <string name="SYS_DISK_SPACE_ERROR">Não foi possível determinar a alocação do espaço de armazenamento.\n\nMensagem de erro:\n#VAR1#</string>
   <string name="SYS_DONATE">Doar</string>
   <string name="SYS_DONT_SHOW">Não exibir</string>
   <string name="SYS_DROPDOWN_LISTBOX">Caixa de listagem suspensa</string>
+  <string name="SYS_DOWNLOAD_PHOTO">Transferir a fotografia</string>
+  <string name="SYS_DOWNLOAD_ALBUM">Transferir o álbum</string>
   <string name="SYS_EDIT">Editar</string>
   <string name="SYS_EDIT_ENTRY">Editar nota</string>
   <string name="SYS_EDIT_MEMBERS">Editar membros</string>
@@ -1196,6 +1189,7 @@
   <string name="SYS_FORGOT_MY_PASSWORD">Eu esqueci minha palavra passe!</string>
   <string name="SYS_FRIDAY">Sexta-feira</string>
   <string name="SYS_FULL_SCREEN">Tela inteira</string>
+  <string name="SYS_FURTHER_INFORMATIONS">Mais Informação</string>
   <string name="SYS_GENDER">Gênero</string>
   <string name="SYS_GEN_RANDOM_ERROR">Um erro não esperado ocorreu ao gerar o número aleatório.\nCódigo do erro: #VAR1#\nMensagem do erro: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">O programa não pôde gerar números aleatórios.\nCódigo do erro: #VAR1#\nMensagem do erro: #VAR2#</string>
@@ -1355,6 +1349,7 @@
   <string name="SYS_SAVE_DATA">Os dados foram guardados</string>
   <string name="SYS_SECONDS">segundos</string>
   <string name="SYS_SECURE">Seguro</string>
+  <string name="SYS_SECURITY">Segurança</string>
   <string name="SYS_SECURITY_ERROR">Erro de segurança</string>
   <string name="SYS_SELECT_FROM_LIST">Selecionar da lista</string>
   <string name="SYS_SEND">Enviar</string>
@@ -1380,10 +1375,7 @@
   <string name="SYS_STREET">Rua</string>
   <string name="SYS_SUNDAY">Domingo</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Alternar para administração de categoria</string>
-  <string name="SYS_SYSMAIL_ACTIVATION_LINK">#subject# Solicitaste uma palavra passe para #organization_short_name# website\n#content# Olá #user_first_name#,\n\nsolicitaste uma nova palavra passe!\n\nTuas credenciais de acesso são:\nNome de usuário: #user_login_name#\nPalavra passe: #variable1#\n\nPara ativar a palavra passe, clique neste link:\n\n#variable2#\n\nA palavra passe foi gerada automaticamente,\npor isso é recomendado que inicie tua sessão em #organization_homepage# e altere-a no ecrã \"Meu perfil\".\n\nSaudações,\nOs Administradores</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Informações de sessão para #organization_homepage#\n#content# Olá #user_first_name#,\n\nsuas novas informações de sessão para a página web de #organization_long_name#:\nNome de usuário: #user_login_name#\nPalavra-passe: #variable1#\n\nA palavra-passe foi gerada automaticamente,\nvocê deve iniciar sua sessão em #organization_homepage# e alterá-la em \"Meu perfil\".\n\nSaudações,\nOs administradores</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# teu registro em #organization_long_name# foi rejeitado.\n#content#Olá #user_first_name# Tua solicitação em #organization_homepage# foi rejeitada.\n\nRegistros são geralmente aceitos pelos nossos usuários. Se és um membro e teu registro ainda assim foi rejeitado, talvez seja porque não esteja sendo identificado corretamente.\nPara esclarecer os motivos da rejeição, contate o webmaster #webmaster_email# da #organization_homepage#.\n\nSaudações,\nOs Administradores</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registro no sítio web de #organization_long_name# aprovado\n#content# Olá #user_first_name#,\n\nteu registro em #organization_homepage# foi aprovado.\n\nAgora pode iniciar uma sessão com as credenciais: #user_login_name#\ne tua palavra passe.\n\nEm caso de dúvidas, não hesite em contatar o webmaster via email #webmaster_email# .\n\nSaudações,\nOs Administradores</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Novo registo no sítio web #organization_long_name#\n#content# Um novo usuário registou a si mesmo em #organization_homepage#.\n\nSobrenome: #user_last_name#\nPrimeiro nome: #user_first_name#\nE-mail: #user_email#\n\n\nEsta mensagem foi gerada automaticamente.</string>
   <string name="SYS_SYSTEM">Sistema</string>
   <string name="SYS_SYSTEM_MAILS">Notificações do sistema</string>
@@ -1428,5 +1420,8 @@
   <string name="SYS_WEDNESDAY">Quarta-feira</string>
   <string name="SYS_WHAT_TO_DO">O que fazer?</string>
   <string name="SYS_WIDTH">Largura</string>
+  <string name="SYS_WRITE_EMAIL">Escreva uma mensagem</string>
+  <string name="SYS_WRITE_ENTRY">Escreva uma entrada</string>
+  <string name="SYS_WRITE_PM">Escreva uma mensagem privada</string>
   <string name="SYS_YES">Sim</string>
 </resources>

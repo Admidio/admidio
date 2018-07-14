@@ -4,24 +4,24 @@
 --
 
 INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, com_version, com_beta, com_update_step)
-                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.4', 0, 660)
-                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.4', 0, 0)
-                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.4', 0, 0)
-                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.4', 0, 0)
-                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.4', 0, 0)
-                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.4', 0, 0)
-                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.4', 0, 0)
-                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.4', 0, 0)
-                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.4', 0, 0)
-                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.4', 0, 0)
-                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.4', 0, 0)
-                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.4', 0, 0)
-                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.4', 0, 0)
-                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.4', 0, 0)
-                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.4', 0, 0)
-                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.4', 0, 0)
-                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.4', 0, 0)
-                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.4', 0, 0);
+                         VALUES (10, 'SYSTEM', 'Admidio Core', 'CORE', '3.3.5', 0, 710)
+                              , (20, 'MODULE', 'ANN_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '3.3.5', 0, 0)
+                              , (30, 'MODULE', 'BAC_DATABASE_BACKUP', 'BACKUP', '3.3.5', 0, 0)
+                              , (40, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '3.3.5', 0, 0)
+                              , (50, 'MODULE', 'DAT_DATES', 'DATES', '3.3.5', 0, 0)
+                              , (60, 'MODULE', 'DOW_DOWNLOADS', 'DOWNLOADS', '3.3.5', 0, 0)
+                              , (70, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '3.3.5', 0, 0)
+                              , (80, 'MODULE', 'LNK_WEBLINKS', 'LINKS', '3.3.5', 0, 0)
+                              , (90, 'MODULE', 'LST_LISTS', 'LISTS', '3.3.5', 0, 0)
+                              , (100, 'MODULE', 'MEM_USER_MANAGEMENT', 'MEMBERS', '3.3.5', 0, 0)
+                              , (110, 'MODULE', 'SYS_MENU', 'MENU', '3.3.5', 0, 0)
+                              , (120, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '3.3.5', 0, 0)
+                              , (130, 'MODULE', 'PHO_PHOTOS', 'PHOTOS', '3.3.5', 0, 0)
+                              , (140, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '3.3.5', 0, 0)
+                              , (150, 'MODULE', 'PRO_PROFILE', 'PROFILE', '3.3.5', 0, 0)
+                              , (160, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '3.3.5', 0, 0)
+                              , (170, 'MODULE', 'ROL_ROLE_ADMINISTRATION', 'ROLES', '3.3.5', 0, 0)
+                              , (180, 'MODULE', 'ROO_ROOM_MANAGEMENT', 'ROOMS', '3.3.5', 0, 0);
 
 --
 -- Data for table adm_organizations
@@ -42,7 +42,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, 1, 0, 1, 1, 'overview', '/adm_program/index.php', 'home.png', 'SYS_OVERVIEW', ''),
 (60, 1, 0, 3, 1, 'download', '/adm_program/modules/downloads/downloads.php', 'download.png', 'DOW_DOWNLOADS', 'DOW_DOWNLOADS_DESC'),
 (90, 1, 0, 7, 1, 'lists', '/adm_program/modules/lists/lists.php', 'lists.png', 'LST_LISTS', 'LST_LISTS_DESC'),
-(90, 1, 0, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', 'mylist.png', 'LST_MY_LIST', ''),
+(90, 1, 0, 8, 1, 'mylist', '/adm_program/modules/lists/mylist.php', 'mylist.png', 'LST_MY_LIST', 'SYS_MYLIST_DESC'),
 (20, 1, 0, 2, 1, 'announcements', '/adm_program/modules/announcements/announcements.php', 'announcements.png', 'ANN_ANNOUNCEMENTS', 'ANN_ANNOUNCEMENTS_DESC'),
 (130, 1, 0, 5, 1, 'photo', '/adm_program/modules/photos/photos.php', 'photo.png', 'PHO_PHOTOS', 'PHO_PHOTOS_DESC'),
 (70, 1, 0, 6, 1, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'guestbook.png', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC'),
@@ -54,7 +54,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (160, 2, 0, 1, 1, 'newreg', '/adm_program/modules/registration/registration.php', 'new_registrations.png', 'NWU_NEW_REGISTRATIONS', 'NWU_MANAGE_NEW_REGISTRATIONS_DESC'),
 (100, 2, 0, 2, 1, 'usrmgt', '/adm_program/modules/members/members.php', 'user_administration.png', 'MEM_USER_MANAGEMENT', 'MEM_USER_MANAGEMENT_DESC'),
 (170, 2, 0, 3, 1, 'roladm', '/adm_program/modules/roles/roles.php', 'roles.png', 'ROL_ROLE_ADMINISTRATION', 'ROL_ROLE_ADMINISTRATION_DESC'),
-(110, 2, 0, 5, 1, 'menu', '/adm_program/modules/menu/menu.php', 'application_view_tile.png', 'SYS_MENU', '');
+(110, 2, 0, 5, 1, 'menu', '/adm_program/modules/menu/menu.php', 'application_view_tile.png', 'SYS_MENU', 'SYS_MENU_DESC');
 
 
 --
@@ -128,6 +128,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (7070, 1, 'mail_smtp_authentication_type', 'LOGIN'),
 (7080, 1, 'mail_smtp_user', ''),
 (7090, 1, 'mail_smtp_password', ''),
+(7095, 1, 'mail_send_to_all_addresses', '1'),
 (7100, 1, 'max_email_attachment_size', '1'),
 (7200, 1, 'max_file_upload_size', '3'),
 (7250, 1, 'members_users_per_page', '25'),
@@ -165,8 +166,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (9360, 1, 'system_search_similar', '1'),
 (9365, 1, 'system_show_create_edit', '1'),
 (9370, 1, 'system_time', 'H:i'),
-(9375, 1, 'system_url_imprint', ''),
-(9380, 1, 'system_url_data_protection', ''),
+(9375, 1, 'system_url_imprint', 'https://www.admidio.org/imprint.php'),
+(9380, 1, 'system_url_data_protection', 'https://www.admidio.org/data_protection.php'),
 (9400, 1, 'captcha_background_color', '#FFEFC4'),
 (9420, 1, 'captcha_fonts', 'AHGBold.ttf'),
 (9430, 1, 'captcha_width', '250'),
@@ -238,6 +239,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (70070, 2, 'mail_smtp_authentication_type', 'LOGIN'),
 (70080, 2, 'mail_smtp_user', ''),
 (70090, 2, 'mail_smtp_password', ''),
+(70095, 2, 'mail_send_to_all_addresses', '1'),
 (71001, 2, 'max_email_attachment_size', '1'),
 (72001, 2, 'max_file_upload_size', '3'),
 (72500, 2, 'members_users_per_page', '25'),
@@ -275,8 +277,8 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (93070, 2, 'system_search_similar', '1'),
 (93080, 2, 'system_time', 'H:i'),
 (93650, 2, 'system_show_create_edit', '2'),
-(93750, 2, 'system_url_imprint', ''),
-(93800, 2, 'system_url_data_protection', ''),
+(93750, 2, 'system_url_imprint', 'https://www.admidio.org/imprint.php'),
+(93800, 2, 'system_url_data_protection', 'https://www.admidio.org/data_protection.php'),
 (94000, 2, 'captcha_background_color', '#FFEFC4'),
 (94020, 2, 'captcha_fonts', 'AHGBold.ttf'),
 (94030, 2, 'captcha_width', '250'),
@@ -513,8 +515,8 @@ INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_a
 (8, 200, 'DAT_DATE 2017-02-06 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
 (9, 200, 'DAT_DATE 2017-04-13 13:00 - 14', 'DEMO_DAT_YOGA', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, 1, 0, 0),
 (10, 200, 'DAT_DATE 2017-05-15 19:00 - 15', 'DEMO_DAT_BOARD_MEETING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
-(11, 200, 'DAT_DATE 2017-05-26 19:00 - 26', 'DEMO_DAT_BOARD_MEETING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0);
-
+(11, 200, 'DAT_DATE 2017-05-26 19:00 - 16', 'DEMO_DAT_BOARD_MEETING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0),
+(12, 200, 'DAT_DATE 2017-05-26 20:00 - 17', 'DEMO_DAT_TEAM_EVENING', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, 1, 0, 0);
 
 --
 -- Data for table adm_roles_rights
@@ -540,7 +542,8 @@ INSERT INTO %PREFIX%_roles_rights_data (rrd_id, rrd_ror_id, rrd_rol_id, rrd_obje
 (5, 5, 3, 15, 1, '2016-10-08 11:23:05'),
 (6, 5, 3, 16, 1, '2016-10-08 11:23:05'),
 (7, 5, 7, 14, 1, '2016-10-08 11:23:05'),
-(8, 5, 3, 4, 1, '2016-10-08 11:23:05');
+(8, 5, 3, 4, 1, '2016-10-08 11:23:05'),
+(9, 5, 5, 17, 355, '2018-02-14 18:38:18');
 
 
 --
@@ -637,20 +640,21 @@ INSERT INTO %PREFIX%_announcements (ann_id, ann_cat_id, ann_headline, ann_descri
 --
 
 INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_highlight, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members) VALUES
-(3, 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', 0,  1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
-(4, 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', 1, 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
-(5, 10, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', 1, 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
-(6, 301, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
-(7, 301, '2012-01-07 06:00:00', '2012-01-08 15:00:00', 1, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', 0, 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
-(8, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0,  1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
-(9, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
-(10, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
-(11, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
-(12, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
-(13, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2013-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
-(14, 107, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_YOGA_CONTENT', 'DEMO_DAT_YOGA_LOCATION', 'ESP', 'DEMO_DAT_YOGA', 1, 1, '2008-07-06 17:41:18', NULL, NULL, 9, NULL, 0),
-(15, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', 0, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', 0, 1, '2017-05-06 23:03:18', NULL, NULL, 10, NULL, 0),
-(16, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', 0, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', 0, 1, '2017-05-06 23:03:18', NULL, NULL, 11, NULL, 0);
+(3, 12, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', 0,  1, '2017-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
+(4, 10, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', 1, 1, '2017-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
+(5, 10, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', 1, 1, '2017-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
+(6, 301, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 0, 1, '2017-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
+(7, 301, '2012-01-07 06:00:00', '2012-01-08 15:00:00', 1, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', 0, 1, '2018-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
+(8, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0,  1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(9, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(10, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(11, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(12, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(13, 12, '2012-01-22 17:00:00', '2012-01-22 18:30:00', 0, null, 'DEMO_DAT_TEAM_TRAINING_LOCATION', 'AUT', 'DEMO_DAT_TEAM_TRAINING', 0, 1, '2017-09-06 12:05:26', NULL, NULL, NULL, NULL, 0),
+(14, 107, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_YOGA_CONTENT', 'DEMO_DAT_YOGA_LOCATION', 'ESP', 'DEMO_DAT_YOGA', 1, 1, '2017-07-06 17:41:18', NULL, NULL, 9, NULL, 0),
+(15, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', 0, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', 0, 1, '2018-05-06 23:03:18', NULL, NULL, 10, NULL, 0),
+(16, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', 0, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_BOARD_MEETING', 0, 1, '2018-05-06 23:03:18', NULL, NULL, 11, NULL, 0),
+(17, 10, '2012-01-12 20:00:00', '2012-01-12 22:00:00', 0, null, 'DEMO_DAT_CLUBHOUSE', 'DEU', 'DEMO_DAT_TEAM_EVENING', 0, 355, '2018-02-14 18:38:18', NULL, NULL, 12, NULL, 0);
 
 
 --
@@ -1020,7 +1024,11 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (503, 8, 302, '2012-01-06', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, 2),
 (504, 8, 328, '2012-01-07', '9999-12-31', 0, 2, '2008-05-03 09:43:02', 328, '2017-02-01 23:04:21', 2),
 (505, 2, 356, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, NULL),
-(506, 2, 357, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, NULL);
+(506, 2, 357, '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, NULL),
+(520, 12, 355, '2018-06-03', '9999-12-31', 1, 2, '2014-08-25 19:13:52', NULL, NULL, NULL),
+(521, 12, 263, '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, NULL),
+(522, 12, 269, '2018-06-04', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, NULL),
+(523, 12, 283, '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL, NULL);
 
 
 --
