@@ -33,7 +33,7 @@ if(!isset($plg_show_visitors) || !is_numeric($plg_show_visitors))
 
 if(!isset($plg_show_members) || !is_numeric($plg_show_members))
 {
-    $plg_show_members = 1;
+    $plg_show_members = 2;
 }
 
 if(!isset($plg_show_self) || !is_numeric($plg_show_self))

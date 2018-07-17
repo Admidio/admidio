@@ -660,7 +660,7 @@ input[type="time"] {
 
 .panel-primary > .panel-footer {
     padding: 5px 0 0 0;
-    background-color: white;
+    background-color: #ffffff;
     border-top: 2px solid #c1dce6;
     font-size: 8pt;
 }
