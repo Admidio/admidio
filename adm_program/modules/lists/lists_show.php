@@ -630,7 +630,7 @@ elseif ($getMode === 'pdf')
     // Write valid column headings
     for ($column = 0, $max = count($arrValidColumns); $column < $max; ++$column)
     {
-        $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$column].';font-size:14;background-color:#C7C7C7;'), 'th');
+        $table->addColumn($arrValidColumns[$column], array('style' => 'text-align: '.$columnAlign[$column].'; font-size: 14px; background-color: #c7c7c7;'), 'th');
     }
 }
 else
