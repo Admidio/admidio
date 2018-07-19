@@ -177,11 +177,11 @@ class ProfileFields
                 case 'CHECKBOX':
                     if ($value == 1)
                     {
-                        $htmlValue = '<img src="' . THEME_URL . '/icons/checkbox_checked.gif" alt="on" />';
+                        $htmlValue = '<i class="fas fa-check-square"></i>';
                     }
                     else
                     {
-                        $htmlValue = '<img src="' . THEME_URL . '/icons/checkbox.gif" alt="off" />';
+                        $htmlValue = '<i class="fas fa-square"></i>';
                     }
                     break;
                 case 'DATE':
@@ -325,7 +325,7 @@ class ProfileFields
         {
             if ($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') === 'CHECKBOX')
             {
-                $value = '<img src="' . THEME_URL . '/icons/checkbox.gif" alt="off" />';
+                $value = '<i class="fas fa-square"></i>';
 
                 // if field has url then create a link
                 $usfUrl = $this->mProfileFields[$fieldNameIntern]->getValue('usf_url');
