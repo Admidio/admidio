@@ -132,7 +132,7 @@ class TableUserField extends TableAccess
                 {
                     $icon = 'fas ' . $icon;
                 }
-                $html = '<i class="' . $icon . '" data-toggle="tooltip" title="' . $text . '"></i>';
+                $html = '<i class="' . $icon . ' fa-fw" data-toggle="tooltip" title="' . $text . '"></i>';
             }
             elseif(StringUtils::strContains($icon, '.png', false) || StringUtils::strContains($icon, '.jpg', false))
             {

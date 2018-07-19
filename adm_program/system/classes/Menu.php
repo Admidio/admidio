@@ -170,7 +170,7 @@ class Menu
                         <li class="media">
                             <div class="media-left">
                                 <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
-                                    <i class="fas '.$item['icon'].' fa-2x"></i>
+                                    <i class="fas fa-fw '.$item['icon'].' fa-2x"></i>
                                 </a>
                             </div>
                             <div class="media-body">
