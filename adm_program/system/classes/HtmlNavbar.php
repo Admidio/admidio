@@ -214,7 +214,7 @@ class HtmlNavbar
                     $html .= '
                         <li class="dropdown ' . $menuEntry['class'] . '">
                             <a id="' . $menuEntry['id'] . '" href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-menu-hamburger"></span>' . $menuEntry['text'] . '<span class="caret"></span>
+                                <i class="fas fa-bars"></i>' . $menuEntry['text'] . '<span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">';
 

@@ -172,7 +172,7 @@ if($getMode === 'choose_files')
                 done: function(e, data) {
                     $.each(data.result.files, function(index, file) {
                         if (typeof file.error !== "undefined") {
-                            $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>"
+                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>"
                                 + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                             countErrorFiles++;
                         } else {
@@ -192,9 +192,9 @@ if($getMode === 'choose_files')
                 },
                 stop: function(e, data) {
                     if (countErrorFiles === 0 && countFiles > 0) {
-                        $("<p/>").html("<div class=\"alert alert-success\"><span class=\"glyphicon glyphicon-ok\"></span>'.$textUploadSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"fas fa-check\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
                     } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><span class=\"glyphicon glyphicon-exclamation-sign\"></span>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"fas fa-exclamation-circle\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                     }
                 }
             }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");

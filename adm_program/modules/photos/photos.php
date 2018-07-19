@@ -526,13 +526,13 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         // Notice for users with foto edit rights that the folder of the album doesn't exists
         if (!is_dir($ordner) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->editPhotoRight())
         {
-            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
+            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
         }
 
         // Notice for users with foto edit right that this album is locked
         if ($childPhotoAlbum->getValue('pho_locked') == 1 && is_dir($ordner))
         {
-            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
+            $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
         }
 
         // if user has admin rights for photo module then show some functions

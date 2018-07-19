@@ -85,7 +85,7 @@ if($getInline)
                     success: function(data) {
                         if (data === "success") {
                             rolesFormAlert.attr("class", "alert alert-success form-alert");
-                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                            rolesFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                             rolesFormAlert.fadeIn("slow");
                             setTimeout(function() {
                                 $("#admidio_modal").modal("hide");
@@ -97,7 +97,7 @@ if($getInline)
                         } else {
                             rolesFormAlert.attr("class", "alert alert-danger form-alert");
                             rolesFormAlert.fadeIn();
-                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                            rolesFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                         }
                     }
                 });
@@ -295,7 +295,7 @@ while($row = $statement->fetch())
 $html .= $table->show();
 
 $html .= '
-    <button class="btn-primary btn" id="btn_save" type="submit"><i class="fas fa-check"></i>'.$gL10n->get('SYS_SAVE').'</button>
+    <button class="btn-primary btn" id="btn_save" type="submit"><i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_SAVE').'</button>
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 

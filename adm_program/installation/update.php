@@ -200,7 +200,7 @@ if ($installedDbVersion === '')
 {
     $message = '
         <div class="alert alert-danger alert-small" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <i class="fas fa-exclamation-sign"></i>
             <strong>' . $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '</strong>
         </div>
         <p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>';
@@ -263,7 +263,7 @@ if ($getMode === 1)
 
             $form->addHtml('
                 <div class="alert alert-warning alert-small" role="alert">
-                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    <i class="fas fa-exclamation-triangle"></i>
                     ' . $gL10n->get('INS_WARNING_BETA_VERSION') . '
                 </div>');
         }
@@ -278,7 +278,7 @@ if ($getMode === 1)
     {
         $message = '
             <div class="alert alert-success form-alert">
-                <span class="glyphicon glyphicon-ok"></span>
+                <i class="fas fa-check"></i>
                 <strong>' . $gL10n->get('INS_DATABASE_IS_UP_TO_DATE') . '</strong>
             </div>
             <p>' . $gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED') . '</p>';
@@ -297,7 +297,7 @@ if ($getMode === 1)
     {
         $message = '
             <div class="alert alert-danger form-alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                <i class="fas fa-exclamation-sign"></i>
                 <strong>' . $gL10n->get('SYS_ERROR') . '</strong>
                 <p>' .
                     $gL10n->get(
@@ -342,7 +342,7 @@ elseif ($getMode === 2)
     $form->setFormDescription(
         $gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', array(ADMIDIO_VERSION_TEXT)) . '<br /><br />' . $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'),
         '<div class="alert alert-success form-alert">
-            <span class="glyphicon glyphicon-ok"></span>
+            <i class="fas fa-check"></i>
             <strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong>
         </div>'
     );

@@ -361,8 +361,8 @@ a.btn {
     margin-left: 6px;
 }
 
-.alert .glyphicon,
-.dropdown-toggle span.glyphicon {
+.alert .fas,
+.dropdown-toggle i.fas {
     margin-right: 5px;
 }
 

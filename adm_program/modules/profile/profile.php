@@ -164,7 +164,7 @@ $page->addJavascript('
                 success: function(data) {
                     if (data === "success") {
                         formAlert.attr("class", "alert alert-success form-alert");
-                        formAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         formAlert.fadeIn("slow");
                         formAlert.animate({opacity: 1.0}, 2500);
                         formAlert.fadeOut("slow");
@@ -179,7 +179,7 @@ $page->addJavascript('
                     } else {
                         formAlert.attr("class", "alert alert-danger form-alert");
                         formAlert.fadeIn();
-                        formAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                        formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                     }
                 }
             });

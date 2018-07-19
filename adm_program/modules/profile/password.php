@@ -161,7 +161,7 @@ elseif($getMode === 'html')
                 $.post(action, $(this).serialize(), function(data) {
                     if (data === "success") {
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
-                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
+                        passwordFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
                         setTimeout(function() {
                             $("#admidio_modal").modal("hide");
@@ -169,7 +169,7 @@ elseif($getMode === 'html')
                     } else {
                         passwordFormAlert.attr("class", "alert alert-danger form-alert");
                         passwordFormAlert.fadeIn();
-                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                        passwordFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                     }
                 });
             });

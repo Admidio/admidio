@@ -573,7 +573,7 @@ else
 }
 // End original backupDB
 
-echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.
+echo '<div class="alert alert-success form-alert"><i class="fas fa-check"></i><strong>'.
     $gL10n->get('BAC_BACKUP_COMPLETED', array(FormattedTimeRemaining(getmicrotime() - $starttime, 2))).'.</strong><br /><br />
 
 '.$gL10n->get('BAC_BACKUP_FILE').'

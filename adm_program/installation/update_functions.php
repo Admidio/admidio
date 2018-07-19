@@ -35,7 +35,7 @@ function checkLogin()
     {
         $message = '
             <div class="alert alert-danger alert-small" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                <i class="fas fa-exclamation-sign"></i>
                 <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
             </div>';
 
@@ -59,7 +59,7 @@ function checkLogin()
         {
             $message = '
                 <div class="alert alert-danger alert-small" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    <i class="fas fa-exclamation-sign"></i>
                     <strong>' . $e->getText() . '</strong>
                 </div>';
 

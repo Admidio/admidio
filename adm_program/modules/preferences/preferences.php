@@ -82,14 +82,14 @@ $page->addJavascript('
                         $("#captcha").attr("src", "' . ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/securimage/securimage_show.php?" + Math.random());
                     }
                     formAlert.attr("class", "alert alert-success form-alert");
-                    formAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    formAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     formAlert.fadeIn("slow");
                     formAlert.animate({opacity: 1.0}, 2500);
                     formAlert.fadeOut("slow");
                 } else {
                     formAlert.attr("class", "alert alert-danger form-alert");
                     formAlert.fadeIn();
-                    formAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                    formAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                 }
             }
         });
@@ -340,7 +340,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
 
 $html = '<a id="add_another_organization" class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/preferences/preferences_function.php', array('mode' => '2')).'">
             <i class="fas fa-plus-circle"></i>'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
-$htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formOrganization->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, array('helpTextIdInline' => $htmlDesc));
 $formOrganization->addSubmitButton(
     'btn_save_organization', $gL10n->get('SYS_SAVE'),
@@ -820,7 +820,7 @@ $formAnnouncements->addInput(
 );
 $html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ANN')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
-$htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formAnnouncements->addCustomContent(
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html,
     array('helpTextIdInline' => $htmlDesc)
@@ -858,7 +858,7 @@ $formUserManagement->addCheckbox(
 );
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
             <i class="fas fa-users-cog"></i>'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'</a>';
-$htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formUserManagement->addCustomContent($gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), $html, array('helpTextIdInline' => $htmlDesc));
 
 $formUserManagement->addSubmitButton(
@@ -1106,7 +1106,7 @@ $formLists->addSelectBox(
 );
 $html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
-$htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formLists->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, array('helpTextIdInline' => $htmlDesc));
 $formLists->addSubmitButton(
     'btn_save_lists', $gL10n->get('SYS_SAVE'),
@@ -1187,7 +1187,7 @@ $formProfile = new HtmlForm(
 
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/preferences/fields.php">
             <i class="fas fa-th-list"></i>'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
-$htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formProfile->addCustomContent($gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formProfile->addCheckbox(
     'profile_log_edit_fields', $gL10n->get('PRO_LOG_EDIT_FIELDS'), (bool) $formValues['profile_log_edit_fields'],
@@ -1302,7 +1302,7 @@ $formEvents->addCheckbox(
 );
 $html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
-$htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formEvents->addCustomContent($gL10n->get('DAT_MANAGE_CALENDARS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formEvents->addCheckbox(
     'dates_show_rooms', $gL10n->get('DAT_ROOM_SELECTABLE'), (bool) $formValues['dates_show_rooms'],
@@ -1310,7 +1310,7 @@ $formEvents->addCheckbox(
 );
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/rooms/rooms.php">
             <i class="fas fa-home"></i>'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
-$htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formEvents->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, array('helpTextIdInline' => $htmlDesc));
 $formEvents->addSubmitButton(
     'btn_save_events', $gL10n->get('SYS_SAVE'),
@@ -1350,7 +1350,7 @@ $formWeblinks->addInput(
 );
 $html = '<a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/categories/categories.php', array('type' => 'LNK')).'">
             <i class="fas fa-th-large"></i>'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
-$htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+$htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
 $formWeblinks->addCustomContent(
     $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html,
     array('helpTextIdInline' => $htmlDesc)

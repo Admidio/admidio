@@ -38,7 +38,7 @@ echo '
             success: function(data) {
                 if (data === "success") {
                     formMembersAlert.attr("class", "alert alert-success form-alert");
-                    formMembersAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
+                    formMembersAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     formMembersAlert.fadeIn("slow");
                     setTimeout(function() {
                         self.location.href = "'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('new_user' => 1)).'&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
@@ -49,7 +49,7 @@ echo '
                     } else {
                         formMembersAlert.attr("class", "alert alert-danger form-alert");
                         formMembersAlert.fadeIn();
-                        formMembersAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                        formMembersAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                     }
                 }
             }

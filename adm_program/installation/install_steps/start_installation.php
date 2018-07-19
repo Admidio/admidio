@@ -285,7 +285,7 @@ if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
 {
     $text = $text.'
         <div class="alert alert-warning alert-small" role="alert">
-            <span class="glyphicon glyphicon-warning-sign"></span>
+            <i class="fas fa-exclamation-triangle"></i>
             '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files')).'
         </div>';
 }
@@ -297,7 +297,7 @@ $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.p
 $form->setFormDescription(
     $text,
     '<div class="alert alert-success form-alert">
-        <span class="glyphicon glyphicon-ok"></span>
+        <i class="fas fa-check"></i>
         <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong>
     </div>'
 );

@@ -94,7 +94,7 @@ if ($getGbcGboId > 0)
                 echo '
                 <div class="btn-group" role="group">
                     <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')">
-                        <i class="fas fa-check"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                        <i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
                     <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')">
                         <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                 </div>';
