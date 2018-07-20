@@ -52,7 +52,6 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @throws AdmException
      * @return array<string,string|array>
      */
     private function buildItem($id, $link, $text, $icon, $desc = '')
@@ -79,7 +78,6 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @throws AdmException
      */
     public function addItem($id, $link, $text, $icon, $desc = '')
     {
@@ -122,7 +120,6 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @throws AdmException
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
