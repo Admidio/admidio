@@ -42,7 +42,7 @@ class UploadHandlerPhoto extends UploadHandler
      */
     protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
     {
-        global $photoAlbum, $gSettingsManager, $gL10n;
+        global $photoAlbum, $gSettingsManager, $gL10n, $gLogger;
 
         $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
@@ -107,10 +107,21 @@ class UploadHandlerPhoto extends UploadHandler
                     try
                     {
                         FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
-                        FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
+
+                        try
+                        {
+                            FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
+                        }
+                        catch (\RuntimeException $exception)
+                        {
+                            $gLogger->error('Could not move file!', array('from' => $fileLocation, 'to' => $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension));
+                            // TODO
+                        }
                     }
                     catch (\RuntimeException $exception)
                     {
+                        $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/originals'));
+                        // TODO
                     }
                 }
 

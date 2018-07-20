@@ -40,7 +40,7 @@ class UploadHandlerDownload extends UploadHandler
      */
     protected function handle_file_upload($uploadedFile, $name, $size, $type, $error, $index = null, $contentRange = null)
     {
-        global $gSettingsManager, $gL10n, $gDb, $getId, $gCurrentOrganization, $gCurrentUser;
+        global $gSettingsManager, $gL10n, $gDb, $getId, $gCurrentOrganization, $gCurrentUser, $gLogger;
 
         $file = parent::handle_file_upload($uploadedFile, $name, $size, $type, $error, $index, $contentRange);
 
@@ -98,6 +98,8 @@ class UploadHandlerDownload extends UploadHandler
                 }
                 catch (\RuntimeException $exception)
                 {
+                    $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
+                    // TODO
                 }
 
                 return $file;

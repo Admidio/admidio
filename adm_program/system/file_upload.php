@@ -144,6 +144,8 @@ if($getMode === 'choose_files')
     }
     catch (\RuntimeException $exception)
     {
+        $gLogger->error('Could not delete directory content!', array('directoryPath' => $completePath));
+        // TODO
     }
 
     // create html page object
