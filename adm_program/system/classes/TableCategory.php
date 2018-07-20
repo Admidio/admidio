@@ -115,7 +115,7 @@ class TableCategory extends TableAccess
 
         if ($recordsetsStatement->rowCount() > 0)
         {
-            throw new AdmException('CAT_DONT_DELETE_CATEGORY', $this->getValue('cat_name'), $this->getNumberElements());
+            throw new AdmException('CAT_DONT_DELETE_CATEGORY', array($this->getValue('cat_name'), $this->getNumberElements()));
         }
 
         // delete all roles assignments that have the right to view this category

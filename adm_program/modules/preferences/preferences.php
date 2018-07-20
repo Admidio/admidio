@@ -252,7 +252,7 @@ $formCommon->addSubmitButton(
     array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'options.png', $formCommon->show(false)));
+$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'options.png', $formCommon->show()));
 
 // PANEL: SECURITY
 
