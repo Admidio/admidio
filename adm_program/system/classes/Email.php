@@ -404,7 +404,7 @@ class Email extends PHPMailer
 
         if($this->emSendAsHTML)
         {
-            $senderText .= self::CRLF . '<hr style="border-width: 1px; border-style: solid;" />' . self::CRLF . self::CRLF;            
+            $senderText .= self::CRLF . '<hr style="border: 1px solid;" />' . self::CRLF . self::CRLF;
         }
         else
         {
@@ -491,8 +491,8 @@ class Email extends PHPMailer
         // add a separate header with info of the copy mail
         if($this->emSendAsHTML)
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF . '<hr style="border-width: 1px; border-style: solid;" />' . 
-                self::CRLF . self::CRLF;            
+            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF . '<hr style="border: 1px solid;" />' .
+                self::CRLF . self::CRLF;
         }
         else
         {
