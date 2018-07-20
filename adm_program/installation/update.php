@@ -331,7 +331,7 @@ elseif ($getMode === 2)
     {
         // TODO
     }
-    
+
     // delete session data
     session_unset();
     session_destroy();

@@ -462,14 +462,14 @@ class TableRoles extends TableAccess
             if($columnName === 'rol_cat_id' && isset($gCurrentUser) && $gCurrentUser instanceof User)
             {
                 $category = new TableCategory($this->db, $newValue);
-    
+
                 if(!$category->isVisible() || $category->getValue('cat_type') !== 'ROL')
                 {
                     throw new AdmException('Category of the role '. $this->getValue('dat_name'). ' could not be set
                         because the category is not visible to the current user and current organization.');
                 }
             }
-    
+
             if ($columnName === 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
             {
                 // checks if at least one other role has this flag
@@ -481,7 +481,7 @@ class TableRoles extends TableAccess
                            AND rol_id    <> ? -- $this->getValue(\'rol_id\')
                            AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
                 $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), (int) $gCurrentOrganization->getValue('org_id')));
-    
+
                 if ((int) $pdoStatement->fetchColumn() === 0)
                 {
                     throw new AdmException('ROL_NO_DEFAULT_ROLE', array($gL10n->get('ROL_DEFAULT_REGISTRATION')));
