@@ -98,6 +98,8 @@ if ($getThumbnail)
             }
             catch (\RuntimeException $exception)
             {
+                $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/thumbnails'));
+                // TODO
             }
 
             // nun das Thumbnail anlegen

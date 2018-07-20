@@ -69,6 +69,8 @@ switch($getJob)
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->error('Could not delete file!', array('filePath' => $completePath));
+            // TODO
         }
         exit();
         break;

@@ -44,12 +44,16 @@ class TableFile extends TableAccess
      */
     public function delete()
     {
+        global $gLogger;
+
         try
         {
             FileSystemUtils::deleteFileIfExists($this->getFullFilePath());
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->error('Could not delete file!', array('filePath' => $this->getFullFilePath()));
+            // TODO
         }
 
         // Even if the delete won't work, return true, so that the entry of the DB disappears
