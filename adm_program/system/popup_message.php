@@ -165,7 +165,7 @@ echo '
     <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
 </div>
 <div class="modal-body row">
-    <div class="col-xs-2"><i class="fas fa-times-circle fa-3x" style="color: #F93535;"></i></div>
+    <div class="col-xs-2"><i class="fas fa-times-circle fa-3x" style="color: #f93535;"></i></div>
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, array($getName, '')).'</div>
 </div>
 <div class="modal-footer">
