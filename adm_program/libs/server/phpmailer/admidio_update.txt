@@ -1,6 +1,0 @@
-Short description to update the current lib
-
-1. Go to https://github.com/PHPMailer/PHPMailer/
-2. Download latest release and unzip the file
-3. Copy all files of the main folder and the subfolders extras and language to the lib folder
-5. Remove folder examples
