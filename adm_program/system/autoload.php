@@ -29,7 +29,7 @@ function admFuncAutoload($className)
         ADMIDIO_PATH . FOLDER_LIBS_CLIENT . '/jquery-file-upload/server/php/' . $className . '.php', // PHP files in the client folder
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/monolog/src/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpass/' . strtolower($className) . '.php', // old phpass password hashing lib for backward compatibility
-        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/src/' . $className . '.php',
+        ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/phpmailer/src/' . substr(str_replace('\\', '/', $className), 20) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/psr/log/' . str_replace('\\', '/', $className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/securimage/' . strtolower($className) . '.php',
         ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/tcpdf/' . strtolower($className) . '.php',
