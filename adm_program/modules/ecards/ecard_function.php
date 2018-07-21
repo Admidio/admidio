@@ -220,16 +220,16 @@ class FunctionClass
                 // Bild als Anhang an die Mail haengen
                 if ($imgName !== 'none.jpg' && $imgName !== '')
                 {
-                    $uid = md5(uniqid($imgName . time(), true));
-                    try
+                    $cid = md5(uniqid($imgName . time(), true));
+                    $result = $email->addEmbeddedImage($imgServerPath, $cid, $imgName, 'base64', 'image/' . $imgType);
+                    if ($result)
                     {
-                        $email->addEmbeddedImage($imgServerPath, $uid, $imgName, 'base64', 'image/' . $imgType);
+                        $ecardHtmlData = str_replace($match, 'cid:' . $cid, $ecardHtmlData);
                     }
-                    catch (phpmailerException $e)
+                    else
                     {
-                        $returnCode = $e->errorMessage();
+                        $returnCode = $email->ErrorInfo;
                     }
-                    $ecardHtmlData = str_replace($match, 'cid:' . $uid, $ecardHtmlData);
                 }
             }
         }

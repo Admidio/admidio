@@ -15,6 +15,8 @@
  */
 require_once(__DIR__ . '/../../system/common.php');
 
+use PHPMailer\PHPMailer\Exception;
+
 // Initialize and check the parameters
 $getMsgId   = admFuncVariableIsValid($_GET, 'msg_id',   'int');
 $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
@@ -413,9 +415,14 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                         {
                             $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
                         }
-                        catch (phpmailerException $e)
+                        catch (Exception $e)
                         {
                             $gMessage->show($e->errorMessage());
+                            // => EXIT
+                        }
+                        catch (\Exception $e)
+                        {
+                            $gMessage->show($e->getMessage());
                             // => EXIT
                         }
                     }
