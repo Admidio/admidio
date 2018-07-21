@@ -77,7 +77,7 @@ switch($getMode)
 
                     if(!is_numeric($_POST['logout_minutes']) || $_POST['logout_minutes'] <= 0)
                     {
-                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'))));
+                        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'))));
                         // => EXIT
                     }
 

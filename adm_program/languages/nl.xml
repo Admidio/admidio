@@ -656,8 +656,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Extra variabelen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Thema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">De layout van Admidio kan hier gekozen worden. Alle thema\'s die opgeslagen zijn in map adm_themes worden getoond. (Standaard: modern)</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatisch uitloggen na</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (Standaard: 20 minuten)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisch uitloggen na</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (Standaard: 20 minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Na activering worden gebruikers met verouderde browsers geadviseerd om een browser-update uit te voeren. Nieuwere browsers bieden betere bescherming tegen fraude, virussen, Trojaanse paarden, gegevensdiefstal en andere bedreigingen van uw privacy en veiligheid. Elke nieuwe generatie browsers verbetert de snelheid en ondersteuning van nieuwe webtechnologieën die webpagina\'s beter kunnen visualiseren. Hiervoor wordt de service van https://browser-update.org/ gebruikt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Achtergrondkleur</string>

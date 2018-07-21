@@ -262,8 +262,8 @@ $formSecurity = new HtmlForm(
 );
 
 $formSecurity->addInput(
-    'logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $formValues['logout_minutes'],
-    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
+    'logout_minutes', $gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'), $formValues['logout_minutes'],
+    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextIdInline' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
 );
 $selectBoxEntries = array(
     0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
