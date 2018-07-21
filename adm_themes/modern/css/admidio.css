@@ -344,15 +344,15 @@ a.btn {
 }
 
 .admidio-btn-event-attend {
-    color: green !important;
+    color: #008000 !important;
 }
 
 .admidio-btn-event-tentative {
-    color: purple !important;
+    color: #800080 !important;
 }
 
 .admidio-btn-event-cancel {
-    color: red !important;
+    color: #F93535 !important;
 }
 
 .admidio-info-icon {
