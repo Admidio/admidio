@@ -123,7 +123,7 @@ $columnHeading = array(
     '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
-    '<i class="fas fa-transgender" data-toggle="tooltip" title="' . $gL10n->get('SYS_GENDER') . '"></i>',
+    '<i class="fas fa-fw fa-transgender" data-toggle="tooltip" title="' . $gL10n->get('SYS_GENDER') . '"></i>',
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
     '&nbsp;'

@@ -119,7 +119,7 @@ $downloadOverview = new HtmlTable('tbl_downloads', $page, true, true);
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_TYPE'),
-    '<i class="fas fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'"></i>',
+    '<i class="fas fa-fw fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'"></i>',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_DATE_MODIFIED'),
     $gL10n->get('SYS_SIZE'),
@@ -153,7 +153,7 @@ if (isset($folderContent['folders']))
         $columnValues = array(
             1, // Type folder
             '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $nextFolder['fol_id'])). '">
-                <i class="fas fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i></a>',
+                <i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i></a>',
             '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $nextFolder['fol_id'])). '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
             '',
             '',
@@ -217,7 +217,7 @@ if (isset($folderContent['files']))
         $columnValues = array(
             2, // Type file
             '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/get_file.php', array('file_id' => $nextFile['fil_id'])). '">
-                <i class="fas ' . $iconFile . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
+                <i class="fas fa-fw ' . $iconFile . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i></a>',
             '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/get_file.php', array('file_id' => $nextFile['fil_id'])). '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
             $timestamp->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')),
             round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
@@ -274,7 +274,7 @@ if ($gCurrentUser->editDownloadRight())
 
         // create array with all column heading values
         $columnHeading = array(
-            '<i class="fas fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'"></i>',
+            '<i class="fas fa-fw fa-folder-open" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'"></i>',
             $gL10n->get('SYS_NAME'),
             $gL10n->get('SYS_SIZE'),
             '&nbsp;'
@@ -287,7 +287,7 @@ if ($gCurrentUser->editDownloadRight())
             foreach ($folderContent['additionalFolders'] as $nextFolder)
             {
                 $columnValues = array(
-                    '<i class="fas fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i>',
+                    '<i class="fas fa-fw fa-folder" data-toggle="tooltip" title="'.$gL10n->get('SYS_FOLDER').'"></i>',
                     $nextFolder['fol_name'],
                     '',
                     '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '6', 'folder_id' => $getFolderId, 'name' => $nextFolder['fol_name'])). '">
@@ -314,7 +314,7 @@ if ($gCurrentUser->editDownloadRight())
                 }
 
                 $columnValues = array(
-                    '<i class="fas ' . $iconFile . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i>',
+                    '<i class="fas fa-fw ' . $iconFile . '" data-toggle="tooltip" title="'.$gL10n->get('SYS_FILE').'"></i>',
                     $nextFile['fil_name'],
                     round($nextFile['fil_size'] / 1024). ' kB&nbsp;',
                     '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/download_function.php', array('mode' => '6', 'folder_id' => $getFolderId, 'name' => $nextFile['fil_name'])). '">

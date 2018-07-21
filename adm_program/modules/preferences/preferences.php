@@ -161,7 +161,7 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
-                        <i class="fas ' . $icon . '"></i>' . $title . '
+                        <i class="fas fa-fw ' . $icon . '"></i>' . $title . '
                     </a>
                 </h4>
             </div>
