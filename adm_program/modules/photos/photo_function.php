@@ -47,6 +47,8 @@ if (!$gCurrentUser->editPhotoRight())
  */
 function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
 {
+    global $gLogger;
+
     // Ordnerpfad zusammensetzen
     $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
     try
@@ -55,6 +57,8 @@ function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
     }
     catch (\RuntimeException $exception)
     {
+        $gLogger->error('Could not delete file!', array('filePath' => $photoPath));
+        // TODO
     }
 }
 
@@ -65,6 +69,8 @@ function deleteThumbnail(TablePhotos $photoAlbum, $picNr)
  */
 function deletePhoto(TablePhotos $photoAlbum, $picNr)
 {
+    global $gLogger;
+
     // Speicherort
     $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
 
@@ -77,6 +83,15 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     }
     catch (\RuntimeException $exception)
     {
+        $gLogger->error(
+            'Could not delete file!',
+            array('filePaths' => array(
+                $albumPath.'/'.$picNr.'.jpg',
+                $albumPath.'/originals/'.$picNr.'.jpg',
+                $albumPath.'/originals/'.$picNr.'.png'
+            ))
+        );
+        // TODO
     }
 
     // Umbenennen der Restbilder und Thumbnails loeschen
@@ -97,6 +112,22 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
                 }
                 catch (\RuntimeException $exception)
                 {
+                    $gLogger->error(
+                        'Could not move file!',
+                        array(
+                            'from' => array(
+                                $albumPath.'/'.$actPicNr.'.jpg',
+                                $albumPath.'/originals/'.$actPicNr.'.jpg',
+                                $albumPath.'/originals/'.$actPicNr.'.png'
+                            ),
+                            'to' => array(
+                                $albumPath.'/'.$newPicNr.'.jpg',
+                                $albumPath.'/originals/'.$newPicNr.'.jpg',
+                                $albumPath.'/originals/'.$newPicNr.'.png'
+                            )
+                        )
+                    );
+                    // TODO
                 }
                 ++$newPicNr;
             }

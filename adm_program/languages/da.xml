@@ -609,8 +609,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Yderligere variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: modern)</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatisk logoff efter</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Sæt tid før systemet automatisk logger en inaktiv bruger af. En bruger er inaktiv når der ikke er hentet sider i en bestemt periode. Dette bliver ignoreret hvis brugeren vælger #VAR1_BOLD#. (Standard: 20 minutter)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisk logoff efter</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Sæt tid før systemet automatisk logger en inaktiv bruger af. En bruger er inaktiv når der ikke er hentet sider i en bestemt periode. Dette bliver ignoreret hvis brugeren vælger #VAR1_BOLD#. (Standard: 20 minutter)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Opdaterings besked for gamle browsere</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Efter aktivering bliver brugere med gamle og usikre browsere bedt om at opdatere deres browser. Nyere browsere garanterer en bedre beskyttelse mod svig, vira, trojanske heste og identitets tyveri og andre trusler mod dit privatliv og sikkerhed. Enhver ny browser generation giver bedre hastighed og understøtter flere og flere af de nye web teknologier, som igen giver en bedre oplevelse af internettet. Til denne service bruges https://browser-update.org/</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Baggrunds farve</string>

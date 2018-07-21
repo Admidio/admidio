@@ -171,7 +171,7 @@ class FunctionClass
      */
     public function sendEcard($senderName, $senderEmail, $ecardHtmlData, $recipientName, $recipientEmail, $photoServerPath)
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gLogger;
 
         $imgPhotoPath = '';
         $returnCode = true;
@@ -249,6 +249,8 @@ class FunctionClass
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->error('Could not delete file!', array('filePath' => $imgPhotoPath));
+            // TODO
         }
 
         return $returnCode;

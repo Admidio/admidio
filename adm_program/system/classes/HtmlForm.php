@@ -2082,11 +2082,3 @@ class HtmlForm extends HtmlFormBasic
         return $html;
     }
 }
-
-// Backwards compatibility
-// constants for field property
-define('FIELD_DEFAULT',  HtmlForm::FIELD_DEFAULT);
-define('FIELD_REQUIRED', HtmlForm::FIELD_REQUIRED);
-define('FIELD_DISABLED', HtmlForm::FIELD_DISABLED);
-define('FIELD_READONLY', HtmlForm::FIELD_READONLY);
-define('FIELD_HIDDEN',   HtmlForm::FIELD_HIDDEN);

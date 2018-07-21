@@ -164,7 +164,7 @@
   <!--Phrases only in New-User-Registration-->
   <!--Phrases only in Organizationadministration-->
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto logg-ut etter</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Auto logg-ut etter</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Etter aktivering vil brukere med utdaterte nettlesere rådes til å kjøre en oppdatering. Nyere nettlesere garanterer en bedre beskyttelse mot svindel, virus, trojanere, identitetstyveri og andre trusler mot personvern og sikkerhet. Hver ny nettlesergenerasjon forbedrer hastigheten og støtter flere og flere nye web-teknologier, noe som fører til en bedre nettopplevelse . Til dette formålet blir https://browser-update.org/ anvendt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Bakgrunnsfarge</string>
   <string name="ORG_PIXEL">Piksel</string>

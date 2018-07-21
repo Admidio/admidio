@@ -947,6 +947,8 @@ elseif ($getMode === 'pdf')
     }
     catch (\RuntimeException $exception)
     {
+        $gLogger->error('Could not delete file!', array('filePath' => $file));
+        // TODO
     }
 }
 elseif ($getMode === 'html' || $getMode === 'print')

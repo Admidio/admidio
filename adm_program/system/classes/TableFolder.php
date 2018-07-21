@@ -168,6 +168,8 @@ class TableFolder extends TableAccess
      */
     public function delete($folderId = 0)
     {
+        global $gLogger;
+
         $folId = (int) $this->getValue('fol_id');
         $folderPath = '';
 
@@ -225,6 +227,8 @@ class TableFolder extends TableAccess
             }
             catch (\RuntimeException $exception)
             {
+                $gLogger->error('Could not delete directory!', array('directoryPath' => $folderPath));
+                // TODO
             }
         }
 

@@ -181,7 +181,7 @@ final class PasswordUtils
 
         if ($exceptionOnInsecurePRNG)
         {
-            throw new AdmException($exceptionMessage, $exception->getCode(), $exception->getMessage());
+            throw new AdmException($exceptionMessage, array($exception->getCode(), $exception->getMessage()));
         }
 
         // as a fallback we use the mt_rand method

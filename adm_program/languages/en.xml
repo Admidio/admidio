@@ -656,8 +656,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto log off after</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected #VAR1_BOLD#. (default: 20 minutes)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Auto log off after</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected #VAR1_BOLD#. (default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Background color</string>

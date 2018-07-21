@@ -143,13 +143,13 @@ while($rowViewRoles = $rolesViewStatement->fetch())
 // show form
 $form = new HtmlForm('menu_edit_form', safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_function.php', array('men_id' => $getMenId, 'mode' => 1)), $page);
 
-$fieldRequired = FIELD_REQUIRED;
-$fieldDefault  = FIELD_DEFAULT;
+$fieldRequired = HtmlForm::FIELD_REQUIRED;
+$fieldDefault  = HtmlForm::FIELD_DEFAULT;
 
 if((bool) $menu->getValue('men_standard'))
 {
-    $fieldRequired = FIELD_DISABLED;
-    $fieldDefault  = FIELD_DISABLED;
+    $fieldRequired = HtmlForm::FIELD_DISABLED;
+    $fieldDefault  = HtmlForm::FIELD_DISABLED;
 }
 
 $menuList = array();
@@ -157,7 +157,7 @@ subMenu($menuList, 1, (int) $menu->getValue('men_id'));
 
 $form->addInput(
     'men_name', $gL10n->get('SYS_NAME'), $menu->getValue('men_name', 'database'),
-    array('maxLength' => 100, 'property'=> FIELD_REQUIRED, 'helpTextIdLabel' => 'MEN_NAME_DESC')
+    array('maxLength' => 100, 'property'=> HtmlForm::FIELD_REQUIRED, 'helpTextIdLabel' => 'MEN_NAME_DESC')
 );
 
 if($getMenId > 0)
@@ -176,9 +176,9 @@ $form->addMultilineTextInput(
 $form->addSelectBox(
     'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuList,
     array(
-        'property'                       => FIELD_REQUIRED,
-        'defaultValue'                   => $menu->getValue('men_men_id_parent'),
-        'helpTextIdLabel'                => 'MEN_MENU_LEVEL_DESC'
+        'property'        => HtmlForm::FIELD_REQUIRED,
+        'defaultValue'    => $menu->getValue('men_men_id_parent'),
+        'helpTextIdLabel' => 'MEN_MENU_LEVEL_DESC'
     )
 );
 

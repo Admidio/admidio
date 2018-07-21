@@ -84,10 +84,21 @@ if($getMode === 'save')
             try
             {
                 FileSystemUtils::deleteFileIfExists($fileNew);
-                FileSystemUtils::moveFile($fileOld, $fileNew);
+
+                try
+                {
+                    FileSystemUtils::moveFile($fileOld, $fileNew);
+                }
+                catch (\RuntimeException $exception)
+                {
+                    $gLogger->error('Could not move file!', array('from' => $fileOld, 'to' => $fileNew));
+                    // TODO
+                }
             }
             catch (\RuntimeException $exception)
             {
+                $gLogger->error('Could not delete file!', array('filePath' => $fileNew));
+                // TODO
             }
         }
     }
@@ -127,6 +138,8 @@ elseif($getMode === 'dont_save')
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->error('Could not delete file!', array('filePath' => $file));
+            // TODO
         }
     }
     // Datenbankspeicherung
@@ -146,12 +159,15 @@ elseif($getMode === 'delete')
     // Ordnerspeicherung, Datei löschen
     if((int) $gSettingsManager->get('profile_photo_storage') === 1)
     {
+        $filePath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg';
         try
         {
-            FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $getUserId . '.jpg');
+            FileSystemUtils::deleteFileIfExists($filePath);
         }
         catch (\RuntimeException $exception)
         {
+            $gLogger->error('Could not delete file!', array('filePath' => $filePath));
+            // TODO
         }
     }
     // Datenbankspeicherung, Daten aus Session entfernen

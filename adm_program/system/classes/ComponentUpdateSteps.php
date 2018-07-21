@@ -338,7 +338,7 @@ final class ComponentUpdateSteps
      */
     public static function updateStepNewDownloadRootFolderName()
     {
-        global $gCurrentOrganization, $g_organization;
+        global $gCurrentOrganization, $gLogger, $g_organization;
 
         $tempOrganization = $gCurrentOrganization;
 
@@ -377,6 +377,8 @@ final class ComponentUpdateSteps
                     }
                     catch (\RuntimeException $exception)
                     {
+                        $gLogger->error('Could not move directory!', array('from' => $folderOldName, 'to' => $folder->getFullFolderPath()));
+                        // TODO
                     }
                 }
             }
@@ -593,6 +595,8 @@ final class ComponentUpdateSteps
      */
     public static function updateStepDownloadOrgFolderName()
     {
+        global $gLogger;
+
         $sql = 'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS;
         $pdoStatement = self::$db->queryPrepared($sql);
 
@@ -610,6 +614,8 @@ final class ComponentUpdateSteps
                 }
                 catch (\RuntimeException $exception)
                 {
+                    $gLogger->error('Could not move directory!', array('from' => $path . strtolower($orgNameOld), 'to' => $path . strtolower($orgNameNew)));
+                    // TODO
                 }
             }
         }

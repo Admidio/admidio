@@ -484,8 +484,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Variabili aggiuntive</string>
   <string name="ORG_ADMIDIO_THEME">Tema Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Seleziona il lay-out per Admidio. Tutti i temi salvati nella cartella adm_themes sono mostrati. (predefinito: modern)</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Auto disconnessione dopo</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Imposta il tempo dopo il quale il sistema automaticamente disconnette un utente inattivo. Un utente è inattivo quando nessuna pagina è caricata per un certo tempo. Queta configurazione è ignorata quando l\'utente selezionato è #VAR1_BOLD#. (predefinito: 20 minuti)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Auto disconnessione dopo</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Imposta il tempo dopo il quale il sistema automaticamente disconnette un utente inattivo. Un utente è inattivo quando nessuna pagina è caricata per un certo tempo. Queta configurazione è ignorata quando l\'utente selezionato è #VAR1_BOLD#. (predefinito: 20 minuti)</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Colore dello sfondo</string>
   <string name="ORG_CAPTCHA_PREVIEW">Anteprima captcha</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Dopo l\'attivazione un\'immagine con un codice captcha o un semplice calcolo sarà visualizzato ai nuovi utenti. E\' necessario inserire il codice corretto o il risultato per salvare la voce modificata ora. Il captcha è parte del sistema anti-spam di Admidio. (predefinito: sì)</string>

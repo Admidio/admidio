@@ -217,6 +217,8 @@ if ($getPhotoNr == null)
     }
     catch (\RuntimeException $exception)
     {
+        $gLogger->error('Could not delete file!', array('filePath' => $zipTempName));
+        // TODO
     }
 }
 else

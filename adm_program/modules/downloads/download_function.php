@@ -206,7 +206,7 @@ elseif ($getMode === 4)
                 $oldName = $file->getValue('fil_name');
 
                 if($newFile !== $file->getValue('fil_name'))
-                {    
+                {
                     // rename file in filesystem and database
                     try
                     {
@@ -249,7 +249,7 @@ elseif ($getMode === 4)
                 $oldName = $folder->getValue('fol_name');
 
                 if($newFolder !== $folder->getValue('fol_name'))
-                {    
+                {
                     // rename folder in filesystem and database
                     try
                     {

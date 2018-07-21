@@ -602,7 +602,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         {
             if($userIdCreated === 1)
             {
-                $userNameCreated = $gL10n->get('SYS_SYSTEM');                
+                $userNameCreated = $gL10n->get('SYS_SYSTEM');
             }
             else
             {
@@ -629,7 +629,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         {
             if($userIdEdited === 1)
             {
-                $userNameEdited = $gL10n->get('SYS_SYSTEM');                
+                $userNameEdited = $gL10n->get('SYS_SYSTEM');
             }
             else
             {
