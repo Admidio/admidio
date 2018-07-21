@@ -179,7 +179,7 @@ if($getType !== 'ROL' && $gCurrentOrganization->countAllRecords() > 1)
 
 // add back link to module menu
 $categoryCreateMenu = $page->getMenu();
-$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('categories_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories_function.php', array('cat_id' => $getCatId, 'type' => $getType, 'mode' => '1')), $page);
@@ -271,11 +271,11 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
         $fieldProperty = HtmlForm::FIELD_DEFAULT;
         if($getType === 'USF')
         {
-            $helpTextIdLabel = array('CAT_CATEGORY_GLOBAL', $organizations);
+            $helpTextIdLabel = $gL10n->get('CAT_CATEGORY_GLOBAL', array($organizations));
         }
         else
         {
-            $helpTextIdLabel = array('SYS_DATA_CATEGORY_GLOBAL', $organizations);
+            $helpTextIdLabel = $gL10n->get('SYS_DATA_CATEGORY_GLOBAL', array($organizations));
         }
     }
 
@@ -299,7 +299,7 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 
     $form->addStaticControl(
         'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-        array('helpTextIdLabel' => array('CAT_ADMINISTRATORS_DESC', $gL10n->get($rolesRightsName)))
+        array('helpTextIdLabel' => $gL10n->get('CAT_ADMINISTRATORS_DESC', array($rolesRightsName)))
     );
 
     $checked = false;
@@ -316,9 +316,9 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
 
 $form->addCheckbox(
     'cat_default', $gL10n->get('CAT_DEFAULT_VAR', array($addButtonText)), (bool) $category->getValue('cat_default'),
-    array('icon' => 'star.png')
+    array('icon' => 'fa-star')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'),
     (int) $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')

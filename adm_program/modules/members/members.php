@@ -60,7 +60,7 @@ $membersAdministrationMenu = $page->getMenu();
 
 $membersAdministrationMenu->addItem(
     'menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php',
-    $gL10n->get('MEM_CREATE_USER'), 'add.png'
+    $gL10n->get('MEM_CREATE_USER'), 'fa-plus-circle'
 );
 
 if($gSettingsManager->getBool('profile_log_edit_fields'))
@@ -68,7 +68,7 @@ if($gSettingsManager->getBool('profile_log_edit_fields'))
     // show link to view profile field change history
     $membersAdministrationMenu->addItem(
         'menu_item_change_history', ADMIDIO_URL.FOLDER_MODULES.'/members/profile_field_history.php',
-        $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png'
+        $gL10n->get('MEM_CHANGE_HISTORY'), 'fa-history'
     );
 }
 
@@ -85,7 +85,7 @@ $membersAdministrationMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MOR
 // show link to import users
 $membersAdministrationMenu->addItem(
     'menu_item_import_users', ADMIDIO_URL.FOLDER_MODULES.'/members/import.php',
-    $gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras'
+    $gL10n->get('MEM_IMPORT_USERS'), 'fa-upload', 'right', 'menu_item_extras'
 );
 
 if($gCurrentUser->isAdministrator())
@@ -93,7 +93,7 @@ if($gCurrentUser->isAdministrator())
     // show link to maintain profile fields
     $membersAdministrationMenu->addItem(
         'menu_item_maintain_profile_fields', ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields.php',
-        $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras'
+        $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'fa-th-list', 'right', 'menu_item_extras'
     );
 
     if($gSettingsManager->getBool('members_enable_user_relations'))
@@ -101,14 +101,14 @@ if($gCurrentUser->isAdministrator())
         // show link to relation types
         $membersAdministrationMenu->addItem(
             'menu_item_maintain_user_relation_types', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
-            $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'user_administration.png', 'right', 'menu_item_extras'
+            $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'fa-users-cog', 'right', 'menu_item_extras'
         );
     }
 
     // show link to system preferences of weblinks
     $membersAdministrationMenu->addItem(
         'menu_item_preferences_links', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'user_management')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
     );
 }
 
@@ -120,12 +120,10 @@ $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-con
 // create array with all column heading values
 $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
-    '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile.png"
-        alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)).'"
-        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)).'" />',
+    '<i class="fas fa-user" data-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName)) . '"></i>',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
-    '<img class="admidio-icon-info" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_URL.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
+    '<i class="fas fa-fw fa-transgender" data-toggle="tooltip" title="' . $gL10n->get('SYS_GENDER') . '"></i>',
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
     '&nbsp;'

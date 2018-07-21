@@ -45,7 +45,7 @@ if($getInactive)
 {
     $activeRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_INACTIV_ROLES');
-    $activeRolesImage = 'roles.png';
+    $activeRolesImage = 'fa-user-tie';
     $activeRolesFlag  = '0';
     $sqlRolesStatus   = ' AND rol_valid = \'0\'
                           AND cat_name_intern <> \'EVENTS\' ';
@@ -54,7 +54,7 @@ else
 {
     $activeRolesLinkDescription = $gL10n->get('ROL_INACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_ACTIV_ROLES');
-    $activeRolesImage = 'roles_gray.png';
+    $activeRolesImage = 'fa-user-secret';
     $activeRolesFlag  = '1';
 }
 
@@ -68,7 +68,7 @@ if($getEvents)
 
     $eventsRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
-    $eventsRolesImage = 'roles.png';
+    $eventsRolesImage = 'fa-user-tie';
     $eventsRolesFlag  = '0';
     // in events mode show active and inactive events roles
     $sqlRolesStatus   = ' AND cat_name_intern = \'EVENTS\' ';
@@ -76,7 +76,7 @@ if($getEvents)
 else
 {
     $eventsRolesLinkDescription = $gL10n->get('ROL_ROLES_CONFIRMATION_OF_PARTICIPATION');
-    $eventsRolesImage = 'dates.png';
+    $eventsRolesImage = 'fa-calendar-alt';
     $eventsRolesFlag  = '1';
 }
 
@@ -92,12 +92,12 @@ $rolesMenu = $page->getMenu();
 // define link to create new profile field
 $rolesMenu->addItem(
     'menu_item_new_role', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
-    $gL10n->get('SYS_CREATE_ROLE'), 'add.png'
+    $gL10n->get('SYS_CREATE_ROLE'), 'fa-plus-circle'
 );
 // define link to maintain categories
 $rolesMenu->addItem(
     'menu_item_maintain_category', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png'
+    $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large'
 );
 // define link to show inactive roles
 $rolesMenu->addItem(
@@ -122,11 +122,13 @@ $columnHeading = array(
     $gL10n->get('SYS_CATEGORY'),
     $listDescription,
     $gL10n->get('SYS_PERMISSIONS'),
-    $gL10n->get('ROL_PREF'),
+    $gL10n->get('ROL_SEND_MAILS'),
+    $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'),
+    $gL10n->get('SYS_LEADER'),
     $gL10n->get('SYS_FEATURES')
 );
-$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$table->disableDatatablesColumnsSort(array(3, 4, 5));
+$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'right'));
+$table->disableDatatablesColumnsSort(array(3, 7));
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
 
@@ -156,69 +158,56 @@ while($row = $rolStatement->fetch())
 
     if($role->getValue('rol_assign_roles') == 1)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/roles.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />';
+        $assignRoles .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'"></i>';
+    }
+    if($role->getValue('rol_all_lists_view') == 1)
+    {
+        $assignRoles .= '<i class="fas fa-list" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'"></i>';
     }
     if($role->getValue('rol_approve_users') == 1)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/new_registrations.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" />';
-    }
-    if($role->getValue('rol_edit_user') == 1)
-    {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/group.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" />';
+        $assignRoles .= '<i class="fas fa-address-card" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'"></i>';
     }
     if($role->getValue('rol_mail_to_all') == 1)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/email.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />';
+        $assignRoles .= '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'"></i>';
+    }
+    if($role->getValue('rol_edit_user') == 1)
+    {
+        $assignRoles .= '<i class="fas fa-user-friends" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'"></i>';
     }
     if($role->getValue('rol_profile') == 1)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/profile.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />';
+        $assignRoles .= '<i class="fas fa-user" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'"></i>';
     }
     if($role->getValue('rol_announcements') == 1 && (int) $gSettingsManager->get('enable_announcements_module') > 0)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/announcements.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />';
+        $assignRoles .= '<i class="fas fa-newspaper" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'"></i>';
     }
     if($role->getValue('rol_dates') == 1 && (int) $gSettingsManager->get('enable_dates_module') > 0)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/dates.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />';
+        $assignRoles .= '<i class="fas fa-calendar-alt" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_DATES').'"></i>';
     }
     if($role->getValue('rol_photo') == 1 && (int) $gSettingsManager->get('enable_photo_module') > 0)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/photo.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />';
+        $assignRoles .= '<i class="fas fa-image" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'"></i>';
     }
     if($role->getValue('rol_download') == 1 && (int) $gSettingsManager->getBool('enable_download_module'))
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/download.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />';
+        $assignRoles .= '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'"></i>';
     }
     if($role->getValue('rol_guestbook') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/guestbook.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />';
+        $assignRoles .= '<i class="fas fa-book" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'"></i>';
     }
     // If allowed to write anonymous guestbook entries, then we don´t need to set rights for the roles
     if($role->getValue('rol_guestbook_comments') == 1 && (int) $gSettingsManager->get('enable_guestbook_module') > 0 && !$gSettingsManager->getBool('enable_gbook_comments4all'))
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/comment.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
+        $assignRoles .= '<i class="fas fa-comment" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'"></i>';
     }
     if($role->getValue('rol_weblinks') == 1 && (int) $gSettingsManager->get('enable_weblinks_module') > 0)
     {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/weblinks.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />';
-    }
-    if($role->getValue('rol_all_lists_view') == 1)
-    {
-        $assignRoles .= '<img class="admidio-icon-info" src="'. THEME_URL. '/icons/lists.png"
-                            alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />';
+        $assignRoles .= '<i class="fas fa-link" data-toggle="tooltip" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'"></i>';
     }
     // if no assigned roles
     if($assignRoles === '')
@@ -226,80 +215,95 @@ while($row = $rolStatement->fetch())
         $assignRoles = '&nbsp;';
     }
 
-    if($role->getValue('rol_this_list_view') == 1)
+    $viewEmail = '';
+    $viewRole  = '';
+    $leaderRights = '';
+
+    switch ($role->getValue('rol_mail_this_role'))
     {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/list_role.png"
-                        alt="'.$gL10n->get('ROL_VIEW_LIST_ROLE').'" title="'.$gL10n->get('ROL_VIEW_LIST_ROLE').'" />';
+        case 0:
+            $viewEmail = 'SYS_NOBODY';
+            break;
+        case 1:
+            $viewEmail = 'SYS_ROLE_MEMBERS';
+            break;
+        case 2:
+            $viewEmail = 'ORG_REGISTERED_USERS';
+            break;
+        case 3:
+            $viewEmail = 'SYS_ALSO_VISITORS';
+            break;
     }
-    if($role->getValue('rol_this_list_view') == 2)
+
+    switch ($role->getValue('rol_this_list_view'))
     {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/list_key.png"
-                        alt="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" title="'.$gL10n->get('ROL_VIEW_LIST_MEMBERS').'" />';
+        case 0:
+            $viewRole = 'SYS_NOBODY';
+            break;
+        case 1:
+            $viewRole = 'SYS_ROLE_MEMBERS';
+            break;
+        case 2:
+            $viewRole = 'ORG_REGISTERED_USERS';
+            break;
     }
-    if($role->getValue('rol_mail_this_role') == 1 && $gSettingsManager->getBool('enable_mail_module'))
+
+    switch ($role->getValue('rol_leader_rights'))
     {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_role.png"
-                        alt="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" title="'.$gL10n->get('ROL_SEND_MAIL_ROLE').'" />';
-    }
-    if($role->getValue('rol_mail_this_role') == 2 && $gSettingsManager->getBool('enable_mail_module'))
-    {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email_key.png"
-                        alt="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" title="'.$gL10n->get('ROL_SEND_MAIL_MEMBERS').'" />';
-    }
-    if($role->getValue('rol_mail_this_role') == 3 && $gSettingsManager->getBool('enable_mail_module'))
-    {
-        $listView .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/email.png"
-                        alt="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$gL10n->get('ROL_SEND_MAIL_GUESTS').'" />';
-    }
-    // if no matches for list view
-    if($listView === '')
-    {
-        $listView = '&nbsp;';
+        case 0:
+            $leaderRights = 'ROL_NO_ADDITIONAL_RIGHTS';
+            break;
+        case 1:
+            $leaderRights = 'SYS_ASSIGN_MEMBERS';
+            break;
+        case 2:
+            $leaderRights = 'SYS_EDIT_MEMBERS';
+            break;
+        case 3:
+            $leaderRights = 'ROL_ASSIGN_EDIT_MEMBERS';
+            break;
     }
 
     $rolId = (int) $role->getValue('rol_id');
     $rolName = $role->getValue('rol_name');
 
-    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)).'"><img
-                                src="'. THEME_URL. '/icons/list.png" alt="'.$gL10n->get('ROL_SHOW_MEMBERS').'" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'" /></a>';
+    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/lists_show.php', array('mode' => 'html', 'rol_ids' => $rolId)).'">'.
+                                '<i class="fas fa-list" data-toggle="tooltip" title="'.$gL10n->get('ROL_SHOW_MEMBERS').'"></i></a>';
 
     if(!$getInactive)
     {
-        $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'"><img
-                                    src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
+        $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
+                                    '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>';
     }
 
-    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id'. $rolId)).'"><img
-                src="'. THEME_URL. '/icons/vcard.png"
-                alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"
-                title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"/></a>';
-
+    $linkAdministration .= '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id'. $rolId)).'">'.
+                                '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($rolName)).'"></i></a>';
 
     if($role->getValue('cat_name_intern') !== 'EVENTS')
     {
         if($getInactive)
         {
             $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'"><img
-                                           src="'. THEME_URL. '/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
+                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_enable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
+                                        '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_ENABLE_ROLE').'"></i></a>';
         }
         else
         {
             $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'"><img
-                                           src="'. THEME_URL. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_DISABLE_ROLE').'" title="'.$gL10n->get('ROL_DISABLE_ROLE').'" /></a>';
+                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol_disable', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
+                                        '<i class="fas fa-user-secret" data-toggle="tooltip" title="'.$gL10n->get('ROL_DISABLE_ROLE').'"></i></a>';
         }
     }
 
     if($role->getValue('rol_administrator') == 1)
     {
-        $linkAdministration .= '<a class="admidio-icon-link"><img src="'. THEME_URL. '/icons/dummy.png" alt="dummy" /></a>';
+        $linkAdministration .= '<i class="fas fa-trash admidio-opacity-0"></i>';
     }
     else
     {
         $linkAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'"><img
-                                       src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
+                                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'rol', 'element_id' => 'row_'.$rolId, 'name' => $rolName, 'database_id' => $rolId)).'">'.
+                                    '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('ROL_ROLE_DELETE').'"></i></a>';
     }
 
     // create array with all column values
@@ -307,7 +311,9 @@ while($row = $rolStatement->fetch())
         array('value' => $role->getValue('cat_name'), 'order' => $role->getValue('cat_sequence')),
         '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'" title="'.$role->getValue('rol_description').'">'.$rolName.'</a>',
         $assignRoles,
-        $listView,
+        $gL10n->get($viewEmail),
+        $gL10n->get($viewRole),
+        $gL10n->get($leaderRights),
         $linkAdministration
     );
 

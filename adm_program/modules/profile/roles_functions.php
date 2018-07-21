@@ -177,37 +177,36 @@ function getRoleMemberships($htmlListId, User $user, \PDOStatement $roleStatemen
 
                             if($role->allowedToAssignMembers($gCurrentUser))
                             {
+                                // do not edit administrator role
+                                if ($row['rol_administrator'] == 0)
+                                {
+                                    $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$memberId.')" href="#"><i
+                                        class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('PRO_CHANGE_DATE').'"></i></a>';
+                                }
+                                else
+                                {
+                                    $roleMemHTML .= '<i class="fas fa-trash admidio-opacity-0"></i>';
+                                }
+
                                 // You are not allowed to delete your own administrator membership, other roles could be deleted
                                 if (($role->getValue('rol_administrator') == 1 && (int) $gCurrentUser->getValue('usr_id') !== (int) $user->getValue('usr_id'))
                                 || ($role->getValue('rol_administrator') == 0))
                                 {
-                                    $roleMemHTML .= '
-                                    <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.$role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><img
-                                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
+                                    $roleMemHTML .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.$role->getValue('rol_id'), 'database_id' => $memberId, 'name' => $role->getValue('rol_name'))).'"><i
+                                            class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'"></i></a>';
                                 }
                                 else
                                 {
-                                    $roleMemHTML .= '
-                                    <a class="admidio-icon-link"><img src="'.THEME_URL.'/icons/dummy.png" alt=""/></a>';
-                                }
-
-                                // do not edit administrator role
-                                if ($row['rol_administrator'] == 0)
-                                {
-                                    $roleMemHTML .= '<a class="admidio-icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$memberId.')"><img
-                                        src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('PRO_CHANGE_DATE').'" title="'.$gL10n->get('PRO_CHANGE_DATE').'" /></a>';
-                                }
-                                else
-                                {
-                                    $roleMemHTML .= '<a class="admidio-icon-link"><img src="'.THEME_URL.'/icons/dummy.png" alt=""/></a>';
+                                    $roleMemHTML .= '<i class="fas fa-trash admidio-opacity-0"></i>';
                                 }
                             }
 
                             // only show info if system setting is activated
                             if((int) $gSettingsManager->get('system_show_create_edit') > 0)
                             {
-                                $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$memberId.'" href="javascript:void(0)"><img src="'.THEME_URL.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
+                                $roleMemHTML .= '<a class="admidio-icon-link admMemberInfo" id="member_info_'.$memberId.'" href="javascript:void(0)"><i
+                                    class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>';
                             }
                         $roleMemHTML .= '</span>
                     </li>

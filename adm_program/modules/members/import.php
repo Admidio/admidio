@@ -49,7 +49,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $importMenu = $page->getMenu();
-$importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));
@@ -122,7 +122,7 @@ $form->addSelectBox(
 );
 $form->addSubmitButton(
     'btn_forward', $gL10n->get('SYS_NEXT'),
-    array('icon' => THEME_URL.'/icons/forward.png', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-arrow-circle-right', 'class' => ' col-sm-offset-3')
 );
 
 // add form to html page and show page

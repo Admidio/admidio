@@ -251,7 +251,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $datesMenu = $page->getMenu();
-$datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('dates_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $getDateId, 'mode' => $mode, 'copy' => $getCopy)), $page);
@@ -384,7 +384,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'admidio-p
 $form->addEditor('dat_description', '', $date->getValue('dat_description'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'),
     (int) $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')

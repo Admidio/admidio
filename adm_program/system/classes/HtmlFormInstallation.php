@@ -20,7 +20,7 @@
  * // create a simple installation form with a free text, a text field and a submit button
  * $form = new HtmlFormInstallation('installation-form', 'next_html_page.php');
  * $form->setText('This is an example.');
- * $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png', 'type' => 'button'));
+ * $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right', 'type' => 'button'));
  * $form->show();
  * ```
  */
@@ -134,6 +134,8 @@ class HtmlFormInstallation extends HtmlForm
             <link rel="apple-touch-icon" type="image/png" href="layout/apple-touch-icon.png" sizes="180x180" />
 
             <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/fontawesome/css/fontawesome.css" />
+            <link rel="stylesheet" type="text/css" href="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/fontawesome/css/solid.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
 
             <script type="text/javascript" src="'.ADMIDIO_URL.FOLDER_LIBS_CLIENT.'/jquery/dist/jquery.min.js"></script>

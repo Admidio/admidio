@@ -34,7 +34,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $loginMenu = $page->getMenu();
-$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('login_form', ADMIDIO_URL.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));
@@ -65,7 +65,7 @@ if($gSettingsManager->getBool('enable_auto_login'))
 {
     $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'), false);
 }
-$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => THEME_URL.'/icons/key.png'));
+$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'fa-key'));
 $page->addHtml($form->show());
 
 if($gSettingsManager->getBool('registration_enable_module'))

@@ -52,7 +52,6 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @throws AdmException
      * @return array<string,string|array>
      */
     private function buildItem($id, $link, $text, $icon, $desc = '')
@@ -61,13 +60,6 @@ class Menu
         if (preg_match('/^http(s?):\/\//', $link) === 0)
         {
             $link = ADMIDIO_URL . $link;
-        }
-
-        // if icon is imagefile or imageurl then show image
-        if (preg_match('/^http(s?):\/\//', $icon) === 0 && admStrIsValidFileName($icon, true)
-        && (StringUtils::strEndsWith($icon, '.png', false) || StringUtils::strEndsWith($icon, '.jpg', false)))
-        {
-            $icon = THEME_URL . '/icons/' . $icon;
         }
 
         return array(
@@ -86,7 +78,6 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @throws AdmException
      */
     public function addItem($id, $link, $text, $icon, $desc = '')
     {
@@ -129,7 +120,6 @@ class Menu
      * @param string $text
      * @param string $icon
      * @param string $desc
-     * @throws AdmException
      */
     public function insertItem($position, $id, $link, $text, $icon, $desc = '')
     {
@@ -177,7 +167,7 @@ class Menu
                         <li class="media">
                             <div class="media-left">
                                 <a id="menu_'.$this->id.'_'.$item['id'].'" href="'.$item['link'].'">
-                                    <img class="media-object" src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />
+                                    <i class="fas fa-fw '.$item['icon'].' fa-2x"></i>
                                 </a>
                             </div>
                             <div class="media-body">
@@ -204,10 +194,11 @@ class Menu
             }
             else
             {
+                $iconHtml = TableUserField::getIconHtml($item['icon'], $item['text']);
                 $html .= '
                     <li>
                         <a id="lmenu_'.$this->id.'_'.$item['id'].'" class="btn" href="'.$item['link'].'">
-                            <img src="'.$item['icon'].'" alt="'.strip_tags($item['text']).'" />'.$item['text'].'
+                            ' . $iconHtml . $item['text'] . '
                         </a>
                     </li>';
             }

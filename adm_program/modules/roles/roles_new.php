@@ -139,7 +139,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $rolesEditMenu = $page->getMenu();
-$rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('roles_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_function.php', array('rol_id' => $getRoleId, 'mode' => '2')), $page);
@@ -170,23 +170,23 @@ $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 if($gSettingsManager->getBool('enable_mail_module'))
 {
-    $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'), 3 => $gL10n->get('ROL_ALL_GUESTS'));
+    $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
     $form->addSelectBox(
         'rol_mail_this_role', $gL10n->get('ROL_SEND_MAILS'), $selectBoxEntries,
         array(
             'defaultValue'                   => $role->getValue('rol_mail_this_role'),
             'showContextDependentFirstEntry' => false,
-            'helpTextIdLabel'                => array('ROL_RIGHT_MAIL_THIS_ROLE_DESC', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'))
+            'helpTextIdLabel'                => $gL10n->get('ROL_RIGHT_MAIL_THIS_ROLE_DESC', array('ROL_RIGHT_MAIL_TO_ALL'))
         )
     );
 }
-$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'));
+$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'));
 $form->addSelectBox(
     'rol_this_list_view', $gL10n->get('ROL_SEE_ROLE_MEMBERSHIP'), $selectBoxEntries,
     array(
         'defaultValue'                   => $role->getValue('rol_this_list_view'),
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => array('ROL_RIGHT_THIS_LIST_VIEW_DESC', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'))
+        'helpTextIdLabel'                => $gL10n->get('ROL_RIGHT_THIS_LIST_VIEW_DESC', array('ROL_RIGHT_ALL_LISTS_VIEW'))
     )
 );
 $selectBoxEntries = array(0 => $gL10n->get('ROL_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('ROL_ASSIGN_EDIT_MEMBERS'));
@@ -245,71 +245,71 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     $form->openGroupBox('gb_authorization', $gL10n->get('SYS_PERMISSIONS'));
     $form->addCheckbox(
         'rol_assign_roles', $gL10n->get('ROL_RIGHT_ASSIGN_ROLES'), (bool) $role->getValue('rol_assign_roles'),
-        array('helpTextIdLabel' => 'ROL_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'roles.png')
+        array('helpTextIdLabel' => 'ROL_RIGHT_ASSIGN_ROLES_DESC', 'icon' => 'fa-user-tie')
     );
     $form->addCheckbox(
         'rol_all_lists_view', $gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW'), (bool) $role->getValue('rol_all_lists_view'),
-        array('icon' => 'lists.png')
+        array('icon' => 'fa-list')
     );
     $form->addCheckbox(
         'rol_approve_users', $gL10n->get('ROL_RIGHT_APPROVE_USERS'), (bool) $role->getValue('rol_approve_users'),
-        array('icon' => 'new_registrations.png')
-    );
-    $form->addCheckbox(
-        'rol_edit_user', $gL10n->get('ROL_RIGHT_EDIT_USER'), (bool) $role->getValue('rol_edit_user'),
-        array('helpTextIdLabel' => 'ROL_RIGHT_EDIT_USER_DESC', 'icon' => 'group.png')
+        array('icon' => 'fa-address-card')
     );
     if($gSettingsManager->getBool('enable_mail_module'))
     {
         $form->addCheckbox(
             'rol_mail_to_all', $gL10n->get('ROL_RIGHT_MAIL_TO_ALL'), (bool) $role->getValue('rol_mail_to_all'),
-            array('icon' => 'email.png')
+            array('icon' => 'fa-envelope')
         );
     }
     $form->addCheckbox(
+        'rol_edit_user', $gL10n->get('ROL_RIGHT_EDIT_USER'), (bool) $role->getValue('rol_edit_user'),
+        array('helpTextIdLabel' => 'ROL_RIGHT_EDIT_USER_DESC', 'icon' => 'fa-user-friends')
+    );
+    $form->addCheckbox(
         'rol_profile', $gL10n->get('ROL_RIGHT_PROFILE'), (bool) $role->getValue('rol_profile'),
-        array('icon' => 'profile.png')
+        array('icon' => 'fa-user')
     );
     if((int) $gSettingsManager->get('enable_announcements_module') > 0)
     {
         $form->addCheckbox(
             'rol_announcements', $gL10n->get('ROL_RIGHT_ANNOUNCEMENTS'), (bool) $role->getValue('rol_announcements'),
-            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'announcements.png')
+            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-newspaper')
         );
     }
     if((int) $gSettingsManager->get('enable_dates_module') > 0)
     {
         $form->addCheckbox(
             'rol_dates', $gL10n->get('ROL_RIGHT_DATES'), (bool) $role->getValue('rol_dates'),
-            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'dates.png')
+            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-calendar-alt')
         );
     }
     if((int) $gSettingsManager->get('enable_photo_module') > 0)
     {
         $form->addCheckbox(
             'rol_photo', $gL10n->get('ROL_RIGHT_PHOTO'), (bool) $role->getValue('rol_photo'),
-            array('icon' => 'photo.png')
+            array('icon' => 'fa-image')
         );
     }
     if($gSettingsManager->getBool('enable_download_module'))
     {
         $form->addCheckbox(
             'rol_download', $gL10n->get('ROL_RIGHT_DOWNLOAD'), (bool) $role->getValue('rol_download'),
-            array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'download.png')
+            array('helpTextIdLabel' => 'ROL_RIGHT_DOWNLOAD_DESC', 'icon' => 'fa-download')
         );
     }
     if((int) $gSettingsManager->get('enable_guestbook_module') > 0)
     {
         $form->addCheckbox(
             'rol_guestbook', $gL10n->get('ROL_RIGHT_GUESTBOOK'), (bool) $role->getValue('rol_guestbook'),
-            array('icon' => 'guestbook.png')
+            array('icon' => 'fa-book')
         );
         // if not registered users can set comments than there is no need to set a role dependent right
         if(!$gSettingsManager->getBool('enable_gbook_comments4all'))
         {
             $form->addCheckbox(
                 'rol_guestbook_comments', $gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS'), (bool) $role->getValue('rol_guestbook_comments'),
-                array('icon' => 'comment.png')
+                array('icon' => 'fa-comment')
             );
         }
     }
@@ -317,7 +317,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     {
         $form->addCheckbox(
             'rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), (bool) $role->getValue('rol_weblinks'),
-            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'weblinks.png')
+            array('helpTextIdLabel' => 'ROL_MODULE_ADMINISTRATORS_DESC', 'icon' => 'fa-link')
         );
     }
     $form->closeGroupBox();
@@ -357,7 +357,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     $form->closeGroupBox();
 }
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'),
     (int) $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')

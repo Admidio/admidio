@@ -79,7 +79,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $linksCreateMenu = $page->getMenu();
-$linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // Html des Modules ausgeben
 if($getLinkId > 0)
@@ -109,7 +109,7 @@ $form->addEditor(
     'lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'),
     array('height' => '150px')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'),

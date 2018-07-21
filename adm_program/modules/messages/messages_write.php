@@ -207,7 +207,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // add back link to module menu
 $messagesWriteMenu = $page->getMenu();
-$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 {
@@ -262,7 +262,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_PM)
 
     $form->closeGroupBox();
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 
     // add form to html page
     $page->addHtml($form->show());
@@ -592,7 +592,8 @@ elseif (!isset($messageStatement))
                 'maxUploadSize'      => Email::getMaxAttachmentSize(),
                 'multiUploadLabel'   => $gL10n->get('MAI_ADD_ATTACHEMENT'),
                 'hideUploadField'    => true,
-                'helpTextIdLabel'    => array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))
+                'helpTextIdLabel'    => $gL10n->get('MAI_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
+                'icon'               => 'fa-paperclip'
             )
         );
     }
@@ -620,7 +621,7 @@ elseif (!isset($messageStatement))
         $form->closeGroupBox();
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 
     // add form to html page and show page
     $page->addHtml($form->show());
@@ -663,12 +664,10 @@ if (isset($messageStatement))
         $page->addHtml('
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
-                    </div>
-                    <div class="col-sm-4 text-right">' . $date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')) .
-                    '</div>
+                <div class="pull-left">
+                    <i class="fas fa-comment-alt"></i>' . $sentUser . '
+                </div>
+                <div class="pull-right text-right">' . $date->format($gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time')) .'
                 </div>
             </div>
             <div class="panel-body">'.

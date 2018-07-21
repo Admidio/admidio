@@ -581,7 +581,6 @@ Thüringen', NULL, NULL, 0, 0, 0, 0, 1, 6, 1, '2013-11-27T17:50:14', 1, '2013-11
 female.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, 1, 0, 0, 1, 1, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1, 14, 1, '2012-01-08 11:12:05', NULL, NULL),
-(14, 2, 'TEXT', 'AOL_INSTANT_MESSENGER', 'INS_AOL_INSTANT_MESSENGER', NULL, NULL, 'aim.png', NULL, 0, 0, 0, 0, 0, 1, 1, '2012-01-08 11:12:07', NULL, NULL),
 (22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'facebook.png', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 2, 1, '2012-01-08 11:11:40', NULL, NULL),
 (15, 2, 'TEXT', 'GOOGLE_PLUS', 'INS_GOOGLE_PLUS', 'INS_GOOGLE_PLUS_DESC', NULL, 'google_plus.png', 'https://plus.google.com/#user_content#/posts', 0, 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
 (16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'https://www.icq.com/people/#user_content#', 0, 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:07', NULL, NULL),

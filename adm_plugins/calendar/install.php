@@ -71,7 +71,7 @@ else
     $form->addInput('men_url', '', $pluginUrl, array('type' => 'hidden'));
     $form->addInput('men_url', $gL10n->get('ORG_URL'), $pluginUrl, array('property' => HtmlForm::FIELD_DISABLED));
 
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
     // add form to html page and show page
     $page->addHtml($form->show());

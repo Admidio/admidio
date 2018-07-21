@@ -298,7 +298,7 @@ switch($getMode)
 
         // add back link to module menu
         $organizationNewMenu = $page->getMenu();
-        $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+        $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
@@ -318,7 +318,7 @@ switch($getMode)
         );
         $form->addSubmitButton(
             'btn_forward', $gL10n->get('INS_SET_UP_ORGANIZATION'),
-            array('icon' => THEME_URL.'/icons/database_in.png', 'class' => ' col-sm-offset-3')
+            array('icon' => 'fa-wrench', 'class' => ' col-sm-offset-3')
         );
 
         // add form to html page and show page
@@ -393,7 +393,7 @@ switch($getMode)
 
         // show form
         $form = new HtmlForm('add_new_organization_form', ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', $page);
-        $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_URL.'/icons/forward.png'));
+        $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right'));
 
         // add form to html page and show page
         $page->addHtml($form->show());

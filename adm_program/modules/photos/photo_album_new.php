@@ -116,7 +116,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $photoAlbumMenu = $page->getMenu();
-$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if ($getMode === 'new')
 {
@@ -140,7 +140,7 @@ $form->addSelectBox(
         'property'                       => HtmlForm::FIELD_REQUIRED,
         'defaultValue'                   => $parentAlbumId,
         'showContextDependentFirstEntry' => false,
-        'helpTextIdLabel'                => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))
+        'helpTextIdLabel'                => $gL10n->get('PHO_PARENT_ALBUM_DESC', array('PHO_PHOTO_ALBUMS'))
     )
 );
 $form->addInput(
@@ -160,7 +160,7 @@ $form->addCheckbox(
     array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC')
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'),
     (int) $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')

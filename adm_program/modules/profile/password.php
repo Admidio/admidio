@@ -161,7 +161,7 @@ elseif($getMode === 'html')
                 $.post(action, $(this).serialize(), function(data) {
                     if (data === "success") {
                         passwordFormAlert.attr("class", "alert alert-success form-alert");
-                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
+                        passwordFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         passwordFormAlert.fadeIn("slow");
                         setTimeout(function() {
                             $("#admidio_modal").modal("hide");
@@ -169,7 +169,7 @@ elseif($getMode === 'html')
                     } else {
                         passwordFormAlert.attr("class", "alert alert-danger form-alert");
                         passwordFormAlert.fadeIn();
-                        passwordFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                        passwordFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                     }
                 });
             });
@@ -210,7 +210,7 @@ elseif($getMode === 'html')
         );
         $form->addSubmitButton(
             'btn_save', $gL10n->get('SYS_SAVE'),
-            array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+            array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
         );
         echo $form->show();
     echo '</div>';

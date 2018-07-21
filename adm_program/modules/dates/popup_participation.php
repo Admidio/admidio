@@ -19,11 +19,8 @@ $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int', array('requireValue'
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
 
 // Initialize local variables
-$disableAdditionalGuests = 4;
-$disableComments         = 4;
-$disableStatusAttend     = '';
-$disableStatusTentative  = '';
-$editUserStatus          = false;
+$disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
+$disableComments         = HtmlForm::FIELD_HIDDEN;
 
 // Get the date object
 $date = new TableDate($gDb, $getDateId);
@@ -53,11 +50,11 @@ if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('
 {
     if ((int) $date->getValue('dat_allow_comments') === 1)
     {
-        $disableComments = '';
+        $disableComments = HtmlForm::FIELD_DEFAULT;
     }
     if ((int) $date->getValue('dat_additional_guests') === 1)
     {
-        $disableAdditionalGuests = '';
+        $disableAdditionalGuests = HtmlForm::FIELD_DEFAULT;
     }
 }
 
@@ -115,15 +112,15 @@ $participationForm->addHtml('</div><div class="modal-footer">');
 $participationForm->openButtonGroup();
 $participationForm->addButton(
     'btn_attend_' . $getDateId, $gL10n->get('DAT_ATTEND'),
-    array('icon' => THEME_URL.'/icons/ok.png', 'class' => $disableStatusAttend)
+    array('icon' => 'fa-check-circle', 'class' => 'admidio-btn-event-attend')
 );
 $participationForm->addButton(
     'btn_tentative_' . $getDateId, $gL10n->get('DAT_USER_TENTATIVE'),
-    array('icon' => THEME_URL.'/icons/help_violett.png', 'class' => $disableStatusTentative)
+    array('icon' => 'fa-question-circle', 'class' => 'admidio-btn-event-tentative')
 );
 $participationForm->addButton(
     'btn_refuse_' . $getDateId, $gL10n->get('DAT_CANCEL'),
-    array('icon' => THEME_URL.'/icons/no.png')
+    array('icon' => 'fa-times-circle', 'class' => 'admidio-btn-event-cancel')
 );
 $participationForm->closeButtonGroup();
 $participationForm->addHtml('</div></div>');

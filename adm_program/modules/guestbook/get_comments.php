@@ -61,14 +61,13 @@ if ($getGbcGboId > 0)
             <div class="panel panel-info admidio-panel-comment" id="gbc_'.$gbcId.'">
                 <div class="panel-heading">
                     <div class="pull-left">
-                        <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/comment.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))).'" />&nbsp;'.
-                        $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name')));
+                        <i class="fas fa-comment"></i>' . $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name')));
 
             // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
             if(strlen($gbcEmail) > 0)
             {
-                echo '<a class="admidio-icon-link" href="mailto:'.$gbcEmail.'"><img src="'. THEME_URL. '/icons/email.png"
-                    alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'" /></a>';
+                echo '<a class="admidio-icon-link" href="mailto:'.$gbcEmail.'">
+                    <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', array($gbcEmail)).'"></i></a>';
             }
             echo '</div>
             <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gSettingsManager->getString('system_date').' '.$gSettingsManager->getString('system_time'));
@@ -77,11 +76,11 @@ if ($getGbcGboId > 0)
             if ($gCurrentUser->editGuestbookRight())
             {
                 echo '
-                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('cid' => $gbcId)).'"><img
-                    src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('cid' => $gbcId)).'">
+                    <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcId, 'database_id' => $gbcId, 'database_id_2' => $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'"><img
-                    src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'gbc', 'element_id' => 'gbc_'.$gbcId, 'database_id' => $gbcId, 'database_id_2' => $gbComment->getValue('gbo_id'), 'name' => $gL10n->get('GBO_COMMENT_BY', array($gbComment->getValue('gbc_name'))))).'">
+                    <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
             echo '</div>
             </div>
@@ -94,10 +93,10 @@ if ($getGbcGboId > 0)
             {
                 echo '
                 <div class="btn-group" role="group">
-                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')"><img
-                        src="'. THEME_URL. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</button>
-                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')"><img
-                        src="'. THEME_URL. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</button>
+                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 10, 'id' => $gbcId)).'\')">
+                        <i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_UNLOCK').'</button>
+                    <button class="btn btn-default" onclick="callUrlHideElement(\'gbc_'.$gbcId.'\', \''.safeUrl('guestbook_function.php', array('mode' => 5, 'id' => $gbcId)).'\')">
+                        <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_REMOVE').'</button>
                 </div>';
             }
             echo '</div>';
@@ -117,9 +116,8 @@ if ($getGbcGboId > 0)
         {
             // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
             echo '
-            <button type="button" class="btn btn-default" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('id' => $getGbcGboId)).'\'"><img
-                src="'. THEME_URL. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
-                title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
+            <button type="button" class="btn btn-default" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_comment_new.php', array('id' => $getGbcGboId)).'\'">
+                <i class="fas fa-pencil-alt"></i>'.$gL10n->get('GBO_WRITE_COMMENT').'</button>';
         }
     }
 }

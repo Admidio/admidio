@@ -173,8 +173,8 @@ if($plgDatesResult['numResults'] > 0)
             $textPrev = substr($textPrev, 0, $plg_dates_show_preview + 15);
             $textPrev = substr($textPrev, 0, strrpos($textPrev, ' ')).' ...
                 <a class="'. $plg_link_class. '"  target="'. $plg_link_target. '"
-                    href="'.safeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => $plgDate->getValue('dat_id'))). '"><span
-                    class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> '.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
+                    href="'.safeUrl($plg_link_url, array('view_mode' => 'html', 'view' => 'detail', 'id' => $plgDate->getValue('dat_id'))). '"><i
+                    class="fas fa-plus-circle" aria-hidden="true"></i>'.$gL10n->get('PLG_SIDEBAR_DATES_MORE').'</a>';
             $textPrev = pluginDatesCloseTags($textPrev);
 
             echo '<div>'.$textPrev.'</div>';

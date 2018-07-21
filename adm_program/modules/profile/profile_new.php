@@ -153,7 +153,7 @@ $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/zxcvbn/dist/zxcvbn
 
 // add back link to module menu
 $profileEditMenu = $page->getMenu();
-$profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // create html form
 $form = new HtmlForm('edit_profile_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_save.php', array('user_id' => $getUserId, 'new_user' => $getNewUser)), $page);
@@ -259,8 +259,8 @@ foreach($gProfileFields->getProfileFields() as $field)
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '
                             <a id="password_link" class="btn" data-toggle="modal" data-target="#admidio_modal"
-                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'"><img src="'. THEME_URL. '/icons/key.png"
-                                alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
+                                href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/password.php', array('usr_id' => $getUserId)).'">
+                                <i class="fas fa-key"></i>'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
                 $form->addLine();
@@ -290,7 +290,7 @@ foreach($gProfileFields->getProfileFields() as $field)
 
         if(strlen($gProfileFields->getProperty($usfNameIntern, 'usf_description')) > 0)
         {
-            $helpId = array('user_field_description', $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'));
+            $helpId = $gProfileFields->getProperty($gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'), 'usf_description');
         }
 
         // code for different field types
@@ -448,11 +448,11 @@ if($getNewUser === 2 && $gSettingsManager->getBool('enable_registration_captcha'
 if($getNewUser === 2)
 {
     // Registrierung
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL.'/icons/email.png'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 }
 else
 {
-    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 }
 
 if($getNewUser === 0)

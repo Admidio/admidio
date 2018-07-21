@@ -114,7 +114,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $menuCreateMenu = $page->getMenu();
-$menuCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$menuCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // alle aus der DB aus lesen
 $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
@@ -207,16 +207,18 @@ if((bool) $menu->getValue('men_node') === false)
     );
 }
 
-$arrayIcons  = admFuncGetDirectoryEntries(THEME_PATH . '/icons');
-$defaultIcon = array_search($menu->getValue('men_icon', 'database'), $arrayIcons, true);
-$form->addSelectBox(
-    'men_icon', $gL10n->get('SYS_ICON'), $arrayIcons,
-    array('defaultValue' => $defaultIcon, 'showContextDependentFirstEntry' => true)
+$form->addInput(
+    'men_icon', $gL10n->get('SYS_ICON'), $menu->getValue('men_icon', 'database'),
+    array(
+        'maxLength' => 100,
+        'helpTextIdLabel' => $gL10n->get('SYS_FONT_AWESOME_DESC', array('<a href="https://fontawesome.com/icons?d=gallery&s=brands,solid&m=free" target="_blank">', '</a>')),
+        'class' => 'form-control-small'
+    )
 );
 
 $form->addSubmitButton(
     'btn_save', $gL10n->get('SYS_SAVE'),
-    array('icon' => THEME_URL.'/icons/disk.png')
+    array('icon' => 'fa-check')
 );
 
 // add form to html page and show page

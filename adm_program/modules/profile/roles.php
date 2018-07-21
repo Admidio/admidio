@@ -85,7 +85,7 @@ if($getInline)
                     success: function(data) {
                         if (data === "success") {
                             rolesFormAlert.attr("class", "alert alert-success form-alert");
-                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                            rolesFormAlert.html("<i class=\"fas fa-check\"></i><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                             rolesFormAlert.fadeIn("slow");
                             setTimeout(function() {
                                 $("#admidio_modal").modal("hide");
@@ -97,7 +97,7 @@ if($getInline)
                         } else {
                             rolesFormAlert.attr("class", "alert alert-danger form-alert");
                             rolesFormAlert.fadeIn();
-                            rolesFormAlert.html("<span class=\"glyphicon glyphicon-exclamation-sign\"></span>" + data);
+                            rolesFormAlert.html("<i class=\"fas fa-exclamation-circle\"></i>" + data);
                         }
                     }
                 });
@@ -122,7 +122,7 @@ else
 
     // add back link to module menu
     $rolesMenu = $page->getMenu();
-    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // show headline of module
@@ -265,31 +265,28 @@ while($row = $statement->fetch())
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/info.png"
-                             alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-                                 <img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
+                          <i class="fas fa-trash admidio-opacity-0"></i>';
     }
 
     // show icon with edit user right if leader has this right
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/profile_edit.png"
-                             alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+        $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<img class="admidio-icon-info" src="'.THEME_URL.'/icons/roles.png"
-                             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+        $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights
     if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $leaderRights .= '<img class="admidio-icon-link" src="'. THEME_URL. '/icons/dummy.png" alt="dummy" />';
+        $leaderRights .= '<i class="fas fa-trash admidio-opacity-0"></i>';
     }
     $columnValues[] = $leaderRights;
 
@@ -298,7 +295,7 @@ while($row = $statement->fetch())
 $html .= $table->show();
 
 $html .= '
-    <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_URL.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+    <button class="btn-primary btn" id="btn_save" type="submit"><i class=\"fas fa-check\"></i>'.$gL10n->get('SYS_SAVE').'</button>
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>';
 

@@ -94,7 +94,7 @@ if (is_file($configPath))
             $gL10n->get('SYS_DATABASE_NO_LOGIN_CONFIG_FILE', array($e->getText())),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
             $gL10n->get('INS_CONTINUE_INSTALLATION'),
-            'layout/forward.png'
+            'fa-arrow-circle-right'
         );
         // => EXIT
     }
@@ -111,7 +111,7 @@ if (is_file($configPath))
             $gL10n->get('INS_INSTALLATION_EXISTS'),
             '../index.php',
             $gL10n->get('SYS_OVERVIEW'),
-            'layout/application_view_list.png'
+            'fa-home'
         );
         // => EXIT
     }

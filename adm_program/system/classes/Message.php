@@ -185,11 +185,11 @@ class Message
                 {
                     $htmlButtons .= '
                         <button id="admButtonYes" class="btn" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'">
-                            <img src="'. THEME_URL. '/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />
+                            <i class="fas fa-check-circle"></i>
                             &nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;
                         </button>
                         <button id="admButtonNo" class="btn" type="button" onclick="history.back()">
-                            <img src="'. THEME_URL. '/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />
+                            <i class="fas fa-minus-circle"></i>
                             &nbsp;'.$gL10n->get('SYS_NO').'
                         </button>';
                 }
@@ -198,8 +198,7 @@ class Message
                     // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
                     $htmlButtons .= '
                         <a class="btn" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'
-                            <img src="'. THEME_URL. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'"
-                                title="'.$gL10n->get('SYS_NEXT').'" />
+                            <i class="fas fa-arrow-circle-right"></i>
                         </a>';
                 }
             }
@@ -211,8 +210,7 @@ class Message
                 {
                     $htmlButtons .= '
                         <a class="btn" href="javascript:void(0)" onclick="history.back()">
-                            <img src="'.THEME_URL.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"
-                                title="'.$gL10n->get('SYS_BACK').'" />'.
+                            <i class="fas fa-arrow-circle-left"></i>'.
                             $gL10n->get('SYS_BACK').
                         '</a>';
                 }

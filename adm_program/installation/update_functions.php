@@ -35,11 +35,11 @@ function checkLogin()
     {
         $message = '
             <div class="alert alert-danger alert-small" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                <i class="fas fa-exclamation-sign"></i>
                 <strong>' . $gL10n->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT') . '</strong>
             </div>';
 
-        showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+        showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', true);
         // => EXIT
     }
     else
@@ -59,11 +59,11 @@ function checkLogin()
         {
             $message = '
                 <div class="alert alert-danger alert-small" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    <i class="fas fa-exclamation-sign"></i>
                     <strong>' . $e->getText() . '</strong>
                 </div>';
 
-            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left', true);
             // => EXIT
         }
     }

@@ -30,7 +30,7 @@ if (isset($_POST['orga_shortname']))
             $gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'),
             safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')),
             $gL10n->get('SYS_BACK'),
-            'layout/back.png'
+            'fa-arrow-circle-left'
         );
         // => EXIT
     }
@@ -104,7 +104,7 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')))
+    array('icon' => 'fa-arrow-circle-left', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')))
 );
-$form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/forward.png'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'fa-arrow-circle-right'));
 echo $form->show();

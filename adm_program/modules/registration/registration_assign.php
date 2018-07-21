@@ -118,7 +118,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $registrationAssignMenu = $page->getMenu();
-$registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('
     <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', array($newUser->getValue('FIRST_NAME'). ' '. $newUser->getValue('LAST_NAME'))).'</p>
@@ -136,8 +136,8 @@ while($row = $usrStatement->fetch())
         $page->addHtml('<hr />');
     }
     $page->addHtml('<p>
-        <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'"><img
-            src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />');
+        <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">
+            <i class="fas fa-user"></i>'.$row['first_name'].' '.$row['last_name'].'</a><br />');
 
         if($row['address'] !== '')
         {
@@ -171,8 +171,8 @@ while($row = $usrStatement->fetch())
             {
                 $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'</p>
 
-                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'"><img
-                    src="'. THEME_URL. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
+                <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '6')).'\'">
+                    <i class="fas fa-key"></i>'.$gL10n->get('NWU_SEND_LOGIN').'</button>');
             }
         }
         else
@@ -180,8 +180,8 @@ while($row = $usrStatement->fetch())
             // Logindaten sind NICHT vorhanden -> diese nun zuordnen
             $page->addHtml('<p>'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'"><img
-                src="'. THEME_URL. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('new_user_id' => $getNewUserId, 'user_id' => $row['usr_id'], 'mode' => '1')).'\'">
+                <i class="fas fa-user-check"></i>'.$gL10n->get('NWU_ASSIGN_LOGIN').'</button>');
         }
     }
     else
@@ -194,16 +194,16 @@ while($row = $usrStatement->fetch())
             // Logindaten sind bereits vorhanden
             $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'.THEME_URL.'/icons/new_registrations.png"
-                alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'">
+                <i class="fas fa-user-check"></i>'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</button>');
         }
         else
         {
             // KEINE Logindaten vorhanden
             $page->addHtml('<p>'.$gL10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_shortname'))).'</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'"><img src="'. THEME_URL. '/icons/new_registrations.png"
-                alt="'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'" />'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$link.'\'">
+                <i class="fas fa-user-check"></i>'.$gL10n->get('NWU_ASSIGN_MEMBERSHIP').'</button>');
         }
     }
     ++$i;
@@ -216,8 +216,8 @@ $page->addHtml('
         <div class="panel-body">
             <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '</p>
 
-            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'"><img
-                src="'. THEME_URL. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
+            <button class="btn btn-default btn-primary" onclick="window.location.href=\''.$urlCreateNewUser.'\'">
+                <i class="fas fa-plus-circle"></i>'.$gL10n->get('SYS_CREATE_NEW_USER').'</button>
         </div>
     </div>'
 );

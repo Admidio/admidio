@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">UPDATE %PREFIX%_menu SET men_icon = 'fa-home' WHERE men_icon = 'home.png'</step>
+    <step id="20">UPDATE %PREFIX%_menu SET men_icon = 'fa-newspaper' WHERE men_icon = 'announcements.png'</step>
+    <step id="30">UPDATE %PREFIX%_menu SET men_icon = 'fa-download' WHERE men_icon = 'download.png'</step>
+    <step id="40">UPDATE %PREFIX%_menu SET men_icon = 'fa-envelope' WHERE men_icon = 'email.png'</step>
+    <step id="50">UPDATE %PREFIX%_menu SET men_icon = 'fa-image' WHERE men_icon = 'photo.png'</step>
+    <step id="60">UPDATE %PREFIX%_menu SET men_icon = 'fa-book' WHERE men_icon = 'guestbook.png'</step>
+    <step id="70">UPDATE %PREFIX%_menu SET men_icon = 'fa-list' WHERE men_icon = 'lists.png'</step>
+    <step id="80">UPDATE %PREFIX%_menu SET men_icon = 'fa-calendar-alt' WHERE men_icon = 'dates.png'</step>
+    <step id="90">UPDATE %PREFIX%_menu SET men_icon = 'fa-link' WHERE men_icon = 'weblinks.png'</step>
+    <step id="100">UPDATE %PREFIX%_menu SET men_icon = 'fa-list-alt' WHERE men_icon = 'mylist.png'</step>
+    <step id="110">UPDATE %PREFIX%_menu SET men_icon = 'fa-address-card' WHERE men_icon = 'new_registrations.png'</step>
+    <step id="120">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-friends' WHERE men_icon = 'user_administration.png'</step>
+    <step id="130">UPDATE %PREFIX%_menu SET men_icon = 'fa-database' WHERE men_icon = 'backup.png'</step>
+    <step id="140">UPDATE %PREFIX%_menu SET men_icon = 'fa-cog' WHERE men_icon = 'options.png'</step>
+    <step id="150">UPDATE %PREFIX%_menu SET men_icon = 'fa-user-tie' WHERE men_icon = 'roles.png'</step>
+    <step id="160">UPDATE %PREFIX%_menu SET men_icon = 'fa-stream' WHERE men_icon = 'application_view_tile.png'</step>
+    <step id="170">UPDATE %PREFIX%_user_fields SET usf_value_list = 'fa-mars|SYS_MALE
+fa-venus|SYS_FEMALE' WHERE usf_name_intern = 'GENDER' AND usf_value_list LIKE 'male.png|%'</step>
+    <step id="180">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-facebook' WHERE usf_name_intern = 'FACEBOOK' AND usf_icon = 'facebook.png'</step>
+    <step id="190">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-google-plus' WHERE usf_name_intern = 'GOOGLE_PLUS' AND usf_icon = 'google_plus.png'</step>
+    <step id="200">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-skype' WHERE usf_name_intern = 'SKYPE' AND usf_icon = 'skype.png'</step>
+    <step id="210">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-twitter' WHERE usf_name_intern = 'TWITTER' AND usf_icon = 'twitter.png'</step>
+    <step id="220">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-xing' WHERE usf_name_intern = 'XING' AND usf_icon = 'xing.png'</step>
+    <step id="230">UPDATE %PREFIX%_user_fields SET usf_icon = 'fab fa-yahoo' WHERE usf_name_intern = 'YAHOO_MESSENGER' AND usf_icon = 'yahoo.png'</step>
+    <step id="240">UPDATE %PREFIX%_user_fields SET usf_icon = null WHERE usf_icon = 'aim.png'</step>
+    <step>stop</step>
+</update>

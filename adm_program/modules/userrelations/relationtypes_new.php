@@ -47,7 +47,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $relationtypeEditMenu = $page->getMenu();
-$relationtypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$relationtypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('relationtype_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);
@@ -67,7 +67,7 @@ $form->addInput(
     array('maxLength' => 100)
 );
 $form->addCheckbox(
-    'urt_edit_user', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'),
+    'urt_edit_user', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationtype1->getValue('urt_edit_user'),
     array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
@@ -136,11 +136,11 @@ $form->addInput(
     array('maxLength' => 100)
 );
 $form->addCheckbox(
-    'urt_edit_user_inverse', $gL10n->get('REL_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'),
+    'urt_edit_user_inverse', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationtype2->getValue('urt_edit_user'),
     array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $relationtype1->getValue('urt_usr_id_create'), $relationtype1->getValue('urt_timestamp_create'),
     (int) $relationtype1->getValue('urt_usr_id_change'), $relationtype1->getValue('urt_timestamp_change')

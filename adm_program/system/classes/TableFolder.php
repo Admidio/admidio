@@ -576,8 +576,9 @@ class TableFolder extends TableAccess
         $link = '
             <ol class="breadcrumb">
                 <li>
-                    <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $rootFolderId)).'"><img
-                    src="'.THEME_URL.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a>
+                    <i class="fas fa-folder-open"></i>
+                    <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/downloads/downloads.php', array('folder_id' => $rootFolderId)).'">
+                        '.$gL10n->get('DOW_DOWNLOADS').'</a>
                 </li>'.
                 $currentNavigation.
                 '<li>'.$this->getValue('fol_name').'</li>

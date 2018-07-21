@@ -20,7 +20,7 @@ if (!is_file($configPath))
         $gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', array('config.php')),
         safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
-        'layout/back.png'
+        'fa-arrow-circle-left'
     );
     // => EXIT
 }
@@ -41,7 +41,7 @@ if (isset($_SESSION['table_prefix'])
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
         safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
         $gL10n->get('SYS_BACK'),
-        'layout/back.png'
+        'fa-arrow-circle-left'
     );
     // => EXIT
 }
@@ -54,7 +54,7 @@ $sqlQueryResult = querySqlFile($db, 'db.sql');
 
 if (is_string($sqlQueryResult))
 {
-    showNotice($sqlQueryResult, safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'layout/back.png');
+    showNotice($sqlQueryResult, safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
     // => EXIT
 }
 
@@ -148,8 +148,8 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, NULL, 0, 0, 0, 0, 8,  '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'PHONE\',        \'FAX\',        \'SYS_FAX\',       NULL, NULL, 0, 0, 0, 0, 9,  '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, NULL, 0, 0, 0, 0, 10, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'male.png|SYS_MALE
-female.png|SYS_FEMALE\', 0, 0, 0, 0, 11, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'fa-mars|SYS_MALE
+fa-venus|SYS_FEMALE\', 0, 0, 0, 0, 11, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, 1, 0, 1, 1, 12, '.$currUsrId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, 0, 0, 0, 0, 13, '.$currUsrId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
@@ -157,13 +157,13 @@ $db->query($sql); // TODO add more params
 // create profile fields of category social networks
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
                (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdSocialNetworks.', \'TEXT\', \'FACEBOOK\',              \'INS_FACEBOOK\',    \''.$gL10n->get('INS_FACEBOOK_DESC').'\',    \'facebook.png\',    \'https://www.facebook.com/#user_content#\',      0, 2, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'GOOGLE_PLUS\',           \'INS_GOOGLE_PLUS\', \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\', \'google_plus.png\', \'https://plus.google.com/#user_content#/posts\', 0, 3, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'ICQ\',                   \'INS_ICQ\',         \''.$gL10n->get('INS_ICQ_DESC').'\',         \'icq.png\',         \'https://www.icq.com/people/#user_content#\',    0, 4, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'SKYPE\',                 \'INS_SKYPE\',       \''.$gL10n->get('INS_SKYPE_DESC').'\',       \'skype.png\',       NULL,                                             0, 5, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'TWITTER\',               \'INS_TWITTER\',     \''.$gL10n->get('INS_TWITTER_DESC').'\',     \'twitter.png\',     \'https://twitter.com/#user_content#\',           0, 6, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'XING\',                  \'INS_XING\',        \''.$gL10n->get('INS_XING_DESC').'\',        \'xing.png\',        \'https://www.xing.com/profile/#user_content#\',  0, 7, '.$currUsrId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'YAHOO_MESSENGER\',       \'INS_YAHOO_MESSENGER\', NULL,                                    \'yahoo.png\',       NULL,                                             0, 8, '.$currUsrId.', \''. DATETIME_NOW.'\')';
+        VALUES ('.$categoryIdSocialNetworks.', \'TEXT\', \'FACEBOOK\',              \'INS_FACEBOOK\',    \''.$gL10n->get('INS_FACEBOOK_DESC').'\',    \'fab fa-facebook\',    \'https://www.facebook.com/#user_content#\',      0, 2, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'GOOGLE_PLUS\',           \'INS_GOOGLE_PLUS\', \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\', \'fab fa-google-plus\', \'https://plus.google.com/#user_content#/posts\', 0, 3, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'ICQ\',                   \'INS_ICQ\',         \''.$gL10n->get('INS_ICQ_DESC').'\',         \'icq.png\',            \'https://www.icq.com/people/#user_content#\',    0, 4, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'SKYPE\',                 \'INS_SKYPE\',       \''.$gL10n->get('INS_SKYPE_DESC').'\',       \'fab fa-skype\',       NULL,                                             0, 5, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'TWITTER\',               \'INS_TWITTER\',     \''.$gL10n->get('INS_TWITTER_DESC').'\',     \'fab fa-twitter\',     \'https://twitter.com/#user_content#\',           0, 6, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'XING\',                  \'INS_XING\',        \''.$gL10n->get('INS_XING_DESC').'\',        \'fab fa-xing\',        \'https://www.xing.com/profile/#user_content#\',  0, 7, '.$currUsrId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdSocialNetworks.', \'TEXT\', \'YAHOO_MESSENGER\',       \'INS_YAHOO_MESSENGER\', NULL,                                    \'fab fa-yahoo\',       NULL,                                             0, 8, '.$currUsrId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
 // create user relation types
@@ -257,22 +257,22 @@ $sql = 'INSERT INTO '.TBL_MENU.'
         VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
              , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'MEN_PLUGIN\', \'\')
-             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOWNLOADS\'), 1, 0, 3, 1, \'download\', \''.FOLDER_MODULES.'/downloads/downloads.php\', \'download.png\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \''.FOLDER_MODULES.'/lists/lists.php\', \'lists.png\', \'LST_LISTS\', \'LST_LISTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'mylist.png\', \'LST_MY_LIST\', \'SYS_MYLIST_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'announcements.png\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'photo.png\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'dates.png\', \'DAT_DATES\', \'DAT_DATES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'weblinks.png\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'backup.png\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'new_registrations.png\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'user_administration.png\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ROLES\'), 2, 0, 3, 1, \'roladm\', \''.FOLDER_MODULES.'/roles/roles.php\', \'roles.png\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'application_view_tile.png\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
+             , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/index.php\', \'fa-home\', \'SYS_OVERVIEW\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOWNLOADS\'), 1, 0, 3, 1, \'download\', \''.FOLDER_MODULES.'/downloads/downloads.php\', \'fa-download\', \'DOW_DOWNLOADS\', \'DOW_DOWNLOADS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 7, 1, \'lists\', \''.FOLDER_MODULES.'/lists/lists.php\', \'fa-list\', \'LST_LISTS\', \'LST_LISTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LISTS\'), 1, 0, 8, 1, \'mylist\', \''.FOLDER_MODULES.'/lists/mylist.php\', \'fa-list-alt\', \'LST_MY_LIST\', \'SYS_MYLIST_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \''.FOLDER_MODULES.'/announcements/announcements.php\', \'fa-newspaper\', \'ANN_ANNOUNCEMENTS\', \'ANN_ANNOUNCEMENTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'fa-image\', \'PHO_PHOTOS\', \'PHO_PHOTOS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \''.FOLDER_MODULES.'/guestbook/guestbook.php\', \'fa-book\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \''.FOLDER_MODULES.'/dates/dates.php\', \'fa-calendar-alt\', \'DAT_DATES\', \'DAT_DATES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'fa-link\', \'LNK_WEBLINKS\', \'LNK_WEBLINKS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \''.FOLDER_MODULES.'/backup/backup.php\', \'fa-database\', \'BAC_DATABASE_BACKUP\', \'BAC_DATABASE_BACKUP_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \''.FOLDER_MODULES.'/preferences/preferences.php\', \'fa-cog\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \''.FOLDER_MODULES.'/messages/messages_write.php\', \'fa-envelope\', \'SYS_EMAIL\', \'MAI_EMAIL_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, 0, 1, 1, \'newreg\', \''.FOLDER_MODULES.'/registration/registration.php\', \'fa-address-card\', \'NWU_NEW_REGISTRATIONS\', \'NWU_MANAGE_NEW_REGISTRATIONS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MEMBERS\'), 2, 0, 2, 1, \'usrmgt\', \''.FOLDER_MODULES.'/members/members.php\', \'fa-user-friends\', \'MEM_USER_MANAGEMENT\', \'MEM_USER_MANAGEMENT_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ROLES\'), 2, 0, 3, 1, \'roladm\', \''.FOLDER_MODULES.'/roles/roles.php\', \'fa-user-tie\', \'ROL_ROLE_ADMINISTRATION\', \'ROL_ROLE_ADMINISTRATION_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, 0, 5, 1, \'menu\', \''.FOLDER_MODULES.'/menu/menu.php\', \'fa-stream\', \'SYS_MENU\', \'SYS_MENU_DESC\')';
 $db->query($sql);
 
 // delete session data
@@ -285,7 +285,7 @@ if (!is_writable(ADMIDIO_PATH . FOLDER_DATA))
 {
     $text = $text.'
         <div class="alert alert-warning alert-small" role="alert">
-            <span class="glyphicon glyphicon-warning-sign"></span>
+            <i class="fas fa-exclamation-triangle"></i>
             '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', array('adm_my_files')).'
         </div>';
 }
@@ -297,15 +297,15 @@ $form = new HtmlFormInstallation('installation-form', ADMIDIO_HOMEPAGE.'donate.p
 $form->setFormDescription(
     $text,
     '<div class="alert alert-success form-alert">
-        <span class="glyphicon glyphicon-ok"></span>
+        <i class="fas fa-check"></i>
         <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong>
     </div>'
 );
 $form->openButtonGroup();
-$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
+$form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
 $form->addButton(
     'main_page', $gL10n->get('SYS_LATER'),
-    array('icon' => 'layout/application_view_list.png', 'link' => ADMIDIO_URL . '/adm_program/index.php')
+    array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/index.php')
 );
 $form->closeButtonGroup();
 echo $form->show();

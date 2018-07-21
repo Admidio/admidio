@@ -73,23 +73,12 @@ if($getMode === 1)
 
     if($postIcon !== '')
     {
-        try
+        if(!preg_match('/^fa-[a-z]*$/', $postIcon))
         {
-            admStrIsValidFileName($postIcon, true);
-        }
-        catch (AdmException $exception)
-        {
-            $exception->showHtml();
+            $gMessage->show($gL10n->get('SYS_INVALID_FONT_AWESOME'));
             // => EXIT
         }
-        // get the name of the icon to save it.
-        $arrayIcons = admFuncGetDirectoryEntries(THEME_PATH . '/icons');
-        if (!array_key_exists($postIcon, $arrayIcons))
-        {
-            $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
-            // => EXIT
-        }
-        $menu->setValue('men_icon', $arrayIcons[$postIcon]);
+        $menu->setValue('men_icon', $postIcon);
     }
 
     $menu->setValue('men_men_id_parent', $postIdParent);

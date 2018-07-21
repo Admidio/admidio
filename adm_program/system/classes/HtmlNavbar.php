@@ -25,7 +25,7 @@
  * // show link to create new announcement
  * $myNavbar->addItem(
  *     'menu_item_new_entry', ADMIDIO_URL . FOLDER_MODULES . '/mymodule/mymodule_new.php',
- *     $gL10n->get('SYS_CREATE'), 'add.png'
+ *     $gL10n->get('SYS_CREATE'), 'fa-plus-circle'
  * );
  * $myNavbar->show();
  * ´´´
@@ -142,19 +142,6 @@ class HtmlNavbar
             $url = ADMIDIO_URL . '/' . $url;
         }
 
-        // add THEME_URL to images unless the full URL is given
-        if ($icon !== '' && preg_match($urlStartRegex, $icon) === 0)
-        {
-            if (StringUtils::strStartsWith($icon, '/icons/'))
-            {
-                $icon = THEME_URL . $icon;
-            }
-            else
-            {
-                $icon = THEME_URL . '/icons/' . $icon;
-            }
-        }
-
         $item = array('id' => $id, 'text' => $text, 'icon' => $icon, 'url' => $url, 'class' => $class);
 
         if ($orientation === 'left')
@@ -188,16 +175,16 @@ class HtmlNavbar
      */
     protected function createHtmlLink(array $data)
     {
-        $icon = '';
+        $iconHtml = '';
 
         if ($data['icon'] !== '')
         {
-            $icon = '<img src="' . $data['icon'] . '" alt="' . strip_tags($data['text']) . '" />';
+            $iconHtml = TableUserField::getIconHtml($data['icon'], $data['text']);
         }
 
         $html = '
             <li class="' . $data['class'] . '">
-                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $icon . $data['text'] . '</a>
+                <a class="navbar-link" id="' . $data['id'] . '" href="' . $data['url'] . '">' . $iconHtml . $data['text'] . '</a>
             </li>';
 
         return $html;
@@ -227,7 +214,7 @@ class HtmlNavbar
                     $html .= '
                         <li class="dropdown ' . $menuEntry['class'] . '">
                             <a id="' . $menuEntry['id'] . '" href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-menu-hamburger"></span>' . $menuEntry['text'] . '<span class="caret"></span>
+                                <i class="fas fa-bars"></i>' . $menuEntry['text'] . '<span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">';
 

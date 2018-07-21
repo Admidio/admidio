@@ -74,24 +74,22 @@ if($getMode === 1)
 
     // add back link to module menu
     $messageMenu = $page->getMenu();
-    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
     $page->addHtml('
     <div class="message">
         <p class="lead">
-            <img src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />
-            '.$gL10n->get('MEM_MAKE_FORMER').'<br /><br />
-            <img src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
-            '.$gL10n->get('MEM_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'
+            <i class="fas fa-user-clock"></i>&nbsp;'.$gL10n->get('MEM_MAKE_FORMER').'<br /><br />
+            <i class="fas fa-trash-alt"></i>&nbsp;'.$gL10n->get('MEM_REMOVE_USER_DESC', array($gL10n->get('SYS_DELETE'))).'
         </p>
 
         <button id="btnFormer" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)).'\'"><img
-            src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
+            onclick="self.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)).'\'">
+            <i class="fas fa-user-clock"></i>'.$gL10n->get('SYS_FORMER').'</button>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <button id="btnDelete" type="button" class="btn btn-primary"
-            onclick="self.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)).'\'"><img
-            src="'.THEME_URL.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
+            onclick="self.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)).'\'">
+            <i class="fas fa-trash-alt"></i>'.$gL10n->get('SYS_DELETE').'</button>
     </div>');
 
     $page->show();

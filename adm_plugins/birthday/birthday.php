@@ -235,15 +235,15 @@ if($numberBirthdays > 0)
                     if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
                     {
                         $plgShowName .= '
-                            <a class="admidio-icon-link" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('usr_id' => $row['usr_id'])) . '"><img
-                            src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('SYS_WRITE_EMAIL').'" title="'.$gL10n->get('SYS_WRITE_EMAIL').'" /></a>';
+                            <a class="admidio-icon-link" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('usr_id' => $row['usr_id'])) . '">'.
+                                '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
                     }
                 }
                 elseif($plg_show_email_extern === 1 && strlen($row['email']) > 0)
                 {
                     $plgShowName .= '
-                        <a class="admidio-icon-link" href="mailto:'. $row['email']. '"><img
-                        src="'. THEME_URL. '/icons/email.png" alt="'.$gL10n->get('SYS_WRITE_EMAIL').'" title="'.$gL10n->get('SYS_WRITE_EMAIL').'" /></a>';
+                        <a class="admidio-icon-link" href="mailto:'. $row['email']. '">'.
+                            '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
                 }
 
                 // set css class and string for birthday today, in the future or in the past

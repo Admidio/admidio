@@ -67,7 +67,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $folderNewMenu = $page->getMenu();
-$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 
@@ -83,7 +83,7 @@ $form->addMultilineTextInput(
 );
 $form->addSubmitButton(
     'btn_create', $gL10n->get('DOW_CREATE_FOLDER'),
-    array('icon' => THEME_URL.'/icons/folder_create.png', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-plus-circle', 'class' => ' col-sm-offset-3')
 );
 
 // add form to html page and show page

@@ -129,7 +129,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $folderConfigMenu = $page->getMenu();
-$folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC', array($folder->getValue('fol_name'))).'</p>');
 
@@ -155,11 +155,11 @@ $form->addSelectBoxFromSql(
 );
 $form->addStaticControl(
     'adm_administrators', $gL10n->get('SYS_ADMINISTRATORS'), implode(', ', $adminRoles),
-    array('helpTextIdLabel' => array('DOW_ADMINISTRATORS_DESC', $gL10n->get('ROL_RIGHT_DOWNLOAD')))
+    array('helpTextIdLabel' => $gL10n->get('DOW_ADMINISTRATORS_DESC', array($gL10n->get('ROL_RIGHT_DOWNLOAD'))))
 );
 $form->addSubmitButton(
     'btn_save', $gL10n->get('SYS_SAVE'),
-    array('icon' => THEME_URL.'/icons/disk.png', 'class' => ' col-sm-offset-3')
+    array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
 // add form to html page and show page

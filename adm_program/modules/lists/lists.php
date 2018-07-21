@@ -91,14 +91,14 @@ if($gCurrentUser->manageRoles())
 {
     // show link to create new role
     $listsMenu->addItem('admMenuItemNewRole', ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php',
-                        $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+                        $gL10n->get('SYS_CREATE_ROLE'), 'fa-plus-circle');
 }
 
 if($gCurrentUser->manageRoles() && !$gCurrentUser->isAdministrator())
 {
     // show link to maintain categories
     $listsMenu->addItem('menu_item_maintain_categories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'ROL')),
-                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'fa-th-large');
 }
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit(); });', true);
@@ -113,7 +113,7 @@ if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of roles
     $listsMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
 }
 
 $previousCategoryId = 0;
@@ -203,33 +203,32 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->hasRightSendMailToRole($rolId) && $gSettingsManager->getBool('enable_mail_module'))
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'"><img
-                        src="'. THEME_URL. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>&nbsp;');
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"></i></a>');
                 }
 
                 // show link to export vCard if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {
-                    $page->addHtml('<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'"><img
-                                    src="'. THEME_URL. '/icons/vcard.png"
-                                    alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"
-                                    title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'" /></a>');
+                    $page->addHtml('
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => '8', 'rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', array($role->getValue('rol_name'))).'"></i></a>');
                 }
 
                 // link to assign or remove members if you are allowed to do it
                 if($role->allowedToAssignMembers($gCurrentUser))
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'"><img
-                        src="'.THEME_URL.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'"></i></a>');
                 }
 
                 // edit roles of you are allowed to assign roles
                 if($gCurrentUser->manageRoles())
                 {
                     $page->addHtml('
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'"><img
-                        src="'.THEME_URL.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'">'.
+                        '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_EDIT_ROLE').'"></i></a>');
                 }
             $page->addHtml('</div>
         </div>

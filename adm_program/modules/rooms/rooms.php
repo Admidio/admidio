@@ -34,11 +34,11 @@ $page->enableModal();
 // get module menu
 $roomsMenu = $page->getMenu();
 // show back link
-$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 // show link to create new room
 $roomsMenu->addItem(
     'menu_item_new_room', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),
-    $gL10n->get('SYS_CREATE_VAR', array($textRoom)), 'add.png'
+    $gL10n->get('SYS_CREATE_VAR', array($textRoom)), 'fa-plus-circle'
 );
 
 if((int) $gSettingsManager->get('system_show_create_edit') === 1)
@@ -107,16 +107,15 @@ else
         <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="admidio-panel-heading-icon" src="'. THEME_URL. '/icons/home.png" alt="'. $room->getValue('room_name'). '" />'
-                     . $room->getValue('room_name').'
+                    <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
                 </div>
                 <div class="pull-right text-right">
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => $room->getValue('room_id'), 'headline' => $textRoom)).'"><img
-                        src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => $room->getValue('room_id'), 'headline' => $textRoom)).'">
+                        <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.$room->getValue('room_id'),
-                        'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_id'))).'"><img
-                        src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
+                        'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_id'))).'">
+                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
                 </div>
             </div>
             <div class="panel-body">

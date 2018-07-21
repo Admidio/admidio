@@ -165,17 +165,17 @@ echo '
     <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
 </div>
 <div class="modal-body row">
-    <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_URL.'/icons/error_big.png" alt="Icon" /></div>
+    <div class="col-xs-2"><i class="fas fa-times-circle fa-3x" style="color: #f93535;"></i></div>
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, array($getName, '')).'</div>
 </div>
 <div class="modal-footer">
     <button id="btn_yes" class="btn btn-default" type="button" onclick="callUrlHideElement(\''.$getElementId.'\', \''.$url.'\''.$callbackFunction.')">
-        <img src="'.THEME_URL.'/icons/ok.png" alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
+        <i class="fas fa-check-circle"></i>'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;
     </button>
     <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal">
-        <img src="'.THEME_URL.'/icons/error.png" alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'
+        <i class="fas fa-minus-circle"></i>'.$gL10n->get('SYS_NO').'
     </button>
     <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal">
-        <img src="'.THEME_URL.'/icons/close.png" alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'
+        <i class="fas fa-window-close"></i>'.$gL10n->get('SYS_CLOSE').'
     </button>
 </div>';

@@ -223,6 +223,11 @@ hr {
     margin-bottom: 15px;
 }
 
+.admidio-media-menu .media-left {
+    min-width: 45px;
+    max-width: 45px;
+}
+
 .ekko-lightbox-nav-overlay a:link,
 .ekko-lightbox-nav-overlay a:visited,
 .ekko-lightbox-nav-overlay a:hover,
@@ -271,6 +276,14 @@ hr {
     width: 0;
 }
 
+.admidio-opacity-0 {
+    opacity: 0.0;
+}
+
+.admidio-opacity-reduced {
+    opacity: 0.4;
+}
+
 /**************************************************/
 /* Links */
 /**************************************************/
@@ -301,27 +314,59 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
-.admidio-icon-link img,
-.admidio-icon-info,
-.admidio-icon-help,
-.btn img,
-.dropdown-toggle span.glyphicon {
-    border: none;
-    vertical-align: text-top;
-    margin-left: 3px;
-    height: 16px;
+.btn .fas,
+.btn .fab,
+.panel-title .fas,
+.navbar-link .fas,
+.checkbox .fas,
+.panel-heading .pull-left .fas,
+.admidio-profile-user-right .fas {
+    margin-right: 6px;
 }
 
-.navbar-link img,
-.btn img,
-.alert .glyphicon,
-.btn,
-.dropdown-toggle span.glyphicon {
+.control-label .fas,
+.control-label .fab,
+.control-label img,
+.form-control-static .fab,
+.form-control-static img {
+    margin-right: 6px;
+    font-size: 11pt;
+}
+
+.admidio-list-roles-assign .fas,
+.table th .fas,
+.table td .fas {
+    margin-left: 6px;
+}
+
+.fa-exclamation-triangle {
+    color: #dacc32;
+}
+
+.admidio-btn-event-attend {
+    color: #008000 !important;
+}
+
+.admidio-btn-event-tentative {
+    color: #800080 !important;
+}
+
+.admidio-btn-event-cancel {
+    color: #f93535 !important;
+}
+
+.admidio-info-icon {
+    color: #4496dd;
+    cursor: help;
+    margin-left: 6px;
+}
+
+.alert .fas,
+.dropdown-toggle i.fas {
     margin-right: 5px;
 }
 
-.admidio-icon-info,
-.admidio-icon-help {
+.admidio-icon-info {
     cursor: help;
     margin-right: 2px;
 }
@@ -544,9 +589,13 @@ input[type="time"] {
 
 .admidio-form-group-required label:after,
 .admidio-form-required-notice span:after {
-    content: url('../icons/bullet_red.png');
+    font-family: "Font Awesome 5 Free";
+    font-size: 6pt;
+    content: "\f111";
+    color: #d91515;
     white-space: nowrap;
-    vertical-align: top;
+    vertical-align: super;
+    margin-left: 3px;
 }
 
 .admidio-form-required-notice {
@@ -590,6 +639,7 @@ input[type="time"] {
 .panel-heading {
     display: inline-block;
     width: 100%;
+    font-size: 12pt;
 }
 
 .panel-heading a:link,
@@ -645,7 +695,6 @@ input[type="time"] {
 
 .panel-primary > .panel-heading {
     color: #333333;
-    font-size: 12pt;
     font-weight: bold;
     letter-spacing: 0.1em;
     background-color: transparent;

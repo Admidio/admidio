@@ -89,7 +89,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $announcementsMenu = $page->getMenu();
-$announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('announcements_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements_function.php', array('ann_id' => $getAnnId, 'headline' => $getHeadline, 'mode' => '1')), $page);
@@ -105,7 +105,7 @@ $form->addEditor(
     'ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'),
     array('property' => HtmlForm::FIELD_REQUIRED, 'height' => '400')
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
     (int) $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'),
     (int) $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')

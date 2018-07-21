@@ -144,14 +144,14 @@ $page->addJavascript('
 
 // add back link to module menu
 $ecardMenu = $page->getMenu();
-$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if($gCurrentUser->isAdministrator())
 {
     // show link to system preferences of announcements
     $ecardMenu->addItem(
         'menu_item_preferences', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'ecards')),
-        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right'
+        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right'
     );
 }
 
@@ -266,8 +266,8 @@ $form->addEditor(
 );
 $form->closeGroupBox();
 $form->openButtonGroup();
-$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_URL. '/icons/eye.png'));
-$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_URL. '/icons/email.png'));
+$form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => 'fa-eye'));
+$form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => 'fa-envelope'));
 $form->closeButtonGroup();
 
 // add form to html page and show page

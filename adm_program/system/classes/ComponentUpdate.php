@@ -92,25 +92,28 @@ class ComponentUpdate extends Component
         $maxUpdateStep = 0;
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
-        try
+        if($currentVersionArray[0] > 1)
         {
-            // open xml file for this version
-            $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
-        }
-        catch (\UnexpectedValueException $exception)
-        {
-            return 0;
-        }
-
-        // go step by step through the SQL statements until the last one is found
-        foreach ($xmlObject->children() as $updateStep)
-        {
-            if ((string) $updateStep === self::UPDATE_STEP_STOP)
+            try
             {
-                break;
+                // open xml file for this version
+                $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
+            }
+            catch (\UnexpectedValueException $exception)
+            {
+                return 0;
             }
 
-            $maxUpdateStep = (int) $updateStep['id'];
+            // go step by step through the SQL statements until the last one is found
+            foreach ($xmlObject->children() as $updateStep)
+            {
+                if ((string) $updateStep === self::UPDATE_STEP_STOP)
+                {
+                    break;
+                }
+
+                $maxUpdateStep = (int) $updateStep['id'];
+            }
         }
 
         return $maxUpdateStep;

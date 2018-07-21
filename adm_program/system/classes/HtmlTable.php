@@ -514,10 +514,10 @@ class HtmlTable extends HtmlTableBasic
         switch ($messageType)
         {
             case 'warning':
-                $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>' . $message . '</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>' . $message . '</div>';
                 break;
             case 'error':
-                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-exclamation-sign"></span>' . $message . '</div>';
+                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><i class="fas fa-exclamation-sign"></i>' . $message . '</div>';
                 break;
             default:
                 $this->messageNoRowsFound = $message;

@@ -159,26 +159,18 @@ a.btn {
 /* Settings for all icons */
 /**************************/
 
-.admidio-icon-link img,
-.admidio-icon-info,
-.admidio-icon-help,
-.btn img {
-    border: none;
-    vertical-align: text-top;
-    margin-left: 3px;
-    height: 16px;
+.btn .fas {
+    margin-right: 6px;
 }
 
-.navbar-link img,
-.btn img,
-.alert .glyphicon,
-.btn {
+.alert .fas {
     margin-right: 5px;
 }
 
-.admidio-icon-info {
+.admidio-info-icon {
+    color: #4496dd;
     cursor: help;
-    margin-right: 2px;
+    margin-left: 6px;
 }
 
 .pagination img {
@@ -365,10 +357,15 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     color: #ffffff;
 }
 
-.admidio-form-group-required label:after, .admidio-form-required-notice span:after {
-    content: url('../layout/bullet_red.png');
+.admidio-form-group-required label:after,
+.admidio-form-required-notice span:after {
+    font-family: "Font Awesome 5 Free";
+    font-size: 6pt;
+    content: "\f111";
+    color: #d91515;
     white-space: nowrap;
-    vertical-align: top;
+    vertical-align: super;
+    margin-left: 3px;
 }
 
 .admidio-form-required-notice {

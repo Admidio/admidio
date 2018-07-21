@@ -62,7 +62,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $relationEditMenu = $page->getMenu();
-$relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('relation_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('usr_id' => $getUsrId, 'mode' => '1')), $page);
@@ -175,7 +175,7 @@ $form->addSelectBoxFromSql(
     'usr_id2', $gL10n->get('SYS_MEMBER'), $gDb, $sqlData,
     array('property' => HtmlForm::FIELD_REQUIRED, 'search' => true)
 );
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_URL.'/icons/disk.png'));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 
 // add form to html page and show page
 $page->addHtml($form->show());

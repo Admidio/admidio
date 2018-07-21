@@ -84,7 +84,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 2)
     {
         $photoPresenterMenu->addItem(
             'menu_item_back_to_album', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)),
-            $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png'
+            $gL10n->get('PHO_BACK_TO_ALBUM'), 'fa-image'
         );
     }
 
@@ -93,7 +93,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 2)
     {
         $photoPresenterMenu->addItem(
             'menu_item_previous_photo', $urlPreviousImage,
-            $gL10n->get('PHO_PREVIOUS_PHOTO'), 'back.png'
+            $gL10n->get('PHO_PREVIOUS_PHOTO'), 'fa-arrow-alt-circle-left'
         );
     }
 
@@ -101,7 +101,7 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 2)
     {
         $photoPresenterMenu->addItem(
             'menu_item_next_photo', $urlNextImage,
-            $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png'
+            $gL10n->get('PHO_NEXT_PHOTO'), 'fa-arrow-alt-circle-right'
         );
     }
 }
@@ -121,12 +121,12 @@ if ((int) $gSettingsManager->get('photo_show_mode') === 0)
     // in popup mode show buttons for prev, next and close
     $page->addHtml('
     <div class="btn-group">
-        <button class="btn btn-default" onclick="window.location.href=\''.$urlPreviousImage.'\'"><img
-            src="'. THEME_URL. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</button>
-        <button class="btn btn-default" onclick="parent.window.close()"><img
-            src="'. THEME_URL. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" />'.$gL10n->get('SYS_CLOSE_WINDOW').'</button>
-        <button class="btn btn-default" onclick="window.location.href=\''.$urlNextImage.'\'"><img
-            src="'. THEME_URL. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</button>
+        <button class="btn btn-default" onclick="window.location.href=\''.$urlPreviousImage.'\'">
+            <i class="fas fa-arrow-alt-circle-left"></i>'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</button>
+        <button class="btn btn-default" onclick="parent.window.close()">
+            <i class="fas fa-window-close"></i>'.$gL10n->get('SYS_CLOSE_WINDOW').'</button>
+        <button class="btn btn-default" onclick="window.location.href=\''.$urlNextImage.'\'">
+            <i class="fas fa-arrow-alt-circle-right"></i>'.$gL10n->get('PHO_NEXT_PHOTO').'</button>
     </div>');
 }
 elseif ((int) $gSettingsManager->get('photo_show_mode') === 2)

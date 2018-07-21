@@ -22,7 +22,7 @@ if (ADMIDIO_VERSION_BETA > 0)
 
     $messageWarning .= '
         <div class="alert alert-warning alert-small" role="alert">
-            <span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
+            <i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('INS_WARNING_BETA_VERSION').'
         </div>';
 }
 
@@ -49,6 +49,6 @@ $form->addSelectBoxFromXml(
 
 $form->addHtml($messageWarning);
 
-$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'fa-arrow-circle-right'));
 
 echo $form->show();

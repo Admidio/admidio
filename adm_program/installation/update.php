@@ -54,7 +54,7 @@ catch (AdmException $e)
         $gL10n->get('SYS_DATABASE_NO_LOGIN', array($e->getText())),
         safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
         $gL10n->get('SYS_BACK'),
-        'layout/back.png'
+        'fa-arrow-circle-left'
     );
     // => EXIT
 }
@@ -118,7 +118,7 @@ if (FileSystemUtils::isUnix() && (!is_executable(ADMIDIO_PATH . FOLDER_DATA) || 
             $gL10n->get('INS_DATA_DIR_RIGHTS'),
             ADMIDIO_URL . '/adm_program/installation/index.php',
             $gL10n->get('SYS_RELOAD'),
-            'layout/forward.png'
+            'fa-arrow-circle-right'
         );
         // => EXIT
     }
@@ -138,7 +138,7 @@ if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA 
             $gL10n->get('INS_DELETE_CONFIG_FILE', array(ADMIDIO_URL)),
             ADMIDIO_URL . '/adm_program/installation/index.php',
             $gL10n->get('SYS_OVERVIEW'),
-            'layout/application_view_list.png'
+            'fa-redo-alt'
         );
         // => EXIT
     }
@@ -153,7 +153,7 @@ if ($message !== '')
         $message,
         ADMIDIO_URL . '/adm_program/index.php',
         $gL10n->get('SYS_OVERVIEW'),
-        'layout/application_view_list.png'
+        'fa-home'
     );
     // => EXIT
 }
@@ -200,7 +200,7 @@ if ($installedDbVersion === '')
 {
     $message = '
         <div class="alert alert-danger alert-small" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <i class="fas fa-exclamation-sign"></i>
             <strong>' . $gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '</strong>
         </div>
         <p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>';
@@ -209,7 +209,7 @@ if ($installedDbVersion === '')
         $message,
         ADMIDIO_URL . '/adm_program/index.php',
         $gL10n->get('SYS_OVERVIEW'),
-        'layout/application_view_list.png',
+        'fa-home',
         true
     );
     // => EXIT
@@ -263,13 +263,13 @@ if ($getMode === 1)
 
             $form->addHtml('
                 <div class="alert alert-warning alert-small" role="alert">
-                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    <i class="fas fa-exclamation-triangle"></i>
                     ' . $gL10n->get('INS_WARNING_BETA_VERSION') . '
                 </div>');
         }
         $form->addSubmitButton(
             'next_page', $gL10n->get('INS_UPDATE_DATABASE'),
-            array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED'))
+            array('icon' => 'fa-wrench', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED'))
         );
         echo $form->show();
     }
@@ -278,7 +278,7 @@ if ($getMode === 1)
     {
         $message = '
             <div class="alert alert-success form-alert">
-                <span class="glyphicon glyphicon-ok"></span>
+                <i class="fas fa-check"></i>
                 <strong>' . $gL10n->get('INS_DATABASE_IS_UP_TO_DATE') . '</strong>
             </div>
             <p>' . $gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED') . '</p>';
@@ -287,7 +287,7 @@ if ($getMode === 1)
             $message,
             ADMIDIO_URL . '/adm_program/index.php',
             $gL10n->get('SYS_OVERVIEW'),
-            'layout/application_view_list.png',
+            'fa-home',
             true
         );
         // => EXIT
@@ -297,7 +297,7 @@ if ($getMode === 1)
     {
         $message = '
             <div class="alert alert-danger form-alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                <i class="fas fa-exclamation-sign"></i>
                 <strong>' . $gL10n->get('SYS_ERROR') . '</strong>
                 <p>' .
                     $gL10n->get(
@@ -311,7 +311,7 @@ if ($getMode === 1)
             $message,
             ADMIDIO_URL . '/adm_program/index.php',
             $gL10n->get('SYS_OVERVIEW'),
-            'layout/application_view_list.png',
+            'fa-home',
             true
         );
         // => EXIT
@@ -342,15 +342,15 @@ elseif ($getMode === 2)
     $form->setFormDescription(
         $gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', array(ADMIDIO_VERSION_TEXT)) . '<br /><br />' . $gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'),
         '<div class="alert alert-success form-alert">
-            <span class="glyphicon glyphicon-ok"></span>
+            <i class="fas fa-check"></i>
             <strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong>
         </div>'
     );
     $form->openButtonGroup();
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'fa-money-bill'));
     $form->addButton(
         'main_page', $gL10n->get('SYS_LATER'),
-        array('icon' => 'layout/application_view_list.png', 'link' => ADMIDIO_URL . '/adm_program/index.php')
+        array('icon' => 'fa-home', 'link' => ADMIDIO_URL . '/adm_program/index.php')
     );
     $form->closeButtonGroup();
     echo $form->show();

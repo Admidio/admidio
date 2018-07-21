@@ -24,7 +24,7 @@ elseif (!isset($_SESSION['language']))
         $gL10n->get('INS_LANGUAGE_NOT_CHOSEN'),
         safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')),
         $gL10n->get('SYS_BACK'),
-        'layout/back.png'
+        'fa-arrow-circle-left'
     );
     // => EXIT
 }
@@ -91,7 +91,7 @@ $form->addInput(
 $form->closeGroupBox();
 $form->addButton(
     'previous_page', $gL10n->get('SYS_BACK'),
-    array('icon' => 'layout/back.png', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')))
+    array('icon' => 'fa-arrow-circle-left', 'link' => safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'welcome')))
 );
-$form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
+$form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'fa-arrow-circle-right'));
 echo $form->show();

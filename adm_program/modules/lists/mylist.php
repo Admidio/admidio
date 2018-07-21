@@ -529,13 +529,13 @@ $myListMenu = $page->getMenu();
 if($gCurrentUser->isAdministrator())
 {
     $myListMenu->addItem('admMenuItemPreferencesLists', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'lists')),
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right');
 }
 
 // if mylist was not called directly then show link to navigate to previous page
 if($gNavigation->count() > 1)
 {
-    $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // show form
@@ -627,7 +627,7 @@ if($gCurrentUser->isAdministrator())
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/msg_window.php', array('message_id' => 'mylist_condition', 'inline' => 'true')).'">
-                        <img src="'.THEME_URL.'/icons/help.png" alt="Help" />
+                        <i class="fas fa-info-circle admidio-info-icon"></i>
                     </a>
                 </th>
             </tr>
@@ -638,27 +638,27 @@ if($gCurrentUser->isAdministrator())
     </div>');
 
 $form->openButtonGroup();
-$form->addButton('btn_add_column', $gL10n->get('LST_ADD_COLUMN'), array('icon' => THEME_URL.'/icons/add.png'));
+$form->addButton('btn_add_column', $gL10n->get('LST_ADD_COLUMN'), array('icon' => 'fa-plus-circle'));
 if($getListId > 0 && $list->getValue('lst_name') !== '')
 {
-    $form->addButton('btn_save_changes', $gL10n->get('LST_SAVE_CHANGES'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addButton('btn_save_changes', $gL10n->get('LST_SAVE_CHANGES'), array('icon' => 'fa-check'));
 }
 else
 {
-    $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => THEME_URL.'/icons/disk.png'));
+    $form->addButton('btn_save', $gL10n->get('LST_SAVE_CONFIGURATION'), array('icon' => 'fa-check'));
 }
 // your lists could be deleted, administrators are allowed to delete system configurations
 if(($gCurrentUser->isAdministrator() && $list->getValue('lst_global') == 1)
 || ((int) $gCurrentUser->getValue('usr_id') === (int) $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
 {
-    $form->addButton('btn_delete', $gL10n->get('LST_DELETE_CONFIGURATION'), array('icon' => THEME_URL.'/icons/delete.png'));
+    $form->addButton('btn_delete', $gL10n->get('LST_DELETE_CONFIGURATION'), array('icon' => 'fa-trash-alt'));
 }
 // current configuration can be duplicated and saved with another name
 if(strlen($list->getValue('lst_name')) > 0)
 {
     $form->addButton(
         'btn_copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('LST_CONFIGURATION'))),
-        array('icon' => THEME_URL.'/icons/application_double.png')
+        array('icon' => 'fa-clone')
     );
 }
 $form->closeButtonGroup();
@@ -728,7 +728,7 @@ $form->closeGroupBox();
 
 $form->addButton(
     'btn_show_list', $gL10n->get('LST_SHOW_LIST'),
-    array('icon' => THEME_URL.'/icons/list.png', 'class' => 'btn-primary')
+    array('icon' => 'fa-list-alt', 'class' => 'btn-primary')
 );
 
 // add form to html page and show page

@@ -1,0 +1,5 @@
+Short description to update the current lib
+
+1. Go to https://fontawesome.com/
+2. Download Font Awesome Free for the Web and unzip the file
+3. Copy only the files into the subfolders of libs/client/fontawesome/ that already exists there

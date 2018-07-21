@@ -356,7 +356,6 @@
   <string name="LNK_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="LNK_EMAIL_NOTIFICATION_TITLE">Ein neuer Weblink wurde angelegt</string>
   <string name="LNK_EMAIL_NOTIFICATION_MESSAGE">Es wurde ein neuer Weblink bei #VAR1# angelegt.\n\nLink: #VAR2#\nAngelegt von: #VAR3#\nAngelegt am: #VAR4#</string>
-  <string name="LNK_GO_TO">Gehe zu #VAR1#</string>
   <string name="LNK_LINK_ADDRESS">Linkadresse</string>
   <string name="LNK_LINK_NAME">Linkname</string>
   <string name="LNK_LINK_TARGET">Linkziel</string>
@@ -704,7 +703,6 @@
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Benutzer mit dem Recht #VAR1_BOLD# editierbar</string>
   <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann vom Benutzer im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten. Leiter einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
-  <string name="ORG_FIELD_DOWN">Profilfeld nach unten verschieben</string>
   <string name="ORG_FIELD_EXIST">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</string>
   <string name="ORG_FIELD_HIDDEN">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Benutzer sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Benutzer das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
@@ -715,7 +713,6 @@
   <string name="ORG_FIELD_REGISTRATION">Feld wird bei der Registrierung angezeigt</string>
   <string name="ORG_FIELD_REQUIRED">Pflichtfeld, muss immer ausgefüllt werden</string>
   <string name="ORG_FIELD_REQUIRED_DESC">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</string>
-  <string name="ORG_FIELD_UP">Profilfeld nach oben verschieben</string>
   <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</string>
@@ -789,7 +786,6 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
   <string name="ORG_VARIABLE_USERNAME">Benutzername des Benutzers aus dem jeweiligen E-Mailkontext</string>
   <!--Phrases only in Updatecheck-->
-  <string name="UPD_ADMIDIO">Zur Admidio-Updateseite wechseln</string>
   <string name="UPD_BETA_VERSION">Verfügbare Beta</string>
   <string name="UPD_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
   <string name="UPD_CURRENT_VERSION">Installiert</string>
@@ -803,7 +799,7 @@
   <string name="PHO_ALBUM_DELETE">Album Löschen</string>
   <string name="PHO_ALBUM_LOCK">Album sperren</string>
   <string name="PHO_ALBUM_LOCK_DESC">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt.</string>
   <string name="PHO_ALBUM_UNLOCK">Album entsperren</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">Das Album wurde erfolgreich angelegt / geändert</string>
   <string name="PHO_BACK_TO_ALBUM">zurück zum Album</string>
@@ -950,7 +946,6 @@
   <string name="PRO_YEARS">Jahre</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_DESC">Ist diese Einstellung gesetzt, dann darf ein Benutzer das Profil eines anderen Benutzers bearbeiten zu dem er in dieser Beziehung steht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben, bei einer symmetrischen Beziehung dürfen beide Benutzer das jeweils andere Profil bearbeiten und bei einer unidirektionalen Beziehung darf nur der Benutzer mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
-  <string name="REL_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung bearbeiten</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Es existieren noch keine Beziehungstypen. Beziehungstypen können in der Benutzerverwaltung erstellt werden.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_BACKWARD">Rückwärts</string>
@@ -961,8 +956,6 @@
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirektional</string>
   <!--Phrases only in Rolesmodule-->
   <string name="ROL_ACTIV_ROLES">Aktive Rollen</string>
-  <string name="ROL_ALL_GUESTS">Alle Besucher der Seite</string>
-  <string name="ROL_ALL_MEMBERS">Alle angemeldeten Benutzer</string>
   <string name="ROL_ANNUALLY">Jährlich</string>
   <string name="ROL_ASSIGN_EDIT_MEMBERS">Mitglieder zuordnen und bearbeiten</string>
   <string name="ROL_DELETE_NO_DEFAULT_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
@@ -993,8 +986,6 @@
   <string name="ROL_NEW_ROLE">Neue Rolle</string>
   <string name="ROL_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
   <string name="ROL_NO_DEFAULT_ROLE">Du kannst die Einstellung #VAR1_BOLD# nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</string>
-  <string name="ROL_ONLY_ROLE_MEMBERS">Nur Rollenmitglieder</string>
-  <string name="ROL_PREF" description="Abbreviation for Preferences">Einst.</string>
   <string name="ROL_ROLE_ASSIGNMENT">Rollenzuordnung für #VAR1# #VAR2#</string>
   <string name="ROL_QUARTERLY">Vierteljährlich</string>
   <string name="ROL_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen einsehen</string>
@@ -1027,17 +1018,12 @@
   <string name="ROL_SAVE_ROLES">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Rollenmitgliedschaft sehen</string>
   <string name="ROL_SEMIYEARLY">Halbjährlich</string>
-  <string name="ROL_SEND_MAIL_GUESTS">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</string>
-  <string name="ROL_SEND_MAIL_MEMBERS">Angemeldete Benutzer dürfen E-Mails an diese Rolle schreiben.</string>
-  <string name="ROL_SEND_MAIL_ROLE">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</string>
   <string name="ROL_SEND_MAILS">E-Mails zusenden</string>
   <string name="ROL_SHOW_MEMBERS">Mitglieder anzeigen</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
   <string name="ROL_UNIQUELY">Einmalig</string>
   <string name="ROL_VALID_FROM" description="Date valid from">Gültig von</string>
   <string name="ROL_VALID_TO" description="Date valid to">Gültig bis</string>
-  <string name="ROL_VIEW_LIST_MEMBERS">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</string>
-  <string name="ROL_VIEW_LIST_ROLE">Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.</string>
   <string name="ROL_WEEKDAY">Wochentag</string>
   <string name="ROL_WITHOUT_LEADER">Ohne Leiter</string>
   <!--Phrases only in Roommodule-->
@@ -1052,6 +1038,7 @@
   <string name="SYS_ACTIVATED">Aktiviert</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger hinzufügen</string>
   <string name="SYS_ADDRESS">Adresse</string>
+  <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
@@ -1155,6 +1142,7 @@
   <string name="SYS_EDIT">Bearbeiten</string>
   <string name="SYS_EDIT_ENTRY">Eintrag bearbeiten</string>
   <string name="SYS_EDIT_MEMBERS">Mitglieder bearbeiten</string>
+  <string name="SYS_EDIT_USER_IN_RELATION">Benutzerprofil dieser Beziehung kann bearbeitet werden</string>
   <string name="SYS_EDIT_VAR">#VAR1# bearbeiten</string>
   <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EMAIL">E-Mail</string>
@@ -1192,6 +1180,7 @@
   <string name="SYS_FOLDER">Ordner</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den #VAR2#Administrator#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
+  <string name="SYS_FONT_AWESOME_DESC">Du kannst auf unterschiedliche Arten ein Icon hinterlegen:\n1. Ein Icon des Webfonts "Font Awesome". Gehe dazu auf #VAR1#http://fontawesome.com#VAR2# und wähle ein kostenloses Icon der Sammlung "Solid" oder "Brands" aus. Als Präfix musst du noch fa- davor setzen. Wählst du also das Icon "user" aus, musst du hier "fa-user" eintragen.\n2. Ein JPEG oder PNG Icon. Trage dazu die vollständige URL zusammen mit dem Dateinamen des Icons ein. Alternativ kannst du das Icon auch im Theme im Ordner "icons" ablegen, dann brauchst du nur den Dateinamen anzugeben.</string>
   <string name="SYS_FORMER">Ehemaliger</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
   <string name="SYS_FONT">Schriftart</string>
@@ -1217,6 +1206,7 @@
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der Syntax von Font Awesome. Prüfe bitte, ob es diesen Namen auch als Icon gibt.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_IO_ERROR">E/A Fehler</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1354,6 +1344,7 @@
   <string name="SYS_RESTRICTIONS">Einschränkungen</string>
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>
+  <string name="SYS_ROLE_MEMBERS">Rollenmitglieder</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Raum</string>
   <string name="SYS_RSS_DISABLED">Der Web-Feed wurde vom Administrator deaktiviert.</string>
@@ -1445,4 +1436,5 @@
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
   <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
   <string name="SYS_YES">Ja</string>
+>>>>>>> master
 </resources>

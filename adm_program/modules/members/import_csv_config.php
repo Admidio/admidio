@@ -83,7 +83,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $importCsvConfigMenu = $page->getMenu();
-$importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 
@@ -165,7 +165,7 @@ $htmlFieldTable = '
     $htmlFieldTable .= '</tbody>
     </table>';
 $form->addHtml($htmlFieldTable);
-$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => THEME_URL.'/icons/database_in.png'));
+$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), array('icon' => 'fa-upload'));
 
 // add form to html page and show page
 $page->addHtml($form->show());

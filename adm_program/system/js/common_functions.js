@@ -58,7 +58,7 @@ function callUrlHideElement(elementId, url, callback) {
 
             var message = (data.length > 0) ? data : "Error: Entry not deleted";
             var messageText = $("#message_text");
-            messageText.html(messageText.html() + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-exclamation-sign\">" + message + "</span></div>");
+            messageText.html(messageText.html() + "<br /><div class=\"alert alert-danger form-alert\"><i class=\"fas fa-exclamation-circle\"></i>" + message + "</div>");
         }
     });
 }

@@ -137,8 +137,8 @@ if($getViewMode === 'html')
     if($getId > 0)
     {
         // add back link to module menu
-        $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+        $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
     }
 
     // Add new event
@@ -146,7 +146,7 @@ if($getViewMode === 'html')
     {
         $datesMenu->addItem(
             'admMenuItemAdd', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('headline' => $getHeadline)),
-            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'add.png'
+            $gL10n->get('SYS_CREATE_VAR', array($getHeadline)), 'fa-plus-circle'
         );
     }
 
@@ -179,7 +179,7 @@ if($getViewMode === 'html')
         $datesMenu->addForm($form->show());
 
         // show print button
-        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+        $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
 
         if($gSettingsManager->getBool('enable_dates_ical') || $gCurrentUser->isAdministrator() || $gCurrentUser->editDates())
         {
@@ -191,7 +191,7 @@ if($getViewMode === 'html')
         {
             $datesMenu->addItem(
                 'admMenuItemICal', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/ical_dates.php', array('headline' => $getHeadline, 'cat_id' => $getCatId, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)),
-                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png', 'right', 'menu_item_extras'
+                $gL10n->get('DAT_EXPORT_ICAL'), 'fa-download', 'right', 'menu_item_extras'
             );
         }
 
@@ -200,7 +200,7 @@ if($getViewMode === 'html')
             // if no calendar selectbox is shown, then show link to edit calendars
             $datesMenu->addItem(
                 'admMenuItemCategories', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories/categories.php', array('type' => 'DAT', 'title' => $gL10n->get('DAT_CALENDAR'))),
-                $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png', 'right', 'menu_item_extras'
+                $gL10n->get('DAT_MANAGE_CALENDARS'), 'fa-th-large', 'right', 'menu_item_extras'
             );
         }
 
@@ -209,7 +209,7 @@ if($getViewMode === 'html')
             // show link to system preferences of weblinks
             $datesMenu->addItem(
                 'admMenuItemPreferencesLinks', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/preferences.php', array('show_option' => 'events')),
-                $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras'
+                $gL10n->get('SYS_MODULE_PREFERENCES'), 'fa-cog', 'right', 'menu_item_extras'
             );
         }
     }
@@ -359,7 +359,7 @@ else
             {
                 $outputButtonIcal = '
                     <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('dat_id' => $dateId, 'mode' => 6)).'">
-                        <img src="'.THEME_URL.'/icons/database_out.png" alt="' . $gL10n->get('DAT_EXPORT_ICAL') . '" title="' . $gL10n->get('DAT_EXPORT_ICAL') . '" /></a>';
+                        <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"></i></a>';
             }
 
             // change and delete is only for users with additional rights
@@ -367,15 +367,15 @@ else
             {
                 $outputButtonCopy = '
                     <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'copy' => 1, 'headline' => $getHeadline)) . '">
-                        <img src="'.THEME_URL.'/icons/application_double.png" alt="' . $gL10n->get('SYS_COPY') . '" title="' . $gL10n->get('SYS_COPY') . '" /></a>';
+                        <i class="fas fa-clone" data-toggle="tooltip" title="'.$gL10n->get('SYS_COPY').'"></i></a>';
                 $outputButtonEdit = '
                     <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_new.php', array('dat_id' => $dateId, 'headline' => $getHeadline)) . '">
-                        <img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('SYS_EDIT') . '" title="' . $gL10n->get('SYS_EDIT') . '" /></a>';
+                        <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
                 $outputButtonDelete = '
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                         href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'dat', 'element_id' => 'dat_' . $dateId,
                         'name' => $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline, 'database_id' => $dateId)) . '">
-                        <img src="'.THEME_URL.'/icons/delete.png" alt="' . $gL10n->get('SYS_DELETE') . '" title="' . $gL10n->get('SYS_DELETE') . '" /></a>';
+                        <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
             }
         }
 
@@ -433,7 +433,7 @@ else
 
                     $outputLinkLocation .= '
                         <a class="admidio-icon-link" href="' . $routeUrl . '" target="_blank">
-                            <img src="'.THEME_URL.'/icons/map.png" alt="' . $gL10n->get('SYS_SHOW_ROUTE') . '" title="' . $gL10n->get('SYS_SHOW_ROUTE') . '" />
+                            <i class="fas fa-map" data-toggle="tooltip" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"></i>
                         </a>';
                 }
             }
@@ -475,6 +475,8 @@ else
         // if current user is allowed to participate then show buttons for participation
         if($date->allowedToParticipate())
         {
+            $buttonClass = '';
+
             if($date->getValue('dat_deadline') !== null)
             {
                 $outputDeadline = $date->getValue('dat_deadline', $gSettingsManager->getString('system_date'). ' ' . $gSettingsManager->getString('system_time'));
@@ -493,23 +495,26 @@ else
                 {
                     case ModuleDates::MEMBER_APPROVAL_STATE_INVITED:
                         $buttonText = $gL10n->get('DAT_USER_INVITED');
-                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/warning.png" alt="' . $gL10n->get('DAT_USER_INVITED') . '" title="' . $gL10n->get('DAT_USER_INVITED') . '"/>';
-                        break;
-                    case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
-                        $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
-                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>';
+                        $iconParticipationStatus = '<i class="fas fa-calendar-check"></i>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_ATTEND:
                         $buttonText = $gL10n->get('DAT_USER_ATTEND');
-                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_USER_ATTEND') . '" title="' . $gL10n->get('DAT_USER_ATTEND') . '"/>';
+                        $buttonClass = 'admidio-btn-event-attend';
+                        $iconParticipationStatus = '<i class="fas fa-check-circle"></i>';
+                        break;
+                    case ModuleDates::MEMBER_APPROVAL_STATE_TENTATIVE:
+                        $buttonText = $gL10n->get('DAT_USER_TENTATIVE');
+                        $buttonClass = 'admidio-btn-event-tentative';
+                        $iconParticipationStatus = '<i class="fas fa-question-circle"></i>';
                         break;
                     case ModuleDates::MEMBER_APPROVAL_STATE_REFUSED:
                         $buttonText = $gL10n->get('DAT_USER_REFUSED');
-                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_USER_REFUSED') . '" title="' . $gL10n->get('DAT_USER_REFUSED') . '"/>';
+                        $buttonClass = 'admidio-btn-event-cancel';
+                        $iconParticipationStatus = '<i class="fas fa-times-circle"></i>';
                         break;
                     default:
                         $buttonText = $gL10n->get('DAT_ATTEND');
-                        $iconParticipationStatus = '<img src="'.THEME_URL.'/icons/edit.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>';
+                        $iconParticipationStatus = '<i class="fas fa-edit"></i>';
                         break;
                 }
 
@@ -553,23 +558,23 @@ else
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
+                                <button class="btn btn-default dropdown-toggle ' . $buttonClass . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.$iconParticipationStatus.$buttonText.'
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_id' => $dateId)) . '"' . $disableStatusAttend . '>
-                                            <img src="'.THEME_URL.'/icons/ok.png" alt="' . $gL10n->get('DAT_ATTEND') . '" title="' . $gL10n->get('DAT_ATTEND') . '"/>' . $gL10n->get('DAT_ATTEND') . '
+                                        <a class="btn admidio-btn-event-attend" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '3', 'dat_id' => $dateId)) . '"' . $disableStatusAttend . '>
+                                            <i class="fas fa-check-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_ATTEND') . '
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
-                                            <img src="'.THEME_URL.'/icons/help_violett.png" alt="' . $gL10n->get('DAT_USER_TENTATIVE') . '" title="' . $gL10n->get('DAT_USER_TENTATIVE') . '"/>' . $gL10n->get('DAT_USER_TENTATIVE') . '
+                                        <a class="btn admidio-btn-event-tentative" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '7', 'dat_id' => $dateId)) . '"' . $disableStatusTentative . '>
+                                            <i class="fas fa-question-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_USER_TENTATIVE') . '
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="btn" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
-                                            <img src="'.THEME_URL.'/icons/no.png" alt="' . $gL10n->get('DAT_CANCEL') . '" title="' . $gL10n->get('DAT_CANCEL') . '"/>' . $gL10n->get('DAT_CANCEL') . '
+                                        <a class="btn admidio-btn-event-cancel" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/dates_function.php', array('mode' => '4', 'dat_id' => $dateId)) . '">
+                                            <i class="fas fa-times-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i>' . $gL10n->get('DAT_CANCEL') . '
                                         </a>
                                     </li>
                                 </ul>
@@ -620,13 +625,13 @@ else
                         {
                             $outputButtonParticipants = '
                                 <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                    <img src="'.THEME_URL.'/icons/list.png" alt="' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '" />' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '</button>';
+                                    <i class="fas fa-list"></i>' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '</button>';
                         }
                         else
                         {
                             $outputButtonParticipants = '
                                 <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                    <img src="'.THEME_URL.'/icons/list.png" alt="' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '" title="' . $gL10n->get('DAT_SHOW_PARTICIPANTS') . '" /></a>';
+                                    <i class="fas fa-list" data-toggle="tooltip" title="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'"></i></a>';
                         }
                     }
                 }
@@ -642,15 +647,13 @@ else
                         {
                             $outputButtonParticipantsEmail = '
                                 <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                    <img src="'.THEME_URL.'/icons/email.png" alt="' . $gL10n->get('SYS_WRITE_EMAIL') . '" />' . $gL10n->get('SYS_WRITE_EMAIL') . '
-                                </button>';
+                                    <i class="fas fa-envelope"></i>' . $gL10n->get('SYS_WRITE_EMAIL') . '</button>';
                         }
                         else
                         {
                             $outputButtonParticipantsEmail = '
                                 <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                    <img src="'.THEME_URL.'/icons/email.png" alt="' . $gL10n->get('SYS_WRITE_EMAIL') . '" title="' . $gL10n->get('SYS_WRITE_EMAIL') . '" />
-                                </a>';
+                                    <i class="fas fa-envelope" data-toggle="tooltip" title="'.$gL10n->get('SYS_WRITE_EMAIL').'"></i></a>';
                         }
                     }
                 }
@@ -664,15 +667,13 @@ else
                     {
                         $outputButtonParticipantsAssign = '
                             <button class="btn btn-default" onclick="window.location.href=\'' . $buttonURL . '\'">
-                                <img src="'.THEME_URL.'/icons/add.png" alt="' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '" />' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '
-                            </button>';
+                                <i class="fas fa-user-plus"></i>' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '</button>';
                     }
                     else
                     {
                         $outputButtonParticipantsAssign = '
                             <a class="admidio-icon-link" href="' . $buttonURL . '">
-                                <img src="'.THEME_URL.'/icons/add.png" alt="' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '" title="' . $gL10n->get('DAT_ASSIGN_PARTICIPANTS') . '" />
-                            </a>';
+                                <i class="fas fa-user-plus" data-toggle="tooltip" title="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'"></i></a>';
                     }
                 }
             }
@@ -760,7 +761,7 @@ else
                 <div class="panel panel-primary ' . $cssClassHighlight . '" id="dat_' . $dateId . '">
                     <div class="panel-heading">
                         <div class="pull-left">
-                            <img class="admidio-panel-heading-icon" src="'.THEME_URL.'/icons/dates.png" alt="' . $dateHeadline . '" />' .
+                            <i class="fas fa-calendar-alt"></i>' .
                             $date->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . '
                         </div>
                         <div class="pull-right text-right">' .

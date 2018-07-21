@@ -113,6 +113,9 @@ class HtmlPage
         $this->setHeadline($headline);
 
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/css/bootstrap.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/fontawesome.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/solid.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/fontawesome/css/brands.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/jquery/dist/jquery.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS_CLIENT . '/bootstrap/js/bootstrap.js');
         $this->addJavascriptFile(ADMIDIO_URL . '/adm_program/system/js/common_functions.js');
@@ -276,7 +279,7 @@ class HtmlPage
 
         while ($mainMenu = $mainMenuStatement->fetch())
         {
-            $menuIcon = '/dummy.png';
+            $menuIcon = 'fa-trash-alt admidio-opacity-0';
             $menuItems = array();
 
             $menuStatement = self::getMenuStatement($mainMenu['men_id']);
@@ -298,7 +301,7 @@ class HtmlPage
                     if ($gValidLogin && $row['men_name_intern'] === 'mail')
                     {
                         $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                        $menuIcon = '/icons/messages.png';
+                        $menuIcon = 'fa-comments';
                         $menuName = $gL10n->get('SYS_MESSAGES') . self::getUnreadMessagesBadge();
                     }
                     else
@@ -326,7 +329,7 @@ class HtmlPage
 
                 $this->menu->addItem(
                     'menu_item_'.$mainMenu['men_name_intern'], '', $menuName,
-                    'application_view_list.png', 'right', 'navbar', 'admidio-default-menu-item'
+                    'fa-align-justify', 'right', 'navbar', 'admidio-default-menu-item'
                 );
 
                 foreach ($menuItems as $menuItem)
@@ -344,12 +347,12 @@ class HtmlPage
             // show link to own profile
             $this->menu->addItem(
                 'menu_item_my_profile', ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', $gL10n->get('PRO_MY_PROFILE'),
-                'profile.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-user', 'right', 'navbar', 'admidio-default-menu-item'
             );
             // show logout link
             $this->menu->addItem(
                 'menu_item_logout', ADMIDIO_URL . '/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'),
-                'door_in.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-sign-out-alt', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
         else
@@ -357,12 +360,12 @@ class HtmlPage
             // show registration link
             $this->menu->addItem(
                 'menu_item_registration', ADMIDIO_URL . FOLDER_MODULES . '/registration/registration.php', $gL10n->get('SYS_REGISTRATION'),
-                'new_registrations.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-address-card', 'right', 'navbar', 'admidio-default-menu-item'
             );
             // show login link
             $this->menu->addItem(
                 'menu_item_login', ADMIDIO_URL . '/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'),
-                'key.png', 'right', 'navbar', 'admidio-default-menu-item'
+                'fa-key', 'right', 'navbar', 'admidio-default-menu-item'
             );
         }
     }
@@ -484,7 +487,7 @@ class HtmlPage
             $headerContent .= '<script type="text/javascript">
                 $(function() {
                     $("[data-toggle=\'popover\']").popover();
-                    $(".admidio-icon-info, .admidio-icon-link img, [data-toggle=tooltip]").tooltip();
+                    $("[data-toggle=tooltip]").tooltip();
                     ' . $this->javascriptContentExecute . '
                 });
             </script>';
@@ -774,7 +777,7 @@ class HtmlPage
     {
         global $gL10n, $gValidLogin, $gSettingsManager, $gDb, $gCurrentUser;
 
-        $menuIcon = '/dummy.png';
+        $menuIcon = 'fa-trash-alt admidio-opacity-0';
         $htmlMenu = '';
 
         $mainMenuStatement = self::getMainMenuStatement();
@@ -818,7 +821,7 @@ class HtmlPage
                             $unreadBadge = self::getUnreadMessagesBadge();
 
                             $menuUrl = ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php';
-                            $menuIcon = 'messages.png';
+                            $menuIcon = 'fa-comments';
                             $menuName = $gL10n->get('SYS_MESSAGES') . $unreadBadge;
                         }
 
@@ -854,7 +857,7 @@ class HtmlPage
 
             $this->menu->addItem(
                 'menu_item_private_message', ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', $gL10n->get('SYS_MESSAGES') . $unreadBadge,
-                'messages.png', 'right', 'menu_item_modules', 'admidio-default-menu-item'
+                'fa-comments', 'right', 'menu_item_modules', 'admidio-default-menu-item'
             );
         }
 

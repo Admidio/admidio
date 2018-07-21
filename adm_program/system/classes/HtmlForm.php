@@ -26,7 +26,7 @@
  * $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'),
  *                     array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  * $form->closeGroupBox();
- * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
+ * $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'fa-arrow-circle-right'));
  * $form->show();
  * ```
  */
@@ -212,7 +212,14 @@ class HtmlForm extends HtmlFormBasic
 
         if ($optionsAll['icon'] !== '')
         {
-            $value = '<img src="' . $optionsAll['icon'] . '" alt="' . $text . '" />' . $value;
+            if(StringUtils::strStartsWith($optionsAll['icon'], 'fa-'))
+            {
+                $value = '<i class="fas ' . $optionsAll['icon'] . '"></i>' . $value;
+            }
+            else
+            {
+                $value = '<img src="' . $optionsAll['icon'] . '" alt="' . $text . '" />' . $value;
+            }
         }
         $this->addElement('button');
         $this->addAttribute('class', 'btn btn-default');
@@ -328,8 +335,8 @@ class HtmlForm extends HtmlFormBasic
         $this->openControlStructure('captcha_puzzle', '', self::FIELD_DEFAULT, '', '', $attributes['class']);
         $onClickCode = 'document.getElementById(\'captcha\').src=\'' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php?\' + Math.random(); return false;';
         $this->addHtml('<img id="captcha" src="' . ADMIDIO_URL . FOLDER_LIBS_SERVER . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
-                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '"><img
-                            src="' . THEME_URL . '/icons/view-refresh.png" alt="' . $gL10n->get('SYS_RELOAD') . '" title="' . $gL10n->get('SYS_RELOAD') . '" /></a>');
+                        <a class="admidio-icon-link" href="javascript:void(0)" onclick="' . $onClickCode . '">
+                            <i class="fas fa-sync-alt fa-lg" data-toggle="tooltip" title="'.$gL10n->get('SYS_RELOAD').'"></i></a>');
         $this->closeControlStructure();
 
         // now add a row with a text field where the user can write the solution for the puzzle
@@ -406,14 +413,7 @@ class HtmlForm extends HtmlFormBasic
         if ($optionsAll['icon'] !== '')
         {
             // create html for icon
-            if (StringUtils::strStartsWith($optionsAll['icon'], 'http', false) && strValidCharacters($optionsAll['icon'], 'url'))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . $optionsAll['icon'] . '" title="' . $label . '" alt="' . $label . '" />';
-            }
-            elseif (admStrIsValidFileName($optionsAll['icon'], true))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $optionsAll['icon'] . '" title="' . $label . '" alt="' . $label . '" />';
-            }
+            $htmlIcon = TableUserField::getIconHtml($optionsAll['icon'], $label);
         }
 
         if ($optionsAll['helpTextIdLabel'] !== '')
@@ -648,6 +648,11 @@ class HtmlForm extends HtmlFormBasic
             $attributes['accept'] = implode(',', $optionsAll['allowedMimeTypes']);
         }
 
+        if ($optionsAll['icon'] === '')
+        {
+            $optionsAll['icon'] = 'fa-upload';
+        }
+
         // set specific css class for this field
         if ($optionsAll['class'] !== '')
         {
@@ -675,7 +680,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'],
-                                    $optionsAll['icon'], 'form-upload');
+                                    '', 'form-upload');
         $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', (string) $optionsAll['maxUploadSize']);
 
         // if multi uploads are enabled then the file upload field could be hidden
@@ -690,9 +695,8 @@ class HtmlForm extends HtmlFormBasic
             // show button to add new upload field to form
             $this->addHtml(
                 '<button type="button" id="btn_add_attachment_' . $id . '" class="btn btn-default">
-                    <img src="' . THEME_URL . '/icons/add.png" alt="' . $optionsAll['multiUploadLabel'] . '" />'
-                    . $optionsAll['multiUploadLabel'] .
-                '</button>'
+                    <i class="fas ' . $optionsAll['icon'] . '"></i>' . $optionsAll['multiUploadLabel'] . '
+                </button>'
             );
         }
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
@@ -1919,23 +1923,22 @@ class HtmlForm extends HtmlFormBasic
 
         if ($parameter === null)
         {
-            $text = $gL10n->get($textId);
-        }
-        else
-        {
-            if ($textId === 'user_field_description')
+            if(Language::isTranslationStringId($textId))
             {
-                $text = $gProfileFields->getProperty($parameter, 'usf_description');
+                $text = $gL10n->get($textId);
             }
             else
             {
-                $text = $gL10n->get($textId, array($parameter));
+                $text = $textId;
             }
         }
+        else
+        {
+            $text = $gL10n->get($textId, array($parameter));
+        }
 
-        return '<img class="admidio-icon-help" src="' . THEME_URL . '/icons/help.png"
-            title="' . $gL10n->get('SYS_NOTE') . '" alt="Help" data-toggle="popover" data-html="true"
-            data-trigger="hover" data-placement="auto" data-content="' . htmlspecialchars($text) . '" />';
+        return '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
+            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . htmlspecialchars($text) . '"></i>';
     }
 
     /**
@@ -1997,14 +2000,7 @@ class HtmlForm extends HtmlFormBasic
         if ($icon !== '')
         {
             // create html for icon
-            if (StringUtils::strStartsWith($icon, 'http', false) && strValidCharacters($icon, 'url'))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . $icon . '" title="' . $label . '" alt="' . $label . '" />';
-            }
-            elseif (admStrIsValidFileName($icon, true))
-            {
-                $htmlIcon = '<img class="admidio-icon-info" src="' . THEME_URL . '/icons/' . $icon . '" title="' . $label . '" alt="' . $label . '" />';
-            }
+            $htmlIcon = TableUserField::getIconHtml($icon, $label);
         }
 
         if ($helpTextId !== '')
