@@ -9,6 +9,10 @@
  ***********************************************************************************************
  */
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 /**
  * Mit dieser Klasse kann ein Email-Objekt erstellt
  * und anschliessend verschickt werden.
@@ -105,7 +109,7 @@ class Email extends PHPMailer
     public function __construct()
     {
         // Übername Einstellungen
-        global $gL10n, $gSettingsManager, $gDebug;
+        global $gL10n, $gSettingsManager, $gDebug, $gLogger;
 
         parent::__construct(true); // enable exceptions in PHPMailer
 
@@ -123,11 +127,11 @@ class Email extends PHPMailer
             $this->AuthType    = $gSettingsManager->getString('mail_smtp_authentication_type');
             $this->Username    = $gSettingsManager->getString('mail_smtp_user');
             $this->Password    = $gSettingsManager->getString('mail_smtp_password');
-            $this->Debugoutput = 'html';
 
             if ($gDebug)
             {
-                $this->SMTPDebug = 2;
+                $this->SMTPDebug = SMTP::DEBUG_SERVER;
+                $this->Debugoutput = $gLogger;
             }
         }
         else
@@ -152,9 +156,13 @@ class Email extends PHPMailer
         {
             $this->addAddress($address, $name);
         }
-        catch (phpmailerException $e)
+        catch (Exception $e)
         {
             return $e->errorMessage();
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
         }
 
         $this->emAddresses[] = $name;
@@ -174,9 +182,13 @@ class Email extends PHPMailer
         {
             $this->addCC($address, $name);
         }
-        catch (phpmailerException $e)
+        catch (Exception $e)
         {
             return $e->errorMessage();
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
         }
 
         $this->emAddresses[] = $name;
@@ -333,9 +345,13 @@ class Email extends PHPMailer
             $this->addReplyTo($address, $name);
             $this->setFrom($fromAddress, $fromName);
         }
-        catch (phpmailerException $e)
+        catch (Exception $e)
         {
             return $e->errorMessage();
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
         }
 
         return true;
@@ -399,18 +415,18 @@ class Email extends PHPMailer
 
         if (!$gValidLogin)
         {
-            $senderText .= self::CRLF . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
+            $senderText .= static::$LE . $gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
         }
 
         if($this->emSendAsHTML)
         {
-            $senderText .= self::CRLF . '<hr style="border: 1px solid;" />' . self::CRLF . self::CRLF;
+            $senderText .= static::$LE . '<hr style="border: 1px solid;" />' . static::$LE . static::$LE;
         }
         else
         {
-            $senderText .= self::CRLF .
+            $senderText .= static::$LE .
                 '*****************************************************************************************************************************' .
-                self::CRLF . self::CRLF;
+                static::$LE . static::$LE;
         }
 
         $this->emText .= $senderText;
@@ -427,7 +443,9 @@ class Email extends PHPMailer
 
     /**
      * Sends Emails with BCC addresses
-     * @throws phpmailerException
+     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     private function sendBccMails()
     {
@@ -477,7 +495,7 @@ class Email extends PHPMailer
     /**
      * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
      * recipients will be listed in the mail.
-     * @throws phpmailerException
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     private function sendCopyMail()
     {
@@ -491,21 +509,21 @@ class Email extends PHPMailer
         // add a separate header with info of the copy mail
         if($this->emSendAsHTML)
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF . '<hr style="border: 1px solid;" />' .
-                self::CRLF . self::CRLF;
+            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
+                static::$LE . static::$LE;
         }
         else
         {
-            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . self::CRLF .
+            $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
                 '*****************************************************************************************************************************' .
-                self::CRLF . self::CRLF;
+                static::$LE . static::$LE;
         }
 
         // if the flag emListRecipients is set than list all recipients of the mail
         if ($this->emListRecipients)
         {
-            $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':' . self::CRLF . self::CRLF .
-                implode(self::CRLF, $this->emAddresses) . self::CRLF . self::CRLF . $copyHeader;
+            $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':' . static::$LE . static::$LE .
+                implode(static::$LE, $this->emAddresses) . static::$LE . static::$LE . $copyHeader;
         }
 
         $this->emText = $copyHeader . $this->emText;
@@ -562,9 +580,13 @@ class Email extends PHPMailer
                 $this->sendCopyMail();
             }
         }
-        catch (phpmailerException $e)
+        catch (Exception $e)
         {
             return $e->errorMessage();
+        }
+        catch (\Exception $e)
+        {
+            return $e->getMessage();
         }
 
         // initialize recipient addresses so same email could be send to other recipients
