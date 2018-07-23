@@ -149,7 +149,7 @@ class FunctionClass
         $pregRepArray['/<%ecard_email_string%>/']         = noHTML($this->emailString);
 
         // make html in description secure
-        $ecardMessage = htmLawed(stripslashes($ecardMessage), array('safe' => 1));
+        $ecardMessage = Htmlawed::filter(stripslashes($ecardMessage), array('safe' => 1));
 
         // Hier wird die Nachricht ersetzt
         $pregRepArray['/<%ecard_message%>/']              = $ecardMessage;

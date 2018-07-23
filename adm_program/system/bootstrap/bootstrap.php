@@ -56,7 +56,6 @@ require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/logging.php');
 // Add shutdown function
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/shutdown.php');
 // Add some common functions
-require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmLawed/htmLawed.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/function.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/string.php');
 // Remove HTML & PHP-Code and escape all quotes from all request parameters
