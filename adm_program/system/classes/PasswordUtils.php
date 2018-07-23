@@ -7,6 +7,8 @@
  ***********************************************************************************************
  */
 
+use Hautelook\Phpass\PasswordHash;
+
 /**
  * This class provides static functions for different tasks for passwords and hashing
  * It used the "random_compat" lib to provide forward compatibility with the random_* functions that ship with PHP 7.0
