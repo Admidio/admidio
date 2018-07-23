@@ -13,12 +13,12 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'bootstrap.php')
     exit('This page may not be called directly!');
 }
 
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(dirname(dirname(__DIR__)));
 
 // Add init_globals and constants file
 // TODO: In future require config.php here
-require_once($rootPath . '/adm_program/system/init_globals.php');
-require_once($rootPath . '/adm_program/system/constants.php');
+require_once($rootPath . '/adm_program/system/bootstrap/init_globals.php');
+require_once($rootPath . '/adm_program/system/bootstrap/constants.php');
 
 // ERROR REPORTING
 // http://www.phptherightway.com/#error_reporting
@@ -48,20 +48,20 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
  * includes WITHOUT database connections
  */
 // Add polyfills for backwards compatibility with older PHP versions
-require_once(ADMIDIO_PATH . '/adm_program/system/polyfill.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/polyfill.php');
 // Add Class autoloader
-require_once(ADMIDIO_PATH . '/adm_program/system/autoload.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/autoload.php');
 // Enable Logging
-require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/logging.php');
 // Add shutdown function
-require_once(ADMIDIO_PATH . '/adm_program/system/shutdown.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/shutdown.php');
 // Add some common functions
 require_once(ADMIDIO_PATH . FOLDER_LIBS_SERVER . '/htmLawed/htmLawed.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/function.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/string.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/function.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/string.php');
 // Remove HTML & PHP-Code and escape all quotes from all request parameters
 // If debug is on and change is made, log it
-require_once(ADMIDIO_PATH . '/adm_program/system/global_request_params.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/bootstrap/global_request_params.php');
 
 // Force permanent HTTPS redirect
 if ($gForceHTTPS && !HTTPS)

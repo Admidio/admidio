@@ -67,7 +67,7 @@ define('ADMIDIO_URL_PATH', parse_url($g_root_path, PHP_URL_PATH)); // /subfolder
 
 // PATHS
 define('SERVER_PATH',  realpath($_SERVER['DOCUMENT_ROOT'])); // /var/www
-define('ADMIDIO_PATH', dirname(dirname(__DIR__))); // /var/www/subfolder
+define('ADMIDIO_PATH', dirname(dirname(dirname(__DIR__)))); // /var/www/subfolder
 define('CURRENT_PATH', realpath($_SERVER['SCRIPT_FILENAME'])); // /var/www/subfolder/adm_program/index.php
 
 // URLS
