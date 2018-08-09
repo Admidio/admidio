@@ -10,13 +10,6 @@
                 <?php
 
                 require(ADMIDIO_PATH . FOLDER_PLUGINS . '/login_form/login_form.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/birthday/birthday.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/calendar/calendar.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/random_photo/random_photo.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/sidebar_announcements/sidebar_announcements.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/sidebar_dates/sidebar_dates.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/sidebar_downloads/sidebar_downloads.php');
-                require(ADMIDIO_PATH . FOLDER_PLUGINS . '/sidebar_online/sidebar_online.php');
 
                 // create html page object and display Menu
                 $page = new HtmlPage();
