@@ -19,7 +19,12 @@ $rootPath = dirname(dirname(__DIR__));
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
-require_once(__DIR__ . '/config.php');
+
+// only include config file if it exists
+if (is_file(__DIR__ . '/config.php'))
+{
+    require_once(__DIR__ . '/config.php');
+}
 
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');

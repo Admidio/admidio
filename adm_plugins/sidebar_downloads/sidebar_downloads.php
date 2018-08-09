@@ -18,7 +18,12 @@ $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
 require_once($rootPath . '/adm_program/system/file_extension_icons.php');
-require_once(__DIR__ . '/config.php');
+
+// only include config file if it exists
+if (is_file(__DIR__ . '/config.php'))
+{
+    require_once(__DIR__ . '/config.php');
+}
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
