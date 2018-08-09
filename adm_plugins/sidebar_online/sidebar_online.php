@@ -24,8 +24,7 @@ if (is_file(__DIR__ . '/config.php'))
     require_once(__DIR__ . '/config.php');
 }
 
-// pruefen, ob alle Einstellungen in config.php gesetzt wurden
-// falls nicht, hier noch mal die Default-Werte setzen
+// set default values if there no value has been stored in the config.php
 if(!isset($plg_time_online) || !is_numeric($plg_time_online))
 {
     $plg_time_online = 10;

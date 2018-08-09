@@ -30,8 +30,7 @@ if (is_file(__DIR__ . '/config.php'))
 // initialize parameters
 $iconCode = null;
 
-// pruefen, ob alle Einstellungen in config.php gesetzt wurden
-// falls nicht, hier noch mal die Default-Werte setzen
+// set default values if there no value has been stored in the config.php
 if(!isset($plg_show_register_link) || !is_numeric($plg_show_register_link))
 {
     $plg_show_register_link = 1;

@@ -35,10 +35,14 @@ if(isset($_GET['ajax_change']) && $plg_ajax_change)
     header('Content-Type: text/html; charset=utf-8');
 }
 
-// Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen
+// set default values if there no value has been stored in the config.php
 if(!isset($plg_ajaxbox))
 {
     $plg_ajaxbox = 1;
+}
+if(!isset($plg_ajax_change))
+{
+    $plg_ajax_change = 1;
 }
 if(!isset($plg_link_target_termin))
 {
