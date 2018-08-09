@@ -18,10 +18,14 @@ $rootPath = dirname(dirname(__DIR__));
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
-require_once(__DIR__ . '/config.php');
 
-// pruefen, ob alle Einstellungen in config.php gesetzt wurden
-// falls nicht, hier noch mal die Default-Werte setzen
+// only include config file if it exists
+if (is_file(__DIR__ . '/config.php'))
+{
+    require_once(__DIR__ . '/config.php');
+}
+
+// set default values if there no value has been stored in the config.php
 if(!isset($plg_show_names_extern) || !is_numeric($plg_show_names_extern) || $plg_show_names_extern !== 1)
 {
     $plg_show_names_extern = 0;
@@ -88,6 +92,11 @@ if(!isset($plg_sort_sql) || $plg_sort_sql === '')
 else
 {
     $sqlSort = $plg_sort_sql;
+}
+
+if(!isset($plg_show_headline) || !is_numeric($plg_show_headline))
+{
+    $plg_show_headline = 1;
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
