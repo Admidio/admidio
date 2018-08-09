@@ -19,7 +19,7 @@ $plg_show_names_extern = 0;
 // 2 = Last name, First name (Mustermann, Hans)
 // 3 = First name (Hans)
 // 4 = Loginname (Hansi)
-$plg_show_names = 0;
+$plg_show_names = 1;
 
 // Show the age of the birthday person (only for registered users)
 // 0 - Don't show the age
