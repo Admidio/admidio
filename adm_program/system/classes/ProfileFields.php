@@ -642,7 +642,9 @@ class ProfileFields
                     }
                     break;
                 case 'URL':
-                    if (!$this->noValueCheck && admFuncCheckUrl($fieldValue) === false)
+                    $fieldValue = admFuncCheckUrl($fieldValue);
+
+                    if (!$this->noValueCheck && $fieldValue === false)
                     {
                         return false;
                     }

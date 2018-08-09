@@ -141,7 +141,9 @@ class TableGuestbook extends TableAccess
             }
             elseif ($columnName === 'gbo_homepage' && $newValue !== '')
             {
-                if (admFuncCheckUrl($newValue) === false)
+                $newValue = admFuncCheckUrl($newValue);
+
+                if ($newValue === false)
                 {
                     return false;
                 }
