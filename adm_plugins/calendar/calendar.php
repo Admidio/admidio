@@ -19,7 +19,12 @@ $rootPath = dirname(dirname(__DIR__));
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
-require_once(__DIR__ . '/config.php');
+
+// only include config file if it exists
+if (is_file(__DIR__ . '/config.php'))
+{
+    require_once(__DIR__ . '/config.php');
+}
 
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
@@ -30,10 +35,14 @@ if(isset($_GET['ajax_change']) && $plg_ajax_change)
     header('Content-Type: text/html; charset=utf-8');
 }
 
-// Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen
+// set default values if there no value has been stored in the config.php
 if(!isset($plg_ajaxbox))
 {
     $plg_ajaxbox = 1;
+}
+if(!isset($plg_ajax_change))
+{
+    $plg_ajax_change = 1;
 }
 if(!isset($plg_link_target_termin))
 {
