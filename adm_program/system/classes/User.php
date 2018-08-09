@@ -1684,6 +1684,16 @@ class User extends TableAccess
         $this->rolesMembershipLeader   = array();
         $this->rolesMembershipNoLeader = array();
     }
+    
+    /**
+     * Reset the count of invalid logins. After that it's possible for the user to try another login.
+     */
+    public function resetInvalidLogins()
+    {
+        $this->setValue('usr_date_invalid', null);
+        $this->setValue('usr_number_invalid', 0);
+        $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
+    }
 
     /**
      * Save all changed columns of the recordset in table of database. Therefore the class remembers if it's a new
@@ -1950,9 +1960,9 @@ class User extends TableAccess
         $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
         $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
         $this->setValue('usr_actual_login', DATETIME_NOW);
-        $this->setValue('usr_date_invalid', null);
-        $this->setValue('usr_number_invalid', 0);
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
+
+        $this->resetInvalidLogins();
     }
 
     /**

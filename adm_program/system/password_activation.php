@@ -34,10 +34,16 @@ try
     {
         // activate the new password
         $user->saveChangesWithoutRights();
+        // set new password
         $user->setPassword($user->getValue('usr_new_password'), false, false);
+        // reset the column usr_new_password
         $user->setPassword('', true, false);
         $user->setValue('usr_activation_code', '');
         $user->save();
+
+        // if user has tried login several times we should reset the invalid counter, 
+        // so he could login with the new password immediately
+        $user->resetInvalidLogins();
 
         $gMessage->setForwardUrl(ADMIDIO_URL.'/adm_program/system/login.php', 2000);
         $gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
