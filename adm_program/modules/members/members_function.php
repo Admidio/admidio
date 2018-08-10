@@ -29,45 +29,14 @@ require(__DIR__ . '/../../system/login_valid.php');
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('requireValue' => true));
 $getMode   = admFuncVariableIsValid($_GET, 'mode',   'int', array('requireValue' => true));
 
-// nur berechtigte User duerfen Funktionen aufrufen
-if(!$gCurrentUser->editUsers())
+// Only users with user-edit rights are allowed
+if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     // => EXIT
 }
 
-// nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
-if(isMember($getUserId))
-{
-    $thisOrga = true;
-}
-else
-{
-    $thisOrga = false;
-}
-
-if($getMode !== 1)
-{
-    // pruefen, ob der User noch in anderen Organisationen aktiv ist
-    $sql = 'SELECT rol_id
-              FROM '.TBL_MEMBERS.'
-        INNER JOIN '.TBL_ROLES.'
-                ON rol_id = mem_rol_id
-        INNER JOIN '.TBL_CATEGORIES.'
-                ON cat_id = rol_cat_id
-             WHERE rol_valid   = 1
-               AND cat_org_id <> ? -- $gCurrentOrganization->getValue(\'org_id\')
-               AND mem_begin  <= ? -- DATE_NOW
-               AND mem_end     > ? -- DATE_NOW
-               AND mem_usr_id  = ? -- $getUserId';
-    $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), DATE_NOW, DATE_NOW, $getUserId));
-    $otherOrgaCount = $statement->rowCount();
-
-    // User-Objekt anlegen
-    $user = new User($gDb, $gProfileFields, $getUserId);
-}
-
-if($getMode === 1)
+if ($getMode === 1)
 {
     // create html page object
     $page = new HtmlPage($gL10n->get('MEM_REMOVE_USER'));
@@ -95,20 +64,37 @@ if($getMode === 1)
     $page->show();
     exit();
 }
-elseif($getMode === 2)
+
+$orgId = (int) $gCurrentOrganization->getValue('org_id');
+
+if ($getMode === 3 || $getMode === 6)
 {
-    // User NUR aus der aktuellen Organisation entfernen
+    // Check if user is also in other organizations
+    $sql = 'SELECT COUNT(*) AS count
+              FROM '.TBL_MEMBERS.'
+        INNER JOIN '.TBL_ROLES.'
+                ON rol_id = mem_rol_id
+        INNER JOIN '.TBL_CATEGORIES.'
+                ON cat_id = rol_cat_id
+             WHERE rol_valid   = 1
+               AND cat_org_id <> ? -- $orgId
+               AND mem_begin  <= ? -- DATE_NOW
+               AND mem_end     > ? -- DATE_NOW
+               AND mem_usr_id  = ? -- $getUserId';
+    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $getUserId));
+    $isAlsoInOtherOrgas = $pdoStatement->fetchColumn() > 0;
+}
 
+// Create user-object
+$user = new User($gDb, $gProfileFields, $getUserId);
+
+if ($getMode === 2)
+{
+    // User has to be a member of this organization
+    // User could not delete himself
     // Administrators could not be deleted
-    if(!$gCurrentUser->isAdministrator() && $user->isAdministrator())
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-
-    // User muss zur aktuellen Orga dazugehoeren
-    // kein Suizid ermoeglichen
-    if(!$thisOrga || (int) $gCurrentUser->getValue('usr_id') === $getUserId)
+    if (!isMember($getUserId) || (int) $gCurrentUser->getValue('usr_id') === $getUserId
+    || (!$gCurrentUser->isAdministrator() && $user->isAdministrator()))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
@@ -123,118 +109,109 @@ elseif($getMode === 2)
         INNER JOIN '.TBL_CATEGORIES.'
                 ON cat_id = rol_cat_id
              WHERE rol_valid  = 1
-               AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+               AND (  cat_org_id = ? -- $orgId
                    OR cat_org_id IS NULL )
                AND mem_begin <= ? -- DATE_NOW
                AND mem_end    > ? -- DATE_NOW
                AND mem_usr_id = ? -- $getUserId';
-    $mglStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), DATE_NOW, DATE_NOW, $getUserId));
+    $pdoStatement = $gDb->queryPrepared($sql, array($orgId, DATE_NOW, DATE_NOW, $getUserId));
 
-    while($row = $mglStatement->fetch())
+    while ($row = $pdoStatement->fetch())
     {
-        // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
+        // invalidate all roles of this organization
         $member->setArray($row);
         $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
     }
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
+    $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
     // => EXIT
 }
-elseif($getMode === 3)
+elseif ($getMode === 3)
 {
-    // User aus der Datenbank loeschen
-
-    // only administrators are allowed to do this
-    if(!$gCurrentUser->isAdministrator())
+    // User must not be in any other organization
+    // User could not delete himself
+    // Only administrators are allowed to do this
+    if ($isAlsoInOtherOrgas || (int) $gCurrentUser->getValue('usr_id') === $getUserId || !$gCurrentUser->isAdministrator())
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
-    // User darf in keiner anderen Orga aktiv sein
-    // kein Suizid ermoeglichen
-    if($otherOrgaCount > 0 || (int) $gCurrentUser->getValue('usr_id') === $getUserId)
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        // => EXIT
-    }
-
-    $phrase = $gL10n->get('SYS_DELETE_DATA');
-
-    // User aus der Admidio Datenbank loeschen
+    // Delete user from database
     $user->delete();
+
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
+    // => EXIT
 }
-elseif($getMode === 4)
+elseif ($getMode === 4)
 {
-    // only administrators are allowed to send new login data
-    // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-    // nur an Mitglieder der eigenen Organisation schicken
-    if(!$gCurrentUser->isAdministrator() || !$gSettingsManager->getBool('enable_system_mails') || !$thisOrga)
+    // User must be member of this organization
+    // Only administrators are allowed to send new login data
+    // E-Mail support must be enabled
+    if (!isMember($getUserId) || !$gCurrentUser->isAdministrator() || !$gSettingsManager->getBool('enable_system_mails'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         // => EXIT
     }
 
-    if($gSettingsManager->getBool('enable_system_mails'))
+    try
     {
-        try
-        {
-            // neues Passwort generieren und abspeichern
-            $password = PasswordUtils::genRandomPassword(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
-            $user->setPassword($password);
-            $user->save();
+        // Generate new secure-random password and save it
+        $password = PasswordUtils::genRandomPassword(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
+        $user->setPassword($password);
+        $user->save();
 
-            // Mail an den User mit den Loginaten schicken
-            $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-            $sysmail->setVariable(1, $password);
-            $sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
-
-            $gMessage->setForwardUrl($gNavigation->getUrl());
-            $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
-            // => EXIT
-        }
-        catch(AdmException $e)
-        {
-            $e->showText();
-            // => EXIT
-        }
+        // Send mail with login data to user
+        $sysMail = new SystemMail($gDb);
+        $sysMail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+        $sysMail->setVariable(1, $password);
+        $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
     }
-}
-elseif($getMode === 5)
-{
-    // Fragen, ob Zugangsdaten verschickt werden sollen
-    $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 4)));
-    $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))));
+    catch (AdmException $e)
+    {
+        $e->showText();
+        // => EXIT
+    }
+
+    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
     // => EXIT
 }
-elseif($getMode === 6)
+elseif ($getMode === 5)
 {
-    if($thisOrga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
+    // Ask to send new login-data
+    $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 4)));
+    $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))));
+    // => EXIT
+}
+elseif ($getMode === 6)
+{
+    if (!$isAlsoInOtherOrgas && $gCurrentUser->isAdministrator())
     {
-        // only administrators are allowed to do this
-        // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
-        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 1)));
-        // => EXIT
-    }
-    elseif(!$thisOrga && $otherOrgaCount === 0 && $gCurrentUser->isAdministrator())
-    {
-        // only administrators are allowed to do this
-        // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
-        $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)));
-        $gMessage->show($gL10n->get('MEM_USER_DELETE', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
-        // => EXIT
+        if (isMember($getUserId))
+        {
+            // User is ONLY member of this organization -> ask if make to former member or delete completely
+            admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 1)));
+            // => EXIT
+        }
+        else
+        {
+            // User is not member of any organization -> ask if delete completely
+            $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 3)));
+            $gMessage->show($gL10n->get('MEM_USER_DELETE', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))), $gL10n->get('SYS_DELETE'));
+            // => EXIT
+        }
     }
     else
     {
-        // User kann nur aus dieser Orga entfernt werden
+        // User could only be removed from this organization -> ask so
         $gMessage->setForwardYesNo(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/members/members_function.php', array('usr_id' => $getUserId, 'mode' => 2)));
-        $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', array($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
+        $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))), $gL10n->get('SYS_REMOVE'));
         // => EXIT
     }
 }
 
-$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-$gMessage->show($phrase);
+$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 // => EXIT
