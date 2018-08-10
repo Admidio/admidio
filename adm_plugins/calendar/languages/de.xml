@@ -2,7 +2,7 @@
 <resources>
     <string name="PLG_CALENDAR_CURRENT_MONTH">Aktueller Monat</string>
     <string name="PLG_CALENDAR_MONTH">Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember</string>
-    <string name="PLG_CALENDAR_MORE"> (... weitere)</string>
+    <string name="PLG_CALENDAR_MORE">(... weitere)</string>
     <string name="PLG_CALENDAR_MONDAY_SHORT">Mo</string>
     <string name="PLG_CALENDAR_TUESDAY_SHORT">Di</string>
     <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Mi</string>

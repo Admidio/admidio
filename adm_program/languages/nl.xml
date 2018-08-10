@@ -178,7 +178,7 @@
   <string name="ECA_A_ECARD_FROM">Ecard gestuurd door</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Ecard module activeren</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">De Ecard module kan geactiveerd en gedeactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (Standaard: ja)</string>
-  <string name="ECA_GREETING_CARD">Ecard </string>
+  <string name="ECA_GREETING_CARD">Ecard</string>
   <string name="ECA_GREETING_CARDS">Ecards</string>
   <string name="ECA_GREETING_CARD_EDIT">Bewerk Ecard</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -693,7 +693,7 @@
   <string name="ORG_DATE_FORMAT">Datum formaat</string>
   <string name="ORG_DATE_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (Standaard: d.m.Y)</string>
   <string name="ORG_DIFFERENT_DATABASE_VERSION">Afwijkende databaseversie</string>
-  <string name="ORG_EDIT_PROFILE_FIELD"> Bewerk profielveld</string>
+  <string name="ORG_EDIT_PROFILE_FIELD">Bewerk profielveld</string>
   <string name="ORG_EMAIL_ALERTS">E-mail notificatie</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Alle leden van rollen met rechten voor #VAR1_BOLD# ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (Standaard: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha activatie</string>
@@ -875,7 +875,7 @@
   <string name="PRO_ADD_USER">Voeg gebruiker toe</string>
   <string name="PRO_ADD_USER_RELATION">Relatie maken</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Ingesteld door de rollen</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registratie werd bevestigd. De gebruiker kan nu inloggen bij het systeem.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registratie werd bevestigd. De gebruiker kan nu inloggen bij het systeem.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Lidmaatschap beëindigen</string>
   <string name="PRO_CANCEL_USER_RELATION">Relatie verwijderen</string>
   <string name="PRO_CHANGE_DATE">Datum aanpassen</string>

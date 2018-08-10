@@ -100,7 +100,7 @@
   <string name="DAT_REGISTRATION_POSSIBLE">Anmeldung zu diesem Termin ermöglichen</string>
   <string name="DAT_REMOVE_APPLICATION">Wollen Sie die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</string>
   <string name="DAT_RIGHT_VIEW_PARTICIPANTS">Teilnehmer können die Teilnehmerliste einsehen</string>
-  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden </string>
+  <string name="DAT_RIGHT_MAIL_PARTICIPANTS">Teilnehmer können Mails an alle Teilnehmer senden</string>
   <string name="DAT_ROLES_DIFFERENT">Sie haben bei den Teilnehmern Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Termine zu sehen. Bitte wählen Sie bei den Teilnehmern eine der folgenden Rollen: #VAR1_BOLD#.</string>
   <string name="DAT_ROOM_INFORMATIONS">Rauminformationen</string>
   <string name="DAT_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
@@ -328,7 +328,7 @@
   <string name="INS_BROTHER">Bruder</string>
   <string name="INS_CHILD">Kind</string>
   <string name="INS_COHABITANT">Partner/-in</string>
-  <string name="INS_COHABITANT_MALE">Partner </string>
+  <string name="INS_COHABITANT_MALE">Partner</string>
   <string name="INS_COHABITANT_FEMALE">Partnerin</string>
   <string name="INS_COMPANION">Freund/-in</string>
   <string name="INS_DAUGHTER">Tochter</string>
@@ -499,7 +499,7 @@
   <string name="MAI_EMAIL_SEND_TO_ROLE_FORMER">#VAR1# hat an die ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_EMAIL_SEND_TO_ROLE_ALL">#VAR1# hat an die aktiven und ehemaligen Mitglieder der Rolle #VAR3# von #VAR2# folgende E-Mail geschickt:</string>
   <string name="MAI_EMAIL_SEND_TO_USER">#VAR1# hat Ihnen von #VAR2# folgende E-Mail geschickt:</string>
-  <string name="MAI_HIDDEN">Versteckt </string>
+  <string name="MAI_HIDDEN">Versteckt</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
   <string name="MAI_HTML_MAILS_REGISTERED_USERS_DESC">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</string>
   <string name="MAI_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
@@ -740,7 +740,7 @@
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
   <string name="ORG_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Hier können Sie die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit </string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier können Sie festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nSehr hoch: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>

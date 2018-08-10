@@ -77,7 +77,7 @@
 </string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2">Lugar: #VAR1#\nSala: #VAR2#\nParticipantes: #VAR3#\nCreado por: #VAR4#\n</string>
   <string name="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3">Creado en: #VAR1#</string>
-  <string name="DAT_ENABLE_ICAL">Activar función-iCal </string>
+  <string name="DAT_ENABLE_ICAL">Activar función-iCal</string>
   <string name="DAT_ENABLE_ICAL_DESC">Si iCal está habilitado, se puede descargar un evento individual, o todos los eventos que haya dentro de un determinado periodo de tiempo. Así mismo, los usuarios se podrán inscribir en los eventos utilizando su propio software cliente de calendario. (Activado de manera predeterminada)</string>
   <string name="DAT_ERROR_DELETE_DEFAULT_LIST">La lista #VAR1_BOLD# es la configuración predeterminada para las listas de participantes en esta organización, y no puede ser borrada. En el módulo de ajustes, seleccione una configuración diferente a la predeterminada y después puede intentar borrar esta configuración.</string>
   <string name="DAT_EXPORT_ICAL">Exportar (iCal)</string>
@@ -298,7 +298,7 @@
   <string name="INS_PASSWORDS_NOT_EQUAL">Las contraseñas suministradas no coinciden.</string>
   <string name="INS_PHONE_LIST">lista de teléfonos</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Por favor seleccione un idioma.</string>
-  <string name="INS_SET_ORGANIZATION">Establecer organización </string>
+  <string name="INS_SET_ORGANIZATION">Establecer organización</string>
   <string name="INS_SET_UP_ORGANIZATION">Instalar organización</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">La configuración se realizó con éxito</string>
   <string name="INS_SKYPE">Skype</string>
@@ -405,7 +405,7 @@
   <string name="LST_FORMER_MEMBERS">Ex miembros</string>
   <string name="LST_FROM_TO">de #VAR1# hasta #VAR2#</string>
   <string name="LST_GENERAL_LISTS">Listas generales</string>
-  <string name="LST_HIDE_DETAILS">Plegar detalles de la vista general </string>
+  <string name="LST_HIDE_DETAILS">Plegar detalles de la vista general</string>
   <string name="LST_HIDE_DETAILS_DESC">Active esta opción para contraer de manera predeterminada los detalles de la lista. Serán visibles nuevamente cuando el usuario los active. (Predeterminado: No)</string>
   <string name="LST_INACTIVE_ROLES">Vista general de los roles inactivos</string>
   <string name="LST_INFOBOX" description="A small html box that will show additional informations">Infobox</string>
@@ -457,7 +457,7 @@
   <string name="LST_SEARCH_LOCATION_DESC">Busca todos los usuarios que vienen de Colonia o Berlín</string>
   <string name="LST_SEARCH_TELEFON_EXAMPLE">*241* *54</string>
   <string name="LST_SEARCH_TELEFON_DESC">Busca todos los usuarios que su número de teléfono tiene 241 y termina con 54</string>
-  <string name="LST_SEARCH_YES_NO_FIELD">Campo Si/No </string>
+  <string name="LST_SEARCH_YES_NO_FIELD">Campo Si/No</string>
   <string name="LST_SEARCH_YES_NO_FIELD_DESC">Busca a todos los usuarios con una marca de verificación.</string>
   <string name="LST_SEAT_AMOUNT">Sillas adicionales</string>
   <string name="LST_SELECT_CONFIGURATION">Eligir configuración</string>

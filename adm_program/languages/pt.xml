@@ -36,13 +36,13 @@
   <string name="CAT_DONT_DELETE_CATEGORY">Não foi possível eliminar a categoria #VAR1_BOLD# devido às dependências de #VAR2#.</string>
   <string name="CAT_MOVE_DOWN">Mover #VAR1# para baixo</string>
   <string name="CAT_MOVE_UP">Mover #VAR1# para cima</string>
-  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta configuração só poder ser modificada pela organização pai </string>
+  <string name="CAT_ONLY_SET_BY_MOTHER_ORGANIZATION">Esta configuração só poder ser modificada pela organização pai</string>
   <string name="CAT_PROFILE_FIELDS_VISIBILITY">Os campos de perfil nessa categoria podem ser ocultados para outros usuários, mas ainda continuarão visíveis e editáveis a partir de seus próprios perfis.</string>
   <string name="CAT_ONLY_PARENT_ORGANIZATION">Esta categoria é visível para todas as organizações. Por isso, só pode ser editada pela organização pai.</string>
   <!--Phrases only in Datesmodule-->
   <string name="DAT_ADD_DATE_TO_CALENDAR">Adicionar evento ao calendário</string>
   <string name="DAT_ALL_DAY">Tempo integral</string>
-  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Participantes podem registrar convidados anônimos </string>
+  <string name="DAT_ALLOW_ADDITIONAL_GUESTS">Participantes podem registrar convidados anônimos</string>
   <string name="DAT_ALLOW_ADDITIONAL_GUESTS_DESC">Participantes podem adicionar assentos aos seus registros, que serão subtraídos do número máximo de participantes e da quantidade de assentos livres remanescentes. Isto é útil se, por exemplo, um participante puder trazer mais visitantes e portanto precisa de assentos livres.</string>
   <string name="DAT_ALLOW_USER_COMMENTS">Permitir comentários na participação</string>
   <string name="DAT_ALLOW_USER_COMMENTS_DESC">Participantes podem comentar em sua participação. Os comentários podem ser vistos via lista de participantes</string>
@@ -262,10 +262,10 @@
   <string name="INS_DATA_OF_ADMINISTRATOR">Detalhes do administrador</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Entre com o nome, e-mail e credenciais de acesso do administrador. Inicie a sessão com o mesmo nome de usuário após a instalação.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Dados da organização</string>
-  <string name="INS_DESCRIPTION_BOARD">Quadro administrativo de associação </string>
+  <string name="INS_DESCRIPTION_BOARD">Quadro administrativo de associação</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Encontros podem ter lugar aqui. Uma sala precisa ser reservada antes. Beamer tem uso livre.</string>
-  <string name="INS_DESCRIPTION_MEMBER">Todos os membros da organização </string>
-  <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupo de administradores do sistema </string>
+  <string name="INS_DESCRIPTION_MEMBER">Todos os membros da organização</string>
+  <string name="INS_DESCRIPTION_ADMINISTRATOR">Grupo de administradores do sistema</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Insira as informações de acesso à base de dados</string>
   <string name="INS_ERROR_OPEN_FILE">O ficheiro #VAR1_BOLD# não pôde ser aberto.</string>
   <string name="INS_FACEBOOK">Facebook</string>
@@ -277,7 +277,7 @@
   <string name="INS_HOST_INVALID">O servidor não é válido. Insira um nome ou endereço IP válido.</string>
   <string name="INS_ICQ">ICQ</string>
   <string name="INS_ICQ_DESC">Insira teu número do ICQ aqui. Se teu estado puder ser exibido na web (ativado no Skype), ele será exibido no teu perfil.</string>
-  <string name="INS_INSTALL_ADMIDIO">Instalar Admidio </string>
+  <string name="INS_INSTALL_ADMIDIO">Instalar Admidio</string>
   <string name="INS_INSTALLATION">Instalação</string>
   <string name="INS_INSTALLATION_EXISTS">A base de dados já contém uma instalação do Admidio. Não é possível realizar uma instalação adicional.</string>
   <string name="INS_INSTALLATION_SUCCESSFUL">A instalação e configuração da base de dados do Admidio estão completas, o sistema está pronto para o uso. Por favor, inicie a sessão agora utilizando as informações de acesso do administrador do sistema.</string>
@@ -589,7 +589,7 @@
   <string name="MEM_SEND_USERNAME_PASSWORD">Enviar e-mail com nome de usuário e senha.</string>
   <string name="MEM_SHOW_ALL_USERS">Exibir todos os usuários</string>
   <string name="MEM_SHOW_USERS_DESC">Se não estiver definida, apenas os membros ativos desta organização serão listados. Caso contrário todos os membros serão listados.</string>
-  <string name="MEM_UPDATED_ON">Atualizado em </string>
+  <string name="MEM_UPDATED_ON">Atualizado em</string>
   <string name="MEM_USER_COULD_BE_CREATED">O usuário foi criado.</string>
   <string name="MEM_USER_DELETE">Remover #VAR1_BOLD#?\n\nEste processo não pode ser desfeito.</string>
   <string name="MEM_USER_MANAGEMENT">Gestão de usuários</string>
@@ -653,7 +653,7 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Variáveis adicionais</string>
   <string name="ORG_ADMIDIO_THEME">Tema do Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Selecione um leiaute para Admidio. Todos os temas guardados no diretório adm_themes estão a ser mostrados. (padrão: moderno)</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Encerrar sessão após </string>
+  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Encerrar sessão após</string>
   <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Define o tempo em que o sistema automaticamente encerrará a sessão de um usuário inativo. Um usuário é dado como inativo quando nenhuma página é carregada por um certo tempo. Esta configuração será ignorada quando o usuário selecionar #VAR1_BOLD#. (padrão: 20 minutos)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Atualizar mensagem para navegadores obsoletos</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Após ativação os usuários com navegadores obsoletos serão advertidos para que atualizem seus navegadores. Navegadores atualizados garantem maior segurança e proteção contra fraudes, vírus, trojans, ladrões de identidade e outras ameaças à privacidade. Toda nova geração de navegadores aperfeiçoa em velocidade e suporta cada vez mais tecnologias web, o que provoca uma experiência melhor. Pra este propósito, o serviço do https://browser-update.org/ é usado.</string>

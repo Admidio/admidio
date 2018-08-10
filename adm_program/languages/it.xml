@@ -128,7 +128,7 @@
   <!--Phrases only in Ecardsmodule-->
   <string name="ECA_A_ECARD_FROM">Cartolina inviata da</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Attivazione modulo cartoline</string>
-  <string name="ECA_GREETING_CARD">Cartolina </string>
+  <string name="ECA_GREETING_CARD">Cartolina</string>
   <string name="ECA_GREETING_CARDS">Cartolina</string>
   <string name="ECA_GREETING_CARD_EDIT">Modifica la cartolina</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -642,7 +642,7 @@
   <!--Phrases only in Profilemodule-->
   <string name="PRO_ACCEPT_NEW_PICTURE">Conferma la nuova foto del profilo</string>
   <string name="PRO_ADD_USER">Aggiungi utente</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> La registrazione è stata confermata. L\'utente può ora accedere al sistema.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">La registrazione è stata confermata. L\'utente può ora accedere al sistema.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancella membership</string>
   <string name="PRO_CHANGE_DATE">Cambia data</string>
   <string name="PRO_CHANGE_PROFILE_PICTURE">Carica immagine del profilo</string>

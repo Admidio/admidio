@@ -890,7 +890,7 @@
   <string name="PRO_YEARS">År</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_IN_RELATION">Rediger bruger profilen i dette forhold</string>
-  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Ingen findes ingen relations typer. Relations typer kan oprettes i bruger administrationen </string>
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Ingen findes ingen relations typer. Relations typer kan oprettes i bruger administrationen</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrisk</string>
   <string name="REL_USER_RELATION_TYPE_BACKWARD">Baglæns</string>
   <string name="REL_USER_RELATION_TYPE_DEL">Vil du fjerne denne type relation? #VAR1_BOLD#? Advarsel: Dette vil slette alle eksisterende relationer af denne type.</string>

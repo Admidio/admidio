@@ -447,7 +447,7 @@
   <string name="PHO_PARENT_ALBUM">Albums Parent</string>
   <string name="PHO_PHOTO_ALBUMS">Albums photo</string>
   <string name="PHO_PHOTO_DELETE">Supprimer la photo</string>
-  <string name="PHO_PHOTO_DESTINATION">Les photos seront ajoutées à l\'album <strong>#VAR1#</strong>.</string>
+  <string name="PHO_PHOTO_DESTINATION">Les photos seront ajoutées à l\'album #VAR1_BOLD#.</string>
   <string name="PHO_PHOTO_FILES_TO_LARGE">La taille totale du fichier d\'un groupe de photos ne doit pas dépasser éventuellement la limite autorisé défini #VAR1#MO.</string>
   <string name="PHO_PHOTO_FORMAT_INVALID">Seules les photos JPG et PNG sont acceptés.</string>
   <string name="PHO_PHOTO_PROCESSING_ERROR">Erreur de traitement de la photo</string>
@@ -788,7 +788,7 @@
   <string name="SYS_SERVER_NO_UPLOAD">Les paramètres serveurs ne permettent pas le téléchargement de fichiers.</string>
   <string name="SYS_SETTINGS">Préférences</string>
   <string name="SYS_SHOW_CALENDAR">Affichage du calendrier</string>
-  <string name="SYS_SHOW_PROFILE"> Afficher le profil</string>
+  <string name="SYS_SHOW_PROFILE">Afficher le profil</string>
   <string name="SYS_SHOW_ROUTE">Voir l\'itinéraire</string>
   <string name="SYS_SIMILAR_USERS_FOUND">Au moins un utilisateur avec un nom similaire (#VAR1_BOLD#) a été trouvé dans la base de données.</string>
   <string name="SYS_SINCE">Depuis #VAR1#</string>

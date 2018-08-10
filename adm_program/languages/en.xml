@@ -178,7 +178,7 @@
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
-  <string name="ECA_GREETING_CARD">Greeting card </string>
+  <string name="ECA_GREETING_CARD">Greeting card</string>
   <string name="ECA_GREETING_CARDS">Greeting cards</string>
   <string name="ECA_GREETING_CARD_EDIT">Edit greeting card</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -875,7 +875,7 @@
   <string name="PRO_ADD_USER">Add user</string>
   <string name="PRO_ADD_USER_RELATION">Create relationship</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registration has been confirmed. The user can now log on to the system.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
   <string name="PRO_CHANGE_DATE">Change date</string>
