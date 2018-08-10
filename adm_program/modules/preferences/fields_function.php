@@ -195,11 +195,11 @@ if($getMode === 1)
         // => EXIT
     }
 
-    $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
     // zu den Organisationseinstellungen zurueck
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gNavigation->removeLast();
+    $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     // => EXIT
 }

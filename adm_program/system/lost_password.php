@@ -13,7 +13,7 @@ require_once(__DIR__ . '/common.php');
 $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 
 // save url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // "systemmail" and "request password" must be activated
 if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery'))
@@ -158,7 +158,7 @@ else
 
     // add back link to module menu
     $lostPasswordMenu = $page->getMenu();
-    $lostPasswordMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $lostPasswordMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
     $page->addHtml('<p class="lead">'.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'</p>');
 

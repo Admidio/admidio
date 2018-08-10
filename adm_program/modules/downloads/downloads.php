@@ -50,7 +50,7 @@ else
 }
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addFirst(CURRENT_URL);
 
 $getFolderId = $currentFolder->getValue('fol_id');
 

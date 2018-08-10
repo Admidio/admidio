@@ -80,11 +80,11 @@ else
 // Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
 if ($getPhotoId === 0)
 {
-    $gNavigation->clear();
+    $gNavigation->reset();
 }
 
 // URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -159,7 +159,7 @@ $photosMenu = $page->getMenu();
 
 if ($photoAlbum->getValue('pho_id') > 0)
 {
-    $photosMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $photosMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 if ($gCurrentUser->editPhotoRight())

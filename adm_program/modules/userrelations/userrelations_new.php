@@ -55,14 +55,14 @@ if((int) $relationsStatement->fetchColumn() === 0)
 }
 
 $headline = $gL10n->get('PRO_ADD_USER_RELATION');
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);
 
 // add back link to module menu
 $relationEditMenu = $page->getMenu();
-$relationEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$relationEditMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('relation_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/userrelations_function.php', array('usr_id' => $getUsrId, 'mode' => '1')), $page);

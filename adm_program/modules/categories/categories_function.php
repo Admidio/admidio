@@ -203,10 +203,9 @@ if($getMode === 1)
 
     $gDb->endTransaction();
 
-    $gNavigation->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    admRedirect($gNavigation->getUrl());
+    $gNavigation->goBack();
     // => EXIT
 }
 elseif($getMode === 2)

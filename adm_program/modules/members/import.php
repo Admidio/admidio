@@ -28,7 +28,7 @@ if (!PhpIniUtils::isFileUploadEnabled())
 $headline = $gL10n->get('MEM_IMPORT_USERS');
 
 // add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 if(isset($_SESSION['import_request']))
 {
@@ -49,7 +49,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $importMenu = $page->getMenu();
-$importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$importMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('import_users_form', ADMIDIO_URL.FOLDER_MODULES.'/members/import_function.php', $page, array('enableFileUpload' => true));

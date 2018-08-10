@@ -28,7 +28,7 @@ if (!$gSettingsManager->getBool('enable_chat_module'))
 $headline = 'Admidio Chat';
 
 // add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -42,7 +42,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $messagesChatMenu = $page->getMenu();
-$messagesChatMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$messagesChatMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<div id="chat-wrap"><div id="chat-area"></div></div>');
 

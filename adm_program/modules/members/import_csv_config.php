@@ -27,7 +27,7 @@ if(count($_SESSION['file_lines']) === 0)
 $headline = $gL10n->get('MEM_ASSIGN_FIELDS');
 
 // add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
 $countComma     = 0;
@@ -83,7 +83,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $importCsvConfigMenu = $page->getMenu();
-$importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 

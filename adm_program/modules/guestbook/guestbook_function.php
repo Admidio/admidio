@@ -250,7 +250,7 @@ if ($getMode === 1 || $getMode === 3)
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_entry_request']);
-        $gNavigation->deleteLastUrl();
+        $gNavigation->removeLast();
 
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/guestbook/guestbook.php', array('headline' => $getHeadline));
 
@@ -446,7 +446,7 @@ elseif ($getMode === 4 || $getMode === 8)
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_comment_request']);
-        $gNavigation->deleteLastUrl();
+        $gNavigation->removeLast();
 
         $url = safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $gbComment->getValue('gbc_gbo_id'), 'headline' => $getHeadline));
 

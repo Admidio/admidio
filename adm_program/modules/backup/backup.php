@@ -65,7 +65,7 @@ if($getMode === 'show_list')
     $existingBackupFiles = array();
 
     // start navigation of this module here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addFirst(CURRENT_URL);
 
     // create a list with all valid files in the backup folder
     $dirHandle = @opendir($backupAbsolutePath);

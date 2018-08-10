@@ -316,10 +316,10 @@ if($getMode === 2)
         RoleDependency::removeChildRoles($gDb, $getRoleId);
     }
 
-    $gNavigation->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gNavigation->removeLast();
+    $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     // => EXIT
 }

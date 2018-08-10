@@ -55,7 +55,7 @@ $announcements->setDateRange($getDateFrom, $getDateTo);
 $announcementsCount = $announcements->getDataSetCount();
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
+$gNavigation->addFirst(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($getHeadline);

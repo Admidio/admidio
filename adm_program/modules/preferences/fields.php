@@ -22,7 +22,7 @@ if (!$gCurrentUser->isAdministrator())
 // set module headline
 $headline = $gL10n->get('ORG_PROFILE_FIELDS');
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 unset($_SESSION['fields_request']);
 
@@ -92,7 +92,7 @@ $page->addJavascript('
 $fieldsMenu = $page->getMenu();
 
 // show back link
-$fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$fieldsMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // define link to create new profile field
 $fieldsMenu->addItem(

@@ -35,7 +35,7 @@ if(!$gCurrentUser->approveUsers())
 $headline = $gL10n->get('NWU_NEW_REGISTRATIONS');
 
 // Navigation in module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addFirst(CURRENT_URL);
 
 // Select new Members of the group
 $sql = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value AS last_name,

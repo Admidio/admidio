@@ -39,7 +39,7 @@ elseif ($getMode === 'change')
     $headline = $gL10n->get('PHO_EDIT_ALBUM');
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
@@ -116,7 +116,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $photoAlbumMenu = $page->getMenu();
-$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if ($getMode === 'new')
 {

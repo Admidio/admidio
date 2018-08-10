@@ -25,7 +25,7 @@ $headline = $gL10n->get('ROO_ROOM_MANAGEMENT');
 $textRoom = $gL10n->get('SYS_ROOM');
 
 // Navigation weiterfuehren
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -34,7 +34,7 @@ $page->enableModal();
 // get module menu
 $roomsMenu = $page->getMenu();
 // show back link
-$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$roomsMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 // show link to create new room
 $roomsMenu->addItem(
     'menu_item_new_room', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('headline' => $textRoom)),

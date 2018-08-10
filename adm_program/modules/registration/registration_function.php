@@ -76,7 +76,7 @@ if($getMode === 1 || $getMode === 2)
         // exception is thrown when email couldn't be send
         // so save user data and then show error
         $user->save();
-        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+        $gMessage->setForwardUrl($gNavigation->getPrevious());
         $e->showHtml();
         // => EXIT
     }
@@ -86,7 +86,7 @@ if($getMode === 2)
 {
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $gNavigation->addUrl(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
+    $gNavigation->add(safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration_function.php', array('mode' => '3', 'user_id' => $getUserId, 'new_user_id' => $getNewUserId)));
     admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $getUserId)));
     // => EXIT
 }
@@ -145,7 +145,7 @@ elseif($getMode === 5)
     }
     catch(AdmException $e)
     {
-        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+        $gMessage->setForwardUrl($gNavigation->getPrevious());
         $e->showHtml();
         // => EXIT
     }
@@ -159,7 +159,7 @@ elseif($getMode === 5)
     }
     else
     {
-        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+        $gMessage->setForwardUrl($gNavigation->getPrevious());
         $gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
         // => EXIT
     }
@@ -175,13 +175,13 @@ elseif($getMode === 6)
     }
     catch(AdmException $e)
     {
-        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+        $gMessage->setForwardUrl($gNavigation->getPrevious());
         $e->showHtml();
         // => EXIT
     }
 
     // Zugangsdaten neu verschicken
-    $gNavigation->addUrl(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
+    $gNavigation->add(ADMIDIO_URL.FOLDER_MODULES.'/registration/registration.php');
     admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/members/members_function.php', array('mode' => '4', 'usr_id' => $getUserId)));
     // => EXIT
 }

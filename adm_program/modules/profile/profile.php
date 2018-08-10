@@ -90,9 +90,9 @@ else
 // if user id was not set and own profile should be shown then initialize navigation
 if(!isset($_GET['user_id']))
 {
-    $gNavigation->clear();
+    $gNavigation->reset();
 }
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -213,7 +213,7 @@ $profileMenu = $page->getMenu();
 // show back link
 if($gNavigation->count() > 1)
 {
-    $profileMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $profileMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // if user has right then show link to edit profile

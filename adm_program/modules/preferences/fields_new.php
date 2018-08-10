@@ -35,7 +35,7 @@ else
     $headline = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // benutzerdefiniertes Feldobjekt anlegen
 $userField = new TableUserField($gDb);
@@ -106,7 +106,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $profileFieldsEditMenu = $page->getMenu();
-$profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('profile_fields_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_function.php', array('usf_id' => $getUsfId, 'mode' => '1')), $page);

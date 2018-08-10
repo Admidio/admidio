@@ -64,9 +64,8 @@ if ($getMode === 1)
     $room->save();
 
     unset($_SESSION['rooms_request']);
-    $gNavigation->deleteLastUrl();
 
-    admRedirect($gNavigation->getUrl());
+    $gNavigation->goBack();
     // => EXIT
 }
 // Löschen des Raums

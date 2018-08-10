@@ -46,7 +46,7 @@ $headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', array($user->getValue('FIRST_NAME
 
 if(!$getInline)
 {
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    $gNavigation->add(CURRENT_URL);
 }
 // Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
@@ -122,7 +122,7 @@ else
 
     // add back link to module menu
     $rolesMenu = $page->getMenu();
-    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $rolesMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // show headline of module

@@ -112,7 +112,7 @@ while($roleName = $statementAdminRoles->fetchColumn())
     $adminRoles[] = $roleName;
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // create html page object
@@ -175,7 +175,7 @@ $page->addJavascript('
 $categoriesMenu = $page->getMenu();
 
 // show back link
-$categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$categoriesMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // define link to create new category
 $categoriesMenu->addItem(

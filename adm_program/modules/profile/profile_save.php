@@ -300,8 +300,9 @@ try
 catch(AdmException $e)
 {
     unset($_SESSION['profile_request']);
-    $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
-    $gNavigation->deleteLastUrl();
+
+    $gNavigation->removeLast();
+    $gMessage->setForwardUrl($gNavigation->getLast());
     $e->showHtml();
     // => EXIT
 }
@@ -315,7 +316,7 @@ if((int) $user->getValue('usr_id') === (int) $gCurrentUser->getValue('usr_id'))
 }
 
 unset($_SESSION['profile_request']);
-$gNavigation->deleteLastUrl();
+$gNavigation->removeLast();
 
 /*------------------------------------------------------------*/
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
@@ -335,7 +336,7 @@ if($getNewUser === 1 || $getNewUser === 3)
         }
         catch(AdmException $e)
         {
-            $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+            $gMessage->setForwardUrl($gNavigation->getPrevious());
             $e->showHtml();
             // => EXIT
         }
@@ -357,7 +358,7 @@ if($getNewUser === 1 || $getNewUser === 3)
     }
     else
     {
-        $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
+        $gMessage->setForwardUrl($gNavigation->getPrevious(), 2000);
         $gMessage->show($gL10n->get($messageId));
         // => EXIT
     }
@@ -372,14 +373,14 @@ elseif($getNewUser === 2)
 elseif($getNewUser === 0 && $user->getValue('usr_valid') == 0)
 {
     // a registration was edited then go back to profile view
-    $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getPrevious(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     // => EXIT
 }
 else
 {
     // go back to profile view
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     // => EXIT
 }

@@ -36,7 +36,7 @@ if (!$folder->hasUploadRight())
     // => EXIT
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 if(isset($_SESSION['download_request']))
 {
@@ -67,7 +67,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $folderNewMenu = $page->getMenu();
-$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$folderNewMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', array($parentFolderName)).'</p>');
 

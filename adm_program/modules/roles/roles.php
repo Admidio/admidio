@@ -33,7 +33,7 @@ if(!$gCurrentUser->manageRoles())
 $headline = $gL10n->get('ROL_ROLE_ADMINISTRATION');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addFirst(CURRENT_URL);
 
 unset($_SESSION['roles_request']);
 
