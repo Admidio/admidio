@@ -180,10 +180,10 @@ class ListConfiguration extends TableLists
      *                                          true  - Only former members
      * @param string         $startDate
      * @param string         $endDate
-     * @param array<int,int> $relationtypeIds
+     * @param array<int,int> $relationTypeIds
      * @return string
      */
-    public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationtypeIds = array())
+    public function getSQL(array $roleIds, $showFormerMembers = false, $startDate = null, $endDate = null, array $relationTypeIds = array())
     {
         global $gL10n, $gProfileFields, $gCurrentOrganization;
 
@@ -354,14 +354,14 @@ class ListConfiguration extends TableLists
 
         $sqlUserJoin = 'INNER JOIN '.TBL_USERS.'
                                 ON usr_id = mem_usr_id';
-        $sqlRelationtypeWhere = '';
-        if (count($relationtypeIds) > 0)
+        $sqlRelationTypeWhere = '';
+        if (count($relationTypeIds) > 0)
         {
             $sqlUserJoin = 'INNER JOIN '.TBL_USER_RELATIONS.'
                                     ON ure_usr_id1 = mem_usr_id
                             INNER JOIN '.TBL_USERS.'
                                     ON usr_id = ure_usr_id2';
-            $sqlRelationtypeWhere = 'AND ure_urt_id IN ('.implode(', ', $relationtypeIds).')';
+            $sqlRelationTypeWhere = 'AND ure_urt_id IN ('.implode(', ', $relationTypeIds).')';
         }
 
         // Set SQL-Statement
@@ -375,7 +375,7 @@ class ListConfiguration extends TableLists
                        '.$sqlJoin.'
                  WHERE usr_valid = 1
                    AND rol_id IN ('.$sqlRoleIds.')
-                       '.$sqlRelationtypeWhere.'
+                       '.$sqlRelationTypeWhere.'
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                        '.$sqlMemberStatus.'

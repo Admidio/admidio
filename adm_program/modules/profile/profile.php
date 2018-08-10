@@ -940,7 +940,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
               ORDER BY urt_name';
         $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
-        $relationtype = new TableUserRelationType($gDb);
+        $relationType = new TableUserRelationType($gDb);
         $relation     = new TableUserRelation($gDb);
         $otherUser    = new User($gDb, $gProfileFields);
 
@@ -949,21 +949,21 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
         while($row = $relationStatement->fetch())
         {
             $editUserIcon = '';
-            $relationtype->clear();
-            $relationtype->setArray($row);
+            $relationType->clear();
+            $relationType->setArray($row);
             $relation->clear();
             $relation->setArray($row);
             $otherUser->clear();
             $otherUser->readDataById($relation->getValue('ure_usr_id2'));
 
-            $relationName = $relationtype->getValue('urt_name');
+            $relationName = $relationType->getValue('urt_name');
             if ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_MALE'))
             {
-                $relationName = $relationtype->getValue('urt_name_male');
+                $relationName = $relationType->getValue('urt_name_male');
             }
             elseif ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_FEMALE'))
             {
-                $relationName = $relationtype->getValue('urt_name_female');
+                $relationName = $relationType->getValue('urt_name_female');
             }
 
             if($gCurrentUser->hasRightEditProfile($otherUser))
@@ -982,7 +982,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
             {
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
                                  href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.$relation->getValue('ure_id'), 'database_id' => $relation->getValue('ure_id'),
-                                 'name' => $relationtype->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
+                                 'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
                                     class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'"></i></a>');
             }
 

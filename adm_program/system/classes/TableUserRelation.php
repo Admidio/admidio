@@ -31,14 +31,14 @@ class TableUserRelation extends TableAccess
      */
     public function getInverse()
     {
-        $relationtype = new TableUserRelationType($this->db, $this->getValue('ure_urt_id'));
-        if ($relationtype->getValue('urt_id_inverse') === null)
+        $relationType = new TableUserRelationType($this->db, $this->getValue('ure_urt_id'));
+        if ($relationType->getValue('urt_id_inverse') === null)
         {
             return null;
         }
 
         $selectColumns = array(
-            'ure_urt_id'  => $relationtype->getValue('urt_id_inverse'),
+            'ure_urt_id'  => $relationType->getValue('urt_id_inverse'),
             'ure_usr_id1' => $this->getValue('ure_usr_id2'),
             'ure_usr_id2' => $this->getValue('ure_usr_id1')
         );

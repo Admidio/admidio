@@ -37,11 +37,11 @@ if (!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
-$relationtype = new TableUserRelationType($gDb);
+$relationType = new TableUserRelationType($gDb);
 
 if($getUrtId > 0)
 {
-    $relationtype->readDataById($getUrtId);
+    $relationType->readDataById($getUrtId);
 }
 
 if($getMode === 1)
@@ -58,21 +58,21 @@ if($getMode === 1)
         $_POST['urt_edit_user_inverse'] = 0;
     }
 
-    $relationtype2 = new TableUserRelationType($gDb);
+    $relationType2 = new TableUserRelationType($gDb);
     if($getUrtId > 0)
     {
-        $relationtype2->readDataById($relationtype->getValue('urt_id_inverse'));
+        $relationType2->readDataById($relationType->getValue('urt_id_inverse'));
     }
 
-    $relationtype->setValue('urt_name', $_POST['urt_name']);
-    $relationtype->setValue('urt_name_male', empty($_POST['urt_name_male']) ? $_POST['urt_name'] : $_POST['urt_name_male']);
-    $relationtype->setValue('urt_name_female', empty($_POST['urt_name_female']) ? $_POST['urt_name'] : $_POST['urt_name_female']);
-    $relationtype->setValue('urt_edit_user', $_POST['urt_edit_user']);
+    $relationType->setValue('urt_name', $_POST['urt_name']);
+    $relationType->setValue('urt_name_male', empty($_POST['urt_name_male']) ? $_POST['urt_name'] : $_POST['urt_name_male']);
+    $relationType->setValue('urt_name_female', empty($_POST['urt_name_female']) ? $_POST['urt_name'] : $_POST['urt_name_female']);
+    $relationType->setValue('urt_edit_user', $_POST['urt_edit_user']);
 
     $postRelationType = admFuncVariableIsValid(
         $_POST, 'relation_type', 'string',
         array(
-            'defaultValue' => $relationtype->getRelationTypeString(),
+            'defaultValue' => $relationType->getRelationTypeString(),
             'validValues' => array(
                 TableUserRelationType::USER_RELATION_TYPE_ASYMMETRICAL,
                 TableUserRelationType::USER_RELATION_TYPE_SYMMETRICAL,
@@ -82,36 +82,36 @@ if($getMode === 1)
     );
     if ($postRelationType === 'asymmetrical')
     {
-        $relationtype2->setValue('urt_name', $_POST['urt_name_inverse']);
-        $relationtype2->setValue('urt_name_male', empty($_POST['urt_name_male_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_male_inverse']);
-        $relationtype2->setValue('urt_name_female', empty($_POST['urt_name_female_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_female_inverse']);
-        $relationtype2->setValue('urt_edit_user', $_POST['urt_edit_user_inverse']);
+        $relationType2->setValue('urt_name', $_POST['urt_name_inverse']);
+        $relationType2->setValue('urt_name_male', empty($_POST['urt_name_male_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_male_inverse']);
+        $relationType2->setValue('urt_name_female', empty($_POST['urt_name_female_inverse']) ? $_POST['urt_name_inverse'] : $_POST['urt_name_female_inverse']);
+        $relationType2->setValue('urt_edit_user', $_POST['urt_edit_user_inverse']);
     }
 
     // write data into database
     $gDb->startTransaction();
 
-    $relationtype->save();
+    $relationType->save();
 
     if ($postRelationType === 'asymmetrical')
     {
         if($getUrtId <= 0)
         {
-            $relationtype2->setValue('urt_id_inverse', $relationtype->getValue('urt_id'));
+            $relationType2->setValue('urt_id_inverse', $relationType->getValue('urt_id'));
         }
 
-        $relationtype2->save();
+        $relationType2->save();
 
         if($getUrtId <= 0)
         {
-            $relationtype->setValue('urt_id_inverse', $relationtype2->getValue('urt_id'));
-            $relationtype->save();
+            $relationType->setValue('urt_id_inverse', $relationType2->getValue('urt_id'));
+            $relationType->save();
         }
     }
     elseif ($postRelationType === 'symmetrical')
     {
-        $relationtype->setValue('urt_id_inverse', $relationtype->getValue('urt_id'));
-        $relationtype->save();
+        $relationType->setValue('urt_id_inverse', $relationType->getValue('urt_id'));
+        $relationType->save();
     }
 
     $gDb->endTransaction();
@@ -125,7 +125,7 @@ elseif($getMode === 2)
     // delete relationtype
     try
     {
-        if($relationtype->delete())
+        if($relationType->delete())
         {
             echo 'done';
         }

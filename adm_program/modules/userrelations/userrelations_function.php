@@ -87,9 +87,9 @@ if($getMode === 1)
     }
 
     $postUrtId = admFuncVariableIsValid($_POST, 'urt_id', 'int');
-    $relationtype = new TableUserRelationType($gDb, $postUrtId);
+    $relationType = new TableUserRelationType($gDb, $postUrtId);
 
-    if($relationtype->isNewRecord())
+    if($relationType->isNewRecord())
     {
         $gMessage->show($gL10n->get('SYS_NO_ENTRY'));
         // => EXIT
@@ -98,15 +98,15 @@ if($getMode === 1)
     $gDb->startTransaction();
 
     $relation1 = new TableUserRelation($gDb);
-    $relation1->setValue('ure_urt_id', $relationtype->getValue('urt_id'));
+    $relation1->setValue('ure_urt_id', $relationType->getValue('urt_id'));
     $relation1->setValue('ure_usr_id1', $user1->getValue('usr_id'));
     $relation1->setValue('ure_usr_id2', $user2->getValue('usr_id'));
     $relation1->save();
 
-    if (!$relationtype->isUnidirectional())
+    if (!$relationType->isUnidirectional())
     {
         $relation2 = new TableUserRelation($gDb);
-        $relation2->setValue('ure_urt_id', $relationtype->getValue('urt_id_inverse'));
+        $relation2->setValue('ure_urt_id', $relationType->getValue('urt_id_inverse'));
         $relation2->setValue('ure_usr_id1', $user2->getValue('usr_id'));
         $relation2->setValue('ure_usr_id2', $user1->getValue('usr_id'));
         $relation2->save();
