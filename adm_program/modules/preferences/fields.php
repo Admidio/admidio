@@ -113,7 +113,7 @@ $sql = 'SELECT *
            AND (  cat_org_id = ?
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence ASC, usf_sequence ASC';
-$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+$statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 
 // Create table
 $table = new HtmlTable('tbl_profile_fields', $page, true);
@@ -150,7 +150,7 @@ while($row = $statement->fetch())
 
     if($categoryId !== (int) $userField->getValue('cat_id'))
     {
-        $blockId = 'admCategory'.$userField->getValue('usf_cat_id');
+        $blockId = 'admCategory'.(int) $userField->getValue('usf_cat_id');
 
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading'));
@@ -225,7 +225,9 @@ while($row = $statement->fetch())
                            'NUMBER'       => $gL10n->get('SYS_NUMBER'),
                            'DECIMAL'      => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
-    $usfSystem = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $userField->getValue('usf_id'))).'">'.
+    $usfId = (int) $userField->getValue('usf_id');
+
+    $usfSystem = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.
                     '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
 
     if($userField->getValue('usf_system') == 1)
@@ -235,17 +237,17 @@ while($row = $statement->fetch())
     else
     {
         $usfSystem .='<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$userField->getValue('usf_id'),
-                        'name' => $userField->getValue('usf_name'), 'database_id' => $userField->getValue('usf_id'))).'">'.
+                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'usf', 'element_id' => 'row_usf_'.$usfId,
+                        'name' => $userField->getValue('usf_name'), 'database_id' => $usfId)).'">'.
                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
     }
 
     // create array with all column values
     $columnValues = array(
-        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $userField->getValue('usf_id'))).'">'.$userField->getValue('usf_name').'</a>',
-        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$userField->getValue('usf_id').')">'.
+        '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/preferences/fields_new.php', array('usf_id' => $usfId)).'">'.$userField->getValue('usf_name').'</a>',
+        '<a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_UP.'\', '.$usfId.')">'.
             '<i class="fas fa-chevron-circle-up" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_UP', array('MEM_PROFILE_FIELD')) . '"></i></a>
-        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$userField->getValue('usf_id').')">'.
+        <a class="admidio-icon-link" href="javascript:void(0)" onclick="moveCategory(\''.TableUserField::MOVE_DOWN.'\', '.$usfId.')">'.
             '<i class="fas fa-chevron-circle-down" data-toggle="tooltip" title="' . $gL10n->get('CAT_MOVE_DOWN', array('MEM_PROFILE_FIELD')) . '"></i></a>',
         $description,
         $hidden,
@@ -255,7 +257,7 @@ while($row = $statement->fetch())
         $userFieldText[$userField->getValue('usf_type')],
         $usfSystem
     );
-    $table->addRowByArray($columnValues, 'row_usf_'.$userField->getValue('usf_id'));
+    $table->addRowByArray($columnValues, 'row_usf_'.$usfId);
 }
 
 $page->addHtml($table->show());

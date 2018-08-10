@@ -32,7 +32,7 @@ $getLastname  = stripslashes(admFuncVariableIsValid($_GET, 'lastname',  'string'
 $getFirstname = stripslashes(admFuncVariableIsValid($_GET, 'firstname', 'string'));
 $getCopy      = admFuncVariableIsValid($_GET, 'copy',     'bool');
 
-$registrationOrgId = $gCurrentOrganization->getValue('org_id');
+$registrationOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
 // if current user has no login then only show registration dialog
 if(!$gValidLogin)
@@ -127,7 +127,7 @@ if(isset($_SESSION['profile_request']))
 
     foreach($gProfileFields->getProfileFields() as $field)
     {
-        $fieldName = 'usf-'. $field->getValue('usf_id');
+        $fieldName = 'usf-'. (int) $field->getValue('usf_id');
         if(isset($_SESSION['profile_request'][$fieldName]))
         {
             $user->setProfileFieldsValue($field->getValue('usf_name_intern'), stripslashes($_SESSION['profile_request'][$fieldName]));
@@ -190,7 +190,7 @@ foreach($gProfileFields->getProfileFields() as $field)
         }
         $category = $field->getValue('cat_name');
 
-        $form->addHtml('<a id="cat-'. $field->getValue('cat_id'). '"></a>');
+        $form->addHtml('<a id="cat-'. (int) $field->getValue('cat_id'). '"></a>');
         $form->openGroupBox('gb_category_'.$field->getValue('cat_name_intern'), $field->getValue('cat_name'));
 
         if($field->getValue('cat_name_intern') === 'MASTER_DATA')
@@ -252,7 +252,7 @@ foreach($gProfileFields->getProfileFields() as $field)
                     // only show link if user is member of this organization.
                     // Password of own user could be changed.
                     // Administrators are allowed to change password if no login was configured or no email is set to send a generated password.
-                    if(isMember($user->getValue('usr_id'))
+                    if(isMember((int) $user->getValue('usr_id'))
                     && ((int) $gCurrentUser->getValue('usr_id') === (int) $user->getValue('usr_id')
                        || ($gCurrentUser->isAdministrator()
                           && (strlen($user->getValue('usr_login_name')) === 0 || strlen($user->getValue('EMAIL')) === 0))))

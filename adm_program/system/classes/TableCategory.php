@@ -85,7 +85,7 @@ class TableCategory extends TableAccess
                  WHERE (  cat_org_id = ? -- $gCurrentSession->getValue(\'ses_org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_type = ? -- $this->getValue(\'cat_type\')';
-        $categoriesStatement = $this->db->queryPrepared($sql, array($gCurrentSession->getValue('ses_org_id'), $this->getValue('cat_type')));
+        $categoriesStatement = $this->db->queryPrepared($sql, array((int) $gCurrentSession->getValue('ses_org_id'), $this->getValue('cat_type')));
 
         // Don't delete the last category of a type!
         if ((int) $categoriesStatement->fetchColumn() === 1)
@@ -102,7 +102,7 @@ class TableCategory extends TableAccess
                        OR cat_org_id IS NULL )
                    AND cat_sequence > ? -- $this->getValue(\'cat_sequence\')
                    AND cat_type     = ? -- $this->getValue(\'cat_type\')';
-        $queryParams = array($gCurrentSession->getValue('ses_org_id'), $this->getValue('cat_sequence'), $this->getValue('cat_type'));
+        $queryParams = array((int) $gCurrentSession->getValue('ses_org_id'), (int) $this->getValue('cat_sequence'), $this->getValue('cat_type'));
         $this->db->queryPrepared($sql, $queryParams);
 
         $catId = (int) $this->getValue('cat_id');
@@ -110,7 +110,7 @@ class TableCategory extends TableAccess
         // search for all related objects and delete them with further dependencies
         $sql = 'SELECT 1
                   FROM '.$this->elementTable.'
-                 WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
+                 WHERE '.$this->elementColumn.' = ? -- $catId';
         $recordsetsStatement = $this->db->queryPrepared($sql, array($catId));
 
         if ($recordsetsStatement->rowCount() > 0)
@@ -170,7 +170,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.$this->elementTable.'
                  WHERE '.$this->elementColumn.' = ? -- $this->getValue(\'cat_id\')';
-        $elementsStatement = $this->db->queryPrepared($sql, array($this->getValue('cat_id')));
+        $elementsStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('cat_id')));
 
         return (int) $elementsStatement->fetchColumn();
     }
@@ -303,7 +303,7 @@ class TableCategory extends TableAccess
                    AND ( cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                    AND cat_sequence = ? -- $catSequence';
-        $queryParams = array($catSequence, $catType, $gCurrentOrganization->getValue('org_id'));
+        $queryParams = array($catSequence, $catType, (int) $gCurrentOrganization->getValue('org_id'));
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if ($mode === self::MOVE_UP)
@@ -392,7 +392,7 @@ class TableCategory extends TableAccess
             {
                 $orgCondition = ' AND (   cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                        OR cat_org_id IS NULL ) ';
-                $queryParams[] = $gCurrentOrganization->getValue('org_id');
+                $queryParams[] = (int) $gCurrentOrganization->getValue('org_id');
             }
             else
             {
@@ -500,7 +500,7 @@ class TableCategory extends TableAccess
                          WHERE cat_type    = ? -- $this->getValue(\'cat_type\')
                            AND (  cat_org_id IS NOT NULL
                                OR cat_org_id = ?) -- $gCurrentOrganization->getValue(\'org_id\')';
-                $this->db->queryPrepared($sql, array($this->getValue('cat_type'), $gCurrentOrganization->getValue('org_id')));
+                $this->db->queryPrepared($sql, array($this->getValue('cat_type'), (int) $gCurrentOrganization->getValue('org_id')));
             }
         }
 

@@ -154,7 +154,7 @@ elseif($getMode === 5)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->manageRoles())
     {
-        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'usr_id' => $registrationUser->getValue('usr_id'))));
+        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('new_user' => '3', 'usr_id' => (int) $registrationUser->getValue('usr_id'))));
         // => EXIT
     }
     else

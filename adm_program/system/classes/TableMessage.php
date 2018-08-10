@@ -72,7 +72,7 @@ class TableMessage extends TableAccess
         $sql = 'SELECT COUNT(*) AS count
                   FROM '.TBL_MESSAGES_CONTENT.'
                  WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')';
-        $countStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
+        $countStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('msg_id')));
 
         return (int) $countStatement->fetchColumn();
     }

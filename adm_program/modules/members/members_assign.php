@@ -129,7 +129,7 @@ echo '
                 if(strlen($row['zip_code']) > 0 || strlen($row['city']) > 0)
                 {
                     // some countries have the order postcode city others have city postcode
-                    if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+                    if((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
                     {
                         echo $row['zip_code'].' '.$row['city'].'<br />';
                     }

@@ -486,7 +486,7 @@ class TableAccess
             if ($this->newRecord && array_key_exists($this->columnPrefix . '_usr_id_create', $this->dbColumns))
             {
                 $this->setValue($this->columnPrefix . '_timestamp_create', DATETIME_NOW);
-                $this->setValue($this->columnPrefix . '_usr_id_create', $gCurrentUser->getValue('usr_id'));
+                $this->setValue($this->columnPrefix . '_usr_id_create', (int) $gCurrentUser->getValue('usr_id'));
             }
             elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns))
             {
@@ -495,7 +495,7 @@ class TableAccess
                 || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900))
                 {
                     $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
-                    $this->setValue($this->columnPrefix . '_usr_id_change', $gCurrentUser->getValue('usr_id'));
+                    $this->setValue($this->columnPrefix . '_usr_id_change', (int) $gCurrentUser->getValue('usr_id'));
                 }
             }
         }

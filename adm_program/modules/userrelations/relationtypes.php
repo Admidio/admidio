@@ -94,12 +94,12 @@ while($relRow = $relationTypesStatement->fetch())
         $editUserInverseIcon = '<i class="fas fa-pen-square" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
     }
 
-    $relationTypeAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => $relationType1->getValue('urt_id'))). '">'.
+    $relationTypeAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => (int) $relationType1->getValue('urt_id'))). '">'.
                                         '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
     $relationTypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_id'),
+                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. (int) $relationType1->getValue('urt_id'),
                                         'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
-                                        'database_id' => $relationType1->getValue('urt_id'))).'">'.
+                                        'database_id' => (int) $relationType1->getValue('urt_id'))).'">'.
                                         '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
 
     // create array with all column values
@@ -108,7 +108,7 @@ while($relRow = $relationTypesStatement->fetch())
         $relationType2->getValue('urt_name') . $editUserInverseIcon,
         $relationTypeAdministration
     );
-    $relationTypesOverview->addRowByArray($columnValues, 'row_'. $relationType1->getValue('urt_id'));
+    $relationTypesOverview->addRowByArray($columnValues, 'row_'. (int) $relationType1->getValue('urt_id'));
 }
 
 $page->addHtml($relationTypesOverview->show());

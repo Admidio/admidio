@@ -242,7 +242,7 @@ switch($getMode)
                 elseif(StringUtils::strStartsWith($key, 'SYSMAIL_'))
                 {
                     $text = new TableText($gDb);
-                    $text->readDataByColumns(array('txt_org_id' => $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
+                    $text->readDataByColumns(array('txt_org_id' => (int) $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
                     $text->setValue('txt_text', $value);
                     $text->save();
                 }

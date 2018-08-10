@@ -36,8 +36,7 @@ class TableUserRelationType extends TableAccess
     {
         if (!$this->isNewRecord())
         {
-            $urtIdReverse = $this->getValue('urt_id_inverse');
-            if (empty($urtIdReverse))
+            if (empty($this->getValue('urt_id_inverse')))
             {
                 return self::USER_RELATION_TYPE_UNIDIRECTIONAL;
             }
@@ -80,7 +79,7 @@ class TableUserRelationType extends TableAccess
      */
     public function getInverse()
     {
-        $inverse = new self($this->db, $this->getValue('urt_id_inverse'));
+        $inverse = new self($this->db, (int) $this->getValue('urt_id_inverse'));
 
         if ($inverse->isNewRecord())
         {

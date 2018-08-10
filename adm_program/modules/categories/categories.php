@@ -104,7 +104,7 @@ $sqlAdminRoles = 'SELECT rol_name
                      AND '. $rolesRightsColumn .' = 1
                      AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                 ORDER BY cat_sequence, rol_name';
-$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
+$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array((int) $gCurrentOrganization->getValue('org_id')));
 
 $adminRoles = array();
 while($roleName = $statementAdminRoles->fetchColumn())
@@ -205,7 +205,7 @@ $sql = 'SELECT *
            AND cat_type = ? -- $getType
       ORDER BY cat_sequence ASC';
 
-$categoryStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $getType));
+$categoryStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), $getType));
 $flagTbodyWritten = false;
 $flagTbodyAllOrgasWritten = false;
 
@@ -334,7 +334,7 @@ while($catRow = $categoryStatement->fetch())
         else
         {
             $categoryAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
+                                            href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'cat', 'element_id' => 'row_'. (int) $category->getValue('cat_id'), 'name' => $category->getValue('cat_name'), 'database_id' => $catId, 'database_id_2' => $getType)).'">'.
                                             '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
         }
     }

@@ -71,7 +71,7 @@ $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
          WHERE cat_type = \'LNK\'
            AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
       ORDER BY lnk_timestamp_create DESC';
-$queryParams[] = $gCurrentOrganization->getValue('org_id');
+$queryParams[] = (int) $gCurrentOrganization->getValue('org_id');
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
 // start defining the RSS Feed
@@ -101,7 +101,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $weblink->getValue('lnk_name'),
         '<a href="'.$lnkUrl.'" target="_blank">'.$lnkUrl.'</a><br /><br />'. $weblink->getValue('lnk_description'),
-        safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => $weblink->getValue('lnk_id'))),
+        safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/links/links.php', array('id' => (int) $weblink->getValue('lnk_id'))),
         $row['create_name'],
         \DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );

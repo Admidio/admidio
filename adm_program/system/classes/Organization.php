@@ -143,7 +143,7 @@ class Organization extends TableAccess
         );
         $text = new TableText($this->db);
 
-        $orgId = $this->getValue('org_id');
+        $orgId = (int) $this->getValue('org_id');
 
         foreach($systemmailsTexts as $key => $value)
         {
@@ -287,12 +287,12 @@ class Organization extends TableAccess
         $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
         $addressList->setValue('lst_org_id', $orgId);
         $addressList->setValue('lst_global', 1);
-        $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-        $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-        $addressList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $addressList->addColumn(4, $gProfileFields->getProperty('STREET', 'usf_id'));
-        $addressList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
-        $addressList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
+        $addressList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $addressList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $addressList->addColumn(3, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $addressList->addColumn(4, (int) $gProfileFields->getProperty('STREET', 'usf_id'));
+        $addressList->addColumn(5, (int) $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $addressList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
         $addressList->save();
 
         // set addresslist to default configuration
@@ -300,42 +300,42 @@ class Organization extends TableAccess
                    SET prf_value  = ? -- $addressList->getValue(\'lst_id\')
                  WHERE prf_org_id = ? -- $orgId
                    AND prf_name   = \'lists_default_configuration\'';
-        $this->db->queryPrepared($sql, array($addressList->getValue('lst_id'), $orgId));
+        $this->db->queryPrepared($sql, array((int) $addressList->getValue('lst_id'), $orgId));
 
         $phoneList = new ListConfiguration($this->db);
         $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
         $phoneList->setValue('lst_org_id', $orgId);
         $phoneList->setValue('lst_global', 1);
-        $phoneList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-        $phoneList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-        $phoneList->addColumn(3, $gProfileFields->getProperty('PHONE', 'usf_id'));
-        $phoneList->addColumn(4, $gProfileFields->getProperty('MOBILE', 'usf_id'));
-        $phoneList->addColumn(5, $gProfileFields->getProperty('EMAIL', 'usf_id'));
-        $phoneList->addColumn(6, $gProfileFields->getProperty('FAX', 'usf_id'));
+        $phoneList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $phoneList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $phoneList->addColumn(3, (int) $gProfileFields->getProperty('PHONE', 'usf_id'));
+        $phoneList->addColumn(4, (int) $gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $phoneList->addColumn(5, (int) $gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $phoneList->addColumn(6, (int) $gProfileFields->getProperty('FAX', 'usf_id'));
         $phoneList->save();
 
         $contactList = new ListConfiguration($this->db);
         $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
         $contactList->setValue('lst_org_id', $orgId);
         $contactList->setValue('lst_global', 1);
-        $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-        $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-        $contactList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-        $contactList->addColumn(4, $gProfileFields->getProperty('STREET', 'usf_id'));
-        $contactList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
-        $contactList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
-        $contactList->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));
-        $contactList->addColumn(8, $gProfileFields->getProperty('MOBILE', 'usf_id'));
-        $contactList->addColumn(9, $gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $contactList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $contactList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $contactList->addColumn(3, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $contactList->addColumn(4, (int) $gProfileFields->getProperty('STREET', 'usf_id'));
+        $contactList->addColumn(5, (int) $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $contactList->addColumn(6, (int) $gProfileFields->getProperty('CITY', 'usf_id'));
+        $contactList->addColumn(7, (int) $gProfileFields->getProperty('PHONE', 'usf_id'));
+        $contactList->addColumn(8, (int) $gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $contactList->addColumn(9, (int) $gProfileFields->getProperty('EMAIL', 'usf_id'));
         $contactList->save();
 
         $formerList = new ListConfiguration($this->db);
         $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
         $formerList->setValue('lst_org_id', $orgId);
         $formerList->setValue('lst_global', 1);
-        $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-        $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-        $formerList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $formerList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $formerList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $formerList->addColumn(3, (int) $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
         $formerList->addColumn(4, 'mem_begin');
         $formerList->addColumn(5, 'mem_end');
         $formerList->save();
@@ -344,8 +344,8 @@ class Organization extends TableAccess
         $participantList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
         $participantList->setValue('lst_org_id', $orgId);
         $participantList->setValue('lst_global', 1);
-        $participantList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-        $participantList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $participantList->addColumn(1, (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $participantList->addColumn(2, (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
         $participantList->addColumn(3, 'mem_approved');
         $participantList->addColumn(4, 'mem_comment');
         $participantList->addColumn(5, 'mem_count_guests');
@@ -356,7 +356,7 @@ class Organization extends TableAccess
                    SET prf_value = ? -- $participantList->getValue(\'lst_id\')
                  WHERE prf_name   = \'dates_default_list_configuration\'
                    AND prf_org_id = ? -- $orgId';
-        $this->db->queryPrepared($sql, array($participantList->getValue('lst_id'), $orgId));
+        $this->db->queryPrepared($sql, array((int) $participantList->getValue('lst_id'), $orgId));
     }
 
     /**
@@ -388,7 +388,7 @@ class Organization extends TableAccess
         }
 
         $organizationIds = array_keys($organizations);
-        $organizationIds[] = $this->getValue('org_id');
+        $organizationIds[] = (int) $this->getValue('org_id');
         return implode(',', $organizationIds);
     }
 
@@ -408,7 +408,7 @@ class Organization extends TableAccess
         if ($child)
         {
             $sqlWhere[] = 'org_org_id_parent = ?';
-            $queryParams[] = $this->getValue('org_id');
+            $queryParams[] = (int) $this->getValue('org_id');
         }
         $orgParentId = (int) $this->getValue('org_org_id_parent');
         if ($parent && $orgParentId > 0)

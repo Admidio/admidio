@@ -142,7 +142,7 @@ $sql = 'SELECT *
                OR cat_org_id IS NULL )
                '.$sqlRolesStatus.'
       ORDER BY cat_sequence ASC, rol_name ASC';
-$rolStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+$rolStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 
 // Create role object
 $role = new TableRoles($gDb);
@@ -308,7 +308,7 @@ while($row = $rolStatement->fetch())
 
     // create array with all column values
     $columnValues = array(
-        array('value' => $role->getValue('cat_name'), 'order' => $role->getValue('cat_sequence')),
+        array('value' => $role->getValue('cat_name'), 'order' => (int) $role->getValue('cat_sequence')),
         '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/roles/roles_new.php', array('rol_id' => $rolId)).'" title="'.$role->getValue('rol_description').'">'.$rolName.'</a>',
         $assignRoles,
         $gL10n->get($viewEmail),

@@ -148,13 +148,13 @@ if($gValidLogin)
     $form = new HtmlForm('plugin-login-static-form', '#', null, array('type' => 'vertical', 'setFocus' => false));
     $form->addStaticControl(
         'plg_user', $gL10n->get('SYS_MEMBER'),
-        '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => $gCurrentUser->getValue('usr_id'))). '" '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
+        '<a href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/profile/profile.php', array('user_id' => (int) $gCurrentUser->getValue('usr_id'))). '" '. $plg_link_target. ' title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'
         . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') .
         '</a>'
     );
     $form->addStaticControl('plg_active_since', $gL10n->get('PLG_LOGIN_ACTIVE_SINCE'), $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
     $form->addStaticControl('plg_last_login', $gL10n->get('PLG_LOGIN_LAST_LOGIN'), $lastLogin);
-    $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
+    $form->addStaticControl('plg_number_of_logins', $gL10n->get('PLG_LOGIN_NUMBER_OF_LOGINS'), (int) $gCurrentUser->getValue('usr_number_login').$htmlUserRank);
     echo $form->show();
 
     echo '<div class="btn-group-vertical" role="group">';
@@ -200,7 +200,7 @@ else
               ORDER BY org_longname ASC, org_shortname ASC';
         $form->addSelectBoxFromSql(
             'plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql,
-            array('defaultValue' => $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false)
+            array('defaultValue' => (int) $gCurrentOrganization->getValue('org_id'), 'showContextDependentFirstEntry' => false)
         );
     }
 
@@ -239,7 +239,7 @@ else
                    AND rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\')
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )';
-        $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrganization->getValue('org_id')));
+        $administratorStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), (int) $gCurrentOrganization->getValue('org_id')));
 
         // create role object for administrator
         $roleAdministrator = new TableRoles($gDb, (int) $administratorStatement->fetchColumn());
@@ -256,7 +256,7 @@ else
         elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
         {
             // show link of message module to send mail to administrator role
-            $linkUrl = safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('rol_id' => $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+            $linkUrl = safeUrl(ADMIDIO_URL. FOLDER_MODULES. '/messages/messages_write.php', array('rol_id' => (int) $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         }
         else
         {

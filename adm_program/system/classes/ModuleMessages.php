@@ -56,7 +56,7 @@ class ModuleMessages
                  WHERE rol_id = ? -- $groupInfo[\'id\']
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL)';
-        $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], $gCurrentOrganization->getValue('org_id')));
+        $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], (int) $gCurrentOrganization->getValue('org_id')));
         $roleName = $statement->fetchColumn();
 
         switch ($groupInfo['status'])

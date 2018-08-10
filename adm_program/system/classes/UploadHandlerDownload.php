@@ -63,7 +63,7 @@ class UploadHandlerDownload extends UploadHandler
 
                 // now add new file to database
                 $newFile = new TableFile($gDb);
-                $newFile->setValue('fil_fol_id', $targetFolder->getValue('fol_id'));
+                $newFile->setValue('fil_fol_id', (int) $targetFolder->getValue('fol_id'));
                 $newFile->setValue('fil_name', $file->name);
                 $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
                 $newFile->setValue('fil_counter', 0);

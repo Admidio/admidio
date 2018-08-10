@@ -87,7 +87,7 @@ if($gCurrentUser->manageRoles())
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
 }
 else
 {
@@ -113,7 +113,7 @@ else
                AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, rol_name';
-    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, $gCurrentUser->getValue('usr_id'), DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, (int) $gCurrentUser->getValue('usr_id'), DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
 }
 $rolesStatement = $gDb->queryPrepared($sql, $queryParams);
 $rolesList      = $rolesStatement->fetchAll();

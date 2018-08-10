@@ -72,7 +72,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     global $gLogger;
 
     // Speicherort
-    $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+    $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
     // delete photos
     try
@@ -145,7 +145,7 @@ function deletePhoto(TablePhotos $photoAlbum, $picNr)
     }//for
 
     // Aendern der Datenbankeintaege
-    $photoAlbum->setValue('pho_quantity', $photoAlbum->getValue('pho_quantity')-1);
+    $photoAlbum->setValue('pho_quantity', (int) $photoAlbum->getValue('pho_quantity') - 1);
     $photoAlbum->save();
 }
 
@@ -169,7 +169,7 @@ if ($getJob === 'rotate')
         deleteThumbnail($photoAlbum, $getPhotoNr);
 
         // Ordnerpfad zusammensetzen
-        $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/' . $getPhotoNr . '.jpg';
+        $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id') . '/' . $getPhotoNr . '.jpg';
 
         // Bild drehen
         $image = new Image($photoPath);

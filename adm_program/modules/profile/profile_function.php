@@ -62,7 +62,7 @@ elseif($getMode === 2)
 {
     // Cancel membership of role
     $member = new TableMembers($gDb, $getMemberId);
-    $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
+    $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // if user has the right then cancel membership
     if($role->allowedToAssignMembers($gCurrentUser))
@@ -143,7 +143,7 @@ elseif($getMode === 7)
     $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId,   'date', array('requireValue' => true));
 
     $member = new TableMembers($gDb, $getMemberId);
-    $role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
+    $role   = new TableRoles($gDb, (int) $member->getValue('mem_rol_id'));
 
     // check if user has the right to edit this membership
     if(!$role->allowedToAssignMembers($gCurrentUser))

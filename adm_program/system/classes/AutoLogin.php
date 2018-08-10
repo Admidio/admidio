@@ -91,7 +91,7 @@ class AutoLogin extends TableAccess
         if ($this->newRecord)
         {
             // Insert
-            $this->setValue('atl_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('atl_org_id', (int) $gCurrentOrganization->getValue('org_id'));
 
             // Tabelle aufraeumen, wenn ein neuer Datensatz geschrieben wird
             $this->tableCleanup();
@@ -123,6 +123,6 @@ class AutoLogin extends TableAccess
         $sql = 'UPDATE '.TBL_AUTO_LOGIN.'
                    SET atl_number_invalid = 0
                  WHERE atl_usr_id = ? -- $this->getValue(\'atl_usr_id\')';
-        $this->db->queryPrepared($sql, array($this->getValue('atl_usr_id')));
+        $this->db->queryPrepared($sql, array((int) $this->getValue('atl_usr_id')));
     }
 }

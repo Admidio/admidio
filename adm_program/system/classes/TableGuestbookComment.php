@@ -90,7 +90,7 @@ class TableGuestbookComment extends TableAccess
 
         if ($this->newRecord)
         {
-            $this->setValue('gbc_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('gbc_org_id', (int) $gCurrentOrganization->getValue('org_id'));
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 

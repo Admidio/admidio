@@ -82,7 +82,7 @@ class SystemMail extends Email
         {
             $this->smTextObject->readDataByColumns(array(
                 'txt_name'   => $systemMailId,
-                'txt_org_id' => $this->smOrganization->getValue('org_id')
+                'txt_org_id' => (int) $this->smOrganization->getValue('org_id')
             ));
         }
 

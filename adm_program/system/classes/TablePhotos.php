@@ -82,7 +82,7 @@ class TablePhotos extends TableAccess
     public function createFolder()
     {
         // Ordner fuer die Veranstaltung anlegen
-        $folderName = $this->getValue('pho_begin', 'Y-m-d') . '_' . $this->getValue('pho_id');
+        $folderName = $this->getValue('pho_begin', 'Y-m-d') . '_' . (int) $this->getValue('pho_id');
         try
         {
             FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $folderName);
@@ -178,7 +178,7 @@ class TablePhotos extends TableAccess
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_PHOTOS.'
                      WHERE pho_pho_id_parent = ? -- $this->getValue(\'pho_id\')';
-            $countChildAlbums = $this->db->queryPrepared($sql, array($this->getValue('pho_id')));
+            $countChildAlbums = $this->db->queryPrepared($sql, array((int) $this->getValue('pho_id')));
 
             $this->hasChildAlbums = $countChildAlbums->fetchColumn() > 0;
         }
@@ -238,7 +238,7 @@ class TablePhotos extends TableAccess
 
         if ($this->newRecord)
         {
-            $this->setValue('pho_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('pho_org_id', (int) $gCurrentOrganization->getValue('org_id'));
         }
 
         return parent::save($updateFingerPrint);
@@ -263,7 +263,7 @@ class TablePhotos extends TableAccess
 
             if ($this->getValue('pho_quantity') > 0)
             {
-                $shuffleImage['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
+                $shuffleImage['shuffle_img_nr'] = mt_rand(1, (int) $this->getValue('pho_quantity'));
             }
         }
 

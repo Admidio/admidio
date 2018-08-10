@@ -80,7 +80,7 @@ $sql = 'SELECT pho.*, '.$additionalFields.'
            AND pho_locked = 0
       ORDER BY pho_timestamp_create DESC
          LIMIT 10';
-$queryParams[] = $gCurrentOrganization->getValue('org_id');
+$queryParams[] = (int) $gCurrentOrganization->getValue('org_id');
 $statement = $gDb->queryPrepared($sql, $queryParams);
 
 $photoAlbum = new TablePhotos($gDb);

@@ -164,7 +164,7 @@ $form->addMultilineTextInput(
 );
 $form->addSelectBoxForCategories(
     'rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $role->getValue('rol_cat_id'))
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $role->getValue('rol_cat_id'))
 );
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
@@ -207,7 +207,7 @@ $sql = 'SELECT lst_id, lst_name
            AND lst_global = 1
            AND lst_name IS NOT NULL
       ORDER BY lst_global ASC, lst_name ASC';
-$pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+$pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 
 while($row = $pdoStatement->fetch())
 {
@@ -215,7 +215,7 @@ while($row = $pdoStatement->fetch())
 }
 $form->addSelectBox(
     'rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries,
-    array('defaultValue' => $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC')
+    array('defaultValue' => (int) $role->getValue('rol_lst_id'), 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC')
 );
 
 if($role->getValue('cat_name_intern') !== 'EVENTS')
@@ -225,7 +225,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
         array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC')
     );
     $form->addInput(
-        'rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'),
+        'rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', (int) $role->getValue('rol_max_members'),
         array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1)
     );
     $form->addInput(
@@ -348,7 +348,7 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
                             AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
-    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+    $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
 
     $form->addSelectBoxFromSql(
         'dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlData,

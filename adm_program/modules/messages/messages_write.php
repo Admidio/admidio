@@ -150,7 +150,7 @@ if ($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // if an User ID is given, we need to check if the actual user is allowed to contact this user
-    if ((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
+    if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT
