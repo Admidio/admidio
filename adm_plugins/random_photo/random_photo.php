@@ -92,7 +92,7 @@ if($plg_photos_albums > 0)
     $sql .= ' LIMIT '.$plg_photos_albums;
 }
 
-$albumStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+$albumStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 $albumList      = $albumStatement->fetchAll();
 
 // Variablen initialisieren
@@ -111,7 +111,7 @@ while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
     // Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr === 0)
     {
-        $picNr = mt_rand(1, $album->getValue('pho_quantity'));
+        $picNr = mt_rand(1, (int) $album->getValue('pho_quantity'));
     }
     else
     {
@@ -119,7 +119,7 @@ while(!is_file($picPath) && $i < 20 && $albumStatement->rowCount() > 0)
     }
 
     // Bilpfad zusammensetzen
-    $picPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . $album->getValue('pho_id') . '/' . $picNr . '.jpg';
+    $picPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $album->getValue('pho_begin', 'Y-m-d') . '_' . (int) $album->getValue('pho_id') . '/' . $picNr . '.jpg';
     ++$i;
 }
 

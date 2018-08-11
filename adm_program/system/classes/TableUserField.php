@@ -71,13 +71,15 @@ class TableUserField extends TableAccess
                    SET usf_sequence = usf_sequence - 1
                  WHERE usf_cat_id   = ? -- $this->getValue(\'usf_cat_id\')
                    AND usf_sequence > ? -- $this->getValue(\'usf_sequence\')';
-        $this->db->queryPrepared($sql, array($this->getValue('usf_cat_id'), $this->getValue('usf_sequence')));
+        $this->db->queryPrepared($sql, array((int) $this->getValue('usf_cat_id'), (int) $this->getValue('usf_sequence')));
+
+        $usfId = (int) $this->getValue('usf_id');
 
         // close gap in sequence of saved lists
         $sql = 'SELECT lsc_lst_id, lsc_number
                   FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_usf_id = ? -- $this->getValue(\'usf_id\')';
-        $listsStatement = $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
+                 WHERE lsc_usf_id = ? -- $usfId';
+        $listsStatement = $this->db->queryPrepared($sql, array($usfId));
 
         while($rowLst = $listsStatement->fetch())
         {
@@ -90,16 +92,16 @@ class TableUserField extends TableAccess
 
         // delete all dependencies in other tables
         $sql = 'DELETE FROM '.TBL_USER_LOG.'
-                 WHERE usl_usf_id = ? -- $this->getValue(\'usf_id\')';
-        $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
+                 WHERE usl_usf_id = ? -- $usfId';
+        $this->db->queryPrepared($sql, array($usfId));
 
         $sql = 'DELETE FROM '.TBL_USER_DATA.'
-                 WHERE usd_usf_id = ? -- $this->getValue(\'usf_id\')';
-        $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
+                 WHERE usd_usf_id = ? -- $usfId';
+        $this->db->queryPrepared($sql, array($usfId));
 
         $sql = 'DELETE FROM '.TBL_LIST_COLUMNS.'
-                 WHERE lsc_usf_id = ? -- $this->getValue(\'usf_id\')';
-        $this->db->queryPrepared($sql, array($this->getValue('usf_id')));
+                 WHERE lsc_usf_id = ? -- $usfId';
+        $this->db->queryPrepared($sql, array($usfId));
 
         // all active users must renew their user data because the user field structure has been changed
         $gCurrentSession->renewUserObject();

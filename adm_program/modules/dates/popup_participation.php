@@ -16,7 +16,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'int', array('requireValue' => true));
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
 
 // Initialize local variables
 $disableAdditionalGuests = HtmlForm::FIELD_HIDDEN;
@@ -35,15 +35,15 @@ if ((int) $gCurrentUser->getValue('usr_id') === $getUserId)
 }
 else
 {
-    if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
+    if (!$gCurrentUser->isAdministrator() || !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id')))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
 // Read participants
-$participants = new Participants($gDb, $date->getValue('dat_rol_id'));
-$participantsArray   = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
+$participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
+$participantsArray = $participants->getParticipantsArray((int) $date->getValue('dat_rol_id'));
 
 // If extended options for participation are allowed then show in form
 if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
@@ -59,7 +59,7 @@ if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('
 }
 
 $member = new TableMembers($gDb);
-$member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
+$member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
 
 // Write header with charset utf8
 header('Content-type: text/html; charset=utf-8');
@@ -105,7 +105,7 @@ $participationForm->addMultilineTextInput(
     array('class' => 'form-control', 'maxLength' => 1000, 'property' => $disableComments)
 );
 $participationForm->addInput(
-    'additional_guests', $gL10n->get('LST_SEAT_AMOUNT'), $member->getValue('mem_count_guests'),
+    'additional_guests', $gL10n->get('LST_SEAT_AMOUNT'), (int) $member->getValue('mem_count_guests'),
     array('class' => 'form-control', 'type' => 'number', 'property' => $disableAdditionalGuests)
 );
 $participationForm->addHtml('</div><div class="modal-footer">');

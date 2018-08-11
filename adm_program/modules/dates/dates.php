@@ -461,7 +461,7 @@ else
         }
 
         // check the rights if the user is allowed to view the participiants or he is allowed to participate
-        if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
+        if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
             || $row['mem_leader'] == 1
             || $gCurrentUser->editDates()
             || $date->allowedToParticipate())
@@ -881,7 +881,7 @@ else
                     {
                         if ($date->getValue('dat_max_members') > 0)
                         {
-                            $htmlParticipants = $outputNumberMembers . ' / ' . $date->getValue('dat_max_members');
+                            $htmlParticipants = $outputNumberMembers . ' / ' . (int) $date->getValue('dat_max_members');
                         }
                         else
                         {
@@ -906,7 +906,7 @@ else
                     if (is_array($participantsArray))
                     {
                         // Only show participants if user has right to view the list, is leader or has permission to create/edit events
-                        if ($gCurrentUser->hasRightViewRole($date->getValue('dat_rol_id'))
+                        if ($gCurrentUser->hasRightViewRole((int) $date->getValue('dat_rol_id'))
                             || $row['mem_leader'] == 1
                             || $gCurrentUser->editDates())
                         {

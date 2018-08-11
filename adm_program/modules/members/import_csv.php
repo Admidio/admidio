@@ -250,7 +250,7 @@ for($i = $startRow, $iMax = count($_SESSION['file_lines']); $i < $iMax; ++$i)
             $user->save();
 
             // assign role membership to user
-            if($user->setRoleMembership($_SESSION['rol_id']))
+            if($user->setRoleMembership((int) $_SESSION['rol_id']))
             {
                 ++$countImportEditRole;
             }

@@ -81,7 +81,7 @@ class RolesRights extends TableAccess
             if (!in_array($roleId, $this->rolesIds, true) && $roleId > 0)
             {
                 $rolesRightsData = new TableAccess($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
-                $rolesRightsData->setValue('rrd_ror_id', $this->getValue('ror_id'));
+                $rolesRightsData->setValue('rrd_ror_id', (int) $this->getValue('ror_id'));
                 $rolesRightsData->setValue('rrd_rol_id', $roleId);
                 $rolesRightsData->setValue('rrd_object_id', $this->objectId);
                 $rolesRightsData->save();
@@ -187,7 +187,7 @@ class RolesRights extends TableAccess
                       FROM '.TBL_ROLES_RIGHTS_DATA.'
                      WHERE rrd_ror_id    = ? -- $this->getValue(\'ror_id\')
                        AND rrd_object_id = ? -- $this->objectId';
-            $rolesRightsStatement = $this->db->queryPrepared($sql, array($this->getValue('ror_id'), $this->objectId));
+            $rolesRightsStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('ror_id'), $this->objectId));
 
             while($row = $rolesRightsStatement->fetch())
             {
@@ -245,7 +245,7 @@ class RolesRights extends TableAccess
             // if current right has a parent role right than add the roles also to the parent role right
             if((int) $this->getValue('ror_ror_id_parent') > 0)
             {
-                $parentRight      = new TableAccess($this->db, TBL_ROLES_RIGHTS, 'ror', $this->getValue('ror_ror_id_parent'));
+                $parentRight      = new TableAccess($this->db, TBL_ROLES_RIGHTS, 'ror', (int) $this->getValue('ror_ror_id_parent'));
                 $parentRolesRight = new self($this->db, $parentRight->getValue('ror_name_intern'), $this->objectId);
                 $parentRolesRight->saveRolesOfChildRight($roleIds);
             }

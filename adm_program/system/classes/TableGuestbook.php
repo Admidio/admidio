@@ -42,7 +42,7 @@ class TableGuestbook extends TableAccess
         // Delete all available comments to this guestbook entry
         $sql = 'DELETE FROM '.TBL_GUESTBOOK_COMMENTS.'
                       WHERE gbc_gbo_id = ? -- $this->getValue(\'gbo_id\')';
-        $this->db->queryPrepared($sql, array($this->getValue('gbo_id')));
+        $this->db->queryPrepared($sql, array((int) $this->getValue('gbo_id')));
 
         $return = parent::delete();
 
@@ -108,7 +108,7 @@ class TableGuestbook extends TableAccess
 
         if ($this->newRecord)
         {
-            $this->setValue('gbo_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('gbo_org_id', (int) $gCurrentOrganization->getValue('org_id'));
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 

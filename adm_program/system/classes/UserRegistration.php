@@ -134,7 +134,7 @@ class UserRegistration extends User
             $sql = 'SELECT reg_id
                       FROM '.TBL_REGISTRATIONS.'
                      WHERE reg_usr_id = ? -- $this->getValue(\'usr_id\')';
-            $registrationsStatement = $this->db->queryPrepared($sql, array($this->getValue('usr_id')));
+            $registrationsStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('usr_id')));
 
             if($registrationsStatement->rowCount() === 0)
             {
@@ -189,7 +189,7 @@ class UserRegistration extends User
         {
             // save registration record
             $this->tableRegistration->setValue('reg_org_id', $this->organizationId);
-            $this->tableRegistration->setValue('reg_usr_id', $this->getValue('usr_id'));
+            $this->tableRegistration->setValue('reg_usr_id', (int) $this->getValue('usr_id'));
             $this->tableRegistration->setValue('reg_timestamp', DATETIME_NOW);
             $this->tableRegistration->save();
 

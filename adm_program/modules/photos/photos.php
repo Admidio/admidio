@@ -210,7 +210,7 @@ while ($phoParentId > 0)
     $photoAlbumParent->readDataById($phoParentId);
 
     // Link zusammensetzen
-    $navilink = '<li><a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $photoAlbumParent->getValue('pho_id'))).'">'.
+    $navilink = '<li><a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $photoAlbumParent->getValue('pho_id'))).'">'.
         $photoAlbumParent->getValue('pho_name').'</a></li>'.$navilink;
 
     // Elternveranst
@@ -386,7 +386,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 
     // show page navigations through thumbnails
     $page->addHtml(admFuncGeneratePagination(
-        safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $photoAlbum->getValue('pho_id'))),
+        safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $photoAlbum->getValue('pho_id'))),
         (int) $photoAlbum->getValue('pho_quantity'),
         $gSettingsManager->getInt('photo_thumbs_page'),
         $getPhotoNr,
@@ -401,7 +401,7 @@ if ($photoAlbum->getValue('pho_quantity') > 0)
 $sql = 'SELECT *
           FROM '.TBL_PHOTOS.'
          WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-$queryParams = array($gCurrentOrganization->getValue('org_id'));
+$queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
 if ($getPhotoId === 0)
 {
     $sql .= '
@@ -446,7 +446,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
     $childPhotoAlbum->setArray($albumList[$x]);
 
     // folder of the album
-    $ordner = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
+    $ordner = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $childPhotoAlbum->getValue('pho_id');
 
     // show album if album is not locked or it has child albums or the user has the photo module edit right
     if ((is_dir($ordner) && $childPhotoAlbum->getValue('pho_locked') == 0)
@@ -458,7 +458,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         // Album angaben
         if (is_dir($ordner) || $childPhotoAlbum->hasChildAlbums())
         {
-            $albumTitle = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
+            $albumTitle = '<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
         }
         else
         {
@@ -472,7 +472,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         }
 
         $page->addHtml('
-            <div class="col-sm-6 admidio-album-card" id="panel_pho_'.$childPhotoAlbum->getValue('pho_id').'">
+            <div class="col-sm-6 admidio-album-card" id="panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id').'">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="pull-left"><i class="fas fa-image"></i>'.$albumTitle.'</div>
@@ -483,7 +483,7 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         if ($gSettingsManager->getBool('photo_download_enabled') && $childPhotoAlbum->getValue('pho_quantity') > 0)
         {
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'">
+                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_download.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
                     <i class="fas fa-download" data-toggle="tooltip" title="'.$gL10n->get('SYS_DOWNLOAD_ALBUM').'"></i></a>
             ');
         }
@@ -492,11 +492,11 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
         if ($gCurrentUser->editPhotoRight())
         {
             $page->addHtml('
-                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
+                <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_new.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => 'change')).'">
                     <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                 <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.$childPhotoAlbum->getValue('pho_id'),
-                    'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => $childPhotoAlbum->getValue('pho_id'))).'">
+                    href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'pho_album', 'element_id' => 'panel_pho_'.(int) $childPhotoAlbum->getValue('pho_id'),
+                    'name' => $childPhotoAlbum->getValue('pho_name'), 'database_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'">
                     <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
             ');
         }
@@ -507,13 +507,13 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-preview">
-                        <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'))).'"><img
+                        <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'))).'"><img
                             class="thumbnail" src="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_show.php', array('pho_id' => $shuffleImage['shuffle_pho_id'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)).'" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 admidio-album-card-description">
         ');
 
-        $form = new HtmlForm('form_album_'.$childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
+        $form = new HtmlForm('form_album_'.(int) $childPhotoAlbum->getValue('pho_id'), null, $page, array('type' => 'vertical'));
         $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
         $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
         if (strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
@@ -554,10 +554,10 @@ for ($x = $getStart; $x <= $getStart + $gSettingsManager->getInt('photo_albums_p
             $page->addHtml('
                 <div class="btn-group" role="group" style="width: 100%;">
                     <button class="btn btn-default admidio-btn-album-upload" style="width: 50%;"
-                        data-pho-id="'.$childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal">
+                        data-pho-id="'.(int) $childPhotoAlbum->getValue('pho_id').'" data-toggle="modal" data-target="#admidio_modal">
                         <i class="fas fa-upload"></i>'.$gL10n->get('PHO_UPLOAD_PHOTOS').'
                     </button>
-                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'">
+                    <button class="btn btn-default" style="width: 50%;" onclick="window.location.href=\''.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photo_album_function.php', array('pho_id' => (int) $childPhotoAlbum->getValue('pho_id'), 'mode' => $lockMode)).'\'">
                         <i class="fas ' . $lockIcon . '"></i>'.$lockBtnName.'
                     </button>
                 </div>

@@ -104,29 +104,29 @@ else
         $room->setArray($row);
 
         $page->addHtml('
-        <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
+        <div class="panel panel-primary" id="room_'.(int) $room->getValue('room_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
                     <i class="fas fa-home"></i>' . $room->getValue('room_name') . '
                 </div>
                 <div class="pull-right text-right">
-                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => $room->getValue('room_id'), 'headline' => $textRoom)).'">
+                    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_id' => (int) $room->getValue('room_id'), 'headline' => $textRoom)).'">
                         <i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>
                     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.$room->getValue('room_id'),
-                        'name' => $room->getValue('room_name'), 'database_id' => $room->getValue('room_id'))).'">
+                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'room', 'element_id' => 'room_'.(int) $room->getValue('room_id'),
+                        'name' => $room->getValue('room_name'), 'database_id' => (int) $room->getValue('room_id'))).'">
                         <i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>
                 </div>
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_CAPACITY').'</div>
-                    <div class="col-sm-4 col-xs-8"><strong>'.$room->getValue('room_capacity').'</strong></div>');
+                    <div class="col-sm-4 col-xs-8"><strong>'.(int) $room->getValue('room_capacity').'</strong></div>');
 
                     if($room->getValue('room_overhang') > 0)
                     {
                         $page->addHtml('<div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_OVERHANG').'</div>
-                        <div class="col-sm-4 col-xs-8"><strong>'.$room->getValue('room_overhang').'</strong></div>');
+                        <div class="col-sm-4 col-xs-8"><strong>'.(int) $room->getValue('room_overhang').'</strong></div>');
                     }
                     else
                     {

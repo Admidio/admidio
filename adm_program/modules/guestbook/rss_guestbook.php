@@ -48,7 +48,7 @@ $sql = 'SELECT *
            AND gbo_locked = 0
       ORDER BY gbo_timestamp_create DESC
          LIMIT 10';
-$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+$statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 
 // ab hier wird der RSS-Feed zusammengestellt
 
@@ -73,7 +73,7 @@ while ($row = $statement->fetch())
     $rss->addItem(
         $guestbook->getValue('gbo_name'),
         $guestbook->getValue('gbo_text'),
-        safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => $guestbook->getValue('gbo_id'))),
+        safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/guestbook/guestbook.php', array('id' => (int) $guestbook->getValue('gbo_id'))),
         $guestbook->getValue('gbo_name'),
         \DateTime::createFromFormat('Y-m-d H:i:s', $guestbook->getValue('gbo_timestamp_create', 'Y-m-d H:i:s'))->format('r')
     );

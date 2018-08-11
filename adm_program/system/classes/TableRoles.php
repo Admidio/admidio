@@ -128,7 +128,7 @@ class TableRoles extends TableAccess
                        AND mem_leader = 1
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW';
-            $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), DATE_NOW, DATE_NOW));
+            $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
             $this->countLeaders = (int) $pdoStatement->fetchColumn();
         }
@@ -155,7 +155,7 @@ class TableRoles extends TableAccess
                        AND (mem_approved IS NULL
                             OR mem_approved < 3)';
 
-            $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), $exceptUserId, DATE_NOW, DATE_NOW));
+            $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), $exceptUserId, DATE_NOW, DATE_NOW));
 
             $this->countMembers = (int) $pdoStatement->fetchColumn();
         }
@@ -188,7 +188,7 @@ class TableRoles extends TableAccess
             $sql .= '
                 AND mem_leader = 0 ';
         }
-        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), DATE_NOW, DATE_NOW));
+        $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
         return $rolMaxMembers - $pdoStatement->rowCount();
     }
@@ -215,7 +215,7 @@ class TableRoles extends TableAccess
                      WHERE rol_default_registration = 1
                        AND rol_id    <> ? -- $rolId
                        AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, $gCurrentOrganization->getValue('org_id')));
+            $countRolesStatement = $this->db->queryPrepared($sql, array($rolId, (int) $gCurrentOrganization->getValue('org_id')));
 
             if ((int) $countRolesStatement->fetchColumn() === 0)
             {
@@ -357,7 +357,7 @@ class TableRoles extends TableAccess
                  WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
                    AND (  mem_begin > ? -- DATE_NOW
                        OR mem_end   < ? ) -- DATE_NOW';
-        $pdoStatement = $this->db->queryPrepared($sql, array($this->getValue('rol_id'), DATE_NOW, DATE_NOW));
+        $pdoStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
         return $pdoStatement->fetchColumn() > 0;
     }
@@ -506,7 +506,7 @@ class TableRoles extends TableAccess
             $sql = 'UPDATE '.TBL_ROLES.'
                        SET rol_valid = ? -- $status
                      WHERE rol_id = ? -- $this->getValue(\'rol_id\')';
-            $this->db->queryPrepared($sql, array((int) $status, $this->getValue('rol_id')));
+            $this->db->queryPrepared($sql, array((int) $status, (int) $this->getValue('rol_id')));
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they where members of this role

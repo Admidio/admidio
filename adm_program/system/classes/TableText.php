@@ -64,7 +64,7 @@ class TableText extends TableAccess
         if ($this->newRecord && $this->getValue('txt_org_id') === '')
         {
             // Insert
-            $this->setValue('txt_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('txt_org_id', (int) $gCurrentOrganization->getValue('org_id'));
         }
 
         return parent::save($updateFingerPrint);

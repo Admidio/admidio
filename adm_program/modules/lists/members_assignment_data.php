@@ -173,7 +173,7 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                          '.$filterRoleCondition.'
                      AND rol_valid = 1
                      AND cat_name_intern <> \'EVENTS\'
-                     AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
+                     AND cat_org_id = '.(int) $gCurrentOrganization->getValue('org_id').')';
 
 if($getMembersShowAll)
 {
@@ -328,7 +328,7 @@ while($user = $userStatement->fetch())
     || (strlen($user['city']) > 0 && $gProfileFields->isVisible('CITY', $gCurrentUser->editUsers())))
     {
         // some countries have the order postcode city others have city postcode
-        if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+        if((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
         {
             $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
         }

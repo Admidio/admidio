@@ -98,7 +98,7 @@ if (!$gValidLogin && $gSettingsManager->getInt('flooding_protection_time') > 0)
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp() - ? -- $gSettingsManager->getInt(\'flooding_protection_time\')
                AND gbo_org_id     = ? -- $gCurrentOrganization->getValue(\'org_id\')
                AND gbo_ip_address = ? -- $guestbook->getValue(\'gbo_ip_address\')';
-    $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
+    $queryParams = array($gSettingsManager->getInt('flooding_protection_time'), (int) $gCurrentOrganization->getValue('org_id'), $guestbook->getValue('gbo_ip_address'));
     $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
 
     if($pdoStatement->fetchColumn() > 0)

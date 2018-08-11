@@ -396,7 +396,7 @@ $page->addHtml('
                                         $urlParam[] = $city;
 
                                         // some countries have the order postcode city others have city postcode
-                                        if($gProfileFields->getProperty('CITY', 'usf_sequence') > $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
+                                        if((int) $gProfileFields->getProperty('CITY', 'usf_sequence') > (int) $gProfileFields->getProperty('POSTCODE', 'usf_sequence'))
                                         {
                                             $address[] = $postcode. ' '. $city;
                                         }
@@ -583,7 +583,7 @@ if($gSettingsManager->getBool('profile_show_roles'))
                        OR cat_org_id IS NULL )
                    AND '.$rolesRightsDbName.' = 1
               ORDER BY cat_org_id, cat_sequence, rol_name';
-        $queryParams = array(DATE_NOW, DATE_NOW, $userId, $gCurrentOrganization->getValue('org_id'));
+        $queryParams = array(DATE_NOW, DATE_NOW, $userId, (int) $gCurrentOrganization->getValue('org_id'));
         $roleStatement = $gDb->queryPrepared($sql, $queryParams);
 
         $roles = array();
@@ -833,7 +833,7 @@ if($gSettingsManager->getBool('profile_show_extern_roles')
                AND cat_name_intern <> \'EVENTS\'
                AND org_id     <> ? -- $gCurrentOrganization->getValue(\'org_id\')
           ORDER BY org_shortname, cat_sequence, rol_name';
-    $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id')));
+    $roleStatement = $gDb->queryPrepared($sql, array($userId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id')));
 
     if($roleStatement->rowCount() > 0)
     {
@@ -968,20 +968,20 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
 
             if($gCurrentUser->hasRightEditProfile($otherUser))
             {
-                $editUserIcon = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => $otherUser->getValue('usr_id'))) . '"><i
+                $editUserIcon = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_new.php', array('user_id' => (int) $otherUser->getValue('usr_id'))) . '"><i
                     class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i></a>';
             }
 
-            $page->addHtml('<li id="row_ure_'.$relation->getValue('ure_id').'" class="list-group-item">');
+            $page->addHtml('<li id="row_ure_'.(int) $relation->getValue('ure_id').'" class="list-group-item">');
             $page->addHtml('<div>');
-            $page->addHtml('<span>'.$relationName.' - <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => $otherUser->getValue('usr_id'))).
+            $page->addHtml('<span>'.$relationName.' - <a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_id' => (int) $otherUser->getValue('usr_id'))).
                            '">'.$otherUser->getValue('FIRST_NAME') . ' ' . $otherUser->getValue('LAST_NAME').'</a> ' . $editUserIcon . '<span>');
             $page->addHtml('<span class="pull-right text-right">');
 
             if($gCurrentUser->editUsers())
             {
                  $page->addHtml('<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                 href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.$relation->getValue('ure_id'), 'database_id' => $relation->getValue('ure_id'),
+                                 href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'ure', 'element_id' => 'row_ure_'.(int) $relation->getValue('ure_id'), 'database_id' => (int) $relation->getValue('ure_id'),
                                  'name' => $relationType->getValue('urt_name').': '.$otherUser->getValue('FIRST_NAME').' '.$otherUser->getValue('LAST_NAME').' -> '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'))).'"><i
                                     class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('PRO_CANCEL_USER_RELATION').'"></i></a>');
             }
@@ -989,7 +989,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
             // only show info if system setting is activated
             if((int) $gSettingsManager->get('system_show_create_edit') > 0)
             {
-                $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.$relation->getValue('ure_id').'" href="javascript:void(0)"><i
+                $page->addHtml('<a class="admidio-icon-link admMemberInfo" id="relation_info_'.(int) $relation->getValue('ure_id').'" href="javascript:void(0)"><i
                     class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('SYS_INFORMATIONS').'"></i></a>');
             }
 
@@ -997,7 +997,7 @@ if($gSettingsManager->getBool('members_enable_user_relations'))
             if((int) $gSettingsManager->get('system_show_create_edit') > 0)
             {
                 $page->addHtml(
-                    '<div id="relation_info_'.$relation->getValue('ure_id').'_Content" style="display: none;">'.
+                    '<div id="relation_info_'.(int) $relation->getValue('ure_id').'_Content" style="display: none;">'.
                     admFuncShowCreateChangeInfoById(
                         (int) $relation->getValue('ure_usr_id_create'), $relation->getValue('ure_timestamp_create'),
                         (int) $relation->getValue('ure_usr_id_change'), $relation->getValue('ure_timestamp_change')

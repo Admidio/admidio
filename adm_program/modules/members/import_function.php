@@ -47,7 +47,7 @@ elseif($postRoleId === 0)
 // evtl. ein Rollenzuordnungsrecht bekommt, wenn er es vorher nicht hatte
 $role = new TableRoles($gDb, $postRoleId);
 
-if(!$gCurrentUser->hasRightViewRole($role->getValue('rol_id'))
+if(!$gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'))
 || (!$gCurrentUser->manageRoles() && $role->getValue('rol_assign_roles') == false))
 {
     $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', array($role->getValue('rol_name'))));
@@ -57,7 +57,7 @@ if(!$gCurrentUser->hasRightViewRole($role->getValue('rol_id'))
 // read file in an array; auto-detect the line endings of different os
 ini_set('auto_detect_line_endings', '1');
 $_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name'][0]);
-$_SESSION['rol_id']           = $role->getValue('rol_id');
+$_SESSION['rol_id']           = (int) $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $postUserImportMode;
 
 if($postImportCoding === 'iso-8859-1')

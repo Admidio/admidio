@@ -392,7 +392,7 @@ class TableFolder extends TableAccess
                        FROM '.TBL_FILES.'
                       WHERE fil_fol_id = ? -- $this->getValue(\'fol_id\')
                    ORDER BY fil_name';
-        $filesStatement = $this->db->queryPrepared($sqlFiles, array($this->getValue('fol_id')));
+        $filesStatement = $this->db->queryPrepared($sqlFiles, array((int) $this->getValue('fol_id')));
 
         // jetzt noch die Dateien ins Array packen:
         while ($rowFiles = $filesStatement->fetch())
@@ -470,7 +470,7 @@ class TableFolder extends TableAccess
             $condition = ' fol_fol_id_parent IS NULL
                        AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        AND fol_type   = \'DOWNLOAD\' ';
-            $queryParams = array($gCurrentOrganization->getValue('org_id'));
+            $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
         }
         $this->readData($condition, $queryParams);
 
@@ -570,7 +570,7 @@ class TableFolder extends TableAccess
                            WHERE fol_type   = \'DOWNLOAD\'
                              AND fol_fol_id_parent IS NULL
                              AND fol_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-        $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array($gCurrentOrganization->getValue('org_id')));
+        $rootFolderStatement = $this->db->queryPrepared($sqlRootFolder, array((int) $gCurrentOrganization->getValue('org_id')));
         $rootFolderId = $rootFolderStatement->fetchColumn();
 
         $link = '
@@ -635,7 +635,7 @@ class TableFolder extends TableAccess
                           AND fol_fol_id_parent = ? -- $this->getValue(\'fol_id\')
                           AND fol_org_id        = ? -- $gCurrentOrganization->getValue(\'org_id\')
                      ORDER BY fol_name';
-        $foldersStatement = $this->db->queryPrepared($sqlFolders, array($this->getValue('fol_id'), $gCurrentOrganization->getValue('org_id')));
+        $foldersStatement = $this->db->queryPrepared($sqlFolders, array((int) $this->getValue('fol_id'), (int) $gCurrentOrganization->getValue('org_id')));
 
         $folders = array();
 
@@ -818,8 +818,8 @@ class TableFolder extends TableAccess
         if ($this->newRecord)
         {
             $this->setValue('fol_timestamp', DATETIME_NOW);
-            $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
-            $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('fol_usr_id', (int) $gCurrentUser->getValue('usr_id'));
+            $this->setValue('fol_org_id', (int) $gCurrentOrganization->getValue('org_id'));
         }
 
         return parent::save($updateFingerPrint);

@@ -68,9 +68,9 @@ function subMenu(&$menuList, $level, $menId, $parentId = null)
         $parentMenu->setArray($menuEntry);
 
         // add entry to array of all menus
-        $menuList[$parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
+        $menuList[(int) $parentMenu->getValue('men_id')] = $einschub . $parentMenu->getValue('men_name');
 
-        subMenu($menuList, ++$level, $menId, $parentMenu->getValue('men_id'));
+        subMenu($menuList, ++$level, $menId, (int) $parentMenu->getValue('men_id'));
     }
 }
 
@@ -177,7 +177,7 @@ $form->addSelectBox(
     'men_men_id_parent', $gL10n->get('MEN_MENU_LEVEL'), $menuList,
     array(
         'property'        => HtmlForm::FIELD_REQUIRED,
-        'defaultValue'    => $menu->getValue('men_men_id_parent'),
+        'defaultValue'    => (int) $menu->getValue('men_men_id_parent'),
         'helpTextIdLabel' => 'MEN_MENU_LEVEL_DESC'
     )
 );
@@ -189,7 +189,7 @@ $form->addSelectBoxFromSql(
     'men_com_id', $gL10n->get('MEN_MODULE_RIGHTS'), $gDb, $sql,
     array(
         'property'        => $fieldDefault,
-        'defaultValue'    => $menu->getValue('men_com_id'),
+        'defaultValue'    => (int) $menu->getValue('men_com_id'),
         'helpTextIdLabel' => 'MEN_MODULE_RIGHTS_DESC'
     )
 );
