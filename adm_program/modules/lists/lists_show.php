@@ -488,7 +488,7 @@ if ($getMode !== 'csv')
             {
                 $listsMenu->addItem('menu_item_extras', '', $gL10n->get('SYS_MORE_FEATURES'));
 
-                $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => $role->getValue('rol_id'))),
+                $listsMenu->addItem('menu_item_assign_members', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/lists/members_assignment.php', array('rol_id' => (int) $role->getValue('rol_id'))),
                     $gL10n->get('SYS_ASSIGN_MEMBERS'), 'fa-user-plus', 'left', 'menu_item_extras');
             }
         }
@@ -1024,7 +1024,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // max participants
             if (strlen($role->getValue('rol_max_members')) > 0)
             {
-                $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), $role->getValue('rol_max_members'));
+                $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), (int) $role->getValue('rol_max_members'));
             }
             $htmlBox .= $form->show();
             $htmlBox .= '</div>

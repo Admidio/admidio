@@ -141,12 +141,12 @@ else
 
 if($date->getValue('dat_rol_id') > 0)
 {
-    $dateRoleID = $date->getValue('dat_rol_id');
-    $role = new TableRoles($gDb, $dateRoleID);
+    $dateRoleId = (int) $date->getValue('dat_rol_id');
+    $role = new TableRoles($gDb, $dateRoleId);
 }
 else
 {
-    $dateRoleID = '0';
+    $dateRoleId = 0;
     $role = new TableRoles($gDb);
 }
 
@@ -214,7 +214,7 @@ $page->addJavascript('
 ');
 
 $page->addJavascript('
-    var dateRoleID = '.$dateRoleID.';
+    var dateRoleID = '.$dateRoleId.';
 
     setAllDay();
     setDateParticipation();
@@ -304,7 +304,7 @@ if($gSettingsManager->getBool('dates_show_rooms'))
     }
     $form->addSelectBoxFromSql(
         'dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql,
-        array('defaultValue' => $date->getValue('dat_room_id'))
+        array('defaultValue' => (int) $date->getValue('dat_room_id'))
     );
 }
 $form->closeGroupBox();
@@ -321,7 +321,7 @@ $form->addInput(
 );
 $form->addSelectBoxForCategories(
     'dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', HtmlForm::SELECT_BOX_MODUS_EDIT,
-    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $date->getValue('dat_cat_id'))
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => (int) $date->getValue('dat_cat_id'))
 );
 $form->closeGroupBox();
 
@@ -369,7 +369,7 @@ $form->addCheckbox(
     array('helpTextIdLabel' => 'DAT_ALLOW_ADDITIONAL_GUESTS_DESC')
 );
 $form->addInput(
-    'dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'),
+    'dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), (int) $date->getValue('dat_max_members'),
     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS')
 );
 $form->addInput(

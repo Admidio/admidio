@@ -197,7 +197,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                OR cat_org_id IS NULL)
                          WHERE rol_id = ? -- $group[\'id\']';
-                $statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $group['id']));
+                $statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), $group['id']));
                 $row = $statement->fetch();
 
                 // logged out ones just to role with permission level "all visitors"
@@ -326,7 +326,7 @@ if ($getMsgType === TableMessage::MESSAGE_TYPE_EMAIL)
                                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                              WHERE usr_id = ? -- $user->getValue(\'usr_id\')
                                AND usr_valid = 1 ';
-                    $statement = $gDb->queryPrepared($sql, array($gProfileFields->getProperty('LAST_NAME', 'usf_id'), $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), $user->getValue('usr_id')));
+                    $statement = $gDb->queryPrepared($sql, array((int) $gProfileFields->getProperty('LAST_NAME', 'usf_id'), (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), (int) $user->getValue('usr_id')));
 
                     while ($row = $statement->fetch())
                     {
@@ -531,7 +531,7 @@ else
     $user = new User($gDb, $gProfileFields, $postTo[0]);
 
     // check if it is allowed to send to this user
-    if ((!$gCurrentUser->editUsers() && !isMember($user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
+    if ((!$gCurrentUser->editUsers() && !isMember((int) $user->getValue('usr_id'))) || $user->getValue('usr_id') === '')
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
         // => EXIT

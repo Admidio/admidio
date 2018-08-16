@@ -267,7 +267,7 @@ if($getMode === 2)
     // holt die Role ID des letzten Insert Statements
     if($getRoleId === 0)
     {
-        $getRoleId = $role->getValue('rol_id');
+        $getRoleId = (int) $role->getValue('rol_id');
     }
 
     // save role dependencies in database
@@ -303,7 +303,7 @@ if($getMode === 2)
                     $roleDep->clear();
                     $roleDep->setChild($sentChildRole);
                     $roleDep->setParent($getRoleId);
-                    $roleDep->insert($gCurrentUser->getValue('usr_id'));
+                    $roleDep->insert((int) $gCurrentUser->getValue('usr_id'));
 
                     // füge alle Mitglieder der ChildRole der ParentRole zu
                     $roleDep->updateMembership();

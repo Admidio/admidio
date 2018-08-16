@@ -280,7 +280,7 @@ foreach($listsResult['recordset'] as $row)
 
                 if($role->getValue('rol_max_members') > 0)
                 {
-                    $html .= '&nbsp;'.$gL10n->get('LST_MAX', array($role->getValue('rol_max_members')));
+                    $html .= '&nbsp;'.$gL10n->get('LST_MAX', array((int) $role->getValue('rol_max_members')));
                 }
                 if($gCurrentUser->hasRightViewFormerRolesMembers($rolId) && $getActiveRole && $row['num_former'] > 0)
                 {

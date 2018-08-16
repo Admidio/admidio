@@ -75,7 +75,7 @@ try
 
         $originalName    = pathinfo($file->getValue('fil_name'), PATHINFO_FILENAME);
         $fileType        = pathinfo($file->getValue('fil_name'), PATHINFO_EXTENSION);
-        $createUserId    = $file->getValue('fil_usr_id');
+        $createUserId    = (int) $file->getValue('fil_usr_id');
         $createTimestamp = $file->getValue('fil_timestamp');
 
         if ($formValues['new_name'] === null)
@@ -96,7 +96,7 @@ try
         $folder->getFolderForDownload($getFolderId);
 
         $originalName    = $folder->getValue('fol_name');
-        $createUserId    = $folder->getValue('fol_usr_id');
+        $createUserId    = (int) $folder->getValue('fol_usr_id');
         $createTimestamp = $folder->getValue('fol_timestamp');
 
         if ($formValues['new_name'] == null)

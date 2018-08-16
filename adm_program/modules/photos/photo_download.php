@@ -68,7 +68,7 @@ if ((int) $photoAlbum->getValue('pho_quantity') === 0)
 // check whether to take original version instead of scaled one
 $takeOriginalsIfAvailable = $gSettingsManager->getBool('photo_keep_original');
 
-$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+$albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
 
 // check folder vs single download
 if ($getPhotoNr == null)
@@ -124,7 +124,7 @@ if ($getPhotoNr == null)
     $sql = 'SELECT pho_id
               FROM '.TBL_PHOTOS.'
              WHERE pho_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')';
-    $queryParams = array($gCurrentOrganization->getValue('org_id'));
+    $queryParams = array((int) $gCurrentOrganization->getValue('org_id'));
     if ($getPhotoId === 0)
     {
         $sql .= '
@@ -157,7 +157,7 @@ if ($getPhotoNr == null)
         // ignore locked albums owned by others
         if ($photoAlbum->getValue('pho_locked') == 0 || $gCurrentUser->editPhotoRight())
         {
-            $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id');
+            $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
             // get number of photos in total
             $quantity = $photoAlbum->getValue('pho_quantity');
             $photoAlbumName = $photoAlbum->getValue('pho_name');

@@ -52,7 +52,7 @@ else
 // Navigation of the module starts here
 $gNavigation->addFirst(CURRENT_URL);
 
-$getFolderId = $currentFolder->getValue('fol_id');
+$getFolderId = (int) $currentFolder->getValue('fol_id');
 
 // Get folder content for style
 $folderContent = $currentFolder->getFolderContentsForDownload();

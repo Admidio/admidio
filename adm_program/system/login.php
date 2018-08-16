@@ -24,7 +24,7 @@ $sql = 'SELECT rol_id
            AND rol_administrator = 1
            AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                OR cat_org_id IS NULL )';
-$pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), $gCurrentOrganization->getValue('org_id')));
+$pdoStatement = $gDb->queryPrepared($sql, array($gL10n->get('SYS_ADMINISTRATOR'), (int) $gCurrentOrganization->getValue('org_id')));
 
 // create role object for administrator
 $roleAdministrator = new TableRoles($gDb, $pdoStatement->fetchColumn());
@@ -87,7 +87,7 @@ if($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->
 elseif($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3)
 {
     // show link of message module to send mail to administrator role
-    $forgotPasswordLink = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
+    $forgotPasswordLink = safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('rol_id' => (int) $roleAdministrator->getValue('rol_id'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
 }
 else
 {

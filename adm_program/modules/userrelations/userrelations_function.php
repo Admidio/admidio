@@ -98,17 +98,17 @@ if($getMode === 1)
     $gDb->startTransaction();
 
     $relation1 = new TableUserRelation($gDb);
-    $relation1->setValue('ure_urt_id', $relationType->getValue('urt_id'));
-    $relation1->setValue('ure_usr_id1', $user1->getValue('usr_id'));
-    $relation1->setValue('ure_usr_id2', $user2->getValue('usr_id'));
+    $relation1->setValue('ure_urt_id', (int) $relationType->getValue('urt_id'));
+    $relation1->setValue('ure_usr_id1', (int) $user1->getValue('usr_id'));
+    $relation1->setValue('ure_usr_id2', (int) $user2->getValue('usr_id'));
     $relation1->save();
 
     if (!$relationType->isUnidirectional())
     {
         $relation2 = new TableUserRelation($gDb);
-        $relation2->setValue('ure_urt_id', $relationType->getValue('urt_id_inverse'));
-        $relation2->setValue('ure_usr_id1', $user2->getValue('usr_id'));
-        $relation2->setValue('ure_usr_id2', $user1->getValue('usr_id'));
+        $relation2->setValue('ure_urt_id', (int) $relationType->getValue('urt_id_inverse'));
+        $relation2->setValue('ure_usr_id1', (int) $user2->getValue('usr_id'));
+        $relation2->setValue('ure_usr_id2', (int) $user1->getValue('usr_id'));
         $relation2->save();
     }
 

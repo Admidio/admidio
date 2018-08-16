@@ -20,7 +20,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
 
     // read new profile field structure for this organization
-    $gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
+    $gProfileFields->readProfileFields((int) $gCurrentOrganization->getValue('org_id'));
 }
 
 // clear data from object of current user

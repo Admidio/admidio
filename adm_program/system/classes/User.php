@@ -162,6 +162,8 @@ class User extends TableAccess
             return false;
         }
 
+        $usrId = (int) $this->getValue('usr_id');
+
         $minStartDate = $startDate;
         $maxEndDate   = $endDate;
 
@@ -189,13 +191,13 @@ class User extends TableAccess
             $sql = 'SELECT *
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = ? -- $id
-                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin ASC';
             $queryParams = array(
                 $id,
-                $this->getValue('usr_id'),
+                $usrId,
                 $endDate,
                 $startDate
             );
@@ -208,14 +210,14 @@ class User extends TableAccess
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_id    <> ? -- $id
                        AND mem_rol_id = ? -- $member->getValue(\'mem_rol_id\')
-                       AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
+                       AND mem_usr_id = ? -- $usrId
                        AND mem_begin <= ? -- $endDate
                        AND mem_end   >= ? -- $startDate
                   ORDER BY mem_begin ASC';
             $queryParams = array(
                 $id,
                 $member->getValue('mem_rol_id'),
-                $this->getValue('usr_id'),
+                $usrId,
                 $endDate,
                 $startDate
             );
@@ -294,7 +296,7 @@ class User extends TableAccess
             if ($mode === 'set')
             {
                 $member->setValue('mem_rol_id', $id);
-                $member->setValue('mem_usr_id', $this->getValue('usr_id'));
+                $member->setValue('mem_usr_id', $usrId);
             }
             $member->setValue('mem_begin', $minStartDate);
             $member->setValue('mem_end', $maxEndDate);
@@ -335,7 +337,7 @@ class User extends TableAccess
                 INNER JOIN '.TBL_USER_RELATION_TYPES.'
                         ON urt_id = ure_urt_id
                      WHERE ure_usr_id1  = ? -- $this->getValue(\'usr_id\') ';
-            $queryParams = array($this->getValue('usr_id'));
+            $queryParams = array((int) $this->getValue('usr_id'));
             $relationsStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $relationsStatement->fetch())
@@ -403,7 +405,7 @@ class User extends TableAccess
                      WHERE rol_valid  = 1
                        AND (  cat_org_id = ? -- $this->organizationId
                            OR cat_org_id IS NULL )';
-            $queryParams = array($this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+            $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
             $rolesStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $rolesStatement->fetch())
@@ -576,7 +578,7 @@ class User extends TableAccess
 
         if ($updateSessionCookies)
         {
-            $gCurrentSession->setValue('ses_usr_id', $this->getValue('usr_id'));
+            $gCurrentSession->setValue('ses_usr_id', (int) $this->getValue('usr_id'));
             $gCurrentSession->save();
         }
 
@@ -1156,7 +1158,7 @@ class User extends TableAccess
         {
             $vCard[] = 'EMAIL;PREF;INTERNET:' . $this->getValue('EMAIL');
         }
-        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $this->getValue('usr_id') . '.jpg';
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int) $this->getValue('usr_id') . '.jpg';
         if ((int) $gSettingsManager->get('profile_photo_storage') === 1 && is_file($file))
         {
             $imgHandle = fopen($file, 'rb');
@@ -1417,7 +1419,7 @@ class User extends TableAccess
                    AND mem_end    > ? -- DATE_NOW
                    AND (  cat_org_id = ? -- $this->organizationId
                        OR cat_org_id IS NULL ) ';
-        $queryParams = array($user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int) $user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $listViewStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($listViewStatement->rowCount() > 0)
@@ -1710,9 +1712,11 @@ class User extends TableAccess
     {
         global $gCurrentSession, $gCurrentUser;
 
+        $usrId = (int) $this->getValue('usr_id');
+
         // if current user is not new and is not allowed to edit this user
         // and saveChangesWithoutRights isn't true than throw exception
-        if (!$this->saveChangesWithoutRights && $this->getValue('usr_id') > 0 && !$gCurrentUser->hasRightEditProfile($this))
+        if (!$this->saveChangesWithoutRights && $usrId > 0 && !$gCurrentUser->hasRightEditProfile($this))
         {
             throw new AdmException('The profile data of user ' . $this->getValue('FIRST_NAME') . ' '
                 . $this->getValue('LAST_NAME') . ' could not be saved because you don\'t have the right to do this.');
@@ -1722,7 +1726,7 @@ class User extends TableAccess
 
         // if new user then set create id
         $updateCreateUserId = false;
-        if ((int) $this->getValue('usr_id') === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
+        if ($usrId === 0 && (int) $gCurrentUser->getValue('usr_id') === 0)
         {
             $updateCreateUserId = true;
             $updateFingerPrint  = false;
@@ -1740,21 +1744,21 @@ class User extends TableAccess
         if ($updateCreateUserId)
         {
             $this->setValue('usr_timestamp_create', DATETIME_NOW);
-            $this->setValue('usr_usr_id_create', $this->getValue('usr_id'));
+            $this->setValue('usr_usr_id_create', $usrId);
             $returnValue = $returnValue && parent::save($updateFingerPrint);
         }
 
         if ($this->mProfileFieldsData instanceof ProfileFields)
         {
             // save data of all user fields
-            $this->mProfileFieldsData->saveUserData((int) $this->getValue('usr_id'));
+            $this->mProfileFieldsData->saveUserData($usrId);
         }
 
         if ($this->columnsValueChanged && $gCurrentSession instanceof Session)
         {
             // now set user object in session of that user to invalid,
             // because he has new data and maybe new rights
-            $gCurrentSession->renewUserObject($this->getValue('usr_id'));
+            $gCurrentSession->renewUserObject($usrId);
         }
         $this->db->endTransaction();
 
@@ -1958,7 +1962,7 @@ class User extends TableAccess
     {
         $this->saveChangesWithoutRights();
         $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
-        $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
+        $this->setValue('usr_number_login', (int) $this->getValue('usr_number_login') + 1);
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
 

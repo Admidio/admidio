@@ -100,7 +100,7 @@ else
             $column = $list->getColumnObject($number);
             if($column->getValue('lsc_usf_id') > 0)
             {
-                $formValues['column'. $number] = $column->getValue('lsc_usf_id');
+                $formValues['column'. $number] = (int) $column->getValue('lsc_usf_id');
             }
             else
             {
@@ -259,9 +259,9 @@ foreach($gProfileFields->getProfileFields() as $field)
     {
         $javascriptCode .= '
             userFields[' . $i . '] = {
-                "cat_id": '. $field->getValue('cat_id'). ',
+                "cat_id": '. (int) $field->getValue('cat_id'). ',
                 "cat_name": "'. str_replace('"', '\'', $field->getValue('cat_name')). '",
-                "usf_id": "'. $field->getValue('usf_id'). '",
+                "usf_id": "'. (int) $field->getValue('usf_id'). '",
                 "usf_name": "'. addslashes($field->getValue('usf_name')). '",
                 "usf_name_intern": "'. addslashes($field->getValue('usf_name_intern')). '",
                 "usf_type": "'. $field->getValue('usf_type'). '",
@@ -556,7 +556,7 @@ $sql = 'SELECT lst_id, lst_name, lst_global, lst_timestamp
            AND (  lst_usr_id = ? -- $gCurrentUser->getValue(\'usr_id\')
                OR lst_global = 1)
       ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC';
-$configurationsStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $gCurrentUser->getValue('usr_id')));
+$configurationsStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
 
 $configurations = $configurationsStatement->fetchAll();
 
@@ -699,7 +699,7 @@ else
                             AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
-    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+    $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
 
     // check if there are roles that the current user could view
     $inactiveRolesStatement = $gDb->queryPrepared($sqlData['query'], $sqlData['params']);

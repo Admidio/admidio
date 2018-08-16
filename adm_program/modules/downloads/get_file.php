@@ -47,7 +47,7 @@ if (!is_file($completePath))
 }
 
 // Downloadcounter inkrementieren
-$file->setValue('fil_counter', $file->getValue('fil_counter') + 1);
+$file->setValue('fil_counter', (int) $file->getValue('fil_counter') + 1);
 $file->save();
 
 // Dateigroese ermitteln

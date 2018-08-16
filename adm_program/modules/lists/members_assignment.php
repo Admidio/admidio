@@ -102,7 +102,7 @@ if($getMode === 'assign')
             $member->startMembership((int) $role->getValue('rol_id'), $getUserId, $leadership, $memberApproved);
 
             // find the parent roles and assign user to parent roles
-            $dependencies = RoleDependency::getParentRoles($gDb, $role->getValue('rol_id'));
+            $dependencies = RoleDependency::getParentRoles($gDb, (int) $role->getValue('rol_id'));
             $parentRoles  = array();
 
             foreach($dependencies as $tmpRole)
@@ -113,7 +113,7 @@ if($getMode === 'assign')
         }
         elseif(!$leadership && !$membership)
         {
-            $member->stopMembership($role->getValue('rol_id'), $getUserId);
+            $member->stopMembership((int) $role->getValue('rol_id'), $getUserId);
             echo 'success';
         }
         else
@@ -236,7 +236,7 @@ else
                             AND (  cat_org_id  = ? -- $gCurrentOrganization->getValue(\'org_id\')
                                 OR cat_org_id IS NULL )
                        ORDER BY cat_sequence, rol_name';
-    $sqlData['params'] = array($gCurrentOrganization->getValue('org_id'));
+    $sqlData['params'] = array((int) $gCurrentOrganization->getValue('org_id'));
     $navbarForm->addSelectBoxFromSql(
         'filter_rol_id', $gL10n->get('SYS_ROLE'), $gDb, $sqlData,
         array('defaultValue' => $getFilterRoleId, 'firstEntry' => $gL10n->get('SYS_ALL'))

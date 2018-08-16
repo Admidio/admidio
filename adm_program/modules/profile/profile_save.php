@@ -41,7 +41,7 @@ if(!isset($_POST['usr_login_name']))
 }
 if(!isset($_POST['reg_org_id']))
 {
-    $_POST['reg_org_id'] = $gCurrentOrganization->getValue('org_id');
+    $_POST['reg_org_id'] = (int) $gCurrentOrganization->getValue('org_id');
 }
 
 // read user data
@@ -131,7 +131,7 @@ if($getNewUser === 2)
 // now check all profile fields
 foreach($gProfileFields->getProfileFields() as $field)
 {
-    $postId    = 'usf-'. $field->getValue('usf_id');
+    $postId    = 'usf-'. (int) $field->getValue('usf_id');
     $showField = false;
 
     // at registration check if the field is enabled for registration
@@ -353,7 +353,7 @@ if($getNewUser === 1 || $getNewUser === 3)
     // otherwise go to previous url (default roles are assigned automatically)
     if($gCurrentUser->assignRoles())
     {
-        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => $user->getValue('usr_id'), 'new_user' => $getNewUser)));
+        admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('usr_id' => (int) $user->getValue('usr_id'), 'new_user' => $getNewUser)));
         // => EXIT
     }
     else

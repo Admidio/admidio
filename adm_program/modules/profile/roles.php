@@ -157,7 +157,7 @@ if($gCurrentUser->manageRoles())
                AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                    OR cat_org_id IS NULL )
           ORDER BY cat_sequence, cat_id, rol_name';
-    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array($getUserId, DATE_NOW, DATE_NOW, (int) $gCurrentOrganization->getValue('org_id'));
 }
 else
 {
@@ -238,16 +238,16 @@ while($row = $statement->fetch())
     }
 
     $columnValues = array(
-        '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
+        '<input type="checkbox" id="role-'.(int) $role->getValue('rol_id').'" name="role-'.(int) $role->getValue('rol_id').'" '.
             $memberChecked.$memberDisabled.' onclick="profileJS.unMarkLeader(this);" value="1" />',
-        '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
+        '<label for="role-'.(int) $role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
         $role->getValue('rol_description')
     );
 
     // if new category than display a category header
     if($category !== (int) $role->getValue('cat_id'))
     {
-        $blockId = 'admCategory'.$role->getValue('cat_id');
+        $blockId = 'admCategory'.(int) $role->getValue('cat_id');
 
         $table->addTableBody();
         $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_'.$blockId));
@@ -259,7 +259,7 @@ while($row = $statement->fetch())
         $category = (int) $role->getValue('cat_id');
     }
 
-    $leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
+    $leaderRights = '<input type="checkbox" id="leader-'.(int) $role->getValue('rol_id').'" name="leader-'.(int) $role->getValue('rol_id').'" '.
                        $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
 
     // show icon that leaders have no additional rights

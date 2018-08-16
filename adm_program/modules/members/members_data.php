@@ -140,7 +140,7 @@ $sqlSubSelect = '(SELECT COUNT(*) AS count_this
                      AND mem_end     > \''.DATE_NOW.'\'
                      AND rol_valid = 1
                      AND cat_name_intern <> \'EVENTS\'
-                     AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                     AND (  cat_org_id = '.(int) $gCurrentOrganization->getValue('org_id').'
                          OR cat_org_id IS NULL ))';
 
 if($getMembers)
@@ -189,7 +189,7 @@ if($gCurrentOrganization->countAllRecords() > 1)
             AND mem_end     > \''.DATE_NOW.'\'
             AND rol_valid = 1
             AND cat_name_intern <> \'EVENTS\'
-            AND cat_org_id <> '.$gCurrentOrganization->getValue('org_id').')';
+            AND cat_org_id <> '.(int) $gCurrentOrganization->getValue('org_id').')';
 }
 
 // show all members (not accepted users should not be shown)

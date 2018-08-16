@@ -92,7 +92,7 @@ class TableMembers extends TableAccess
         if ($returnStatus && $gCurrentSession instanceof Session)
         {
             // renew user object of the affected user because of edited role assignment
-            $gCurrentSession->renewUserObject($this->getValue('mem_usr_id'));
+            $gCurrentSession->renewUserObject((int) $this->getValue('mem_usr_id'));
         }
 
         return $returnStatus;
@@ -205,7 +205,7 @@ class TableMembers extends TableAccess
                              WHERE mem_rol_id  = ? -- $this->getValue(\'mem_rol_id\')
                                AND mem_usr_id <> ? -- $this->getValue(\'mem_usr_id\')
                                AND ? BETWEEN mem_begin AND mem_end';
-                    $queryParams = array($this->getValue('mem_rol_id'), $this->getValue('mem_usr_id'), DATE_NOW);
+                    $queryParams = array((int) $this->getValue('mem_rol_id'), (int) $this->getValue('mem_usr_id'), DATE_NOW);
                     $memberStatement = $this->db->queryPrepared($sql, $queryParams);
 
                     if ($memberStatement->rowCount() === 0)

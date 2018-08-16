@@ -61,7 +61,7 @@ if($getMode === 1)
     $relationType2 = new TableUserRelationType($gDb);
     if($getUrtId > 0)
     {
-        $relationType2->readDataById($relationType->getValue('urt_id_inverse'));
+        $relationType2->readDataById((int) $relationType->getValue('urt_id_inverse'));
     }
 
     $relationType->setValue('urt_name', $_POST['urt_name']);
@@ -97,20 +97,20 @@ if($getMode === 1)
     {
         if($getUrtId <= 0)
         {
-            $relationType2->setValue('urt_id_inverse', $relationType->getValue('urt_id'));
+            $relationType2->setValue('urt_id_inverse', (int) $relationType->getValue('urt_id'));
         }
 
         $relationType2->save();
 
         if($getUrtId <= 0)
         {
-            $relationType->setValue('urt_id_inverse', $relationType2->getValue('urt_id'));
+            $relationType->setValue('urt_id_inverse', (int) $relationType2->getValue('urt_id'));
             $relationType->save();
         }
     }
     elseif ($postRelationType === 'symmetrical')
     {
-        $relationType->setValue('urt_id_inverse', $relationType->getValue('urt_id'));
+        $relationType->setValue('urt_id_inverse', (int) $relationType->getValue('urt_id'));
         $relationType->save();
     }
 

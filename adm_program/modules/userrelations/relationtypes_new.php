@@ -39,7 +39,7 @@ $relationType2 = new TableUserRelationType($gDb);
 if($getUrtId > 0)
 {
     $relationType1->readDataById($getUrtId);
-    $relationType2->readDataById($relationType1->getValue('urt_id_inverse'));
+    $relationType2->readDataById((int) $relationType1->getValue('urt_id_inverse'));
 }
 
 // create html page object

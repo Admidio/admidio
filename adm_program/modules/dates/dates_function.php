@@ -35,7 +35,7 @@ $getMode                = admFuncVariableIsValid($_GET, 'mode',   'int', array('
 $getRoleId              = admFuncVariableIsValid($_GET, 'rol_id', 'int');
 $getCopy                = admFuncVariableIsValid($_GET, 'copy',   'bool');
 $getNumberRoleSelect    = admFuncVariableIsValid($_GET, 'number_role_select', 'int');
-$getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => $gCurrentUser->getValue('usr_id')));
+$getUserId              = admFuncVariableIsValid($_GET, 'usr_id', 'int', array('defaultValue' => (int) $gCurrentUser->getValue('usr_id')));
 $postAdditionalGuests   = admFuncVariableIsValid($_POST, 'additional_guests', 'int');
 $postUserComment        = admFuncVariableIsValid($_POST, 'dat_comment', 'text');
 
@@ -252,7 +252,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     else
     {
         // First check the current participants to prevent invalid reduction of the limit
-        $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+        $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
         $totalMembers = $participants->getCount();
 
         if ($_POST['dat_max_members'] < $totalMembers)
@@ -523,7 +523,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         }
 
         // dat_rol_id anpassen (Referenz zwischen date und role)
-        $date->setValue('dat_rol_id', $role->getValue('rol_id'));
+        $date->setValue('dat_rol_id', (int) $role->getValue('rol_id'));
         $returnCode = $date->save();
         if($returnCode < 0)
         {
@@ -535,7 +535,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     elseif($_POST['date_registration_possible'] == 0 && $date->getValue('dat_rol_id') > 0)
     {
         // date participation was deselected -> delete flag in event and than delete role
-        $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
+        $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
         $date->setValue('dat_rol_id', '');
         $date->save();
         $role->delete();
@@ -544,7 +544,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     {
         // if event exists and you could register to this event then we must check
         // if the data of the role must be changed
-        $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
+        $role = new TableRoles($gDb, (int) $date->getValue('dat_rol_id'));
 
         // only change name of role if no custom name was set
         if(StringUtils::strContains($role->getValue('rol_name'), $gL10n->get('DAT_DATE')))
@@ -561,14 +561,14 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         $role->setValue('rol_this_list_view', isset($_POST['date_right_list_view']) ? 1 : 0);
         // role members are allowed to send mail to this role
         $role->setValue('rol_mail_this_role', isset($_POST['date_right_send_mail']) ? 1 : 0);
-        $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
+        $role->setValue('rol_max_members', (int) $date->getValue('dat_max_members'));
 
         $role->save();
     }
 
     // check if flag is set that current user wants to participate as leader to the date
     if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1
-    && !$gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')))
+    && !$gCurrentUser->isLeaderOfRole((int) $date->getValue('dat_rol_id')))
     {
         // user wants to participate -> add him to date and set approval state to 2 ( user attend )
         $member = new TableMembers($gDb);
@@ -580,7 +580,7 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
         // user does't want to participate as leader -> remove his participation as leader from the event,
         // dont remove the participation itself!
         $member = new TableMembers($gDb);
-        $member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $getUserId));
+        $member->readDataByColumns(array('mem_rol_id' => (int) $role->getValue('rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_leader', 0);
         $member->save();
     }
@@ -623,7 +623,7 @@ if (in_array($getMode, array(3, 4, 7), true))
     // Check participation deadline and update user inputs if possible
     if ($date->allowedToParticipate() && !$date->deadlineExceeded())
     {
-        $member->readDataByColumns(array('mem_rol_id' => $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
+        $member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
         $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
 
         if ($member->isNewRecord())
@@ -634,7 +634,7 @@ if (in_array($getMode, array(3, 4, 7), true))
         // Now check participants limit and save guests if possible
         if ($date->getValue('dat_max_members') > 0)
         {
-            $participants = new Participants($gDb, $date->getValue('dat_rol_id'));
+            $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
             $totalMembers = $participants->getCount();
 
             if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
@@ -656,7 +656,7 @@ if (in_array($getMode, array(3, 4, 7), true))
 
             if ($date->getValue('dat_max_members') > 0)
             {
-                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . $date->getValue('dat_max_members');
+                $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . (int) $date->getValue('dat_max_members');
             }
 
         }

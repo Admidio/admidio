@@ -68,7 +68,7 @@ class ListConfiguration extends TableLists
         if(!array_key_exists($number, $this->columns))
         {
             $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
+            $this->columns[$number]->setValue('lsc_lsf_id', (int) $this->getValue('lst_id'));
         }
 
         // Assign content of column
@@ -376,7 +376,7 @@ class ListConfiguration extends TableLists
                  WHERE usr_valid = 1
                    AND rol_id IN ('.$sqlRoleIds.')
                        '.$sqlRelationTypeWhere.'
-                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                   AND (  cat_org_id = '. (int) $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                        '.$sqlMemberStatus.'
                        '.$sqlWhere.'
@@ -398,7 +398,7 @@ class ListConfiguration extends TableLists
                   FROM '.TBL_LIST_COLUMNS.'
                  WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
               ORDER BY lsc_number ASC';
-        $lscStatement = $this->db->queryPrepared($sql, array($this->getValue('lst_id')));
+        $lscStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('lst_id')));
 
         while($lscRow = $lscStatement->fetch())
         {
@@ -451,7 +451,7 @@ class ListConfiguration extends TableLists
         {
             if((int) $listColumn->getValue('lsc_lst_id') === 0)
             {
-                $listColumn->setValue('lsc_lst_id', $this->getValue('lst_id'));
+                $listColumn->setValue('lsc_lst_id', (int) $this->getValue('lst_id'));
             }
             $listColumn->save($updateFingerPrint);
         }

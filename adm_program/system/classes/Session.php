@@ -234,7 +234,7 @@ class Session extends TableAccess
                 $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
                 $this->mAutoLogin->save();
 
-                $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
+                $this->setValue('ses_usr_id', (int) $this->mAutoLogin->getValue('atl_usr_id'));
 
                 // save cookie for autologin
                 $currDateTime = new \DateTime();
@@ -302,7 +302,7 @@ class Session extends TableAccess
         {
             if((int) $this->getValue('ses_usr_id') === 0)
             {
-                $this->setValue('ses_usr_id', $this->mAutoLogin->getValue('atl_usr_id'));
+                $this->setValue('ses_usr_id', (int) $this->mAutoLogin->getValue('atl_usr_id'));
             }
         }
         elseif(array_key_exists($this->cookieAutoLoginId, $_COOKIE))
@@ -369,7 +369,7 @@ class Session extends TableAccess
         if ($this->newRecord)
         {
             // Insert
-            $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
+            $this->setValue('ses_org_id', (int) $gCurrentOrganization->getValue('org_id'));
             $this->setValue('ses_begin', DATETIME_NOW);
             // save IP address and remove the last part because auf privacy (GDPR)
             $this->setValue(
@@ -394,8 +394,8 @@ class Session extends TableAccess
         // create object and set current session data to AutoLogin
         $this->mAutoLogin = new AutoLogin($this->db);
         $this->mAutoLogin->setValue('atl_session_id', $this->getValue('ses_session_id'));
-        $this->mAutoLogin->setValue('atl_org_id', $this->getValue('ses_org_id'));
-        $this->mAutoLogin->setValue('atl_usr_id', $this->getValue('ses_usr_id'));
+        $this->mAutoLogin->setValue('atl_org_id', (int) $this->getValue('ses_org_id'));
+        $this->mAutoLogin->setValue('atl_usr_id', (int) $this->getValue('ses_usr_id'));
 
         // set new auto_login_id and save data
         $this->mAutoLogin->setValue('atl_auto_login_id', $this->mAutoLogin->generateAutoLoginId((int) $this->getValue('ses_usr_id')));

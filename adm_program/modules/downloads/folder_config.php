@@ -79,7 +79,7 @@ $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                ORDER BY cat_sequence, rol_name';
 $sqlDataView = array(
     'query'  => $sqlViewRoles,
-    'params' => array_merge($rolesViewRightParentFolder, array($gCurrentOrganization->getValue('org_id')))
+    'params' => array_merge($rolesViewRightParentFolder, array((int) $gCurrentOrganization->getValue('org_id')))
 );
 
 $firstEntryViewRoles = '';
@@ -116,7 +116,7 @@ $sqlAdminRoles = 'SELECT rol_name
                      AND rol_download = 1
                      AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
                 ORDER BY cat_sequence, rol_name';
-$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
+$statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array((int) $gCurrentOrganization->getValue('org_id')));
 
 $adminRoles = array();
 while($row = $statementAdminRoles->fetch())

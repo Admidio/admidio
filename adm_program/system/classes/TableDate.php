@@ -217,7 +217,7 @@ class TableDate extends TableAccess
         }
 
         // Semicolons herausfiltern
-        $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
+        $iCalVEvent[] = 'UID:' . $this->getValue('dat_timestamp_create', $dateTimeFormat) . '+' . (int) $this->getValue('dat_usr_id_create') . '@' . $domain;
         $iCalVEvent[] = 'SUMMARY:' . $this->escapeIcalText($this->getValue('dat_headline'));
         $iCalVEvent[] = 'DESCRIPTION:' . strStripTags($this->escapeIcalText(html_entity_decode($this->getValue('dat_description'), ENT_QUOTES, 'UTF-8')));
         $iCalVEvent[] = 'DTSTAMP:' . date($dateTimeFormat);

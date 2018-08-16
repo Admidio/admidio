@@ -100,6 +100,7 @@ $gNavigation->add(CURRENT_URL);
 
 // create category object
 $category = new TableCategory($gDb);
+$orgId = (int) $gCurrentOrganization->getValue('org_id');
 
 if(isset($_SESSION['categories_request']))
 {
@@ -115,7 +116,7 @@ if(isset($_SESSION['categories_request']))
 
     if(isset($_SESSION['categories_request']['show_in_several_organizations']))
     {
-        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+        $category->setValue('cat_org_id', $orgId);
     }
     unset($_SESSION['categories_request']);
 }
@@ -124,11 +125,12 @@ else
     if($getCatId > 0)
     {
         $category->readDataById($getCatId);
+        $catId = (int) $category->getValue('cat_id');
 
         // get assigned roles of this category
-        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', (int) $category->getValue('cat_id'));
+        $categoryViewRolesObject = new RolesRights($gDb, 'category_view', $catId);
         $roleViewSet = $categoryViewRolesObject->getRolesIds();
-        $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $category->getValue('cat_id'));
+        $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $catId);
         $roleEditSet = $categoryEditRolesObject->getRolesIds();
     }
     else
@@ -136,7 +138,7 @@ else
         // profile fields should be organization independent all other categories should be organization dependent as default
         if($getType !== 'USF')
         {
-            $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+            $category->setValue('cat_org_id', $orgId);
         }
     }
 }
@@ -209,11 +211,11 @@ if($getType !== 'ROL' && ((bool) $category->getValue('cat_system') === false || 
                       WHERE rol_valid  = 1
                         AND rol_system = 0
                         AND cat_name_intern <> \'EVENTS\'
-                        AND cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                        AND cat_org_id = ? -- $orgId
                    ORDER BY cat_sequence, rol_name';
     $sqlDataView = array(
         'query'  => $sqlViewRoles,
-        'params' => array($gCurrentOrganization->getValue('org_id'))
+        'params' => array($orgId)
     );
 
     // if no roles are assigned then set "all users" as default
@@ -287,9 +289,9 @@ if($getType !== 'ROL' && $category->getValue('cat_system') == 0 && $gCurrentOrga
                           ON cat_id = rol_cat_id
                        WHERE rol_valid    = 1
                          AND '. $rolesRightsColumn .' = 1
-                         AND cat_org_id   = ? -- $gCurrentOrganization->getValue(\'org_id\')
+                         AND cat_org_id   = ? -- $orgId
                     ORDER BY cat_sequence, rol_name';
-    $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($gCurrentOrganization->getValue('org_id')));
+    $statementAdminRoles = $gDb->queryPrepared($sqlAdminRoles, array($orgId));
 
     $adminRoles = array();
     while($roleName = $statementAdminRoles->fetchColumn())

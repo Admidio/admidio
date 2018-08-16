@@ -300,7 +300,7 @@ class ModuleLists extends Modules
             $sql .= ' OFFSET '.$startElement;
         }
 
-        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, (int) $this->activeRole, $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $listsStatement = $gDb->queryPrepared($sql, array(DATE_NOW, (int) $this->activeRole, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         // array for results
         return array(
@@ -332,7 +332,7 @@ class ModuleLists extends Modules
                    AND (  cat_org_id = ? -- $gCurrentOrganization->getValue(\'org_id\')
                        OR cat_org_id IS NULL )
                        '.$sqlConditions;
-        $pdoStatement = $gDb->queryPrepared($sql, array((int) $this->activeRole, $gCurrentOrganization->getValue('org_id'))); // TODO add more params
+        $pdoStatement = $gDb->queryPrepared($sql, array((int) $this->activeRole, (int) $gCurrentOrganization->getValue('org_id'))); // TODO add more params
 
         return (int) $pdoStatement->fetchColumn();
     }
@@ -352,7 +352,7 @@ class ModuleLists extends Modules
                        OR lst_global = 1)
                    AND lst_name IS NOT NULL
               ORDER BY lst_global ASC, lst_name ASC';
-        $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id'), $gCurrentUser->getValue('usr_id')));
+        $pdoStatement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id'), (int) $gCurrentUser->getValue('usr_id')));
 
         $configurations = array();
         while($row = $pdoStatement->fetch())

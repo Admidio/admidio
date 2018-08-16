@@ -101,41 +101,42 @@ class TableMenu extends TableAccess
      */
     public function moveSequence($mode)
     {
+        $menOrder = (int) $this->getValue('men_order');
         $menIdParent = (int) $this->getValue('men_men_id_parent');
-
-        // count all categories that are organization independent because these categories should not
-        // be mixed with the organization categories. Hidden categories are sidelined.
-        $sql = 'SELECT COUNT(*) AS count
-                  FROM '.TBL_MENU.'
-                 WHERE men_men_id_parent = ? -- $menIdParent';
-        $countMenuStatement = $this->db->queryPrepared($sql, array($menIdParent));
-        $rowCount = $countMenuStatement->fetchColumn();
 
         // die Sortierung wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if($mode === self::MOVE_UP)
         {
-            if($this->getValue('men_order') > 1)
+            if($menOrder > 1)
             {
                 $sql = 'UPDATE '.TBL_MENU.'
-                           SET men_order = '.$this->getValue('men_order').'
+                           SET men_order = ? -- $menOrder
                          WHERE men_men_id_parent = ? -- $menIdParent
-                           AND men_order = '.$this->getValue('men_order').' - 1 ';
-                $this->db->queryPrepared($sql, array($menIdParent));
-                $this->setValue('men_order', $this->getValue('men_order')-1);
+                           AND men_order = ? -- $menOrder - 1';
+                $this->db->queryPrepared($sql, array($menOrder, $menIdParent, $menOrder - 1));
+                $this->setValue('men_order', $menOrder - 1);
                 $this->save();
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
         elseif($mode === self::MOVE_DOWN)
         {
-            if($this->getValue('men_order') < $rowCount)
+            // count all categories that are organization independent because these categories should not
+            // be mixed with the organization categories. Hidden categories are sidelined.
+            $sql = 'SELECT COUNT(*) AS count
+                      FROM '.TBL_MENU.'
+                     WHERE men_men_id_parent = ? -- $menIdParent';
+            $countMenuStatement = $this->db->queryPrepared($sql, array($menIdParent));
+            $rowCount = $countMenuStatement->fetchColumn();
+
+            if($menOrder < $rowCount)
             {
                 $sql = 'UPDATE '.TBL_MENU.'
-                           SET men_order = '.$this->getValue('men_order').'
+                           SET men_order = ? -- $menOrder
                          WHERE men_men_id_parent = ? -- $menIdParent
-                           AND men_order = '.$this->getValue('men_order').' + 1 ';
-                $this->db->queryPrepared($sql, array($menIdParent));
-                $this->setValue('men_order', $this->getValue('men_order')+1);
+                           AND men_order = ? -- $menOrder + 1';
+                $this->db->queryPrepared($sql, array($menOrder, $menIdParent, $menOrder + 1));
+                $this->setValue('men_order', $menOrder + 1);
                 $this->save();
             }
         }
@@ -204,7 +205,7 @@ class TableMenu extends TableAccess
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_MENU.'
                      WHERE men_men_id_parent = ? -- $this->getValue(\'men_men_id_parent\')';
-            $countMenuStatement = $this->db->queryPrepared($sql, array($this->getValue('men_men_id_parent')));
+            $countMenuStatement = $this->db->queryPrepared($sql, array((int) $this->getValue('men_men_id_parent')));
 
             $rowCount = $countMenuStatement->fetchColumn();
             $this->setValue('men_order', $rowCount + 1);

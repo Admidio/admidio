@@ -123,8 +123,9 @@ $htmlFieldTable = '
 
                 $categoryId = $catId;
             }
+            $usfId = (int) $field->getValue('usf_id');
             $htmlFieldTable .= '<tr>
-                <td><label for="usf-'. $field->getValue('usf_id'). '">'.$field->getValue('usf_name');
+                <td><label for="usf-'. $usfId. '">'.$field->getValue('usf_name');
                     // Lastname und first name are mandatory fields
                     if($field->getValue('usf_name_intern') === 'LAST_NAME' || $field->getValue('usf_name_intern') === 'FIRST_NAME')
                     {
@@ -132,8 +133,8 @@ $htmlFieldTable = '
                     }
                     $htmlFieldTable .= '</label></td>
                 <td>
-                    <select class="form-control" size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">';
-                        if(isset($formValues['usf-'.$field->getValue('usf_id')]) && $formValues['usf-'. $field->getValue('usf_id')] > 0)
+                    <select class="form-control" size="1" id="usf-'. $usfId. '" name="usf-'. $usfId. '" style="width: 90%;">';
+                        if(isset($formValues['usf-'.$usfId]) && $formValues['usf-'. $usfId] > 0)
                         {
                             $htmlFieldTable .= '<option value=""></option>';
                         }
@@ -147,9 +148,9 @@ $htmlFieldTable = '
                         {
                             $colValue = trim(strip_tags(str_replace('"', '', $colValue)));
 
-                            if(isset($formValues['usf-'. $field->getValue('usf_id')])
-                            && strlen($formValues['usf-'. $field->getValue('usf_id')]) > 0
-                            && $formValues['usf-'. $field->getValue('usf_id')] == $colKey)
+                            if(isset($formValues['usf-'. $usfId])
+                            && strlen($formValues['usf-'. $usfId]) > 0
+                            && $formValues['usf-'. $usfId] == $colKey)
                             {
                                 $htmlFieldTable .= '<option value="'.$colKey.'" selected="selected">'.$colValue.'</option>';
                             }

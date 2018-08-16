@@ -122,7 +122,7 @@ else
     // add the organization to the session
     $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
     $gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization);
-    $gCurrentSession->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
+    $gCurrentSession->setValue('ses_org_id', (int) $gCurrentOrganization->getValue('org_id'));
 
     // create a language data object and assign it to the language object
     $gLanguageData = new LanguageData($gSettingsManager->getString('system_language'));

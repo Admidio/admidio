@@ -89,7 +89,7 @@ $sql = 'SELECT rol_id, rol_name, cat_name
                OR cat_org_id IS NULL )
                '.$condition.'
       ORDER BY cat_sequence, rol_name';
-$statement = $gDb->queryPrepared($sql, array($gCurrentOrganization->getValue('org_id')));
+$statement = $gDb->queryPrepared($sql, array((int) $gCurrentOrganization->getValue('org_id')));
 $roles = array();
 
 while($row = $statement->fetch())

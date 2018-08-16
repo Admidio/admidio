@@ -166,13 +166,13 @@ if($ecardSendResult)
     $sql = 'INSERT INTO '. TBL_MESSAGES. '
                    (msg_type, msg_subject, msg_usr_id_sender, msg_usr_id_receiver, msg_timestamp, msg_read)
             VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, 0) -- $getMsgType, $postSubjectSQL, $currUsrId, $receiverString';
-    $gDb->queryPrepared($sql, array(TableMessage::MESSAGE_TYPE_EMAIL, $gL10n->get('ECA_GREETING_CARD').': '.$gL10n->get('ECA_NEW_MESSAGE_RECEIVED'), $gCurrentUser->getValue('usr_id'), $receiverString));
+    $gDb->queryPrepared($sql, array(TableMessage::MESSAGE_TYPE_EMAIL, $gL10n->get('ECA_GREETING_CARD').': '.$gL10n->get('ECA_NEW_MESSAGE_RECEIVED'), (int) $gCurrentUser->getValue('usr_id'), $receiverString));
     $getMsgId = $gDb->lastInsertId();
 
     $sql = 'INSERT INTO '. TBL_MESSAGES_CONTENT. '
                    (msc_msg_id, msc_part_id, msc_usr_id, msc_message, msc_timestamp)
             VALUES (?, 1, ?, ?, CURRENT_TIMESTAMP) -- $getMsgId, $currUsrId, $postBodySQL';
-    $gDb->queryPrepared($sql, array($getMsgId, $gCurrentUser->getValue('usr_id'), $ecardHtmlData));
+    $gDb->queryPrepared($sql, array($getMsgId, (int) $gCurrentUser->getValue('usr_id'), $ecardHtmlData));
     
     $gMessage->setForwardUrl($gNavigation->getPrevious());
     $gMessage->show($gL10n->get('ECA_SUCCESSFULLY_SEND'));

@@ -79,7 +79,7 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
     $sqlConditionParentId = '';
     $parentPhotoAlbum = new TablePhotos($gDb);
 
-    $queryParams = array($photoAlbum->getValue('pho_id'), $gCurrentOrganization->getValue('org_id'));
+    $queryParams = array((int) $photoAlbum->getValue('pho_id'), (int) $gCurrentOrganization->getValue('org_id'));
     // Erfassen des auszugebenden Albums
     if ($parentId > 0)
     {
@@ -104,10 +104,10 @@ function subfolder($parentId, $vorschub, TablePhotos $photoAlbum, $phoId)
         $parentPhotoAlbum->setArray($admPhotoChild);
 
         // add entry to array of all photo albums
-        $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_id')] =
+        $photoAlbumsArray[(int) $parentPhotoAlbum->getValue('pho_id')] =
             $vorschub.'&#151; '.$parentPhotoAlbum->getValue('pho_name').'&nbsp('.$parentPhotoAlbum->getValue('pho_begin', 'Y').')';
 
-        subfolder($parentPhotoAlbum->getValue('pho_id'), $vorschub, $photoAlbum, $phoId);
+        subfolder((int) $parentPhotoAlbum->getValue('pho_id'), $vorschub, $photoAlbum, $phoId);
     }//while
 }//function
 
