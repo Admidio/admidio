@@ -39,7 +39,7 @@ if (!isset($gImportDemoData) || !$gImportDemoData)
     <p style="color: #cc0000;">Please add the following line to your config.php:<br /><em>$gImportDemoData = true;</em></p>');
 }
 
-require_once($rootPath . '/adm_program/system/bootstrap.php');
+require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 
 /**
  * parts of this function are from get_backtrace out of phpBB3
