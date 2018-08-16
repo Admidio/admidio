@@ -136,9 +136,9 @@ else
     $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
     // add current url to navigation stack if last url was not the same page
-    if(!StringUtils::strContains($gNavigation->getUrl(), 'members_assignment.php'))
+    if(!StringUtils::strContains($gNavigation->getLast(), 'members_assignment.php'))
     {
-        $gNavigation->addUrl(CURRENT_URL, $headline);
+        $gNavigation->add(CURRENT_URL);
     }
 
     // create html page object
@@ -221,7 +221,7 @@ else
 
     // get module menu
     $membersAssignmentMenu = $page->getMenu();
-    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
     if ($gCurrentUser->editUsers())
     {
         $membersAssignmentMenu->addItem('menu_item_create_user', ADMIDIO_URL.FOLDER_MODULES.'/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'fa-plus-circle');

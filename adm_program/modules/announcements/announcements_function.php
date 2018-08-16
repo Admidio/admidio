@@ -113,9 +113,8 @@ if($getMode === 1)
     }
 
     unset($_SESSION['announcements_request']);
-    $gNavigation->deleteLastUrl();
 
-    admRedirect($gNavigation->getUrl());
+    $gNavigation->goBack();
     // => EXIT
 }
 elseif($getMode === 2)

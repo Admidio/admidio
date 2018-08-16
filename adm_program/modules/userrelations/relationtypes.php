@@ -25,7 +25,7 @@ if (!$gCurrentUser->isAdministrator())
 
 // set module headline
 $headline = $gL10n->get('SYS_USER_RELATION_TYPES');
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);
@@ -35,7 +35,7 @@ $page->enableModal();
 $relationTypesMenu = $page->getMenu();
 
 // show back link
-$relationTypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$relationTypesMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // define link to create new category
 $relationTypesMenu->addItem(

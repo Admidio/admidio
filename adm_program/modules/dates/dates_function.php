@@ -588,9 +588,8 @@ if($getMode === 1 || $getMode === 5)  // Create a new event or edit an existing 
     $gDb->endTransaction();
 
     unset($_SESSION['dates_request']);
-    $gNavigation->deleteLastUrl();
 
-    admRedirect($gNavigation->getUrl());
+    $gNavigation->goBack();
     // => EXIT
 }
 elseif($getMode === 2)
@@ -713,6 +712,6 @@ if (in_array($getMode, array(3, 4, 7), true))
         $outputMessage = $gL10n->get('DAT_PARTICIPATE_NO_RIGHTS');
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getLast());
     $gMessage->show($outputMessage, $gL10n->get('DAT_ATTEND'));
 }

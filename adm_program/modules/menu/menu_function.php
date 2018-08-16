@@ -116,16 +116,16 @@ if($getMode === 1)
 
     if($gNavigation->count() > 1)
     {
-        $gNavigation->deleteLastUrl();
+        $gNavigation->removeLast();
     }
     else
     {
-        $gNavigation->addUrl($gHomepage, 'Home');
+        $gNavigation->add($gHomepage);
     }
 
     unset($_SESSION['menu_request']);
 
-    header('Location: '. $gNavigation->getUrl());
+    header('Location: '. $gNavigation->getLast());
     exit();
 }
 elseif($getMode === 2)

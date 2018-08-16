@@ -114,8 +114,7 @@ if($getMode === 1)
 
     $gDb->endTransaction();
 
-    $gNavigation->deleteLastUrl();
-    admRedirect($gNavigation->getUrl());
+    $gNavigation->goBack();
     // => EXIT
 }
 elseif($getMode === 2)

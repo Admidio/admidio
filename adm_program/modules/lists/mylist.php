@@ -46,9 +46,9 @@ $headline = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 if($getRoleId === 0)
 {
     // Navigation faengt hier im Modul an
-    $gNavigation->clear();
+    $gNavigation->reset();
 }
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 $defaultColumnRows   = 6;    // number of columns that should be shown
 $mySqlMaxColumnAlert = '';
@@ -535,7 +535,7 @@ if($gCurrentUser->isAdministrator())
 // if mylist was not called directly then show link to navigate to previous page
 if($gNavigation->count() > 1)
 {
-    $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $myListMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 
 // show form

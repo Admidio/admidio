@@ -294,11 +294,11 @@ switch($getMode)
         $page = new HtmlPage($headline);
 
         // add current url to navigation stack
-        $gNavigation->addUrl(CURRENT_URL, $headline);
+        $gNavigation->add(CURRENT_URL);
 
         // add back link to module menu
         $organizationNewMenu = $page->getMenu();
-        $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+        $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
         $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 

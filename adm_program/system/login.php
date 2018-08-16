@@ -13,7 +13,7 @@ require_once(__DIR__ . '/common.php');
 $headline = $gL10n->get('SYS_LOGIN');
 
 // remember url (will be removed in login_check)
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // read id of administrator role
 $sql = 'SELECT rol_id
@@ -34,7 +34,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $loginMenu = $page->getMenu();
-$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$loginMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('login_form', ADMIDIO_URL.'/adm_program/system/login_check.php', $page, array('showRequiredFields' => false));

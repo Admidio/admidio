@@ -37,7 +37,7 @@ $postListId     = admFuncVariableIsValid($_POST, 'lst_id',       'int');
 $_SESSION['message_request'] = $_POST;
 
 // save page in navigation - to have a check for a navigation back.
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->add(CURRENT_URL);
 
 if (isset($_POST['msg_to']))
 {
@@ -545,7 +545,7 @@ else
     }
 
     // save page in navigation - to have a check for a navigation back.
-    $gNavigation->addUrl(CURRENT_URL);
+    $gNavigation->add(CURRENT_URL);
 
     if ($getMsgId === 0)
     {
@@ -597,13 +597,13 @@ if ($sendResult === true) // don't remove check === true. ($sendResult) won't wo
     }
 
     // after sending remove the actual Page from the NaviObject and remove also the send-page
-    $gNavigation->deleteLastUrl();
-    $gNavigation->deleteLastUrl();
+    $gNavigation->removeLast();
+    $gNavigation->removeLast();
 
     // message if sending was OK
     if ($gNavigation->count() > 0)
     {
-        $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+        $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     }
     else
     {

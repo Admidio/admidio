@@ -100,7 +100,7 @@ $datesResult = $dates->getDataSet($getStart, $datesPerPage);
 if($getViewMode === 'html' && $getId === 0)
 {
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
+    $gNavigation->addFirst(CURRENT_URL);
 }
 
 // create html page object
@@ -137,7 +137,7 @@ if($getViewMode === 'html')
     if($getId > 0)
     {
         // add back link to module menu
-        $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+        $datesMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
         $datesMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'fa-print');
     }
 

@@ -43,7 +43,7 @@ if ($getMode === 1)
 
     // add back link to module menu
     $messageMenu = $page->getMenu();
-    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $messageMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
     $page->addHtml('
     <div class="message">
@@ -123,7 +123,7 @@ if ($getMode === 2)
         $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))));
     // => EXIT
 }
@@ -141,7 +141,7 @@ elseif ($getMode === 3)
     // Delete user from database
     $user->delete();
 
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
     // => EXIT
 }
@@ -175,7 +175,7 @@ elseif ($getMode === 4)
         // => EXIT
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getLast());
     $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
     // => EXIT
 }

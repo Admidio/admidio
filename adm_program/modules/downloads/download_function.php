@@ -368,7 +368,7 @@ elseif ($getMode === 6)
         $newFile->save();
 
         // Zurueck zur letzten Seite
-        $gNavigation->addUrl(CURRENT_URL);
+        $gNavigation->add(CURRENT_URL);
 
         admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
         // => EXIT
@@ -393,7 +393,7 @@ elseif ($getMode === 6)
         $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
 
         // Zurueck zur letzten Seite
-        $gNavigation->addUrl(CURRENT_URL);
+        $gNavigation->add(CURRENT_URL);
 
         admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
         // => EXIT

@@ -43,7 +43,7 @@ else
 }
 
 // add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($gDb);
@@ -114,7 +114,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $guestbookCreateMenu = $page->getMenu();
-$guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // Html des Modules ausgeben
 if ($getGboId > 0)

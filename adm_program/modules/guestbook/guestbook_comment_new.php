@@ -78,7 +78,7 @@ if($getGbcId > 0)
 
 }
 
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // Gaestebuchkommentarobjekt anlegen
 $gbComment = new TableGuestbookComment($gDb);
@@ -137,7 +137,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $guestbookCommentCreateMenu = $page->getMenu();
-$guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('guestbook_comment_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/guestbook/guestbook_function.php', array('id' => $id, 'headline' => $getHeadline, 'mode' => $mode)), $page);

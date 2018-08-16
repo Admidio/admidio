@@ -31,7 +31,7 @@ if (!$gCurrentUser->isAdministrator())
 }
 
 $headline = $gL10n->get('SYS_USER_RELATION_TYPES');
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 $relationType1 = new TableUserRelationType($gDb);
 $relationType2 = new TableUserRelationType($gDb);
@@ -47,7 +47,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $relationTypeEditMenu = $page->getMenu();
-$relationTypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$relationTypeEditMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('relationtype_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);

@@ -316,9 +316,9 @@ elseif (count($relationTypeIds) > 1)
 }
 
 // if html mode and last url was not a list view then save this url to navigation stack
-if ($getMode === 'html' && !StringUtils::strContains($gNavigation->getUrl(), 'lists_show.php'))
+if ($getMode === 'html' && !StringUtils::strContains($gNavigation->getLast(), 'lists_show.php'))
 {
-    $gNavigation->addUrl(CURRENT_URL);
+    $gNavigation->add(CURRENT_URL);
 }
 
 if ($getMode !== 'csv')
@@ -459,7 +459,7 @@ if ($getMode !== 'csv')
         // get module menu
         $listsMenu = $page->getMenu();
 
-        $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+        $listsMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
         if ($getFullScreen)
         {

@@ -130,9 +130,8 @@ if ($getMode === 1 || ($getMode === 3 && $getLinkId > 0))
     }
 
     unset($_SESSION['links_request']);
-    $gNavigation->deleteLastUrl();
 
-    admRedirect($gNavigation->getUrl());
+    $gNavigation->goBack();
     // => EXIT
 }
 elseif ($getMode === 2 && $getLinkId > 0)

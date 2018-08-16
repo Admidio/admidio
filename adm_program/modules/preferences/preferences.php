@@ -121,16 +121,16 @@ $page->addJavascript('
 if($showOption !== '')
 {
     // add current url to navigation stack
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    $gNavigation->add(CURRENT_URL);
 
     // add back link to module menu
     $preferencesMenu = $page->getMenu();
-    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 }
 else
 {
     // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $gNavigation->addFirst(CURRENT_URL);
 }
 
 $orgId = (int) $gCurrentOrganization->getValue('org_id');

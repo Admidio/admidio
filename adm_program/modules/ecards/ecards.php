@@ -38,7 +38,7 @@ if (!$gSettingsManager->getBool('enable_ecard_module'))
 }
 
 // URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_album']) && (int) $_SESSION['photo_album']->getValue('pho_id') === $getPhotoId)
@@ -144,7 +144,7 @@ $page->addJavascript('
 
 // add back link to module menu
 $ecardMenu = $page->getMenu();
-$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$ecardMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 if($gCurrentUser->isAdministrator())
 {

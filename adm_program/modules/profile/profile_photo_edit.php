@@ -121,7 +121,7 @@ if($getMode === 'save')
     }
 
     // zur Ausgangsseite zurueck
-    $gNavigation->deleteLastUrl();
+    $gNavigation->removeLast();
     admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile.php', array('user_id' => $getUserId)));
     // => EXIT
 }
@@ -196,14 +196,14 @@ if($getMode === 'choose')
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    $gNavigation->add(CURRENT_URL);
 
     // create html page object
     $page = new HtmlPage($headline);
 
     // add back link to module menu
     $profilePhotoMenu = $page->getMenu();
-    $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
     // show form
     $form = new HtmlForm('upload_files_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_photo_edit.php', array('mode' => 'upload', 'usr_id' => $getUserId)), $page, array('enableFileUpload' => true));

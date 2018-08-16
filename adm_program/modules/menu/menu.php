@@ -72,7 +72,7 @@ $page->addJavascript('
 // get module menu
 $menuMenu = $page->getMenu();
 
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
+$gNavigation->addFirst(CURRENT_URL);
 
 // define link to create new menu
 $menuMenu->addItem(

@@ -39,7 +39,7 @@ else
 }
 
 // add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // Create room object
 $room = new TableRooms($gDb);
@@ -61,7 +61,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $roomsMenu = $page->getMenu();
-$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$roomsMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // show form
 $form = new HtmlForm('rooms_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_function.php', array('room_id' => $getRoomId, 'mode' => '1')), $page);

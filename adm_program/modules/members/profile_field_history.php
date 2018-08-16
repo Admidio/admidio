@@ -52,7 +52,7 @@ if (!$gSettingsManager->getBool('profile_log_edit_fields')
 }
 
 // add page to navigation history
-$gNavigation->addUrl(CURRENT_URL, $headline);
+$gNavigation->add(CURRENT_URL);
 
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
@@ -140,7 +140,7 @@ $fieldHistoryStatement = $gDb->queryPrepared($sql, array_merge($queryParams, $qu
 if($fieldHistoryStatement->rowCount() === 0)
 {
     // message is shown, so delete this page from navigation stack
-    $gNavigation->deleteLastUrl();
+    $gNavigation->removeLast();
 
     // show message if there were no changes for users
     if($getUserId > 0)
@@ -160,7 +160,7 @@ $page = new HtmlPage($headline);
 
 // add back link to module menu
 $profileFieldHistoryMenu = $page->getMenu();
-$profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+$profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
 
 // create filter menu with input elements for Startdate and Enddate
 $filterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');

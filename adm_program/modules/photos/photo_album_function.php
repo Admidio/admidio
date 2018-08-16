@@ -192,16 +192,16 @@ if ($getMode === 'new' || $getMode === 'change')
     }
 
     unset($_SESSION['photo_album_request']);
-    $gNavigation->deleteLastUrl();
 
     if ($getMode === 'new')
     {
+        $gNavigation->removeLast();
         admRedirect(safeUrl(ADMIDIO_URL . FOLDER_MODULES.'/photos/photos.php', array('pho_id' => $getPhotoId)));
         // => EXIT
     }
     else
     {
-        admRedirect($gNavigation->getUrl());
+        $gNavigation->goBack();
         // => EXIT
     }
 }
@@ -224,7 +224,7 @@ elseif ($getMode === 'lock')
     $photoAlbum->setValue('pho_locked', 1);
     $photoAlbum->save();
 
-    admRedirect($gNavigation->getUrl());
+    admRedirect($gNavigation->getLast());
     // => EXIT
 }
 
@@ -234,6 +234,6 @@ elseif ($getMode === 'unlock')
     $photoAlbum->setValue('pho_locked', 0);
     $photoAlbum->save();
 
-    admRedirect($gNavigation->getUrl());
+    admRedirect($gNavigation->getLast());
     // => EXIT
 }

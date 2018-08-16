@@ -240,7 +240,7 @@ if(count($parentRoles) > 0)
 // if role selection was a separate page then delete this page from the navigation stack
 if(!$getInline)
 {
-    $gNavigation->deleteLastUrl();
+    $gNavigation->removeLast();
 }
 
 // all active users must renew their user data because maybe their
@@ -263,10 +263,10 @@ if($getNewUser > 0 && $assignedCount === 0)
 }
 
 // zur Ausgangsseite zurueck
-if(StringUtils::strContains($gNavigation->getUrl(), 'new_user_assign.php'))
+if(StringUtils::strContains($gNavigation->getLast(), 'new_user_assign.php'))
 {
     // von hier aus direkt zur Registrierungsuebersicht zurueck
-    $gNavigation->deleteLastUrl();
+    $gNavigation->removeLast();
 }
 
 if($getInline)
@@ -284,7 +284,7 @@ else
         $messageId = 'SYS_SAVE_DATA';
     }
 
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getLast(), 2000);
     $gMessage->show($gL10n->get($messageId));
     // => EXIT
 }
