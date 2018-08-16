@@ -37,7 +37,7 @@ else
     $g_root_path    = '../..';
 }
 
-require_once($rootPath . '/adm_program/system/bootstrap.php');
+require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 
 $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation');

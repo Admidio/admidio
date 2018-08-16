@@ -34,7 +34,7 @@ else
     exit();
 }
 
-require_once($rootPath . '/adm_program/system/bootstrap.php');
+require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/install_functions.php');
 require_once(ADMIDIO_PATH . '/adm_program/installation/update_functions.php');
 
