@@ -30,7 +30,8 @@ class TableUserRelationType extends TableAccess
     }
 
     /**
-     * @return string
+     * Get the string of the current relationship type.
+     * @return string The relationship type could be **asymmetrical**, **symmetrical** or **unidirectional**
      */
     public function getRelationTypeString()
     {

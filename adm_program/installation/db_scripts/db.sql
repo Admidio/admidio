@@ -750,7 +750,7 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_name ON %PREFIX%_user_relation_types (urt_name);
 
 /*==============================================================*/
-/* Table: adm_user_relation_types                               */
+/* Table: adm_user_relations                                    */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_user_relations
 (
