@@ -1238,7 +1238,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL"> L\'adresse courriel #VAR1_BOLD# a été assignée plus d\'une fois. Aucun utilisateur unique n\'a pu être trouvé.</string>
   <string name="SYS_MAIL_DISPATCH">Envoi par courriel</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Gérer les catégories</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Gérer les types de relations</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Les types de relations (parent - enfant) peuvent être définis. Le type (asymétrique, symétrique ou unidirectionnel) et les droits d\'édition de profil dans la relation sont stockés pour chaque relation définie.</string>
   <string name="SYS_MALE">Masculin</string>
   <string name="SYS_MANDATORY_FIELD">Champ obligatoire</string>
@@ -1414,7 +1413,6 @@
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">Relations</string>
   <string name="SYS_USER_RELATION_TYPE">Type de relation</string>
-  <string name="SYS_USER_RELATION_TYPES">Types de relation</string>
   <string name="SYS_USERNAME">Nom d\'utilisateur</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nom d\'utilisateur ou courriel</string>
   <string name="SYS_USERS_FOUND">Utilisateurs trouvés</string>

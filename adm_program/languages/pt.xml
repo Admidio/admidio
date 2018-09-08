@@ -1237,7 +1237,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">O endereço de e-mail #VAR1_BOLD# foi atribuído para vários registos. Um único registo de usuário não foi identificado.</string>
   <string name="SYS_MAIL_DISPATCH">Entrega de e-mail</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Gerenciar categorias</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Manter tipos de relação</string>
   <string name="SYS_MALE">Masculino</string>
   <string name="SYS_MANDATORY_FIELD">Campo obrigatório</string>
   <string name="SYS_MAP">Mapa</string>
@@ -1402,7 +1401,6 @@
   <string name="SYS_USER_RELATION">Relação</string>
   <string name="SYS_USER_RELATIONS">Relações</string>
   <string name="SYS_USER_RELATION_TYPE">Tipo de relação</string>
-  <string name="SYS_USER_RELATION_TYPES">Tipos de relação</string>
   <string name="SYS_USERNAME">Nome de usuário</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nome de usuário ou e-mail</string>
   <string name="SYS_USERS_FOUND">Usuário encontrado</string>

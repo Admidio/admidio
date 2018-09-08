@@ -871,7 +871,6 @@
   <string name="SYS_USER_RELATION">Relación</string>
   <string name="SYS_USER_RELATIONS">relaciónes</string>
   <string name="SYS_USER_RELATION_TYPE">Tipo de relación</string>
-  <string name="SYS_USER_RELATION_TYPES">tipos de relaciónes</string>
   <string name="SYS_USERNAME">Nombre del usuario</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nombre del usuario y E-Mail</string>
   <string name="SYS_USERS_FOUND">Usuarios encontrados</string>

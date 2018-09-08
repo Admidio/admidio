@@ -1092,6 +1092,7 @@
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_CONDITION">Bedingung</string>
+  <string name="SYS_CONFIGURE_RELATIONSHIPS">Beziehungen konfigurieren</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
@@ -1248,7 +1249,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</string>
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Kategorien pflegen</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Beziehungstypen pflegen</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANDATORY_FIELD">Pflichtfeld</string>
@@ -1346,6 +1346,8 @@
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
   <string name="SYS_REGISTRATION_SAVED">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMOVE">Entfernen</string>
@@ -1423,7 +1425,6 @@
   <string name="SYS_USER_RELATION">Beziehung</string>
   <string name="SYS_USER_RELATIONS">Beziehungen</string>
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
-  <string name="SYS_USER_RELATION_TYPES">Beziehungstypen</string>
   <string name="SYS_USERNAME">Benutzername</string>
   <string name="SYS_USERNAME_OR_EMAIL">Benutzername oder E-Mail</string>
   <string name="SYS_USERS_FOUND">Gefundene Benutzer</string>

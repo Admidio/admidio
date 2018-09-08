@@ -244,7 +244,6 @@
   <string name="SYS_USER_RELATION">关系</string>
   <string name="SYS_USER_RELATIONS">关系</string>
   <string name="SYS_USER_RELATION_TYPE">关系类型</string>
-  <string name="SYS_USER_RELATION_TYPES">关系类型</string>
   <string name="SYS_USERNAME">用户名</string>
   <string name="SYS_USERNAME_OR_EMAIL">用户名或电子邮件</string>
   <string name="SYS_USERS_FOUND">查找用户</string>

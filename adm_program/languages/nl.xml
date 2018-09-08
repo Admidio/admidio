@@ -1247,7 +1247,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Het e-mailadres #VAR1_BOLD# werd meerdere malen toegewezen. Er kon geen unieke gebruiker worden gevonden.</string>
   <string name="SYS_MAIL_DISPATCH">E-mail verzending</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Categorieën beheren</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Relatie typen beheren</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">U kunt relatie typen definiëren (ouder - kind). Voor elke gedefinieerde relatie wordt het type (asymmetrisch, symmetrisch of unidirectioneel) gedefinieerd en de bewerkingsrechten voor het profiel worden gedefinieerd binnen de relatie.</string>
   <string name="SYS_MALE">Man</string>
   <string name="SYS_MANDATORY_FIELD">Verplicht veld</string>
@@ -1420,7 +1419,6 @@
   <string name="SYS_USER_RELATION">Relatie</string>
   <string name="SYS_USER_RELATIONS">Relaties</string>
   <string name="SYS_USER_RELATION_TYPE">Relatie type</string>
-  <string name="SYS_USER_RELATION_TYPES">Relatie typen</string>
   <string name="SYS_USERNAME">Gebruikersnaam</string>
   <string name="SYS_USERNAME_OR_EMAIL">Gebruikersnaam of e-mailadres</string>
   <string name="SYS_USERS_FOUND">Gebruiker gevonden</string>

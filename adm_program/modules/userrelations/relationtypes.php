@@ -24,7 +24,7 @@ if (!$gCurrentUser->isAdministrator())
 }
 
 // set module headline
-$headline = $gL10n->get('SYS_USER_RELATION_TYPES');
+$headline = $gL10n->get('SYS_RELATIONSHIP_CONFIGURATIONS');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create html page object
@@ -40,15 +40,22 @@ $relationtypesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $g
 // define link to create new category
 $relationtypesMenu->addItem(
     'admMenuItemNewRelationType', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php',
-    $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_USER_RELATION_TYPE'))), 'add.png'
+    $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('LST_CONFIGURATION'))), 'add.png'
 );
 
 // Create table object
 $relationtypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
 
+$relationTypes = array(
+    'asymmetrical'   => $gL10n->get('REL_USER_RELATION_TYPE_ASYMMETRICAL'),
+    'symmetrical'    => $gL10n->get('REL_USER_RELATION_TYPE_SYMMETRICAL'),
+    'unidirectional' => $gL10n->get('REL_USER_RELATION_TYPE_UNIDIRECTIONAL')
+);
+
 // create array with all column heading values
 $columnHeading = array(
-    $gL10n->get('SYS_USER_RELATION_TYPE'),
+    $gL10n->get('SYS_USER_RELATION'),
+    $gL10n->get('SYS_USER_RELATION_TYPE').HtmlForm::getHelpTextIcon('REL_USER_RELATION_TYPE_DESC'),
     '&nbsp;'
 );
 $relationtypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));
@@ -116,6 +123,7 @@ while($relRow = $relationtypesStatement->fetch())
     // create array with all column values
     $columnValues = array(
         $nameRelationshiptype,
+        $relationTypes[$relationtype1->getRelationTypeString()],
         $relationtypeAdministration
     );
     $relationtypesOverview->addRowByArray($columnValues, 'row_'. $relationtype1->getValue('urt_id'));

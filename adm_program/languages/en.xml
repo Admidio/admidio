@@ -1092,6 +1092,7 @@
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_CONDITION">Requirement</string>
+  <string name="SYS_CONFIGURE_RELATIONSHIPS">Configure relationships</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
@@ -1248,7 +1249,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Manage categories</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Maintain relationship types</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
@@ -1347,6 +1347,8 @@
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMOVE">Remove</string>
@@ -1424,7 +1426,6 @@
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
   <string name="SYS_USER_RELATION_TYPE">Relationship type</string>
-  <string name="SYS_USER_RELATION_TYPES">Relationship types</string>
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERS_FOUND">User found</string>
