@@ -30,7 +30,24 @@ class TableUserRelationType extends TableAccess
     }
 
     /**
-     * @return string
+     * Returns the inverse relationtype.
+     * @return null|self Returns the inverse relationtype
+     */
+    public function getInverse()
+    {
+        $inverse = new self($this->db, $this->getValue('urt_id_inverse'));
+
+        if ($inverse->isNewRecord())
+        {
+            return null;
+        }
+
+        return $inverse;
+    }
+
+    /**
+     * Get the string of the current relationship type.
+     * @return string The relationship type could be **asymmetrical**, **symmetrical** or **unidirectional**
      */
     public function getRelationTypeString()
     {
@@ -52,9 +69,9 @@ class TableUserRelationType extends TableAccess
     /**
      * @return bool
      */
-    public function isUnidirectional()
+    public function isAsymmetrical()
     {
-        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_UNIDIRECTIONAL;
+        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_ASYMMETRICAL;
     }
 
     /**
@@ -68,24 +85,8 @@ class TableUserRelationType extends TableAccess
     /**
      * @return bool
      */
-    public function isAsymmetrical()
+    public function isUnidirectional()
     {
-        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_ASYMMETRICAL;
-    }
-
-    /**
-     * Returns the inverse relationtype.
-     * @return null|self Returns the inverse relationtype
-     */
-    public function getInverse()
-    {
-        $inverse = new self($this->db, (int) $this->getValue('urt_id_inverse'));
-
-        if ($inverse->isNewRecord())
-        {
-            return null;
-        }
-
-        return $inverse;
+        return $this->getRelationTypeString() === self::USER_RELATION_TYPE_UNIDIRECTIONAL;
     }
 }

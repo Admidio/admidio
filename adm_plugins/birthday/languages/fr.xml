@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# aura dans #VAR2# jours #VAR3# ans, le #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# a son anniversaire en #VAR2# jours</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Anniversaires</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Monsieur #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_USERS">Aujourd\'hui, #VAR1# membres ont leurs anniversaire !</string>
+  <string name="PLG_BIRTHDAY_NO_USER">Aujourd\'hui, aucun membre a son anniversaire.</string>
+  <string name="PLG_BIRTHDAY_ONE_USER">Aujourd\'hui, un membre a son anniversaire !</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# avait il y a #VAR2# jours #VAR3# ans, le #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# avait son anniversaire il y a #VAR2# jours</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# a aujourd\'hui #VAR2# ans</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# a son anniversaire aujourd\'hui</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# aura demain #VAR3# ans, le #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# a son anniversaire demain</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Madame #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# avait hier #VAR3# ans, le #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# a eu son anniversaire hier</string>
+</resources>

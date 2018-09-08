@@ -178,7 +178,7 @@
   <string name="MEM_CHOOSE_FILE">选择文件</string>
   <string name="MEM_COMPLEMENT">补充</string>
   <string name="MEM_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
-  <string name="MEM_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
+  <string name="MEM_DAYS_FIELD_HISTORY_DESC">配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
   <string name="MEM_DUPLICATE">重复</string>
   <string name="MEM_EDIT_USER">编辑用户</string>
   <string name="MEM_ENABLE_USER_RELATIONS">保持和显示关系</string>
@@ -215,7 +215,7 @@
   <string name="SYS_ALL_ORGANIZATIONS">所有部门</string>
   <string name="SYS_CATEGORIES">类别</string>
   <string name="SYS_CATEGORIES_VAR">#VAR1# - 类别</string>
-  <string name="SYS_CATEGORY"> 类别</string>
+  <string name="SYS_CATEGORY">类别</string>
   <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">你不能删除系统类别</string>
   <string name="SYS_MAINTAIN_CATEGORIES">管理类别</string>
@@ -230,7 +230,7 @@
   <string name="SYS_TIME_INVALID">时间字段错误 #VAR1_BOLD#.\n\n时间格式的值必须以如下方式表示： #VAR2_BOLD#.</string>
   <string name="SYS_TIME_TO">时间到</string>
   <string name="SYS_TITLE">标题</string>
-  <string name="SYS_TO" description="E-Mail"> To</string>
+  <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TUESDAY">星期二</string>
   <string name="SYS_TYPE">类型</string>
   <string name="SYS_UNKNOWN">未经确认的</string>
@@ -244,7 +244,6 @@
   <string name="SYS_USER_RELATION">关系</string>
   <string name="SYS_USER_RELATIONS">关系</string>
   <string name="SYS_USER_RELATION_TYPE">关系类型</string>
-  <string name="SYS_USER_RELATION_TYPES">关系类型</string>
   <string name="SYS_USERNAME">用户名</string>
   <string name="SYS_USERNAME_OR_EMAIL">用户名或电子邮件</string>
   <string name="SYS_USERS_FOUND">查找用户</string>
@@ -252,11 +251,11 @@
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VIEW">视图</string>
   <string name="SYS_VISIBLE">可见</string>
-  <string name="SYS_VISITORS"> 访客</string>
+  <string name="SYS_VISITORS">访客</string>
   <string name="SYS_WANT_REGISTER">我想要注册！</string>
   <string name="SYS_WARNING">警告</string>
   <string name="SYS_WEBMASTER">网站管理员</string>
-  <string name="SYS_WEBSITE"> 网站</string>
+  <string name="SYS_WEBSITE">网站</string>
   <string name="SYS_WEDNESDAY">星期三</string>
   <string name="SYS_WHAT_TO_DO">该怎么办？</string>
   <string name="SYS_WIDTH">宽度</string>

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_DATES_ALL_EVENTS">Tous les événements</string>
+  <string name="PLG_DATES_HEADLINE">Événements</string>
+  <string name="PLG_SIDEBAR_DATES_MORE">plus</string>
+</resources>

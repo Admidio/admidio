@@ -856,10 +856,11 @@ $formUserManagement->addCheckbox(
     'members_enable_user_relations', $gL10n->get('MEM_ENABLE_USER_RELATIONS'), (bool) $formValues['members_enable_user_relations'],
     array('helpTextIdInline' => 'MEM_ENABLE_USER_RELATIONS_DESC')
 );
+
 $html = '<a class="btn" href="'. ADMIDIO_URL. FOLDER_MODULES.'/userrelations/relationtypes.php">
-            <i class="fas fa-users-cog"></i>'.$gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES').'</a>';
+            <i class="fas fa-users-cog"></i>'.$gL10n->get('SYS_CONFIGURE_RELATIONSHIPS').'</a>';
 $htmlDesc = $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES_DESC').'<div class="alert alert-warning alert-small" role="alert"><i class="fas fa-exclamation-triangle"></i>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
-$formUserManagement->addCustomContent($gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), $html, array('helpTextIdInline' => $htmlDesc));
+$formUserManagement->addCustomContent($gL10n->get('SYS_CONFIGURE_RELATIONSHIPS'), $html, array('helpTextIdInline' => $htmlDesc));
 
 $formUserManagement->addSubmitButton(
     'btn_save_user_management', $gL10n->get('SYS_SAVE'),

@@ -101,7 +101,7 @@ if($gCurrentUser->isAdministrator())
         // show link to relation types
         $membersAdministrationMenu->addItem(
             'menu_item_maintain_user_relation_types', ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes.php',
-            $gL10n->get('SYS_MAINTAIN_USER_RELATION_TYPES'), 'fa-users-cog', 'right', 'menu_item_extras'
+            $gL10n->get('SYS_CONFIGURE_RELATIONSHIPS'), 'fa-users-cog', 'right', 'menu_item_extras'
         );
     }
 

@@ -39,7 +39,7 @@ try
         // reset the column usr_new_password
         $user->setPassword('', true, false);
         $user->setValue('usr_activation_code', '');
-        $user->save();
+        $user->save(false);
 
         // if user has tried login several times we should reset the invalid counter, 
         // so he could login with the new password immediately

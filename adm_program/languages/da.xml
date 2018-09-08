@@ -890,7 +890,7 @@
   <string name="PRO_YEARS">År</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_IN_RELATION">Rediger bruger profilen i dette forhold</string>
-  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Ingen findes ingen relations typer. Relations typer kan oprettes i bruger administrationen </string>
+  <string name="REL_NO_USER_RELATION_TYPES_FOUND">Ingen findes ingen relations typer. Relations typer kan oprettes i bruger administrationen</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">Asymmetrisk</string>
   <string name="REL_USER_RELATION_TYPE_BACKWARD">Baglæns</string>
   <string name="REL_USER_RELATION_TYPE_DEL">Vil du fjerne denne type relation? #VAR1_BOLD#? Advarsel: Dette vil slette alle eksisterende relationer af denne type.</string>
@@ -1160,7 +1160,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail adressen #VAR1_BOLD# er blevet tildelt til flere registreringer. En unik bruger registrering kunne identificeres.</string>
   <string name="SYS_MAIL_DISPATCH">E-mail forsendelse</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Vedligehold kategorier</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Vedligehold relations typer</string>
   <string name="SYS_MALE">Hankøn</string>
   <string name="SYS_MANDATORY_FIELD">Krævet felt</string>
   <string name="SYS_MAP">Kort</string>
@@ -1326,7 +1325,6 @@
   <string name="SYS_USER_RELATION">Relation</string>
   <string name="SYS_USER_RELATIONS">Relationer</string>
   <string name="SYS_USER_RELATION_TYPE">Relations typer</string>
-  <string name="SYS_USER_RELATION_TYPES">Relations typer</string>
   <string name="SYS_USERNAME">Bruger navn</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERS_FOUND">Bruger fundet</string>

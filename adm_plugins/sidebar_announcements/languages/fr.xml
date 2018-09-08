@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ENTRIES">Toutes les annonces</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE">Annonces</string>
+  <string name="PLG_SIDEBAR_ANNOUNCEMENTS_MORE">plus</string>
+</resources>

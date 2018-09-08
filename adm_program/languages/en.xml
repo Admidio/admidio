@@ -178,7 +178,7 @@
   <string name="ECA_A_ECARD_FROM">Greeting card sent by</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Activating greeting card module</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">The greeting card module can be activated or deactivated via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
-  <string name="ECA_GREETING_CARD">Greeting card </string>
+  <string name="ECA_GREETING_CARD">Greeting card</string>
   <string name="ECA_GREETING_CARDS">Greeting cards</string>
   <string name="ECA_GREETING_CARD_EDIT">Edit greeting card</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -875,7 +875,7 @@
   <string name="PRO_ADD_USER">Add user</string>
   <string name="PRO_ADD_USER_RELATION">Create relationship</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Set by the roles</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registration has been confirmed. The user can now log on to the system.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The user can now log on to the system.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="PRO_CANCEL_USER_RELATION">Delete relationship</string>
   <string name="PRO_CHANGE_DATE">Change date</string>
@@ -1092,6 +1092,7 @@
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_CONDITION">Requirement</string>
+  <string name="SYS_CONFIGURE_RELATIONSHIPS">Configure relationships</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONTACT_DETAILS">Contact information</string>
@@ -1248,7 +1249,6 @@
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
   <string name="SYS_MAIL_DISPATCH">Email delivery</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Manage categories</string>
-  <string name="SYS_MAINTAIN_USER_RELATION_TYPES">Maintain relationship types</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANDATORY_FIELD">Mandatory field</string>
@@ -1298,6 +1298,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">On</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online membership management</string>
+  <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
@@ -1346,6 +1347,8 @@
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMOVE">Remove</string>
@@ -1422,8 +1425,7 @@
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_RELATION">Relationship</string>
   <string name="SYS_USER_RELATIONS">Relationships</string>
-  <string name="SYS_USER_RELATION_TYPE">Relationship typ</string>
-  <string name="SYS_USER_RELATION_TYPES">Relationship types</string>
+  <string name="SYS_USER_RELATION_TYPE">Relationship type</string>
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERS_FOUND">User found</string>

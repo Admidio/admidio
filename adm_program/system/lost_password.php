@@ -126,7 +126,7 @@ if(!empty($_POST['recipient_email']))
             $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
             $user->saveChangesWithoutRights();
-            $user->save();
+            $user->save(false);
         }
 
         // always show a positive feedback to prevent hackers to validate an email-address or username

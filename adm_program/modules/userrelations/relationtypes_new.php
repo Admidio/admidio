@@ -30,7 +30,7 @@ if (!$gCurrentUser->isAdministrator())
     // => EXIT
 }
 
-$headline = $gL10n->get('SYS_USER_RELATION_TYPES');
+$headline = $gL10n->get('SYS_RELATIONSHIP_CONFIGURATION');
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 $relationType1 = new TableUserRelationType($gDb);
@@ -52,18 +52,19 @@ $relationTypeEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(),
 // show form
 $form = new HtmlForm('relationtype_edit_form', safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_function.php', array('urt_id' => $getUrtId, 'mode' => '1')), $page);
 
+$form->openGroupBox('gb_user_relationship', $gL10n->get('SYS_USER_RELATION'));
 $form->addInput(
-    'urt_name', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD'), $relationType1->getValue('urt_name'),
+    'urt_name', $gL10n->get('SYS_NAME'), $relationtype1->getValue('urt_name'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'urt_name_male', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD').' '.$gL10n->get('SYS_MALE'),
-    ($relationType1->getValue('urt_name_male') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_male') : '',
+    'urt_name_male', $gL10n->get('SYS_MALE'),
+    ($relationtype1->getValue('urt_name_male') !== $relationtype1->getValue('urt_name')) ? $relationtype1->getValue('urt_name_male') : '',
     array('maxLength' => 100)
 );
 $form->addInput(
-    'urt_name_female', $gL10n->get('REL_USER_RELATION_TYPE_FORWARD').' '.$gL10n->get('SYS_FEMALE'),
-    ($relationType1->getValue('urt_name_female') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_female') : '',
+    'urt_name_female', $gL10n->get('SYS_FEMALE'),
+    ($relationtype1->getValue('urt_name_female') !== $relationtype1->getValue('urt_name')) ? $relationtype1->getValue('urt_name_female') : '',
     array('maxLength' => 100)
 );
 $form->addCheckbox(
@@ -86,6 +87,9 @@ $form->addRadioButton(
     ),
     $options
 );
+$form->closeGroupBox();
+
+$form->openGroupBox('gb_opposite_relationship', $gL10n->get('SYS_OPPOSITE_RELATIONSHIP'));
 $page->addJavascript('
     function checkRelationTypeNames() {
         $("#btn_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());
@@ -100,6 +104,7 @@ $page->addJavascript('
     function updateRelationType(element, duration) {
         if ($(element).val() === "unidirectional" || $(element).val() === "symmetrical") {
             $("#urt_name_inverse").prop("required", false);
+            $("#gb_opposite_relationship").hide(duration);
             $("#urt_name_inverse_group").hide(duration);
             $("#urt_name_male_inverse_group").hide(duration);
             $("#urt_name_female_inverse_group").hide(duration);
@@ -107,6 +112,7 @@ $page->addJavascript('
         }
         else if ($(element).val() === "asymmetrical") {
             $("#urt_name_inverse").prop("required", true);
+            $("#gb_opposite_relationship").show(duration);
             $("#urt_name_inverse_group").show(duration);
             $("#urt_name_male_inverse_group").show(duration);
             $("#urt_name_female_inverse_group").show(duration);
@@ -122,23 +128,24 @@ $page->addJavascript('
 );
 
 $form->addInput(
-    'urt_name_inverse', $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD'), $relationType2->getValue('urt_name'),
+    'urt_name_inverse', $gL10n->get('SYS_NAME'), $relationtype2->getValue('urt_name'),
     array('maxLength' => 100, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
-    'urt_name_male_inverse', $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD').' '.$gL10n->get('SYS_MALE'),
-    ($relationType2->getValue('urt_name_male') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_male') : '',
+    'urt_name_male_inverse', $gL10n->get('SYS_MALE'),
+    ($relationtype2->getValue('urt_name_male') !== $relationtype2->getValue('urt_name')) ? $relationtype2->getValue('urt_name_male') : '',
     array('maxLength' => 100)
 );
 $form->addInput(
-    'urt_name_female_inverse', $gL10n->get('REL_USER_RELATION_TYPE_BACKWARD').' '.$gL10n->get('SYS_FEMALE'),
-    ($relationType2->getValue('urt_name_female') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_female') : '',
+    'urt_name_female_inverse', $gL10n->get('SYS_FEMALE'),
+    ($relationtype2->getValue('urt_name_female') !== $relationtype2->getValue('urt_name')) ? $relationtype2->getValue('urt_name_female') : '',
     array('maxLength' => 100)
 );
 $form->addCheckbox(
     'urt_edit_user_inverse', $gL10n->get('SYS_EDIT_USER_IN_RELATION'), (bool) $relationType2->getValue('urt_edit_user'),
     array('helpTextIdLabel' => 'REL_EDIT_USER_DESC')
 );
+$form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => 'fa-check'));
 $form->addHtml(admFuncShowCreateChangeInfoById(
