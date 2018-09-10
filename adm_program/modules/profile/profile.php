@@ -87,13 +87,6 @@ else
     $headline = $gL10n->get('PRO_PROFILE_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 }
 
-// if user id was not set and own profile should be shown then initialize navigation
-if(!isset($_GET['user_id']))
-{
-    $gNavigation->reset();
-}
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();

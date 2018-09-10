@@ -367,9 +367,6 @@ elseif ($getMode === 6)
         $newFile->setValue('fil_counter', 0);
         $newFile->save();
 
-        // Zurueck zur letzten Seite
-        $gNavigation->add(CURRENT_URL);
-
         admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
         // => EXIT
     }
@@ -391,9 +388,6 @@ elseif ($getMode === 6)
         $newFolder->addRolesOnFolder('folder_view', $rightParentFolderView->getRolesIds());
         $rightParentFolderUpload = new RolesRights($gDb, 'folder_upload', $folId);
         $newFolder->addRolesOnFolder('folder_upload', $rightParentFolderUpload->getRolesIds());
-
-        // Zurueck zur letzten Seite
-        $gNavigation->add(CURRENT_URL);
 
         admRedirect(ADMIDIO_URL . '/adm_program/system/back.php');
         // => EXIT

@@ -83,9 +83,6 @@ if ($getPhotoId === 0)
     $gNavigation->reset();
 }
 
-// URL auf Navigationstack ablegen
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();

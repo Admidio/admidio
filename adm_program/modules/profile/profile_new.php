@@ -118,8 +118,6 @@ switch($getNewUser)
         break;
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
 if(isset($_SESSION['profile_request']))
 {

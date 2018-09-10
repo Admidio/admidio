@@ -12,9 +12,6 @@ require_once(__DIR__ . '/common.php');
 
 $headline = $gL10n->get('SYS_LOGIN');
 
-// remember url (will be removed in login_check)
-$gNavigation->add(CURRENT_URL);
-
 // read id of administrator role
 $sql = 'SELECT rol_id
           FROM '.TBL_ROLES.'

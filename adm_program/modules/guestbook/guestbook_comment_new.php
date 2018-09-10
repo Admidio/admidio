@@ -78,8 +78,6 @@ if($getGbcId > 0)
 
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // Gaestebuchkommentarobjekt anlegen
 $gbComment = new TableGuestbookComment($gDb);
 

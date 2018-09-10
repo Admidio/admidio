@@ -196,8 +196,6 @@ if($getMode === 'choose')
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
     }
 
-    $gNavigation->add(CURRENT_URL);
-
     // create html page object
     $page = new HtmlPage($headline);
 

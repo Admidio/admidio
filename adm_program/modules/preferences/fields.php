@@ -22,8 +22,6 @@ if (!$gCurrentUser->isAdministrator())
 // set module headline
 $headline = $gL10n->get('ORG_PROFILE_FIELDS');
 
-$gNavigation->add(CURRENT_URL);
-
 unset($_SESSION['fields_request']);
 
 // create html page object

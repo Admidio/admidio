@@ -71,9 +71,6 @@ else
     $headline = $gL10n->get('SYS_CREATE_VAR', array($getHeadline));
 }
 
-// add current url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 

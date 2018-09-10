@@ -217,21 +217,6 @@ define('THEME_URL',  ADMIDIO_URL  . FOLDER_THEMES . '/' . $gSettingsManager->get
 // Create message object which can be called if a message should be shown
 $gMessage = new Message();
 
-// Create object for navigation between the scripts and modules
-// Every URL will be stored in a stack and can be called if user want's to navigate back
-if($gCurrentSession->hasObject('gNavigation'))
-{
-    /**
-     * @var Navigation $gNavigation
-     */
-    $gNavigation =& $gCurrentSession->getObject('gNavigation');
-}
-else
-{
-    $gNavigation = new Navigation();
-    $gCurrentSession->addObject('gNavigation', $gNavigation);
-}
-
 try
 {
     // check version of database against version of file system and show notice if not equal
@@ -253,3 +238,19 @@ else
 {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }
+
+// Create object for navigation between the scripts and modules
+// Every URL will be stored in a stack and can be called if user want's to navigate back
+if($gCurrentSession->hasObject('gNavigation'))
+{
+    /**
+     * @var Navigation $gNavigation
+     */
+    $gNavigation =& $gCurrentSession->getObject('gNavigation');
+}
+else
+{
+    $gNavigation = new Navigation();
+    $gCurrentSession->addObject('gNavigation', $gNavigation);
+}
+$gNavigation->add(CURRENT_URL);

@@ -55,9 +55,6 @@ else
 // Output head
 $headline = $weblinks->getHeadline($getHeadline);
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();

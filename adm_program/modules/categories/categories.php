@@ -112,7 +112,6 @@ while($roleName = $statementAdminRoles->fetchColumn())
     $adminRoles[] = $roleName;
 }
 
-$gNavigation->add(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // create html page object

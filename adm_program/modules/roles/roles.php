@@ -32,9 +32,6 @@ if(!$gCurrentUser->manageRoles())
 // set headline of the script
 $headline = $gL10n->get('ROL_ROLE_ADMINISTRATION');
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 unset($_SESSION['roles_request']);
 
 // per default show active and not event roles

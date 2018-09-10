@@ -36,9 +36,6 @@ if (!$gCurrentUser->editUsers())
 // set headline of the script
 $headline = $gL10n->get('MEM_USER_MANAGEMENT');
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 $flagShowMembers = !$getMembers;
 

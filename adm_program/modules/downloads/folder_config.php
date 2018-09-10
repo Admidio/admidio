@@ -34,8 +34,6 @@ if (!$gCurrentUser->editDownloadRight())
     // => EXIT
 }
 
-$gNavigation->add(CURRENT_URL);
-
 $rolesViewRightParentFolder = array();
 $sqlRolesViewRight          = '';
 $sqlRolesUploadRight        = '';

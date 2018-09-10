@@ -56,9 +56,6 @@ if($getCatId > 0)
     $headline .= ' - '.$category->getValue('cat_name');
 }
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 

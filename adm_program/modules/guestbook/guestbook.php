@@ -45,13 +45,6 @@ if($getModeration && !$gCurrentUser->editGuestbookRight())
     // => EXIT
 }
 
-// Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
-if($getGboId === 0)
-{
-    $gNavigation->reset();
-}
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage();
 $page->enableModal();

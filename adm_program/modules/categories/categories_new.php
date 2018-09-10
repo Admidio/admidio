@@ -96,8 +96,6 @@ else
     $headline = $gL10n->get('SYS_CREATE_VAR', array($headline));
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // create category object
 $category = new TableCategory($gDb);
 $orgId = (int) $gCurrentOrganization->getValue('org_id');

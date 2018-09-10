@@ -37,8 +37,6 @@ else
     $headline = $gL10n->get('SYS_CREATE_ROLE');
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 

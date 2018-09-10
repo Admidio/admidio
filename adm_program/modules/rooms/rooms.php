@@ -24,9 +24,6 @@ unset($_SESSION['rooms_request']);
 $headline = $gL10n->get('ROO_ROOM_MANAGEMENT');
 $textRoom = $gL10n->get('SYS_ROOM');
 
-// Navigation weiterfuehren
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();

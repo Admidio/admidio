@@ -55,7 +55,6 @@ if((int) $relationsStatement->fetchColumn() === 0)
 }
 
 $headline = $gL10n->get('PRO_ADD_USER_RELATION');
-$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);

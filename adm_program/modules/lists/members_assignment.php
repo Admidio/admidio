@@ -135,12 +135,6 @@ else
     // set headline of the script
     $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
-    // add current url to navigation stack if last url was not the same page
-    if(!StringUtils::strContains($gNavigation->getLast(), 'members_assignment.php'))
-    {
-        $gNavigation->add(CURRENT_URL);
-    }
-
     // create html page object
     $page = new HtmlPage($headline);
     $page->enableModal();

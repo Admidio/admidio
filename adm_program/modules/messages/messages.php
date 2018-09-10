@@ -48,10 +48,6 @@ if ($getMsgId > 0)
 
 $headline = $gL10n->get('SYS_MESSAGES');
 
-// add current url to navigation stack
-$gNavigation->reset();
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 $page->enableModal();

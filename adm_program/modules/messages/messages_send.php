@@ -36,9 +36,6 @@ $postListId     = admFuncVariableIsValid($_POST, 'lst_id',       'int');
 // save form data in session for back navigation
 $_SESSION['message_request'] = $_POST;
 
-// save page in navigation - to have a check for a navigation back.
-$gNavigation->add(CURRENT_URL);
-
 if (isset($_POST['msg_to']))
 {
     $postTo = $_POST['msg_to'];
@@ -543,9 +540,6 @@ else
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_TO'))));
         // => EXIT
     }
-
-    // save page in navigation - to have a check for a navigation back.
-    $gNavigation->add(CURRENT_URL);
 
     if ($getMsgId === 0)
     {

@@ -72,8 +72,6 @@ $page->addJavascript('
 // get module menu
 $menuMenu = $page->getMenu();
 
-$gNavigation->addFirst(CURRENT_URL);
-
 // define link to create new menu
 $menuMenu->addItem(
     'admMenuItemNew', ADMIDIO_URL . FOLDER_MODULES . '/menu/menu_new.php',

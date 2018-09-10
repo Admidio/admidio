@@ -44,10 +44,6 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 // set headline of the script
 $headline = $gL10n->get('ROL_ROLE_ASSIGNMENT', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
 
-if(!$getInline)
-{
-    $gNavigation->add(CURRENT_URL);
-}
 // Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
 {

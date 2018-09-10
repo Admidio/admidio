@@ -54,9 +54,6 @@ $announcements->setDateRange($getDateFrom, $getDateTo);
 // get parameters and number of recordsets
 $announcementsCount = $announcements->getDataSetCount();
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($getHeadline);
 $page->enableModal();

@@ -70,11 +70,13 @@ class Navigation
     }
 
     /**
-     * Checks the given url.
-     * @param string $url The url that should be checked.
+     * Add a new url to the navigation stack. Before the url will be added to the stack
+     * the method checks if the current url was already added to the url.
+     * @param string $url The url that should be added to the navigation stack.
+     * @return bool Returns true if the navigation-stack got changed and false if not.
      * @throws \UnexpectedValueException
      */
-    protected function checkUrl($url)
+    public function add($url)
     {
         global $gLogger;
 
@@ -83,46 +85,13 @@ class Navigation
             $gLogger->notice('NAVIGATION: Invalid URL!', array('url' => $url));
             throw new \UnexpectedValueException('Invalid url!');
         }
-    }
 
-    /**
-     * Initialize the stack and adds a new url to the navigation stack.
-     * @param string $url The url that should be added to the navigation stack.
-     * @return void
-     * @throws \UnexpectedValueException
-     */
-    public function addFirst($url)
-    {
-        $this->checkUrl($url); // Check before clearing the stack
-        $this->urlStack = array();
-        $this->add($url);
-    }
+        $count = count($this->urlStack);
 
-    /**
-     * Add a new url to the navigation stack. Before the url will be added to the stack
-     * the method checks if the current url was already added to the url.
-     * @param string $url   The url that should be added to the navigation stack.
-     * @param bool   $clear Set to true, to start with an empty stack.
-     * @return bool Returns true if the navigation-stack got changed and false if not.
-     * @throws \UnexpectedValueException
-     */
-    public function add($url, $clear = false)
-    {
-        $this->checkUrl($url);
-
-        if ($clear)
+        // if the last url is equal to the new url than don't add the new url
+        if ($count > 0 && $url === $this->urlStack[$count - 1])
         {
-            $this->urlStack = array();
-        }
-        else
-        {
-            $count = count($this->urlStack);
-
-            // if the last url is equal to the new url than don't add the new url
-            if ($count > 0 && $url === $this->urlStack[$count - 1])
-            {
-                return false;
-            }
+            return false;
         }
 
         $this->urlStack[] = $url;

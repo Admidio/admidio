@@ -315,12 +315,6 @@ elseif (count($relationTypeIds) > 1)
     $headline .= ' - '.$gL10n->get('LST_VARIOUS_USER_RELATION_TYPES');
 }
 
-// if html mode and last url was not a list view then save this url to navigation stack
-if ($getMode === 'html' && !StringUtils::strContains($gNavigation->getLast(), 'lists_show.php'))
-{
-    $gNavigation->add(CURRENT_URL);
-}
-
 if ($getMode !== 'csv')
 {
     $datatable = false;

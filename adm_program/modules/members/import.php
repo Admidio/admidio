@@ -27,9 +27,6 @@ if (!PhpIniUtils::isFileUploadEnabled())
 
 $headline = $gL10n->get('MEM_IMPORT_USERS');
 
-// add current url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 if(isset($_SESSION['import_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt

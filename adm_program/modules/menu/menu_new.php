@@ -107,8 +107,6 @@ if(isset($_SESSION['menu_request']))
     unset($_SESSION['menu_request']);
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 

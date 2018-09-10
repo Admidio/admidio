@@ -27,9 +27,6 @@ if (!$gSettingsManager->getBool('enable_chat_module'))
 
 $headline = 'Admidio Chat';
 
-// add current url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 

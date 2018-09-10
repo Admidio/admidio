@@ -25,7 +25,6 @@ if (!$gCurrentUser->isAdministrator())
 
 // set module headline
 $headline = $gL10n->get('SYS_USER_RELATION_TYPES');
-$gNavigation->add(CURRENT_URL);
 
 // create html page object
 $page = new HtmlPage($headline);

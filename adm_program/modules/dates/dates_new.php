@@ -53,8 +53,6 @@ else
     $mode = 1;
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // create date object
 $date = new TableDate($gDb);
 

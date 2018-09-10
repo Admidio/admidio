@@ -39,8 +39,6 @@ elseif ($getMode === 'change')
     $headline = $gL10n->get('PHO_EDIT_ALBUM');
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // create photo album object
 $photoAlbum = new TablePhotos($gDb);
 

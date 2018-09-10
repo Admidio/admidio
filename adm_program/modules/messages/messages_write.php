@@ -202,9 +202,6 @@ else
 // create html page object
 $page = new HtmlPage($headline);
 
-// add current url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 // add back link to module menu
 $messagesWriteMenu = $page->getMenu();
 $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');

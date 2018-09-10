@@ -31,7 +31,6 @@ if (!$gCurrentUser->isAdministrator())
 }
 
 $headline = $gL10n->get('SYS_USER_RELATION_TYPES');
-$gNavigation->add(CURRENT_URL);
 
 $relationType1 = new TableUserRelationType($gDb);
 $relationType2 = new TableUserRelationType($gDb);

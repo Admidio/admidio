@@ -37,8 +37,6 @@ if (!$gSettingsManager->getBool('enable_download_module'))
     // => EXIT
 }
 
-$gNavigation->add(CURRENT_URL);
-
 if(isset($_SESSION['download_request']))
 {
     $formValues = strStripSlashesDeep($_SESSION['download_request']);

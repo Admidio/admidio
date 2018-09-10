@@ -20,9 +20,6 @@ require_once(__DIR__ . '/system/common.php');
 
 $headline = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 

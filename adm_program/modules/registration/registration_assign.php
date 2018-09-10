@@ -111,8 +111,6 @@ if($usrStatement->rowCount() === 0)
     // => EXIT
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // create html page object
 $page = new HtmlPage($headline);
 

@@ -36,8 +36,6 @@ if (!$folder->hasUploadRight())
     // => EXIT
 }
 
-$gNavigation->add(CURRENT_URL);
-
 if(isset($_SESSION['download_request']))
 {
     $formValues = strStripSlashesDeep($_SESSION['download_request']);

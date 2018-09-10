@@ -44,9 +44,6 @@ else
     $headline = $getHeadline. ' - '. $gL10n->get('SYS_CREATE_ENTRY');
 }
 
-// add current url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 // Create announcements object
 $announcement = new TableAnnouncement($gDb);
 

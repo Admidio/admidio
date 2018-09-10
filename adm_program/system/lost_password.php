@@ -12,9 +12,6 @@ require_once(__DIR__ . '/common.php');
 
 $headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
 
-// save url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 // "systemmail" and "request password" must be activated
 if(!$gSettingsManager->getBool('enable_system_mails') || !$gSettingsManager->getBool('enable_password_recovery'))
 {

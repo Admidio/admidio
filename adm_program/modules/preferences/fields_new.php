@@ -35,8 +35,6 @@ else
     $headline = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
 }
 
-$gNavigation->add(CURRENT_URL);
-
 // benutzerdefiniertes Feldobjekt anlegen
 $userField = new TableUserField($gDb);
 

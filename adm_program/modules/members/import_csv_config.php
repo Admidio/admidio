@@ -26,9 +26,6 @@ if(count($_SESSION['file_lines']) === 0)
 
 $headline = $gL10n->get('MEM_ASSIGN_FIELDS');
 
-// add current url to navigation stack
-$gNavigation->add(CURRENT_URL);
-
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
 $countComma     = 0;
 $countSemicolon = 0;

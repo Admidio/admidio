@@ -97,12 +97,6 @@ else
 // read relevant events from database
 $datesResult = $dates->getDataSet($getStart, $datesPerPage);
 
-if($getViewMode === 'html' && $getId === 0)
-{
-    // Navigation of the module starts here
-    $gNavigation->addFirst(CURRENT_URL);
-}
-
 // create html page object
 $page = new HtmlPage($dates->getHeadline($getHeadline));
 $page->enableModal();

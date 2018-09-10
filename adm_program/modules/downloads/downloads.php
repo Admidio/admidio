@@ -49,9 +49,6 @@ else
     $headline = $gL10n->get('DOW_DOWNLOADS').' - '.$currentFolder->getValue('fol_name');
 }
 
-// Navigation of the module starts here
-$gNavigation->addFirst(CURRENT_URL);
-
 $getFolderId = (int) $currentFolder->getValue('fol_id');
 
 // Get folder content for style

@@ -51,9 +51,6 @@ if (!$gSettingsManager->getBool('profile_log_edit_fields')
     // => EXIT
 }
 
-// add page to navigation history
-$gNavigation->add(CURRENT_URL);
-
 // filter_date_from and filter_date_to can have different formats
 // now we try to get a default format for intern use and html output
 $objDateFrom = \DateTime::createFromFormat('Y-m-d', $getDateFrom);

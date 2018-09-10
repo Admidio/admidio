@@ -120,17 +120,9 @@ $page->addJavascript('
 
 if($showOption !== '')
 {
-    // add current url to navigation stack
-    $gNavigation->add(CURRENT_URL);
-
     // add back link to module menu
     $preferencesMenu = $page->getMenu();
     $preferencesMenu->addItem('menu_item_back', $gNavigation->getPrevious(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
-}
-else
-{
-    // Navigation of the module starts here
-    $gNavigation->addFirst(CURRENT_URL);
 }
 
 $orgId = (int) $gCurrentOrganization->getValue('org_id');
