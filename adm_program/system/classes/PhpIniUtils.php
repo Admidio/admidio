@@ -40,12 +40,12 @@ final class PhpIniUtils
      */
     public static function checkSizeLimits()
     {
-        return (self::getMemoryLimit() === -1 || self::getMemoryLimit() >= self::getPostMaxSize())
-            && (self::getPostMaxSize() === -1 || self::getPostMaxSize() >= self::getFileUploadMaxFileSize());
+        return (is_infinite(self::getMemoryLimit()) || self::getMemoryLimit() >= self::getPostMaxSize())
+            && (is_infinite(self::getPostMaxSize()) || self::getPostMaxSize() >= self::getFileUploadMaxFileSize());
     }
 
     /**
-     * Returns the calculated bytes of a string or -1 if unlimited.
+     * Returns the calculated bytes of a string or INF if unlimited.
      * @param string $data  Could be empty string (not set), "-1" (no limit) or a float with a unit.
      *                      Units could be K for Kilobyte, M for Megabyte, G for Gigabyte or T for Terabyte.
      * @param int    $multi Factor to multiply. Default: 1024
@@ -55,7 +55,7 @@ final class PhpIniUtils
     {
         if ($data === '' || $data === '-1')
         {
-            return -1;
+            return INF;
         }
 
         $value = (float) substr($data, 0, -1);

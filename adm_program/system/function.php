@@ -276,7 +276,7 @@ function admFuncProcessableImageSize()
 {
     $memoryLimit = PhpIniUtils::getMemoryLimit();
     // if memory_limit is disabled in php.ini
-    if ($memoryLimit === -1)
+    if (is_infinite($memoryLimit))
     {
         $memoryLimit = 128 * 1024 * 1024; // 128MB
     }
