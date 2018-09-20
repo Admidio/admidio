@@ -87,9 +87,9 @@ if ($getMsgType !== TableMessage::MESSAGE_TYPE_PM && $gSettingsManager->getInt('
 }
 
 $list = array();
-$arrAllVisibleRoles = $gCurrentUser->getAllVisibleRoles();
+$arrAllMailRoles = $gCurrentUser->getAllMailRoles();
 
-if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllVisibleRoles) > 0)
+if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrAllMailRoles) > 0)
 {
     $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM '.TBL_MEMBERS.'
@@ -105,7 +105,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
          LEFT JOIN '.TBL_USER_DATA.' AS first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-             WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllVisibleRoles).')
+             WHERE rol_id IN ('.replaceValuesArrWithQM($arrAllMailRoles).')
                AND cat_name_intern <> \'EVENTS\'
                AND (  cat_org_id = ? -- $currOrgId
                    OR cat_org_id IS NULL )
@@ -121,7 +121,7 @@ if ($gValidLogin && $getMsgType === TableMessage::MESSAGE_TYPE_PM && count($arrA
             $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
             $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
         ),
-        $arrAllVisibleRoles,
+        $arrAllMailRoles,
         array(
             $currOrgId,
             DATE_NOW,
@@ -346,7 +346,7 @@ elseif (!isset($messageStatement))
         if(count($sqlRoleIds) === 0)
         {
             // if only send mail to one user than this user must be in a role the current user is allowed to see
-            $listVisibleRoleArray = $arrAllVisibleRoles;
+            $listVisibleRoleArray = $gCurrentUser->getAllVisibleRoles();
         }
         else
         {
@@ -381,7 +381,7 @@ elseif (!isset($messageStatement))
             }
 
             $list = array_merge($list, $listFormer, $listActiveAndFormer);
-            $listVisibleRoleArray = array_intersect($listRoleIdsArray, $arrAllVisibleRoles);
+            $listVisibleRoleArray = array_intersect($listRoleIdsArray, $gCurrentUser->getAllVisibleRoles());
         }
 
         if($getRoleId === 0 && count($listVisibleRoleArray) > 0)
