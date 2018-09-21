@@ -43,6 +43,16 @@ final class FileSystemUtils
     }
 
     /**
+     * Checks if file-system is UNIX and the POSIX functions are installed
+     * @return bool Returns true if file-system is UNIX and POSIX functions are installed
+     */
+    public static function isUnixWithPosix()
+    {
+        
+        return isUnix() && function_exists('posix_getpwuid');
+    }
+
+    /**
      * Get a generated filename with a timestamp and a secure random identifier
      * @param string $filename The original filename
      * @throws AdmException Throws if secure random identifier could not be generated
@@ -303,7 +313,7 @@ final class FileSystemUtils
      */
     public static function getPathOwnerInfo($path)
     {
-        if (!self::isUnix())
+        if (!self::isUnixWithPosix())
         {
             throw new \RuntimeException('"FileSystemUtils::getPathOwnerInfo()" is only available on systems with POSIX support!');
         }
@@ -361,7 +371,7 @@ final class FileSystemUtils
      */
     public static function hasPathOwnerRight($path)
     {
-        if (!self::isUnix())
+        if (!self::isUnixWithPosix())
         {
             throw new \RuntimeException('"FileSystemUtils::hasPathOwnerRight()" is only available on systems with POSIX support!');
         }
@@ -480,7 +490,7 @@ final class FileSystemUtils
 
         self::checkParentDirExecAndPathExist($path);
 
-        if (self::isUnix())
+        if (self::isUnixWithPosix())
         {
             $ownerInfo = self::getPathOwnerInfo($path);
             $groupInfo = self::getPathGroupInfo($path);
@@ -551,7 +561,7 @@ final class FileSystemUtils
             throw new \RuntimeException('Directory "' . $directoryPath . '" cannot be created!');
         }
 
-        if (self::isUnix())
+        if (self::isUnixWithPosix())
         {
             if (!self::hasPathOwnerRight($directoryPath))
             {
@@ -973,7 +983,7 @@ final class FileSystemUtils
      */
     public static function chmodDirectory($directoryPath, $mode = self::DEFAULT_MODE_DIRECTORY, $recursive = false, $onlyDirectories = true)
     {
-        if (!self::isUnix())
+        if (!self::isUnixWithPosix())
         {
             throw new \RuntimeException('"FileSystemUtils::chmodDirectory()" is only available on systems with POSIX support!');
         }
@@ -1177,7 +1187,7 @@ final class FileSystemUtils
      */
     public static function chmodFile($filePath, $mode = self::DEFAULT_MODE_FILE)
     {
-        if (!self::isUnix())
+        if (!self::isUnixWithPosix())
         {
             throw new \RuntimeException('"FileSystemUtils::chmodFile()" is only available on systems with POSIX support!');
         }
