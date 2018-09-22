@@ -49,7 +49,7 @@ final class FileSystemUtils
     public static function isUnixWithPosix()
     {
         
-        return isUnix() && function_exists('posix_getpwuid');
+        return self::isUnix() && function_exists('posix_getpwuid');
     }
 
     /**
