@@ -178,7 +178,7 @@
   <string name="ECA_A_ECARD_FROM">Ecard gestuurd door</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS">Ecard module activeren</string>
   <string name="ECA_ACTIVATE_GREETING_CARDS_DESC">De Ecard module kan geactiveerd en gedeactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (Standaard: ja)</string>
-  <string name="ECA_GREETING_CARD">Ecard</string>
+  <string name="ECA_GREETING_CARD">Ecard </string>
   <string name="ECA_GREETING_CARDS">Ecards</string>
   <string name="ECA_GREETING_CARD_EDIT">Bewerk Ecard</string>
   <string name="ECA_LAYOUT">Layout</string>
@@ -340,7 +340,7 @@
   <string name="INS_SUBORDINATE">Ondergeschikte</string>
   <string name="INS_SUBORDINATE_MALE">Ondergeschikte</string>
   <string name="INS_SUBORDINATE_FEMALE">Ondergeschikte</string>
-  <string name="INS_SUPERIOR">Leider / s</string>
+  <string name="INS_SUPERIOR">Leider</string>
   <string name="INS_SUPERIOR_MALE">Leider</string>
   <string name="INS_SUPERIOR_FEMALE">Leider</string>
   <string name="INS_SIBLING">Broers/Zussen</string>
@@ -656,8 +656,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Extra variabelen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Thema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">De layout van Admidio kan hier gekozen worden. Alle thema\'s die opgeslagen zijn in map adm_themes worden getoond. (Standaard: modern)</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER">Automatisch uitloggen na</string>
-  <string name="ORG_AUTOMATOC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (Standaard: 20 minuten)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisch uitloggen na</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (Standaard: 20 minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Na activering worden gebruikers met verouderde browsers geadviseerd om een browser-update uit te voeren. Nieuwere browsers bieden betere bescherming tegen fraude, virussen, Trojaanse paarden, gegevensdiefstal en andere bedreigingen van uw privacy en veiligheid. Elke nieuwe generatie browsers verbetert de snelheid en ondersteuning van nieuwe webtechnologieën die webpagina\'s beter kunnen visualiseren. Hiervoor wordt de service van https://browser-update.org/ gebruikt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Achtergrondkleur</string>
@@ -693,7 +693,7 @@
   <string name="ORG_DATE_FORMAT">Datum formaat</string>
   <string name="ORG_DATE_FORMAT_DESC">Formaat voldoet aan PHP functie #VAR1#. (Standaard: d.m.Y)</string>
   <string name="ORG_DIFFERENT_DATABASE_VERSION">Afwijkende databaseversie</string>
-  <string name="ORG_EDIT_PROFILE_FIELD">Bewerk profielveld</string>
+  <string name="ORG_EDIT_PROFILE_FIELD"> Bewerk profielveld</string>
   <string name="ORG_EMAIL_ALERTS">E-mail notificatie</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Alle leden van rollen met rechten voor #VAR1_BOLD# ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (Standaard: ja)</string>
   <string name="ORG_ENABLE_CAPTCHA">Captcha activatie</string>
@@ -803,7 +803,7 @@
   <string name="PHO_ALBUM_DELETE">Verwijder album</string>
   <string name="PHO_ALBUM_LOCK">Album vergrendelen</string>
   <string name="PHO_ALBUM_LOCK_DESC">Leden en bezoekers kunnen gesloten albums niet inzien. U kunt bijvoorbeeld een album tijdelijk sluiten terwijl u de foto\'s voor het album upload.</string>
-  <string name="PHO_ALBUM_NOT_APPROVED">Het album is momenteel vergrendeld en wordt daarom niet aan bezoekers getoond. U kunt het album vrijgeven via het sleutelpictogram in het bewerkingsveld.</string>
+  <string name="PHO_ALBUM_NOT_APPROVED">Het album is momenteel vergrendeld en wordt daarom niet aan bezoekers getoond.</string>
   <string name="PHO_ALBUM_UNLOCK">Album ontgrendelen</string>
   <string name="PHO_ALBUM_WRITE_SUCCESS">Album is succesvol gemaakt / gewijzigd</string>
   <string name="PHO_BACK_TO_ALBUM">terug naar album</string>
@@ -875,7 +875,7 @@
   <string name="PRO_ADD_USER">Voeg gebruiker toe</string>
   <string name="PRO_ADD_USER_RELATION">Relatie maken</string>
   <string name="PRO_ASSIGNED_BY_ROLES">Ingesteld door de rollen</string>
-  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL">Registratie werd bevestigd. De gebruiker kan nu inloggen bij het systeem.</string>
+  <string name="PRO_ASSIGN_REGISTRATION_SUCCESSFUL"> Registratie werd bevestigd. De gebruiker kan nu inloggen bij het systeem.</string>
   <string name="PRO_CANCEL_MEMBERSHIP">Lidmaatschap beëindigen</string>
   <string name="PRO_CANCEL_USER_RELATION">Relatie verwijderen</string>
   <string name="PRO_CHANGE_DATE">Datum aanpassen</string>
@@ -950,13 +950,10 @@
   <string name="PRO_YEARS">Jaren</string>
   <!--Phrases only in Relationssmodule-->
   <string name="REL_EDIT_USER_DESC">Als deze instelling is ingesteld, kan een gebruiker het profiel van een andere gebruiker bewerken als hij in relatie staat tot deze andere gebruiker. Bij een asymmetrische relatie wordt het recht afzonderlijk toegewezen, bij een symmetrische relatie mogen beide gebruikers het andere profiel bewerken en bij een unidirectionele relatie mag alleen de gebruiker met de opgeslagen relatie het andere profiel bewerken.</string>
-  <string name="REL_EDIT_USER_IN_RELATION">Bewerk gebruikersprofiel van deze relatie</string>
   <string name="REL_NO_USER_RELATION_TYPES_FOUND">Er zijn nog geen relatie typen. Relatie typen kunnen worden gemaakt in de gebruikersadministratie.</string>
   <string name="REL_USER_RELATION_TYPE_ASYMMETRICAL">asymmetrisch</string>
-  <string name="REL_USER_RELATION_TYPE_BACKWARD">Achteruit</string>
   <string name="REL_USER_RELATION_TYPE_DEL">Wilt u het relatie type #VAR1_BOLD# verwijderen? Let op: hiermee worden alle bestaande relaties van dit type verwijderd.</string>
   <string name="REL_USER_RELATION_TYPE_DESC">Een asymmetrische relatie kan b.v. worden gebruikt voor ouder / kind, terwijl een symmetrische relatie b.v. kan worden gebruikt voor broers en zussen. Deze zijn altijd tweezijdig, terwijl unidirectionele relaties slechts in één richting wijzen.</string>
-  <string name="REL_USER_RELATION_TYPE_FORWARD">Vooruit</string>
   <string name="REL_USER_RELATION_TYPE_SYMMETRICAL">symmetrisch</string>
   <string name="REL_USER_RELATION_TYPE_UNIDIRECTIONAL">unidirectional</string>
   <!--Phrases only in Rolesmodule-->
@@ -1009,6 +1006,7 @@
   <string name="ROL_RIGHT_EDIT_USER_DESC">Rollen met deze rechten kunnen alle gebruikersgegevens (behalve wachtwoorden) van andere leden bewerken. \nU hebt ook toegang tot het gebruikersbeheer en kunt nieuwe gebruikers maken of oude gebruikers verwijderen.</string>
   <string name="ROL_RIGHT_GUESTBOOK">Berichten gastenboek bewerken en verwijderen</string>
   <string name="ROL_RIGHT_GUESTBOOK_COMMENTS">Reacties plaatsen in gastenboek</string>
+  <string name="ROL_RIGHT_MAIL_THIS_ROLE_DESC">Deze instelling bepaalt wie het recht heeft om e-mails naar deze rol te sturen via de berichten module. Het recht van de rol #VAR1_BOLD# staat nog steeds boven deze instelling.</string>
   <string name="ROL_RIGHT_MAIL_TO_ALL">E-mail naar alle rollen sturen</string>
   <string name="ROL_RIGHT_PHOTO">Foto\'s uploaden en bewerken</string>
   <string name="ROL_RIGHT_PROFILE">Bewerk eigen profiel</string>
@@ -1026,10 +1024,10 @@
   <string name="ROL_SAVE_ROLES">Als u dit opslaat zullen ingestelde afhankelijkheden van rollen mogelijk verloren gaan.</string>
   <string name="ROL_SEE_ROLE_MEMBERSHIP">Toon rol lidmaatschap</string>
   <string name="ROL_SEMIYEARLY">Tweemaal per jaar</string>
+  <string name="ROL_SEND_MAILS">Stuur e-mails</string>
   <string name="ROL_SEND_MAIL_GUESTS">Alle gebruikers mogen e-mails naar huidige rol sturen.</string>
   <string name="ROL_SEND_MAIL_MEMBERS">Ingelogde gebruikers mogen e-mails naar deze rol sturen.</string>
   <string name="ROL_SEND_MAIL_ROLE">Alleen leden van deze rol mogen e-mails naar huidige rol sturen.</string>
-  <string name="ROL_SEND_MAILS">Stuur e-mails</string>
   <string name="ROL_SHOW_MEMBERS">Toon leden</string>
   <string name="ROL_SYSTEM_DEFAULT_LIST">Standaard lijst voor het hele systeem</string>
   <string name="ROL_UNIQUELY">Eenmalig</string>
@@ -1051,6 +1049,7 @@
   <string name="SYS_ACTIVATED">Geactiveerd</string>
   <string name="SYS_ADD_RECIPIENTS">Ontvanger toevoegen</string>
   <string name="SYS_ADDRESS">Adres</string>
+  <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Ga naar de downloadpagina van Admidio</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Het online management systeem voor Verenigingen, Groepen en Organisaties</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio versie</string>
@@ -1091,6 +1090,7 @@
   <string name="SYS_COMMENT">Reactie</string>
   <string name="SYS_COMMON">Algemeen</string>
   <string name="SYS_CONDITION">Voorwaarde</string>
+  <string name="SYS_CONFIGURE_RELATIONSHIPS">Relaties configureren</string>
   <string name="SYS_CONFIRM_PASSWORD">Bevestig wachtwoord</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bevestig waarde</string>
   <string name="SYS_CONTACT_DETAILS">Contact informatie</string>
@@ -1154,6 +1154,7 @@
   <string name="SYS_EDIT">Bewerk</string>
   <string name="SYS_EDIT_ENTRY">Bericht bewerken</string>
   <string name="SYS_EDIT_MEMBERS">Gebruikers aanpassen</string>
+  <string name="SYS_EDIT_USER_IN_RELATION">Gebruikersprofiel van deze relatie kan bewerkt worden</string>
   <string name="SYS_EDIT_VAR">Bewerk #VAR1#</string>
   <string name="SYS_EDITED_BY">Laatst aangepast door</string>
   <string name="SYS_EMAIL">E-mail</string>
@@ -1171,7 +1172,7 @@
   <string name="SYS_FADE_IN">Fade in</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEATURES">Opties</string>
-  <string name="SYS_FEMALE">Vrouw</string>
+  <string name="SYS_FEMALE">Vrouwelijk</string>
   <string name="SYS_FIELD">Veld</string>
   <string name="SYS_FIELD_EMPTY">Veld #VAR1_BOLD# is leeg.</string>
   <string name="SYS_FIELD_INVALID_CHAR">In veld #VAR1_BOLD# staan onjuiste karakters.\n\nToegestaan zijn letters a-z en A-Z, cijfers 0-9 en speciale karakters zoals .-_+@ .</string>
@@ -1191,6 +1192,7 @@
   <string name="SYS_FOLDER">Map</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een  #VAR2#beheerder#VAR3# om de schrijfrechten van de bovenliggende map na te kijken.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een #VAR2#beheerder#VAR3# om de schrijfrechten na te kijken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
+  <string name="SYS_FONT_AWESOME_DESC">U kunt een pictogram op verschillende manieren deponeren:\n1. Een pictogram van het weblettertype \"Font Awesome\". Ga hiervoor naar #VAR1#http://fontawesome.com#VAR2# en selecteer een gratis pictogram uit de collectie \"Solid\" of \"Brands\". Als voorvoegsel moet u \"fa-\" daarvoor plaatsen. Als u ook het pictogram \"gebruiker\" kiest, moet u hier \"fa-user\" invoeren.\n2. Een JPEG- of PNG-pictogram. Hiertoe voert u de volledige URL in samen met de bestandsnaam van het pictogram. Als alternatief kunt u het pictogram in de thema-map \"pictogrammen\" plaatsen, waarna u alleen de bestandsnaam hoeft op te geven.</string>
   <string name="SYS_FORMER">Voormalig</string>
   <string name="SYS_FORMER_PL">Voormalig</string>
   <string name="SYS_FONT">Font</string>
@@ -1216,6 +1218,7 @@
   <string name="SYS_INFORMATIONS">informatie</string>
   <string name="SYS_INTERNAL_NAME">Interne naam</string>
   <string name="SYS_INTERNAL_NAME_DESC">De interne naam wordt gebruikt om op unieke wijze toegang te krijgen tot dit gegevensobject. Dit is niet relevant voor het gebruik van het programma. In ontwikkeling moet deze naam echter altijd worden gebruikt om het veld te identificeren, b.v. om het veld met getValue() aan te spreken. De interne naam wordt automatisch ingevuld bij het maken van een gegevensrecord.</string>
+  <string name="SYS_INVALID_FONT_AWESOME">De ingevoerde pictogramnaam komt niet overeen met de syntaxis van Font Awesome. Controleer of deze naam ook een pictogram is.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ongeldige pagina weergave</string>
   <string name="SYS_IO_ERROR">I/O fout</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
@@ -1248,7 +1251,7 @@
   <string name="SYS_MAIL_DISPATCH">E-mail verzending</string>
   <string name="SYS_MAINTAIN_CATEGORIES">Categorieën beheren</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">U kunt relatie typen definiëren (ouder - kind). Voor elke gedefinieerde relatie wordt het type (asymmetrisch, symmetrisch of unidirectioneel) gedefinieerd en de bewerkingsrechten voor het profiel worden gedefinieerd binnen de relatie.</string>
-  <string name="SYS_MALE">Man</string>
+  <string name="SYS_MALE">Mannelijk</string>
   <string name="SYS_MANDATORY_FIELD">Verplicht veld</string>
   <string name="SYS_MAP">Kaart</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Geeft de plaats weer op Google Maps. De straat, postcode, plaats en land worden verstuurd naar Google.</string>
@@ -1296,6 +1299,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">aan</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Het online ledenbeheer</string>
+  <string name="SYS_OPPOSITE_RELATIONSHIP">Tegenovergestelde relatie</string>
   <string name="SYS_OPTIONAL">Optioneel</string>
   <string name="SYS_ORDER">Volgorde</string>
   <string name="SYS_ORGANIZATION">Organisatie</string>
@@ -1344,6 +1348,8 @@
   <string name="SYS_REGISTERED_AS">Ingelogd als</string>
   <string name="SYS_REGISTRATION">Registratie</string>
   <string name="SYS_REGISTRATION_SAVED">Uw gegevens zijn opgeslagen.\n\nNa goedkeuring kunt u inloggen. U zult per e-mail hierover worden geinformeerd.</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATION">Relatie configuratie</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relatie configuraties</string>
   <string name="SYS_RELOAD">Opnieuw laden</string>
   <string name="SYS_REMEMBER_ME">Blijf ingelogd</string>
   <string name="SYS_REMOVE">Verwijderen</string>
@@ -1352,6 +1358,7 @@
   <string name="SYS_RESTRICTIONS">Voorwaarden</string>
   <string name="SYS_ROLE">Rol</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Opslaan is niet mogelijk. Voor rol #VAR1_BOLD# wordt het maximale aantal leden overschreden.</string>
+  <string name="SYS_ROLE_MEMBERS">Rolleden</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROOM">Zaal</string>
   <string name="SYS_RSS_DISABLED">De webfeed is uitgeschakeld door de beheerder.</string>
@@ -1369,6 +1376,8 @@
   <string name="SYS_SEND">Verstuur</string>
   <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar #VAR1#</string>
   <string name="SYS_SEARCH">Zoek</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Stuur e-mails naar alle e-mailadressen van de gebruiker</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Als deze instelling is ingeschakeld, worden e-mails naar alle e-mailadressen gestuurd die in het profiel staan. Als deze instelling is uitgeschakeld, worden e-mails alleen gestuurd naar het e-mailadres van het profielveld met de interne naam EMAIL. (Standaard: ingeschakeld)</string>
   <string name="SYS_SEND_NEW_PW">Stuur nieuw wachtwoord</string>
   <string name="SYS_SENDER">Afzender</string>
   <string name="SYS_SERVER">Server</string>
