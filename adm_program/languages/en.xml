@@ -1347,8 +1347,8 @@
   <string name="SYS_REGISTERED_AS">Logged in as</string>
   <string name="SYS_REGISTRATION">Registration</string>
   <string name="SYS_REGISTRATION_SAVED">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</string>
-  <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
-  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
+  <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMOVE">Remove</string>
