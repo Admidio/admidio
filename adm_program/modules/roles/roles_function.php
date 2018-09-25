@@ -103,7 +103,6 @@ if($getMode === 2)
     {
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;
-        $_POST['rol_mail_to_all']    = 1;
     }
 
     if($role->getValue('cat_name_intern') === 'EVENTS')
