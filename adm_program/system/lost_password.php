@@ -139,6 +139,15 @@ if(!empty($_POST['recipient_email']))
     }
     catch(AdmException $e)
     {
+        if(is_object($user))
+        {
+            // reset the column usr_new_password
+            $user->setPassword('', true, false);
+            $user->setValue('usr_activation_code', '');
+            $user->saveChangesWithoutRights();
+            $user->save(false);
+        }
+        
         $e->showHtml();
         // => EXIT
     }
