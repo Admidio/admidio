@@ -33,8 +33,6 @@ require_once(__DIR__ . '/../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$disableStatusAttend       = '';
-$disableStatusTentative    = '';
 $getMode     = admFuncVariableIsValid($_GET, 'mode',      'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
 $getStart    = admFuncVariableIsValid($_GET, 'start',     'int');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline',  'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
@@ -45,8 +43,6 @@ $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to',   'date');
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'print')));
 $getView     = admFuncVariableIsValid($_GET, 'view',      'string', array('defaultValue' => $gSettingsManager->getString('dates_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
-$participateModalForm      = false;
-$participationPossible     = true;
 
 // check if module is active
 if((int) $gSettingsManager->get('enable_dates_module') === 0)
@@ -332,13 +328,15 @@ else
         $outputButtonParticipants       = '';
         $outputButtonParticipantsEmail  = '';
         $outputButtonParticipantsAssign = '';
-        $outputLinkLocation  = '';
-        $outputLinkRoom      = '';
-        $outputNumberMembers = '';
-        $outputNumberLeaders = '';
-        $outputDeadline      = '';
-        $dateElements        = array();
-        $participantsArray   = array();
+        $outputLinkLocation    = '';
+        $outputLinkRoom        = '';
+        $outputNumberMembers   = '';
+        $outputNumberLeaders   = '';
+        $outputDeadline        = '';
+        $dateElements          = array();
+        $participantsArray     = array();
+        $participateModalForm  = false;
+        $participationPossible = true;
 
         // If extended options for participation are allowed then use a modal form instead the dropdown button
         if ((int) $date->getValue('dat_allow_comments') === 1 || (int) $date->getValue('dat_additional_guests') === 1)
@@ -520,6 +518,8 @@ else
                 }
 
                 $usrId = (int) $gCurrentUser->getValue('usr_id');
+                $disableStatusAttend    = '';
+                $disableStatusTentative = '';
 
                 // Check limit of participants
                 if ($date->getValue('dat_max_members') > 0 && $outputNumberMembers >= $date->getValue('dat_max_members'))
@@ -549,7 +549,7 @@ else
                 // Check participation deadline and show buttons if allowed
                 if (!$date->deadlineExceeded())
                 {
-                    if (!$participateModalForm)
+                    if ($participateModalForm === false)
                     {
                         $outputButtonParticipation = '
                             <div class="btn-group" role="group">
@@ -582,10 +582,6 @@ else
                                 <button class="btn btn-default" data-toggle="modal" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/dates/popup_participation.php', array('dat_id' => $dateId)) . '" data-target="#admidio_modal">' . $iconParticipationStatus . $buttonText . '
                             </div>';
                     }
-                    // Reset flags and parameters
-                    $disableStatusAttend    = '';
-                    $disableStatusTentative = '';
-                    $participateModalForm   = false;
                 }
                 else
                 {
