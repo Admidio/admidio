@@ -479,7 +479,7 @@ class TableAccess
             return false;
         }
 
-        if ($updateFingerPrint && $gCurrentUser->getValue('usr_id') > 0)
+        if ($updateFingerPrint && is_object($gCurrentUser) && $gCurrentUser->getValue('usr_id') > 0)
         {
             // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung,
             // dann diese hier automatisiert fuellen
