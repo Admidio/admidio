@@ -46,7 +46,7 @@ $plg_geb_displayNames = 1;
 // Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
 // Achtung: Seit Admidio 2.2 und dermit verbundenen Mehrsprachigkeit haben die Standardkalender
 // folgende interne Bezeichnungen: "Allgemein" = "SYS_COMMON", "Training" = "INS_TRAINING", "Kurse" = "INS_COURSES"
-$plg_kal_cat =  array('all');
+$plg_kal_cat = array('all');
 
 // Soll die Kategorie des Kalenders mit ausgegeben werden (1) Ja oder (0) Nein
 $plg_kal_cat_show = 0;
