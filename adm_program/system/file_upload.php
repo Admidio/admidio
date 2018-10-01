@@ -141,7 +141,7 @@ if($getMode === 'choose_files')
     }
     catch (\RuntimeException $exception)
     {
-        $gLogger->error('Could not delete directory content!', array('directoryPath' => $completePath));
+        $gLogger->error('Could not delete directory content!', array('directoryPath' => ADMIDIO_PATH . FOLDER_DATA. '/photos/upload'));
         // TODO
     }
 
