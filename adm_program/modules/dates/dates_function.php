@@ -625,7 +625,7 @@ if (in_array($getMode, array(3, 4, 7), true))
     if ($date->allowedToParticipate() && !$date->deadlineExceeded())
     {
         $member->readDataByColumns(array('mem_rol_id' => (int) $date->getValue('dat_rol_id'), 'mem_usr_id' => $getUserId));
-        $member->setValue('mem_comment', $postUserComment); // Comments will be safed in any case. Maybe it is a documentation afterwards by a leader or admin
+        $member->setValue('mem_comment', $postUserComment); // Comments will be saved in any case. Maybe it is a documentation afterwards by a leader or admin
 
         if ($member->isNewRecord())
         {
@@ -652,7 +652,7 @@ if (in_array($getMode, array(3, 4, 7), true))
             if ($date->getValue('dat_max_members') === (int) $totalMembers
                 && !$participants->isMemberOfEvent($getUserId))
             {
-                $participationPossible = false; // Participation Limit exeeded and user refused
+                $participationPossible = false; // Participation Limit exceeded and user refused
             }
 
             if ($date->getValue('dat_max_members') > 0)
