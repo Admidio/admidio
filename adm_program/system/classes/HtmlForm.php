@@ -858,12 +858,14 @@ class HtmlForm extends HtmlFormBasic
             if (!$this->datepickerInitialized || $optionsAll['type'] === 'birthday')
             {
                 $javascriptCode = '
-                    $("input[data-provide=\'' . $attributes['data-provide'] . '\']").datepicker({
-                        language: "' . $gL10n->getLanguageIsoCode() . '",
-                        format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
-                        ' . $datepickerOptions . '
-                        todayHighlight: true
-                    });';
+                    $("input[data-provide=\'' . $attributes['data-provide'] . '\']").each(function() {
+                        $(this).datepicker({
+                            language: "' . $gL10n->getLanguageIsoCode() . '",
+                            format: "' . DateTimeExtended::getDateFormatForDatepicker($gSettingsManager->getString('system_date')) . '",
+                            ' . $datepickerOptions . '
+                            todayHighlight: true
+                        });
+                    })';
 
                 if ($optionsAll['type'] !== 'birthday')
                 {
