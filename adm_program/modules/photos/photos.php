@@ -201,7 +201,7 @@ if ($gCurrentUser->isAdministrator())
 
 // Breadcrump bauen
 $navilink = '';
-$phoParentId = $photoAlbum->getValue('pho_pho_id_parent');
+$phoParentId = (int) $photoAlbum->getValue('pho_pho_id_parent');
 $photoAlbumParent = new TablePhotos($gDb);
 
 while ($phoParentId > 0)
@@ -214,7 +214,7 @@ while ($phoParentId > 0)
         $photoAlbumParent->getValue('pho_name').'</a></li>'.$navilink;
 
     // Elternveranst
-    $phoParentId = $photoAlbumParent->getValue('pho_pho_id_parent');
+    $phoParentId = (int) $photoAlbumParent->getValue('pho_pho_id_parent');
 }
 
 if ($getPhotoId > 0)
