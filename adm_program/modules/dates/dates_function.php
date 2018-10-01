@@ -638,7 +638,7 @@ if (in_array($getMode, array(3, 4, 7), true))
             $participants = new Participants($gDb, (int) $date->getValue('dat_rol_id'));
             $totalMembers = $participants->getCount();
 
-            if ($totalMembers + ($postAdditionalGuests - $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
+            if ($totalMembers + ($postAdditionalGuests - (int) $member->getValue('mem_count_guests')) <= $date->getValue('dat_max_members'))
             {
                 $member->setValue('mem_count_guests', $postAdditionalGuests);
             }
@@ -647,10 +647,9 @@ if (in_array($getMode, array(3, 4, 7), true))
                 $participationPossible = false;
             }
 
-            $outputMessage  = $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($date->getValue('dat_headline')));
+            $outputMessage = $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($date->getValue('dat_headline')));
 
-            if ($date->getValue('dat_max_members') === (int) $totalMembers
-                && !$participants->isMemberOfEvent($getUserId))
+            if ($date->getValue('dat_max_members') === $totalMembers && !$participants->isMemberOfEvent($getUserId))
             {
                 $participationPossible = false; // Participation Limit exceeded and user refused
             }
@@ -682,15 +681,15 @@ if (in_array($getMode, array(3, 4, 7), true))
                     break;
 
                 case 4:  // User cancel the event
-                    if (!$gSettingsManager->getBool('dates_save_all_confirmations'))
-                    {
-                        // Delete entry
-                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
-                    }
-                    else
+                    if ($gSettingsManager->getBool('dates_save_all_confirmations'))
                     {
                         // Set user status to refused
                         $member->startMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId, null, 3);
+                    }
+                    else
+                    {
+                        // Delete entry
+                        $member->deleteMembership((int) $date->getValue('dat_rol_id'), (int) $getUserId);
                     }
 
                     $outputMessage = $gL10n->get('DAT_CANCEL_DATE', array($date->getValue('dat_headline'), $date->getValue('dat_begin')));
