@@ -1120,7 +1120,7 @@
   <string name="SYS_DATE_MODIFIED">Aangepast op datum</string>
   <string name="SYS_DATE_TO">tot</string>
   <string name="SYS_DEACTIVATED">Gedeactiveerd</string>
-  <string name="SYS_DEBUG_MODUS">Debug modus</string>
+  <string name="SYS_DEBUG_MODE">Debug modus</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DELETE">Verwijder</string>
   <string name="SYS_DELETE_DATA">Gegevens zijn verwijderd.</string>

@@ -642,7 +642,7 @@
   <string name="SYS_DATE_MODIFIED">Date de modification</string>
   <string name="SYS_DATE_TO">à</string>
   <string name="SYS_DEACTIVATED">Inactifs</string>
-  <string name="SYS_DEBUG_MODUS">Débogage</string>
+  <string name="SYS_DEBUG_MODE">Débogage</string>
   <string name="SYS_DELETE">Supprimer</string>
   <string name="SYS_DELETE_DATA">La donnée a été supprimé.</string>
   <string name="SYS_DELETE_ENTRY">Voulez-vous supprimer entrée #VAR1_BOLD#?</string>

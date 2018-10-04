@@ -1031,6 +1031,7 @@
   <string name="ROO_SEATING">Sitzplätze</string>
   <string name="ROO_STANDING">Stehplätze</string>
   <!--System-Phrases for use in every module-->
+  <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Abbrechen</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACTIVATED">Aktiviert</string>
@@ -1039,6 +1040,7 @@
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
+  <string name="SYS_ADMIDIO_UPDATE">Admidio Update</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
@@ -1120,7 +1122,7 @@
   <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
   <string name="SYS_DATE_TO">bis</string>
   <string name="SYS_DEACTIVATED">Deaktiviert</string>
-  <string name="SYS_DEBUG_MODUS">Debugmodus</string>
+  <string name="SYS_DEBUG_MODE">Debugmodus</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
@@ -1131,6 +1133,7 @@
   <string name="SYS_DESCRIPTION">Beschreibung</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
+  <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DONATE">Spenden</string>
@@ -1200,6 +1203,7 @@
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion wurde vom Administrator deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Wichtig</string>
+  <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPRINT">Impressum</string>
   <string name="SYS_IMPRINT_DESC">Hier kann die URL zum Impressum deiner Seite hinterlegt werden. Sofern das gewählte Theme dies unterstützt, wird ein Link auf den Admidio-Seiten angezeigt. (Beispiel: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
@@ -1245,6 +1249,7 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt eine Route vom eigenen Wohnort zum Wohnort dieses Benutzers bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MASTER_DATA">Stammdaten</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmer</string>
+  <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Mitglied</string>
@@ -1286,6 +1291,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">an</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Die Online-Mitgliederverwaltung</string>
+  <string name="SYS_OPERATING_SYSTEM">Betriebssystem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
@@ -1299,6 +1305,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN">Passwort vergessen</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Solltest du dein Passwort vergessen haben, kann das System ein neues Passwort erstellen und an deine E-Mail-Adresse senden. Gib dazu bitte deinen Benutzernamen oder die E-Mail-Adresse an, unter der du dich in diesem System registriert hast. Das neue Passwort wird dann unverzüglich an diese E-Mail-Adresse gesendet.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</string>
+  <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERMISSIONS">Berechtigungen</string>
   <string name="SYS_PDF">PDF</string>
@@ -1306,6 +1313,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">Die Telefonnummer im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Zahlen 0-9 und die Sonderzeichen +-/ ().</string>
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTOS">Fotos</string>
+  <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">alle PHP-Einstellungen</string>
   <string name="SYS_PHP_VERSION">PHP-Version</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
@@ -1402,6 +1410,7 @@
   <string name="SYS_TO" description="E-Mail">An</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
+  <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLIMITED">Unbegrenzt</string>
   <string name="SYS_UNLOCK">Freigeben</string>

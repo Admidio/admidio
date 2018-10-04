@@ -1047,6 +1047,7 @@
   <string name="ROO_SEATING">Seats</string>
   <string name="ROO_STANDING">Standing room</string>
   <!--System-Phrases for use in every module-->
+  <string name="SYS_64BIT">64bit</string>
   <string name="SYS_ABORT">Cancel</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
   <string name="SYS_ACTIVATED">Active</string>
@@ -1054,6 +1055,7 @@
   <string name="SYS_ADDRESS">Address</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_TEAM">Admidio Team</string>
+  <string name="SYS_ADMIDIO_UPDATE">Admidio update</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
@@ -1135,7 +1137,7 @@
   <string name="SYS_DATE_MODIFIED">Date of modification</string>
   <string name="SYS_DATE_TO">to</string>
   <string name="SYS_DEACTIVATED">Inactive</string>
-  <string name="SYS_DEBUG_MODUS">Debug modus</string>
+  <string name="SYS_DEBUG_MODE">Debug mode</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
@@ -1146,6 +1148,7 @@
   <string name="SYS_DESCRIPTION">Description</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
+  <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DONATE">Donate</string>
@@ -1213,6 +1216,7 @@
   <string name="SYS_ICAL_DISABLED">iCal has been disabled by the system administrator.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_IMPORTANT">Important</string>
+  <string name="SYS_IMPORT_MODE">Import mode</string>
   <string name="SYS_IMPRINT">Imprint</string>
   <string name="SYS_IMPRINT_DESC">Here the URL for the imprint of your page can be deposited. If the selected theme supports this, a link will be displayed on the Admidio pages. (Example: https://www.example.com/imprint.html)</string>
   <string name="SYS_INFORMATIONS">information</string>
@@ -1257,6 +1261,7 @@
   <string name="SYS_MAP_LINK_ROUTE_DESC">Displays a route from your own place of residence to the location of this user on Google Maps. The street, postal code, city and country are transferred to Google.</string>
   <string name="SYS_MASTER_DATA">Basic information</string>
   <string name="SYS_MAX_PARTICIPANTS">Max. participants</string>
+  <string name="SYS_MAX_PATH_LENGTH">Max path length</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. processable image size</string>
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
@@ -1298,6 +1303,7 @@
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">On</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Online membership management</string>
+  <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
@@ -1311,6 +1317,7 @@
   <string name="SYS_PASSWORD_FORGOTTEN">Password forgotten</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">If you have forgotten your password, the system can create a new password and send it to your email address. Please type in, your user name or e-mail address used for registration in the system. The new password will be sent immediately to the registred e-mail address.</string>
   <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
+  <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PERIOD">Time period</string>
   <string name="SYS_PERMISSIONS">Permissions</string>
   <string name="SYS_PDF">PDF</string>
@@ -1318,6 +1325,7 @@
   <string name="SYS_PHONE_INVALID_CHAR">The phone number in the field #VAR1_BOLD# has invalid characters.\n\nAllowed are only numbers 0-9 and the special characters +-/ ().</string>
   <string name="SYS_PHOTO">Photo</string>
   <string name="SYS_PHOTOS">Photos</string>
+  <string name="SYS_PHP">PHP</string>
   <string name="SYS_PHP_INFO">All PHP settings</string>
   <string name="SYS_PHP_VERSION">PHP version</string>
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
@@ -1413,6 +1421,7 @@
   <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Unidentified</string>
   <string name="SYS_UNLIMITED">Unlimited</string>
   <string name="SYS_UNLOCK">Unlock</string>

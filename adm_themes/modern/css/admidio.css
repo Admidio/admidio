@@ -317,11 +317,16 @@ a.btn {
 .btn .fas,
 .btn .fab,
 .panel-title .fas,
+.panel-title .fab,
 .navbar-link .fas,
 .checkbox .fas,
 .panel-heading .pull-left .fas,
 .admidio-profile-user-right .fas {
     margin-right: 6px;
+}
+
+.panel-title .fab {
+    font-weight: normal;
 }
 
 .control-label .fas,
