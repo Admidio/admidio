@@ -139,7 +139,7 @@ if(!empty($_POST['recipient_email']))
     }
     catch(AdmException $e)
     {
-        if(is_object($user))
+        if($user instanceof User)
         {
             // reset the column usr_new_password
             $user->setPassword('', true, false);
