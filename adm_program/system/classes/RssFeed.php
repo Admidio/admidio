@@ -119,7 +119,7 @@ class RssFeed
         {
             if (isset($this->channel[$field]))
             {
-                $channelInfo .= '<'.$field.'>'.htmlspecialchars($this->channel[$field], ENT_QUOTES).'</'.$field.'>'.chr(10);
+                $channelInfo .= '<'.$field.'>'.encodeHTML($this->channel[$field]).'</'.$field.'>'.chr(10);
             }
         }
         $channelInfo .= '<language>'.$gL10n->getLanguageIsoCode().'</language>'.chr(10);
@@ -142,11 +142,11 @@ class RssFeed
             {
                 if (isset($item[$field]))
                 {
-                    $itemString .= '<'.$field.'>'.htmlspecialchars($item[$field], ENT_QUOTES).'</'.$field.'>'.chr(10);
+                    $itemString .= '<'.$field.'>'.encodeHTML($item[$field]).'</'.$field.'>'.chr(10);
                 }
             }
             $itemString .= '<guid>'.str_replace('&', '&amp;', $item['link']).'</guid>'.chr(10);
-            $itemString .= '<source url="'.$this->feed.'">'.htmlspecialchars($this->channel['title'], ENT_QUOTES).'</source>'.chr(10);
+            $itemString .= '<source url="'.$this->feed.'">'.encodeHTML($this->channel['title']).'</source>'.chr(10);
             $itemString .= '</item>'.chr(10).chr(10);
         }
 

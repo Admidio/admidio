@@ -273,7 +273,7 @@ else
     }
 
     $htmlLeaderColumn .= '<i class="fas fa-info-circle admidio-info-icon" data-toggle="popover" data-html="true" data-trigger="hover" data-placement="auto"
-            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . htmlspecialchars($htmlLeaderText) . '"></i>';
+            title="'.$gL10n->get('SYS_NOTE').'" data-content="' . encodeHTML($htmlLeaderText) . '"></i>';
 
     // create array with all column heading values
     $columnHeading = array(

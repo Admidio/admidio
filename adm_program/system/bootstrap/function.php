@@ -454,7 +454,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             break;
 
         case 'string':
-            $value = strStripTags(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
+            $value = strStripTags(encodeHTML($value));
             break;
 
         case 'html':
@@ -725,14 +725,22 @@ function admFuncCheckUrl($url)
 }
 
 /**
- * Escape all HTML, JavaScript, and CSS
- * @param string $input    The input string
- * @param string $encoding Define character encoding tue use
- * @return string Escaped string
+ * Encodes all HTML special chars
+ * @param string $input     The input string
+ * @param bool   $encodeAll
+ * @param string $encoding  Define character encoding tue use
+ * @return string Encoded string
  */
-function noHTML($input, $encoding = 'UTF-8')
+function encodeHTML($input, $encodeAll = false, $encoding = 'UTF-8')
 {
-    return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+    if ($encodeAll)
+    {
+        // Encodes: all special HTML characters
+        return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
+    }
+
+    // Encodes: &, ", ', <, >
+    return htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, $encoding);
 }
 
 /**
@@ -760,7 +768,7 @@ function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
 
     if ($escape)
     {
-        return noHTML($url);
+        return encodeHTML($url);
     }
 
     return $url;
