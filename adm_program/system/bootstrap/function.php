@@ -747,10 +747,10 @@ function encodeHTML($input, $encodeAll = false, $encoding = 'UTF-8')
  * @param string              $path
  * @param array<string,mixed> $params
  * @param string              $anchor
- * @param bool                $escape
+ * @param bool                $encode
  * @return string
  */
-function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
+function safeUrl($path, array $params = array(), $anchor = '', $encode = false)
 {
     $paramsText = '';
     if (count($params) > 0)
@@ -766,7 +766,7 @@ function safeUrl($path, array $params = array(), $anchor = '', $escape = false)
 
     $url = $path . $paramsText . $anchorText;
 
-    if ($escape)
+    if ($encode)
     {
         return encodeHTML($url);
     }
