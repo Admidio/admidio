@@ -690,7 +690,6 @@ input[type="time"] {
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
-    margin-bottom: 30px;
 }
 
 .panel-primary > .panel-heading {
@@ -703,7 +702,7 @@ input[type="time"] {
 }
 
 .panel-primary > .panel-body {
-    padding: 10px 0;
+    padding: 10px 0 0;
 }
 
 
