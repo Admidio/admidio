@@ -230,8 +230,8 @@ if($role->getValue('cat_name_intern') !== 'EVENTS')
     );
     $form->addInput(
         'rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gSettingsManager->getString('system_currency'), $role->getValue('rol_cost'),
-        array('maxLength' => 6, 'class' => 'form-control-small'
-        ));
+        array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1)
+    );
     $form->addSelectBox(
         'rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), TableRoles::getCostPeriods(),
         array('defaultValue' => $role->getValue('rol_cost_period'))
