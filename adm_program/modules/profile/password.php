@@ -186,7 +186,6 @@ elseif($getMode === 'html')
         if($currUsrId === $getUserId)
         {
             // to change own password user must enter the valid old password for verification
-            // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
             $form->addInput(
                 'old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), '',
                 array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED)

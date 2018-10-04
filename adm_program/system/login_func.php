@@ -76,12 +76,6 @@ function createUserObjectFromPost()
         // => EXIT
     }
 
-    // TODO Future: check Password min/max Length
-    //if(strlen($password) < PASSWORD_MIN_LENGTH)
-    //{
-    //    throw new AdmException( $gL10n->get('PRO_PASSWORD_LENGTH', array($gL10n->get('SYS_PASSWORD'))));
-    //}
-
     // Search for username
     $sql = 'SELECT usr_id
               FROM ' . TBL_USERS . '

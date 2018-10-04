@@ -43,7 +43,6 @@ $form->addInput(
     'usr_login_name', $gL10n->get('SYS_USERNAME'), '',
     array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
 );
-// TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
 $form->addInput(
     'usr_password', $gL10n->get('SYS_PASSWORD'), '',
     array('type' => 'password', 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
