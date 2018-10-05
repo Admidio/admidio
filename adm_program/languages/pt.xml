@@ -1125,7 +1125,7 @@
   <string name="SYS_DATE_MODIFIED">Data da alteração</string>
   <string name="SYS_DATE_TO">a</string>
   <string name="SYS_DEACTIVATED">Inativo</string>
-  <string name="SYS_DEBUG_MODUS">Modo de depuração</string>
+  <string name="SYS_DEBUG_MODE">Modo de depuração</string>
   <string name="SYS_DECIMAL_NUMBER">Número decimal</string>
   <string name="SYS_DELETE">Excluir</string>
   <string name="SYS_DELETE_DATA">Os dados foram excluídos</string>

@@ -851,7 +851,7 @@
   <string name="SYS_DATE_MODIFIED">Data di modifica</string>
   <string name="SYS_DATE_TO">a</string>
   <string name="SYS_DEACTIVATED">Inattivo</string>
-  <string name="SYS_DEBUG_MODUS">Modo debug</string>
+  <string name="SYS_DEBUG_MODE">Modo debug</string>
   <string name="SYS_DECIMAL_NUMBER">Numero decimale</string>
   <string name="SYS_DELETE">Cancella</string>
   <string name="SYS_DELETE_DATA">I dati sono stati cancellati.</string>

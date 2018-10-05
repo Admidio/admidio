@@ -1055,7 +1055,7 @@
   <string name="SYS_DATE_MODIFIED">Dato for modifikation</string>
   <string name="SYS_DATE_TO">til</string>
   <string name="SYS_DEACTIVATED">Inaktiv</string>
-  <string name="SYS_DEBUG_MODUS">debug modus</string>
+  <string name="SYS_DEBUG_MODE">debug modus</string>
   <string name="SYS_DECIMAL_NUMBER">Decimal nummer</string>
   <string name="SYS_DELETE">Slet</string>
   <string name="SYS_DELETE_DATA">Data er blevet slettet.</string>

@@ -1135,7 +1135,7 @@
   <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
   <string name="SYS_DATE_TO">bis</string>
   <string name="SYS_DEACTIVATED">Deaktiviert</string>
-  <string name="SYS_DEBUG_MODUS">Debugmodus</string>
+  <string name="SYS_DEBUG_MODE">Debugmodus</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>

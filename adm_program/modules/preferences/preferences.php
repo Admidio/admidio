@@ -125,7 +125,7 @@ if($showOption !== '')
 
     // add back link to module menu
     $preferencesMenu = $page->getMenu();
-    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fa-arrow-circle-left');
+    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'fas fa-arrow-circle-left');
 }
 else
 {
@@ -161,7 +161,7 @@ function getPreferencePanel($group, $id, $title, $icon, $body)
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#accordion_' . $group . '" href="#collapse_' . $id . '">
-                        <i class="fas fa-fw ' . $icon . '"></i>' . $title . '
+                        <i class="' . $icon . ' fa-fw"></i>' . $title . '
                     </a>
                 </h4>
             </div>
@@ -253,7 +253,7 @@ $formCommon->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'fa-cog', $formCommon->show()));
+$page->addHtml(getPreferencePanel('common', 'common', $gL10n->get('SYS_COMMON'), 'fas fa-cog', $formCommon->show()));
 
 // PANEL: SECURITY
 
@@ -292,7 +292,7 @@ $formSecurity->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'security', $gL10n->get('SYS_SECURITY'), 'fa-shield-alt', $formSecurity->show()));
+$page->addHtml(getPreferencePanel('common', 'security', $gL10n->get('SYS_SECURITY'), 'fas fa-shield-alt', $formSecurity->show()));
 
 // PANEL: ORGANIZATION
 
@@ -347,7 +347,7 @@ $formOrganization->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'organization', $gL10n->get('SYS_ORGANIZATION'), 'fa-sitemap', $formOrganization->show()));
+$page->addHtml(getPreferencePanel('common', 'organization', $gL10n->get('SYS_ORGANIZATION'), 'fas fa-sitemap', $formOrganization->show()));
 
 // PANEL: REGIONAL SETTINGS
 
@@ -385,7 +385,7 @@ $formRegionalSettings->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'fa-globe', $formRegionalSettings->show()));
+$page->addHtml(getPreferencePanel('common', 'regional_settings', $gL10n->get('ORG_REGIONAL_SETTINGS'), 'fas fa-globe', $formRegionalSettings->show()));
 
 // PANEL: REGISTRATION
 
@@ -411,7 +411,7 @@ $formRegistration->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'registration', $gL10n->get('SYS_REGISTRATION'), 'fa-address-card', $formRegistration->show()));
+$page->addHtml(getPreferencePanel('common', 'registration', $gL10n->get('SYS_REGISTRATION'), 'fas fa-address-card', $formRegistration->show()));
 
 // PANEL: EMAIL DISPATCH
 
@@ -490,7 +490,7 @@ $formEmailDispatch->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'fa-envelope', $formEmailDispatch->show()));
+$page->addHtml(getPreferencePanel('common', 'email_dispatch', $gL10n->get('SYS_MAIL_DISPATCH'), 'fas fa-envelope', $formEmailDispatch->show()));
 
 // PANEL: SYSTEM NOTIFICATION
 
@@ -547,7 +547,7 @@ $formSystemNotification->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'fa-broadcast-tower', $formSystemNotification->show()));
+$page->addHtml(getPreferencePanel('common', 'system_notification', $gL10n->get('SYS_SYSTEM_MAILS'), 'fas fa-broadcast-tower', $formSystemNotification->show()));
 
 // PANEL: CAPTCHA
 
@@ -619,21 +619,21 @@ $formCaptcha->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('common', 'captcha', $gL10n->get('SYS_CAPTCHA'), 'fa-font', $formCaptcha->show()));
+$page->addHtml(getPreferencePanel('common', 'captcha', $gL10n->get('SYS_CAPTCHA'), 'fas fa-font', $formCaptcha->show()));
 
-// PANEL: SYSTEM INFORMATION
+// PANEL: ADMIDIO UPDATE
 
-$formSystemInformation = new HtmlForm('system_information_preferences_form', null, $page);
+$formAdmidioUpdate = new HtmlForm('admidio_update_preferences_form', null, $page);
 
 $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION_TEXT.'
             <a id="link_check_for_update" href="#link_check_for_update" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
          </span>';
-$formSystemInformation->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
+$formAdmidioUpdate->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);
 
 // if database version is different to file version, then show database version
 if($gSystemComponent->getValue('com_version') !== ADMIDIO_VERSION)
 {
-    $formSystemInformation->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
+    $formAdmidioUpdate->addStaticControl('admidio_database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
 }
 
 $component = new ComponentUpdate($gDb);
@@ -653,7 +653,13 @@ else
 {
     $html = getStaticText('danger', $textStep);
 }
-$formSystemInformation->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
+$formAdmidioUpdate->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $html);
+
+$page->addHtml(getPreferencePanel('common', 'admidio_update', $gL10n->get('SYS_ADMIDIO_UPDATE'), 'fas fa-cloud-download-alt', $formAdmidioUpdate->show()));
+
+// PANEL: PHP
+
+$formPhp = new HtmlForm('php_preferences_form', null, $page);
 
 if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
 {
@@ -667,17 +673,50 @@ else
 {
     $html = getStaticText('success', PHP_VERSION);
 }
-$formSystemInformation->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
+$formPhp->addStaticControl('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
 
-if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
+$postMaxSize = PhpIniUtils::getPostMaxSize();
+if(is_infinite($postMaxSize))
 {
-    $html = getStaticText('danger', $gDb->getVersion(), ' &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion())));
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
 }
 else
 {
-    $html = getStaticText('success', $gDb->getVersion());
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($postMaxSize));
 }
-$formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
+$formPhp->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
+
+$memoryLimit = PhpIniUtils::getMemoryLimit();
+if(is_infinite($memoryLimit))
+{
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+}
+else
+{
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($memoryLimit));
+}
+$formPhp->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
+
+if(PhpIniUtils::isFileUploadEnabled())
+{
+    $html = getStaticText('success', $gL10n->get('SYS_ON'));
+}
+else
+{
+    $html = getStaticText('danger', $gL10n->get('SYS_OFF'));
+}
+$formPhp->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
+
+$fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
+if(is_infinite($fileUploadMaxFileSize))
+{
+    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
+}
+else
+{
+    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize));
+}
+$formPhp->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
 
 try
 {
@@ -688,7 +727,66 @@ catch (AdmException $e)
 {
     $html = getStaticText('danger', $gL10n->get('SYS_PRNG_INSECURE'), '<br />' . $e->getText());
 }
-$formSystemInformation->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
+$formPhp->addStaticControl('pseudo_random_number_generator', $gL10n->get('SYS_PRNG'), $html);
+
+$html = '<a href="' . ADMIDIO_URL . '/adm_program/system/phpinfo.php' . '" target="_blank">phpinfo()</a> <i class="fas fa-external-link-alt"></i>';
+$formPhp->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
+
+$page->addHtml(getPreferencePanel('common', 'php', $gL10n->get('SYS_PHP'), 'fab fa-php', $formPhp->show()));
+
+// PANEL: SYSTEM INFORMATION
+
+$formSystemInformation = new HtmlForm('system_information_preferences_form', null, $page);
+
+$formSystemInformation->addStaticControl(
+    'operating_system', $gL10n->get('SYS_OPERATING_SYSTEM'),
+    '<strong>' . SystemInfoUtils::getOS() . '</strong> (' . SystemInfoUtils::getUname() . ')'
+);
+
+if(SystemInfoUtils::is64Bit())
+{
+    $html = getStaticText('success', $gL10n->get('SYS_YES'));
+}
+else
+{
+    $html = getStaticText('success', $gL10n->get('SYS_NO'));
+}
+$formSystemInformation->addStaticControl('64bit', $gL10n->get('SYS_64BIT'), $html);
+
+if(SystemInfoUtils::isUnixFileSystem())
+{
+    $html = '<strong>' . $gL10n->get('SYS_YES') . '</strong>';
+}
+else
+{
+    $html = '<strong>' . $gL10n->get('SYS_NO') . '</strong>';
+}
+$formSystemInformation->addStaticControl('unix', $gL10n->get('SYS_UNIX'), $html);
+
+$formSystemInformation->addStaticControl(
+    'directory_separator', $gL10n->get('SYS_DIRECTORY_SEPARATOR'),
+    '<strong>"' . SystemInfoUtils::getDirectorySeparator() . '"</strong>'
+);
+
+$formSystemInformation->addStaticControl(
+    'path_separator', $gL10n->get('SYS_PATH_SEPARATOR'),
+    '<strong>"' . SystemInfoUtils::getPathSeparator() . '"</strong>'
+);
+
+$formSystemInformation->addStaticControl(
+    'max_path_length', $gL10n->get('SYS_MAX_PATH_LENGTH'),
+    SystemInfoUtils::getMaxPathLength()
+);
+
+if(version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<'))
+{
+    $html = getStaticText('danger', $gDb->getVersion(), ' &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion())));
+}
+else
+{
+    $html = getStaticText('success', $gDb->getVersion());
+}
+$formSystemInformation->addStaticControl('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
 
 if(is_file(ADMIDIO_PATH . FOLDER_DATA . '/.htaccess'))
 {
@@ -704,52 +802,7 @@ else
 }
 $formSystemInformation->addStaticControl('directory_protection', $gL10n->get('SYS_DIRECTORY_PROTECTION'), $html);
 
-$postMaxSize = PhpIniUtils::getPostMaxSize();
-if(is_infinite($postMaxSize))
-{
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-}
-else
-{
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($postMaxSize));
-}
-$formSystemInformation->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $html);
-
-$memoryLimit = PhpIniUtils::getMemoryLimit();
-if(is_infinite($memoryLimit))
-{
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-}
-else
-{
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($memoryLimit));
-}
-$formSystemInformation->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $html);
-
-if(PhpIniUtils::isFileUploadEnabled())
-{
-    $html = getStaticText('success', $gL10n->get('SYS_ON'));
-}
-else
-{
-    $html = getStaticText('danger', $gL10n->get('SYS_OFF'));
-}
-$formSystemInformation->addStaticControl('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
-
-$fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
-if(is_infinite($fileUploadMaxFileSize))
-{
-    $html = getStaticText('warning', $gL10n->get('SYS_NOT_SET'));
-}
-else
-{
-    $html = getStaticText('success', FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize));
-}
-$formSystemInformation->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $html);
-
 $formSystemInformation->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('SYS_MEGAPIXEL'));
-$html = '<a href="' . ADMIDIO_URL . '/adm_program/system/phpinfo.php' . '" target="_blank">phpinfo()</a>';
-$formSystemInformation->addStaticControl('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
 
 if($gDebug)
 {
@@ -759,7 +812,17 @@ else
 {
     $html = getStaticText('success', $gL10n->get('SYS_OFF'));
 }
-$formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODUS'), $html);
+$formSystemInformation->addStaticControl('debug_mode', $gL10n->get('SYS_DEBUG_MODE'), $html);
+
+if($gImportDemoData)
+{
+    $html = getStaticText('danger', $gL10n->get('SYS_ON'));
+}
+else
+{
+    $html = getStaticText('success', $gL10n->get('SYS_OFF'));
+}
+$formSystemInformation->addStaticControl('import_mode', $gL10n->get('SYS_IMPORT_MODE'), $html);
 
 try
 {
@@ -790,7 +853,7 @@ catch (\RuntimeException $exception)
 }
 $formSystemInformation->addStaticControl('disk_space', $gL10n->get('SYS_DISK_SPACE'), $html);
 
-$page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'fa-info-circle', $formSystemInformation->show()));
+$page->addHtml(getPreferencePanel('common', 'system_information', $gL10n->get('ORG_SYSTEM_INFORMATION'), 'fas fa-info-circle', $formSystemInformation->show()));
 
 $page->addHtml('
         </div>
@@ -830,7 +893,7 @@ $formAnnouncements->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'fa-newspaper', $formAnnouncements->show()));
+$page->addHtml(getPreferencePanel('modules', 'announcements', $gL10n->get('ANN_ANNOUNCEMENTS'), 'fas fa-newspaper', $formAnnouncements->show()));
 
 // PANEL: USER MANAGEMENT
 
@@ -867,7 +930,7 @@ $formUserManagement->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fa-user-friends', $formUserManagement->show()));
+$page->addHtml(getPreferencePanel('modules', 'user_administration', $gL10n->get('MEM_USER_MANAGEMENT'), 'fas fa-user-friends', $formUserManagement->show()));
 
 // PANEL: DOWNLOADS
 
@@ -889,7 +952,7 @@ $formDownloads->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'fa-download', $formDownloads->show()));
+$page->addHtml(getPreferencePanel('modules', 'downloads', $gL10n->get('DOW_DOWNLOADS'), 'fas fa-download', $formDownloads->show()));
 
 // PANEL: PHOTOS
 
@@ -961,7 +1024,7 @@ $formPhotos->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'fa-image', $formPhotos->show()));
+$page->addHtml(getPreferencePanel('modules', 'photos', $gL10n->get('PHO_PHOTOS'), 'fas fa-image', $formPhotos->show()));
 
 // PANEL: GUESTBOOK
 
@@ -1013,7 +1076,7 @@ $formGuestbook->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'guestbook', $gL10n->get('GBO_GUESTBOOK'), 'fa-book', $formGuestbook->show()));
+$page->addHtml(getPreferencePanel('modules', 'guestbook', $gL10n->get('GBO_GUESTBOOK'), 'fas fa-book', $formGuestbook->show()));
 
 // PANEL: ECARDS
 
@@ -1058,7 +1121,7 @@ $formEcards->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'fa-file-image', $formEcards->show()));
+$page->addHtml(getPreferencePanel('modules', 'ecards', $gL10n->get('ECA_GREETING_CARDS'), 'fas fa-file-image', $formEcards->show()));
 
 // PANEL: LISTS
 
@@ -1114,7 +1177,7 @@ $formLists->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'fa-list', $formLists->show()));
+$page->addHtml(getPreferencePanel('modules', 'lists', $gL10n->get('LST_LISTS'), 'fas fa-list', $formLists->show()));
 
 // PANEL: MESSAGES
 
@@ -1177,7 +1240,7 @@ $formMessages->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'messages', $gL10n->get('SYS_MESSAGES'), 'fa-comments', $formMessages->show()));
+$page->addHtml(getPreferencePanel('modules', 'messages', $gL10n->get('SYS_MESSAGES'), 'fas fa-comments', $formMessages->show()));
 
 // PANEL: PROFILE
 
@@ -1225,7 +1288,7 @@ $formProfile->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'profile', $gL10n->get('PRO_PROFILE'), 'fa-user', $formProfile->show()));
+$page->addHtml(getPreferencePanel('modules', 'profile', $gL10n->get('PRO_PROFILE'), 'fas fa-user', $formProfile->show()));
 
 // PANEL: EVENTS
 
@@ -1318,7 +1381,7 @@ $formEvents->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'events', $gL10n->get('DAT_DATES'), 'fa-calendar-alt', $formEvents->show()));
+$page->addHtml(getPreferencePanel('modules', 'events', $gL10n->get('DAT_DATES'), 'fas fa-calendar-alt', $formEvents->show()));
 
 // PANEL: WEBLINKS
 
@@ -1361,7 +1424,7 @@ $formWeblinks->addSubmitButton(
     array('icon' => 'fa-check', 'class' => ' col-sm-offset-3')
 );
 
-$page->addHtml(getPreferencePanel('modules', 'links', $gL10n->get('LNK_WEBLINKS'), 'fa-link', $formWeblinks->show()));
+$page->addHtml(getPreferencePanel('modules', 'links', $gL10n->get('LNK_WEBLINKS'), 'fas fa-link', $formWeblinks->show()));
 
 $page->addHtml('
         </div>
