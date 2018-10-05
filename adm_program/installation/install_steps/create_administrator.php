@@ -34,6 +34,18 @@ if (isset($_POST['orga_shortname']))
         );
         // => EXIT
     }
+
+    // allow only letters, numbers and special characters like .-_+@
+    if(!strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar'))
+    {
+        showNotice(
+            $gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')),
+            safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_organization')),
+            $gL10n->get('SYS_BACK'),
+            'layout/back.png'
+        );
+        // => EXIT
+    }
 }
 
 // initialize form data

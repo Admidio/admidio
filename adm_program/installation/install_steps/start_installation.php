@@ -39,7 +39,7 @@ if (isset($_SESSION['table_prefix'])
 {
     showNotice(
         $gL10n->get('INS_DATA_DO_NOT_MATCH', array('config.php')),
-        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'create_config')),
+        safeUrl(ADMIDIO_URL . '/adm_program/installation/installation.php', array('step' => 'connect_database')),
         $gL10n->get('SYS_BACK'),
         'fa-arrow-circle-left'
     );

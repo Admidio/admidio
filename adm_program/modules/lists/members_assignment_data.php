@@ -248,7 +248,7 @@ $queryParamsMain = array(
     $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
     $gProfileFields->getProperty('BIRTHDAY', 'usf_id'),
     $gProfileFields->getProperty('CITY', 'usf_id'),
-    $gProfileFields->getProperty('ADDRESS', 'usf_id'),
+    $gProfileFields->getProperty('STREET', 'usf_id'),
     $gProfileFields->getProperty('POSTCODE', 'usf_id'),
     $gProfileFields->getProperty('COUNTRY', 'usf_id'),
     $getRoleId,
@@ -349,7 +349,7 @@ while($user = $userStatement->fetch())
     {
         if(strlen($addressText) > 0)
         {
-            $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . $addressText . '"></i>';
+            $arrContent[] = '<i class="fas fa-map-marker-alt" data-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
         }
         else
         {

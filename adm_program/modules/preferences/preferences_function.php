@@ -347,6 +347,13 @@ switch($getMode)
             // => EXIT
         }
 
+        // allow only letters, numbers and special characters like .-_+@
+        if(!strValidCharacters($_POST['orgaShortName'], 'noSpecialChar'))
+        {
+            $gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION')));
+            // => EXIT
+        }
+
         // set execution time to 2 minutes because we have a lot to do
         PhpIniUtils::startNewExecutionTimeLimit(120);
 
