@@ -56,7 +56,7 @@ else
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
-               first_name.usd_value AS first_name, address.usd_value AS address,
+               first_name.usd_value AS first_name, street.usd_value AS street,
                zip_code.usd_value AS zip_code, city.usd_value AS city,
                email.usd_value AS email
           FROM '.TBL_USERS.'
@@ -66,9 +66,9 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
     RIGHT JOIN '.TBL_USER_DATA.' AS first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-     LEFT JOIN '.TBL_USER_DATA.' AS address
-            ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
+     LEFT JOIN '.TBL_USER_DATA.' AS street
+            ON street.usd_usr_id = usr_id
+           AND street.usd_usf_id = ? -- $gProfileFields->getProperty(\'STREET\', \'usf_id\')
      LEFT JOIN '.TBL_USER_DATA.' AS zip_code
             ON zip_code.usd_usr_id = usr_id
            AND zip_code.usd_usf_id = ? -- $gProfileFields->getProperty(\'POSTCODE\', \'usf_id\')
@@ -83,7 +83,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value AS last_name,
 $queryParams = array(
     $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
     $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-    $gProfileFields->getProperty('ADDRESS', 'usf_id'),
+    $gProfileFields->getProperty('STREET', 'usf_id'),
     $gProfileFields->getProperty('POSTCODE', 'usf_id'),
     $gProfileFields->getProperty('CITY', 'usf_id'),
     $gProfileFields->getProperty('EMAIL', 'usf_id'),
@@ -122,9 +122,9 @@ echo '
                 <a class="btn" href="'. safeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_id' => $row['usr_id'])).'"><img
                     src="'.THEME_URL.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />';
 
-                if(strlen($row['address']) > 0)
+                if(strlen($row['street']) > 0)
                 {
-                    echo $row['address'].'<br />';
+                    echo $row['street'].'<br />';
                 }
                 if(strlen($row['zip_code']) > 0 || strlen($row['city']) > 0)
                 {
