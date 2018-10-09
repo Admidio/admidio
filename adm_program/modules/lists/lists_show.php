@@ -1012,7 +1012,7 @@ elseif ($getMode === 'html' || $getMode === 'print')
             // Member Fee
             if (strlen($role->getValue('rol_cost')) > 0)
             {
-                $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency'));
+                $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), (float) $role->getValue('rol_cost').' '.$gSettingsManager->getString('system_currency'));
             }
 
             // Fee period
