@@ -253,21 +253,21 @@ else
     $htmlLeaderText   = '';
 
     // show icon that leaders have no additional rights
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
     {
         $htmlLeaderText .= $gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS');
     }
 
     // show icon with edit user right if leader has this right
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
-    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $htmlLeaderText .= $gL10n->get('ROL_LEADER_EDIT_MEMBERS');
     }
 
     // show icon with assign role right if leader has this right
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
-    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $htmlLeaderText .= $gL10n->get('ROL_LEADER_ASSIGN_MEMBERS');
     }

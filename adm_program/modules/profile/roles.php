@@ -263,28 +263,28 @@ while($row = $statement->fetch())
                        $leaderChecked.$leaderDisabled.' onclick="profileJS.markLeader(this);" value="1" />';
 
     // show icon that leaders have no additional rights
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_NO_RIGHTS)
     {
         $leaderRights .= '<i class="fas fa-info-circle" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'"></i>
                           <i class="fas fa-trash admidio-opacity-0"></i>';
     }
 
     // show icon with edit user right if leader has this right
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT
-    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_EDIT
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $leaderRights .= '<i class="fas fa-user-edit" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'"></i>';
     }
 
     // show icon with assign role right if leader has this right
-    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN
-    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    if((int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN
+    || (int) $role->getValue('rol_leader_rights') === ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $leaderRights .= '<i class="fas fa-user-tie" data-toggle="tooltip" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'"></i>';
     }
 
     // show dummy icon if leader has not all rights
-    if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    if((int) $role->getValue('rol_leader_rights') !== ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
         $leaderRights .= '<i class="fas fa-trash admidio-opacity-0"></i>';
     }
