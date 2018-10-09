@@ -27,7 +27,7 @@ class User extends TableAccess
     /**
      * @var array<string,bool> Array with all roles rights and the status of the current user e.g. array('rol_assign_roles'  => '0', 'rol_approve_users' => '1' ...)
      */
-    protected $rolesRights  = array();
+    protected $rolesRights = array();
     /**
      * @var array<int,bool> Array with all roles and a flag if the user could view this role e.g. array('role_id_1' => '1', 'role_id_2' => '0' ...)
      */
