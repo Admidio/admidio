@@ -80,56 +80,26 @@ while($relRow = $relationTypesStatement->fetch())
     $editUserIcon = '';
     $editUserInverseIcon = '';
 
-<<<<<<< HEAD
     $relationType1->clear();
     $relationType1->setArray($relRow);
-    $relationType2->clear();
-    $relRow2 = $relRow;
-    $relRow2['urt_id'] = $relRow2['urt_id_inverse'];
-    $relRow2['urt_name'] = $relRow2['urt_name_inverse'];
-    $relRow2['urt_name_male'] = $relRow2['urt_name_male_inverse'];
-    $relRow2['urt_name_female'] = $relRow2['urt_name_female_inverse'];
-    $relationType2->setArray($relRow2);
-=======
-    $relationtype1->clear();
-    $relationtype1->setArray($relRow);
->>>>>>> v3.3
 
     if((bool) $relRow['urt_edit_user'])
     {
         $editUserIcon = '<i class="fas fa-pen-square" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
     }
 
-    $nameRelationshiptype = $relationtype1->getValue('urt_name') . $editUserIcon;
+    $nameRelationshiptype = $relationType1->getValue('urt_name') . $editUserIcon;
 
     // if it's a asymmetrical relationship type we must add the name of the other relationship type
-    if($relationtype1->getRelationTypeString() === 'asymmetrical')
+    if($relationType1->getRelationTypeString() === 'asymmetrical')
     {
-<<<<<<< HEAD
-        $editUserInverseIcon = '<i class="fas fa-pen-square" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT_USER_IN_RELATION').'"></i>';
-    }
-
-    $relationTypeAdministration = '<a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => (int) $relationType1->getValue('urt_id'))). '">'.
-                                        '<i class="fas fa-edit" data-toggle="tooltip" title="'.$gL10n->get('SYS_EDIT').'"></i></a>';
-    $relationTypeAdministration .= '<a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-                                        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. (int) $relationType1->getValue('urt_id'),
-                                        'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
-                                        'database_id' => (int) $relationType1->getValue('urt_id'))).'">'.
-                                        '<i class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_DELETE').'"></i></a>';
-
-    // create array with all column values
-    $columnValues = array(
-        $relationType1->getValue('urt_name') . $editUserIcon,
-        $relationType2->getValue('urt_name') . $editUserInverseIcon,
-        $relationTypeAdministration
-=======
-        $relationtype2->clear();
+        $relationType2->clear();
         $relRow2 = $relRow;
         $relRow2['urt_id'] = $relRow2['urt_id_inverse'];
         $relRow2['urt_name'] = $relRow2['urt_name_inverse'];
         $relRow2['urt_name_male'] = $relRow2['urt_name_male_inverse'];
         $relRow2['urt_name_female'] = $relRow2['urt_name_female_inverse'];
-        $relationtype2->setArray($relRow2);
+        $relationType2->setArray($relRow2);
 
         if((bool) $relRow['urt_edit_user_inverse'])
         {
@@ -137,24 +107,23 @@ while($relRow = $relationTypesStatement->fetch())
                                 alt="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" title="'.$gL10n->get('REL_EDIT_USER_IN_RELATION').'" />';
         }
 
-        $nameRelationshiptype .= '&nbsp;&nbsp;-&nbsp;&nbsp;'. $relationtype2->getValue('urt_name') . $editUserInverseIcon;
+        $nameRelationshiptype .= '&nbsp;&nbsp;-&nbsp;&nbsp;'. $relationType2->getValue('urt_name') . $editUserInverseIcon;
     }
 
     $relationtypeAdministration = '
-    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => $relationtype1->getValue('urt_id'))). '"><img
+    <a class="admidio-icon-link" href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_id' => $relationType1->getValue('urt_id'))). '"><img
         src="'. THEME_URL. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
     <a class="admidio-icon-link" data-toggle="modal" data-target="#admidio_modal"
-        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationtype1->getValue('urt_id'),
-        'name' => $relationtype1->getValue('urt_name').($relationtype1->isUnidirectional() ? '' : ('/'.$relationtype2->getValue('urt_name'))),
-        'database_id' => $relationtype1->getValue('urt_id'))).'"><img
+        href="'.safeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => 'urt', 'element_id' => 'row_'. $relationType1->getValue('urt_id'),
+        'name' => $relationType1->getValue('urt_name').($relationType1->isUnidirectional() ? '' : ('/'.$relationType2->getValue('urt_name'))),
+        'database_id' => $relationType1->getValue('urt_id'))).'"><img
            src="'. THEME_URL. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
     // create array with all column values
     $columnValues = array(
         $nameRelationshiptype,
-        $relationTypes[$relationtype1->getRelationTypeString()],
+        $relationTypes[$relationType1->getRelationTypeString()],
         $relationtypeAdministration
->>>>>>> v3.3
     );
     $relationTypesOverview->addRowByArray($columnValues, 'row_'. (int) $relationType1->getValue('urt_id'));
 }
