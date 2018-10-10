@@ -69,7 +69,7 @@ try
     // Format: 20180131-123456_0123456789abcdef.jpg
     $filename = FileSystemUtils::getGeneratedFilename($_FILES['upload']['name']);
 
-    $htmlUrl = safeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $filename));
+    $htmlUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/show_image.php', array('module' => $folderName, 'file' => $filename));
 
     move_uploaded_file($_FILES['upload']['tmp_name'], $imagesPath . '/' . $filename);
 }

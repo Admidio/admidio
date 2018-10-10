@@ -107,8 +107,8 @@ if(!empty($_POST['recipient_email']))
             $user = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
             // create and save new password and activation id
-            $newPassword  = PasswordUtils::genRandomPassword(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
-            $activationId = PasswordUtils::genRandomPassword(10);
+            $newPassword  = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
+            $activationId = SecurityUtils::getRandomString(10);
 
             $user->setPassword($newPassword, true);
             $user->setValue('usr_activation_code', $activationId);
@@ -116,7 +116,7 @@ if(!empty($_POST['recipient_email']))
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME', 'database').' '.$user->getValue('LAST_NAME', 'database'));
             $sysmail->setVariable(1, $newPassword);
-            $sysmail->setVariable(2, safeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => (int) $user->getValue('usr_id'), 'aid' => $activationId)));
+            $sysmail->setVariable(2, SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/password_activation.php', array('usr_id' => (int) $user->getValue('usr_id'), 'aid' => $activationId)));
             $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
             $user->saveChangesWithoutRights();

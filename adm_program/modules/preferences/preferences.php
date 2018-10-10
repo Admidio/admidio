@@ -720,7 +720,7 @@ $formPhp->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FI
 
 try
 {
-    PasswordUtils::genRandomInt(0, 1, true);
+    SecurityUtils::getRandomInt(0, 1, true);
     $html = getStaticText('success', $gL10n->get('SYS_SECURE'));
 }
 catch (AdmException $e)

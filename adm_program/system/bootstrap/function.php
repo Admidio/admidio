@@ -454,7 +454,7 @@ function admFuncVariableIsValid(array $array, $variableName, $datatype, array $o
             break;
 
         case 'string':
-            $value = strStripTags(encodeHTML($value));
+            $value = strStripTags(SecurityUtils::encodeHTML($value));
             break;
 
         case 'html':
@@ -613,7 +613,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userIdCreated > 0 && $userNameCreated !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameCreated = '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdCreated)) .
+            $userNameCreated = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdCreated)) .
                                '">' . $userNameCreated . '</a>';
         }
 
@@ -640,7 +640,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
         // if valid login and a user id is given than create a link to the profile of this user
         if ($gValidLogin && $userIdEdited > 0 && $userNameEdited !== $gL10n->get('SYS_SYSTEM'))
         {
-            $userNameEdited = '<a href="' . safeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdEdited)) .
+            $userNameEdited = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_id' => $userIdEdited)) .
                               '">' . $userNameEdited . '</a>';
         }
 
@@ -725,56 +725,6 @@ function admFuncCheckUrl($url)
 }
 
 /**
- * Encodes all HTML special chars
- * @param string $input     The input string
- * @param bool   $encodeAll
- * @param string $encoding  Define character encoding tue use
- * @return string Encoded string
- */
-function encodeHTML($input, $encodeAll = false, $encoding = 'UTF-8')
-{
-    if ($encodeAll)
-    {
-        // Encodes: all special HTML characters
-        return htmlentities($input, ENT_QUOTES | ENT_HTML5, $encoding);
-    }
-
-    // Encodes: &, ", ', <, >
-    return htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, $encoding);
-}
-
-/**
- * @param string              $path
- * @param array<string,mixed> $params
- * @param string              $anchor
- * @param bool                $encode
- * @return string
- */
-function safeUrl($path, array $params = array(), $anchor = '', $encode = false)
-{
-    $paramsText = '';
-    if (count($params) > 0)
-    {
-        $paramsText = '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-    }
-
-    $anchorText = '';
-    if ($anchor !== '')
-    {
-        $anchorText = '#' . rawurlencode($anchor);
-    }
-
-    $url = $path . $paramsText . $anchorText;
-
-    if ($encode)
-    {
-        return encodeHTML($url);
-    }
-
-    return $url;
-}
-
-/**
  * This is a safe method for redirecting.
  * @param string $url        The URL where redirecting to. Must be a absolute URL. (www.example.org)
  * @param int    $statusCode The status-code which should be send. (301, 302, 303 (default), 307)
@@ -820,7 +770,7 @@ function admRedirect($url, $statusCode = 303)
     {
         $gLogger->notice('REDIRECT: Redirecting to external URL!', $loggerObject);
 
-        $redirectUrl = safeUrl(ADMIDIO_URL . '/adm_program/system/redirect.php', array('url' => $url));
+        $redirectUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/redirect.php', array('url' => $url));
     }
 
     header('Location: ' . $redirectUrl, true, $statusCode);

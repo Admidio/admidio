@@ -18,8 +18,6 @@ use Hautelook\Phpass\PasswordHash;
  * hash()               hash the given password with the given options
  * verify()             verify if the given password belongs to the given hash
  * needsRehash()        checks if the given hash is generated from the given options
- * genRandomPassword()  generate a cryptographically strong random password
- * genRandomInt()       generate a cryptographically strong random int
  * passwordInfo()       provides infos about the given password (length, number, lowerCase, upperCase, symbol)
  * hashInfo()           provides infos about the given hash (Algorithm & Options, PRIVATE/PORTABLE_HASH, MD5, UNKNOWN)
  * passwordStrength()   shows the strength of the given password
@@ -112,7 +110,7 @@ final class PasswordUtils
 
         if ($algorithm === self::HASH_ALGORITHM_SHA512)
         {
-            $salt = self::genRandomPassword(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
+            $salt = SecurityUtils::getRandomString(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./');
             return crypt($password, '$6$rounds=' . $options['cost'] . '$' . $salt . '$');
         }
         elseif ($algorithm === self::HASH_ALGORITHM_BCRYPT)
@@ -125,95 +123,6 @@ final class PasswordUtils
         }
 
         return password_hash($password, $algorithmPhpConstant, $options);
-    }
-
-    /**
-     * Generate a cryptographically strong random password
-     * @param int    $length  The length of the generated password (default = 16)
-     * @param string $charset A string of all possible characters to choose from (default = [0-9a-zA-z])
-     * @throws AdmException SYS_GEN_RANDOM_TWO_DISTINCT_CHARS
-     * @return string Returns a cryptographically strong random password string
-     * @see https://paragonie.com/b/JvICXzh_jhLyt4y3
-     */
-    public static function genRandomPassword($length = 16, $charset = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    {
-        if ($length < 1)
-        {
-            // Just return an empty string. Any value < 1 is meaningless.
-            return '';
-        }
-
-        // Remove duplicate characters from $charset
-        $split = str_split($charset);
-        $charset = implode('', array_unique($split));
-
-        // This is the maximum index for all of the characters in the string $charset
-        $charsetMax = strlen($charset) - 1;
-        if ($charsetMax < 1)
-        {
-            // Avoid letting users do: randomString($int, 'a'); -> 'aaaaa...'
-            throw new AdmException('SYS_GEN_RANDOM_TWO_DISTINCT_CHARS');
-        }
-
-        $randomString = '';
-        for ($i = 0; $i < $length; ++$i)
-        {
-            $randomInt = self::genRandomInt(0, $charsetMax);
-            $randomString .= $charset[$randomInt];
-        }
-
-        return $randomString;
-    }
-
-    /**
-     * Generate an insecure random integer
-     * @param int             $min                     The min of the range (inclusive)
-     * @param int             $max                     The max of the range (inclusive)
-     * @param bool            $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @param Error|Exception $exception               The thrown Error or Exception object.
-     * @param string          $exceptionMessage        The Admidio Exception-Message.
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
-     * @return int Returns an insecure random integer
-     */
-    private static function genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $exception, $exceptionMessage)
-    {
-        global $gLogger;
-
-        $gLogger->warning('SECURITY: Could not generate secure pseudo-random number!', array('code' => $exception->getCode(), 'message' => $exception->getMessage()));
-
-        if ($exceptionOnInsecurePRNG)
-        {
-            throw new AdmException($exceptionMessage, array($exception->getCode(), $exception->getMessage()));
-        }
-
-        // as a fallback we use the mt_rand method
-        return mt_rand($min, $max);
-    }
-
-    /**
-     * Generate a cryptographically strong random integer
-     * @param int  $min                     The min of the range (inclusive)
-     * @param int  $max                     The max of the range (inclusive)
-     * @param bool $exceptionOnInsecurePRNG Could be set to true to get an Exception if no secure PRN could be generated.
-     * @throws AdmException SYS_GEN_RANDOM_ERROR, SYS_GEN_RANDOM_EXCEPTION
-     * @return int Returns a cryptographically strong random integer
-     */
-    public static function genRandomInt($min, $max, $exceptionOnInsecurePRNG = false)
-    {
-        try
-        {
-            $int = random_int($min, $max);
-        }
-        catch (Error $e)
-        {
-            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_ERROR');
-        }
-        catch (Exception $e)
-        {
-            $int = self::genRandomIntFallback($min, $max, $exceptionOnInsecurePRNG, $e, 'SYS_GEN_RANDOM_EXCEPTION');
-        }
-
-        return $int;
     }
 
     /**

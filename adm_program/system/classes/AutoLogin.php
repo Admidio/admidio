@@ -61,7 +61,7 @@ class AutoLogin extends TableAccess
 
         try
         {
-            $loginId = $userId . ':' . PasswordUtils::genRandomPassword(40);
+            $loginId = $userId . ':' . SecurityUtils::getRandomString(40);
         }
         catch (AdmException $e)
         {

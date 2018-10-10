@@ -110,7 +110,7 @@ else
             $plgNewHeadline = '';
 
             // Woerter unterbrechen, wenn sie zu lang sind
-            $plgWords = explode(' ', encodeHTML($plgAnnouncement->getValue('ann_headline')));
+            $plgWords = explode(' ', SecurityUtils::encodeHTML($plgAnnouncement->getValue('ann_headline')));
 
             foreach($plgWords as $plgValue)
             {
@@ -128,7 +128,7 @@ else
         }
         else
         {
-            echo encodeHTML($plgAnnouncement->getValue('ann_headline')).'</a></h4>';
+            echo SecurityUtils::encodeHTML($plgAnnouncement->getValue('ann_headline')).'</a></h4>';
         }
 
         // show preview text

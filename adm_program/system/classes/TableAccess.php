@@ -253,7 +253,7 @@ class TableAccess
                     if ($format !== 'database')
                     {
                         // if text field and format not 'database' then convert all quotes to html syntax
-                        $columnValue = encodeHTML($columnValue);
+                        $columnValue = SecurityUtils::encodeHTML($columnValue);
                     }
                     break;
 

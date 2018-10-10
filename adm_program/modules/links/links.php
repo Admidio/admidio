@@ -155,7 +155,7 @@ else
 
             $lnkId    = (int) $weblink->getValue('lnk_id');
             $lnkCatId = (int) $weblink->getValue('lnk_cat_id');
-            $lnkName  = encodeHTML($weblink->getValue('lnk_name'));
+            $lnkName  = SecurityUtils::encodeHTML($weblink->getValue('lnk_name'));
             $lnkDescription = $weblink->getValue('lnk_description');
 
             if ($lnkCatId !== $previousCatId)

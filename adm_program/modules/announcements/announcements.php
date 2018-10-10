@@ -149,7 +149,7 @@ else
         $announcement->setArray($row);
 
         $annId = (int) $announcement->getValue('ann_id');
-        $annHeadline = encodeHTML($announcement->getValue('ann_headline'));
+        $annHeadline = SecurityUtils::encodeHTML($announcement->getValue('ann_headline'));
 
         $page->addHtml('
         <div class="panel panel-primary" id="ann_'.$annId.'">
@@ -186,7 +186,7 @@ else
                 ) .
                 '<div class="admidio-info-category">' .
                     $gL10n->get('SYS_CATEGORY') .
-                    '&nbsp;<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . encodeHTML($announcement->getValue('cat_name')).'</a>
+                    '&nbsp;<a href="'.safeUrl(ADMIDIO_URL.FOLDER_MODULES.'/announcements/announcements.php', array('headline' => $getHeadline, 'cat_id' => (int) $announcement->getValue('ann_cat_id'))).'">' . SecurityUtils::encodeHTML($announcement->getValue('cat_name')).'</a>
                 </div>
             </div>
         </div>');

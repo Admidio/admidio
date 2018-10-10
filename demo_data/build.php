@@ -80,7 +80,7 @@ function getBacktrace()
             // Path...
             if (!empty($trace['args'][0]))
             {
-                $argument = encodeHTML($trace['args'][0]);
+                $argument = SecurityUtils::encodeHTML($trace['args'][0]);
                 $argument = str_replace(array(ADMIDIO_PATH, '\\'), array('', '/'), $argument);
                 $argument = substr($argument, 1);
                 $args[] = '\''.$argument.'\'';
@@ -91,10 +91,10 @@ function getBacktrace()
         $trace['type']  = array_key_exists('type',  $trace) ? $trace['type'] : '';
 
         $output .= '<br />';
-        $output .= '<strong>FILE:</strong> '.encodeHTML($trace['file']).'<br />';
+        $output .= '<strong>FILE:</strong> '.SecurityUtils::encodeHTML($trace['file']).'<br />';
         $output .= '<strong>LINE:</strong> '.((!empty($trace['line'])) ? $trace['line'] : '').'<br />';
 
-        $output .= '<strong>CALL:</strong> '.encodeHTML($trace['class'].$trace['type'].$trace['function']).
+        $output .= '<strong>CALL:</strong> '.SecurityUtils::encodeHTML($trace['class'].$trace['type'].$trace['function']).
             '('.(count($args) ? implode(', ', $args) : '').')<br />';
     }
     $output .= '</div>';

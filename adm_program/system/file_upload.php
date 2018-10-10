@@ -162,7 +162,7 @@ if($getMode === 'choose_files')
         $(function() {
             "use strict";
             $("#fileupload").fileupload({
-                url: "'.safeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $getModule, 'mode' => 'upload_files', 'id' => $getId)).'",
+                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/file_upload.php', array('module' => $getModule, 'mode' => 'upload_files', 'id' => $getId)).'",
                 sequentialUploads: true,
                 dataType: "json",
                 add: function(e, data) {

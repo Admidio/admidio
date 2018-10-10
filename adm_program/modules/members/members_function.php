@@ -159,7 +159,7 @@ elseif ($getMode === 4)
     try
     {
         // Generate new secure-random password and save it
-        $password = PasswordUtils::genRandomPassword(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
+        $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
         $user->setPassword($password);
         $user->save();
 
