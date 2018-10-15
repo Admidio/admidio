@@ -184,7 +184,7 @@ else
     );
     $form->addInput(
         'plg_usr_login_name', $gL10n->get('SYS_USERNAME'), '',
-        array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 35)
+        array('property' => HtmlForm::FIELD_REQUIRED, 'maxLength' => 254)
     );
     $form->addInput(
         'plg_usr_password', $gL10n->get('SYS_PASSWORD'), '',

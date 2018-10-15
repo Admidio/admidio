@@ -103,7 +103,7 @@ $form->addInput(
 );
 $form->addInput(
     'user_login', $gL10n->get('SYS_USERNAME'), $userLogin,
-    array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED)
+    array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED)
 );
 $form->addInput(
     'user_password', $gL10n->get('SYS_PASSWORD'), '',

@@ -247,7 +247,7 @@ if ($getMode === 1)
             $form->addDescription($gL10n->get('INS_ADMINISTRATOR_LOGIN_DESC'));
             $form->addInput(
                 'login_name', $gL10n->get('SYS_USERNAME'), '',
-                array('maxLength' => 35, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
+                array('maxLength' => 254, 'property' => HtmlForm::FIELD_REQUIRED, 'class' => 'form-control-small')
             );
             // TODO Future: 'minLength' => PASSWORD_MIN_LENGTH
             $form->addInput(
